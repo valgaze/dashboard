@@ -15,7 +15,7 @@ deployment:
       - gulp build
       - aws s3 sync build/ s3://$SUBDOMAIN.density.rodeo/ --region us-east-1
   production:
-    branch: master
+    branch: trunk
     commands:
       - gulp build
       - aws s3 sync build/ s3://$SUBDOMAIN.density.io/ --region us-east-1
