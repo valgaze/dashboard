@@ -1,0 +1,21 @@
+machine:
+  node:
+    version: 5.3.0
+  environment:
+    SUBDOMAIN: dashboard
+
+checkout:
+  post:
+    - npm install -g browserify
+
+deployment:
+  staging:
+    branch: staging
+    commands:
+      - gulp build
+      - aws s3 sync build/ s3://$SUBDOMAIN.density.rodeo/ --region us-east-1
+  production:
+    branch: master
+    commands:
+      - gulp build
+      - aws s3 sync build/ s3://$SUBDOMAIN.density.io/ --region us-east-1

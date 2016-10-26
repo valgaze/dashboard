@@ -1,0 +1,66 @@
+{
+  "name": "density-web-dashboard",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "",
+    "build": "./node_modules/.bin/gulp build",
+    "dev": "./node_modules/.bin/gulp",
+    "lint": "./node_modules/.bin/eslint src/scripts"
+  },
+  "keywords": [],
+  "contributors": [
+    {
+      "name": "John Shanley",
+      "email": "john@density.io"
+    },
+    {
+      "name": "Brian Weinreich",
+      "email": "brian@density.io"
+    },
+    {
+      "name": "Ryan Gaus",
+      "email": "ryan@density.io"
+    },
+    {
+      "name": "Robert Grazioli",
+      "email": "rob@density.io"
+    }
+  ],
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.10.1",
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.3.0",
+    "browser-sync": "^2.13.0",
+    "browserify": "^13.0.1",
+    "density-ui": "densityco/density-ui#v2.0",
+    "express": "^4.14.0",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "watchify": "^3.7.0"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-es2017": "^1.4.0",
+    "del": "^2.2.1",
+    "eslint": "^3.0.1",
+    "glob": "^7.0.5",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-hash": "^3.1.0",
+    "gulp-if": "^2.0.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-nodemon": "^2.1.0",
+    "gulp-nunjucks": "^2.2.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-util": "^3.0.7",
+    "run-sequence": "^1.2.1",
+    "tiny-lr": "^0.2.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
