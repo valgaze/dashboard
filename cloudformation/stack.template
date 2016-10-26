@@ -9,6 +9,9 @@
       "Default": "error.html",
       "Type": "String"
     },
+    "SSLCertificateARN": {
+      "Type": "String"
+    },
     "HostedZoneName": {
       "Description": "Domain of the site to be deployed (i.e. \"density.io\").",
       "Type": "String"
@@ -116,6 +119,12 @@
           },
           "DefaultRootObject": "index.html",
           "Enabled": "true",
+          "ViewerCertificate": {
+            "SslSupportMethod": "sni-only",
+            "AcmCertificateArn": {
+              "SSLCertificateARN"
+            }
+          },
           "Origins": [
             {
               "CustomOriginConfig": {
@@ -141,6 +150,10 @@
               "Id": "cloudfrontOrigin"
             }
           ],
+          "ViewerCertificate": {
+            "SslSupportMethod": "sni-only",
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:937369328181:certificate/f53501b3-5cf5-40d9-9241-393519d0654d"
+          },
           "PriceClass": "PriceClass_200"
         }
       },

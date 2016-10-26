@@ -6,14 +6,6 @@ deploy_env = sys.argv[1]
 if deploy_env not in ['staging', 'production']:
     sys.exit()
 
-print "=================IMPORTANT==================="
-user_input = raw_input(
-    "Hey! AWS doesn't have support for their own SSL certs. So don't update this unless you know what you are doing. You will have to manually switch over to the correct SSL cert in Cloudfront once updated. Type OK to proceed: ")
-
-if user_input.lower() is "ok":
-    print "Ok, bye bye!"
-    sys.exit()
-
 application_name = "Web-Dashboard"
 region = "us-east-1"
 hosted_zone_name = "density.io" if deploy_env == "production" else "density.rodeo"
@@ -23,8 +15,15 @@ error_document = "404.html"
 stack_name = "%s-%s" % (application_name, deploy_env.capitalize())
 stack_template = open('stack.template', 'r')
 
-cloudformation = boto3.client('cloudformation', region_name=region)
+# ssl certificate arn
+acm = boto3.client('acm', region_name=region)
+ssl_crt = "*.%s" % hosted_zone_name
+certificates = acm.list_certificates()['CertificateSummaryList']
+star_certificate = filter(lambda cert: cert['DomainName'] == ssl_crt, certificates)[0]
+star_certificate_arn = star_certificate['CertificateArn']
 
+# build stack
+cloudformation = boto3.client('cloudformation', region_name=region)
 try:
     create_or_update_stack = "create_stack"
     try:
@@ -45,6 +44,11 @@ try:
             {
                 'ParameterKey': 'AWSRegion',
                 'ParameterValue': region,
+                'UsePreviousValue': False
+            },
+            {
+                'ParameterKey': 'SSLCertificateARN',
+                'ParameterValue': star_certificate_arn,
                 'UsePreviousValue': False
             },
             {
