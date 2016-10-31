@@ -1,6 +1,14 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
-export default function Login(props) {
+import {
+  loginButtonPress,
+} from 'dashboard/actions/login';
+
+function Login(props) {
+  const {
+      loginPressed,
+  } = props;
 
   return (
     <div className="login-section">
@@ -19,7 +27,7 @@ export default function Login(props) {
           />
           <button 
             className="button button-primary login-button"
-            onClick="alert"
+            onClick={loginPressed}
             type="button">
             Login
           </button>
@@ -33,3 +41,13 @@ export default function Login(props) {
     </div>
   )
 }
+
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  loginPressed: () => {
+    dispatch(loginButtonPress())
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
