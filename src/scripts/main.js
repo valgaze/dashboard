@@ -1,9 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {Provider} from 'react-redux';
 
-import App from 'fred/App'
+import App from 'dashboard/App'
+import store from 'dashboard/store';
 
 ReactDOM.render(
-	<App />,
-  document.getElementById('react-mount')
+    <Provider store={store}>
+    	<App />
+    </Provider>,
+    document.getElementById('react-mount')
 )
