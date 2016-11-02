@@ -16,27 +16,28 @@ export function loginSubmit(email, password) {
       password: password
     }
 
-    var headers = new Headers({
-      "Content-Type": "application/json"
-    });
-
     fetch('https://clerk.density.io/tokens/', {
         method: 'POST',
-        body: loginParams
+        body: JSON.stringify(loginParams),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       })
       .then(function(response) {
         if (response.ok) {
           return response.json();
         } else if (response.status == 403) {
-          console.log("403");
-          throw new Error(response.json()['detail']);
+          return response.json().then(({detail}) => {
+            throw new Error(detail);
+          });
         } else {
           console.log(response.status);
-          console.log("is error");
           throw new Error(response.statusText);
         }
       }).then(function(json) {
-        dispatch({type: "LOGIN_SUCCESS"});
+        dispatch({type: "LOGIN_SUCCESS", json});
+        dispatch({type: 'CHANGE_JWT', jwt: json});
       }).catch(function(error) {
         console.log(error);
         dispatch({

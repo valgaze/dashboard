@@ -11,9 +11,9 @@ export default function login(state=initialState, action) {
     case 'LOGIN_FIELD_UPDATE':
       return Object.assign({}, state, {[action.field]: action.value});
     case 'LOGIN_REQUEST':
-      return Object.assign({}, state, {['statusText']: "Logging in..."});
+      return Object.assign({}, state, {statusText: "Logging in..."});
     case 'LOGIN_FAILURE':
-      return Object.assign({}, state, {['statusText']: action.message });
+      return Object.assign({}, state, {statusText: action.message });
     default:
       return state;
   }
