@@ -8,14 +8,13 @@ const initialState = {
 
 export default function login(state=initialState, action) {
   switch(action.type) {
-    case 'LOGIN_UPDATE':
+    case 'LOGIN_FIELD_UPDATE':
       return Object.assign({}, state, {[action.field]: action.value});
     case 'LOGIN_REQUEST':
-      return Object.assign({}, state, {['statusText']: "Logging you in..."});
+      return Object.assign({}, state, {['statusText']: "Logging in..."});
     case 'LOGIN_FAILURE':
-      return Object.assign({}, state, {['statusText']: "Sorry, we couldn't log you in."});
+      return Object.assign({}, state, {['statusText']: action.message });
     default:
-      console.log("Initial State");
       return state;
   }
 }

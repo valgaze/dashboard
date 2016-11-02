@@ -1,6 +1,6 @@
-export function loginUpdate(field, value) {
+export function loginFieldUpdate(field, value) {
   return {
-    type: 'LOGIN_UPDATE',
+    type: 'LOGIN_FIELD_UPDATE',
     field: field,
     value: value
   }
@@ -9,22 +9,40 @@ export function loginUpdate(field, value) {
 // this one is a thunk 
 export function loginSubmit(email, password) {
   return dispatch => {
-    dispatch({type: "LOGIN_REQUEST"})
+    dispatch({type: "LOGIN_REQUEST"});
 
-    // fetch('/login')
-    //   .then(function(response) {
-    //     return response.text()
-    //   }).then(function(body) {
-    //     document.body.innerHTML = body
-    //   })
+    var loginParams = {
+      email: email,
+      password: password
+    }
 
-    // $.ajax({
-    //   method: 'get',
-    //   url: 'http://asdf.com'
-    // }).done(function (data){
-    //   dispatch({type: "LOGIN_SUCCESS"});
-    // }).fail(function (xhr, etc, etc2) {
-      dispatch({type: "LOGIN_FAILURE"});
-    // })
+    var headers = new Headers({
+      "Content-Type": "application/json"
+    });
+
+    fetch('https://clerk.density.io/tokens/', {
+        method: 'POST',
+        body: loginParams
+      })
+      .then(function(response) {
+        if (response.ok) {
+          return response.json();
+        } else if (response.status == 403) {
+          console.log("403");
+          throw new Error(response.json()['detail']);
+        } else {
+          console.log(response.status);
+          console.log("is error");
+          throw new Error(response.statusText);
+        }
+      }).then(function(json) {
+        dispatch({type: "LOGIN_SUCCESS"});
+      }).catch(function(error) {
+        console.log(error);
+        dispatch({
+          type: "LOGIN_FAILURE",
+          message: error.message
+        });
+      })
   }
 }

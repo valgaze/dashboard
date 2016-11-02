@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux';
 
-import App from 'dashboard/App'
+import App from 'dashboard/app'
 import store from 'dashboard/store';
 import "whatwg-fetch"
 

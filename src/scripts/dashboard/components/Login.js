@@ -2,14 +2,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {
-  loginUpdate,
+  loginFieldUpdate,
   loginSubmit,
 } from 'dashboard/actions/login';
 
 function Login(props) {
   const {
     onLoginPressed,
-    onUpdateLogin,
+    onUpdateLoginField,
     email,
     password,
     statusText,
@@ -25,14 +25,14 @@ function Login(props) {
             className="form-control"
             type="email"
             placeholder="Email Address"
-            onChange={onUpdateLogin('email')}
+            onChange={onUpdateLoginField('email')}
             defaultValue={email}
           />
           <input
             className="form-control"
             type="password"
             placeholder="Password"
-            onChange={onUpdateLogin('password')}
+            onChange={onUpdateLoginField('password')}
             defaultValue={password}
           />
           <button 
@@ -59,8 +59,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onUpdateLogin: field => event => {
-    dispatch(loginUpdate(field, event.target.value));
+  onUpdateLoginField: field => event => {
+    dispatch(loginFieldUpdate(field, event.target.value));
   },
   onLoginPressed: (email, password) => () => {
     dispatch(loginSubmit(email, password));
