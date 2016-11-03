@@ -36,7 +36,7 @@ export function loginSubmit(email, password) {
           throw new Error(response.statusText);
         }
       }).then(function(json) {
-        dispatch({type: "LOGIN_SUCCESS", json});
+        dispatch({type: "LOGIN_SUCCESS"});
         dispatch({type: 'CHANGE_JWT', jwt: json});
       }).catch(function(error) {
         console.log(error);
