@@ -17,33 +17,28 @@ export function loginSubmit(email, password) {
     }
 
     fetch('https://clerk.density.io/tokens/', {
-        method: 'POST',
-        body: JSON.stringify(loginParams),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(function(response) {
-        if (response.ok) {
-          return response.json();
-        } else if (response.status == 403) {
-          return response.json().then(({detail}) => {
-            throw new Error(detail);
-          });
-        } else {
-          console.log(response.status);
-          throw new Error(response.statusText);
-        }
-      }).then(function(json) {
-        dispatch({type: "LOGIN_SUCCESS"});
-        dispatch({type: 'CHANGE_JWT', jwt: json});
-      }).catch(function(error) {
-        console.log(error);
-        dispatch({
-          type: "LOGIN_FAILURE",
-          message: error.message
+      method: 'POST',
+      body: JSON.stringify(loginParams),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(function(response) {
+      if (response.ok) {
+        return response.json();
+      } else if (response.status == 403) {
+        return response.json().then(({detail}) => {
+          throw new Error(detail);
         });
-      })
+      } else {
+        throw new Error(response.statusText);
+      }
+    }).then(function(json) {
+      dispatch({ type: 'LOGIN_SUCCESS' });
+      dispatch({ type: 'CHANGE_JWT', jwt: json });
+    }).catch(function(error) {
+      dispatch({ type: 'LOGIN_FAILURE', message: error.message });
+    })
   }
 }

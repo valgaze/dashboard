@@ -15,7 +15,6 @@ export default function login(state=initialState, action) {
     case 'LOGIN_FAILURE':
       return Object.assign({}, state, {statusText: action.message });
     case 'LOGIN_SUCCESS':
-      console.log("test");
       return Object.assign({}, state, {statusText: "Success!" });
     default:
       return state;
