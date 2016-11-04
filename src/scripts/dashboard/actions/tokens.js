@@ -1,5 +1,3 @@
-import { hashHistory } from 'react-router';
-
 export function tokensGet(jwt) {
   return dispatch => {
     

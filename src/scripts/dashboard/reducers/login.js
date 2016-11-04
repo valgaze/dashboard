@@ -1,9 +1,9 @@
 import update from 'react-addons-update';
 
 const initialState = {
-  email: "",
-  password: "",
-  statusText: "",
+  email: null,
+  password: null,
+  statusText: null,
   jwt: window.localStorage.jwt
 }
 
