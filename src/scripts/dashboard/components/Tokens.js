@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
+import Sidebar from './sidebar'
 import {
   tokensGet
 } from 'dashboard/actions/tokens';
@@ -24,16 +25,7 @@ function Tokens(props) {
   return (
 
     <div className="content-inner">
-      <div className="content-sidebar">
-        <ul class="sidebar-nav-list">
-          <li class="list-header active">
-            <a href="#environment" class="active">Your Environment</a>
-          </li>
-          <li>
-            <a href="#environment-tokens">Tokens</a>
-          </li>
-        </ul>
-      </div>
+      <Sidebar />
       <div className="content-panel">
         <div className="tokens-section">
           <div className="container">
