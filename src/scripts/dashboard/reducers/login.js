@@ -7,7 +7,7 @@ const initialState = {
   jwt: window.localStorage.jwt
 }
 
-export default function user(state=initialState, action) {
+export default function login(state=initialState, action) {
   switch(action.type) {
     case 'LOGIN_FIELD_UPDATE':
       return Object.assign({}, state, {[action.field]: action.value});

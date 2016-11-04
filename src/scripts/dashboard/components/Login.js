@@ -53,9 +53,9 @@ function Login(props) {
 }
 
 const mapStateToProps = state => ({
-  email: state.user.email,
-  password: state.user.password,
-  statusText: state.user.statusText
+  email: state.login.email,
+  password: state.login.password,
+  statusText: state.login.statusText
 });
 
 const mapDispatchToProps = dispatch => ({

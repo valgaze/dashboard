@@ -1,8 +1,12 @@
 import { hashHistory } from 'react-router';
 
 export function tokensGet(jwt) {
-  console.log("fetching tokens");
   return dispatch => {
+
+    // for now, let's fake it til this endpoint exists!
+    dispatch({type: 'TOKENS_SUCCESS', json: json})
+    return;
+
     fetch('https://clerk.density.io/org_tokens/', {
       method: 'GET',
       headers: {
@@ -22,9 +26,9 @@ export function tokensGet(jwt) {
         throw new Error(response.statusText);
       }
     }).then(function(json) {
-      console.log(json);
+      console.log('success' + json);
     }).catch(function(error) {
-      dispatch({type: 'LOGIN_FAILURE', message: error.message});
+      dispatch({type: 'TOKENS_FAILURE', message: error.message});
     })
   }
 }

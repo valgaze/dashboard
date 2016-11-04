@@ -10,11 +10,11 @@ function Tokens(props) {
     sandboxToken,
     liveToken,
     jwt,
-    getTokens
+    fetchOrganizationTokens
   } = props;
   
   if (sandboxToken == null && liveToken == null) {
-    getTokens(jwt);
+    fetchOrganizationTokens(jwt);
   }
 
   return (
@@ -22,7 +22,8 @@ function Tokens(props) {
       <div className="row">
         <div className="col-xs-20 off-xs-2 col-md-8 off-md-8">
           <h1>Tokens</h1>
-          Welcome
+          Welcome:
+          {sandboxToken}
         </div>
       </div>
     </div>
@@ -32,11 +33,11 @@ function Tokens(props) {
 const mapStateToProps = state => ({
   sandboxToken: state.organization.sandboxToken,
   liveToken: state.organization.liveToken,
-  jwt: state.user.jwt
+  jwt: state.login.jwt
 });
 
 const mapDispatchToProps = dispatch => ({
-  getTokens: (jwt) => {
+  fetchOrganizationTokens: (jwt) => {
     dispatch(tokensGet(jwt));
   }
 });

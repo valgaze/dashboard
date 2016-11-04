@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
 
-import user from './user';
+import login from './login';
 import organization from './organization';
 
 export default combineReducers({
-  user,
+  login,
   organization
 });
