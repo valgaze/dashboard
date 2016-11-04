@@ -1,3 +1,5 @@
+import { hashHistory } from 'react-router';
+
 export function loginFieldUpdate(field, value) {
   return {
     type: 'LOGIN_FIELD_UPDATE',
@@ -6,7 +8,6 @@ export function loginFieldUpdate(field, value) {
   }
 };
 
-// this one is a thunk 
 export function loginSubmit(email, password) {
   return dispatch => {
     dispatch({type: "LOGIN_REQUEST"});
@@ -35,10 +36,11 @@ export function loginSubmit(email, password) {
         throw new Error(response.statusText);
       }
     }).then(function(json) {
-      dispatch({ type: 'LOGIN_SUCCESS' });
-      dispatch({ type: 'CHANGE_JWT', jwt: json });
+      dispatch({type: 'LOGIN_SUCCESS'});
+      dispatch({type: 'CHANGE_JWT', jwt: json});
+      hashHistory.push('/tokens');
     }).catch(function(error) {
-      dispatch({ type: 'LOGIN_FAILURE', message: error.message });
+      dispatch({type: 'LOGIN_FAILURE', message: error.message});
     })
   }
 }
