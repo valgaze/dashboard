@@ -1,28 +1,14 @@
 import { hashHistory } from 'react-router';
 
-export function loginFieldUpdate(field, value) {
-  return {
-    type: 'LOGIN_FIELD_UPDATE',
-    field: field,
-    value: value
-  }
-};
-
-export function loginSubmit(email, password) {
+export function tokensGet(jwt) {
+  console.log("fetching tokens");
   return dispatch => {
-    dispatch({type: "LOGIN_REQUEST"});
-
-    var loginParams = {
-      email: email,
-      password: password
-    }
-
-    fetch('https://clerk.density.io/tokens/', {
-      method: 'POST',
-      body: JSON.stringify(loginParams),
+    fetch('https://clerk.density.io/org_tokens/', {
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
       },
     })
     .then(function(response) {
@@ -36,9 +22,7 @@ export function loginSubmit(email, password) {
         throw new Error(response.statusText);
       }
     }).then(function(json) {
-      dispatch({type: 'LOGIN_SUCCESS', jwt: json});
-      dispatch({type: 'SAVE_JWT_TO_LOCAL_STORAGE', jwt: json});
-      hashHistory.push('/tokens');
+      console.log(json);
     }).catch(function(error) {
       dispatch({type: 'LOGIN_FAILURE', message: error.message});
     })

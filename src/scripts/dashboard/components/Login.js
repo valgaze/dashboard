@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import {
   loginFieldUpdate,
-  loginSubmit,
+  loginSubmit
 } from 'dashboard/actions/login';
 
 function Login(props) {
@@ -12,7 +12,7 @@ function Login(props) {
     onUpdateLoginField,
     email,
     password,
-    statusText,
+    statusText
   } = props;
 
   return (
@@ -53,9 +53,9 @@ function Login(props) {
 }
 
 const mapStateToProps = state => ({
-  email: state.login.email,
-  password: state.login.password,
-  statusText: state.login.statusText
+  email: state.user.email,
+  password: state.user.password,
+  statusText: state.user.statusText
 });
 
 const mapDispatchToProps = dispatch => ({

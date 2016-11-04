@@ -1,8 +1,8 @@
 import update from 'react-addons-update';
 
 const initialState = {
-  sandboxToken: "initial",
-  liveToken: "nope"
+  sandboxToken: null,
+  liveToken: null
 }
 
 export default function organization(state=initialState, action) {

@@ -3,10 +3,11 @@ import update from 'react-addons-update';
 const initialState = {
   email: "",
   password: "",
-  statusText: ""
+  statusText: "",
+  jwt: window.localStorage.jwt
 }
 
-export default function login(state=initialState, action) {
+export default function user(state=initialState, action) {
   switch(action.type) {
     case 'LOGIN_FIELD_UPDATE':
       return Object.assign({}, state, {[action.field]: action.value});
@@ -15,7 +16,7 @@ export default function login(state=initialState, action) {
     case 'LOGIN_FAILURE':
       return Object.assign({}, state, {statusText: action.message });
     case 'LOGIN_SUCCESS':
-      return Object.assign({}, state, {statusText: "Success!" });
+      return Object.assign({}, state, {statusText: "", jwt: action.jwt});
     default:
       return state;
   }
