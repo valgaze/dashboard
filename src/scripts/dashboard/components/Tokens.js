@@ -46,9 +46,6 @@ function Tokens(props) {
                     <div className="card">
                       <div className="card-header">
                         <h3 className="card-header-title">Sandbox Token</h3>
-                        <button className="copy">
-                          <i className=""></i>
-                        </button>
                       </div>
                       <div className="card-body">
                         {loading ? "Loading" : sandboxToken}
