@@ -9,7 +9,8 @@ function Tokens(props) {
   const {
     sandboxToken,
     liveToken,
-    jwt
+    jwt,
+    getTokens
   } = props;
   
   if (sandboxToken == null && liveToken == null) {
