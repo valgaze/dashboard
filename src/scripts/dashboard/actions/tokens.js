@@ -6,13 +6,13 @@ export function tokensGet(jwt) {
 
     // for now, let's fake it til this endpoint exists!
     var json = {
-      sandboxToken: "blahSandboxblah",
-      liveToken: "blahLiveblah"
+      sandboxToken: "the_sandbox_token",
+      liveToken: "the_live_token"
     }
     dispatch({type: 'TOKENS_SUCCESS', json: json})
     return;
     // the rest won't get executed...
-    
+
 
     fetch('https://clerk.density.io/org_tokens/', {
       method: 'GET',
