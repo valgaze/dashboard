@@ -13,8 +13,12 @@ function Tokens(props) {
     fetchOrganizationTokens
   } = props;
   
+  var loading;
   if (sandboxToken == null && liveToken == null) {
     fetchOrganizationTokens(jwt);
+    loading = true;
+  } else {
+    loading = false;
   }
 
   return (
@@ -22,8 +26,12 @@ function Tokens(props) {
       <div className="row">
         <div className="col-xs-20 off-xs-2 col-md-8 off-md-8">
           <h1>Tokens</h1>
-          Welcome:
-          {sandboxToken}
+          <div>
+            Sandbox Token: {loading ? "Loading" : sandboxToken}
+          </div>
+          <div>
+            Live Token: {loading ? "Loading" : liveToken}
+          </div>
         </div>
       </div>
     </div>
@@ -31,8 +39,8 @@ function Tokens(props) {
 }
 
 const mapStateToProps = state => ({
-  sandboxToken: state.organization.sandboxToken,
-  liveToken: state.organization.liveToken,
+  sandboxToken: state.tokens.sandbox,
+  liveToken: state.tokens.live,
   jwt: state.login.jwt
 });
 
