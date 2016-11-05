@@ -2,15 +2,15 @@ import update from 'react-addons-update';
 
 const initialState = {
   count: null,
-  spaces: null
+  events: null
 }
 
-export default function spaces(state=initialState, action) {
+export default function events(state=initialState, action) {
   switch(action.type) {
-    case 'SPACES_SUCCESS':
+    case 'EVENTS_SUCCESS':
       return Object.assign({}, state, {
         count: action.json.count,
-        spaces: action.json.results
+        events: action.json.results
       });
       break;
     default:

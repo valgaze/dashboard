@@ -1,7 +1,7 @@
-export function spacesGet(jwt) {
+export function eventsGet(jwt) {
   return dispatch => {
 
-    fetch('https://api.density.io/v1/spaces/', {
+    fetch('https://api.density.io/v1/events/?start_time=2000-01-01', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -22,7 +22,7 @@ export function spacesGet(jwt) {
         throw new Error(response.statusText);
       }
     }).then(function(json) {
-      dispatch({type: 'SPACES_SUCCESS', json: json});
+      dispatch({type: 'EVENTS_SUCCESS', json: json});
     }).catch(function(error) {
       console.log(error.message);
     })

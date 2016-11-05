@@ -2,15 +2,15 @@ import update from 'react-addons-update';
 
 const initialState = {
   count: null,
-  spaces: null
+  doorways: null
 }
 
-export default function spaces(state=initialState, action) {
+export default function doorways(state=initialState, action) {
   switch(action.type) {
-    case 'SPACES_SUCCESS':
+    case 'DOORWAYS_SUCCESS':
       return Object.assign({}, state, {
         count: action.json.count,
-        spaces: action.json.results
+        doorways: action.json.results
       });
       break;
     default:
