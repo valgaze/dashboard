@@ -1,6 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
+import CopyToClipboard from 'react-copy-to-clipboard';
+
 import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
 import {tokensGet} from 'dashboard/actions/tokens';
@@ -60,7 +62,9 @@ function Tokens(props) {
                       <div className="card token-card">
                         <div className="card-header">
                           <h3 className="card-header-title">Sandbox Token</h3>
-                          <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
+                           <CopyToClipboard text={sandboxToken || ""}>
+                            <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
+                          </CopyToClipboard>
                         </div>
                         <div className="card-body">
                           <code>{loading ? "Loading..." : sandboxToken}</code>
@@ -71,7 +75,9 @@ function Tokens(props) {
                       <div className="card token-card">
                         <div className="card-header">
                           <h3 className="card-header-title">Live Token</h3>
-                          <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
+                          <CopyToClipboard text={liveToken || ""}>
+                            <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
+                          </CopyToClipboard>
                         </div>
                         <div className="card-body">
                           <code>{loading ? "Loading..." : liveToken}</code>
