@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 import {
   loginFieldUpdate,
@@ -45,11 +46,7 @@ function Login(props) {
               type="button">
               Login
             </button>
-            <a
-              href="/forgot-password" 
-              className="forgot-password-link">
-              Forgot password?
-            </a>
+            <Link to='/forgot-password' className="forgot-password-link">Forgot password?</Link>
           </div>
         </div>
       </div>

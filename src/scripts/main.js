@@ -8,8 +8,9 @@ import "whatwg-fetch"
 
 import App from 'dashboard/app'
 import store from 'dashboard/store';
-import Tokens from 'dashboard/components/Tokens'
 import Login from 'dashboard/components/Login'
+import ForgotPassword from 'dashboard/components/ForgotPassword'
+import Tokens from 'dashboard/components/Tokens'
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -27,7 +28,7 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" component={Tokens} onEnter={requireAuth} />
       <Route path="login" component={Login} />
-      <Route path="forgot-password" component={() => <span>Yo</span>} />
+      <Route path="forgot-password" component={ForgotPassword} />
     </Router>
   </Provider>,
   document.getElementById('react-mount')
