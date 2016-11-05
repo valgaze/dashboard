@@ -51,7 +51,8 @@ const ASSETS_URL = process.env.ASSETS_URL || '/assets';
 var browserifyOptions = Object.assign({}, watchify.args, {
   entries: ['./src/scripts/main.js'],
   paths: ['./node_modules', './src/scripts'],
-  debug: BROWSERIFY_DEBUG_ENABLED
+  debug: BROWSERIFY_DEBUG_ENABLED,
+  poll: true
 });
 var b = browserify(browserifyOptions);
 if (WATCHIFY_ENABLED) {

@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux';
 
 import App from 'dashboard/app'
-import Tokens from 'dashboard/components/tokens'
 import store from 'dashboard/store';
+import Tokens from 'dashboard/components/Tokens'
 import "whatwg-fetch"
 
 import {Router, Route, browserHistory} from 'react-router';
