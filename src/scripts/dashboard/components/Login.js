@@ -9,6 +9,7 @@ import {
 function Login(props) {
   const {
     onLoginPressed,
+    onEnterPressed,
     onUpdateLoginField,
     email,
     password,
@@ -27,6 +28,7 @@ function Login(props) {
               type="email"
               placeholder="Email Address"
               onChange={onUpdateLoginField('email')}
+              onKeyPress={onEnterPressed(email, password)}
               defaultValue={email}
             />
             <input
@@ -34,6 +36,7 @@ function Login(props) {
               type="password"
               placeholder="Password"
               onChange={onUpdateLoginField('password')}
+              onKeyPress={onEnterPressed(email, password)}
               defaultValue={password}
             />
             <button 
@@ -66,6 +69,11 @@ const mapDispatchToProps = dispatch => ({
   },
   onLoginPressed: (email, password) => () => {
     dispatch(loginSubmit(email, password));    
+  },
+  onEnterPressed: (email, password) => event => {
+    if (event.key === 'Enter') {
+      dispatch(loginSubmit(email, password));  
+    }
   }
 });
 

@@ -4,3 +4,11 @@
 
 @import "login";
 @import "tokens";
+
+// Remove outlines from Chrome
+textarea:focus, input:focus{
+    outline: none;
+}
+*:focus {
+    outline: none;
+}

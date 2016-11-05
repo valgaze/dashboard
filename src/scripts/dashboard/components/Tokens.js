@@ -60,9 +60,10 @@ function Tokens(props) {
                       <div className="card token-card">
                         <div className="card-header">
                           <h3 className="card-header-title">Sandbox Token</h3>
+                          <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
                         </div>
                         <div className="card-body">
-                          {loading ? "Loading" : sandboxToken}
+                          <code>{loading ? "Loading..." : sandboxToken}</code>
                         </div>
                       </div>
                     </div>
@@ -70,9 +71,10 @@ function Tokens(props) {
                       <div className="card token-card">
                         <div className="card-header">
                           <h3 className="card-header-title">Live Token</h3>
+                          <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
                         </div>
                         <div className="card-body">
-                          {loading ? "Loading" : liveToken}
+                          <code>{loading ? "Loading..." : liveToken}</code>
                         </div>
                       </div>
                     </div>
