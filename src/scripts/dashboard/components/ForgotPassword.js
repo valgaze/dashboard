@@ -1,33 +1,38 @@
 import React from 'react';
 import {Link} from 'react-router';
 
-export default function ForgotPassword(props) {
-  const {} = props;
-
-  var email;
-  var statusText;
-
-  var forgotPasswordFieldUpdate = (event) => {
-    email = event.target.value;
-    console.log(email);
+class ForgotPassword extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: null,
+      statusText: null
+    };
   }
 
-  var onEnterPressed = () => {
+  forgotPasswordFieldUpdate(event) {
+    this.setState({email: event.target.value});
+  }
+
+  onEnterPressed(event) {
     if (event.key === 'Enter') {
-      onSubmitPressed();
+      this.onSubmitPressed();
     }
   }
 
-  var onSubmitPressed = () => {
+  onSubmitPressed () {
+    this.setState({
+      statusText: "Sending password reset email..."
+    });
     fetch('https://clerk.density.io/forgot-password/', {
       method: 'POST',
-      body: JSON.stringify({email: email}),
+      body: JSON.stringify({email: this.state.email}),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
     })
-    .then(function(response) {
+    .then((response) => {
       if (response.ok) {
         return response.json();
       } else if (response.status == 403) {
@@ -37,40 +42,46 @@ export default function ForgotPassword(props) {
       } else {
         throw new Error(response.statusText);
       }
-    }).then(function(json) {
-      statusText = "We have sent you a reset-password link. Please check your email.";
-      console.log("Success!");
-    }).catch(function(error) {
-      statusText = "There was an error. Please try again.";
-      console.log("Fail!");
+    }).then((json) => {
+      this.setState({
+        statusText: "We have sent you a reset-password link. Please check your email."
+      });
+    }).catch((error) => {
+      this.setState({
+        statusText: "There was an error. Please try again."
+      });
     })
   }
 
-  return (
-    <div className="container">
-      <div className="forgot-password-section">
-        <div className="row">
-          <div className="col-xs-20 off-xs-2 col-md-8 off-md-8">
-            <h1>Forgot password?</h1>
-            {statusText}
-            <input
-              className="form-control"
-              type="email"
-              placeholder="Email Address"
-              onChange={forgotPasswordFieldUpdate}
-              onKeyPress={onEnterPressed}
-              defaultValue={email}
-            />
-            <button 
-              className="button button-primary submit-button"
-              onClick={onSubmitPressed}
-              type="button">
-              Submit
-            </button>
-            <Link to='/login' className="back-to-login-link">Back to Login</Link>
+  render() {
+    return (
+      <div className="container">
+        <div className="forgot-password-section">
+          <div className="row">
+            <div className="col-xs-20 off-xs-2 col-md-8 off-md-8">
+              <h1>Forgot password?</h1>
+              {this.state.statusText}
+              <input
+                className="form-control"
+                type="email"
+                placeholder="Email Address"
+                onChange={this.forgotPasswordFieldUpdate.bind(this)}
+                onKeyPress={this.onEnterPressed.bind(this)}
+                defaultValue={this.state.email}
+              />
+              <button 
+                className="button button-primary submit-button"
+                onClick={this.onSubmitPressed.bind(this)}
+                type="button">
+                Submit
+              </button>
+              <Link to='/login' className="back-to-login-link">Back to Login</Link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
+
+export default ForgotPassword;
