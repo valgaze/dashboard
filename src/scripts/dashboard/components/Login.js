@@ -22,6 +22,7 @@ function Login(props) {
       <div className="login-section">
         <div className="row">
           <div className="col-xs-20 off-xs-2 col-md-8 off-md-8">
+            <img className="app-icon" src="/assets/images/density_mark_black.png" alt="Density Logo" />
             <h1>Login</h1>
             {statusText}
             <input
