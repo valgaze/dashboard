@@ -1,8 +1,8 @@
-import {push} from 'react-router-redux';
+import {hashHistory} from 'react-router';
 
 export function logoutUser() {
   return dispatch => {
-    dispatch(push('/login'));
+    hashHistory.push('/login');
     dispatch({type: 'DELETE_JWT_FROM_LOCAL_STORAGE'});
     dispatch({type: 'LOGOUT_USER'});
   }

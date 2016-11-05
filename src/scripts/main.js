@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux';
-import {Router, Route, browserHistory} from 'react-router';
+import {Router, Route, hashHistory} from 'react-router';
 import {syncHistoryWithStore} from 'react-router-redux'
 
 import "whatwg-fetch"
@@ -12,7 +12,7 @@ import Login from 'dashboard/components/Login'
 import ForgotPassword from 'dashboard/components/ForgotPassword'
 import Tokens from 'dashboard/components/Tokens'
 
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(hashHistory, store);
 
 function requireAuth(nextState, replace) {
   if (!window.localStorage.jwt) {

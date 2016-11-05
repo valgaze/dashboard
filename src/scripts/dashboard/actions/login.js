@@ -1,4 +1,4 @@
-import {push} from 'react-router-redux';
+import {hashHistory} from 'react-router'; 
 
 export function loginFieldUpdate(field, value) {
   return {
@@ -38,7 +38,7 @@ export function loginSubmit(email, password) {
     }).then(function(json) {
       dispatch({type: 'LOGIN_SUCCESS', jwt: json, email: email});
       dispatch({type: 'SAVE_JWT_TO_LOCAL_STORAGE', jwt: json});
-      dispatch(push('/'));
+      hashHistory.push('/');
     }).catch(function(error) {
       dispatch({type: 'LOGIN_FAILURE', message: error.message});
     })

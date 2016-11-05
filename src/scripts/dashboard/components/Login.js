@@ -22,7 +22,7 @@ function Login(props) {
       <div className="login-section">
         <div className="row">
           <div className="col-xs-20 off-xs-2 col-md-8 off-md-8">
-            <h1>Sign in</h1>
+            <h1>Login</h1>
             {statusText}
             <input
               className="form-control"
@@ -44,7 +44,7 @@ function Login(props) {
               className="button button-primary login-button"
               onClick={onLoginPressed(email, password)}
               type="button">
-              Login
+              Log in
             </button>
             <Link to='/forgot-password' className="forgot-password-link">Forgot password?</Link>
           </div>
