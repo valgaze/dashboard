@@ -8,19 +8,19 @@ function Sidebar(props) {
     <div className="content-sidebar">
       <ul className="sidebar-nav-list">
         <li className="list-header">
-          <a href="/tokens#">Your Environment</a>
+          <a href="#">Your Environment</a>
         </li>
         <li className="active">
-          <a href="/tokens#" className="active">Tokens</a>
+          <a href="#" className="active">Tokens</a>
         </li>
         <li>
-          <a href="/tokens#">Spaces</a>
+          <a href="#">Spaces</a>
         </li>
         <li>
-          <a href="/tokens#">Doorways</a>
+          <a href="#">Doorways</a>
         </li>
         <li>
-          <a href="/tokens#">Events</a>
+          <a href="#">Events</a>
         </li>
       </ul>
     </div>
