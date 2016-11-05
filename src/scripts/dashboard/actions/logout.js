@@ -1,6 +1,5 @@
 import {push} from 'react-router-redux';
 
-
 export function logoutUser() {
   return dispatch => {
     dispatch(push('/login'));

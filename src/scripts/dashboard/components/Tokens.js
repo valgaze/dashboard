@@ -57,7 +57,7 @@ function Tokens(props) {
                   <h2 className="fun-stat">With {spaceCount} spaces, {doorwayCount} doorways, we've counted {eventCount} events.</h2>
                   <div className="row">
                     <div className="col-xs-24 col-md-12">
-                      <div className="card">
+                      <div className="card token-card">
                         <div className="card-header">
                           <h3 className="card-header-title">Sandbox Token</h3>
                         </div>
@@ -67,7 +67,7 @@ function Tokens(props) {
                       </div>
                     </div>
                     <div className="col-xs-24 col-md-12">
-                      <div className="card">
+                      <div className="card token-card">
                         <div className="card-header">
                           <h3 className="card-header-title">Live Token</h3>
                         </div>

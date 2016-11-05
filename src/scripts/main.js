@@ -1,15 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux';
+import {Router, Route, browserHistory} from 'react-router';
+import {syncHistoryWithStore} from 'react-router-redux'
+
+import "whatwg-fetch"
 
 import App from 'dashboard/app'
 import store from 'dashboard/store';
 import Tokens from 'dashboard/components/Tokens'
 import Login from 'dashboard/components/Login'
-import "whatwg-fetch"
-
-import {Router, Route, browserHistory} from 'react-router';
-import {syncHistoryWithStore} from 'react-router-redux'
 
 const history = syncHistoryWithStore(browserHistory, store);
 
