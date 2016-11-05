@@ -6,7 +6,7 @@ const jwtLocalStorageMiddleware = store => next => action => {
       window.localStorage.jwt = action.jwt;
       break;
     case 'DELETE_JWT_FROM_LOCAL_STORAGE':
-      delete window.localStorage.jwt;
+      window.localStorage.removeItem('jwt');
       break;
   }
 

@@ -11,7 +11,7 @@ export function loginFieldUpdate(field, value) {
 export function loginSubmit(email, password) {
   return dispatch => {
     dispatch({type: "LOGIN_REQUEST"});
-    console.log(email, password);
+
     var loginParams = {
       email: email,
       password: password
