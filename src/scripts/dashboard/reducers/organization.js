@@ -1,16 +1,16 @@
 import update from 'react-addons-update';
 
 const initialState = {
-  sandbox: null,
-  live: null
+  sandboxToken: null,
+  liveToken: null
 }
 
-export default function tokens(state=initialState, action) {
+export default function organization(state=initialState, action) {
   switch(action.type) {
     case 'TOKENS_SUCCESS':
       return Object.assign({}, state, {
-        sandbox: action.json.sandboxToken, 
-        live: action.json.liveToken
+        sandboxToken: action.json.sandboxToken, 
+        liveToken: action.json.liveToken
       });
     default:
       return state;

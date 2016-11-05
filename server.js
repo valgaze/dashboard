@@ -5,7 +5,7 @@ var server = express()
 
 server.use('/assets', express.static(__dirname + '/build/assets'))
 
-server.get('/', (req, res) => {
+server.get('*', (req, res) => {
   res.sendFile(__dirname + '/build/index.html')
 })
 

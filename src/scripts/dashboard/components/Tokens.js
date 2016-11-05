@@ -2,24 +2,29 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import Sidebar from './sidebar'
-import {
-  tokensGet
-} from 'dashboard/actions/tokens';
+import {tokensGet} from 'dashboard/actions/tokens';
+import {spacesGet} from 'dashboard/actions/spaces';
 
 function Tokens(props) {
   const {
     sandboxToken,
     liveToken,
     jwt,
-    fetchOrganizationTokens
+    fetchOrganizationTokens,
+    fetchSpaces,
+    spaceCount
   } = props;
   
   var loading;
-  if (sandboxToken == null && liveToken == null) {
+  if (!sandboxToken && !liveToken) {
     fetchOrganizationTokens(jwt);
     loading = true;
   } else {
     loading = false;
+  }
+
+  if (!spaceCount) {
+    fetchSpaces(jwt);
   }
 
   return (
@@ -32,7 +37,7 @@ function Tokens(props) {
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-20">
                 <h1>Tokens</h1>
-                <h2 className="fun-stat">With 7 spaces, 23 doorways, we've counted 3421 events.</h2>
+                <h2 className="fun-stat">With {spaceCount} spaces, 23 doorways, we've counted 3421 events.</h2>
                 <div className="row">
                   <div className="col-xs-24 col-md-12">
                     <div className="card">
@@ -65,14 +70,18 @@ function Tokens(props) {
 }
 
 const mapStateToProps = state => ({
-  sandboxToken: state.tokens.sandbox,
-  liveToken: state.tokens.live,
-  jwt: state.login.jwt
+  sandboxToken: state.organization.sandboxToken,
+  liveToken: state.organization.liveToken,
+  spaceCount: state.spaces.count,
+  jwt: state.user.jwt
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchOrganizationTokens: (jwt) => {
     dispatch(tokensGet(jwt));
+  },
+  fetchSpaces: (jwt) => {
+    dispatch(spacesGet(jwt));
   }
 });
 

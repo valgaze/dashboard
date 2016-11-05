@@ -1,3 +1,5 @@
+import {push} from 'react-router-redux';
+
 export function loginFieldUpdate(field, value) {
   return {
     type: 'LOGIN_FIELD_UPDATE',
@@ -9,7 +11,7 @@ export function loginFieldUpdate(field, value) {
 export function loginSubmit(email, password) {
   return dispatch => {
     dispatch({type: "LOGIN_REQUEST"});
-
+    console.log(email, password);
     var loginParams = {
       email: email,
       password: password
@@ -34,8 +36,9 @@ export function loginSubmit(email, password) {
         throw new Error(response.statusText);
       }
     }).then(function(json) {
-      dispatch({type: 'LOGIN_SUCCESS', jwt: json});
+      dispatch({type: 'LOGIN_SUCCESS', jwt: json, email: email});
       dispatch({type: 'SAVE_JWT_TO_LOCAL_STORAGE', jwt: json});
+      dispatch(push('/tokens'));
     }).catch(function(error) {
       dispatch({type: 'LOGIN_FAILURE', message: error.message});
     })

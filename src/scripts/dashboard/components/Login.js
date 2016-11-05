@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {push} from 'react-router-redux';
 
 import {
   loginFieldUpdate,
@@ -66,9 +65,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(loginFieldUpdate(field, event.target.value));
   },
   onLoginPressed: (email, password) => () => {
-    dispatch(push('/tokens'));
-    // dispatch(loginSubmit(email, password));
-    
+    dispatch(loginSubmit(email, password));    
   }
 });
 

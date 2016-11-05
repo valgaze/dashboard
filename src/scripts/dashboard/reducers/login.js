@@ -3,8 +3,7 @@ import update from 'react-addons-update';
 const initialState = {
   email: null,
   password: null,
-  statusText: null,
-  jwt: window.localStorage.jwt
+  statusText: null
 }
 
 export default function login(state=initialState, action) {
@@ -16,7 +15,7 @@ export default function login(state=initialState, action) {
     case 'LOGIN_FAILURE':
       return Object.assign({}, state, {statusText: action.message });
     case 'LOGIN_SUCCESS':
-      return Object.assign({}, state, {statusText: "", jwt: action.jwt});
+      return initialState;
     default:
       return state;
   }
