@@ -12,7 +12,7 @@ function Spaces(props) {
     spaces,
   } = props;
   
-  
+  var loading;
   if (!spaces) {
     fetchSpaces(jwt);
     loading = true;
