@@ -2,7 +2,7 @@ import update from 'react-addons-update';
 
 const initialState = {
   count: null,
-  events: null
+  results: null
 }
 
 export default function events(state=initialState, action) {
@@ -10,7 +10,7 @@ export default function events(state=initialState, action) {
     case 'EVENTS_SUCCESS':
       return Object.assign({}, state, {
         count: action.json.count,
-        events: action.json.results
+        results: action.json.results
       });
       break;
     default:

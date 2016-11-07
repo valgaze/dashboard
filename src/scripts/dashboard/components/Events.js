@@ -3,23 +3,23 @@ import {connect} from 'react-redux';
 
 import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
-import {spacesGet} from 'dashboard/actions/spaces';
+import {eventsGet} from 'dashboard/actions/events';
 
-function Spaces(props) {
+function Events(props) {
   const {
     jwt,
-    fetchSpaces,
-    spaces,
+    fetchEvents,
+    events,
   } = props;
   
   var loading;
-  if(!spaces) {
+  if(!events) {
     loading = true;
-    fetchSpaces(jwt);
+    fetchEvents(jwt);
   } else {
     loading = false;
     setTimeout(function(){
-      fetchSpaces(jwt);
+      fetchEvents(jwt);
     }, 1000);
   }
   
@@ -33,22 +33,24 @@ function Spaces(props) {
             <div className="container">
               <div className="row">
                 <div className="col-xs-20 off-xs-2 col-md-20">
-                  <h1>Spaces</h1>
+                  <h1>Events</h1>
                   <table className="table data-table">
                     <thead>
                       <tr>
-                        <td>Name</td>
-                        <td>ID</td>
-                        <td>Current Count</td>
+                        <td>Event ID</td>
+                        <td>Doorway ID</td>
+                        <td>Timestamp</td>
+                        <td>Count Change</td>
                       </tr>
                     </thead>
                     <tbody>
-                      {loading ? "Loading spaces..." : spaces.map(function(space, i) {
+                      {loading ? "Loading events..." : events.reverse().map(function(event, i) {
                         return (
                           <tr>
-                            <td>{space.name}</td>
-                            <td>{space.id}</td>
-                            <td>{space.current_count}</td>
+                            <td>{event.id}</td>
+                            <td>{event.doorway_id}</td>
+                            <td>{event.timestamp}</td>
+                            <td>{event.spaces[0].count_change}</td>
                           </tr>
                         );
                       })}
@@ -65,14 +67,14 @@ function Spaces(props) {
 }
 
 const mapStateToProps = state => ({
-  spaces: state.spaces.results,
+  events: state.events.results,
   jwt: state.user.jwt
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSpaces: (jwt) => {
-    dispatch(spacesGet(jwt))
+  fetchEvents: (jwt) => {
+    dispatch(eventsGet(jwt))
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Spaces);
+export default connect(mapStateToProps, mapDispatchToProps)(Events);

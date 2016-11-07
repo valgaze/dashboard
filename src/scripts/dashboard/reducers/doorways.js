@@ -2,7 +2,7 @@ import update from 'react-addons-update';
 
 const initialState = {
   count: null,
-  doorways: null
+  results: null
 }
 
 export default function doorways(state=initialState, action) {
@@ -10,7 +10,7 @@ export default function doorways(state=initialState, action) {
     case 'DOORWAYS_SUCCESS':
       return Object.assign({}, state, {
         count: action.json.count,
-        doorways: action.json.results
+        results: action.json.results
       });
       break;
     default:
