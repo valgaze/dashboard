@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 function Sidebar(props) {
   const {} = props;
@@ -11,10 +12,10 @@ function Sidebar(props) {
           <a href="#">Your Environment</a>
         </li>
         <li className="active">
-          <a href="#" className="active">Tokens</a>
+          <Link to='/tokens' className="">Tokens</Link>
         </li>
         <li>
-          <a href="#">Spaces</a>
+          <Link to='/spaces' className="">Spaces</Link>
         </li>
         <li>
           <a href="#">Doorways</a>

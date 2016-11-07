@@ -11,6 +11,7 @@ import store from 'dashboard/store';
 import Login from 'dashboard/components/Login'
 import ForgotPassword from 'dashboard/components/ForgotPassword'
 import Tokens from 'dashboard/components/Tokens'
+import Spaces from 'dashboard/components/Spaces'
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -29,6 +30,8 @@ ReactDOM.render(
       <Route path="/" component={Tokens} onEnter={requireAuth} />
       <Route path="login" component={Login} />
       <Route path="forgot-password" component={ForgotPassword} />
+      <Route path="tokens" component={Tokens} onEnter={requireAuth} />
+      <Route path="spaces" component={Spaces} onEnter={requireAuth} />
     </Router>
   </Provider>,
   document.getElementById('react-mount')
