@@ -9,8 +9,8 @@ export default function organization(state=initialState, action) {
   switch(action.type) {
     case 'TOKENS_SUCCESS':
       return Object.assign({}, state, {
-        sandboxToken: action.json.sandboxToken, 
-        liveToken: action.json.liveToken
+        sandboxToken: action.json.sandbox[0], 
+        liveToken: action.json.live[0]
       });
     default:
       return state;

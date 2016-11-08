@@ -1,7 +1,7 @@
 export function eventsGet(jwt) {
   return dispatch => {
 
-    fetch('https://api.density.io/v1/events/?start_time=2016-10-01&page=2', {
+    fetch('https://api.density.io/v1/events/?start_time=2016-10-01', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

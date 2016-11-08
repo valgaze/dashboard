@@ -33,7 +33,7 @@ ReactDOM.render(
       <Route path="forgot-password" component={ForgotPassword} />
       <Route path="tokens" component={Tokens} onEnter={requireAuth} />
       <Route path="spaces" component={Spaces} onEnter={requireAuth} />
-      <Route path="events" component={Events} onEnter={requireAuth} />
+      <Route path="events/:page" component={Events} onEnter={requireAuth} />
     </Router>
   </Provider>,
   document.getElementById('react-mount')

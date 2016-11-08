@@ -13,7 +13,7 @@ function Events(props) {
     fetchEvents,
     events,
   } = props;
-  
+
   var loading;
   if(!events) {
     loading = true;
