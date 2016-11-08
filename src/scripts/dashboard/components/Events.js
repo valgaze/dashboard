@@ -1,8 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import Appbar from 'dashboard/components/Appbar'
-import Sidebar from 'dashboard/components/Sidebar'
+import Moment from 'moment';
+
+import Appbar from 'dashboard/components/Appbar';
+import Sidebar from 'dashboard/components/Sidebar';
 import {eventsGet} from 'dashboard/actions/events';
 
 function Events(props) {
@@ -34,23 +36,27 @@ function Events(props) {
               <div className="row">
                 <div className="col-xs-20 off-xs-2 col-md-20">
                   <h1>Events</h1>
+                  {loading ? "Loading Events..." : null}
                   <table className="table data-table">
                     <thead>
                       <tr>
-                        <td>Event ID</td>
+                        <td>Sensor ID</td>
                         <td>Doorway ID</td>
                         <td>Timestamp</td>
                         <td>Count Change</td>
                       </tr>
                     </thead>
                     <tbody>
-                      {loading ? "Loading events..." : events.reverse().map(function(event, i) {
+                      {loading ? null : events.reverse().map(function(event, i) {
                         return (
-                          <tr>
-                            <td>{event.id}</td>
+                          <tr key={event.id}>
+                            <td>{event.sensor_id}</td>
                             <td>{event.doorway_id}</td>
-                            <td>{event.timestamp}</td>
-                            <td>{event.spaces[0].count_change}</td>
+                            <td>{Moment(event.timestamp).format('MMM D, h:mm:ss A Z')}</td>
+                            <td>{event.spaces.map(function(space) {
+                                  return space.count_change
+                                })}
+                            </td>
                           </tr>
                         );
                       })}
