@@ -21,7 +21,7 @@ function Sidebar(props) {
           <a href="#">Doorways</a>
         </li>
         <li>
-          <Link to='/events/1' className="">Events</Link>
+          <Link to='#' className="">Events</Link>
         </li>
       </ul>
     </div>

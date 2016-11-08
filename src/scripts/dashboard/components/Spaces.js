@@ -34,6 +34,7 @@ function Spaces(props) {
               <div className="row">
                 <div className="col-xs-20 off-xs-2 col-md-20">
                   <h1>Spaces</h1>
+                  {loading ? "Loading spaces..." : null}
                   <table className="table data-table">
                     <thead>
                       <tr>
@@ -43,9 +44,9 @@ function Spaces(props) {
                       </tr>
                     </thead>
                     <tbody>
-                      {loading ? "Loading spaces..." : spaces.map(function(space, i) {
+                      {loading ? null : spaces.map(function(space, i) {
                         return (
-                          <tr>
+                          <tr key={space.id}>
                             <td>{space.name}</td>
                             <td>{space.id}</td>
                             <td>{space.current_count}</td>
