@@ -11,17 +11,18 @@ function Events(props) {
   const {
     jwt,
     fetchEvents,
-    events,
+    events
   } = props;
 
+  var page = 1;
   var loading;
   if(!events) {
     loading = true;
-    fetchEvents(jwt);
+    fetchEvents(jwt, page);
   } else {
     loading = false;
     setTimeout(function(){
-      fetchEvents(jwt);
+      fetchEvents(jwt, page);
     }, 1000);
   }
   
@@ -32,37 +33,35 @@ function Events(props) {
         <Sidebar />
         <div className="content-panel">
           <div className="tokens-section">
-            <div className="container">
-              <div className="row">
-                <div className="col-xs-20 off-xs-2 col-md-20">
-                  <h1>Events</h1>
-                  {loading ? "Loading Events..." : null}
-                  <table className="table data-table">
-                    <thead>
-                      <tr>
-                        <td>Sensor ID</td>
-                        <td>Doorway ID</td>
-                        <td>Timestamp</td>
-                        <td>Count Change</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {loading ? null : events.reverse().map(function(event, i) {
-                        return (
-                          <tr key={event.id}>
-                            <td>{event.sensor_id}</td>
-                            <td>{event.doorway_id}</td>
-                            <td>{Moment(event.timestamp).format('MMM D, h:mm:ss A Z')}</td>
-                            <td>{event.spaces.map(function(space) {
-                                  return space.count_change
-                                })}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+            <div className="row">
+              <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
+                <h1>Events</h1>
+                {loading ? "Loading Events..." : null}
+                <table className="table data-table">
+                  <thead>
+                    <tr>
+                      <td>Sensor ID</td>
+                      <td>Doorway ID</td>
+                      <td>Timestamp</td>
+                      <td>Count Change</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {loading ? null : events.reverse().map(function(event, i) {
+                      return (
+                        <tr key={event.id}>
+                          <td>{event.sensor_id}</td>
+                          <td>{event.doorway_id}</td>
+                          <td>{Moment(event.timestamp).format('MMM D, h:mm:ss A Z')}</td>
+                          <td>{event.spaces.map(function(space) {
+                                return space.count_change
+                              })}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -78,8 +77,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchEvents: (jwt) => {
-    dispatch(eventsGet(jwt))
+  fetchEvents: (jwt, page) => {
+    dispatch(eventsGet(jwt, page))
   }
 });
 

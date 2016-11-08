@@ -30,32 +30,30 @@ function Spaces(props) {
         <Sidebar />
         <div className="content-panel">
           <div className="tokens-section">
-            <div className="container">
-              <div className="row">
-                <div className="col-xs-20 off-xs-2 col-md-20">
-                  <h1>Spaces</h1>
-                  {loading ? "Loading spaces..." : null}
-                  <table className="table data-table">
-                    <thead>
-                      <tr>
-                        <td>Name</td>
-                        <td>ID</td>
-                        <td>Current Count</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {loading ? null : spaces.map(function(space, i) {
-                        return (
-                          <tr key={space.id}>
-                            <td>{space.name}</td>
-                            <td>{space.id}</td>
-                            <td>{space.current_count}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+            <div className="row">
+              <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
+                <h1>Spaces</h1>
+                {loading ? "Loading spaces..." : null}
+                <table className="table data-table">
+                  <thead>
+                    <tr>
+                      <td>Name</td>
+                      <td>ID</td>
+                      <td>Current Count</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {loading ? null : spaces.map(function(space, i) {
+                      return (
+                        <tr key={space.id}>
+                          <td>{space.name}</td>
+                          <td>{space.id}</td>
+                          <td>{space.current_count}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

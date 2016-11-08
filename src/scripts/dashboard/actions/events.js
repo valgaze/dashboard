@@ -1,7 +1,7 @@
-export function eventsGet(jwt) {
+export function eventsGet(jwt, page) {
   return dispatch => {
-
-    fetch('https://api.density.io/v1/events/?start_time=2016-10-01', {
+    var url = `https://api.density.io/v1/events/?start_time=2016-10-01&page=${page}`
+    fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

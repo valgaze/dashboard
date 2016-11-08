@@ -15,10 +15,10 @@ function Sidebar(props) {
           <Link to='/tokens' className="">Tokens</Link>
         </li>
         <li>
-        <Link to='/spaces' className="">Spaces</Link>
+          <Link to='/spaces' className="">Spaces</Link>
         </li>
         <li>
-          <a href="#">Doorways</a>
+          <Link to='#' className="">Doorways</Link>
         </li>
         <li>
           <Link to='#' className="">Events</Link>
