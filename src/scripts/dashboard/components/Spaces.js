@@ -13,13 +13,16 @@ function Spaces(props) {
   } = props;
   
   var loading;
-  if (!spaces) {
-    fetchSpaces(jwt);
+  if(!spaces) {
     loading = true;
+    fetchSpaces(jwt);
   } else {
     loading = false;
+    setTimeout(function(){
+      fetchSpaces(jwt);
+    }, 1000);
   }
-
+  
   return (
     <div>
       <Appbar />
@@ -31,7 +34,7 @@ function Spaces(props) {
               <div className="row">
                 <div className="col-xs-20 off-xs-2 col-md-20">
                   <h1>Spaces</h1>
-                  <table className="table">
+                  <table className="table data-table">
                     <thead>
                       <tr>
                         <td>Name</td>
@@ -39,8 +42,8 @@ function Spaces(props) {
                         <td>Current Count</td>
                       </tr>
                     </thead>
-                    <tbody>  
-                      {loading ? "Loading..." : spaces.map(function(space, i) {
+                    <tbody>
+                      {loading ? "Loading spaces..." : spaces.map(function(space, i) {
                         return (
                           <tr>
                             <td>{space.name}</td>
@@ -68,7 +71,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchSpaces: (jwt) => {
-    dispatch(spacesGet(jwt));
+    dispatch(spacesGet(jwt))
   }
 });
 

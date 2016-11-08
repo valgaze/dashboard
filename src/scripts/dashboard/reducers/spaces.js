@@ -2,7 +2,7 @@ import update from 'react-addons-update';
 
 const initialState = {
   count: null,
-  spaces: null
+  results: null
 }
 
 export default function spaces(state=initialState, action) {
@@ -10,7 +10,7 @@ export default function spaces(state=initialState, action) {
     case 'SPACES_SUCCESS':
       return Object.assign({}, state, {
         count: action.json.count,
-        spaces: action.json.results
+        results: action.json.results
       });
       break;
     default:
