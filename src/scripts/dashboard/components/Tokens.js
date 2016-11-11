@@ -113,7 +113,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(doorwaysGet(jwt));
   },
   fetchEvents: (jwt) => {
-    dispatch(eventsGet(jwt, 1));
+    dispatch(eventsGet(jwt, 1, 200));
   }
 });
 

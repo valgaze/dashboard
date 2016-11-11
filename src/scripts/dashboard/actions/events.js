@@ -1,6 +1,6 @@
-export function eventsGet(jwt, page) {
+export function eventsGet(jwt, page, pageSize) {
   return dispatch => {
-    var url = `https://api.density.io/v1/events/?start_time=2016-10-01&page=${page}`
+    var url = `https://api.density.io/v1/events/?start_time=2016-10-01&page=${page}&page_size=${pageSize}`
     fetch(url, {
       method: 'GET',
       headers: {

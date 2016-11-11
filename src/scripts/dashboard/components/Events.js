@@ -15,14 +15,15 @@ function Events(props) {
   } = props;
 
   var page = 1;
+  var pageSize = 20;
   var loading;
   if(!events) {
     loading = true;
-    fetchEvents(jwt, page);
+    fetchEvents(jwt, page, pageSize);
   } else {
     loading = false;
     setTimeout(function(){
-      fetchEvents(jwt, page);
+      fetchEvents(jwt, page, pageSize);
     }, 1000);
   }
   
@@ -77,8 +78,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchEvents: (jwt, page) => {
-    dispatch(eventsGet(jwt, page))
+  fetchEvents: (jwt, page, pageSize) => {
+    dispatch(eventsGet(jwt, page, pageSize))
   }
 });
 
