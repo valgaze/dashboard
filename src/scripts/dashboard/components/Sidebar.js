@@ -11,7 +11,7 @@ function Sidebar(props) {
         <li className="list-header">
           <a href="#">Your Environment</a>
         </li>
-        <li className="active">
+        <li className="">
           <Link to='/tokens' className="">Tokens</Link>
         </li>
         <li>
@@ -22,6 +22,14 @@ function Sidebar(props) {
         </li>
         <li>
           <Link to='#' className="">Events</Link>
+        </li>
+      </ul>
+      <ul className="sidebar-nav-list">
+        <li className="list-header">
+          <a href="#">Account</a>
+        </li>
+        <li>
+          <Link to='/account/change-password' className="">Change Password</Link>
         </li>
       </ul>
     </div>

@@ -13,6 +13,7 @@ import ForgotPassword from 'dashboard/components/ForgotPassword';
 import Tokens from 'dashboard/components/Tokens';
 import Spaces from 'dashboard/components/Spaces';
 import Events from 'dashboard/components/Events';
+import ChangePassword from 'dashboard/components/ChangePassword';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -34,6 +35,7 @@ ReactDOM.render(
       <Route path="tokens" component={Tokens} onEnter={requireAuth} />
       <Route path="spaces" component={Spaces} onEnter={requireAuth} />
       <Route path="events/:page" component={Events} onEnter={requireAuth} />
+      <Route path="account/change-password" component={ChangePassword} onEnter={requireAuth} />
     </Router>
   </Provider>,
   document.getElementById('react-mount')

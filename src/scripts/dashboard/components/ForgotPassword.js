@@ -20,7 +20,7 @@ class ForgotPassword extends React.Component {
     }
   }
 
-  onSubmitPressed () {
+  onSubmitPressed() {
     this.setState({
       statusText: "Sending password reset email..."
     });

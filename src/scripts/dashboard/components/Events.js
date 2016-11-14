@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-
+import {Link} from 'react-router';
 import Moment from 'moment';
 
 import Appbar from 'dashboard/components/Appbar';
@@ -9,22 +9,21 @@ import {eventsGet} from 'dashboard/actions/events';
 
 function Events(props) {
   const {
+    page,
     jwt,
     fetchEvents,
     events
   } = props;
 
-  var page = 1;
-  var pageSize = 20;
+  var nextPage = parseInt(page)+1;
+  var prevPage = Math.max(1, parseInt(page)-1);
+  var pageSize = 10;
   var loading;
   if(!events) {
     loading = true;
     fetchEvents(jwt, page, pageSize);
   } else {
     loading = false;
-    setTimeout(function(){
-      fetchEvents(jwt, page, pageSize);
-    }, 1000);
   }
   
   return (
@@ -63,6 +62,11 @@ function Events(props) {
                     })}
                   </tbody>
                 </table>
+                <ul className="nav nav-tabs data-table-nav">
+                  <li><Link to={'/events/'+prevPage} className="">&laquo;</Link></li>
+                  <li className="active"><Link to={'/events/'+page} className="">{page}</Link></li>
+                  <li><Link to={'/events/'+nextPage} className="">&raquo;</Link></li>
+                </ul>
               </div>
             </div>
           </div>
@@ -72,7 +76,8 @@ function Events(props) {
   )
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
+  page: ownProps.params.page,
   events: state.events.results,
   jwt: state.user.jwt
 });
