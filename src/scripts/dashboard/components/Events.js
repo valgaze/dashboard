@@ -33,7 +33,6 @@ function Events(props) {
   }
 
   function fetchNextPage(){
-    console.log(nextPage);
     fetchPageEvents(nextPage);
   }
 

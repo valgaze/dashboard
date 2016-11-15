@@ -9,7 +9,7 @@ function Sidebar(props) {
     <div className="content-sidebar">
       <ul className="sidebar-nav-list">
         <li className="list-header">
-          <a href="#">Your Environment</a>
+          <span>Your Environment</span>
         </li>
         <li className="">
           <Link to='/tokens' className="">Tokens</Link>
@@ -18,20 +18,25 @@ function Sidebar(props) {
           <Link to='/spaces' className="">Spaces</Link>
         </li>
         <li>
-          <Link to='#' className="">Doorways</Link>
-        </li>
-        <li>
           <Link to='/events/1' className="">Events</Link>
         </li>
+        {/*
+        <li>
+          <Link to='#' className="">Doorways</Link>
+        </li>
+        
+        */}
       </ul>
+      {/*
       <ul className="sidebar-nav-list">
         <li className="list-header">
-          <a href="#">Account</a>
+          <span>Settings</span>
         </li>
         <li>
-          <Link to='/account/change-password' className="">Change Password</Link>
+          <Link to='/account/change-password' className="">Account</Link>
         </li>
       </ul>
+      */}
     </div>
   )
 }
