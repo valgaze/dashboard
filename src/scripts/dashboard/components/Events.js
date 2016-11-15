@@ -9,21 +9,36 @@ import {eventsGet} from 'dashboard/actions/events';
 
 function Events(props) {
   const {
-    page,
+    eventCount,
+    currentPage,
     jwt,
     fetchEvents,
     events
   } = props;
 
-  var nextPage = parseInt(page)+1;
-  var prevPage = Math.max(1, parseInt(page)-1);
   var pageSize = 10;
+  var maxPage = Math.round(eventCount/pageSize);
+  var nextPage = Math.min(maxPage, parseInt(currentPage)+1);
+  var prevPage = Math.max(1, parseInt(currentPage)-1);
   var loading;
   if(!events) {
+    fetchPageEvents(currentPage);
     loading = true;
-    fetchEvents(jwt, page, pageSize);
   } else {
     loading = false;
+  }
+
+  function fetchPageEvents(page) {
+    fetchEvents(jwt, page, pageSize);
+  }
+
+  function fetchNextPage(){
+    console.log(nextPage);
+    fetchPageEvents(nextPage);
+  }
+
+  function fetchPrevPage(){
+    fetchPageEvents(prevPage);
   }
   
   return (
@@ -47,7 +62,7 @@ function Events(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {loading ? null : events.reverse().map(function(event, i) {
+                    {loading ? null : events.map(function(event, i) {
                       return (
                         <tr key={event.id}>
                           <td>{event.sensor_id}</td>
@@ -63,9 +78,9 @@ function Events(props) {
                   </tbody>
                 </table>
                 <ul className="nav nav-tabs data-table-nav">
-                  <li><Link to={'/events/'+prevPage} className="">&laquo;</Link></li>
-                  <li className="active"><Link to={'/events/'+page} className="">{page}</Link></li>
-                  <li><Link to={'/events/'+nextPage} className="">&raquo;</Link></li>
+                  <li><Link to={'/events/'+prevPage} onClick={fetchPrevPage} className="">&laquo;</Link></li>
+                  <li className="active"><Link to={'/events/'+currentPage} className="">{currentPage}</Link></li>
+                  <li><Link to={'/events/'+nextPage} onClick={fetchNextPage} className="">&raquo;</Link></li>
                 </ul>
               </div>
             </div>
@@ -77,7 +92,8 @@ function Events(props) {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  page: ownProps.params.page,
+  eventCount: state.events.count,
+  currentPage: ownProps.params.page,
   events: state.events.results,
   jwt: state.user.jwt
 });
