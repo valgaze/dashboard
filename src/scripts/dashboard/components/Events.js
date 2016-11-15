@@ -6,9 +6,13 @@ import Moment from 'moment';
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
 import {eventsGet} from 'dashboard/actions/events';
+import {doorwaysGet} from 'dashboard/actions/doorways';
+import {spacesGet} from 'dashboard/actions/spaces';
 
 function Events(props) {
   const {
+    doorways,
+    spaces,
     eventCount,
     currentPage,
     jwt,
@@ -43,7 +47,17 @@ function Events(props) {
   function fetchPrevPage(){
     fetchPageEvents(prevPage);
   }
-  
+
+  function doorwayName(doorway_id){
+    var doorway = doorways.find(doorway => doorway.id === doorway_id);
+    return doorway.name;
+  }
+
+  function spaceName(space_id){
+    var space = spaces.find(space => space.id === space_id);
+    return space.name;
+  }
+
   return (
     <div>
       <Appbar />
@@ -59,7 +73,7 @@ function Events(props) {
                     return (
                       <div className="event-item" key={event.id}>
                         <div className="event-doorway-time">
-                          {Moment(event.timestamp).format('MMM D, (h:mm A)')} / Doorway: {event.doorway_id}
+                          {Moment(event.timestamp).format('MMM D (h:mm A)')} / Doorway: {doorwayName(event.doorway_id)}
                         </div>
                         <table className="table data-table">
                           <thead>
@@ -73,7 +87,7 @@ function Events(props) {
                             {event.spaces.map(function(space) {
                               return (
                                 <tr key={space.space_id}>
-                                  <td width="60%">{space.space_id}</td>
+                                  <td width="60%">{spaceName(space.space_id)}</td>
                                   <td width="20%">{entranceOrExit(space.count_change)}</td>
                                   <td width="20%">{space.count}</td>
                                 </tr>
@@ -100,6 +114,8 @@ function Events(props) {
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  doorways: state.doorways.results,
+  spaces: state.spaces.results,
   eventCount: state.events.count,
   currentPage: ownProps.params.page,
   events: state.events.results,
@@ -109,7 +125,9 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = dispatch => ({
   fetchEvents: (jwt, page, pageSize) => {
     dispatch(eventsGet(jwt, page, pageSize))
-  }
+    dispatch(doorwaysGet(jwt))
+    dispatch(spacesGet(jwt))
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Events);
