@@ -27,7 +27,6 @@ function Sidebar(props) {
         
         */}
       </ul>
-      {/*
       <ul className="sidebar-nav-list">
         <li className="list-header">
           <span>Settings</span>
@@ -36,7 +35,6 @@ function Sidebar(props) {
           <Link to='/account/change-password' className="">Account</Link>
         </li>
       </ul>
-      */}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 .data-table {
   width: 100%;
-  
+  border: 1px solid #ddd;
+
   tbody > tr:nth-of-type(odd) {
     background-color: #f9f9f9;
   }

@@ -28,6 +28,10 @@ function Events(props) {
     loading = false;
   }
 
+  function entranceOrExit(count_change) {
+    return count_change === 1 ? "Entrance" : "Exit"
+  }
+
   function fetchPageEvents(page) {
     fetchEvents(jwt, page, pageSize);
   }
@@ -46,36 +50,41 @@ function Events(props) {
       <div className="content-inner">
         <Sidebar />
         <div className="content-panel">
-          <div className="tokens-section">
+          <div className="events-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
                 <h1>Events</h1>
-                {loading ? "Loading Events..." : null}
-                <table className="table data-table">
-                  <thead>
-                    <tr>
-                      <td>Sensor ID</td>
-                      <td>Doorway ID</td>
-                      <td>Timestamp</td>
-                      <td>Count Change</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {loading ? null : events.map(function(event, i) {
-                      return (
-                        <tr key={event.id}>
-                          <td>{event.sensor_id}</td>
-                          <td>{event.doorway_id}</td>
-                          <td>{Moment(event.timestamp).format('MMM D, h:mm:ss A Z')}</td>
-                          <td>{event.spaces.map(function(space) {
-                                return space.count_change
-                              })}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                <div className="events-list-section">
+                  {loading ? "Loading Events..." : events.map(function(event, i) {
+                    return (
+                      <div className="event-item" key={event.id}>
+                        <div className="event-doorway-time">
+                          {Moment(event.timestamp).format('MMM D, (h:mm A)')} / Doorway: {event.doorway_id}
+                        </div>
+                        <table className="table data-table">
+                          <thead>
+                            <tr>
+                              <td>Space</td>
+                              <td>Event</td>
+                              <td>Count</td>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {event.spaces.map(function(space) {
+                              return (
+                                <tr key={space.space_id}>
+                                  <td width="60%">{space.space_id}</td>
+                                  <td width="20%">{entranceOrExit(space.count_change)}</td>
+                                  <td width="20%">{space.count}</td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  })}
+                </div>
                 <ul className="nav nav-tabs data-table-nav">
                   <li><Link to={'/events/'+prevPage} onClick={fetchPrevPage} className="">&laquo;</Link></li>
                   <li className="active"><Link to={'/events/'+currentPage} className="">{currentPage}</Link></li>
