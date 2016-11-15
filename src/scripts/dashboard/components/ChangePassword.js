@@ -1,8 +1,10 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
 import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
+import {logoutUser} from 'dashboard/actions/logout'
 
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -28,9 +30,7 @@ class ChangePassword extends React.Component {
   }
 
   onSubmitPressed() {
-    this.setState({
-      statusText: "Updating your password..."
-    });
+    this.setState({statusText: "Updating your password..."});
     fetch('https://clerk.density.io/password_change/', {
       method: 'POST',
       body: JSON.stringify({
@@ -41,11 +41,13 @@ class ChangePassword extends React.Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.props.jwt}`
       },
     })
     .then((response) => {
       if (response.ok) {
-        return response.json();
+        // this.setState({statusText: "We have successfully updated your password."});
+        this.props.triggerLogOut();
       } else if (response.status == 403) {
         return response.json().then(({detail}) => {
           throw new Error(detail);
@@ -53,14 +55,8 @@ class ChangePassword extends React.Component {
       } else {
         throw new Error(response.statusText);
       }
-    }).then((json) => {
-      this.setState({
-        statusText: "We have successfully updated your password."
-      });
     }).catch((error) => {
-      this.setState({
-        statusText: "There was an error. Please try again."
-      });
+      this.setState({statusText: error.message});
     })
   }
 
@@ -119,4 +115,14 @@ class ChangePassword extends React.Component {
   }
 }
 
-export default ChangePassword;
+const mapStateToProps = (state, ownProps) => ({
+  jwt: state.user.jwt
+});
+
+const mapDispatchToProps = dispatch => ({
+  triggerLogOut: () => {
+    dispatch(logoutUser());
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);
