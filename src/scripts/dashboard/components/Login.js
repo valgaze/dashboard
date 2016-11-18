@@ -12,6 +12,7 @@ function Login(props) {
     onLoginPressed,
     onEnterPressed,
     onUpdateLoginField,
+    loading,
     email,
     password,
     statusText
@@ -58,7 +59,8 @@ function Login(props) {
 const mapStateToProps = state => ({
   email: state.login.email,
   password: state.login.password,
-  statusText: state.login.statusText
+  statusText: state.login.statusText,
+  loading: state.login.loading
 });
 
 const mapDispatchToProps = dispatch => ({
