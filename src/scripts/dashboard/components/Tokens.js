@@ -22,13 +22,13 @@ function Tokens({
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
                 <h1>Tokens</h1>
-                <h2 className="fun-stat">With {spaceCount} spaces and {doorwayCount} doorways, we've counted {eventCount} events.</h2>
+                <h2 className="fun-stat">With {spaceCount} spaces and {doorwayCount} doorways, we have counted {eventCount} events.</h2>
                 <div className="row">
                   <div className="col-xs-24 col-md-12">
                     <div className="card token-card">
                       <div className="card-header">
                         <h3 className="card-header-title">Sandbox Token</h3>
-                         <CopyToClipboard text={sandboxToken || ""}>
+                         <CopyToClipboard text={sandboxToken || ''}>
                           <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
                         </CopyToClipboard>
                       </div>
