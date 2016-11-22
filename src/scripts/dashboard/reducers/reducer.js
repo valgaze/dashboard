@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import { routerReducer } from 'react-router-redux'
+import {routerReducer} from 'react-router-redux'
 import {push} from 'react-router-redux';
 
 import login from './login';
@@ -21,8 +21,8 @@ const appReducer = combineReducers({
 
 const rootReducer = (state, action) => {
   if (action.type === 'LOGOUT_USER') {
-    const { routing } = state;
-    state = { routing }
+    const {routing} = state;
+    state = {routing}
   }
 
   return appReducer(state, action)

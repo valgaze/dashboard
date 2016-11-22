@@ -3,26 +3,8 @@ import {connect} from 'react-redux';
 
 import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
-import {spacesGet} from 'dashboard/actions/spaces';
 
-function Spaces(props) {
-  const {
-    jwt,
-    fetchSpaces,
-    spaces,
-  } = props;
-  
-  var loading;
-  if(!spaces) {
-    loading = true;
-    fetchSpaces(jwt);
-  } else {
-    loading = false;
-    setTimeout(function(){
-      fetchSpaces(jwt);
-    }, 1000);
-  }
-  
+function Spaces({spaces}) {
   return (
     <div>
       <Appbar />
@@ -33,7 +15,7 @@ function Spaces(props) {
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
                 <h1>Spaces</h1>
-                {loading ? "Loading spaces..." : null}
+                {spaces ? null : "Loading..."}
                 <table className="table data-table">
                   <thead>
                     <tr>
@@ -43,7 +25,7 @@ function Spaces(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {loading ? null : spaces.map(function(space, i) {
+                    {spaces && spaces.map(function(space, i) {
                       return (
                         <tr key={space.id}>
                           <td>{space.name}</td>
@@ -64,14 +46,10 @@ function Spaces(props) {
 }
 
 const mapStateToProps = state => ({
-  spaces: state.spaces.results,
-  jwt: state.user.jwt
+  spaces: state.spaces.results
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSpaces: (jwt) => {
-    dispatch(spacesGet(jwt))
-  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Spaces);

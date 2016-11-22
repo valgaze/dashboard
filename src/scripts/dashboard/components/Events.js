@@ -1,61 +1,45 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
+import {push} from 'react-router-redux';
 import Moment from 'moment';
 
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
-import {eventsGet} from 'dashboard/actions/events';
-import {doorwaysGet} from 'dashboard/actions/doorways';
-import {spacesGet} from 'dashboard/actions/spaces';
 
-function Events(props) {
-  const {
-    doorways,
-    spaces,
-    eventCount,
-    currentPage,
-    jwt,
-    fetchEvents,
-    events
-  } = props;
+function Events({
+  doorways,
+  spaces,
+  eventCount,
+  currentPage,
+  events,
+  onNavigateToPage,
+}) {
+  const pageSize = 10;
+  const maxPage = Math.round(eventCount/pageSize);
+  const nextPage = Math.min(maxPage, parseInt(currentPage)+1);
+  const prevPage = Math.max(1, parseInt(currentPage)-1);
 
-  var pageSize = 10;
-  var maxPage = Math.round(eventCount/pageSize);
-  var nextPage = Math.min(maxPage, parseInt(currentPage)+1);
-  var prevPage = Math.max(1, parseInt(currentPage)-1);
-  var loading;
-  if(!events) {
-    fetchPageEvents(currentPage);
-    loading = true;
-  } else {
-    loading = false;
+  function entranceOrExit(countChange) {
+    return countChange === 1 ? "Entrance" : "Exit"
   }
 
-  function entranceOrExit(count_change) {
-    return count_change === 1 ? "Entrance" : "Exit"
+  function doorwayName(doorwayId){
+    if(doorways) {
+      var doorway = doorways.find(doorway => doorway.id === doorwayId);
+      return doorway ? doorway.name : doorwayId;
+    } else {
+      return doorwayId;
+    }
   }
 
-  function fetchPageEvents(page) {
-    fetchEvents(jwt, page, pageSize);
-  }
-
-  function fetchNextPage(){
-    fetchPageEvents(nextPage);
-  }
-
-  function fetchPrevPage(){
-    fetchPageEvents(prevPage);
-  }
-
-  function doorwayName(doorway_id){
-    var doorway = doorways.find(doorway => doorway.id === doorway_id);
-    return doorway.name;
-  }
-
-  function spaceName(space_id){
-    var space = spaces.find(space => space.id === space_id);
-    return space.name;
+  function spaceName(spaceId){
+    if(spaces) {
+      var space = spaces.find(space => space.id === spaceId);
+      return space ? space.name : spaceId;
+    } else {
+      return spaceId;
+    }
   }
 
   return (
@@ -69,7 +53,7 @@ function Events(props) {
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
                 <h1>Events</h1>
                 <div className="events-list-section">
-                  {loading ? "Loading Events..." : events.map(function(event, i) {
+                  {!events ? "Loading Events..." : events.map(function(event, i) {
                     return (
                       <div className="event-item" key={event.id}>
                         <div className="event-doorway-time">
@@ -100,9 +84,9 @@ function Events(props) {
                   })}
                 </div>
                 <ul className="nav nav-tabs data-table-nav">
-                  <li><Link to={'/events/'+prevPage} onClick={fetchPrevPage} className="">&laquo;</Link></li>
+                  <li><button onClick={onNavigateToPage.bind(null, prevPage)} className="">&laquo;</button></li>
                   <li className="active"><Link to={'/events/'+currentPage} className="">{currentPage}</Link></li>
-                  <li><Link to={'/events/'+nextPage} onClick={fetchNextPage} className="">&raquo;</Link></li>
+                  <li><button onClick={onNavigateToPage.bind(null, nextPage)} className="">&raquo;</button></li>
                 </ul>
               </div>
             </div>
@@ -119,14 +103,11 @@ const mapStateToProps = (state, ownProps) => ({
   eventCount: state.events.count,
   currentPage: ownProps.params.page,
   events: state.events.results,
-  jwt: state.user.jwt
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchEvents: (jwt, page, pageSize) => {
-    dispatch(eventsGet(jwt, page, pageSize))
-    dispatch(doorwaysGet(jwt))
-    dispatch(spacesGet(jwt))
+  onNavigateToPage(pageNum) {
+    dispatch(push(`/#/events/${pageNum}`));
   },
 });
 

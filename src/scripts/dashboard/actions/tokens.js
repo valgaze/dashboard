@@ -1,11 +1,14 @@
+import {ACCOUNTS_URL} from 'dashboard/constants';
+
 export function tokensGet(jwt) {
-  return dispatch => {
-    fetch('https://clerk.density.io/org_tokens/', {
+  return (dispatch, getState) => {
+    let state = getState();
+    fetch(`${ACCOUNTS_URL}/org_tokens/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
+        'Authorization': `Bearer ${state.user.jwt}`
       },
     })
     .then(function(response) {

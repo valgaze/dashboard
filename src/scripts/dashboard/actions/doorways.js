@@ -1,12 +1,14 @@
-export function doorwaysGet(jwt) {
-  return dispatch => {
+import {API_URL} from 'dashboard/constants';
 
-    fetch('https://api.density.io/v1/doorways/', {
+export function doorwaysGet() {
+  return (dispatch, getState) => {
+    let state = getState();
+    fetch(`${API_URL}/doorways/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
+        'Authorization': `Bearer ${state.user.jwt}`
       },
     })
     .then(function(response) {

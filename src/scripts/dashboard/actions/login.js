@@ -1,5 +1,7 @@
 import {hashHistory} from 'react-router'; 
 
+import {ACCOUNTS_URL} from 'dashboard/constants';
+
 export function loginFieldUpdate(field, value) {
   return {
     type: 'LOGIN_FIELD_UPDATE',
@@ -17,7 +19,7 @@ export function loginSubmit(email, password) {
       password: password
     }
 
-    fetch('https://clerk.density.io/tokens/', {
+    fetch(`${ACCOUNTS_URL}/tokens/`, {
       method: 'POST',
       body: JSON.stringify(loginParams),
       headers: {

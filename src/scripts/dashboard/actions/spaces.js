@@ -1,12 +1,14 @@
-export function spacesGet(jwt) {
-  return dispatch => {
+import {API_URL} from 'dashboard/constants';
 
-    fetch('https://api.density.io/v1/spaces/', {
+export function spacesGet() {
+  return (dispatch, getState) => {
+    let state = getState();
+    return fetch(`${API_URL}/spaces/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
+        'Authorization': `Bearer ${state.user.jwt}`
       },
     })
     .then(function(response) {
@@ -23,8 +25,6 @@ export function spacesGet(jwt) {
       }
     }).then(function(json) {
       dispatch({type: 'SPACES_SUCCESS', json: json});
-    }).catch(function(error) {
-      console.log(error.message);
     })
   }
 }

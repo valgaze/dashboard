@@ -4,46 +4,14 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
-import {tokensGet} from 'dashboard/actions/tokens';
-import {spacesGet} from 'dashboard/actions/spaces';
-import {doorwaysGet} from 'dashboard/actions/doorways';
-import {eventsGet} from 'dashboard/actions/events';
 
-function Tokens(props) {
-  const {
-    sandboxToken,
-    liveToken,
-    jwt,
-    fetchOrganizationTokens,
-    fetchSpaces,
-    fetchDoorways,
-    fetchEvents,
-    spaceCount,
-    doorwayCount,
-    eventCount
-  } = props;
-  
-  var loading;
-  if (!sandboxToken && !liveToken) {
-    fetchOrganizationTokens(jwt);
-    loading = true;
-  } else {
-    loading = false;
-  }
-
-  // TODO: Find a way to consolidate these...
-  if (!spaceCount) {
-    fetchSpaces(jwt);
-  }
-
-  if (!doorwayCount) {
-    fetchDoorways(jwt);
-  }
-
-  if (!eventCount) {
-    fetchEvents(jwt);
-  }
-
+function Tokens({
+  sandboxToken,
+  liveToken,
+  spaceCount,
+  doorwayCount,
+  eventCount
+}) {  
   return (
     <div>
       <Appbar />
@@ -65,7 +33,7 @@ function Tokens(props) {
                         </CopyToClipboard>
                       </div>
                       <div className="card-body">
-                        <code>{loading ? "Loading..." : sandboxToken}</code>
+                        <code>{!sandboxToken ? "Loading..." : sandboxToken}</code>
                       </div>
                     </div>
                   </div>
@@ -78,7 +46,7 @@ function Tokens(props) {
                         </CopyToClipboard>
                       </div>
                       <div className="card-body">
-                        <code>{loading ? "Loading..." : liveToken}</code>
+                        <code>{!liveToken ? "Loading..." : liveToken}</code>
                       </div>
                     </div>
                   </div>
@@ -97,23 +65,10 @@ const mapStateToProps = state => ({
   liveToken: state.organization.liveToken,
   spaceCount: state.spaces.count,
   doorwayCount: state.doorways.count,
-  eventCount: state.events.count,
-  jwt: state.user.jwt
+  eventCount: state.events.count
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchOrganizationTokens: (jwt) => {
-    dispatch(tokensGet(jwt));
-  },
-  fetchSpaces: (jwt) => {
-    dispatch(spacesGet(jwt));
-  },
-  fetchDoorways: (jwt) => {
-    dispatch(doorwaysGet(jwt));
-  },
-  fetchEvents: (jwt) => {
-    dispatch(eventsGet(jwt, 1, 200));
-  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tokens);

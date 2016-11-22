@@ -1,12 +1,15 @@
-export function eventsGet(jwt, page, pageSize) {
-  return dispatch => {
-    var url = `https://api.density.io/v1/events/?start_time=2016-10-01&page=${page}&page_size=${pageSize}`
-    fetch(url, {
+import {API_URL} from 'dashboard/constants';
+
+export function eventsGet(pageNum, pageSize) {
+  return (dispatch, getState) => {
+    let state = getState();
+    let url = `${API_URL}/events/?start_time=2016-10-01&page=${pageNum}&page_size=${pageSize}`
+    return fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
+        'Authorization': `Bearer ${state.user.jwt}`
       },
     })
     .then(function(response) {
@@ -23,8 +26,6 @@ export function eventsGet(jwt, page, pageSize) {
       }
     }).then(function(json) {
       dispatch({type: 'EVENTS_SUCCESS', json: json});
-    }).catch(function(error) {
-      console.log(error.message);
     })
   }
 }
