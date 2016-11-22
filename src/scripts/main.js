@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux';
 import {Router, Route, hashHistory} from 'react-router';
-import {syncHistoryWithStore} from 'react-router-redux'
+import {syncHistoryWithStore, push} from 'react-router-redux'
 
 import "whatwg-fetch"
 
@@ -32,8 +32,6 @@ function requireAuth(nextState, replace) {
 }
 
 history.listen(location => {
-  console.log(location);
-
   if (location.pathname === "/") {
     store.dispatch(spacesGet());
     store.dispatch(doorwaysGet());
@@ -42,9 +40,10 @@ history.listen(location => {
   } else if (location.pathname === "/spaces") {
     store.dispatch(spacesGet());
   } else if (location.pathname.startsWith("/events")) {
+    var pageNum = location.query.page || 1;
     store.dispatch(spacesGet());
     store.dispatch(doorwaysGet());
-    store.dispatch(eventsGet(1, 10));
+    store.dispatch(eventsGet(pageNum, 10));
   }
 });
 
@@ -54,9 +53,8 @@ ReactDOM.render(
       <Route path="/" component={Tokens} onEnter={requireAuth} />
       <Route path="login" component={Login} />
       <Route path="forgot-password" component={ForgotPassword} />
-      <Route path="tokens" component={Tokens} onEnter={requireAuth} />
       <Route path="spaces" component={Spaces} onEnter={requireAuth} />
-      <Route path="events/:page" component={Events} onEnter={requireAuth} />
+      <Route path="events" component={Events} onEnter={requireAuth} />
       <Route path="account/change-password" component={ChangePassword} onEnter={requireAuth} />
     </Router>
   </Provider>,

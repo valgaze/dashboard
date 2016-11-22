@@ -1,6 +1,6 @@
 import {ACCOUNTS_URL} from 'dashboard/constants';
 
-export function tokensGet(jwt) {
+export function tokensGet() {
   return (dispatch, getState) => {
     let state = getState();
     fetch(`${ACCOUNTS_URL}/org_tokens/`, {

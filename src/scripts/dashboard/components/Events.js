@@ -84,9 +84,9 @@ function Events({
                   })}
                 </div>
                 <ul className="nav nav-tabs data-table-nav">
-                  <li><button onClick={onNavigateToPage.bind(null, prevPage)} className="">&laquo;</button></li>
-                  <li className="active"><Link to={'/events/'+currentPage} className="">{currentPage}</Link></li>
-                  <li><button onClick={onNavigateToPage.bind(null, nextPage)} className="">&raquo;</button></li>
+                  <li><Link to={'/events?page='+prevPage} className="">&laquo;</Link></li>
+                  <li className="active"><Link to={'/events?page='+currentPage} className="">{currentPage}</Link></li>
+                  <li><Link to={'/events?page='+nextPage} className="">&raquo;</Link></li>
                 </ul>
               </div>
             </div>
@@ -101,13 +101,13 @@ const mapStateToProps = (state, ownProps) => ({
   doorways: state.doorways.results,
   spaces: state.spaces.results,
   eventCount: state.events.count,
-  currentPage: ownProps.params.page,
+  currentPage: (ownProps.location.query.page || 1),
   events: state.events.results,
 });
 
 const mapDispatchToProps = dispatch => ({
   onNavigateToPage(pageNum) {
-    dispatch(push(`/#/events/${pageNum}`));
+    dispatch(push(`/#/events?page=${pageNum}`));
   },
 });
 

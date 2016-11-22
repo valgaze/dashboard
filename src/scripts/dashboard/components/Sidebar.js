@@ -12,13 +12,13 @@ function Sidebar(props) {
           <span>Your Environment</span>
         </li>
         <li className="">
-          <Link to='/tokens' className="">Tokens</Link>
+          <Link to='/' className="">Tokens</Link>
         </li>
         <li>
           <Link to='/spaces' className="">Spaces</Link>
         </li>
         <li>
-          <Link to='/events/1' className="">Events</Link>
+          <Link to='/events?page=1' className="">Events</Link>
         </li>
         {/*
         <li>
