@@ -4,10 +4,6 @@ machine:
   environment:
     SUBDOMAIN: dashboard
 
-checkout:
-  post:
-    - npm install -g browserify
-
 deployment:
   staging:
     branch: staging
