@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
-import Moment from 'moment';
+import Moment from 'moment-timezone';
 
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
@@ -20,6 +20,7 @@ function Events(props) {
     events
   } = props;
 
+  var timezone = Moment.tz.guess();
   var pageSize = 10;
   var maxPage = Math.round(eventCount/pageSize);
   var nextPage = Math.min(maxPage, parseInt(currentPage)+1);
@@ -58,6 +59,7 @@ function Events(props) {
     return space.name;
   }
 
+  
   return (
     <div>
       <Appbar />
@@ -73,7 +75,8 @@ function Events(props) {
                     return (
                       <div className="event-item" key={event.id}>
                         <div className="event-doorway-time">
-                          {Moment(event.timestamp).tz(Moment().tz.guess()).format('MMM D (h:mm A)')} / Doorway: {doorwayName(event.doorway_id)}
+                          {Moment.utc(event.timestamp).tz(timezone).format('MMM D (h:mm A) z')} / Doorway: {doorwayName(event.doorway_id)}
+                          }
                         </div>
                         <table className="table data-table">
                           <thead>
