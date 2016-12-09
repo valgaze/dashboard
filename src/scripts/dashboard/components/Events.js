@@ -73,7 +73,7 @@ function Events(props) {
                     return (
                       <div className="event-item" key={event.id}>
                         <div className="event-doorway-time">
-                          {Moment(event.timestamp).format('MMM D (h:mm A)')} / Doorway: {doorwayName(event.doorway_id)}
+                          {Moment(event.timestamp).tz(Moment().tz.guess()).format('MMM D (h:mm A)')} / Doorway: {doorwayName(event.doorway_id)}
                         </div>
                         <table className="table data-table">
                           <thead>
