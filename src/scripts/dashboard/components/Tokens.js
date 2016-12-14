@@ -17,10 +17,10 @@ function Tokens({
       <Appbar />
       <div className="content-inner">
         <Sidebar />
-        <div className="content-panel">
+        <div className="content-panel col-xs-24 col-md-20">
           <div className="tokens-section">
             <div className="row">
-              <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
+              <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
                 <h1>Tokens</h1>
                 <h2 className="fun-stat">With {spaceCount} spaces and {doorwayCount} doorways, we have counted {eventCount} events.</h2>
                 <div className="row">

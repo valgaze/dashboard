@@ -10,10 +10,10 @@ function SpaceDetail({space}) {
       <Appbar />
       <div className="content-inner">
         <Sidebar />
-        <div className="content-panel">
+        <div className="content-panel col-xs-24 col-md-20">
           <div className="space-detail-section">
             <div className="row">
-              <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
+              <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
                 <h1>Spaces / {space.name}</h1>
                 <div className="count-and-detail-section">
                   <div className="row">
@@ -34,7 +34,7 @@ function SpaceDetail({space}) {
                         <span className="action">Edit details</span>
                       </div>
                       <div className="card count-and-detail-cards">
-                        <table className="table data-table">
+                        <table className="table data-table striped">
                           <tbody>
                             <tr>
                               <td>Name</td>
@@ -63,10 +63,10 @@ function SpaceDetail({space}) {
                     <span className="title">Doorways</span>
                   </div>
                   <div className="card">
-                    <table className="table data-table">
+                    <table className="table data-table striped">
                       <thead>
                         <tr>
-                          <td>Doorway</td>
+                          <td>Name</td>
                           <td>ID</td>
                           <td>Sensor Status</td>
                         </tr>
@@ -74,7 +74,7 @@ function SpaceDetail({space}) {
                       <tbody>
                         {space.doorways && space.doorways.map(function(doorway, i) {
                           return (
-                            <tr key={doorway.id}>
+                            <tr key={doorway.doorway_id}>
                               <td>{doorway.name}</td>
                               <td>{doorway.doorway_id}</td>
                               <td>Online</td>

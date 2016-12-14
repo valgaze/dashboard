@@ -1,9 +1,20 @@
 .data-table {
   width: 100%;
-  tbody > tr:nth-of-type(odd) {
-    background-color: #f9f9f9;
+
+  thead tr td {
+    font-weight: bold;
   }
 }
+
+.data-table.striped {
+  tbody > tr:nth-of-type(even) {
+    background-color: #FBFBFB;
+  }
+  thead+tbody > tr:nth-of-type(odd) {
+    background-color: #FBFBFB;
+  }
+}
+
 .data-table.bordered {
   border: 1px solid #ddd;
 }
