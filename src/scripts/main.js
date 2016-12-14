@@ -6,6 +6,7 @@ import {syncHistoryWithStore} from 'react-router-redux'
 
 import "whatwg-fetch"
 
+import ga from 'dashboard/helpers/google-analytics/index';
 import App from 'dashboard/app';
 import store from 'dashboard/store';
 import Login from 'dashboard/components/Login';
