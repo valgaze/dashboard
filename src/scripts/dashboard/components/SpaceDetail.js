@@ -8,9 +8,9 @@ function SpaceDetail({space}) {
   return (
     <div>
       <Appbar />
-      <div className="content-inner">
+      <div className="row">
         <Sidebar />
-        <div className="content-panel col-xs-24 col-md-20">
+        <div className="col-xs-24 col-md-20">
           <div className="space-detail-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
@@ -34,7 +34,7 @@ function SpaceDetail({space}) {
                         <span className="action">Edit details</span>
                       </div>
                       <div className="card count-and-detail-cards">
-                        <table className="table data-table striped">
+                        <table className="table striped">
                           <tbody>
                             <tr>
                               <td>Name</td>
@@ -63,7 +63,7 @@ function SpaceDetail({space}) {
                     <span className="title">Doorways</span>
                   </div>
                   <div className="card">
-                    <table className="table data-table striped">
+                    <table className="table striped">
                       <thead>
                         <tr>
                           <td>Name</td>

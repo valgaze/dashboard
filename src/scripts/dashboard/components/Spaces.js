@@ -9,16 +9,16 @@ function Spaces({spaces}) {
   return (
     <div>
       <Appbar />
-      <div className="content-inner">
+      <div className="row">
         <Sidebar />
-        <div className="content-panel col-xs-24 col-md-20">
+        <div className="col-xs-24 col-md-20">
           <div className="tokens-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
                 <h1>Spaces</h1>
                 {spaces ? null : "Loading..."}
                 <div className="card">
-                  <table className="table data-table striped">
+                  <table className="table striped">
                     <thead>
                       <tr>
                         <td>Name</td>

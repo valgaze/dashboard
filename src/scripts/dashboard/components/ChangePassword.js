@@ -64,12 +64,12 @@ class ChangePassword extends React.Component {
     return (
       <div>
         <Appbar />
-        <div className="content-inner">
+        <div className="row">
           <Sidebar />
-          <div className="content-panel">
+          <div className="col-xs-24 col-md-20">
             <div className="change-password-section">
               <div className="row">
-                <div className="col-xs-20 off-xs-2 col-md-8 off-md-0">
+                <div className="col-xs-20 off-xs-2 col-md-8 off-md-1">
                   <h1>Change your password</h1>
                     {this.state.statusText}
                     <input

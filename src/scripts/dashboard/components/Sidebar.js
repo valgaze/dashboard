@@ -6,7 +6,7 @@ function Sidebar(props) {
   const {} = props;
   
   return (
-    <div className="content-sidebar-new col-xs-0 col-md-4 off-md-0">
+    <div className="sidebar col-xs-0 col-md-4 off-md-0">
       <ul className="sidebar-nav-list">
         <li className="list-header">
           <span>API</span>

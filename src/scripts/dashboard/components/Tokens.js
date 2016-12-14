@@ -15,9 +15,9 @@ function Tokens({
   return (
     <div>
       <Appbar />
-      <div className="content-inner">
+      <div className="row">
         <Sidebar />
-        <div className="content-panel col-xs-24 col-md-20">
+        <div className="col-xs-24 col-md-20">
           <div className="tokens-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">

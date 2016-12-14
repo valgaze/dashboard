@@ -2,10 +2,7 @@
 @import "icons";
 @import "loading";
 
-// Overrides
-@import "data-table";
-@import "card";
-
+@import "sidebar";
 @import "login";
 @import "forgot-password";
 @import "change-password";
@@ -25,31 +22,4 @@ textarea:focus, input:focus{
 // Overrides
 body {
   background-color: #FAFAFA;
-}
-
-.content-inner {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  height: 100vh;
-}
-
-.content-sidebar-new {
-  background-color: #222A2E;
-
-  .sidebar-nav-list {
-    margin-top: 40px;
-  }
-}
-
-@media (max-width: $screen-md) {
-  .content-sidebar-new {
-    display: none;
-  }
-}
-
-.content-panel {
-  background-color: inherit;
-  float: none;
 }
