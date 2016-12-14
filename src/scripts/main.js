@@ -7,16 +7,18 @@ import {syncHistoryWithStore} from 'react-router-redux'
 import "whatwg-fetch"
 
 import ga from 'dashboard/helpers/google-analytics/index';
+import fetchParam from 'dashboard/helpers/fetch-param';
+
 import App from 'dashboard/app';
 import store from 'dashboard/store';
 import Login from 'dashboard/components/Login';
 import ForgotPassword from 'dashboard/components/ForgotPassword';
 import Tokens from 'dashboard/components/Tokens';
 import Spaces from 'dashboard/components/Spaces';
-import Events from 'dashboard/components/Events';
+import SpaceDetail from 'dashboard/components/SpaceDetail';
 import ChangePassword from 'dashboard/components/ChangePassword';
 
-import {spacesGet} from 'dashboard/actions/spaces';
+import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
 import {eventsGet} from 'dashboard/actions/events';
 import {doorwaysGet} from 'dashboard/actions/doorways';
 import {tokensGet} from 'dashboard/actions/tokens';
@@ -34,17 +36,15 @@ function requireAuth(nextState, replace) {
 
 history.listen(location => {
   if (location.pathname === "/") {
-    store.dispatch(spacesGet());
+    store.dispatch(spacesIndex());
     store.dispatch(doorwaysGet());
     store.dispatch(tokensGet());
     store.dispatch(eventsGet(1, 10));
-  } else if (location.pathname === "/spaces") {
-    store.dispatch(spacesGet());
-  } else if (location.pathname.startsWith("/events")) {
-    var pageNum = location.query.page || 1;
-    store.dispatch(spacesGet());
-    store.dispatch(doorwaysGet());
-    store.dispatch(eventsGet(pageNum, 10));
+  } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
+    var spaceId = fetchParam(location);
+    store.dispatch(spacesRead(spaceId));
+  } else if (location.pathname === "/spaces/") {
+    store.dispatch(spacesIndex());
   }
 });
 
@@ -55,7 +55,7 @@ ReactDOM.render(
       <Route path="login" component={Login} />
       <Route path="forgot-password" component={ForgotPassword} />
       <Route path="spaces" component={Spaces} onEnter={requireAuth} />
-      <Route path="events" component={Events} onEnter={requireAuth} />
+      <Route path="spaces/:spaceId" component={SpaceDetail} onEnter={requireAuth} />
       <Route path="account/change-password" component={ChangePassword} onEnter={requireAuth} />
     </Router>
   </Provider>,

@@ -17,15 +17,6 @@ function Sidebar(props) {
         <li>
           <Link to='/spaces' className="">Spaces</Link>
         </li>
-        <li>
-          <Link to='/events?page=1' className="">Events</Link>
-        </li>
-        {/*
-        <li>
-          <Link to='#' className="">Doorways</Link>
-        </li>
-        
-        */}
       </ul>
       <ul className="sidebar-nav-list">
         <li className="list-header">

@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
@@ -28,7 +29,7 @@ function Spaces({spaces}) {
                     {spaces && spaces.map(function(space, i) {
                       return (
                         <tr key={space.id}>
-                          <td>{space.name}</td>
+                          <td><Link to={`/spaces/${space.id}`} className="">{space.name}</Link></td>
                           <td>{space.id}</td>
                           <td>{space.current_count}</td>
                         </tr>
