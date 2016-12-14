@@ -17,7 +17,7 @@ function Spaces({spaces}) {
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
                 <h1>Spaces</h1>
                 {spaces ? null : "Loading..."}
-                <table className="table data-table">
+                <table className="table data-table bordered">
                   <thead>
                     <tr>
                       <td>Name</td>

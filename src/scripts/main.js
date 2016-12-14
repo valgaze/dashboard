@@ -19,9 +19,9 @@ import SpaceDetail from 'dashboard/components/SpaceDetail';
 import ChangePassword from 'dashboard/components/ChangePassword';
 
 import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
-import {eventsGet} from 'dashboard/actions/events';
-import {doorwaysGet} from 'dashboard/actions/doorways';
-import {tokensGet} from 'dashboard/actions/tokens';
+import {eventsIndex} from 'dashboard/actions/events';
+import {doorwaysIndex} from 'dashboard/actions/doorways';
+import {tokensIndex} from 'dashboard/actions/tokens';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -37,13 +37,13 @@ function requireAuth(nextState, replace) {
 history.listen(location => {
   if (location.pathname === "/") {
     store.dispatch(spacesIndex());
-    store.dispatch(doorwaysGet());
-    store.dispatch(tokensGet());
-    store.dispatch(eventsGet(1, 10));
+    store.dispatch(doorwaysIndex());
+    store.dispatch(tokensIndex());
+    store.dispatch(eventsIndex(1, 10));
   } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
     var spaceId = fetchParam(location);
     store.dispatch(spacesRead(spaceId));
-  } else if (location.pathname === "/spaces/") {
+  } else if (location.pathname === "/spaces") {
     store.dispatch(spacesIndex());
   }
 });

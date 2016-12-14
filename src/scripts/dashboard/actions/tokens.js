@@ -1,6 +1,6 @@
 import {ACCOUNTS_URL} from 'dashboard/constants';
 
-export function tokensGet() {
+export function tokensIndex() {
   return (dispatch, getState) => {
     let state = getState();
     fetch(`${ACCOUNTS_URL}/org_tokens/`, {

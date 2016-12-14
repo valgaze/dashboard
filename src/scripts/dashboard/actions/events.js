@@ -1,6 +1,6 @@
 import {API_URL} from 'dashboard/constants';
 
-export function eventsGet(pageNum, pageSize) {
+export function eventsIndex(pageNum, pageSize) {
   return (dispatch, getState) => {
     let state = getState();
     let url = `${API_URL}/events/?start_time=2016-10-01&page=${pageNum}&page_size=${pageSize}`

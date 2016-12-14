@@ -11,10 +11,80 @@ function SpaceDetail({space}) {
       <div className="content-inner">
         <Sidebar />
         <div className="content-panel">
-          <div className="tokens-section">
+          <div className="space-detail-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-0">
-                <h1>{space.name}</h1>
+                <h1>Spaces / {space.name}</h1>
+                <div className="count-and-detail-section">
+                  <div className="row">
+                    <div className="col-xs-20 off-xs-2 col-md-12 off-md-0">
+                      <div className="card-top-header">
+                        <span className="title">Current Count</span>
+                        <span className="action">Edit count</span>
+                      </div>
+                      <div className="card count-and-detail-cards">
+                        <div className="card-body">
+                          <div className="current-count">{space.current_count}</div>
+                        </div>
+                      </div>  
+                    </div>
+                    <div className="col-xs-20 off-xs-2 col-md-12 off-md-0">
+                      <div className="card-top-header">
+                        <span className="title">Space Details</span>
+                        <span className="action">Edit details</span>
+                      </div>
+                      <div className="card count-and-detail-cards">
+                        <table className="table data-table">
+                          <tbody>
+                            <tr>
+                              <td>Name</td>
+                              <td>{space.name}</td>
+                            </tr>
+                            <tr>
+                              <td>ID</td>
+                              <td>{space.id}</td>
+                            </tr>
+                            <tr>
+                              <td>Time Zone</td>
+                              <td>{space.timezone}</td>
+                            </tr>
+                            <tr>
+                              <td>Reset Time</td>
+                              <td>N/A</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>  
+                    </div>
+                  </div>
+                </div>
+                <div className="doorways-section">
+                  <div className="card-top-header">
+                    <span className="title">Doorways</span>
+                  </div>
+                  <div className="card">
+                    <table className="table data-table">
+                      <thead>
+                        <tr>
+                          <td>Doorway</td>
+                          <td>ID</td>
+                          <td>Sensor Status</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {space.doorways && space.doorways.map(function(doorway, i) {
+                          return (
+                            <tr key={doorway.id}>
+                              <td>{doorway.name}</td>
+                              <td>{doorway.doorway_id}</td>
+                              <td>Online</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>  
+                </div>
               </div>
             </div>
           </div>

@@ -1,11 +1,15 @@
 .data-table {
   width: 100%;
-  border: 1px solid #ddd;
-
   tbody > tr:nth-of-type(odd) {
     background-color: #f9f9f9;
   }
+}
+.data-table.bordered {
+  border: 1px solid #ddd;
+}
 
+.data-table td {
+  border-top: none !important;
 }
 
 .data-table-nav {

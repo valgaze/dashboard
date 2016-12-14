@@ -1,0 +1,36 @@
+.space-detail-section {
+  
+  .count-and-detail-cards {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .current-count {
+    font-size: 58px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .card-top-header {
+    padding: 20px 0;
+
+    .title {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .action {
+      float: right;
+      text-decoration: underline;
+      color: $gray-dark;
+    }
+
+  }
+
+  .doorways-section {
+    margin-top: 40px;
+  }
+
+}

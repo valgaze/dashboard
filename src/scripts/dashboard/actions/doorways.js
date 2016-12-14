@@ -1,6 +1,6 @@
 import {API_URL} from 'dashboard/constants';
 
-export function doorwaysGet() {
+export function doorwaysIndex() {
   return (dispatch, getState) => {
     let state = getState();
     fetch(`${API_URL}/doorways/`, {
