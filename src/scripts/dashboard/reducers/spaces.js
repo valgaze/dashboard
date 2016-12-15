@@ -3,7 +3,9 @@ import update from 'react-addons-update';
 const initialState = {
   count: null,
   results: null,
-  currentObj: {}
+  currentObj: {},
+  editingCurrentCount: false,
+  tempCount: null
 }
 
 export default function spaces(state=initialState, action) {
@@ -16,12 +18,20 @@ export default function spaces(state=initialState, action) {
       break;
     case 'SPACES_READ_REQUEST':
       return Object.assign({}, state, {
-        currentObj: {}
+        currentObj: {},
+        editingCurrentCount: false,
+        tempCount: null
       });
       break;
     case 'SPACES_READ_SUCCESS':
       return Object.assign({}, state, {
         currentObj: action.json
+      });
+      break;
+    case 'SPACES_TOGGLE_EDIT_COUNT':
+      return Object.assign({}, state, {
+        editingCurrentCount: !action.editingCurrentCount,
+        tempCount: state.currentObj.current_count
       });
       break;
     default:

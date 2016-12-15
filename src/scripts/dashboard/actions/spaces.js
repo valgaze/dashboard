@@ -1,5 +1,11 @@
 import {API_URL} from 'dashboard/constants';
 
+export function spacesToggleEditCount(editingCurrentCount) {
+  return dispatch => {
+    dispatch({type: 'SPACES_TOGGLE_EDIT_COUNT', editingCurrentCount: editingCurrentCount});
+  }
+};
+
 export function spacesIndex() {
   return (dispatch, getState) => {
     let state = getState();

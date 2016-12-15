@@ -1,10 +1,16 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import Appbar from 'dashboard/components/Appbar'
-import Sidebar from 'dashboard/components/Sidebar'
+import Appbar from 'dashboard/components/Appbar';
+import Sidebar from 'dashboard/components/Sidebar';
+import {spacesToggleEditCount} from 'dashboard/actions/spaces';
 
-function SpaceDetail({space}) {
+function SpaceDetail({
+  space, 
+  editingCurrentCount, 
+  tempCount, 
+  onToggleEditCount
+}) {
   return (
     <div>
       <Appbar />
@@ -20,13 +26,17 @@ function SpaceDetail({space}) {
                     <div className="col-xs-20 off-xs-2 col-md-12 off-md-0">
                       <div className="card-top-header">
                         <span className="title">Current Count</span>
-                        <span className="action">Edit count</span>
+                        <span className="action" onClick={onToggleEditCount(editingCurrentCount)}>{editingCurrentCount ? "Save" : "Edit count" }</span>
                       </div>
                       <div className="card current-count-card">
                         <div className="card-body">
-                          <div className="card circle-button"><i className="icon icon-minus"></i></div>
-                          <div className="current-count">{space.current_count}</div>
-                          <div className="card circle-button"><i className="icon icon-add"></i></div>
+                          <button className={editingCurrentCount ? "card circle-button" : "hide"}>
+                            <i className="icon icon-minus"></i>
+                          </button>
+                          <div className="current-count">{editingCurrentCount ? tempCount : space.current_count}</div>
+                          <button className={editingCurrentCount ? "card circle-button" : "hide"}>
+                            <i className="icon icon-add"></i>
+                          </button>
                         </div>
                       </div>  
                     </div>
@@ -97,10 +107,15 @@ function SpaceDetail({space}) {
 }
 
 const mapStateToProps = state => ({
-  space: state.spaces.currentObj
+  space: state.spaces.currentObj,
+  editingCurrentCount: state.spaces.editingCurrentCount,
+  tempCount: state.spaces.tempCount
 });
 
 const mapDispatchToProps = dispatch => ({
+  onToggleEditCount: (editingCurrentCount) => () => {
+    dispatch(spacesToggleEditCount(editingCurrentCount));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpaceDetail);
