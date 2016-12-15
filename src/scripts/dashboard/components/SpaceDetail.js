@@ -28,7 +28,8 @@ function SpaceDetail({
                     <div className="col-xs-20 off-xs-2 col-md-12 off-md-0">
                       <div className="card-top-header">
                         <span className="title">Current Count</span>
-                        <span className="action" onClick={onToggleEditCount(editingCurrentCount)}>{editingCurrentCount ? "Save" : "Edit count" }</span>
+                        <span className={editingCurrentCount ? "action" : "hide"} onClick={onToggleEditCount(editingCurrentCount)}>Cancel</span>
+                        <span className="action" onClick={onToggleEditCount(editingCurrentCount)}>{editingCurrentCount ? "Save" : "Edit count" }</span> 
                       </div>
                       <div className="card current-count-card">
                         <div className="card-body">
