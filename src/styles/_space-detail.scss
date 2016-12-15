@@ -1,5 +1,9 @@
 .space-detail-section {
   margin-top: 50px;
+
+  h1 .breadcrumb {
+    color: $gray;
+  }
   
   .count-and-detail-cards {
     height: 100%;

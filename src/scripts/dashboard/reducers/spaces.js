@@ -14,6 +14,11 @@ export default function spaces(state=initialState, action) {
         results: action.json.results
       });
       break;
+    case 'SPACES_READ_REQUEST':
+      return Object.assign({}, state, {
+        currentObj: {}
+      });
+      break;
     case 'SPACES_READ_SUCCESS':
       return Object.assign({}, state, {
         currentObj: action.json

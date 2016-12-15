@@ -31,6 +31,7 @@ export function spacesIndex() {
 
 export function spacesRead(spaceId) {
   return (dispatch, getState) => {
+    dispatch({type: 'SPACES_READ_REQUEST'});
     let state = getState();
     return fetch(`${API_URL}/spaces/${spaceId}/`, {
       method: 'GET',
