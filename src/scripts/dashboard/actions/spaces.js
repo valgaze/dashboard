@@ -2,7 +2,32 @@ import {API_URL} from 'dashboard/constants';
 
 export function spacesToggleEditCount(editingCurrentCount) {
   return dispatch => {
-    dispatch({type: 'SPACES_TOGGLE_EDIT_COUNT', editingCurrentCount: editingCurrentCount});
+    dispatch({
+      type: 'SPACES_TOGGLE_EDIT_COUNT', 
+      editingCurrentCount: editingCurrentCount
+    });
+  }
+};
+
+export function spacesIncreaseCount() {
+  return (dispatch, getState) => {
+    let state = getState();
+    let newTempCount = state.spaces.tempCount+1;
+    dispatch({
+      type: 'SPACES_NEW_TEMP_COUNT', 
+      newTempCount: newTempCount
+    });
+  }
+};
+
+export function spacesDecreaseCount() {
+  return (dispatch, getState) => {
+    let state = getState();
+    let newTempCount = Math.max(0, state.spaces.tempCount-1);
+    dispatch({
+      type: 'SPACES_NEW_TEMP_COUNT', 
+      newTempCount: newTempCount
+    });
   }
 };
 

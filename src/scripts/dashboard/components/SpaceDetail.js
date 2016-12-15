@@ -3,13 +3,15 @@ import {connect} from 'react-redux';
 
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
-import {spacesToggleEditCount} from 'dashboard/actions/spaces';
+import {spacesToggleEditCount, spacesIncreaseCount, spacesDecreaseCount} from 'dashboard/actions/spaces';
 
 function SpaceDetail({
   space, 
   editingCurrentCount, 
   tempCount, 
-  onToggleEditCount
+  onToggleEditCount,
+  onDecreaseCount,
+  onIncreaseCount
 }) {
   return (
     <div>
@@ -30,11 +32,11 @@ function SpaceDetail({
                       </div>
                       <div className="card current-count-card">
                         <div className="card-body">
-                          <button className={editingCurrentCount ? "card circle-button" : "hide"}>
+                          <button className={editingCurrentCount ? "card circle-button" : "hide"} onClick={onDecreaseCount}>
                             <i className="icon icon-minus"></i>
                           </button>
                           <div className="current-count">{editingCurrentCount ? tempCount : space.current_count}</div>
-                          <button className={editingCurrentCount ? "card circle-button" : "hide"}>
+                          <button className={editingCurrentCount ? "card circle-button" : "hide"} onClick={onIncreaseCount}>
                             <i className="icon icon-add"></i>
                           </button>
                         </div>
@@ -115,6 +117,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onToggleEditCount: (editingCurrentCount) => () => {
     dispatch(spacesToggleEditCount(editingCurrentCount));
+  },
+  onIncreaseCount: () => {
+    dispatch(spacesIncreaseCount());
+  },
+  onDecreaseCount: () => {
+    dispatch(spacesDecreaseCount());
   },
 });
 

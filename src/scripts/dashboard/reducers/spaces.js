@@ -34,6 +34,11 @@ export default function spaces(state=initialState, action) {
         tempCount: state.currentObj.current_count
       });
       break;
+    case 'SPACES_NEW_TEMP_COUNT':
+      return Object.assign({}, state, {
+        tempCount: action.newTempCount
+      });
+      break;
     default:
       return state;
   }
