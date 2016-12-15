@@ -1,0 +1,47 @@
+.spaces-section {
+  margin-top: 50px;
+
+  .space-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 60px;
+  }
+
+  .space-cell {
+    width: 320px;
+    padding-bottom: 60px;
+  }
+
+  .card-body {
+    border: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 24px;
+    padding-top: 0;
+    padding-bottom: 20px;
+
+    .current-count {
+      font-size: 44px;
+      text-align: center;
+      color: $brand-primary;
+      font-weight: 600;
+    }
+  }
+
+  .card-header-title {
+    font-size: 14px;
+  }
+  
+  .card-view-details {
+    font-size: 14px;
+    position: absolute;
+    top: 22px;
+    right: 20px;
+    color: $gray;
+    text-decoration: underline;
+  }
+}

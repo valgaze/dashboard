@@ -12,32 +12,28 @@ function Spaces({spaces}) {
       <div className="row">
         <Sidebar />
         <div className="col-xs-24 col-md-20">
-          <div className="tokens-section">
+          <div className="spaces-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
                 <h1>Spaces</h1>
-                {spaces ? null : "Loading..."}
-                <div className="card">
-                  <table className="table striped">
-                    <thead>
-                      <tr>
-                        <td>Name</td>
-                        <td>ID</td>
-                        <td>Current Count</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {spaces && spaces.map(function(space, i) {
-                        return (
-                          <tr key={space.id}>
-                            <td><Link to={`/spaces/${space.id}`} className="">{space.name}</Link></td>
-                            <td>{space.id}</td>
-                            <td>{space.current_count}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                <div className="space-grid">
+                  {spaces ? null : "Loading..."}
+                  {spaces && spaces.map(function(space, i) {
+                    return (
+                      <div className="space-cell" key={space.id}>
+                        <h3>{space.name}</h3>
+                        <div className="card">
+                          <div className="card-header">
+                            <h5 className="card-header-title">Current Count</h5>
+                            <Link to={`/spaces/${space.id}`} className="card-view-details">View Details</Link>
+                          </div>
+                          <div className="card-body">
+                            <div className="current-count">{space.current_count}</div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
