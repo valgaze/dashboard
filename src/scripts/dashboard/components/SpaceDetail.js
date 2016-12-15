@@ -22,9 +22,11 @@ function SpaceDetail({space}) {
                         <span className="title">Current Count</span>
                         <span className="action">Edit count</span>
                       </div>
-                      <div className="card count-and-detail-cards">
+                      <div className="card current-count-card">
                         <div className="card-body">
+                          <div className="card circle-button"><i className="icon icon-minus"></i></div>
                           <div className="current-count">{space.current_count}</div>
+                          <div className="card circle-button"><i className="icon icon-add"></i></div>
                         </div>
                       </div>  
                     </div>
@@ -33,7 +35,7 @@ function SpaceDetail({space}) {
                         <span className="title">Space Details</span>
                         <span className="action">Edit details</span>
                       </div>
-                      <div className="card count-and-detail-cards">
+                      <div className="card">
                         <table className="table striped">
                           <tbody>
                             <tr>

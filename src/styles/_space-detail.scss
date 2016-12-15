@@ -1,8 +1,10 @@
 .space-detail-section {
   margin-top: 50px;
 
-  h1 .breadcrumb {
-    color: $gray;
+  h1 {
+    .breadcrumb {
+      color: $gray;
+    }
   }
   
   .count-and-detail-cards {
@@ -12,17 +14,46 @@
     justify-content: center;
   }
 
+  .current-count-card {
+    .card-body {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+
   .current-count {
-    font-size: 72px;
+    font-size: 98px;
     text-align: center;
-    font-weight: bold;
+    color: $brand-primary;
+    font-weight: 600;
+  }
+
+  .circle-button {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FAFAFA;
+    
+    i {
+      font-weight:bold;
+      color: $gray;
+      margin-top: 8px;
+    }
+    i:before {
+      font-size: 20px;
+    }
   }
 
   .card-top-header {
     padding: 20px 0;
 
     .title {
-      font-weight: bold;
+      font-weight: 600;
       font-size: 16px;
     }
 
