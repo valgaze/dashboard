@@ -16,6 +16,17 @@ export default function spaces(state=initialState, action) {
         results: action.json.results
       });
       break;
+    case 'SPACES_UPDATE_COUNT_REQUEST':
+      return Object.assign({}, state, {
+      });
+      break;
+    case 'SPACES_UPDATE_COUNT_SUCCESS':
+      return Object.assign({}, state, {
+        currentObj: action.newCurrentObj,
+        editingCurrentCount: false,
+        tempCount: null
+      });
+      break;
     case 'SPACES_READ_REQUEST':
       return Object.assign({}, state, {
         currentObj: {},

@@ -9,6 +9,43 @@ export function spacesToggleEditCount(editingCurrentCount) {
   }
 };
 
+export function spacesSaveTempCount() {
+  return (dispatch, getState) => {
+    dispatch({type: 'SPACES_UPDATE_COUNT_REQUEST'});
+    let state = getState();
+    var params = {
+      space_id: state.spaces.currentObj.id,
+      count: state.spaces.tempCount
+    }
+
+    return fetch(`${API_URL}/resets/`, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.user.jwt}`
+      },
+    })
+    .then(function(response) {
+      if (response.ok) {
+        return response.json();
+      } else if (response.status == 403) {
+        return response.json().then(({detail}) => {
+          throw new Error(detail);
+        });
+      } else {
+        throw new Error(response.statusText);
+      }
+    }).then(function(json) {
+      var newCurrentObj = state.spaces.currentObj;
+      newCurrentObj.current_count = json.count;
+      dispatch({type: 'SPACES_UPDATE_COUNT_SUCCESS', newCurrentObj: newCurrentObj});
+    })
+  }
+}
+
+
 export function spacesIncreaseCount() {
   return (dispatch, getState) => {
     let state = getState();
