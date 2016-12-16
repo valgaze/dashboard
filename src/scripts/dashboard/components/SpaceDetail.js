@@ -21,10 +21,10 @@ function SpaceDetail({
                 <h1><span className="breadcrumb">Spaces /</span> {space.name}</h1>
                 <div className="count-and-detail-section">
                   <div className="row">
-                    <div className="col-xs-20 off-xs-2 col-md-12 off-md-0">
+                    <div className="col-xs-24 off-xs-0 col-md-12 off-md-0">
                       <SpaceCurrentCountCard />
                     </div>
-                    <div className="col-xs-20 off-xs-2 col-md-12 off-md-0">
+                    <div className="col-xs-24 off-xs-0 col-md-12 off-md-0">
                       <SpaceDetailsCard />
                     </div>
                   </div>
