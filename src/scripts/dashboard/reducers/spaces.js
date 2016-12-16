@@ -18,13 +18,18 @@ export default function spaces(state=initialState, action) {
         results: action.json.results
       });
       break;
-    case 'SPACES_READ_REQUEST':
-      return initialState;
+    case 'SPACES_RESET_CURRENT_OBJ':
+      return Object.assign({}, state, {
+        currentObj: {},
+        editingCurrentCount: false,
+        editingSpaceDetails: false,
+        tempName: "",
+        tempCount: null
+      });
       break;
     case 'SPACES_READ_SUCCESS':
       return Object.assign({}, state, {
-        currentObj: action.json,
-        tempName: action.json.name
+        currentObj: action.json
       });
       break;
     case 'SPACES_TOGGLE_EDIT_DETAILS':
@@ -38,17 +43,12 @@ export default function spaces(state=initialState, action) {
         [action.field]: action.value
       });
       break;
-    case 'SPACES_UPDATE_REQUEST':
-      return Object.assign({}, state, {
-      });
-      break;
     case 'SPACES_UPDATE_SUCCESS':
       var newCurrentObj = state.currentObj;
       newCurrentObj.name = action.json.name;
       return Object.assign({}, state, {
         currentObj: newCurrentObj,
-        editingSpaceDetails: false,
-        tempName: null
+        editingSpaceDetails: false
       });
       break;
     case 'SPACES_UPDATE_COUNT_REQUEST':

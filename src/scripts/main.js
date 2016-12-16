@@ -34,7 +34,12 @@ function requireAuth(nextState, replace) {
   }
 }
 
+var spacesReadInterval;
+var spacesIndexInterval;
+
 history.listen(location => {
+  clearInterval(spacesIndexInterval);
+  clearInterval(spacesReadInterval);
   if (location.pathname === "/") {
     store.dispatch(spacesIndex());
     store.dispatch(doorwaysIndex());
@@ -43,8 +48,14 @@ history.listen(location => {
   } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
     var spaceId = fetchParam(location);
     store.dispatch(spacesRead(spaceId));
+    spacesReadInterval = setInterval(() => {
+      store.dispatch(spacesRead(spaceId));  
+    }, 2000);
   } else if (location.pathname === "/spaces") {
     store.dispatch(spacesIndex());
+    spacesIndexInterval = setInterval(() => {
+      store.dispatch(spacesIndex());  
+    }, 2000);
   }
 });
 

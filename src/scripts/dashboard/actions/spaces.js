@@ -100,8 +100,10 @@ export function spacesIndex() {
 
 export function spacesRead(spaceId) {
   return (dispatch, getState) => {
-    dispatch({type: 'SPACES_READ_REQUEST'});
     let state = getState();
+    if (state.spaces.currentObj.id != spaceId) {
+      dispatch({type: 'SPACES_RESET_CURRENT_OBJ'});
+    }
     return fetch(`${API_URL}/spaces/${spaceId}/`, {
       method: 'GET',
       headers: {
