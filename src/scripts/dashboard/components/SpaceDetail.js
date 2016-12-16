@@ -3,16 +3,11 @@ import {connect} from 'react-redux';
 
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
-import {spacesToggleEditCount, spacesIncreaseCount, spacesDecreaseCount, spacesSaveTempCount} from 'dashboard/actions/spaces';
+import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
+import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
 
 function SpaceDetail({
-  space, 
-  editingCurrentCount, 
-  tempCount, 
-  onToggleEditCount,
-  onDecreaseCount,
-  onIncreaseCount,
-  onSaveCount
+  space,
 }) {
   return (
     <div>
@@ -27,50 +22,10 @@ function SpaceDetail({
                 <div className="count-and-detail-section">
                   <div className="row">
                     <div className="col-xs-20 off-xs-2 col-md-12 off-md-0">
-                      <div className="card-top-header">
-                        <span className="title">Current Count</span>
-                        <span className="action" onClick={onToggleEditCount(editingCurrentCount)}>{editingCurrentCount ? "Cancel" : "Edit count" }</span> 
-                        <span className={editingCurrentCount ? "action save-action" : "hide"} onClick={onSaveCount}>Save</span>
-                      </div>
-                      <div className="card current-count-card">
-                        <div className="card-body">
-                          <button className={editingCurrentCount ? "card circle-button" : "hide"} onClick={onDecreaseCount}>
-                            <i className="icon icon-minus"></i>
-                          </button>
-                          <div className="current-count">{editingCurrentCount ? tempCount : space.current_count}</div>
-                          <button className={editingCurrentCount ? "card circle-button" : "hide"} onClick={onIncreaseCount}>
-                            <i className="icon icon-add"></i>
-                          </button>
-                        </div>
-                      </div>  
+                      <SpaceCurrentCountCard />
                     </div>
                     <div className="col-xs-20 off-xs-2 col-md-12 off-md-0">
-                      <div className="card-top-header">
-                        <span className="title">Space Details</span>
-                        <span className="action">Edit details</span>
-                      </div>
-                      <div className="card">
-                        <table className="table striped">
-                          <tbody>
-                            <tr>
-                              <td>Name</td>
-                              <td>{space.name}</td>
-                            </tr>
-                            <tr>
-                              <td>ID</td>
-                              <td>{space.id}</td>
-                            </tr>
-                            <tr>
-                              <td>Time Zone</td>
-                              <td>{space.timezone}</td>
-                            </tr>
-                            <tr>
-                              <td>Reset Time</td>
-                              <td>N/A</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>  
+                      <SpaceDetailsCard />
                     </div>
                   </div>
                 </div>
@@ -111,24 +66,10 @@ function SpaceDetail({
 }
 
 const mapStateToProps = state => ({
-  space: state.spaces.currentObj,
-  editingCurrentCount: state.spaces.editingCurrentCount,
-  tempCount: state.spaces.tempCount
+  space: state.spaces.currentObj
 });
 
 const mapDispatchToProps = dispatch => ({
-  onToggleEditCount: (editingCurrentCount) => () => {
-    dispatch(spacesToggleEditCount(editingCurrentCount));
-  },
-  onIncreaseCount: () => {
-    dispatch(spacesIncreaseCount());
-  },
-  onDecreaseCount: () => {
-    dispatch(spacesDecreaseCount());
-  },
-  onSaveCount: () => {
-    dispatch(spacesSaveTempCount());
-  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpaceDetail);
