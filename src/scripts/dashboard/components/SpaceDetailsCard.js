@@ -27,7 +27,7 @@ function SpaceDetailsCard({
                 <input type="text"
                   className={editingSpaceDetails ? "input editing" : "input"} 
                   disabled={!editingSpaceDetails} 
-                  value={tempName}
+                  value={editingSpaceDetails ? tempName : space.name}
                   onChange={onUpdateFormField('tempName')}
                 />
               </td>
@@ -58,7 +58,7 @@ function SpaceDetailsCard({
                 <input type="text"
                   className="input"
                   disabled={true}
-                  value="N/A"
+                  value={space.daily_reset}
                 />
               </td>
             </tr>

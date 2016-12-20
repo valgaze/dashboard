@@ -48,7 +48,7 @@ function SpaceDetail({
                             <tr key={doorway.doorway_id}>
                               <td>{doorway.name}</td>
                               <td>{doorway.doorway_id}</td>
-                              <td>Online</td>
+                              <td>-</td>
                             </tr>
                           );
                         })}

@@ -18,15 +18,19 @@ export default function spaces(state=initialState, action) {
         results: action.json.results
       });
       break;
-    case 'SPACES_RESET_CURRENT_OBJ':
-      return Object.assign({}, state, {
-        currentObj: {},
-        editingCurrentCount: false,
-        editingSpaceDetails: false,
-        tempName: "",
-        tempCount: null
-      });
-      break;
+    case 'SPACES_READ_REQUEST':
+      if(state.currentObj.id != action.spaceId) {
+        return Object.assign({}, state, {
+          currentObj: {},
+          editingCurrentCount: false,
+          editingSpaceDetails: false,
+          tempName: "",
+          tempCount: null
+        });   
+      } else {
+        return state;
+      }
+      break;    
     case 'SPACES_READ_SUCCESS':
       return Object.assign({}, state, {
         currentObj: action.json
