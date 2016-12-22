@@ -56,6 +56,15 @@ function SpaceDetail({
                     </table>
                   </div>  
                 </div>
+                {/*<div className="analytics-section">
+                  <div className="card-top-header">
+                    <span className="title">Analytics</span>
+                  </div>
+                  <div className="card">
+                    
+                  </div>
+                </div>
+                */}
               </div>
             </div>
           </div>

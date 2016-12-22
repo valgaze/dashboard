@@ -37,6 +37,7 @@
     "babelify": "^7.3.0",
     "browser-sync": "^2.13.0",
     "browserify": "^13.0.1",
+    "d3": "^4.4.0",
     "density-ui": "densityco/density-ui#v3.0",
     "express": "^4.14.0",
     "moment": "^2.15.2",
