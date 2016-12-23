@@ -51,7 +51,7 @@ history.listen(location => {
     var spaceId = fetchParam(location);
     store.dispatch(spacesRead(spaceId));
     spacesReadInterval = setInterval(() => {
-      store.dispatch(spacesRead(spaceId));  
+      // store.dispatch(spacesRead(spaceId));  
     }, 2000);
   } else if (location.pathname === "/spaces") {
     store.dispatch(spacesIndex());

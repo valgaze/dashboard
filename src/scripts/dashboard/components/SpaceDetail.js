@@ -5,6 +5,7 @@ import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
 import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
+import TotalVisitorsChart from 'dashboard/components/TotalVisitorsChart';
 
 function SpaceDetail({
   space,
@@ -56,15 +57,12 @@ function SpaceDetail({
                     </table>
                   </div>  
                 </div>
-                {/*<div className="analytics-section">
+                <div className="analytics-section">
                   <div className="card-top-header">
                     <span className="title">Analytics</span>
                   </div>
-                  <div className="card">
-                    
-                  </div>
+                  <TotalVisitorsChart />
                 </div>
-                */}
               </div>
             </div>
           </div>
