@@ -41,6 +41,8 @@ history.listen(location => {
   clearInterval(spacesIndexInterval);
   clearInterval(spacesReadInterval);
   if (location.pathname === "/") {
+    window.localStorage.jwt ? hashHistory.push('/spaces') : hashHistory.push('/login');
+  } else if (location.pathname === "/tokens") {
     store.dispatch(spacesIndex());
     store.dispatch(doorwaysIndex());
     store.dispatch(tokensIndex());
@@ -62,7 +64,7 @@ history.listen(location => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={Tokens} onEnter={requireAuth} />
+      <Route path="tokens" component={Tokens} onEnter={requireAuth} />
       <Route path="login" component={Login} />
       <Route path="forgot-password" component={ForgotPassword} />
       <Route path="spaces" component={Spaces} onEnter={requireAuth} />

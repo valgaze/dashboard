@@ -12,7 +12,7 @@ function Sidebar(props) {
           <span>API</span>
         </li>
         <li className="">
-          <Link to='/' className="">Tokens</Link>
+          <Link to='/tokens' className="">Tokens</Link>
         </li>
         <li>
           <Link to='/spaces' className="">Spaces</Link>

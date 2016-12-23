@@ -40,7 +40,7 @@ export function loginSubmit(email, password) {
     }).then(function(json) {
       dispatch({type: 'LOGIN_SUCCESS', jwt: json, email: email});
       dispatch({type: 'SAVE_JWT_TO_LOCAL_STORAGE', jwt: json});
-      hashHistory.push('/');
+      hashHistory.push('/spaces');
     }).catch(function(error) {
       dispatch({type: 'LOGIN_FAILURE', message: error.message});
     })
