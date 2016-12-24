@@ -6,9 +6,14 @@ import Sidebar from 'dashboard/components/Sidebar';
 import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
 import TotalVisitorsChart from 'dashboard/components/TotalVisitorsChart';
+import DensityDateRangePicker from 'dashboard/components/DensityDateRangePicker';
+import {setTotalVisitorsDateRange} from 'dashboard/actions/total-visitors';
 
 function SpaceDetail({
   space,
+  onSetDateRange,
+  startDate,
+  endDate
 }) {
   return (
     <div>
@@ -39,7 +44,7 @@ function SpaceDetail({
                       <thead>
                         <tr>
                           <td>Name</td>
-                          <td>ID</td>
+                          <td className="mobile-hide">ID</td>
                           <td>Sensor Status</td>
                         </tr>
                       </thead>
@@ -48,7 +53,7 @@ function SpaceDetail({
                           return (
                             <tr key={doorway.doorway_id}>
                               <td>{doorway.name}</td>
-                              <td>{doorway.doorway_id}</td>
+                              <td className="mobile-hide">{doorway.doorway_id}</td>
                               <td>-</td>
                             </tr>
                           );
@@ -59,9 +64,10 @@ function SpaceDetail({
                 </div>
                 <div className="analytics-section">
                   <div className="card-top-header">
-                    <span className="title">Analytics</span>
+                    <span className="title">Total Visitors</span>
                   </div>
-                  <TotalVisitorsChart />
+                  <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
+                  <TotalVisitorsChart startDate={startDate} endDate={endDate} />
                 </div>
               </div>
             </div>
@@ -73,10 +79,15 @@ function SpaceDetail({
 }
 
 const mapStateToProps = state => ({
-  space: state.spaces.currentObj
+  space: state.spaces.currentObj,
+  startDate: state.totalVisitors.startDate,
+  endDate: state.totalVisitors.endDate
 });
 
 const mapDispatchToProps = dispatch => ({
+  onSetDateRange: (value) => {
+    dispatch(setTotalVisitorsDateRange(value));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpaceDetail);

@@ -8,6 +8,7 @@ import organization from './organization';
 import spaces from './spaces';
 import doorways from './doorways';
 import events from './events';
+import totalVisitors from './total-visitors';
 
 const appReducer = combineReducers({
   login,
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   spaces,
   doorways,
   events,
+  totalVisitors,
   routing: routerReducer
 })
 

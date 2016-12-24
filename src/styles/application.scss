@@ -11,6 +11,10 @@
 @import "spaces";
 @import "space-detail";
 
+// Blueprint stuff
+@import "blueprint-core";
+@import "blueprint-datetime";
+
 // Remove outlines from Chrome
 textarea:focus, input:focus{
     outline: none;
@@ -27,4 +31,10 @@ body {
 
 .hide {
   display: none !important;
+}
+
+@media screen and (max-width: 480px) {
+  .mobile-hide {
+    display: none !important;
+  }
 }

@@ -2,10 +2,15 @@ import React from 'react';
 import {connect} from 'react-redux';
 import c3 from 'c3';
 
+import moment from 'moment';
+import {} from "moment-range";
 
 let TotalVisitorsChart = React.createClass({
-  drawChart: function() {
-    var chart = c3.generate({
+
+  drawChart: function(dates, totalVisitorCounts) {
+    let newDates = ['Date'].concat(dates);
+    let newVisitorCounts = ['Total Visitors'].concat(totalVisitorCounts);
+    this._chart = c3.generate({
       bindto: '#totalvisitorschart',
       tooltip: {
           show: false
@@ -17,14 +22,11 @@ let TotalVisitorsChart = React.createClass({
               'Total Visitors': '#469AFD',
           },
           columns: [
-              ['Date', '2016-01-01', '2016-01-02', '2016-01-03', '2016-01-04', '2016-01-05', '2016-01-06'],
-              ['Total Visitors', 10, 20, 15, 18, 14, 4]
+              newDates,
+              newVisitorCounts,
           ],
           type: 'bar',
           labels: true
-      },
-      transition: {
-          duration: 700
       },
       legend: {
           hide: true
@@ -40,7 +42,7 @@ let TotalVisitorsChart = React.createClass({
               },
               height: 50,
               tick: {
-                  format: '%A %m/%d',
+                  format: '%m/%d',
                   outer: false
               }
           }
@@ -51,22 +53,35 @@ let TotalVisitorsChart = React.createClass({
           }
       }
     });
-    return chart;
+  },
+
+  updateChart: function(dates, totalVisitorCounts) {
+    let newDates = ['Date'].concat(dates);
+    let newVisitorCounts = ['Total Visitors'].concat(totalVisitorCounts);
+    this._chart.load({
+      columns: [
+        newDates,
+        newVisitorCounts
+      ]
+    });
   },
   
   componentDidMount: function() {
-    this.drawChart();
+    var dayRange = moment.range(this.props.startDate, this.props.endDate).toArray('days').map(date => date.format('YYYY-MM-DD'));
+    this.drawChart(dayRange, [10, 20, 15, 18, 14, 4]);
   },
 
   componentDidUpdate: function () {
-    this.drawChart();
+    var dayRange = moment.range(this.props.startDate, this.props.endDate).toArray('days').map(date => date.format('YYYY-MM-DD'));
+    this.updateChart(dayRange, [15, 0, 1, 18, 14, 4]);
   },
 
   render: function() {
     return (
       <div>
         <div id="totalvisitorschart"></div>
-      </div>);
+      </div>
+    );
   }
 });
 
