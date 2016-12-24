@@ -7,13 +7,15 @@ import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
 import TotalVisitorsChart from 'dashboard/components/TotalVisitorsChart';
 import DensityDateRangePicker from 'dashboard/components/DensityDateRangePicker';
-import {setTotalVisitorsDateRange} from 'dashboard/actions/total-visitors';
+import {totalVisitorsSetDateRange, totalVisitorsFetch} from 'dashboard/actions/total-visitors';
 
 function SpaceDetail({
   space,
   onSetDateRange,
   startDate,
-  endDate
+  endDate,
+  totalVisitorCounts,
+  dates
 }) {
   return (
     <div>
@@ -67,7 +69,7 @@ function SpaceDetail({
                     <span className="title">Total Visitors</span>
                   </div>
                   <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
-                  <TotalVisitorsChart startDate={startDate} endDate={endDate} />
+                  <TotalVisitorsChart dates={dates} totalVisitorCounts={totalVisitorCounts} />
                 </div>
               </div>
             </div>
@@ -81,12 +83,15 @@ function SpaceDetail({
 const mapStateToProps = state => ({
   space: state.spaces.currentObj,
   startDate: state.totalVisitors.startDate,
-  endDate: state.totalVisitors.endDate
+  endDate: state.totalVisitors.endDate,
+  totalVisitorCounts: state.totalVisitors.totalVisitorCounts,
+  dates: state.totalVisitors.dates
 });
 
 const mapDispatchToProps = dispatch => ({
   onSetDateRange: (value) => {
-    dispatch(setTotalVisitorsDateRange(value));
+    dispatch(totalVisitorsSetDateRange(value));
+    dispatch(totalVisitorsFetch());
   }
 });
 

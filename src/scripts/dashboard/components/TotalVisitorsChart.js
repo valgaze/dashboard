@@ -2,9 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import c3 from 'c3';
 
-import moment from 'moment';
-import {} from "moment-range";
-
 let TotalVisitorsChart = React.createClass({
 
   drawChart: function(dates, totalVisitorCounts) {
@@ -67,13 +64,11 @@ let TotalVisitorsChart = React.createClass({
   },
   
   componentDidMount: function() {
-    var dayRange = moment.range(this.props.startDate, this.props.endDate).toArray('days').map(date => date.format('YYYY-MM-DD'));
-    this.drawChart(dayRange, [10, 20, 15, 18, 14, 4]);
+    this.drawChart(this.props.dates, this.props.totalVisitorCounts);
   },
 
   componentDidUpdate: function () {
-    var dayRange = moment.range(this.props.startDate, this.props.endDate).toArray('days').map(date => date.format('YYYY-MM-DD'));
-    this.updateChart(dayRange, [15, 0, 1, 18, 14, 4]);
+    this.updateChart(this.props.dates, this.props.totalVisitorCounts);
   },
 
   render: function() {
