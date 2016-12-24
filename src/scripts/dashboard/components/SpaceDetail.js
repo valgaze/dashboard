@@ -5,17 +5,10 @@ import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
 import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
-import TotalVisitorsChart from 'dashboard/components/TotalVisitorsChart';
-import DensityDateRangePicker from 'dashboard/components/DensityDateRangePicker';
-import {totalVisitorsSetDateRange, totalVisitorsFetch} from 'dashboard/actions/total-visitors';
+import TotalVisitors from 'dashboard/components/TotalVisitors';
 
 function SpaceDetail({
-  space,
-  onSetDateRange,
-  startDate,
-  endDate,
-  totalVisitorCounts,
-  dates
+  space
 }) {
   return (
     <div>
@@ -65,14 +58,7 @@ function SpaceDetail({
                   </div>  
                 </div>
                 <div className="analytics-section">
-                  <div className="card-top-header">
-                    <span className="title">Total Visitors</span>
-                  </div>
-                  <div className="date-range">
-                    <span className="date-range-text">Date Range:</span>
-                    <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
-                  </div>
-                  <TotalVisitorsChart dates={dates} totalVisitorCounts={totalVisitorCounts} />
+                  <TotalVisitors spaceId={space.id} />
                 </div>
               </div>
             </div>
@@ -84,18 +70,10 @@ function SpaceDetail({
 }
 
 const mapStateToProps = state => ({
-  space: state.spaces.currentObj,
-  startDate: state.totalVisitors.startDate,
-  endDate: state.totalVisitors.endDate,
-  totalVisitorCounts: state.totalVisitors.totalVisitorCounts,
-  dates: state.totalVisitors.dates
+  space: state.spaces.currentObj
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetDateRange: (value) => {
-    dispatch(totalVisitorsSetDateRange(value));
-    dispatch(totalVisitorsFetch());
-  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpaceDetail);

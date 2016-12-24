@@ -51,7 +51,7 @@ history.listen(location => {
   } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
     var spaceId = fetchParam(location);
     store.dispatch(spacesRead(spaceId));
-    store.dispatch(totalVisitorsFetch());
+    store.dispatch(totalVisitorsFetch(spaceId));
     spacesReadInterval = setInterval(() => {
       // store.dispatch(spacesRead(spaceId));  
     }, 2000);

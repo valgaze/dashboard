@@ -8,20 +8,21 @@ export function totalVisitorsSetDateRange(dateRange) {
   }
 }
 
-export function totalVisitorsFetch() {
+export function totalVisitorsFetch(spaceId) {
   return (dispatch, getState) => {
     let state = getState();
     let pageSize = 1;
     let dates = state.totalVisitors.dates;
-    var totalVisitorCounts = [];
+    var totalVisitorCounts = {};
     var promises = []
+    let stateSpaceId = spaceId || state.spaces.currentObj.id;
     
     for (var i = 0; i < dates.length; i++) {
       let startTime = dates[i];
       let endTime = moment(startTime).add(1, 'd').format("YYYY-MM-DD");
 
       var promise = new Promise((resolve, reject) => {
-        fetch(`${API_URL}/events/?start_time=${startTime}&end_time=${endTime}&page_size=${pageSize}`, {
+        fetch(`${API_URL}/events/?start_time=${startTime}&end_time=${endTime}&page_size=${pageSize}&space_id=${stateSpaceId}`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -42,7 +43,7 @@ export function totalVisitorsFetch() {
         }).then(function(json) {
           // TODO: Come up with a better metric than dividing by two
           var dayCount = Math.round(json.count/2);
-          totalVisitorCounts.push(dayCount);
+          totalVisitorCounts[startTime] = dayCount;
           resolve()
         }).catch(function(error) {
           console.log(error.message);
@@ -51,7 +52,10 @@ export function totalVisitorsFetch() {
       promises.push(promise);
     }
     Promise.all(promises).then(values => { 
-      dispatch({type: 'TOTAL_VISITORS_SET_VISITOR_COUNTS', newCounts: totalVisitorCounts});  
+      console.log(totalVisitorCounts);
+      let totalVisitorCountsOrdered = Object.keys(totalVisitorCounts).map(key => totalVisitorCounts[key]);
+      console.log(totalVisitorCountsOrdered);
+      dispatch({type: 'TOTAL_VISITORS_SET_VISITOR_COUNTS', newCounts: totalVisitorCountsOrdered});
     }).catch(reason => { 
       console.log(reason)
     });
