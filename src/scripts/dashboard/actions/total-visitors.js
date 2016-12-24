@@ -13,7 +13,7 @@ export function totalVisitorsFetch(spaceId) {
     let state = getState();
     let pageSize = 1;
     let dates = state.totalVisitors.dates;
-    var totalVisitorCounts = {};
+    var totalVisitorCounts = [];
     var promises = []
     let stateSpaceId = spaceId || state.spaces.currentObj.id;
     
@@ -42,8 +42,9 @@ export function totalVisitorsFetch(spaceId) {
           }
         }).then(function(json) {
           // TODO: Come up with a better metric than dividing by two
+          // TODO: Come up with a better way to insure the order of the count data
           var dayCount = Math.round(json.count/2);
-          totalVisitorCounts[startTime] = dayCount;
+          totalVisitorCounts[dates.indexOf(startTime)] = dayCount;
           resolve()
         }).catch(function(error) {
           console.log(error.message);
@@ -53,9 +54,7 @@ export function totalVisitorsFetch(spaceId) {
     }
     Promise.all(promises).then(values => { 
       console.log(totalVisitorCounts);
-      let totalVisitorCountsOrdered = Object.keys(totalVisitorCounts).map(key => totalVisitorCounts[key]);
-      console.log(totalVisitorCountsOrdered);
-      dispatch({type: 'TOTAL_VISITORS_SET_VISITOR_COUNTS', newCounts: totalVisitorCountsOrdered});
+      dispatch({type: 'TOTAL_VISITORS_SET_VISITOR_COUNTS', newCounts: totalVisitorCounts});
     }).catch(reason => { 
       console.log(reason)
     });
