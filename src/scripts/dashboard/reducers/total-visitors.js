@@ -21,7 +21,6 @@ export default function totalVisitors(state=initialState, action) {
       });
       break;
     case 'TOTAL_VISITORS_SET_VISITOR_COUNTS':
-      console.log(action.newCounts);
       return Object.assign({}, state, {
         totalVisitorCounts: action.newCounts
       });

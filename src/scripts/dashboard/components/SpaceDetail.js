@@ -68,7 +68,10 @@ function SpaceDetail({
                   <div className="card-top-header">
                     <span className="title">Total Visitors</span>
                   </div>
-                  <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
+                  <div className="date-range">
+                    <span className="date-range-text">Date Range:</span>
+                    <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
+                  </div>
                   <TotalVisitorsChart dates={dates} totalVisitorCounts={totalVisitorCounts} />
                 </div>
               </div>

@@ -107,6 +107,15 @@
     margin-top: 40px;
     margin-bottom: 40px;
 
+    .date-range {
+      line-height: 28px;
+      margin-bottom: 30px;
+
+      .date-range-text {
+        margin-right: 15px;
+      }
+    }
+
     text.c3-text.c3-text {
       font-size: 16px;
       fill: $gray-darker !important;
