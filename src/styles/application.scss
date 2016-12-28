@@ -2,14 +2,16 @@
 @import "icons";
 @import "loading";
 
-@import "sidebar";
-@import "login";
-@import "forgot-password";
+@import "app-bar";
 @import "change-password";
-@import "tokens";
 @import "events";
+@import "forgot-password";
+@import "login";
+@import "sidebar";
 @import "spaces";
 @import "space-detail";
+@import "tokens";
+
 
 // Blueprint stuff
 @import "blueprint-core";
