@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
@@ -19,7 +20,10 @@ function SpaceDetail({
           <div className="space-detail-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
-                <h1><span className="breadcrumb">Spaces /</span> {space.name}</h1>
+                <h1>
+                  <Link to="/spaces" className="breadcrumb">Spaces / </Link>
+                  {space.name}
+                </h1>
                 <div className="count-and-detail-section">
                   <div className="row">
                     <div className="col-xs-24 off-xs-0 col-md-12 off-md-0">

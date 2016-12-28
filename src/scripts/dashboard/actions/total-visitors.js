@@ -53,7 +53,6 @@ export function totalVisitorsFetch(spaceId) {
       promises.push(promise);
     }
     Promise.all(promises).then(values => { 
-      console.log(totalVisitorCounts);
       dispatch({type: 'TOTAL_VISITORS_SET_VISITOR_COUNTS', newCounts: totalVisitorCounts});
     }).catch(reason => { 
       console.log(reason)

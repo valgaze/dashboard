@@ -20,7 +20,6 @@ class ChangePassword extends React.Component {
   changePasswordFieldUpdate(event) {
     var field = event.target.dataset.field;
     Object.assign(this.state, {[field]: event.target.value});
-    console.log(this.state);
   }
 
   onEnterPressed(event) {
