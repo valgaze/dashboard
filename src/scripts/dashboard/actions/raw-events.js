@@ -7,6 +7,15 @@ export function rawEventsSetDateRange(dateRange) {
   }
 }
 
+export function rawEventsChangePage(pageNum, pageSize) {
+  return {
+    type: 'RAW_EVENTS_CHANGE_PAGE',
+    newPageNum: pageNum,
+    pageSize: pageSize
+  }
+}
+
+
 export function rawEventsFetch(startDate, endDate, pageNum, pageSize, spaceId) {
   return (dispatch, getState) => {
     let state = getState();

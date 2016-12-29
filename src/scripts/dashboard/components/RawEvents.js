@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {rawEventsSetDateRange, rawEventsFetch} from 'dashboard/actions/raw-events';
+import {rawEventsChangePage, rawEventsSetDateRange, rawEventsFetch} from 'dashboard/actions/raw-events';
 import DensityDateRangePicker from 'dashboard/components/DensityDateRangePicker';
 
 function RawEvents({
@@ -13,14 +13,15 @@ function RawEvents({
   pageNum,
   pageSize,
   doorways,
-  eventCount
+  eventCount,
+  onChangePage
 }) {
   function entranceOrExit(countChange) {
     return countChange === 1 ? "Entrance" : "Exit"
   }
 
   function totalPages() {
-    return Math.round(eventCount/pageSize);
+    return Math.ceil(eventCount/pageSize);
   }
 
   function doorwayName(doorwayId){
@@ -69,10 +70,10 @@ function RawEvents({
         <div>{eventCount} events...</div>
         <div className="page-num">Page {pageNum} of {totalPages()}</div>
         <div className="pt-button-group">
-          <button className="pt-button">«</button>
-          <button className="pt-button">‹</button>
-          <button className="pt-button">›</button>
-          <button className="pt-button">»</button>
+          <button className="pt-button" onClick={onChangePage(1, pageSize, startDate, endDate)}>«</button>
+          <button className="pt-button" onClick={onChangePage(pageNum-1, pageSize, startDate, endDate)}>‹</button>
+          <button className="pt-button" onClick={onChangePage(pageNum+1, pageSize, startDate, endDate)}>›</button>
+          <button className="pt-button" onClick={onChangePage(totalPages(), pageSize, startDate, endDate)}>»</button>
         </div>
       </div>
     </div>
@@ -89,6 +90,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
+  onChangePage: (pageNum, pageSize, startDate, endDate) => () => {
+    dispatch(rawEventsChangePage(pageNum, pageSize));
+    dispatch(rawEventsFetch(startDate, endDate, pageNum, ownProps.pageSize, ownProps.spaceId));
+  },
   onSetDateRange: (value) => {
     dispatch(rawEventsSetDateRange(value));
     dispatch(rawEventsFetch(value[0].format(), value[1].format(), 1, ownProps.pageSize, ownProps.spaceId));
