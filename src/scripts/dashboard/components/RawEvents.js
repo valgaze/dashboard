@@ -49,7 +49,7 @@ function RawEvents({
             <tr>
               <td>Time</td>
               <td>Event</td>
-              <td>Doorway</td>
+              <td className="mobile-hide">Doorway</td>
               <td>Count</td>
             </tr>
           </thead>
@@ -59,7 +59,7 @@ function RawEvents({
                 <tr key={event.id}>
                   <td width="30%">{moment(event.timestamp).format('h:mm A - MMM D')}</td>
                   <td width="20%">{entranceOrExit(event.spaces[0].count_change)}</td>
-                  <td width="30%">{doorwayName(event.doorway_id)}</td>
+                  <td className="mobile-hide" width="30%">{doorwayName(event.doorway_id)}</td>
                   <td width="20%">{event.spaces[0].count}</td>
                 </tr>
               )
