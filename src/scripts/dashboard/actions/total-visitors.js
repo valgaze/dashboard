@@ -15,14 +15,13 @@ export function totalVisitorsFetch(spaceId) {
     let dates = state.totalVisitors.dates;
     var totalVisitorCounts = [];
     var promises = []
-    let stateSpaceId = spaceId || state.spaces.currentObj.id;
     
     for (var i = 0; i < dates.length; i++) {
       let startTime = dates[i];
       let endTime = moment(startTime).add(1, 'd').format("YYYY-MM-DD");
 
       var promise = new Promise((resolve, reject) => {
-        fetch(`${API_URL}/events/?start_time=${startTime}&end_time=${endTime}&page_size=${pageSize}&space_id=${stateSpaceId}`, {
+        fetch(`${API_URL}/events/?start_time=${startTime}&end_time=${endTime}&page_size=${pageSize}&space_id=${spaceId}`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
 import Appbar from 'dashboard/components/Appbar';
+import RawEvents from 'dashboard/components/RawEvents';
 import Sidebar from 'dashboard/components/Sidebar';
 import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
@@ -63,6 +64,7 @@ function SpaceDetail({
                 </div>
                 <div className="analytics-section">
                   <TotalVisitors spaceId={space.id} />
+                  <RawEvents spaceId={space.id} />
                 </div>
               </div>
             </div>

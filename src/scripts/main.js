@@ -23,6 +23,7 @@ import {eventsIndex} from 'dashboard/actions/events';
 import {doorwaysIndex} from 'dashboard/actions/doorways';
 import {tokensIndex} from 'dashboard/actions/tokens';
 import {totalVisitorsFetch} from 'dashboard/actions/total-visitors';
+import {rawEventsFetch} from 'dashboard/actions/raw-events';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -49,9 +50,12 @@ history.listen(location => {
     store.dispatch(tokensIndex());
     store.dispatch(eventsIndex(1, 10));
   } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
+    let state = store.getState();
     var spaceId = fetchParam(location);
+    store.dispatch(doorwaysIndex());
     store.dispatch(spacesRead(spaceId));
     store.dispatch(totalVisitorsFetch(spaceId));
+    store.dispatch(rawEventsFetch(state.rawEvents.startDate, state.rawEvents.endDate, 1, 10, spaceId));
     spacesReadInterval = setInterval(() => {
       // store.dispatch(spacesRead(spaceId));  
     }, 2000);

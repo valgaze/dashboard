@@ -3,8 +3,8 @@ import moment from 'moment';
 import {} from 'moment-range';
 
 const initialState = {
-  startDate: moment().subtract(7,'d'),
-  endDate: Date.now(),
+  startDate: moment().subtract(7,'d').startOf('day').format(),
+  endDate: moment().format(),
   dates: moment.range(moment().subtract(7, 'd'), Date.now()).toArray('days').map(date => date.format('YYYY-MM-DD')),
   totalVisitorCounts: [0,0,0,0,0,0,0]
 }

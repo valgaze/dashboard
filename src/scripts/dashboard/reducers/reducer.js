@@ -3,24 +3,27 @@ import {routerReducer} from 'react-router-redux'
 import {push} from 'react-router-redux';
 
 import appbar from './appbar';
-import login from './login';
-import user from './user';
-import organization from './organization';
-import spaces from './spaces';
 import doorways from './doorways';
 import events from './events';
+import login from './login';
+import organization from './organization';
+import rawEvents from './raw-events';
+import spaces from './spaces';
 import totalVisitors from './total-visitors';
+import user from './user';
+
 
 
 const appReducer = combineReducers({
   appbar,
-  login,
-  user,
-  organization,
-  spaces,
   doorways,
   events,
+  login,
+  organization,
+  rawEvents,
+  spaces,
   totalVisitors,
+  user,
   routing: routerReducer
 })
 

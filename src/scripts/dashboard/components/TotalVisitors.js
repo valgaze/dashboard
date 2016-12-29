@@ -34,10 +34,10 @@ const mapStateToProps = state => ({
   dates: state.totalVisitors.dates
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   onSetDateRange: (value) => {
     dispatch(totalVisitorsSetDateRange(value));
-    dispatch(totalVisitorsFetch());
+    dispatch(totalVisitorsFetch(ownProps.spaceId));
   }
 });
 
