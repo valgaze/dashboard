@@ -64,7 +64,7 @@ function SpaceDetail({
                 </div>
                 <div className="analytics-section">
                   <TotalVisitors spaceId={space.id} />
-                  <RawEvents spaceId={space.id} />
+                  <RawEvents spaceId={space.id} pageSize={10} />
                 </div>
               </div>
             </div>

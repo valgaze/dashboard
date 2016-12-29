@@ -11,10 +11,16 @@ function RawEvents({
   endDate,
   events,
   pageNum,
-  doorways
+  pageSize,
+  doorways,
+  eventCount
 }) {
   function entranceOrExit(countChange) {
     return countChange === 1 ? "Entrance" : "Exit"
+  }
+
+  function totalPages() {
+    return Math.round(eventCount/pageSize);
   }
 
   function doorwayName(doorwayId){
@@ -59,6 +65,16 @@ function RawEvents({
           </tbody>
         </table>
       </div>
+      <div className="raw-events-navigation">
+        <div>{eventCount} events...</div>
+        <div className="page-num">Page {pageNum} of {totalPages()}</div>
+        <div className="pt-button-group">
+          <button className="pt-button">«</button>
+          <button className="pt-button">‹</button>
+          <button className="pt-button">›</button>
+          <button className="pt-button">»</button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -67,13 +83,15 @@ const mapStateToProps = state => ({
   doorways: state.doorways.results,
   startDate: state.rawEvents.startDate,
   endDate: state.rawEvents.endDate,
-  events: state.rawEvents.events
+  events: state.rawEvents.events,
+  eventCount: state.rawEvents.count,
+  pageNum: state.rawEvents.pageNum
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSetDateRange: (value) => {
     dispatch(rawEventsSetDateRange(value));
-    dispatch(rawEventsFetch(value[0].format(), value[1].format(), 1, 10, ownProps.spaceId));
+    dispatch(rawEventsFetch(value[0].format(), value[1].format(), 1, ownProps.pageSize, ownProps.spaceId));
   }
 });
 
