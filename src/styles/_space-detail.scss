@@ -40,10 +40,22 @@
     height: 204px;
     
     .card-body {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-around;
+      .count {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+      }
+      .reset-to-zero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -25px;
+        font-size: 14px;
+        text-decoration: underline;
+        color: $brand-primary;
+        cursor: pointer;
+      }
     }
   }
 

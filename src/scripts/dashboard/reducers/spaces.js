@@ -80,6 +80,11 @@ export default function spaces(state=initialState, action) {
         tempCount: newTempCount
       });
       break;
+    case 'SPACES_ZERO_COUNT':
+      return Object.assign({}, state, {
+        tempCount: 0
+      });
+      break;
     default:
       return state;
   }
