@@ -39,8 +39,8 @@ function RawEvents({
       <div className="card-top-header">
         <span className="title">Raw Events</span>
       </div>
-      <div className="date-range">
-        <span className="date-range-text">Date Range:</span>
+      <div className="date-picker">
+        <span className="date-picker-text">Date Range:</span>
         <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
       </div>
       <div className="card">

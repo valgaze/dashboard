@@ -18,8 +18,8 @@ function TotalVisitors({
       <div className="card-top-header">
         <span className="title">Total Visitors</span>
       </div>
-      <div className="date-range">
-        <span className="date-range-text">Date Range:</span>
+      <div className="date-picker">
+        <span className="date-picker-text">Date Range:</span>
         <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
       </div>
       <TotalVisitorsChart dates={dates} totalVisitorCounts={totalVisitorCounts} />
