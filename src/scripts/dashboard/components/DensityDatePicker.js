@@ -45,7 +45,7 @@ const DensityDatePicker = React.createClass({
     const content = (
       <div onClick={event => { cmp.setState({ clickedInPopover: true }); }}>
         <DatePicker
-          defaultValue={cmp.state.date}
+          defaultValue={cmp.props.date}
           maxDate={maxDate}
           onChange={value => {
             cmp.setState({ date: value });
