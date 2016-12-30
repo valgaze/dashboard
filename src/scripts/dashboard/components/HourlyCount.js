@@ -1,8 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import DensityDatePicker from 'dashboard/components/DensityDatePicker';
 import {hourlyCountSetDate} from 'dashboard/actions/hourly-count';
+import DensityDatePicker from 'dashboard/components/DensityDatePicker';
+import HourlyCountChart from 'dashboard/components/HourlyCountChart';
+
+
+import moment from 'moment';
+
 
 function HourlyCount({
   spaceId,
@@ -18,6 +23,7 @@ function HourlyCount({
         <span className="date-picker-text">Date:</span>
         <DensityDatePicker date={date} onChange={onSetDate} />
       </div>
+      <HourlyCountChart timestamps={[moment().subtract(2,'minute').toDate(), moment().subtract(1,'minute').toDate(), moment().toDate()]} counts={[33,37,39]} />
     </div>
   )
 }

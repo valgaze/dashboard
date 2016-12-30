@@ -39,7 +39,7 @@ let TotalVisitorsChart = React.createClass({
               },
               height: 50,
               tick: {
-                  format: '%m/%d',
+                  format: '%-m/%-d',
                   outer: false
               }
           }
