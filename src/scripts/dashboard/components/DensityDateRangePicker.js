@@ -46,8 +46,9 @@ const DensityDateRangePicker = React.createClass({
     const content = (
       <div onClick={event => { cmp.setState({ clickedInPopover: true }); }}>
         <DateRangePicker
-          // defaultValue={[cmp.state.startDate, cmp.state.endDate]}
+          defaultValue={[cmp.state.startDate, cmp.state.endDate]}
           maxDate={maxDate}
+          initialMonth={new Date()}
           onChange={value => {
             cmp.setState({ startDate: value[0], endDate: value[1] });
           }}
