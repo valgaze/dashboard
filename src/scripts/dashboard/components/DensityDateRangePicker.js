@@ -71,6 +71,7 @@ const DensityDateRangePicker = React.createClass({
         content={content} 
         position={Position.BOTTOM} 
         isOpen={cmp.state.isOpen}
+        useSmartPositioning={true}
       >
         <Button 
           text={cmp.getDisplayString()} 

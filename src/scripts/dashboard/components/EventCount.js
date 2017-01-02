@@ -1,15 +1,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {hourlyCountSetDate} from 'dashboard/actions/hourly-count';
+import {eventCountFetch, eventCountSetDate} from 'dashboard/actions/event-count';
 import DensityDatePicker from 'dashboard/components/DensityDatePicker';
-import HourlyCountChart from 'dashboard/components/HourlyCountChart';
+import EventCountChart from 'dashboard/components/EventCountChart';
 
 
 import moment from 'moment';
 
 
-function HourlyCount({
+function EventCount({
   spaceId,
   onSetDate,
   date
@@ -23,20 +23,20 @@ function HourlyCount({
         <span className="date-picker-text">Date:</span>
         <DensityDatePicker date={date} onChange={onSetDate} />
       </div>
-      <HourlyCountChart timestamps={[moment().subtract(2,'minute').toDate(), moment().subtract(1,'minute').toDate(), moment().toDate()]} counts={[33,37,39]} />
+      <EventCountChart timestamps={[moment().subtract(2,'minute').toDate(), moment().subtract(1,'minute').toDate(), moment().toDate()]} counts={[33,37,39]} />
     </div>
   )
 }
 
 const mapStateToProps = state => ({
-  date: state.hourlyCount.date
+  date: state.eventCount.date
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSetDate: (value) => {
-    dispatch(hourlyCountSetDate(value));
-    // dispatch(hourlyCountFetch(ownProps.spaceId));
+    dispatch(eventCountSetDate(value));
+    dispatch(eventCountFetch(value, ownProps.spaceId));
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HourlyCount);
+export default connect(mapStateToProps, mapDispatchToProps)(EventCount);

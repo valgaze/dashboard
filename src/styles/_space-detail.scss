@@ -127,28 +127,6 @@
         margin-right: 15px;
       }
     }
-
-    text.c3-text.c3-text {
-      font-size: 16px;
-      fill: $gray-darker !important;
-      font-family: 'Avenir Next', 'Avenir', 'Arial';
-      transform: translate(0px,-15px) !important;
-      font-weight: 600;
-    }
-
-    .c3-axis.c3-axis-x {
-      transform: translate(0px,260px) !important;
-    }
-
-    .c3-axis.c3-axis-x {
-      path {
-        stroke: rgba(0, 0, 0, 0) !important;
-      }
-      .tick {
-        font-size: 14px;
-        font-family: 'Avenir Next', 'Avenir', 'Arial';
-      }
-    }
   }
 
 }

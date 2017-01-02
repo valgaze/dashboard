@@ -2,13 +2,13 @@ import React from 'react';
 import {connect} from 'react-redux';
 import c3 from 'c3';
 
-let HourlyCountChart = React.createClass({
+let EventCount = React.createClass({
 
   drawChart: function(timestamps, counts) {
     let newTimestamps = ['Time'].concat(timestamps);
     let newCounts = ['Count'].concat(counts);
     this._chart = c3.generate({
-      bindto: '#hourlycountchart',
+      bindto: '#eventcountchart',
       tooltip: {
           show: true
       },
@@ -16,7 +16,7 @@ let HourlyCountChart = React.createClass({
           x: 'Time',
           y: 'Count',
           colors: {
-              'Count': '#469AFD',
+              'Count': '#F0F0F2',
           },
           columns: [
               newTimestamps,
@@ -71,10 +71,10 @@ let HourlyCountChart = React.createClass({
   render: function() {
     return (
       <div>
-        <div id="hourlycountchart"></div>
+        <div id="eventcountchart"></div>
       </div>
     );
   }
 });
 
-module.exports = HourlyCountChart;
+module.exports = EventCount;
