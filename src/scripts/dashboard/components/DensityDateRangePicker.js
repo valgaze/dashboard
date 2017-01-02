@@ -7,9 +7,7 @@ const DensityDateRangePicker = React.createClass({
   getInitialState: function () {
     return {
       startDate: null,
-      endDate: null,
-      isOpen: false,
-      clickedInPopover: false
+      endDate: null
     }
   },
 
@@ -19,36 +17,14 @@ const DensityDateRangePicker = React.createClass({
       : '';
   },
 
-  clickListener: function () {
-    if (this.state.clickedInPopover) {
-      this.setState({ clickedInPopover: false });
-    } else {
-      this.setState({ clickedInPopover: false, isOpen: false });
-    }
-  },
-
-  openOverlay: function () {
-    this.setState({ 
-      isOpen: true,
-      clickedInPopover: true // to prevent initial click from closing
-    });
-    window.addEventListener('click', this.clickListener);
-  },
-
-  closeOverlay: function () {
-    window.removeEventListener('click', this.clickListener);
-    this.setState({ isOpen: false });
-  },
-
   render: function () {
     const cmp = this;
     const maxDate = new Date();
     const content = (
-      <div onClick={event => { cmp.setState({ clickedInPopover: true }); }}>
+      <div>
         <DateRangePicker
           defaultValue={[cmp.props.startDate, cmp.props.endDate]}
           maxDate={maxDate}
-          initialMonth={new Date()}
           onChange={value => {
             cmp.setState({ startDate: value[0], endDate: value[1] });
           }}
@@ -56,11 +32,10 @@ const DensityDateRangePicker = React.createClass({
         />
         <Button 
           text="Select Date"
-          className="pt-intent-primary"
+          className="pt-intent-primary pt-popover-dismiss"
           style={{ width: '100%', padding: '6px 0' }}
           onClick={() => {
             cmp.props.onChange([moment(cmp.state.startDate).hours(0).minutes(0).seconds(0), moment(cmp.state.endDate).hours(0).minutes(0).seconds(0)]);
-            cmp.setState({isOpen: false});
           }}
         />
       </div>
@@ -69,13 +44,10 @@ const DensityDateRangePicker = React.createClass({
     return (
       <Popover 
         content={content} 
-        position={Position.BOTTOM} 
-        isOpen={cmp.state.isOpen}
         useSmartPositioning={true}
       >
         <Button 
           text={cmp.getDisplayString()} 
-          onClick={cmp.openOverlay}
         />
       </Popover>
     );

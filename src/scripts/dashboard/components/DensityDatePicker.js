@@ -45,10 +45,7 @@ const DensityDatePicker = React.createClass({
         content={content}
         useSmartPositioning={true}
       >
-        <Button 
-          text={cmp.getDisplayString()} 
-          onClick={cmp.openOverlay}
-        />
+        <Button text={cmp.getDisplayString()} />
       </Popover>
     );
   }
