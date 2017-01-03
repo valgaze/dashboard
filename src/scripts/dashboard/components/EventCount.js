@@ -12,10 +12,12 @@ import moment from 'moment';
 function EventCount({
   spaceId,
   onSetDate,
-  date
+  date,
+  timestamps,
+  counts
 }) {
   return (
-    <div className="hourly-count-section">
+    <div className="event-count-section">
       <div className="card-top-header">
         <span className="title">24 Hour</span>
       </div>
@@ -23,13 +25,15 @@ function EventCount({
         <span className="date-picker-text">Date:</span>
         <DensityDatePicker date={date} onChange={onSetDate} />
       </div>
-      <EventCountChart timestamps={[moment().subtract(2,'minute').toDate(), moment().subtract(1,'minute').toDate(), moment().toDate()]} counts={[33,37,39]} />
+      <EventCountChart timestamps={timestamps} counts={counts} />
     </div>
   )
 }
 
 const mapStateToProps = state => ({
-  date: state.eventCount.date
+  date: state.eventCount.date,
+  timestamps: state.eventCount.timestamps,
+  counts: state.eventCount.counts
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

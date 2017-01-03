@@ -10,41 +10,40 @@ let EventCount = React.createClass({
     this._chart = c3.generate({
       bindto: '#eventcountchart',
       tooltip: {
-          show: true
+        show: true
       },
       data: {
-          x: 'Time',
-          y: 'Count',
-          colors: {
-              'Count': '#F0F0F2',
-          },
-          columns: [
-              newTimestamps,
-              newCounts,
-          ],
-          types: {
-            'Count': 'area'
-          },
-          labels: true
+        x: 'Time',
+        y: 'Count',
+        colors: {
+          'Count': '#CBCFD6',
+        },
+        columns: [
+          newTimestamps,
+          newCounts,
+        ],
+        type: 'area-step',
+        labels: false
       },
       legend: {
-          hide: true
+        hide: true
       },
       axis: {
-          y: {
-              show: false
+        y: {
+          show: true
+        },
+        x: {
+          type: 'timeseries',
+          label: {
+            show: false
           },
-          x: {
-              type: 'timeseries',
-              label: {
-                  show: false
-              },
-              height: 50,
-              tick: {
-                  format: '%-I:%M %p',
-                  outer: false
-              }
+          height: 50,
+          tick: {
+            fit: false,
+            format: '%-I:%M %p',
+            outer: false
           }
+        }
       }
     });
   },
@@ -54,8 +53,8 @@ let EventCount = React.createClass({
     let newCounts = ['Count'].concat(counts);
     this._chart.load({
       columns: [
-        newTimestamps,
-        newCounts
+      newTimestamps,
+      newCounts
       ]
     });
   },
@@ -71,9 +70,9 @@ let EventCount = React.createClass({
   render: function() {
     return (
       <div>
-        <div id="eventcountchart"></div>
+      <div id="eventcountchart"></div>
       </div>
-    );
+      );
   }
 });
 

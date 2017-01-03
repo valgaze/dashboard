@@ -10,44 +10,44 @@ let TotalVisitorsChart = React.createClass({
     this._chart = c3.generate({
       bindto: '#totalvisitorschart',
       tooltip: {
-          show: false
+        show: false
       },
       data: {
-          x: 'Date',
-          y: 'Total Visitors',
-          colors: {
-              'Total Visitors': '#469AFD',
-          },
-          columns: [
-              newDates,
-              newVisitorCounts,
-          ],
-          type: 'bar',
-          labels: true
+        x: 'Date',
+        y: 'Total Visitors',
+        colors: {
+          'Total Visitors': '#469AFD',
+        },
+        columns: [
+        newDates,
+        newVisitorCounts,
+        ],
+        type: 'bar',
+        labels: true
       },
       legend: {
-          hide: true
+        hide: true
       },
       axis: {
-          y: {
-              show: false
+        y: {
+          show: false
+        },
+        x: {
+          type: 'timeseries',
+          label: {
+            show: false
           },
-          x: {
-              type: 'timeseries',
-              label: {
-                  show: false
-              },
-              height: 50,
-              tick: {
-                  format: '%-m/%-d',
-                  outer: false
-              }
+          height: 50,
+          tick: {
+            format: '%-m/%-d',
+            outer: false
           }
+        }
       },
       bar: {
-          width: {
-              ratio: 0.9
-          }
+        width: {
+          ratio: 0.9
+        }
       }
     });
   },
@@ -57,8 +57,8 @@ let TotalVisitorsChart = React.createClass({
     let newVisitorCounts = ['Total Visitors'].concat(totalVisitorCounts);
     this._chart.load({
       columns: [
-        newDates,
-        newVisitorCounts
+      newDates,
+      newVisitorCounts
       ]
     });
   },
@@ -74,9 +74,9 @@ let TotalVisitorsChart = React.createClass({
   render: function() {
     return (
       <div>
-        <div id="totalvisitorschart"></div>
+      <div id="totalvisitorschart"></div>
       </div>
-    );
+      );
   }
 });
 

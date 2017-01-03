@@ -1,0 +1,17 @@
+.event-count-section {
+  #eventcountchart {
+    /*width: 10000px;*/
+  }
+  .c3-axis.c3-axis-y .domain {
+    fill: none;
+  }
+  .c3-shapes.c3-circles {
+    circle {
+      fill: #469AFD !important;
+      r: 0 !important;
+    }
+    circle._expanded_ {
+      r: 2 !important;
+    }
+  }
+}

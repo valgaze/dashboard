@@ -24,6 +24,7 @@ import {doorwaysIndex} from 'dashboard/actions/doorways';
 import {tokensIndex} from 'dashboard/actions/tokens';
 import {totalVisitorsFetch} from 'dashboard/actions/total-visitors';
 import {rawEventsFetch} from 'dashboard/actions/raw-events';
+import {eventCountFetch} from 'dashboard/actions/event-count';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -55,6 +56,7 @@ history.listen(location => {
     store.dispatch(doorwaysIndex());
     store.dispatch(spacesRead(spaceId));
     store.dispatch(totalVisitorsFetch(spaceId));
+    store.dispatch(eventCountFetch(state.eventCount.date, spaceId));
     store.dispatch(rawEventsFetch(state.rawEvents.startDate, state.rawEvents.endDate, 1, 10, spaceId));
     spacesReadInterval = setInterval(() => {
       store.dispatch(spacesRead(spaceId));  

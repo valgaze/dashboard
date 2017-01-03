@@ -14,8 +14,11 @@ export function eventCountFetch(date, spaceId) {
     let state = getState();
     let pageSize = 50000;
     let pageNum = 1;
-    let startTime = date.format();
-    let endTime = date.add(1, 'd').format();
+    // let startTime = date.format();
+    // let endTime = date.add(1, 'd').format();
+    let startTime = moment().toDate();
+    let endTime = moment().add(1, 'd').toDate();
+
     
     let url = `${API_URL}/events/?start_time=${startTime}&end_time=${endTime}&page=${pageNum}&page_size=${pageSize}&space_id=${spaceId}`
     return fetch(url, {
@@ -38,7 +41,6 @@ export function eventCountFetch(date, spaceId) {
         throw new Error(response.statusText);
       }
     }).then(function(json) {
-      console.log(json);
       dispatch({type: 'EVENT_COUNT_SUCCESS', json: json});
     })
   }
