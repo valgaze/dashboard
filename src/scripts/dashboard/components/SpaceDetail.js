@@ -1,10 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {AnchorButton} from '@blueprintjs/core';
 
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
 import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
+
+const INVALID_HTML_PROPS = ["large"];
 
 function SpaceDetail({
   space,
@@ -52,9 +55,19 @@ function SpaceDetail({
                             </tr>
                           );
                         })}
+                        <tr>
+                          <td>
+                            <div className="docs-react-example-column">
+                              <AnchorButton
+                                target="_blank"
+                                text="Go to CSV"
+                              />
+                            </div>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
-                  </div>  
+                  </div>
                 </div>
               </div>
             </div>
