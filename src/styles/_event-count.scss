@@ -3,9 +3,6 @@
     height: 31px;
     margin-left: 9px;
   }
-  #eventcountchart {
-    /*width: 10000px;*/
-  }
   .c3-axis.c3-axis-y .domain {
     fill: none;
   }
@@ -15,7 +12,7 @@
       r: 0 !important;
     }
     circle._expanded_ {
-      r: 2 !important;
+      r: 4 !important;
     }
   }
 }

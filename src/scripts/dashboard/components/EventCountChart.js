@@ -12,11 +12,16 @@ let EventCountChart = React.createClass({
       tooltip: {
         show: true
       },
+      grid: {
+        y: {
+          show:true
+        }
+      },
       data: {
         x: 'Time',
         y: 'Count',
         colors: {
-          'Count': '#CBCFD6',
+          'Count': '#DDDDDD',
         },
         columns: [
           newTimestamps,
