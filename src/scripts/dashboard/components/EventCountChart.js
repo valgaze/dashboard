@@ -53,8 +53,7 @@ let EventCountChart = React.createClass({
           tick: {
             fit: false,
             format: '%-I:%M %p',
-            outer: false,
-            count: 10
+            outer: false
           }
         }
       }
