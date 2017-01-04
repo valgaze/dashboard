@@ -48,7 +48,7 @@ function Login(props) {
               type="button">
               Log in
             </button>
-            <Link to='/forgot-password' className="forgot-password-link">Forgot password?</Link>
+            {/*<Link to='/forgot-password' className="forgot-password-link">Forgot password?</Link>*/}
           </div>
         </div>
       </div>
