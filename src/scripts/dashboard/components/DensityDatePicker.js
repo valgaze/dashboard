@@ -23,7 +23,7 @@ const DensityDatePicker = React.createClass({
       <div>
         <DatePicker
           defaultValue={cmp.props.date}
-          popoverPosition={PositionPosition.BOTTOM}
+          popoverPosition={Position.BOTTOM}
           maxDate={maxDate}
           onChange={value => {
             cmp.setState({ date: value });
