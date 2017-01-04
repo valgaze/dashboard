@@ -104,39 +104,46 @@
 
 /*-- Tooltip --*/
 .c3-tooltip-container {
-  z-index: 10; }
+  z-index: 10; 
+}
 
 .c3-tooltip {
   border-collapse: collapse;
   border-spacing: 0;
   background-color: #fff;
   empty-cells: show;
-  -webkit-box-shadow: 7px 7px 12px -9px #777777;
-  -moz-box-shadow: 7px 7px 12px -9px #777777;
-  box-shadow: 7px 7px 12px -9px #777777;
-  opacity: 0.9; }
+  -webkit-box-shadow: 7px 7px 12px -9px #BBBBBB;
+  -moz-box-shadow: 7px 7px 12px -9px #BBBBBB;
+  box-shadow: 7px 7px 12px -9px #BBBBBB;
+  opacity: 0.9;
+}
 
 .c3-tooltip tr {
-  border: 1px solid #CCC; }
+  /*border: 1px solid #CCC; }*/
+  border: none;
+}
 
 .c3-tooltip th {
-  background-color: #aaa;
-  font-size: 14px;
-  padding: 2px 5px;
+  background-color: $gray-lighter;
+  font-size: 15px;
+  padding: 7px;
   text-align: left;
-  color: #FFF; }
+  color: $gray-darker; 
+}
 
 .c3-tooltip td {
-  font-size: 13px;
-  padding: 3px 6px;
+  font-size: 14px;
+  padding: 7px;
   background-color: #fff;
-  border-left: 1px dotted #999; }
+  /*border-left: 1px dotted #999; */
+}
 
 .c3-tooltip td > span {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 6px; }
+  display: none;
+  /*width: 10px;*/
+  /*height: 10px;*/
+  margin-right: 6px; 
+}
 
 .c3-tooltip td.value {
   text-align: right; }
@@ -144,7 +151,7 @@
 /*-- Area --*/
 .c3-area {
   stroke-width: 0;
-  opacity: 0.4; 
+  opacity: 0.6; 
 }
 
 /*-- Arc --*/

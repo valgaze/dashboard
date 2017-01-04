@@ -12,9 +12,12 @@ let EventCountChart = React.createClass({
       tooltip: {
         show: true
       },
+      padding: {
+        right: 20
+      },
       grid: {
         y: {
-          show:true
+          show: true
         }
       },
       data: {
@@ -36,7 +39,10 @@ let EventCountChart = React.createClass({
       },
       axis: {
         y: {
-          show: true
+          show: true,
+          tick: {
+            outer: false
+          }
         },
         x: {
           type: 'timeseries',
@@ -48,7 +54,7 @@ let EventCountChart = React.createClass({
             fit: false,
             format: '%-I:%M %p',
             outer: false,
-            count: 8
+            count: 10
           }
         }
       }
