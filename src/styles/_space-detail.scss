@@ -120,11 +120,13 @@
     margin-bottom: 40px;
 
     .date-picker {
-      line-height: 28px;
+      display: flex;
       margin-bottom: 30px;
 
       .date-picker-text {
         margin-right: 15px;
+        display: inline-block;
+        margin-top: 8px;
       }
     }
   }

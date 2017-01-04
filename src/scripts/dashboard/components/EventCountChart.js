@@ -2,11 +2,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import c3 from 'c3';
 
-let EventCount = React.createClass({
+let EventCountChart = React.createClass({
 
-  drawChart: function(timestamps, counts) {
-    let newTimestamps = ['Time'].concat(timestamps);
-    let newCounts = ['Count'].concat(counts);
+  drawChart: function() {
+    let newTimestamps = ['Time'];
+    let newCounts = ['Count'];
     this._chart = c3.generate({
       bindto: '#eventcountchart',
       tooltip: {
@@ -26,6 +26,7 @@ let EventCount = React.createClass({
         labels: false
       },
       legend: {
+        show: false,
         hide: true
       },
       axis: {
@@ -41,7 +42,8 @@ let EventCount = React.createClass({
           tick: {
             fit: false,
             format: '%-I:%M %p',
-            outer: false
+            outer: false,
+            count: 8
           }
         }
       }
@@ -52,15 +54,12 @@ let EventCount = React.createClass({
     let newTimestamps = ['Time'].concat(timestamps);
     let newCounts = ['Count'].concat(counts);
     this._chart.load({
-      columns: [
-      newTimestamps,
-      newCounts
-      ]
+      columns: [newTimestamps, newCounts]
     });
   },
   
   componentDidMount: function() {
-    this.drawChart(this.props.timestamps, this.props.counts);
+    this.drawChart();
   },
 
   componentDidUpdate: function () {
@@ -69,11 +68,9 @@ let EventCount = React.createClass({
 
   render: function() {
     return (
-      <div>
       <div id="eventcountchart"></div>
-      </div>
-      );
+    );
   }
 });
 
-module.exports = EventCount;
+module.exports = EventCountChart;
