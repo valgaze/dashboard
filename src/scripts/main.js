@@ -22,7 +22,7 @@ import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
 import {eventsIndex} from 'dashboard/actions/events';
 import {doorwaysIndex} from 'dashboard/actions/doorways';
 import {tokensIndex} from 'dashboard/actions/tokens';
-import {totalVisitsFetch} from 'dashboard/actions/total-visitors';
+import {totalVisitsFetch} from 'dashboard/actions/total-visits';
 import {rawEventsFetch} from 'dashboard/actions/raw-events';
 import {eventCountFetch} from 'dashboard/actions/event-count';
 

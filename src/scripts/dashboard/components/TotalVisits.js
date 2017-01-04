@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import TotalVisitsChart from 'dashboard/components/TotalVisitsChart';
 import DensityDateRangePicker from 'dashboard/components/DensityDateRangePicker';
-import {totalVisitsSetDateRange, totalVisitsFetch} from 'dashboard/actions/total-visitors';
+import {totalVisitsSetDateRange, totalVisitsFetch} from 'dashboard/actions/total-visits';
 
 function TotalVisits({
   spaceId,
@@ -14,7 +14,7 @@ function TotalVisits({
   dates
 }) {
   return (
-    <div className="total-visitors-section">
+    <div className="total-visits-section">
       <div className="card-top-header">
         <span className="title">Total Visits</span>
       </div>

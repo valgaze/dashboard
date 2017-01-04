@@ -10,7 +10,7 @@ import login from './login';
 import organization from './organization';
 import rawEvents from './raw-events';
 import spaces from './spaces';
-import totalVisits from './total-visitors';
+import totalVisits from './total-visits';
 import user from './user';
 
 
