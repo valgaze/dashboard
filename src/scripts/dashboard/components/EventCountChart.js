@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import c3 from 'c3';
+import moment from 'moment';
 
 let EventCountChart = React.createClass({
 
@@ -10,7 +11,10 @@ let EventCountChart = React.createClass({
     this._chart = c3.generate({
       bindto: '#eventcountchart',
       tooltip: {
-        show: true
+        show: true,
+        format: {
+          title: function (x) { return moment(x).format('h:mm:ss A'); }
+        }
       },
       padding: {
         right: 20
@@ -30,7 +34,7 @@ let EventCountChart = React.createClass({
           newTimestamps,
           newCounts,
         ],
-        type: 'area-step',
+        type: 'area',
         labels: false
       },
       legend: {
