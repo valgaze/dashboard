@@ -2,21 +2,21 @@ import React from 'react';
 import {connect} from 'react-redux';
 import c3 from 'c3';
 
-let TotalVisitorsChart = React.createClass({
+let TotalVisitsChart = React.createClass({
 
   drawChart: function(dates, totalVisitorCounts) {
     let newDates = ['Date'].concat(dates);
-    let newVisitorCounts = ['Total Visitors'].concat(totalVisitorCounts);
+    let newVisitorCounts = ['Total Visits'].concat(totalVisitorCounts);
     this._chart = c3.generate({
-      bindto: '#totalvisitorschart',
+      bindto: '#totalvisitschart',
       tooltip: {
         show: false
       },
       data: {
         x: 'Date',
-        y: 'Total Visitors',
+        y: 'Total Visits',
         colors: {
-          'Total Visitors': '#469AFD',
+          'Total Visits': '#469AFD',
         },
         columns: [
         newDates,
@@ -54,7 +54,7 @@ let TotalVisitorsChart = React.createClass({
 
   updateChart: function(dates, totalVisitorCounts) {
     let newDates = ['Date'].concat(dates);
-    let newVisitorCounts = ['Total Visitors'].concat(totalVisitorCounts);
+    let newVisitorCounts = ['Total Visits'].concat(totalVisitorCounts);
     this._chart.load({
       columns: [
       newDates,
@@ -74,10 +74,10 @@ let TotalVisitorsChart = React.createClass({
   render: function() {
     return (
       <div>
-      <div id="totalvisitorschart"></div>
+      <div id="totalvisitschart"></div>
       </div>
       );
   }
 });
 
-module.exports = TotalVisitorsChart;
+module.exports = TotalVisitsChart;

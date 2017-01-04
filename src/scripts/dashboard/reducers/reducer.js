@@ -10,7 +10,7 @@ import login from './login';
 import organization from './organization';
 import rawEvents from './raw-events';
 import spaces from './spaces';
-import totalVisitors from './total-visitors';
+import totalVisits from './total-visitors';
 import user from './user';
 
 
@@ -24,7 +24,7 @@ const appReducer = combineReducers({
   organization,
   rawEvents,
   spaces,
-  totalVisitors,
+  totalVisits,
   user,
   routing: routerReducer
 })

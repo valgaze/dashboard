@@ -1,18 +1,18 @@
 import {API_URL} from 'dashboard/constants';
 import moment from 'moment';
 
-export function totalVisitorsSetDateRange(dateRange) {
+export function totalVisitsSetDateRange(dateRange) {
   return {
     type: 'TOTAL_VISITORS_SET_DATE_RANGE',
     dateRange: dateRange
   }
 }
 
-export function totalVisitorsFetch(spaceId) {
+export function totalVisitsFetch(spaceId) {
   return (dispatch, getState) => {
     let state = getState();
     let pageSize = 1;
-    let dates = state.totalVisitors.dates;
+    let dates = state.totalVisits.dates;
     var totalVisitorCounts = [];
     var promises = []
     

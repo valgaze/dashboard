@@ -9,7 +9,7 @@ const initialState = {
   totalVisitorCounts: [0,0,0,0,0,0,0]
 }
 
-export default function totalVisitors(state=initialState, action) {
+export default function totalVisits(state=initialState, action) {
   switch(action.type) {
     case 'TOTAL_VISITORS_SET_DATE_RANGE':
       var dates = moment.range(action.dateRange[0], action.dateRange[1]).toArray('days').map(date => date.format('YYYY-MM-DD'));

@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import TotalVisitorsChart from 'dashboard/components/TotalVisitorsChart';
+import TotalVisitsChart from 'dashboard/components/TotalVisitsChart';
 import DensityDateRangePicker from 'dashboard/components/DensityDateRangePicker';
-import {totalVisitorsSetDateRange, totalVisitorsFetch} from 'dashboard/actions/total-visitors';
+import {totalVisitsSetDateRange, totalVisitsFetch} from 'dashboard/actions/total-visitors';
 
-function TotalVisitors({
+function TotalVisits({
   spaceId,
   onSetDateRange,
   startDate,
@@ -16,29 +16,29 @@ function TotalVisitors({
   return (
     <div className="total-visitors-section">
       <div className="card-top-header">
-        <span className="title">Total Visitors</span>
+        <span className="title">Total Visits</span>
       </div>
       <div className="date-picker">
         <span className="date-picker-text">Date Range:</span>
         <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
       </div>
-      <TotalVisitorsChart dates={dates} totalVisitorCounts={totalVisitorCounts} />
+      <TotalVisitsChart dates={dates} totalVisitorCounts={totalVisitorCounts} />
     </div>
   )
 }
 
 const mapStateToProps = state => ({
-  startDate: state.totalVisitors.startDate,
-  endDate: state.totalVisitors.endDate,
-  totalVisitorCounts: state.totalVisitors.totalVisitorCounts,
-  dates: state.totalVisitors.dates
+  startDate: state.totalVisits.startDate,
+  endDate: state.totalVisits.endDate,
+  totalVisitorCounts: state.totalVisits.totalVisitorCounts,
+  dates: state.totalVisits.dates
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSetDateRange: (value) => {
-    dispatch(totalVisitorsSetDateRange(value));
-    dispatch(totalVisitorsFetch(ownProps.spaceId));
+    dispatch(totalVisitsSetDateRange(value));
+    dispatch(totalVisitsFetch(ownProps.spaceId));
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TotalVisitors);
+export default connect(mapStateToProps, mapDispatchToProps)(TotalVisits);

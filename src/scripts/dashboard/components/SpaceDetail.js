@@ -8,7 +8,7 @@ import RawEvents from 'dashboard/components/RawEvents';
 import Sidebar from 'dashboard/components/Sidebar';
 import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
-import TotalVisitors from 'dashboard/components/TotalVisitors';
+import TotalVisits from 'dashboard/components/TotalVisits';
 
 function SpaceDetail({
   space
@@ -67,7 +67,7 @@ function SpaceDetail({
                   <div className="mobile-hide">
                     <EventCount spaceId={space.id} />
                   </div>
-                  <TotalVisitors spaceId={space.id} />
+                  <TotalVisits spaceId={space.id} />
                   <RawEvents spaceId={space.id} pageSize={10} />
                 </div>
               </div>
