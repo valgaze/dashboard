@@ -24,14 +24,12 @@ export function getCsv(spaceId) {
         throw new Error(response.statusText);
       }
     }).then(function(csv) {
-      console.log(csv)
       var data = new Blob([csv], {type: 'text/csv'});
       var csvURL = window.URL.createObjectURL(data);
       var tempLink = document.createElement('a');
       tempLink.href = csvURL;
       tempLink.setAttribute('download', 'currentevents.csv');
       tempLink.click();
-
     }).catch(function(error) {
       console.log(error.message);
     })

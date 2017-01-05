@@ -61,6 +61,7 @@ function SpaceDetail({
                           <td>
                             <div>
                               <Button
+                                className="button button-primary"
                                 text="Go to CSV"
                                 onClick={goToCsv}
                               />
