@@ -48,13 +48,14 @@ history.listen(location => {
   } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
     var spaceId = fetchParam(location);
     store.dispatch(spacesRead(spaceId));
+    store.dispatch(eventsIndex(1, 10));
     spacesReadInterval = setInterval(() => {
-      store.dispatch(spacesRead(spaceId));  
+      store.dispatch(spacesRead(spaceId));
     }, 2000);
   } else if (location.pathname === "/spaces") {
     store.dispatch(spacesIndex());
     spacesIndexInterval = setInterval(() => {
-      store.dispatch(spacesIndex());  
+      store.dispatch(spacesIndex());
     }, 2000);
   }
 });

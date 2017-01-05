@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {AnchorButton} from '@blueprintjs/core';
+import {Button} from '@blueprintjs/core';
+import {getCsv} from 'dashboard/actions/getCsv';
 
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
@@ -11,6 +12,7 @@ const INVALID_HTML_PROPS = ["large"];
 
 function SpaceDetail({
   space,
+  goToCsv
 }) {
   return (
     <div>
@@ -57,10 +59,10 @@ function SpaceDetail({
                         })}
                         <tr>
                           <td>
-                            <div className="docs-react-example-column">
-                              <AnchorButton
-                                target="_blank"
+                            <div>
+                              <Button
                                 text="Go to CSV"
+                                onClick={goToCsv}
                               />
                             </div>
                           </td>
@@ -83,6 +85,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  goToCsv: (spaceId, start, end) => {
+    dispatch(getCsv(spaceId))
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpaceDetail);
