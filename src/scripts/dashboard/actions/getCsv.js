@@ -3,7 +3,9 @@ import {API_URL} from 'dashboard/constants';
 export function getCsv(spaceId) {
   return (dispatch, getState) => {
     let state = getState();
-    fetch(`${API_URL}/csv/?start_time=2017-01-04`, {
+    var defaultStartTime = '2016-11-01'
+    console.log(state)
+    fetch(`${API_URL}/csv/?start_time=${defaultStartTime}&&space_id=${spaceId}`, {
       method: 'GET',
       headers: {
         'Accept': 'text/csv',
