@@ -1,5 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Button} from '@blueprintjs/core';
+import {getCsv} from 'dashboard/actions/getCsv';
 import moment from 'moment';
 
 import {rawEventsChangePage, rawEventsSetDateRange, rawEventsFetch} from 'dashboard/actions/raw-events';
@@ -15,7 +17,8 @@ function RawEvents({
   pageSize,
   doorways,
   eventCount,
-  onChangePage
+  onChangePage,
+  pullCsv
 }) {
   function entranceOrExit(countChange) {
     return countChange === 1 ? "Entrance" : "Exit"
@@ -33,7 +36,7 @@ function RawEvents({
       return doorwayId;
     }
   }
-  
+
   return (
     <div className="raw-events-section">
       <div className="card-top-header">
@@ -41,7 +44,8 @@ function RawEvents({
       </div>
       <div className="date-picker">
         <span className="date-picker-text">Date Range:</span>
-        <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
+        <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} /> &nbsp;&nbsp;&nbsp;
+        <Button text="Download CSV" onClick={pullCsv(spaceId, startDate, endDate)}/>
       </div>
       <div className="card">
         <table className="table striped">
@@ -98,6 +102,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onSetDateRange: (value) => {
     dispatch(rawEventsSetDateRange(value));
     dispatch(rawEventsFetch(value[0].format(), value[1].format(), 1, ownProps.pageSize, ownProps.spaceId));
+  },
+  pullCsv: (spaceId, startDate, endDate) => evt => {
+    dispatch(getCsv(spaceId, startDate, endDate))
   }
 });
 

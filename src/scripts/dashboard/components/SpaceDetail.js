@@ -1,7 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Button} from '@blueprintjs/core';
-import {getCsv} from 'dashboard/actions/getCsv';
 import {Link} from 'react-router';
 
 import Appbar from 'dashboard/components/Appbar';
@@ -12,15 +10,8 @@ import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
 import TotalVisits from 'dashboard/components/TotalVisits';
 
-const INVALID_HTML_PROPS = ["large"];
-
 function SpaceDetail({
-<<<<<<< HEAD
-  space,
-  goToCsv
-=======
   space
->>>>>>> staging
 }) {
   return (
     <div>
@@ -34,11 +25,6 @@ function SpaceDetail({
                 <h1>
                   <Link to="/spaces" className="breadcrumb">Spaces / </Link>
                   {space.name}
-                  <Button
-                    className="button button-primary"
-                    text="Download CSV"
-                    onClick={goToCsv(space.id)}
-                  />
                 </h1>
                 <div className="count-and-detail-section">
                   <div className="row">
@@ -76,8 +62,6 @@ function SpaceDetail({
                       </tbody>
                     </table>
                   </div>
-<<<<<<< HEAD
-=======
                 </div>
                 <div className="analytics-section">
                   <div className="mobile-hide">
@@ -85,7 +69,6 @@ function SpaceDetail({
                   </div>
                   <TotalVisits spaceId={space.id} />
                   <RawEvents spaceId={space.id} pageSize={10} />
->>>>>>> staging
                 </div>
               </div>
             </div>
@@ -101,9 +84,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  goToCsv: (spaceId) => evt => {
-    dispatch(getCsv(spaceId))
-  }
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpaceDetail);
