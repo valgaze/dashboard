@@ -1,11 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
-<<<<<<< HEAD
 import {Button} from '@blueprintjs/core';
 import {getCsv} from 'dashboard/actions/getCsv';
-=======
 import {Link} from 'react-router';
->>>>>>> staging
 
 import Appbar from 'dashboard/components/Appbar';
 import EventCount from 'dashboard/components/EventCount';
