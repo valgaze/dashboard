@@ -51,8 +51,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  pullCsv: (spaceId="None") => evt => {
-    dispatch(getCsv(spaceId))
+  pullCsv: () => evt => {
+    dispatch(getCsv())
   }
 });
 

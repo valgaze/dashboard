@@ -6,7 +6,7 @@
       color: $gray;
     }
   }
-  
+
   .details-card {
     font-size: 14px;
 
@@ -38,7 +38,7 @@
 
   .current-count-card {
     height: 204px;
-    
+
     .card-body {
       .count {
         display: flex;
@@ -84,6 +84,10 @@
     i:before {
       font-size: 20px;
     }
+  }
+
+  .download-csv-button {
+    margin-left: 20px;
   }
 
   .circle-button:active {

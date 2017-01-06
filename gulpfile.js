@@ -132,7 +132,7 @@ gulp.task('assets', (cb) => {
 })
 
 gulp.task('css', () => {
-  return gulp.src(['node_modules/@blueprintjs/core/dist/blueprint.css', 'src/styles/application.scss'])
+  return gulp.src('src/styles/application.scss')
     .pipe(sass({
       outputStyle: SASS_OUTPUT_STYLE,
       includePaths: densityUi.includePaths

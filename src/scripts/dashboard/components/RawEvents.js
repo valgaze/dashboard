@@ -44,8 +44,8 @@ function RawEvents({
       </div>
       <div className="date-picker">
         <span className="date-picker-text">Date Range:</span>
-        <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} /> &nbsp;&nbsp;&nbsp;
-        <Button text="Download CSV" onClick={pullCsv(spaceId, startDate, endDate)}/>
+        <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
+        <Button text="Download CSV" className="download-csv-button" onClick={pullCsv(spaceId, startDate, endDate)}/>
       </div>
       <div className="card">
         <table className="table striped">

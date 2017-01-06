@@ -3,7 +3,11 @@ import {API_URL} from 'dashboard/constants';
 export function getCsv(spaceId, startDate, endDate) {
   return (dispatch, getState) => {
     let state = getState();
-    fetch(`${API_URL}/csv/?start_time=${startDate}&&space_id=${spaceId}`, {
+    var url = `${API_URL}/csv/?start_time=${startDate}&end_time=${endDate}`;
+    if(spaceId) {
+      var url = `${url}&space_id=${spaceId}`
+    }
+    fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'text/csv',
