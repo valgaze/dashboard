@@ -22,6 +22,9 @@ import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
 import {eventsIndex} from 'dashboard/actions/events';
 import {doorwaysIndex} from 'dashboard/actions/doorways';
 import {tokensIndex} from 'dashboard/actions/tokens';
+import {totalVisitsFetch} from 'dashboard/actions/total-visits';
+import {rawEventsFetch} from 'dashboard/actions/raw-events';
+import {eventCountFetch} from 'dashboard/actions/event-count';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -41,14 +44,20 @@ history.listen(location => {
   clearInterval(spacesIndexInterval);
   clearInterval(spacesReadInterval);
   if (location.pathname === "/") {
+    window.localStorage.jwt ? hashHistory.push('/spaces') : hashHistory.push('/login');
+  } else if (location.pathname === "/tokens") {
     store.dispatch(spacesIndex());
     store.dispatch(doorwaysIndex());
     store.dispatch(tokensIndex());
     store.dispatch(eventsIndex(1, 10));
   } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
+    let state = store.getState();
     var spaceId = fetchParam(location);
+    store.dispatch(doorwaysIndex());
     store.dispatch(spacesRead(spaceId));
-    store.dispatch(eventsIndex(1, 10));
+    store.dispatch(totalVisitsFetch(spaceId));
+    store.dispatch(eventCountFetch(state.eventCount.date, spaceId));
+    store.dispatch(rawEventsFetch(state.rawEvents.startDate, state.rawEvents.endDate, 1, 10, spaceId));
     spacesReadInterval = setInterval(() => {
       store.dispatch(spacesRead(spaceId));
     }, 2000);
@@ -63,7 +72,7 @@ history.listen(location => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={Tokens} onEnter={requireAuth} />
+      <Route path="tokens" component={Tokens} onEnter={requireAuth} />
       <Route path="login" component={Login} />
       <Route path="forgot-password" component={ForgotPassword} />
       <Route path="spaces" component={Spaces} onEnter={requireAuth} />

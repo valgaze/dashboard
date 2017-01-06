@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {spacesToggleEditCount, spacesIncreaseCount, spacesDecreaseCount, spacesSaveTempCount} from 'dashboard/actions/spaces';
+import {spacesResetToZeroCount, spacesToggleEditCount, spacesChangeCount, spacesSaveTempCount} from 'dashboard/actions/spaces';
 
 function SpaceCurrentCountCard({
   space, 
@@ -10,7 +10,8 @@ function SpaceCurrentCountCard({
   onToggleEditCount,
   onDecreaseCount,
   onIncreaseCount,
-  onSaveCount
+  onSaveCount,
+  onResetToZero
 }) {
   return (
     <div>
@@ -21,13 +22,18 @@ function SpaceCurrentCountCard({
       </div>
       <div className="card current-count-card">
         <div className="card-body">
-          <button className={editingCurrentCount ? "card circle-button" : "hide"} onClick={onDecreaseCount}>
-            <i className="icon icon-minus"></i>
-          </button>
-          <div className="current-count">{editingCurrentCount ? tempCount : space.current_count}</div>
-          <button className={editingCurrentCount ? "card circle-button" : "hide"} onClick={onIncreaseCount}>
-            <i className="icon icon-add"></i>
-          </button>
+          <div className="count">
+            <button className={editingCurrentCount ? "card circle-button" : "hide"} onClick={onDecreaseCount}>
+              <i className="icon icon-minus"></i>
+            </button>
+            <div className="current-count" contentEditable={editingCurrentCount}>{editingCurrentCount ? tempCount : space.current_count}</div>
+            <button className={editingCurrentCount ? "card circle-button" : "hide"} onClick={onIncreaseCount}>
+              <i className="icon icon-add"></i>
+            </button>
+          </div>
+          <div className="reset-to-zero">
+            <div className={editingCurrentCount ? "action" : "hide"} onClick={onResetToZero}>Reset to zero</div>
+          </div>
         </div>
       </div>  
     </div>
@@ -44,11 +50,14 @@ const mapDispatchToProps = dispatch => ({
   onToggleEditCount: (editingCurrentCount) => () => {
     dispatch(spacesToggleEditCount(editingCurrentCount));
   },
+  onResetToZero: () => {
+    dispatch(spacesResetToZeroCount());
+  },
   onIncreaseCount: () => {
-    dispatch(spacesIncreaseCount());
+    dispatch(spacesChangeCount(1));
   },
   onDecreaseCount: () => {
-    dispatch(spacesDecreaseCount());
+    dispatch(spacesChangeCount(-1));
   },
   onSaveCount: () => {
     dispatch(spacesSaveTempCount());

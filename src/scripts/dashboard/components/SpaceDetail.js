@@ -1,18 +1,29 @@
 import React from 'react';
 import {connect} from 'react-redux';
+<<<<<<< HEAD
 import {Button} from '@blueprintjs/core';
 import {getCsv} from 'dashboard/actions/getCsv';
+=======
+import {Link} from 'react-router';
+>>>>>>> staging
 
 import Appbar from 'dashboard/components/Appbar';
+import EventCount from 'dashboard/components/EventCount';
+import RawEvents from 'dashboard/components/RawEvents';
 import Sidebar from 'dashboard/components/Sidebar';
 import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
+import TotalVisits from 'dashboard/components/TotalVisits';
 
 const INVALID_HTML_PROPS = ["large"];
 
 function SpaceDetail({
+<<<<<<< HEAD
   space,
   goToCsv
+=======
+  space
+>>>>>>> staging
 }) {
   return (
     <div>
@@ -23,12 +34,14 @@ function SpaceDetail({
           <div className="space-detail-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
-                <h1><span className="breadcrumb">Spaces /</span> {space.name} &nbsp;&nbsp;
-                <Button
-                  className="button button-primary"
-                  text="Download CSV"
-                  onClick={goToCsv(space.id)}
-                />
+                <h1>
+                  <Link to="/spaces" className="breadcrumb">Spaces / </Link>
+                  {space.name}
+                  <Button
+                    className="button button-primary"
+                    text="Download CSV"
+                    onClick={goToCsv(space.id)}
+                  />
                 </h1>
                 <div className="count-and-detail-section">
                   <div className="row">
@@ -49,7 +62,7 @@ function SpaceDetail({
                       <thead>
                         <tr>
                           <td>Name</td>
-                          <td>ID</td>
+                          <td className="mobile-hide">ID</td>
                           <td>Sensor Status</td>
                         </tr>
                       </thead>
@@ -58,7 +71,7 @@ function SpaceDetail({
                           return (
                             <tr key={doorway.doorway_id}>
                               <td>{doorway.name}</td>
-                              <td>{doorway.doorway_id}</td>
+                              <td className="mobile-hide">{doorway.doorway_id}</td>
                               <td>-</td>
                             </tr>
                           );
@@ -66,6 +79,16 @@ function SpaceDetail({
                       </tbody>
                     </table>
                   </div>
+<<<<<<< HEAD
+=======
+                </div>
+                <div className="analytics-section">
+                  <div className="mobile-hide">
+                    <EventCount spaceId={space.id} />
+                  </div>
+                  <TotalVisits spaceId={space.id} />
+                  <RawEvents spaceId={space.id} pageSize={10} />
+>>>>>>> staging
                 </div>
               </div>
             </div>

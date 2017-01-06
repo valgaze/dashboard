@@ -40,10 +40,22 @@
     height: 204px;
     
     .card-body {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-around;
+      .count {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+      }
+      .reset-to-zero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -25px;
+        font-size: 14px;
+        text-decoration: underline;
+        color: $brand-primary;
+        cursor: pointer;
+      }
     }
   }
 
@@ -101,6 +113,22 @@
 
   .doorways-section {
     margin-top: 40px;
+  }
+
+  .analytics-section {
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    .date-picker {
+      display: flex;
+      margin-bottom: 30px;
+
+      .date-picker-text {
+        margin-right: 15px;
+        display: inline-block;
+        margin-top: 8px;
+      }
+    }
   }
 
 }

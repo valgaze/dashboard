@@ -13,7 +13,7 @@ function Tokens({
   eventCount
 }) {  
   return (
-    <div>
+    <div className="">
       <Appbar />
       <div className="row">
         <Sidebar />

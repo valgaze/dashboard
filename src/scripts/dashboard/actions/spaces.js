@@ -23,17 +23,16 @@ export function spacesToggleEditDetails(editingSpaceDetails) {
   }
 };
 
-export function spacesIncreaseCount() {
+export function spacesChangeCount(countChange) {
   return {
     type: 'SPACES_NEW_TEMP_COUNT', 
-    countChange: 1
+    countChange: countChange
   }
 };
 
-export function spacesDecreaseCount() {
+export function spacesResetToZeroCount() {
   return {
-    type: 'SPACES_NEW_TEMP_COUNT', 
-    countChange: -1
+    type: 'SPACES_ZERO_COUNT'
   }
 };
 
