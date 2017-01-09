@@ -24,6 +24,11 @@ let EventCountChart = React.createClass({
           show: true
         }
       },
+      line: {
+        step: {
+          type: 'step-after'
+        }
+      },
       data: {
         x: 'Time',
         y: 'Count',
@@ -34,7 +39,7 @@ let EventCountChart = React.createClass({
           newTimestamps,
           newCounts,
         ],
-        type: 'area',
+        type: 'area-step',
         labels: false
       },
       legend: {
