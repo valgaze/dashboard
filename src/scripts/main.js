@@ -59,12 +59,12 @@ history.listen(location => {
     store.dispatch(eventCountFetch(state.eventCount.date, spaceId));
     store.dispatch(rawEventsFetch(state.rawEvents.startDate, state.rawEvents.endDate, 1, 10, spaceId));
     spacesReadInterval = setInterval(() => {
-      store.dispatch(spacesRead(spaceId));  
+      store.dispatch(spacesRead(spaceId));
     }, 2000);
   } else if (location.pathname === "/spaces") {
     store.dispatch(spacesIndex());
     spacesIndexInterval = setInterval(() => {
-      store.dispatch(spacesIndex());  
+      store.dispatch(spacesIndex());
     }, 2000);
   }
 });
