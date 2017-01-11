@@ -6,7 +6,7 @@ import { DatePicker } from '@blueprintjs/datetime';
 const DensityDatePicker = React.createClass({
   getInitialState: function () {
     return {
-      date: null
+      date: this.props.date
     }
   },
 

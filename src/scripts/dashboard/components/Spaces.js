@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button} from '@blueprintjs/core';
-import {getCsv} from 'dashboard/actions/getCsv';
+import {getCsv} from 'dashboard/actions/get-csv';
 import {Link} from 'react-router';
 
 import Appbar from 'dashboard/components/Appbar'

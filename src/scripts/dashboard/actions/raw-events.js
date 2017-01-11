@@ -1,4 +1,7 @@
+import moment from 'moment';
+
 import {API_URL} from 'dashboard/constants';
+
 
 export function rawEventsSetDateRange(dateRange) {
   return {
@@ -19,6 +22,8 @@ export function rawEventsChangePage(pageNum, pageSize) {
 export function rawEventsFetch(startDate, endDate, pageNum, pageSize, spaceId) {
   return (dispatch, getState) => {
     let state = getState();
+    startDate = moment(startDate).format('YYYY-MM-DD');
+    endDate = moment(endDate).add(1, 'd').format('YYYY-MM-DD');
     let url = `${API_URL}/events/?start_time=${startDate}&end_time=${endDate}&page=${pageNum}&page_size=${pageSize}&space_id=${spaceId}`
     return fetch(url, {
       method: 'GET',

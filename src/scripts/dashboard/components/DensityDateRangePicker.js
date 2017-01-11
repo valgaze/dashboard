@@ -6,8 +6,8 @@ import { DateRangePicker } from '@blueprintjs/datetime';
 const DensityDateRangePicker = React.createClass({
   getInitialState: function () {
     return {
-      startDate: null,
-      endDate: null
+      startDate: this.props.startDate,
+      endDate: this.props.endDate
     }
   },
 
@@ -20,6 +20,16 @@ const DensityDateRangePicker = React.createClass({
   render: function () {
     const cmp = this;
     const maxDate = new Date();
+
+    function handleNullEndDate(startDate, endDate) {
+      if (endDate == null) {
+        endDate = startDate;
+      } else if (startDate == null) {
+        startDate = endDate;
+      }
+      return [startDate, endDate];
+    }
+
     const content = (
       <div>
         <DateRangePicker
@@ -36,7 +46,8 @@ const DensityDateRangePicker = React.createClass({
           className="pt-intent-primary pt-popover-dismiss"
           style={{ width: '100%', padding: '6px 0' }}
           onClick={() => {
-            cmp.props.onChange([moment(cmp.state.startDate).hours(0).minutes(0).seconds(0), moment(cmp.state.endDate).hours(0).minutes(0).seconds(0)]);
+            var date = handleNullEndDate(cmp.state.startDate, cmp.state.endDate);
+            cmp.props.onChange([moment(date[0]).hours(0).minutes(0).seconds(0), moment(date[1]).hours(0).minutes(0).seconds(0)]);
           }}
         />
       </div>
