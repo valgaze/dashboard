@@ -30,9 +30,9 @@ function Alerts({
                             <span className="action">Remove Integration</span> 
                           </div>
                           <div className="card-body">
-                            <div>Post to 
-                            <div className="pt-select pt-large">
-                              <select>
+                            <div className="alert-line">Post to 
+                              <div className="pt-select pt-large">
+                                <select>
                                   <option selected>Choose a channel...</option>
                                   <option value="1">#density-alerts</option>
                                   <option value="2">#announcements</option>
@@ -40,10 +40,20 @@ function Alerts({
                                   <option value="4">#wall</option>
                                 </select>
                               </div>
-
                             </div>
-                            <div>when current count in Conference Room</div>
-                            <div>exceeds 25 people</div>
+                            <div className="alert-line">when the current count in
+                              <div className="pt-select pt-large">
+                                <select>
+                                  <option selected>Choose a space...</option>
+                                  <option value="1">Conference Room</option>
+                                  <option value="2">Main Office</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div className="alert-line">exceeds 
+                              <input type="number" />
+                              people
+                            </div>
                           </div>
                         </div>
                       </div>
