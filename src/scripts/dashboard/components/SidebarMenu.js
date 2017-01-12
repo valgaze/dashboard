@@ -24,14 +24,6 @@ function SidebarMenu(props) {
       </ul>
       <ul className="sidebar-nav-list">
         <li className="list-header">
-          <span>Integrations</span>
-        </li>
-        <li>
-          <Link to='/integrations/alerts' className="" onClick={onCloseSideNav}>Alerts</Link>
-        </li>
-      </ul>
-      <ul className="sidebar-nav-list">
-        <li className="list-header">
           <span>Settings</span>
         </li>
         <li>
