@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
 import {push} from 'react-router-redux';
 
+import alerts from './alerts';
 import appbar from './appbar';
 import doorways from './doorways';
 import eventCount from './event-count';
@@ -16,6 +17,7 @@ import user from './user';
 
 
 const appReducer = combineReducers({
+  alerts,
   appbar,
   doorways,
   eventCount,

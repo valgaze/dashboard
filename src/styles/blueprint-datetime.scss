@@ -41,7 +41,7 @@
 .pt-dark .pt-datepicker .DayPicker-NavButton {
       color: #bfccd6; }
 .pt-dark .pt-datepicker .DayPicker-NavButton:hover {
-        color: #f5f8fa; }
+        color: $brand-primary; }
 .pt-datepicker .DayPicker-NavButton--prev {
     left: -5px; }
 .pt-datepicker .DayPicker-NavButton--prev::before {
@@ -164,14 +164,14 @@
     color: rgba(191, 204, 214, 0.5); }
 .pt-dark .pt-datepicker .DayPicker-Day--selected:not(.DayPicker-Day--outside),
   .pt-dark .pt-datepicker .DayPicker-Day--selected:not(.DayPicker-Day--outside):focus {
-    background-color: #137cbd; }
+    background-color: $brand-primary; }
 .pt-dark .pt-datepicker .DayPicker-Day--selected:not(.DayPicker-Day--outside):hover,
     .pt-dark .pt-datepicker .DayPicker-Day--selected:not(.DayPicker-Day--outside):focus:hover {
       background-color: #2b95d6; }
 .pt-dark .pt-datepicker .pt-datepicker-caption {
     border-bottom-color: rgba(16, 22, 26, 0.4); }
 .pt-dark .pt-datepicker .pt-datepicker-caption select {
-      color: #f5f8fa; }
+      color: $brand-primary; }
 .pt-dark .pt-datepicker .pt-datepicker-footer {
     border-top-color: rgba(16, 22, 26, 0.4); }
 
@@ -223,7 +223,7 @@
 .pt-dark .pt-timepicker .pt-timepicker-arrow-button {
       color: #bfccd6; }
 .pt-dark .pt-timepicker .pt-timepicker-arrow-button:hover {
-        color: #f5f8fa; }
+        color: $brand-primary; }
 .pt-timepicker .pt-timepicker-arrow-button + .pt-timepicker-arrow-button {
       margin-left: 11px; }
 .pt-timepicker .pt-timepicker-arrow-button:hover {
@@ -253,7 +253,7 @@
     text-align: center;
     color: #182026; }
 .pt-timepicker .pt-timepicker-input:focus {
-      box-shadow: 0 0 0 2px #137cbd; }
+      box-shadow: 0 0 0 2px $brand-primary; }
 .pt-dark .pt-timepicker .pt-timepicker-arrow-button {
   color: #738694; }
 .pt-dark .pt-timepicker .pt-timepicker-arrow-button:hover {
@@ -264,7 +264,7 @@
 .pt-dark .pt-timepicker .pt-timepicker-divider-text {
   color: #bfccd6; }
 .pt-dark .pt-timepicker .pt-timepicker-input {
-  color: #f5f8fa; }
+  color: $brand-primary; }
 
 .pt-datetimepicker {
   border-radius: 3px;
