@@ -34,7 +34,7 @@ function requireAuth(nextState, replace) {
 function fireTracking() {
   var decoded = jwt.decode(window.localStorage.jwt);
   if (decoded) {
-    ReactGA.set({ email: decoded['user']['email'] });
+    ReactGA.set({ userId: decoded['auth']['orgs'][0]['id'] });
   }
   ReactGA.pageview(window.location.hash);
 }
