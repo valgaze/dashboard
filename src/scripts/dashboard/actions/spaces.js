@@ -1,5 +1,5 @@
 import {API_URL} from 'dashboard/constants';
-
+import {logoutUser} from 'dashboard/actions/logout';
 
 export function spacesFormFieldUpdate(field, value) {
   return {
@@ -86,6 +86,7 @@ export function spacesIndex() {
         return response.json();
       } else if (response.status == 403) {
         return response.json().then(({detail}) => {
+          dispatch(logoutUser());
           throw new Error(detail);
         });
       } else {
@@ -114,6 +115,7 @@ export function spacesRead(spaceId) {
         return response.json();
       } else if (response.status == 403) {
         return response.json().then(({detail}) => {
+          dispatch(logoutUser());
           throw new Error(detail);
         });
       } else {
