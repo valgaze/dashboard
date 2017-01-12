@@ -5,9 +5,9 @@ import moment from 'moment';
 
 let EventCountChart = React.createClass({
 
-  drawChart: function() {
-    let newTimestamps = ['Time'];
-    let newCounts = ['Count'];
+  drawChart: function(timestamps, counts) {
+    let newTimestamps = ['Time'].concat(timestamps);
+    let newCounts = ['Count'].concat(counts);
     this._chart = c3.generate({
       bindto: '#eventcountchart',
       tooltip: {
@@ -78,7 +78,7 @@ let EventCountChart = React.createClass({
   },
   
   componentDidMount: function() {
-    this.drawChart();
+    this.drawChart(this.props.timestamps, this.props.counts);
   },
 
   componentDidUpdate: function () {
