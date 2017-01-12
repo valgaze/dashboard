@@ -42,6 +42,7 @@
     "c3": "^0.4.11",
     "density-ui": "densityco/density-ui#v3.0",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.2.1",
     "moment": "^2.15.2",
     "moment-range": "^2.2.0",
     "moment-timezone": "^0.5.10",

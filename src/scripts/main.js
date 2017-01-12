@@ -6,6 +6,7 @@ import {Router, Route, hashHistory} from 'react-router';
 import "whatwg-fetch"
 
 import {GA_TRACKING_CODE} from 'dashboard/constants';
+import jwt from 'jsonwebtoken';
 import ReactGA from 'react-ga';
 ReactGA.initialize(GA_TRACKING_CODE);
 
@@ -31,6 +32,10 @@ function requireAuth(nextState, replace) {
 }
 
 function fireTracking() {
+  var decoded = jwt.decode(window.localStorage.jwt);
+  if (decoded) {
+    ReactGA.set({ email: decoded['user']['email'] });
+  }
   ReactGA.pageview(window.location.hash);
 }
 
