@@ -2,49 +2,41 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Switch} from '@blueprintjs/core';
 
-import {alertsToggleEnabled, alertsCancelCreation, alertsUpdateFormField, alertsCreate, alertsDelete} from 'dashboard/actions/alerts';
+import {alertsToggleEnabled, alertsCancel, alertsUpdateFormField, alertsCreate, alertsDelete, alertsEdit} from 'dashboard/actions/alerts';
 
 function AlertCard({
   alert,
   onToggleSwitch,
-  onCancelCreate,
+  onCancelClick,
   onCreateAlert,
+  onEditAlert,
+  onSaveAlert,
   onUpdateFormField,
   spaces,
   onDeleteClick,
   channels
 }) {
 
-  var actions;
-  if (alert.state === "new") {
-    actions = <div>
-      <span className="action primary-action" onClick={onCreateAlert(alert.compareValue, alert.space_id, alert.enabled, alert.channel)}>Create</span>
-      <span className="action" onClick={onCancelCreate(alert.id)}>Cancel</span>
-    </div>;
-  } else if (alert.state === "edit") {
-    actions = <div><span className="action" onClick={onDeleteClick(alert.id)}>Delete</span></div>;
-    {/* actions = <div>
-       <span className="action primary-action">Save</span>
-       <span className="action">Cancel</span>
-     </div>; */}
-  } else {
-    actions = <div>
-      {/*<span className="action primary-action">Edit</span>*/}
-      <span className="action" onClick={onDeleteClick(alert.id)}>Delete</span>
-    </div>;
-  }
+  let enableFields = !(alert.mode == "edit" || alert.mode == "new");
 
   return (
     <div className="alert-cell">
+      <div className="card-top-header">
+        <span className="title">Alert via Slack</span>
+        <span className={(alert.mode == "edit" || alert.mode == "new") ? "action" : "hide"} onClick={onCancelClick(alert.id)}>Cancel</span>
+        <span className={alert.mode == null ? "action primary-action" : "hide"} onClick={onEditAlert(alert.id)}>Edit</span> 
+        <span className={alert.mode == "new" ? "action primary-action" : "hide"} onClick={onCreateAlert(alert.compareValue, alert.space_id, alert.enabled, alert.channel)}>Create</span> 
+        <span className={alert.mode == "edit" ? "action primary-action" : "hide"} onClick={onSaveAlert(alert.compareValue, alert.space_id, alert.enabled, alert.channel)}>Save</span>
+      </div>
       <div className="card">
         <div className="card-header">
-          <Switch checked={alert.enabled} label={alert.enabled ? "On" : "Off"} onChange={onToggleSwitch(alert.id)} className="pt-large" />
-          {actions}
+          <Switch checked={alert.enabled} label={alert.enabled ? "On" : "Off"} onChange={onToggleSwitch(alert.id, alert.mode, alert.enabled)} className="pt-large" />
+          <span className={alert.mode != "new" ? "action" : "hide"} onClick={onDeleteClick(alert.id)}>Remove Alert</span>
         </div>
         <div className="card-body">
           <div className="alert-line">Post to 
             <div className="pt-select pt-large">
-              <select onChange={onUpdateFormField('channel', alert.id)} value={alert.channel}>
+              <select onChange={onUpdateFormField('channel', alert.id)} value={alert.channel} disabled={enableFields}>
                 <option value="" key="0">Select a channel...</option>;
                 {channels && channels.map(function(channel, i) {
                   return <option value={channel.name} key={channel.id}>{channel.name}</option>;
@@ -54,7 +46,7 @@ function AlertCard({
           </div>
           <div className="alert-line">when the current count in
             <div className="pt-select pt-large">
-              <select onChange={onUpdateFormField('space_id', alert.id)} value={alert.space_id}>
+              <select onChange={onUpdateFormField('space_id', alert.id)} value={alert.space_id} disabled={enableFields}>
                 <option value="" key="0">Select a space...</option>;
                 {spaces && spaces.map(function(space, i) {
                   return <option value={space.id} key={space.id}>{space.name}</option>;
@@ -63,7 +55,7 @@ function AlertCard({
             </div>
           </div>
           <div className="alert-line">exceeds 
-            <input type="number" defaultValue={alert.compare_value} onChange={onUpdateFormField('compareValue', alert.id)} />
+            <input type="number" defaultValue={alert.compare_value} onChange={onUpdateFormField('compareValue', alert.id)} disabled={enableFields} />
             people
           </div>
         </div>
@@ -79,11 +71,11 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onToggleSwitch: (alertId) => () => {
-    dispatch(alertsToggleEnabled(alertId));
+  onToggleSwitch: (alertId, mode, enabled) => () => {
+    dispatch(alertsToggleEnabled(alertId, mode, enabled));
   },
-  onCancelCreate: (alertId) => () => {
-    dispatch(alertsCancelCreation(alertId));
+  onCancelClick: (alertId) => () => {
+    dispatch(alertsCancel(alertId));
   },
   onUpdateFormField: (field, alertId) => (event) => {
     dispatch(alertsUpdateFormField(alertId, field, event.target.value));
@@ -93,7 +85,14 @@ const mapDispatchToProps = dispatch => ({
   },
   onDeleteClick: (alertId) => () => {
     dispatch(alertsDelete(alertId));
-  }
+  },
+  onEditAlert: (alertId) => () => {
+    dispatch(alertsEdit(alertId));
+  },
+  onSaveAlert: (compareValue, spaceId, enabled, channel) => () => {
+    console.log("saved");
+    // dispatch(alertsCreate(compareValue, spaceId, enabled, channel));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlertCard);

@@ -6,9 +6,16 @@ export function alertsGenerateNewAlert() {
   }
 }
 
-export function alertsCancelCreation(alertId) {
+export function alertsEdit(alertId) {
   return {
-    type: 'ALERTS_CANCEL_NEW_ALERT',
+    type: 'ALERTS_EDIT_ALERT',
+    alertId: alertId
+  }
+}
+
+export function alertsCancel(alertId) {
+  return {
+    type: 'ALERTS_CANCEL_ALERT',
     alertId: alertId
   }
 }
@@ -22,10 +29,15 @@ export function alertsUpdateFormField(alertId, field, value) {
   }
 }
 
-export function alertsToggleEnabled(alertId) {
-  return {
-    type: 'ALERTS_TOGGLE_ENABLED',
-    alertId: alertId
+export function alertsToggleEnabled(alertId, mode, enabled) {
+  if (mode == "new") {
+    return {
+      type: 'ALERTS_TOGGLE_ENABLED',
+      alertId: alertId
+    }  
+  } else {
+    var params = {enabled: !enabled}
+    return alertsUpdate(alertId, params);
   }
 }
 
@@ -52,6 +64,36 @@ export function alertsIndex() {
       }
     }).then(function(json) {
       dispatch({type: 'ALERTS_SUCCESS', json: json});
+    }).catch(function(error) {
+      console.log(error.message);
+    })
+  }
+}
+
+export function alertsUpdate(alertId, params) {
+  return (dispatch, getState) => {
+    let state = getState();
+    fetch(`${INTEGRATIONS_URL}/alerts/${alertId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(params),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.user.jwt}`
+      },
+    })
+    .then(function(response) {
+      if (response.status == 204) {
+        return;
+      } else if (response.status == 403) {
+        return response.json().then(({detail}) => {
+          throw new Error(detail);
+        });
+      } else {
+        throw new Error(response.statusText);
+      }
+    }).then(function() {
+      dispatch(alertsIndex());
     }).catch(function(error) {
       console.log(error.message);
     })
@@ -107,8 +149,8 @@ export function alertsDelete(alertId) {
       },
     })
     .then(function(response) {
-      if (response.ok) {
-        return response.json();
+      if (response.status == 204) {
+        return;
       } else if (response.status == 403) {
         return response.json().then(({detail}) => {
           throw new Error(detail);
@@ -116,7 +158,7 @@ export function alertsDelete(alertId) {
       } else {
         throw new Error(response.statusText);
       }
-    }).then(function(json) {
+    }).then(function() {
       dispatch({type: 'ALERTS_DELETE_SUCCESS', alertId: alertId});
     }).catch(function(error) {
       console.log(error.message);

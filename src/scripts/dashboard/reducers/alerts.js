@@ -23,7 +23,7 @@ export default function alerts(state=initialState, action) {
         return state;
       }
       let newAlert = [{
-        state: "new",
+        mode: "new",
         id: null,
         condition: null,
         channel: "",
@@ -35,9 +35,17 @@ export default function alerts(state=initialState, action) {
       return Object.assign({}, state, {
         results: newResults
       });
-    case 'ALERTS_CANCEL_NEW_ALERT':
+    case 'ALERTS_EDIT_ALERT':
       var index = state.results.findIndex(e=>(e.id===action.alertId));
-      var newState = dotProp.delete(state, `results.${index}`)
+      var newState = dotProp.set(state, `results.${index}.mode`, "edit")
+      return Object.assign({}, state, newState);
+    case 'ALERTS_CANCEL_ALERT':
+      var index = state.results.findIndex(e=>(e.id===action.alertId));
+      if (state.results[index].mode == "new") {
+        var newState = dotProp.delete(state, `results.${index}`)
+      } else {
+        var newState = dotProp.set(state, `results.${index}.mode`, null)
+      }
       return Object.assign({}, state, newState);
     case 'ALERTS_UPDATE_FORM_FIELD':
       var index = state.results.findIndex(e=>(e.id===action.alertId));
