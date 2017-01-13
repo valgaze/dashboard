@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Switch} from '@blueprintjs/core';
 
-import {alertsToggleEnabled, alertsCancelCreation, alertsUpdateFormField, alertsCreate} from 'dashboard/actions/alerts';
+import {alertsToggleEnabled, alertsCancelCreation, alertsUpdateFormField, alertsCreate, alertsDelete} from 'dashboard/actions/alerts';
 
 function AlertCard({
   alert,
@@ -11,6 +11,7 @@ function AlertCard({
   onCreateAlert,
   onUpdateFormField,
   spaces,
+  onDeleteClick,
   channels
 }) {
 
@@ -21,7 +22,7 @@ function AlertCard({
       <span className="action" onClick={onCancelCreate(alert.id)}>Cancel</span>
     </div>;
   } else if (alert.state === "edit") {
-    actions = <div><span className="action">Delete</span></div>;
+    actions = <div><span className="action" onClick={onDeleteClick(alert.id)}>Delete</span></div>;
     {/* actions = <div>
        <span className="action primary-action">Save</span>
        <span className="action">Cancel</span>
@@ -29,7 +30,7 @@ function AlertCard({
   } else {
     actions = <div>
       {/*<span className="action primary-action">Edit</span>*/}
-      <span className="action">Delete</span>
+      <span className="action" onClick={onDeleteClick(alert.id)}>Delete</span>
     </div>;
   }
 
@@ -44,6 +45,7 @@ function AlertCard({
           <div className="alert-line">Post to 
             <div className="pt-select pt-large">
               <select onChange={onUpdateFormField('channel', alert.id)} value={alert.channel}>
+                <option value="" key="0">Select a channel...</option>;
                 {channels && channels.map(function(channel, i) {
                   return <option value={channel.name} key={channel.id}>{channel.name}</option>;
                 })}
@@ -53,6 +55,7 @@ function AlertCard({
           <div className="alert-line">when the current count in
             <div className="pt-select pt-large">
               <select onChange={onUpdateFormField('space_id', alert.id)} value={alert.space_id}>
+                <option value="" key="0">Select a space...</option>;
                 {spaces && spaces.map(function(space, i) {
                   return <option value={space.id} key={space.id}>{space.name}</option>;
                 })}
@@ -87,6 +90,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onCreateAlert: (compareValue, spaceId, enabled, channel) => () => {
     dispatch(alertsCreate(compareValue, spaceId, enabled, channel));
+  },
+  onDeleteClick: (alertId) => () => {
+    dispatch(alertsDelete(alertId));
   }
 });
 

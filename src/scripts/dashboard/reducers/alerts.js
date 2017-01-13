@@ -26,10 +26,10 @@ export default function alerts(state=initialState, action) {
         state: "new",
         id: null,
         condition: null,
-        channel: null,
-        compareValue: 0,
-        space_id: null,
-        enabled: false
+        channel: "",
+        compare_value: 0,
+        space_id: "",
+        enabled: true
       }];
       var newResults = newAlert.concat(state.results);
       return Object.assign({}, state, {
@@ -42,6 +42,10 @@ export default function alerts(state=initialState, action) {
     case 'ALERTS_UPDATE_FORM_FIELD':
       var index = state.results.findIndex(e=>(e.id===action.alertId));
       var newState = dotProp.set(state, `results.${index}.${action.field}`, action.value);
+      return Object.assign({}, state, newState);
+    case 'ALERTS_DELETE_SUCCESS':
+      var index = state.results.findIndex(e=>(e.id===action.alertId));
+      var newState = dotProp.delete(state, `results.${index}`)
       return Object.assign({}, state, newState);
     default:
       return state;

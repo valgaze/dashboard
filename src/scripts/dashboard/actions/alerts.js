@@ -88,7 +88,36 @@ export function alertsCreate(compareValue, spaceId, enabled, channel) {
         throw new Error(response.statusText);
       }
     }).then(function(json) {
-      dispatch({type: 'ALERTS_CREATE_SUCCESS', json: json});
+      dispatch(alertsIndex());
+    }).catch(function(error) {
+      console.log(error.message);
+    })
+  }
+}
+
+export function alertsDelete(alertId) {
+  return (dispatch, getState) => {
+    let state = getState();
+    fetch(`${INTEGRATIONS_URL}/alerts/${alertId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.user.jwt}`
+      },
+    })
+    .then(function(response) {
+      if (response.ok) {
+        return response.json();
+      } else if (response.status == 403) {
+        return response.json().then(({detail}) => {
+          throw new Error(detail);
+        });
+      } else {
+        throw new Error(response.statusText);
+      }
+    }).then(function(json) {
+      dispatch({type: 'ALERTS_DELETE_SUCCESS', alertId: alertId});
     }).catch(function(error) {
       console.log(error.message);
     })
