@@ -11,7 +11,7 @@ import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
 
 function Alerts({
-  slackToken,
+  slackEnabled,
   alerts,
   onToggleSwitch,
   jwt,
@@ -20,7 +20,7 @@ function Alerts({
 }) {
 
   var slackButton = "";
-  if (!slackToken) {
+  if (!slackEnabled) {
     slackButton = <a href={`https://slack.com/oauth/authorize?scope=channels:read,chat:write:bot&client_id=${SLACK_CLIENT_ID}&state=${jwt}`}><img src="https://platform.slack-edge.com/img/sign_in_with_slack" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>;
   }
   
@@ -35,7 +35,7 @@ function Alerts({
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
                 <div>
                   <div className="add-new-alert-button">
-                    <button className={slackToken ? "card circle-button" : "hide"} onClick={onNewAlertClick}>
+                    <button className={slackEnabled ? "card circle-button" : "hide"} onClick={onNewAlertClick}>
                       <i className="icon icon-add"></i>
                     </button>
                   </div>
@@ -57,7 +57,7 @@ function Alerts({
 }
 
 const mapStateToProps = state => ({
-  slackToken: state.services.slackToken,
+  slackEnabled: state.integrations.slackEnabled,
   alerts: state.alerts.results,
   jwt: state.user.jwt
 });

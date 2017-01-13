@@ -8,11 +8,12 @@ import {alertsIndex} from 'dashboard/actions/alerts';
 import {doorwaysIndex} from 'dashboard/actions/doorways';
 import {eventCountFetch} from 'dashboard/actions/event-count';
 import {eventsIndex} from 'dashboard/actions/events';
+import {servicesIndex, servicesSlackChannels} from 'dashboard/actions/integrations';
 import {tokensIndex} from 'dashboard/actions/tokens';
 import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
 import {totalVisitsFetch} from 'dashboard/actions/total-visits';
 import {rawEventsFetch} from 'dashboard/actions/raw-events';
-import {servicesIndex} from 'dashboard/actions/services';
+
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -52,6 +53,8 @@ history.listen(location => {
         store.dispatch(spacesIndex());
       }, 2000);
     } else if (location.pathname === "/integrations/alerts") {
+      store.dispatch(servicesSlackChannels());
+      store.dispatch(spacesIndex());
       store.dispatch(alertsIndex());
       store.dispatch(servicesIndex());
     }
