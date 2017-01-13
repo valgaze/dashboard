@@ -32,13 +32,17 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-around;
     margin-top: 60px;
   }
 
   .alert-cell {
-    width: 480px;
+    box-sizing: border-box;
+    padding: 20px 10px;
     padding-bottom: 60px;
+    -webkit-flex-basis: 50%;
+    -ms-flex-preferred-size: 50%;
+    flex-basis: 50%;
+    max-width: 50%;
 
     .card-header {
       display: flex;
@@ -80,4 +84,13 @@
     border-radius: 3px;
   }
 
+}
+
+@media (max-width: $screen-md) {
+  .alerts-section .alert-cell {
+    -webkit-flex-basis: 100%;
+    -ms-flex-preferred-size: 100%;
+    flex-basis: 100%;
+    max-width: 100%;
+  }
 }
