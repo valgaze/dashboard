@@ -43,10 +43,6 @@
     -ms-flex-preferred-size: 50%;
     flex-basis: 50%;
     max-width: 50%;
-    -webkit-animation: fadepop 0.3s;
-    animation: fadepop 0.3s;
-    opacity: 1;
-    transform: scale(1,1);
   
     .card-top-header {
       padding: 20px 0;
@@ -91,6 +87,12 @@
         margin: 0;
       }
     }
+  }
+  .alert-cell.new {
+    -webkit-animation: fadepop 0.3s;
+    animation: fadepop 0.3s;
+    opacity: 1;
+    transform: scale(1,1);
   }
   
   .alert-line {

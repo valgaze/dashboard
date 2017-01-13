@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Switch} from '@blueprintjs/core';
 
-import {alertsToggleEnabled, alertsCancel, alertsUpdateFormField, alertsCreate, alertsDelete, alertsEdit} from 'dashboard/actions/alerts';
+import {alertsToggleEnabled, alertsCancel, alertsUpdateFormField, alertsCreate, alertsDelete, alertsEdit, alertsSave} from 'dashboard/actions/alerts';
 
 function AlertCard({
   alert,
@@ -20,13 +20,13 @@ function AlertCard({
   let enableFields = !(alert.mode == "edit" || alert.mode == "new");
 
   return (
-    <div className="alert-cell">
+    <div className={`${alert.mode} alert-cell`}>
       <div className="card-top-header">
         <span className="title">Alert via Slack</span>
         <span className={(alert.mode == "edit" || alert.mode == "new") ? "action" : "hide"} onClick={onCancelClick(alert.id)}>Cancel</span>
         <span className={alert.mode == null ? "action primary-action" : "hide"} onClick={onEditAlert(alert.id)}>Edit</span> 
         <span className={alert.mode == "new" ? "action primary-action" : "hide"} onClick={onCreateAlert(alert.compareValue, alert.space_id, alert.enabled, alert.channel)}>Create</span> 
-        <span className={alert.mode == "edit" ? "action primary-action" : "hide"} onClick={onSaveAlert(alert.compareValue, alert.space_id, alert.enabled, alert.channel)}>Save</span>
+        <span className={alert.mode == "edit" ? "action primary-action" : "hide"} onClick={onSaveAlert(alert.id, alert.compareValue, alert.space_id, alert.enabled, alert.channel)}>Save</span>
       </div>
       <div className="card">
         <div className="card-header">
@@ -89,9 +89,8 @@ const mapDispatchToProps = dispatch => ({
   onEditAlert: (alertId) => () => {
     dispatch(alertsEdit(alertId));
   },
-  onSaveAlert: (compareValue, spaceId, enabled, channel) => () => {
-    console.log("saved");
-    // dispatch(alertsCreate(compareValue, spaceId, enabled, channel));
+  onSaveAlert: (alertId, compareValue, spaceId, enabled, channel) => () => {
+    dispatch(alertsSave(alertId, compareValue, spaceId, enabled, channel));
   },
 });
 

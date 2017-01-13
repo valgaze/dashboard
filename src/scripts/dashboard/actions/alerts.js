@@ -70,6 +70,17 @@ export function alertsIndex() {
   }
 }
 
+export function alertsSave(alertId, compareValue, spaceId, enabled, channel) {
+  var params = {
+    compare_value: compareValue,
+    space_id: spaceId,
+    enabled: enabled,
+    channel: channel
+  }
+  return alertsUpdate(alertId, params);
+}
+
+
 export function alertsUpdate(alertId, params) {
   return (dispatch, getState) => {
     let state = getState();
