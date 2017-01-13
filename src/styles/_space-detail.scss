@@ -85,14 +85,15 @@
       font-size: 20px;
     }
   }
+  
+  .circle-button:active {
+    transform: translateY(2px);
+  }
 
   .download-csv-button {
     margin-left: 20px;
   }
 
-  .circle-button:active {
-    transform: translateY(2px);
-  }
 
   .card-top-header {
     padding: 20px 0;

@@ -1,14 +1,29 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { Switch } from '@blueprintjs/core';
+import {Switch} from '@blueprintjs/core';
 
+import {SLACK_CLIENT_ID} from 'dashboard/constants';
+
+import {alertsGenerateNewAlert} from 'dashboard/actions/alerts';
+
+import AlertCard from 'dashboard/components/AlertCard';
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
 
 function Alerts({
+  slackToken,
   alerts,
-  onToggleSwitch
+  onToggleSwitch,
+  jwt,
+  newAlert,
+  onNewAlertClick
 }) {
+
+  var slackButton = "";
+  if (!slackToken) {
+    slackButton = <a href={`https://slack.com/oauth/authorize?scope=channels:read,chat:write:bot&client_id=${SLACK_CLIENT_ID}&state=${jwt}`}><img src="https://platform.slack-edge.com/img/sign_in_with_slack" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>;
+  }
+  
   return (
     <div>
       <Appbar />
@@ -18,46 +33,18 @@ function Alerts({
           <div className="alerts-section">
             <div className="row">
               <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
-                <h1>Alerts via Slack</h1>
+                <div>
+                  <div className="add-new-alert-button">
+                    <button className={slackToken ? "card circle-button" : "hide"} onClick={onNewAlertClick}>
+                      <i className="icon icon-add"></i>
+                    </button>
+                  </div>
+                  <h1>Alerts via Slack</h1>
+                  {slackButton}
+                </div>
                 <div className="alerts-grid">
-                  {alerts ? null : "Loading..."}
                   {alerts && alerts.map(function(alert, i) {
-                    return (
-                      <div className="alert-cell" key={alert.id}>
-                        <div className="card">
-                          <div className="card-header">
-                            <Switch checked={alert.enabled} label={alert.enabled ? "On" : "Off"} onChange={onToggleSwitch(alert.id)} className="pt-large" />
-                            <span className="action">Remove Integration</span> 
-                          </div>
-                          <div className="card-body">
-                            <div className="alert-line">Post to 
-                              <div className="pt-select pt-large">
-                                <select>
-                                  <option selected>Choose a channel...</option>
-                                  <option value="1">#density-alerts</option>
-                                  <option value="2">#announcements</option>
-                                  <option value="3">#something</option>
-                                  <option value="4">#wall</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div className="alert-line">when the current count in
-                              <div className="pt-select pt-large">
-                                <select>
-                                  <option selected>Choose a space...</option>
-                                  <option value="1">Conference Room</option>
-                                  <option value="2">Main Office</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div className="alert-line">exceeds 
-                              <input type="number" />
-                              people
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
+                    return <AlertCard alert={alert} key={alert.id} />
                   })}
                 </div>
               </div>
@@ -70,12 +57,14 @@ function Alerts({
 }
 
 const mapStateToProps = state => ({
-  alerts: state.alerts.results
+  slackToken: state.services.slackToken,
+  alerts: state.alerts.results,
+  jwt: state.user.jwt
 });
 
 const mapDispatchToProps = dispatch => ({
-  onToggleSwitch: (alertId) => () => {
-    console.log(alertId);
+  onNewAlertClick: () => {
+    dispatch(alertsGenerateNewAlert());
   }
 });
 

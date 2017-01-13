@@ -4,13 +4,15 @@ import {syncHistoryWithStore} from 'react-router-redux'
 
 import fetchParam from 'dashboard/helpers/fetch-param';
 
-import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
-import {eventsIndex} from 'dashboard/actions/events';
+import {alertsIndex} from 'dashboard/actions/alerts';
 import {doorwaysIndex} from 'dashboard/actions/doorways';
+import {eventCountFetch} from 'dashboard/actions/event-count';
+import {eventsIndex} from 'dashboard/actions/events';
 import {tokensIndex} from 'dashboard/actions/tokens';
+import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
 import {totalVisitsFetch} from 'dashboard/actions/total-visits';
 import {rawEventsFetch} from 'dashboard/actions/raw-events';
-import {eventCountFetch} from 'dashboard/actions/event-count';
+import {servicesIndex} from 'dashboard/actions/services';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -49,6 +51,9 @@ history.listen(location => {
       spacesIndexInterval = setInterval(() => {
         store.dispatch(spacesIndex());
       }, 2000);
+    } else if (location.pathname === "/integrations/alerts") {
+      store.dispatch(alertsIndex());
+      store.dispatch(servicesIndex());
     }
   }
   requestNum = (requestNum==1 || requestNum==3) ? 0 : 1;

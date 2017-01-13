@@ -1,5 +1,32 @@
 .alerts-section {
   margin-top: 50px;
+  
+  .add-new-alert-button {
+    float: right;
+  }
+  .circle-button {
+    width: 58px;
+    height: 58px;
+    border-radius: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $brand-primary;
+    cursor: pointer;
+
+    i {
+      font-weight:bolder;
+      color: white;
+      margin-top: 2px;
+    }
+    i:before {
+      font-size: 20px;
+    }
+  }
+  
+  .circle-button:active {
+    transform: translateY(2px);
+  }
 
   .alerts-grid {
     display: flex;
@@ -38,6 +65,15 @@
 
   .pt-select {
     margin-left: 15px;
+  }
+
+  input {
+    border: 1px solid $gray-light;
+    margin: 0 15px;
+    padding: 9px;
+    font-size: 14px;
+    width: 60px;
+    border-radius: 3px;
   }
 
 }

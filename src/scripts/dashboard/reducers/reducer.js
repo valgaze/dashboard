@@ -7,6 +7,7 @@ import appbar from './appbar';
 import doorways from './doorways';
 import eventCount from './event-count';
 import events from './events';
+import services from './services';
 import login from './login';
 import organization from './organization';
 import rawEvents from './raw-events';
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
   login,
   organization,
   rawEvents,
+  services,
   spaces,
   totalVisits,
   user,
