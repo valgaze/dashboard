@@ -43,8 +43,8 @@
     -ms-flex-preferred-size: 50%;
     flex-basis: 50%;
     max-width: 50%;
-    -webkit-animation: fade 0.4s;
-    animation: fade 0.4s;
+    -webkit-animation: fadepop 0.3s;
+    animation: fadepop 0.3s;
     opacity: 1;
     transform: scale(1,1);
   
@@ -132,14 +132,4 @@
     flex-basis: 100%;
     max-width: 100%;
   }
-}
-
-@-webkit-keyframes fade {
-    0% {opacity: 0; transform: scale(0.9, 0.9)}
-    30% {opacity: 1; transform: scale(1.04, 1.04)}
-    100% {opacity: 1; transform: scale(1, 1)}
-}@keyframes fade {
-    0% {opacity: 0; transform: scale(0.9, 0.9)}
-    30% {opacity: 1; transform: scale(1.04, 1.04)}
-    100% {opacity: 1; transform: scale(1, 1)}
 }
