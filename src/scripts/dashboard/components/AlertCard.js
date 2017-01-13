@@ -8,21 +8,31 @@ function AlertCard({
   alert,
   onToggleSwitch
 }) {
+
+  var actions;
+  if (alert.state === "new") {
+    actions = <div>
+      <span className="action primary-action">Create</span>
+      <span className="action">Cancel</span>
+    </div>;
+  } else if (alert.state === "edit") {
+    actions = <div>
+      <span className="action primary-action">Save</span>
+      <span className="action">Cancel</span>
+    </div>;
+  } else {
+    actions = <div>
+      <span className="action primary-action">Edit</span>
+      <span className="action">Delete</span>
+    </div>;
+  }
+
   return (
     <div className="alert-cell">
       <div className="card">
         <div className="card-header">
           <Switch checked={alert.enabled} label={alert.enabled ? "On" : "Off"} onChange={onToggleSwitch(alert.id)} className="pt-large" />
-          
-          <span className="action">Create</span>
-          <span className="action">Cancel</span>
-
-          <span className="action">Edit</span>
-          <span className="action">Delete</span>
-
-          <span className="action">Save</span>
-          <span className="action">Cancel</span>
-
+          {actions}
         </div>
         <div className="card-body">
           <div className="alert-line">Post to 

@@ -3,24 +3,14 @@ import dotProp from 'dot-prop-immutable';
 
 const initialState = {
   results: [{
-      id: -1,
+      state: "new",
+      id: null,
       condition: null,
       channel: null,
       compareValue: null,
       space: null,
-      enabled: true
+      enabled: false
     }]
-}
-
-function toggleEnabled(alertId, results){
-  var newResults = [];
-  for (var i = 0; i < results.length; i++) {
-    if(results[i].id === alertId) {
-      results[i].enabled = !results[i].enabled;
-    }
-    newResults.push(results[i]);
-  }
-  return newResults;
 }
 
 export default function alerts(state=initialState, action) {
@@ -32,13 +22,14 @@ export default function alerts(state=initialState, action) {
     //   break;
     case 'ALERTS_TOGGLE_ENABLED':
       var index = state.results.findIndex(e=>(e.id===action.alertId));
-      var isEnabled = state.results[index].enabled
-      var newState = dotProp.set(state, `results.${index}.enabled`, !isEnabled)
+      var isEnabled = state.results[index].enabled;
+      var newState = dotProp.set(state, `results.${index}.enabled`, !isEnabled);
       return Object.assign({}, state, newState);
       break;
     case 'ALERTS_NEW_ALERT':
       let newAlert = [{
-        id: -1,
+        state: "new",
+        id: null,
         condition: null,
         channel: null,
         compareValue: null,

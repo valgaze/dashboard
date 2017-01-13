@@ -51,6 +51,10 @@
         cursor: pointer;
         font-size: 14px;
         margin-top: 4px;
+        margin-left: 10px;
+      }
+      .action.primary-action {
+        color: $brand-primary;
       }
 
       .pt-control {
