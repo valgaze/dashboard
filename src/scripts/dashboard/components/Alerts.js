@@ -39,7 +39,9 @@ function Alerts({
                       <i className="icon icon-add"></i>
                     </button>
                   </div>
-                  <h1>Alerts via </h1><img className="slack-logo" src="/assets/images/slack.png" />
+                  <div>
+                    <h1>Alerts via </h1><img className="slack-logo" src="/assets/images/slack.png" />
+                  </div>
                   {slackButton}
                 </div>
                 <div className="alerts-grid">
