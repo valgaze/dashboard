@@ -69,7 +69,7 @@
   .circle-button {
     width: 58px;
     height: 58px;
-    border-radius: 29px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,7 +78,7 @@
 
     i {
       font-weight:bold;
-      color: $gray;
+      color: $gray-dark;
       margin-top: 2px;
     }
     i:before {
@@ -118,6 +118,18 @@
 
   .doorways-section {
     margin-top: 40px;
+
+    .simulate-event-buttons {
+      .circle-button {
+        width: 26px;
+        height: 26px;    
+        display: inline-block;
+        margin: 0 10px 0 0;
+      }
+      i:before {
+        font-size: 14px;
+      }  
+    }
   }
 
   .analytics-section {

@@ -2,6 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
+import {eventsSimulateEvent} from 'dashboard/actions/events';
+
 import Appbar from 'dashboard/components/Appbar';
 import EventCount from 'dashboard/components/EventCount';
 import RawEvents from 'dashboard/components/RawEvents';
@@ -11,7 +13,8 @@ import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
 import TotalVisits from 'dashboard/components/TotalVisits';
 
 function SpaceDetail({
-  space
+  space,
+  onSimulateEvent
 }) {
   return (
     <div>
@@ -46,7 +49,7 @@ function SpaceDetail({
                         <tr>
                           <td>Name</td>
                           <td className="mobile-hide">ID</td>
-                          <td>Sensor Status</td>
+                          <td>Simulate Event</td>
                         </tr>
                       </thead>
                       <tbody>
@@ -55,7 +58,14 @@ function SpaceDetail({
                             <tr key={doorway.doorway_id}>
                               <td>{doorway.name}</td>
                               <td className="mobile-hide">{doorway.doorway_id}</td>
-                              <td>-</td>
+                              <td className="simulate-event-buttons">
+                                <button className="card circle-button" onClick={onSimulateEvent(doorway.doorway_id, -1)}>
+                                  <i className="icon icon-minus"></i>
+                                </button>
+                                <button className="card circle-button" onClick={onSimulateEvent(doorway.doorway_id, 1)}>
+                                  <i className="icon icon-add"></i>
+                                </button>
+                              </td>
                             </tr>
                           );
                         })}
@@ -84,7 +94,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  onSimulateEvent: (doorwayId, direction) => () => {
+    dispatch(eventsSimulateEvent(doorwayId, direction));
+  }
+  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpaceDetail);

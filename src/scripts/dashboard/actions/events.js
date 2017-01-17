@@ -29,3 +29,46 @@ export function eventsIndex(pageNum, pageSize) {
     })
   }
 }
+
+export function eventsSimulateEvent(doorwayId, direction) {
+  return (dispatch, getState) => {
+    let state = getState();
+
+    var sensorId;
+    var sensors = state.sensors.results;
+    for (var i = 0; i < sensors.length; i++) {
+      if(sensors[i].doorway_id === doorwayId) {
+        sensorId = sensors[i].id;
+        break;
+      }
+    }
+
+    var params = {
+      sensor_id: sensorId,
+      direction: direction
+    }
+
+    return fetch(`${API_URL}/events/`, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.user.jwt}`
+      },
+    })
+    .then(function(response) {
+      if (response.ok) {
+        return response.json();
+      } else if (response.status == 403) {
+        return response.json().then(({detail}) => {
+          throw new Error(detail);
+        });
+      } else {
+        throw new Error(response.statusText);
+      }
+    }).then(function(json) {
+      dispatch({type: 'EVENTS_SIMULATE_EVENT_SUCCESS', json: json});
+    })
+  }
+}

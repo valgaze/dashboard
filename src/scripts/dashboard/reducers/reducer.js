@@ -11,6 +11,7 @@ import integrations from './integrations';
 import login from './login';
 import organization from './organization';
 import rawEvents from './raw-events';
+import sensors from './sensors';
 import spaces from './spaces';
 import totalVisits from './total-visits';
 import user from './user';
@@ -27,6 +28,7 @@ const appReducer = combineReducers({
   login,
   organization,
   rawEvents,
+  sensors,
   spaces,
   totalVisits,
   user,

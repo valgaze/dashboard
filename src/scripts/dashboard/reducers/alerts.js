@@ -5,11 +5,17 @@ const initialState = {
   results: []
 }
 
+function orderById(results) {
+  return results.sort(function(a, b) {
+    return b.id - a.id;
+  });
+}
+
 export default function alerts(state=initialState, action) {
   switch(action.type) {
     case 'ALERTS_SUCCESS':
       return Object.assign({}, state, {
-        results: action.json
+        results: orderById(action.json)
       });
       break;
     case 'ALERTS_TOGGLE_ENABLED':
@@ -24,7 +30,7 @@ export default function alerts(state=initialState, action) {
       }
       let newAlert = [{
         mode: "new",
-        id: null,
+        id: 9999999999,
         condition: null,
         channel: "",
         compare_value: 0,
@@ -33,7 +39,7 @@ export default function alerts(state=initialState, action) {
       }];
       var newResults = newAlert.concat(state.results);
       return Object.assign({}, state, {
-        results: newResults
+        results: orderById(newResults)
       });
     case 'ALERTS_EDIT_ALERT':
       var index = state.results.findIndex(e=>(e.id===action.alertId));

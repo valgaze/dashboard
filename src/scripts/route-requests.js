@@ -10,6 +10,7 @@ import {eventCountFetch} from 'dashboard/actions/event-count';
 import {eventsIndex} from 'dashboard/actions/events';
 import {servicesIndex, servicesSlackChannels} from 'dashboard/actions/integrations';
 import {tokensIndex} from 'dashboard/actions/tokens';
+import {sensorsIndex} from 'dashboard/actions/sensors';
 import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
 import {totalVisitsFetch} from 'dashboard/actions/total-visits';
 import {rawEventsFetch} from 'dashboard/actions/raw-events';
@@ -41,6 +42,7 @@ history.listen(location => {
       var spaceId = fetchParam(location);
       store.dispatch(doorwaysIndex());
       store.dispatch(spacesRead(spaceId));
+      store.dispatch(sensorsIndex());
       store.dispatch(totalVisitsFetch(spaceId));
       store.dispatch(eventCountFetch(state.eventCount.date, spaceId));
       store.dispatch(rawEventsFetch(state.rawEvents.startDate, state.rawEvents.endDate, 1, 10, spaceId));
