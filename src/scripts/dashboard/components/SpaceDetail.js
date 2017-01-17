@@ -10,6 +10,7 @@ import RawEvents from 'dashboard/components/RawEvents';
 import Sidebar from 'dashboard/components/Sidebar';
 import SpaceCurrentCountCard from 'dashboard/components/SpaceCurrentCountCard';
 import SpaceDetailsCard from 'dashboard/components/SpaceDetailsCard';
+import SpaceDoorwaysCard from 'dashboard/components/SpaceDoorwaysCard';
 import TotalVisits from 'dashboard/components/TotalVisits';
 
 function SpaceDetail({
@@ -40,38 +41,7 @@ function SpaceDetail({
                   </div>
                 </div>
                 <div className="doorways-section">
-                  <div className="card-top-header">
-                    <span className="title">Doorways</span>
-                  </div>
-                  <div className="card">
-                    <table className="table striped">
-                      <thead>
-                        <tr>
-                          <td>Name</td>
-                          <td className="mobile-hide">ID</td>
-                          <td>Simulate Event</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {space.doorways && space.doorways.map(function(doorway, i) {
-                          return (
-                            <tr key={doorway.doorway_id}>
-                              <td>{doorway.name}</td>
-                              <td className="mobile-hide">{doorway.doorway_id}</td>
-                              <td className="simulate-event-buttons">
-                                <button className="card circle-button" onClick={onSimulateEvent(doorway.doorway_id, -1)}>
-                                  <i className="icon icon-minus"></i>
-                                </button>
-                                <button className="card circle-button" onClick={onSimulateEvent(doorway.doorway_id, 1)}>
-                                  <i className="icon icon-add"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
+                  <SpaceDoorwaysCard space={space} />
                 </div>
                 <div className="analytics-section">
                   <div className="mobile-hide">
@@ -94,10 +64,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSimulateEvent: (doorwayId, direction) => () => {
-    dispatch(eventsSimulateEvent(doorwayId, direction));
-  }
-  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpaceDetail);

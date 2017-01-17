@@ -1,5 +1,15 @@
 .alerts-section {
   margin-top: 50px;
+
+  h1 {
+    display: inline-block;
+  }
+  .slack-logo {
+    height: 30px;
+    display: inline-block;
+    vertical-align: text-bottom;
+    margin-left: 10px;
+  }
   
   .add-new-alert-button {
     float: right;

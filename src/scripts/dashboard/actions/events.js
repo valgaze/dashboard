@@ -30,7 +30,7 @@ export function eventsIndex(pageNum, pageSize) {
   }
 }
 
-export function eventsSimulateEvent(doorwayId, direction) {
+export function eventsSimulateEvent(doorwayId, direction, sensorPlacement) {
   return (dispatch, getState) => {
     let state = getState();
 
@@ -43,9 +43,17 @@ export function eventsSimulateEvent(doorwayId, direction) {
       }
     }
 
+    dispatch({type: 'SPACES_SIMULATE_EVENT_REQUEST', doorwayId: doorwayId});
+
+    // handle the case where the sensor is outside the space
+    var eventDirection = direction;
+    if (sensorPlacement==-1) {
+      eventDirection = direction*-1;
+    }
+
     var params = {
       sensor_id: sensorId,
-      direction: direction
+      direction: eventDirection
     }
 
     return fetch(`${API_URL}/events/`, {
@@ -65,10 +73,12 @@ export function eventsSimulateEvent(doorwayId, direction) {
           throw new Error(detail);
         });
       } else {
+        dispatch({type: 'SPACES_SIMULATE_EVENT_FAIL', doorwayId: doorwayId});
         throw new Error(response.statusText);
       }
     }).then(function(json) {
       dispatch({type: 'EVENTS_SIMULATE_EVENT_SUCCESS', json: json});
+      dispatch({type: 'SPACES_SIMULATE_EVENT_SUCCESS', direction: direction, doorwayId: doorwayId});
     })
   }
 }

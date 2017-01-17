@@ -1,4 +1,5 @@
 import update from 'react-addons-update';
+import dotProp from 'dot-prop-immutable';
 
 const initialState = {
   count: null,
@@ -17,7 +18,6 @@ export default function spaces(state=initialState, action) {
         count: action.json.count,
         results: action.json.results
       });
-      break;
     case 'SPACES_READ_REQUEST':
       if(state.currentObj.id != action.spaceId) {
         return Object.assign({}, state, {
@@ -35,18 +35,15 @@ export default function spaces(state=initialState, action) {
       return Object.assign({}, state, {
         currentObj: action.json
       });
-      break;
     case 'SPACES_TOGGLE_EDIT_DETAILS':
       return Object.assign({}, state, {
         editingSpaceDetails: !action.editingSpaceDetails,
         tempName: state.currentObj.name
       });
-      break;
     case 'SPACES_FORM_FIELD_UPDATE':
       return Object.assign({}, state, {
         [action.field]: action.value
       });
-      break;
     case 'SPACES_UPDATE_SUCCESS':
       var newCurrentObj = state.currentObj;
       newCurrentObj.name = action.json.name;
@@ -54,11 +51,9 @@ export default function spaces(state=initialState, action) {
         currentObj: newCurrentObj,
         editingSpaceDetails: false
       });
-      break;
     case 'SPACES_UPDATE_COUNT_REQUEST':
       return Object.assign({}, state, {
       });
-      break;
     case 'SPACES_UPDATE_COUNT_SUCCESS':
       var newCurrentObj = state.currentObj;
       newCurrentObj.current_count = action.json.count;
@@ -67,24 +62,37 @@ export default function spaces(state=initialState, action) {
         editingCurrentCount: false,
         tempCount: null
       });
-      break;
     case 'SPACES_TOGGLE_EDIT_COUNT':
       return Object.assign({}, state, {
         editingCurrentCount: !action.editingCurrentCount,
         tempCount: state.currentObj.current_count
       });
-      break;
     case 'SPACES_NEW_TEMP_COUNT':
       var newTempCount = state.tempCount+action.countChange;
       return Object.assign({}, state, {
         tempCount: newTempCount
       });
-      break;
     case 'SPACES_ZERO_COUNT':
       return Object.assign({}, state, {
         tempCount: 0
       });
-      break;
+    case 'SPACES_SIMULATE_EVENT_REQUEST':
+      var doorwayIndex = state.currentObj.doorways.findIndex(e=>(e.doorway_id===action.doorwayId));
+      var newState = dotProp.set(state, `currentObj.doorways.${doorwayIndex}.isSimulatingEvent`, true);
+      return Object.assign({}, state, newState);
+    case 'SPACES_SIMULATE_EVENT_FAIL':
+      var doorwayIndex = state.currentObj.doorways.findIndex(e=>(e.doorway_id===action.doorwayId));
+      var newState = dotProp.set(state, `currentObj.doorways.${doorwayIndex}.isSimulatingEvent`, false);
+      return Object.assign({}, state, newState);
+    case 'SPACES_SIMULATE_EVENT_SUCCESS':
+      var doorwayIndex = state.results.findIndex(e=>(e.id===action.alertId));
+      var direction = action.direction;
+      var currentCount = state.currentObj.current_count;
+      var newCount = currentCount+direction;
+      var newState = dotProp.set(state, `currentObj.current_count`, newCount);
+      var newerState = dotProp.set(newState, `doorways.${doorwayIndex}.isSimulatingEvent`, false);
+      console.log("done");
+      return Object.assign({}, state, newerState);
     default:
       return state;
   }

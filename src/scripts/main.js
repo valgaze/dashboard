@@ -10,9 +10,8 @@ import jwt from 'jsonwebtoken';
 import ReactGA from 'react-ga';
 ReactGA.initialize(GA_TRACKING_CODE);
 
-import App from 'dashboard/app';
 import store from 'dashboard/store';
-import history from 'route-requests'; 
+import history from 'dashboard/route-requests'; 
 
 import Alerts from 'dashboard/components/Alerts';
 import ChangePassword from 'dashboard/components/ChangePassword';

@@ -12,7 +12,6 @@ export default function events(state=initialState, action) {
         count: action.json.count,
         results: action.json.results
       });
-      break;
     default:
       return state;
   }
