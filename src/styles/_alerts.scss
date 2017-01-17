@@ -10,7 +10,11 @@
     vertical-align: text-bottom;
     margin-left: 10px;
   }
-  
+
+  .sign-in-with-slack img {
+    margin-top: 24px;
+  }  
+
   .add-new-alert-button {
     float: right;
   }
@@ -21,6 +25,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    display: -webkit-flex; /* Safari */
+    -webkit-justify-content: center; /* Safari 6.1+ */
     background-color: $brand-primary;
     cursor: pointer;
 
@@ -79,6 +85,8 @@
     .card-header {
       display: flex;
       justify-content: space-between;
+      display: -webkit-flex; /* Safari */
+      -webkit-justify-content: space-between; /* Safari 6.1+ */
       padding: 20px;
 
       .action {

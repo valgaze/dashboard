@@ -45,11 +45,15 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-around;
+        display: -webkit-flex; /* Safari */
+        -webkit-justify-content: space-around; /* Safari 6.1+ */
       }
       .reset-to-zero {
         display: flex;
         align-items: center;
         justify-content: center;
+        display: -webkit-flex; /* Safari */
+        -webkit-justify-content: center; /* Safari 6.1+ */
         margin-top: -25px;
         font-size: 14px;
         text-decoration: underline;
@@ -73,6 +77,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    display: -webkit-flex; /* Safari */
+    -webkit-justify-content: center; /* Safari 6.1+ */
     background-color: #FAFAFA;
     cursor: pointer;
 

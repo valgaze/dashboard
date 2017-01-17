@@ -91,7 +91,6 @@ export default function spaces(state=initialState, action) {
       var newCount = currentCount+direction;
       var newState = dotProp.set(state, `currentObj.current_count`, newCount);
       var newerState = dotProp.set(newState, `doorways.${doorwayIndex}.isSimulatingEvent`, false);
-      console.log("done");
       return Object.assign({}, state, newerState);
     default:
       return state;

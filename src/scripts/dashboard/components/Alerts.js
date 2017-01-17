@@ -21,7 +21,7 @@ function Alerts({
 
   var slackButton = "";
   if (!slackEnabled) {
-    slackButton = <a href={`https://slack.com/oauth/authorize?scope=channels:read,chat:write:bot&client_id=${SLACK_CLIENT_ID}&state=${jwt}`}><img src="https://platform.slack-edge.com/img/sign_in_with_slack" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>;
+    slackButton = <a href={`https://slack.com/oauth/authorize?scope=channels:read,chat:write:bot&client_id=${SLACK_CLIENT_ID}&state=${jwt}`} className="sign-in-with-slack"><img src="https://platform.slack-edge.com/img/sign_in_with_slack" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>;
   }
   
   return (
