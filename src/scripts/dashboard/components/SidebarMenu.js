@@ -36,6 +36,7 @@ function SidebarMenu(props) {
         </li>
         <li>
           <Link to='/account/change-password' className="" onClick={onCloseSideNav}>Account</Link>
+          <Link to='/account/billing' className="" onClick={onCloseSideNav}>Billing</Link>
         </li>
       </ul>
     </div>

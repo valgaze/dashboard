@@ -14,12 +14,14 @@ import store from 'dashboard/store';
 import history from 'dashboard/route-requests'; 
 
 import Alerts from 'dashboard/components/Alerts';
+import Billing from 'dashboard/components/Billing';
 import ChangePassword from 'dashboard/components/ChangePassword';
 import ForgotPassword from 'dashboard/components/ForgotPassword';
 import Login from 'dashboard/components/Login';
 import SpaceDetail from 'dashboard/components/SpaceDetail';
 import Spaces from 'dashboard/components/Spaces';
 import Tokens from 'dashboard/components/Tokens';
+
 
 function requireAuth(nextState, replace) {
   if (!window.localStorage.jwt) {
@@ -47,6 +49,7 @@ ReactDOM.render(
       <Route path="forgot-password" component={ForgotPassword} />
       <Route path="spaces" component={Spaces} onEnter={requireAuth} />
       <Route path="spaces/:spaceId" component={SpaceDetail} onEnter={requireAuth} />
+      <Route path="account/billing" component={Billing} />
       <Route path="account/change-password" component={ChangePassword} onEnter={requireAuth} />
     </Router>
   </Provider>,

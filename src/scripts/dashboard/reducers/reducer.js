@@ -4,6 +4,7 @@ import {push} from 'react-router-redux';
 
 import alerts from './alerts';
 import appbar from './appbar';
+import billing from './billing';
 import doorways from './doorways';
 import eventCount from './event-count';
 import events from './events';
@@ -21,6 +22,7 @@ import user from './user';
 const appReducer = combineReducers({
   alerts,
   appbar,
+  billing,
   doorways,
   eventCount,
   events,
