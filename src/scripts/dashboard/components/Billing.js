@@ -6,12 +6,13 @@ import NumberFormat from 'react-number-format';
 import Appbar from 'dashboard/components/Appbar';
 import Sidebar from 'dashboard/components/Sidebar';
 
-import {billingSetCVC, billingSetExp, billingSetNumber} from 'dashboard/actions/billing';
+import {billingSetCVC, billingSetExp, billingSetNumber, billingSubmit} from 'dashboard/actions/billing';
 
 function Billing({
   cardCvc,
   cardExp,
   cardNumber,
+  lastFour,
   onChangeCSV,
   onChangeExp,
   onChangeNumber,
@@ -58,7 +59,7 @@ function Billing({
                         <div className="submit">
                           <button 
                             className="button button-primary submit-button"
-                            onClick={onSubmitPressed}
+                            onClick={onSubmitPressed(cardNumber, cardCvc, cardExp)}
                             type="button">
                             Submit Credit Card
                           </button>
@@ -67,6 +68,7 @@ function Billing({
                     </div>
                   </div>
                   <div className="col-xs-22 col-md-12 off-md-0">
+                    <div className="credit-card-on-file">{lastFour ? `You have a credit card on file ending in ${lastFour}` : "You do not have a credit card on file"}.</div>
                     <Card 
                         cvc = {cardCvc}
                         number = {cardNumber}
@@ -87,7 +89,8 @@ function Billing({
 const mapStateToProps = state => ({
   cardNumber: state.billing.number,
   cardExp: state.billing.exp,
-  cardCvc: state.billing.cvc
+  cardCvc: state.billing.cvc,
+  lastFour: state.billing.lastFour,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -100,8 +103,8 @@ const mapDispatchToProps = dispatch => ({
   onChangeNumber: (e, val) => {
     dispatch(billingSetNumber(val));
   },
-  onSubmitPressed: () => {
-    console.log("substring");
+  onSubmitPressed: (cardNumber, cardCvc, cardExp) => () => {
+    dispatch(billingSubmit(cardNumber, cardCvc, cardExp));
   }
 
 });

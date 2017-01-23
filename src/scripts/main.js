@@ -5,10 +5,11 @@ import {Router, Route, hashHistory} from 'react-router';
 
 import "whatwg-fetch"
 
-import {GA_TRACKING_CODE} from 'dashboard/constants';
+import {GA_TRACKING_CODE, STRIPE_KEY} from 'dashboard/constants';
 import jwt from 'jsonwebtoken';
 import ReactGA from 'react-ga';
 ReactGA.initialize(GA_TRACKING_CODE);
+Stripe.setPublishableKey(STRIPE_KEY);
 
 import store from 'dashboard/store';
 import history from 'dashboard/route-requests'; 

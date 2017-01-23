@@ -5,6 +5,7 @@ import {syncHistoryWithStore} from 'react-router-redux'
 import fetchParam from 'dashboard/helpers/fetch-param';
 
 import {alertsIndex} from 'dashboard/actions/alerts';
+import {getCustomer} from 'dashboard/actions/billing';
 import {doorwaysIndex} from 'dashboard/actions/doorways';
 import {eventCountFetch} from 'dashboard/actions/event-count';
 import {eventsIndex} from 'dashboard/actions/events';
@@ -59,6 +60,8 @@ history.listen(location => {
       store.dispatch(spacesIndex());
       store.dispatch(alertsIndex());
       store.dispatch(servicesIndex());
+    } else if (location.pathname === "/account/billing") {
+      store.dispatch(getCustomer());
     }
   }
   requestNum = (requestNum==1 || requestNum==3) ? 0 : 1;

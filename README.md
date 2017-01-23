@@ -11,3 +11,8 @@ The Density Web Dashboard allows customers to manage their account and sensors.
 1. Run `npm install`
 1. Run `gulp` to start up the express server
 
+## Environment variables
+
+1. Install biome.
+1. Run biome, enter the values.
+1. Run biome use, then start with gulp.
