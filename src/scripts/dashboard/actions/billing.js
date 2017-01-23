@@ -31,6 +31,7 @@ export function billingSubmit(cardNumber, cardCvc, cardExp) {
     } else if (cardExp.length != 4) {
       return DensityToaster.show({ message: "Please enter an 4-digit expiration date.", timeout: 8000, className: "pt-intent-danger" });
     }
+    DensityToaster.show({ message: "Saving credit card information...", timeout: 3000, className: "pt-intent-primary" });
     Stripe.card.createToken({
       number: cardNumber,
       cvc: cardCvc,
@@ -56,9 +57,10 @@ function createCustomer(stripeToken, lastFour) {
     var params = {
       stripe_token: stripeToken,
       last_four: lastFour,
-      email: decoded.user.email
+      email: decoded.user.email,
+      org_id: decoded.auth.orgs[0].id
     }
-    fetch(`${BOOKIE_URL}/billing/customers`, {
+    fetch(`${BOOKIE_URL}/billing/sources`, {
       method: 'POST',
       body: JSON.stringify(params),
       headers: {
@@ -91,8 +93,8 @@ export function getCustomer() {
   return (dispatch, getState) => {
     let state = getState();
     let decoded = jwt.decode(state.user.jwt);
-    let email = decoded.user.email;
-    fetch(`${BOOKIE_URL}/billing/customers?email=${email}`, {
+    let orgId = decoded.auth.orgs[0].id
+    fetch(`${BOOKIE_URL}/billing/customers/${orgId}/sources/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -100,7 +102,6 @@ export function getCustomer() {
       },
     })
     .then(function(response) {
-      console.log(response);
       if (response.ok) {
         return response.json();
       } else if (response.status == 403) {

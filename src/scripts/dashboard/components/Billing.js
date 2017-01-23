@@ -12,8 +12,8 @@ function Billing({
   cardCvc,
   cardExp,
   cardNumber,
-  lastFour,
-  onChangeCSV,
+  sources,
+  onChangeCVC,
   onChangeExp,
   onChangeNumber,
   onSubmitPressed
@@ -29,6 +29,8 @@ function Billing({
     val = val.substring(0,2)+ (val.length > 2 ? '/'+val.substring(2,4) : '');
     return val;
   }
+
+  var creditCardString = sources.length == 1 ? "credit card" : "credit cards";
 
   return (
     <div>
@@ -46,15 +48,15 @@ function Billing({
                       <div className="card-body">
                         <div className="number">
                           <label>Credit Card Number</label>
-                          <NumberFormat className="form-control" format="#### #### #### ####" onChange={onChangeNumber} />
+                          <NumberFormat className="form-control" value={cardNumber} format="#### #### #### ####" onChange={onChangeNumber} />
                         </div>
                         <div className="exp">
                           <label>Expiration Date</label>
-                          <NumberFormat className="form-control" format={formatExpiryChange} onChange={onChangeExp} />
+                          <NumberFormat className="form-control" value={cardExp} format={formatExpiryChange} onChange={onChangeExp} />
                         </div>
                         <div className="cvc">
                           <label>CVC</label>
-                          <NumberFormat className="form-control" onChange={onChangeCSV} />
+                          <NumberFormat className="form-control" value={cardCvc} onChange={onChangeCVC} />
                         </div>
                         <div className="submit">
                           <button 
@@ -68,13 +70,22 @@ function Billing({
                     </div>
                   </div>
                   <div className="col-xs-22 col-md-12 off-md-0">
-                    <div className="credit-card-on-file">{lastFour ? `You have a credit card on file ending in ${lastFour}` : "You do not have a credit card on file"}.</div>
+                    <div className="credit-card-on-file">
+                      {sources ? `You have ${sources.length} ${creditCardString} on file.` : "You do not have a credit card on file."}
+                      {sources && sources.map(function(source, i) {
+                        return (
+                          <ul key={i}>
+                            <li>Card ending in {source.last_four}</li>
+                          </ul>
+                        )
+                      })}
+                    </div>
                     <Card 
                         cvc = {cardCvc}
                         number = {cardNumber}
                         expiry = {parseInt(cardExp)}
                         namePlaceholder = ""
-                      />
+                    />
                   </div>
                 </div>
               </div>
@@ -90,11 +101,11 @@ const mapStateToProps = state => ({
   cardNumber: state.billing.number,
   cardExp: state.billing.exp,
   cardCvc: state.billing.cvc,
-  lastFour: state.billing.lastFour,
+  sources: state.billing.sources,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onChangeCSV: (e, val) => {
+  onChangeCVC: (e, val) => {
     dispatch(billingSetCVC(val));
   },
   onChangeExp: (e, val) => {

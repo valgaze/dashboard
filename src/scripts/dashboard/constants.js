@@ -1,6 +1,6 @@
 export const ACCOUNTS_URL = "https://clerk.density.io";
 export const API_URL = "https://api.density.io/v1";
-export const BOOKIE_URL = "https://bookie.density.io/v1";
+export const BOOKIE_URL = "http://localhost:8000/v2";
 export const GA_TRACKING_CODE = "UA-77313135-1";
 export const INTEGRATIONS_URL = "https://density-integrations.herokuapp.com/v1";
 // export const INTEGRATIONS_URL = "http://localhost:3000/v1";

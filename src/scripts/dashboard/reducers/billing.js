@@ -4,7 +4,7 @@ const initialState = {
   cvc: null,
   exp: null,
   number: null,
-  lastFour: null
+  sources: []
 }
 
 export default function billing(state=initialState, action) {
@@ -29,7 +29,7 @@ export default function billing(state=initialState, action) {
       });
     case 'BILLING_CUSTOMER_SUCCESS':
       return Object.assign({}, state, {
-        lastFour: action.data.last_four
+        sources: action.data.results
       });
     default:
       return state;
