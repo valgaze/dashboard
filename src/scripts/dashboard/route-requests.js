@@ -44,8 +44,11 @@ history.listen(location => {
       store.dispatch(doorwaysIndex());
       store.dispatch(spacesRead(spaceId));
       store.dispatch(sensorsIndex());
-      store.dispatch(totalVisitsFetch(spaceId));
-      store.dispatch(eventCountFetch(state.eventCount.date, spaceId));
+      setTimeout(() => {
+        // TODO: Remove this— it's only necessary right now because we're not passing in the timezone
+        store.dispatch(totalVisitsFetch(spaceId));
+        store.dispatch(eventCountFetch(state.eventCount.date, spaceId));
+      }, 1000);
       store.dispatch(rawEventsFetch(state.rawEvents.startDate, state.rawEvents.endDate, 1, 10, spaceId));
       spacesReadInterval = setInterval(() => {
         store.dispatch(spacesRead(spaceId));

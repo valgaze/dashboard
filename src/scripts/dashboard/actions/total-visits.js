@@ -14,14 +14,23 @@ export function totalVisitsFetch(spaceId) {
     let pageSize = 1;
     let dates = state.totalVisits.dates;
     var totalVisitorCounts = [];
-    var promises = []
-    
+    var promises = [];
+    var timezone = state.spaces.currentObj.timezone;
+    var tempTimezoneString = "T00:00:00"+timezone;
+
+    if(timezone==null) {
+      return;
+    }
+
     for (var i = 0; i < dates.length; i++) {
       let startTime = dates[i];
       let endTime = moment(startTime).add(1, 'd').format("YYYY-MM-DD");
 
+      let startTimeAdjusted = startTime+tempTimezoneString;
+      let endTimeAdjusted = endTime+tempTimezoneString;
+
       var promise = new Promise((resolve, reject) => {
-        fetch(`${API_URL}/events/?start_time=${startTime}&end_time=${endTime}&page_size=${pageSize}&space_id=${spaceId}`, {
+        fetch(`${API_URL}/events/?start_time=${startTimeAdjusted}&end_time=${endTimeAdjusted}&page_size=${pageSize}&space_id=${spaceId}`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -44,7 +53,7 @@ export function totalVisitsFetch(spaceId) {
           // TODO: Come up with a better way to insure the order of the count data
           var dayCount = Math.round(json.count/2);
           totalVisitorCounts[dates.indexOf(startTime)] = dayCount;
-          resolve()
+          resolve();
         }).catch(function(error) {
           console.log(error.message);
         })

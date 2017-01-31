@@ -52,8 +52,18 @@ export function eventCountFetch(date, spaceId) {
     let pageNum = 1;
     let startTime = moment(date).format("YYYY-MM-DD")+"T09:00:00";
     let endTime = moment(date).add(1, 'd').format("YYYY-MM-DD")+"T00:00:00";
+
+    let timezone = state.spaces.currentObj.timezone;
+    var tempTimezoneString = "T00:00:00"+timezone;
+    if(timezone==null) {
+      return;
+    }
+
+    let startTimeAdjusted = startTime+tempTimezoneString;
+    let endTimeAdjusted = endTime+tempTimezoneString;
+
     dispatch({type: 'EVENT_COUNT_BEGIN_REQUEST'});
-    fetchEventsByPage(dispatch, token, startTime, endTime, spaceId, pageNum, pageSize);
+    fetchEventsByPage(dispatch, token, startTimeAdjusted, endTimeAdjusted, spaceId, pageNum, pageSize);
   }
 }
 
