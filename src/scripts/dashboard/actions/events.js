@@ -9,7 +9,7 @@ export function eventsIndex(pageNum, pageSize) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {
@@ -62,7 +62,7 @@ export function eventsSimulateEvent(doorwayId, direction, sensorPlacement) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {

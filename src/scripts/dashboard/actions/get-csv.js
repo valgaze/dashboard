@@ -12,7 +12,7 @@ export function getCsv(spaceId, startDate, endDate) {
       headers: {
         'Accept': 'text/csv',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {

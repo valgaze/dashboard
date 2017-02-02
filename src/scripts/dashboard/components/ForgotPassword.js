@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router';
 
+import {ACCOUNTS_URL} from 'dashboard/constants';
+
 class ForgotPassword extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +26,7 @@ class ForgotPassword extends React.Component {
     this.setState({
       statusText: "Sending password reset email..."
     });
-    fetch('https://clerk.density.io/forgot-password/', {
+    fetch(`${ACCOUNTS_URL}/forgot-password/`, {
       method: 'POST',
       body: JSON.stringify({email: this.state.email}),
       headers: {

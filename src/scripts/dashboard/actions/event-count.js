@@ -48,7 +48,7 @@ export function eventCountFetch(date, spaceId) {
     let pageSize = 50000;
     var promises = [];
     var eventData = [];
-    let token = state.user.jwt;
+    let token = state.user.token;
     let pageNum = 1;
     let startTime = moment(date).format("YYYY-MM-DD")+"T09:00:00";
     let endTime = moment(date).add(1, 'd').format("YYYY-MM-DD")+"T00:00:00";

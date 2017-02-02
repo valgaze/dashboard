@@ -3,12 +3,12 @@ import {ACCOUNTS_URL} from 'dashboard/constants';
 export function tokensIndex() {
   return (dispatch, getState) => {
     let state = getState();
-    fetch(`${ACCOUNTS_URL}/org_tokens/`, {
+    fetch(`${ACCOUNTS_URL}/tokens/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {

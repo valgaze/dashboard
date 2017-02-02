@@ -32,7 +32,7 @@ history.listen(location => {
     clearInterval(spacesIndexInterval);
     clearInterval(spacesReadInterval);
     if (location.pathname === "/") {
-      window.localStorage.jwt ? hashHistory.push('/spaces') : hashHistory.push('/login');
+      window.localStorage.token ? hashHistory.push('/spaces') : hashHistory.push('/login');
     } else if (location.pathname === "/tokens") {
       store.dispatch(spacesIndex());
       store.dispatch(doorwaysIndex());

@@ -49,7 +49,7 @@ export function alertsIndex() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {
@@ -90,7 +90,7 @@ export function alertsUpdate(alertId, params) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {
@@ -127,7 +127,7 @@ export function alertsCreate(compareValue, spaceId, enabled, channel) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {
@@ -156,7 +156,7 @@ export function alertsDelete(alertId) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {

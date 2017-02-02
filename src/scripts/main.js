@@ -6,7 +6,6 @@ import {Router, Route, hashHistory} from 'react-router';
 import "whatwg-fetch"
 
 import {GA_TRACKING_CODE, STRIPE_KEY} from 'dashboard/constants';
-import jwt from 'jsonwebtoken';
 import ReactGA from 'react-ga';
 ReactGA.initialize(GA_TRACKING_CODE);
 Stripe.setPublishableKey(STRIPE_KEY);
@@ -25,7 +24,7 @@ import Tokens from 'dashboard/components/Tokens';
 
 
 function requireAuth(nextState, replace) {
-  if (!window.localStorage.jwt) {
+  if (!window.localStorage.token) {
     replace({
       pathname: '/login',
       state: { nextPathname: nextState.location.pathname }
@@ -34,10 +33,7 @@ function requireAuth(nextState, replace) {
 }
 
 function fireTracking() {
-  var decoded = jwt.decode(window.localStorage.jwt);
-  if (decoded) {
-    ReactGA.set({ userId: decoded['auth']['orgs'][0]['id'] });
-  }
+  // ReactGA.set({ userId: decoded['auth']['orgs'][0]['id'] });
   ReactGA.pageview(window.location.hash);
 }
 

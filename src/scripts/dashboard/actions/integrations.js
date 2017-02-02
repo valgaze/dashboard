@@ -8,7 +8,7 @@ export function servicesIndex() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {
@@ -37,7 +37,7 @@ export function servicesSlackChannels() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {

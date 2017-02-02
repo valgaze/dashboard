@@ -30,7 +30,7 @@ export function rawEventsFetch(startDate, endDate, pageNum, pageSize, spaceId) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.jwt}`
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {

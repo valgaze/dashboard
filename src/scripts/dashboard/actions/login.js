@@ -19,7 +19,7 @@ export function loginSubmit(email, password) {
       password: password
     }
 
-    fetch(`${ACCOUNTS_URL}/tokens/`, {
+    fetch(`${ACCOUNTS_URL}/login/`, {
       method: 'POST',
       body: JSON.stringify(loginParams),
       headers: {
@@ -38,8 +38,8 @@ export function loginSubmit(email, password) {
         throw new Error(response.statusText);
       }
     }).then(function(json) {
-      dispatch({type: 'LOGIN_SUCCESS', jwt: json, email: email});
-      dispatch({type: 'SAVE_JWT_TO_LOCAL_STORAGE', jwt: json});
+      dispatch({type: 'LOGIN_SUCCESS', token: json, email: email});
+      dispatch({type: 'SAVE_TOKEN_TO_LOCAL_STORAGE', token: json});
       hashHistory.push('/spaces');
     }).catch(function(error) {
       dispatch({type: 'LOGIN_FAILURE', message: error.message});

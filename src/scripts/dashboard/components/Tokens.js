@@ -6,8 +6,7 @@ import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
 
 function Tokens({
-  sandboxToken,
-  liveToken,
+  orgToken,
   spaceCount,
   doorwayCount,
   eventCount
@@ -27,26 +26,13 @@ function Tokens({
                   <div className="col-xs-24 col-md-12">
                     <div className="card token-card">
                       <div className="card-header">
-                        <h3 className="card-header-title">Sandbox Token</h3>
-                         <CopyToClipboard text={sandboxToken || ''}>
+                        <h3 className="card-header-title">API Token</h3>
+                         <CopyToClipboard text={orgToken || ''}>
                           <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
                         </CopyToClipboard>
                       </div>
                       <div className="card-body">
-                        <code>{!sandboxToken ? "Loading..." : sandboxToken}</code>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-xs-24 col-md-12">
-                    <div className="card token-card">
-                      <div className="card-header">
-                        <h3 className="card-header-title">Live Token</h3>
-                        <CopyToClipboard text={liveToken || ""}>
-                          <button className="button button-primary button-icon copy-button"><i className="icon-duplicate" /></button>
-                        </CopyToClipboard>
-                      </div>
-                      <div className="card-body">
-                        <code>{!liveToken ? "Loading..." : liveToken}</code>
+                        <code>{!orgToken ? "Loading..." : orgToken}</code>
                       </div>
                     </div>
                   </div>
@@ -61,8 +47,7 @@ function Tokens({
 }
 
 const mapStateToProps = state => ({
-  sandboxToken: state.organization.sandboxToken,
-  liveToken: state.organization.liveToken,
+  orgToken: state.organization.orgToken,
   spaceCount: state.spaces.count,
   doorwayCount: state.doorways.count,
   eventCount: state.events.count

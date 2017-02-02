@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 
 import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
+import {ACCOUNTS_URL} from 'dashboard/constants';
 import {logoutUser} from 'dashboard/actions/logout'
 
 class ChangePassword extends React.Component {
@@ -30,7 +31,7 @@ class ChangePassword extends React.Component {
 
   onSubmitPressed() {
     this.setState({statusText: "Updating your password..."});
-    fetch('https://clerk.density.io/password_change/', {
+    fetch(`${ACCOUNTS_URL}/password_change/`, {
       method: 'POST',
       body: JSON.stringify({
         old_password: this.state.oldPassword,
@@ -40,7 +41,7 @@ class ChangePassword extends React.Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.props.jwt}`
+        'Authorization': `Bearer ${this.props.token}`
       },
     })
     .then((response) => {
@@ -115,7 +116,7 @@ class ChangePassword extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  jwt: state.user.jwt
+  token: state.user.token
 });
 
 const mapDispatchToProps = dispatch => ({

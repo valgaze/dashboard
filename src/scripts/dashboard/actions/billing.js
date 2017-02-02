@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-
 import {BOOKIE_URL} from 'dashboard/constants';
 import {DensityToaster} from 'dashboard/components/DensityToaster';
 
@@ -52,13 +50,10 @@ export function billingSubmit(cardNumber, cardCvc, cardExp) {
 function createCustomer(stripeToken, lastFour) {
   return (dispatch, getState) => {
     let state = getState();
-    var decoded = jwt.decode(state.user.jwt);
 
     var params = {
       stripe_token: stripeToken,
-      last_four: lastFour,
-      email: decoded.user.email,
-      org_id: decoded.auth.orgs[0].id
+      last_four: lastFour
     }
     fetch(`${BOOKIE_URL}/billing/sources`, {
       method: 'POST',
@@ -66,6 +61,7 @@ function createCustomer(stripeToken, lastFour) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {
@@ -92,13 +88,12 @@ function createCustomer(stripeToken, lastFour) {
 export function getCustomer() {
   return (dispatch, getState) => {
     let state = getState();
-    let decoded = jwt.decode(state.user.jwt);
-    let orgId = decoded.auth.orgs[0].id
-    fetch(`${BOOKIE_URL}/billing/customers/${orgId}/sources/`, {
+    fetch(`${BOOKIE_URL}/billing/sources/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.user.token}`
       },
     })
     .then(function(response) {
