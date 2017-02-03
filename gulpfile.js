@@ -2,6 +2,7 @@
 
 var browserify = require('browserify');
 var babelify = require('babelify');
+var envify = require('envify');
 var watchify = require('watchify');
 var densityUi = require('density-ui');
 
@@ -60,6 +61,7 @@ if (WATCHIFY_ENABLED) {
 }
 // add transformations here
 b.transform(babelify);
+b.transform(envify);
 
 gulp.task('js', bundle); // so you can run `gulp js` to build the file
 b.on('update', bundle); // on any dep update, runs the bundler

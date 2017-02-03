@@ -69,42 +69,54 @@ class ChangePassword extends React.Component {
           <div className="col-xs-24 col-md-20">
             <div className="change-password-section">
               <div className="row">
-                <div className="col-xs-20 off-xs-2 col-md-8 off-md-1">
+                <div className="col-xs-20 off-xs-2 col-md-12 off-md-1">
                   <h1>Change your password</h1>
-                    {this.state.statusText}
-                    <input
-                      className="form-control"
-                      type="password"
-                      placeholder="Old Password"
-                      data-field="oldPassword"
-                      onChange={this.changePasswordFieldUpdate.bind(this)}
-                      onKeyPress={this.onEnterPressed.bind(this)}
-                      defaultValue={this.state.oldPassword}
-                    />
-                    <input
-                      className="form-control"
-                      type="password"
-                      data-field="newPassword"
-                      placeholder="New Password"
-                      onChange={this.changePasswordFieldUpdate.bind(this)}
-                      onKeyPress={this.onEnterPressed.bind(this)}
-                      defaultValue={this.state.oldPassword}
-                    />
-                    <input
-                      className="form-control"
-                      type="password"
-                      data-field="newPasswordConfirm"
-                      placeholder="New Password (Confirm)"
-                      onChange={this.changePasswordFieldUpdate.bind(this)}
-                      onKeyPress={this.onEnterPressed.bind(this)}
-                      defaultValue={this.state.oldPassword}
-                    />
-                    <button 
-                      className="button button-primary submit-button"
-                      onClick={this.onSubmitPressed.bind(this)}
-                      type="button">
-                      Submit
-                    </button>
+                  <div className="change-password-card card">
+                    <div className="card-body">
+                      {this.state.statusText}
+                      <div className="">
+                        <label>Old Password</label>
+                        <input
+                          className="form-control"
+                          type="password"
+                          data-field="oldPassword"
+                          onChange={this.changePasswordFieldUpdate.bind(this)}
+                          onKeyPress={this.onEnterPressed.bind(this)}
+                          defaultValue={this.state.oldPassword}
+                        />
+                      </div>
+                      <div className="">
+                        <label>New Password</label>
+                        <input
+                          className="form-control"
+                          type="password"
+                          data-field="newPassword"
+                          onChange={this.changePasswordFieldUpdate.bind(this)}
+                          onKeyPress={this.onEnterPressed.bind(this)}
+                          defaultValue={this.state.oldPassword}
+                        />
+                      </div>
+                      <div className="">
+                        <label>New Password (confirm)</label>
+                        <input
+                          className="form-control"
+                          type="password"
+                          data-field="newPasswordConfirm"
+                          onChange={this.changePasswordFieldUpdate.bind(this)}
+                          onKeyPress={this.onEnterPressed.bind(this)}
+                          defaultValue={this.state.oldPassword}
+                        />
+                      </div>
+                      <div className="submit">
+                        <button 
+                          className="button button-primary submit-button"
+                          onClick={this.onSubmitPressed.bind(this)}
+                          type="button">
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
