@@ -76,22 +76,12 @@ export default function spaces(state=initialState, action) {
       return Object.assign({}, state, {
         tempCount: 0
       });
-    case 'SPACES_SIMULATE_EVENT_REQUEST':
-      var doorwayIndex = state.currentObj.doorways.findIndex(e=>(e.doorway_id===action.doorwayId));
-      var newState = dotProp.set(state, `currentObj.doorways.${doorwayIndex}.isSimulatingEvent`, true);
-      return Object.assign({}, state, newState);
-    case 'SPACES_SIMULATE_EVENT_FAIL':
-      var doorwayIndex = state.currentObj.doorways.findIndex(e=>(e.doorway_id===action.doorwayId));
-      var newState = dotProp.set(state, `currentObj.doorways.${doorwayIndex}.isSimulatingEvent`, false);
-      return Object.assign({}, state, newState);
     case 'SPACES_SIMULATE_EVENT_SUCCESS':
-      var doorwayIndex = state.results.findIndex(e=>(e.id===action.alertId));
       var direction = action.direction;
       var currentCount = state.currentObj.current_count;
       var newCount = currentCount+direction;
       var newState = dotProp.set(state, `currentObj.current_count`, newCount);
-      var newerState = dotProp.set(newState, `doorways.${doorwayIndex}.isSimulatingEvent`, false);
-      return Object.assign({}, state, newerState);
+      return Object.assign({}, state, newState);
     default:
       return state;
   }
