@@ -8,7 +8,8 @@ const initialState = {
   editingCurrentCount: false,
   tempCount: null,
   editingSpaceDetails: false,
-  tempName: ""
+  tempName: "",
+  tempDailyReset: ""
 }
 
 export default function spaces(state=initialState, action) {
@@ -25,6 +26,7 @@ export default function spaces(state=initialState, action) {
           editingCurrentCount: false,
           editingSpaceDetails: false,
           tempName: "",
+          tempDailyReset: "",
           tempCount: null
         });   
       } else {
@@ -38,7 +40,8 @@ export default function spaces(state=initialState, action) {
     case 'SPACES_TOGGLE_EDIT_DETAILS':
       return Object.assign({}, state, {
         editingSpaceDetails: !action.editingSpaceDetails,
-        tempName: state.currentObj.name
+        tempName: state.currentObj.name,
+        tempDailyReset: state.currentObj.daily_reset
       });
     case 'SPACES_FORM_FIELD_UPDATE':
       return Object.assign({}, state, {

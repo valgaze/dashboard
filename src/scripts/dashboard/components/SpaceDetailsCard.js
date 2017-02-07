@@ -7,6 +7,7 @@ function SpaceDetailsCard({
   space,
   editingSpaceDetails,
   tempName, 
+  tempDailyReset,
   onToggleEditDetails,
   onSaveDetails,
   onUpdateFormField
@@ -56,9 +57,10 @@ function SpaceDetailsCard({
               <td>Reset Time</td>
               <td>
                 <input type="text"
-                  className="input"
-                  disabled={true}
-                  value={space.daily_reset}
+                  className={editingSpaceDetails ? "input editing" : "input"} 
+                  disabled={!editingSpaceDetails} 
+                  value={editingSpaceDetails ? tempDailyReset : space.daily_reset}
+                  onChange={onUpdateFormField('tempDailyReset')}
                 />
               </td>
             </tr>
@@ -72,7 +74,8 @@ function SpaceDetailsCard({
 const mapStateToProps = state => ({
   space: state.spaces.currentObj,
   editingSpaceDetails: state.spaces.editingSpaceDetails,
-  tempName: state.spaces.tempName
+  tempName: state.spaces.tempName,
+  tempDailyReset: state.spaces.tempDailyReset
 });
 
 const mapDispatchToProps = dispatch => ({

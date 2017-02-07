@@ -132,7 +132,8 @@ export function spacesUpdate() {
     dispatch({type: 'SPACES_UPDATE_REQUEST'});
     let state = getState();
     var params = {
-      name: state.spaces.tempName
+      name: state.spaces.tempName,
+      daily_reset: state.spaces.tempDailyReset
     }
 
     return fetch(`${API_URL}/spaces/${state.spaces.currentObj.id}/`, {
