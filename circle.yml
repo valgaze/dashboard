@@ -5,8 +5,8 @@ machine:
     SUBDOMAIN: dashboard
 
 deployment:
-  staging:
-    branch: staging
+  alerts:
+    branch: alerts
     commands:
       - source environment.sh STAGING && gulp build
       - aws s3 sync build/ s3://$SUBDOMAIN.density.rodeo/ --region us-east-1
