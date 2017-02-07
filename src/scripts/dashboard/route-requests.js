@@ -59,6 +59,7 @@ history.listen(location => {
         store.dispatch(spacesIndex());
       }, 2000);
     } else if (location.pathname === "/integrations/alerts") {
+      // console.log(location.query);
       store.dispatch(servicesSlackChannels());
       store.dispatch(spacesIndex());
       store.dispatch(alertsIndex());

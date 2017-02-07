@@ -22,7 +22,7 @@ function SidebarMenu(props) {
           <Link to='/spaces' className="" onClick={onCloseSideNav}>Spaces</Link>
         </li>
       </ul>
-{/*      <ul className="sidebar-nav-list">
+     {/* <ul className="sidebar-nav-list">
         <li className="list-header">
           <span>Integrations</span>
         </li>
