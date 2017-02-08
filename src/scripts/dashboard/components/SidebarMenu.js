@@ -6,7 +6,8 @@ import {sideNavClose} from 'dashboard/actions/appbar';
 
 function SidebarMenu(props) {
   const {
-    onCloseSideNav
+    onCloseSideNav,
+    organizationId
   } = props;
   
   return (
@@ -22,7 +23,8 @@ function SidebarMenu(props) {
           <Link to='/spaces' className="" onClick={onCloseSideNav}>Spaces</Link>
         </li>
       </ul>
-     <ul className="sidebar-nav-list">
+
+      <ul className={organizationId=="123" ? "sidebar-nav-list" : "hide"}>
         <li className="list-header">
           <span>Integrations</span>
         </li>
@@ -30,6 +32,7 @@ function SidebarMenu(props) {
           <Link to='/integrations/alerts' className="" onClick={onCloseSideNav}>Alerts</Link>
         </li>
       </ul>
+
       <ul className="sidebar-nav-list">
         <li className="list-header">
           <span>Settings</span>
@@ -44,6 +47,7 @@ function SidebarMenu(props) {
 }
 
 const mapStateToProps = state => ({
+  organizationId: state.organization.id
 });
 
 const mapDispatchToProps = dispatch => ({
