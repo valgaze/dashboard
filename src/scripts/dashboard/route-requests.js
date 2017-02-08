@@ -9,13 +9,12 @@ import {getCustomer} from 'dashboard/actions/billing';
 import {doorwaysIndex} from 'dashboard/actions/doorways';
 import {eventCountFetch} from 'dashboard/actions/event-count';
 import {eventsIndex} from 'dashboard/actions/events';
-import {servicesIndex, servicesSlackChannels} from 'dashboard/actions/integrations';
+import {servicesIndex, servicesSlackChannels, servicesSendSlackCode} from 'dashboard/actions/integrations';
 import {tokensIndex} from 'dashboard/actions/tokens';
 import {sensorsIndex} from 'dashboard/actions/sensors';
 import {spacesIndex, spacesRead} from 'dashboard/actions/spaces';
 import {totalVisitsFetch} from 'dashboard/actions/total-visits';
 import {rawEventsFetch} from 'dashboard/actions/raw-events';
-
 
 const history = syncHistoryWithStore(hashHistory, store);
 
@@ -59,7 +58,9 @@ history.listen(location => {
         store.dispatch(spacesIndex());
       }, 2000);
     } else if (location.pathname === "/integrations/alerts") {
-      // console.log(location.query);
+      if (location.query.code) {
+        store.dispatch(servicesSendSlackCode(location.query.code));
+      }
       store.dispatch(servicesSlackChannels());
       store.dispatch(spacesIndex());
       store.dispatch(alertsIndex());

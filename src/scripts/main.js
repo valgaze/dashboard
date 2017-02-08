@@ -33,7 +33,7 @@ function requireAuth(nextState, replace) {
 }
 
 function fireTracking() {
-  // ReactGA.set({ userId: decoded['auth']['orgs'][0]['id'] });
+  ReactGA.set({ userId: window.localStorage.orgId });
   ReactGA.pageview(window.location.hash);
 }
 

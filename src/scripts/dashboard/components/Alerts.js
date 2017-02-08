@@ -12,6 +12,7 @@ import Sidebar from 'dashboard/components/Sidebar';
 
 function Alerts({
   slackEnabled,
+  slackLoading,
   alerts,
   onToggleSwitch,
   token,
@@ -43,6 +44,7 @@ function Alerts({
                     <h1>Alerts via </h1><img className="slack-logo" src="/assets/images/slack.png" />
                   </div>
                   {slackButton}
+                  <img className={slackLoading ? "loading-image" : "hide"} src="/assets/images/loading.gif" alt="Loading" />
                 </div>
                 <div className="alerts-grid">
                   {alerts && alerts.map(function(alert, i) {
@@ -60,6 +62,7 @@ function Alerts({
 
 const mapStateToProps = state => ({
   slackEnabled: state.integrations.slackEnabled,
+  slackLoading: state.integrations.slackLoading,
   alerts: state.alerts.results,
   token: state.user.token
 });

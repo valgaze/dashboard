@@ -1,6 +1,7 @@
 import {hashHistory} from 'react-router'; 
 
 import {ACCOUNTS_URL} from 'dashboard/constants';
+import {usersMe} from 'dashboard/actions/users';
 
 export function loginFieldUpdate(field, value) {
   return {
@@ -40,6 +41,7 @@ export function loginSubmit(email, password) {
     }).then(function(json) {
       dispatch({type: 'LOGIN_SUCCESS', token: json, email: email});
       dispatch({type: 'SAVE_TOKEN_TO_LOCAL_STORAGE', token: json});
+      dispatch(usersMe());
       hashHistory.push('/spaces');
     }).catch(function(error) {
       dispatch({type: 'LOGIN_FAILURE', message: error.message});

@@ -3,6 +3,7 @@ import update from 'react-addons-update';
 const initialState = {
   services: null,
   slackEnabled: false,
+  slackLoading: false,
   slackChannels: []
 }
 
@@ -22,6 +23,18 @@ export default function integrations(state=initialState, action) {
       return Object.assign({}, state, {
         services: action.json,
         slackEnabled: checkForSlackService(action.json)
+      });
+    case 'SERVICES_SLACK_CODE_REQUEST':
+      return Object.assign({}, state, {
+        slackLoading: true
+      });
+    case 'SERVICES_SLACK_CODE_SUCCESS':
+      return Object.assign({}, state, {
+        slackLoading: false
+      });
+    case 'SERVICES_SLACK_CODE_FAIL':
+      return Object.assign({}, state, {
+        slackLoading: false
       });
     case 'SERVICES_SLACK_CHANNELS_SUCCESS':
       return Object.assign({}, state, {
