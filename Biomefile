@@ -3,4 +3,5 @@ ACCOUNTS_URL=https://clerk.density.rodeo
 API_URL=https://api.density.rodeo/v1
 BOOKIE_URL=https://bookie.density.io/v2
 INTEGRATIONS_URL=http://localhost:3000/v1
+SLACK_CLIENT_ID=2180757426.138906558069
 STRIPE_KEY=pk_test_7I4XNXDTskv8K27CAbAxrCj5
