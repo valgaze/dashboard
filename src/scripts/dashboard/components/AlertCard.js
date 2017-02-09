@@ -54,7 +54,7 @@ function AlertCard({
               </select>
             </div>
           </div>
-          <div className="alert-line">equals 
+          <div className="alert-line">exceeds 
             <input type="number" defaultValue={alert.compare_value} onChange={onUpdateFormField('compareValue', alert.id)} disabled={enableFields} />
             people
           </div>
