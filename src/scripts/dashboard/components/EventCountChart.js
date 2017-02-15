@@ -33,7 +33,7 @@ let EventCountChart = React.createClass({
         x: 'Time',
         y: 'Count',
         colors: {
-          'Count': '#DDDDDD',
+          'Count': '#999999',
         },
         columns: [
           newTimestamps,
