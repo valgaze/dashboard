@@ -6,4 +6,5 @@ export const BOOKIE_URL = getEnvVariable(process.env.BOOKIE_URL, 'string', true)
 export const GA_TRACKING_CODE = "UA-77313135-1";
 export const INTEGRATIONS_URL = getEnvVariable(process.env.INTEGRATIONS_URL, 'string', true);
 export const SLACK_CLIENT_ID = getEnvVariable(process.env.SLACK_CLIENT_ID, 'string', true);
+export const SLACK_REDIRECT_URI = getEnvVariable(process.env.SLACK_REDIRECT_URI, 'string', true);
 export const STRIPE_KEY = getEnvVariable(process.env.STRIPE_KEY, 'string', true);

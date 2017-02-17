@@ -55,9 +55,13 @@ export function servicesSendSlackCode(code) {
       }
     }).then(function(json) {
       dispatch({type: 'SERVICES_SLACK_CODE_SUCCESS'});
+      console.log("success...");
       dispatch(servicesIndex());
       dispatch(servicesSlackChannels());
     }).catch(function(error) {
+      console.log("failllleed");
+      console.log(error);
+
       dispatch({type: 'SERVICES_SLACK_CODE_FAIL'});
       console.log(error.message);
     })

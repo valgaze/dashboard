@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Switch} from '@blueprintjs/core';
 
-import {SLACK_CLIENT_ID} from 'dashboard/constants';
+import {SLACK_CLIENT_ID, SLACK_REDIRECT_URI} from 'dashboard/constants';
 
 import {alertsGenerateNewAlert} from 'dashboard/actions/alerts';
 
@@ -21,8 +21,8 @@ function Alerts({
 }) {
 
   var slackButton = "";
-  if (!slackEnabled) {
-    slackButton = <a href={`https://slack.com/oauth/authorize?scope=channels:read,chat:write:bot&client_id=${SLACK_CLIENT_ID}`} className="sign-in-with-slack"><img src="https://platform.slack-edge.com/img/sign_in_with_slack" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>;
+  if (slackEnabled==false) {
+    slackButton = <a href={`https://slack.com/oauth/authorize?scope=channels:read,chat:write:bot&client_id=${SLACK_CLIENT_ID}&redirect_uri=${SLACK_REDIRECT_URI}`} className="sign-in-with-slack"><img src="https://platform.slack-edge.com/img/sign_in_with_slack" srcSet="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>;
   }
   
   return (
@@ -47,6 +47,7 @@ function Alerts({
                   <img className={slackLoading ? "loading-image" : "hide"} src="/assets/images/loading.gif" alt="Loading" />
                 </div>
                 <div className="alerts-grid">
+                  {(alerts.length == 0 && slackEnabled) ? "Let's add your first alert. Click the blue plus button at the top right of the screen." : ""}
                   {alerts && alerts.map(function(alert, i) {
                     return <AlertCard alert={alert} key={alert.id} />
                   })}

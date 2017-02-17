@@ -2,7 +2,7 @@ import update from 'react-addons-update';
 
 const initialState = {
   services: null,
-  slackEnabled: false,
+  slackEnabled: null,
   slackLoading: false,
   slackChannels: []
 }
