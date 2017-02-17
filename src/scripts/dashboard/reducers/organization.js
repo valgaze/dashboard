@@ -2,7 +2,7 @@ import update from 'react-addons-update';
 
 const initialState = {
   orgToken: null,
-  id: null
+  id: window.localStorage.orgId
 }
 
 export default function organization(state=initialState, action) {
