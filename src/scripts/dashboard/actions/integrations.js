@@ -1,4 +1,4 @@
-import {INTEGRATIONS_URL} from 'dashboard/constants';
+import {INTEGRATIONS_URL, SLACK_REDIRECT_URI} from 'dashboard/constants';
 
 export function servicesIndex() {
   return (dispatch, getState) => {
@@ -33,7 +33,7 @@ export function servicesSendSlackCode(code) {
   return (dispatch, getState) => {
     dispatch({type: 'SERVICES_SLACK_CODE_REQUEST'});
     let state = getState();
-    var params = {"code": code};
+    var params = {"code": code, "redirect_uri": SLACK_REDIRECT_URI};
     fetch(`${INTEGRATIONS_URL}/services/slack/callback`, {
       method: 'POST',
       body: JSON.stringify(params),
@@ -55,13 +55,9 @@ export function servicesSendSlackCode(code) {
       }
     }).then(function(json) {
       dispatch({type: 'SERVICES_SLACK_CODE_SUCCESS'});
-      console.log("success...");
       dispatch(servicesIndex());
       dispatch(servicesSlackChannels());
     }).catch(function(error) {
-      console.log("failllleed");
-      console.log(error);
-
       dispatch({type: 'SERVICES_SLACK_CODE_FAIL'});
       console.log(error.message);
     })

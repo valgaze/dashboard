@@ -60,11 +60,12 @@ history.listen(location => {
     } else if (location.pathname === "/integrations/alerts") {
       if (location.query.code) {
         store.dispatch(servicesSendSlackCode(location.query.code));
+      } else {
+        store.dispatch(servicesSlackChannels());
+        store.dispatch(alertsIndex());
+        store.dispatch(servicesIndex());
       }
-      store.dispatch(servicesSlackChannels());
       store.dispatch(spacesIndex());
-      store.dispatch(alertsIndex());
-      store.dispatch(servicesIndex());
     } else if (location.pathname === "/account/billing") {
       store.dispatch(getCustomer());
     }
