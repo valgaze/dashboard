@@ -28,29 +28,31 @@ function Alerts({
   return (
     <div>
       <Appbar />
-      <div className="row">
-        <Sidebar />
-        <div className="col-xs-24 col-md-20">
-          <div className="alerts-section">
-            <div className="row">
-              <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
-                <div>
-                  <div className="add-new-alert-button">
-                    <button className={slackEnabled ? "card circle-button" : "hide"} onClick={onNewAlertClick}>
-                      <i className="icon icon-add"></i>
-                    </button>
-                  </div>
+      <div className="content-section">
+        <div className="row">
+          <Sidebar />
+          <div className="col-xs-24 col-md-20">
+            <div className="alerts-section">
+              <div className="row">
+                <div className="col-xs-20 off-xs-2 col-md-22 off-md-1">
                   <div>
-                    <h1>Alerts via </h1><img className="slack-logo" src="/assets/images/slack.png" />
+                    <div className="add-new-alert-button">
+                      <button className={slackEnabled ? "card circle-button" : "hide"} onClick={onNewAlertClick}>
+                        <i className="icon icon-add"></i>
+                      </button>
+                    </div>
+                    <div>
+                      <h1>Alerts via </h1><img className="slack-logo" src="/assets/images/slack.png" />
+                    </div>
+                    {slackButton}
+                    <img className={slackLoading ? "loading-image" : "hide"} src="/assets/images/loading.gif" alt="Loading" />
                   </div>
-                  {slackButton}
-                  <img className={slackLoading ? "loading-image" : "hide"} src="/assets/images/loading.gif" alt="Loading" />
-                </div>
-                <div className="alerts-grid">
-                  {(alerts.length == 0 && slackEnabled) ? "Let's add your first alert. Click the blue plus button at the top right of the screen." : ""}
-                  {alerts && alerts.map(function(alert, i) {
-                    return <AlertCard alert={alert} key={alert.id} />
-                  })}
+                  <div className="alerts-grid">
+                    {(alerts.length == 0 && slackEnabled) ? "Let's add your first alert. Click the blue plus button at the top right of the screen." : ""}
+                    {alerts && alerts.map(function(alert, i) {
+                      return <AlertCard alert={alert} key={alert.id} />
+                    })}
+                  </div>
                 </div>
               </div>
             </div>

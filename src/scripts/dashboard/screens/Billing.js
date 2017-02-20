@@ -35,7 +35,8 @@ function Billing({
   return (
     <div>
       <Appbar />
-      <div className="row">
+      <div className="content-section">
+        <div className="row">
         <Sidebar />
         <div className="col-xs-24 col-md-20">
           <div className="billing-section">
@@ -91,6 +92,7 @@ function Billing({
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

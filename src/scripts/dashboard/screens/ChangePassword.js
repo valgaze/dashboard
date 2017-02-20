@@ -64,7 +64,8 @@ class ChangePassword extends React.Component {
     return (
       <div>
         <Appbar />
-        <div className="row">
+        <div className="content-section">
+          <div className="row">
           <Sidebar />
           <div className="col-xs-24 col-md-20">
             <div className="change-password-section">
@@ -120,6 +121,7 @@ class ChangePassword extends React.Component {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>
