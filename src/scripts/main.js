@@ -13,14 +13,14 @@ Stripe.setPublishableKey(STRIPE_KEY);
 import store from 'dashboard/store';
 import history from 'dashboard/route-requests'; 
 
-import Alerts from 'dashboard/components/Alerts';
-import Billing from 'dashboard/components/Billing';
-import ChangePassword from 'dashboard/components/ChangePassword';
-import ForgotPassword from 'dashboard/components/ForgotPassword';
-import Login from 'dashboard/components/Login';
-import SpaceDetail from 'dashboard/components/SpaceDetail';
-import Spaces from 'dashboard/components/Spaces';
-import Tokens from 'dashboard/components/Tokens';
+import Alerts from 'dashboard/screens/Alerts';
+import Billing from 'dashboard/screens/Billing';
+import ChangePassword from 'dashboard/screens/ChangePassword';
+import ForgotPassword from 'dashboard/screens/ForgotPassword';
+import Login from 'dashboard/screens/Login';
+import SpaceDetail from 'dashboard/screens/SpaceDetail';
+import Spaces from 'dashboard/screens/Spaces';
+import Tokens from 'dashboard/screens/Tokens';
 
 
 function requireAuth(nextState, replace) {
