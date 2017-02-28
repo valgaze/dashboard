@@ -24,7 +24,11 @@ function SidebarMenu(props) {
         </li>
       </ul>
 
+<<<<<<< HEAD
+      <ul className={["1HfvtFz4fZ5dEMw96uD1we", "6wkQroQQA8HiMlPenCuyeI", "1RCEwpLcHhkZUVfSIwOyAa", "2SUEzcvWJKO4EipyEuwwo1"].indexOf(organizationId) > -1 ? "sidebar-nav-list" : "hide"}>
+=======
       <ul className={["org_1RCEwpLcHhkZUVfSIwOyAa", "org_6wkQroQQA8HiMlPenCuyeI"].indexOf(organizationId) > -1 ? "sidebar-nav-list" : "hide"}>
+>>>>>>> 2e5964172e781fcd6c4db4aa83511aecd57b82b0
         <li className="list-header">
           <span>Integrations</span>
         </li>

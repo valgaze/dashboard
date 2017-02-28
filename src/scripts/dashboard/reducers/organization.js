@@ -12,7 +12,7 @@ export default function organization(state=initialState, action) {
         orgToken: action.json.tokens[0]
       });
     case 'USERS_ME_SUCCESS':
-      let orgId = action.json.auth.orgs[0].id;
+      let orgId = action.json.auth.organization.id;
       return Object.assign({}, state, {
         id: orgId
       });
