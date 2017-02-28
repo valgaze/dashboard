@@ -24,7 +24,7 @@ function SidebarMenu(props) {
         </li>
       </ul>
 
-      <ul className={["1HfvtFz4fZ5dEMw96uD1we", "6wkQroQQA8HiMlPenCuyeI", "1RCEwpLcHhkZUVfSIwOyAa"].indexOf(organizationId) > -1 ? "sidebar-nav-list" : "hide"}>
+      <ul className={["org_1RCEwpLcHhkZUVfSIwOyAa", "org_6wkQroQQA8HiMlPenCuyeI"].indexOf(organizationId) > -1 ? "sidebar-nav-list" : "hide"}>
         <li className="list-header">
           <span>Integrations</span>
         </li>
