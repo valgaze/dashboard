@@ -18,7 +18,8 @@ function RawEvents({
   doorways,
   eventCount,
   onChangePage,
-  onDownloadCsv
+  onDownloadCsv,
+  loadingCSV
 }) {
   function entranceOrExit(countChange) {
     return countChange === 1 ? "Entrance" : "Exit"
@@ -46,6 +47,7 @@ function RawEvents({
         <span className="date-picker-text">Date Range:</span>
         <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
         <Button text="Download CSV" className="download-csv-button" onClick={onDownloadCsv(spaceId, startDate, endDate)}/>
+        <img className={loadingCSV ? "loading-image" : "hide"} src="/assets/images/loading.gif" alt="Loading" />
       </div>
       <div className="card">
         <table className="table striped">
@@ -91,7 +93,8 @@ const mapStateToProps = state => ({
   endDate: state.rawEvents.endDate,
   events: state.rawEvents.events,
   eventCount: state.rawEvents.count,
-  pageNum: state.rawEvents.pageNum
+  pageNum: state.rawEvents.pageNum,
+  loadingCSV: state.rawEvents.loadingCSV
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

@@ -7,11 +7,24 @@ const initialState = {
   endDate: moment().toDate(),
   events: [],
   count: 0,
-  pageNum: 1
+  pageNum: 1,
+  loadingCSV: false
 }
 
 export default function rawEvents(state=initialState, action) {
   switch(action.type) {
+    case 'RAW_EVENTS_CSV_REQUEST': 
+      return Object.assign({}, state, {
+        loadingCSV: true
+      });
+    case 'RAW_EVENTS_CSV_SUCCESS': 
+      return Object.assign({}, state, {
+        loadingCSV: false
+      });
+    case 'RAW_EVENTS_CSV_FAIL': 
+      return Object.assign({}, state, {
+        loadingCSV: false
+      });
     case 'RAW_EVENTS_SET_DATE_RANGE':
       return Object.assign({}, state, {
         startDate: action.dateRange[0].toDate(),

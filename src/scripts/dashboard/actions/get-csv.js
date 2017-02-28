@@ -4,9 +4,10 @@ export function getCsv(spaceId, startDate, endDate) {
   return (dispatch, getState) => {
     let state = getState();
     var url = `${API_URL}/csv/?start_time=${startDate}&end_time=${endDate}`;
-    if(spaceId) {
+    if (spaceId) {
       var url = `${url}&space_id=${spaceId}`
     }
+    dispatch({type: 'RAW_EVENTS_CSV_REQUEST'});
     fetch(url, {
       method: 'GET',
       headers: {
@@ -34,8 +35,10 @@ export function getCsv(spaceId, startDate, endDate) {
       tempLink.href = csvURL;
       tempLink.setAttribute('download', 'currentevents.csv');
       tempLink.click();
+      dispatch({type: 'RAW_EVENTS_CSV_SUCCESS'});
     }).catch(function(error) {
       console.log(error.message);
+      dispatch({type: 'RAW_EVENTS_CSV_FAIL'});
     })
   }
 }
