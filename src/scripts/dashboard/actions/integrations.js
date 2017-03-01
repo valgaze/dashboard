@@ -1,4 +1,5 @@
 import {INTEGRATIONS_URL, SLACK_REDIRECT_URI} from 'dashboard/constants';
+import {DensityToaster} from 'dashboard/components/DensityToaster';
 
 export function servicesIndex() {
   return (dispatch, getState) => {
@@ -58,8 +59,9 @@ export function servicesSendSlackCode(code) {
       dispatch(servicesIndex());
       dispatch(servicesSlackChannels());
     }).catch(function(error) {
-      dispatch({type: 'SERVICES_SLACK_CODE_FAIL'});
       console.log(error.message);
+      dispatch({type: 'SERVICES_SLACK_CODE_FAIL'});
+      return DensityToaster.show({ message: "Could not connect to Slack.", timeout: 8000, className: "pt-intent-danger" });
     })
   }
 }
