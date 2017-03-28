@@ -1,13 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button} from '@blueprintjs/core';
-import {getCsv} from 'dashboard/actions/csv';
 import {Link} from 'react-router';
 
 import Appbar from 'dashboard/components/Appbar'
 import Sidebar from 'dashboard/components/Sidebar'
 
-function Spaces({spaces, pullCsv}) {
+function Spaces({spaces}) {
   return (
     <div>
       <Appbar />
@@ -53,9 +52,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  pullCsv: () => evt => {
-    dispatch(getCsv())
-  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Spaces);

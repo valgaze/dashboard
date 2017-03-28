@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button} from '@blueprintjs/core';
-import {getCsv} from 'dashboard/actions/csv';
+import {csv} from 'dashboard/actions/csv';
 import moment from 'moment';
 
 import {rawEventsChangePage, rawEventsSetDateRange, rawEventsFetch} from 'dashboard/actions/raw-events';
@@ -107,7 +107,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(rawEventsFetch(value[0].format(), value[1].format(), 1, ownProps.pageSize, ownProps.spaceId));
   },
   onDownloadCsv: (spaceId, startDate, endDate) => evt => {
-    dispatch(getCsv(spaceId, startDate, endDate))
+    dispatch(csv.download(spaceId, startDate, endDate))
   }
 });
 
