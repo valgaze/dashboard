@@ -25,7 +25,7 @@ export const doorway = {
   list() {
     return (dispatch, getState) => {
       let state = getState();
-      api.list(state, '/doorways').then(function(json){
+      return api.list(state, '/doorways').then(function(json){
         dispatch({type: SUCCESS, json: json});
       });
     }

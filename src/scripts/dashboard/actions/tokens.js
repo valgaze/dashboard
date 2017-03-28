@@ -9,7 +9,7 @@ export const token = {
   list() {
     return (dispatch, getState) => {
       let state = getState();
-      api.list(state, '/tokens', ACCOUNTS_URL).then(function(json){
+      return api.list(state, '/tokens', ACCOUNTS_URL).then(function(json){
         dispatch({type: SUCCESS, json: json});
       });
     }
