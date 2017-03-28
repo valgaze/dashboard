@@ -7,7 +7,7 @@ const initialState = {
 
 export default function organization(state=initialState, action) {
   switch(action.type) {
-    case 'TOKENS_SUCCESS':
+    case 'tokens/success':
       return Object.assign({}, state, {
         orgToken: action.json.tokens[0]
       });

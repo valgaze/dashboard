@@ -1,30 +1,17 @@
+import update from 'react-addons-update';
+import api from 'dashboard/helpers/api';
 import {ACCOUNTS_URL} from 'dashboard/constants';
 
-export function tokensIndex() {
-  return (dispatch, getState) => {
-    let state = getState();
-    fetch(`${ACCOUNTS_URL}/tokens/`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.user.token}`
-      },
-    })
-    .then(function(response) {
-      if (response.ok) {
-        return response.json();
-      } else if (response.status == 403) {
-        return response.json().then(({detail}) => {
-          throw new Error(detail);
-        });
-      } else {
-        throw new Error(response.statusText);
-      }
-    }).then(function(json) {
-      dispatch({type: 'TOKENS_SUCCESS', json: json});
-    }).catch(function(error) {
-      dispatch({type: 'TOKENS_FAILURE', message: error.message});
-    })
+
+const SUCCESS = 'tokens/success';
+
+export const token = {
+  list() {
+    return (dispatch, getState) => {
+      let state = getState();
+      api.list(state, '/tokens', ACCOUNTS_URL).then(function(json){
+        dispatch({type: SUCCESS, json: json});
+      });
+    }
   }
 }

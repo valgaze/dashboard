@@ -1,5 +1,6 @@
 import update from 'react-addons-update';
-import {API_URL} from 'dashboard/constants';
+import api from 'dashboard/helpers/api';
+
 
 const SUCCESS = 'doorways/success';
 const initialState = {
@@ -20,33 +21,13 @@ export default function doorways(state=initialState, action) {
   }
 }
 
-export const doorwayActions = {
+export const doorway = {
   list() {
     return (dispatch, getState) => {
       let state = getState();
-      fetch(`${API_URL}/doorways/`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${state.user.token}`
-        },
-      })
-      .then(function(response) {
-        if (response.ok) {
-          return response.json();
-        } else if (response.status == 403) {
-          return response.json().then(({detail}) => {
-            throw new Error(detail);
-          });
-        } else {
-          throw new Error(response.statusText);
-        }
-      }).then(function(json) {
+      api.list(state, '/doorways').then(function(json){
         dispatch({type: SUCCESS, json: json});
-      }).catch(function(error) {
-        console.log(error.message);
-      })
+      });
     }
   }
 }
