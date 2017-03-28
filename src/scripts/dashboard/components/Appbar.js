@@ -9,7 +9,7 @@ import {toggleSidebar} from 'dashboard/ducks/sidebar';
 function Appbar(props) {
   const {
     sidebarOpen,
-    onAppBarSideNavClicked,
+    onAppBarSidebarClicked,
     onLogOutClicked
   } = props;
   
@@ -22,7 +22,7 @@ function Appbar(props) {
         </div>
       </div>
       <div className="app-bar">
-        <button className="app-bar-side-nav-btn" onClick={onAppBarSideNavClicked}>
+        <button className="app-bar-side-nav-btn" onClick={onAppBarSidebarClicked}>
           <i className="icon-menu"></i>
         </button>
         <a className="app-bar-brand" href="/">
@@ -41,7 +41,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAppBarSideNavClicked: () => {
+  onAppBarSidebarClicked: () => {
     dispatch(toggleSidebar());
   },
   onLogOutClicked: () => {

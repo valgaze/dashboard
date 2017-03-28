@@ -2,11 +2,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
-import {sideNavClose} from 'dashboard/actions/appbar';
+import {closeSidebar} from 'dashboard/ducks/sidebar';
 
 function SidebarMenu(props) {
   const {
-    onCloseSideNav,
+    onCloseSidebar,
     organizationId
   } = props;
   
@@ -17,10 +17,10 @@ function SidebarMenu(props) {
           <span>API</span>
         </li>
         <li className="">
-          <Link to='/tokens' className="" onClick={onCloseSideNav}>Tokens</Link>
+          <Link to='/tokens' className="" onClick={onCloseSidebar}>Tokens</Link>
         </li>
         <li>
-          <Link to='/spaces' className="" onClick={onCloseSideNav}>Spaces</Link>
+          <Link to='/spaces' className="" onClick={onCloseSidebar}>Spaces</Link>
         </li>
       </ul>
 
@@ -29,7 +29,7 @@ function SidebarMenu(props) {
           <span>Integrations</span>
         </li>
         <li>
-          <Link to='/integrations/alerts' className="" onClick={onCloseSideNav}>Alerts</Link>
+          <Link to='/integrations/alerts' className="" onClick={onCloseSidebar}>Alerts</Link>
         </li>
       </ul>
 
@@ -38,8 +38,8 @@ function SidebarMenu(props) {
           <span>Settings</span>
         </li>
         <li>
-          <Link to='/account/change-password' className="" onClick={onCloseSideNav}>Account</Link>
-          <Link to='/account/billing' className="" onClick={onCloseSideNav}>Billing</Link>
+          <Link to='/account/change-password' className="" onClick={onCloseSidebar}>Account</Link>
+          <Link to='/account/billing' className="" onClick={onCloseSidebar}>Billing</Link>
         </li>
       </ul>
     </div>
@@ -51,8 +51,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onCloseSideNav: () => {
-    dispatch(sideNavClose());
+  onCloseSidebar: () => {
+    dispatch(closeSidebar());
   }
 });
 
