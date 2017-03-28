@@ -6,7 +6,7 @@ import fetchParam from 'dashboard/helpers/fetch-param';
 
 import {alertsIndex} from 'dashboard/actions/alerts';
 import {getCustomer} from 'dashboard/actions/billing';
-import {doorwaysIndex} from 'dashboard/actions/doorways';
+import {doorwayActions} from 'dashboard/ducks/doorways';
 import {eventCountFetch} from 'dashboard/actions/event-count';
 import {eventsIndex} from 'dashboard/actions/events';
 import {servicesIndex, servicesSlackChannels, servicesSendSlackCode} from 'dashboard/actions/integrations';
@@ -34,13 +34,13 @@ history.listen(location => {
       window.localStorage.token ? hashHistory.push('/spaces') : hashHistory.push('/login');
     } else if (location.pathname === "/tokens") {
       store.dispatch(spacesIndex());
-      store.dispatch(doorwaysIndex());
+      store.dispatch(doorwayActions.list());
       store.dispatch(tokensIndex());
       store.dispatch(eventsIndex(1, 10));
     } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
       let state = store.getState();
       var spaceId = fetchParam(location);
-      store.dispatch(doorwaysIndex());
+      store.dispatch(doorwayActions.list());
       store.dispatch(spacesRead(spaceId));
       store.dispatch(sensorsIndex());
       setTimeout(() => {

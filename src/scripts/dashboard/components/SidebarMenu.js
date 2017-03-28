@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
-import {closeSidebar} from 'dashboard/ducks/sidebar';
+import {sidebarActions} from 'dashboard/ducks/sidebar';
 
 function SidebarMenu(props) {
   const {
@@ -52,7 +52,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onCloseSidebar: () => {
-    dispatch(closeSidebar());
+    dispatch(sidebarActions.close());
   }
 });
 

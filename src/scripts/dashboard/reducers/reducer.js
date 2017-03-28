@@ -4,7 +4,7 @@ import {push} from 'react-router-redux';
 
 import alerts from './alerts';
 import billing from './billing';
-import doorways from './doorways';
+import doorways from 'dashboard/ducks/doorways';
 import eventCount from './event-count';
 import events from './events';
 import integrations from './integrations';
