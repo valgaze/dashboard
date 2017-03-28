@@ -32,6 +32,7 @@ export function getCsv(spaceId, startDate, endDate) {
       var data = new Blob([csv], {type: 'text/csv'});
       var csvURL = window.URL.createObjectURL(data);
       var tempLink = document.createElement('a');
+      document.body.appendChild(tempLink);
       tempLink.href = csvURL;
       tempLink.setAttribute('download', 'currentevents.csv');
       tempLink.click();

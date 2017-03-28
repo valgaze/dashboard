@@ -4,18 +4,18 @@ import {Link} from 'react-router';
 
 import SidebarMenu from 'dashboard/components/SidebarMenu';
 import {logoutUser} from 'dashboard/actions/logout';
-import {sideNavToggle} from 'dashboard/actions/appbar';
+import {toggleSidebar} from 'dashboard/ducks/sidebar';
 
 function Appbar(props) {
   const {
-    sideNavOpen,
+    sidebarOpen,
     onAppBarSideNavClicked,
     onLogOutClicked
   } = props;
   
   return (
     <div>
-      <div className={sideNavOpen ? "side-nav open" : "side-nav"}>
+      <div className={sidebarOpen ? "side-nav open" : "side-nav"}>
         <div className="side-nav-header"></div>
         <div className="side-nav-body">
           <SidebarMenu />
@@ -37,12 +37,12 @@ function Appbar(props) {
 }
 
 const mapStateToProps = state => ({
-  sideNavOpen: state.appbar.sideNavOpen
+  sidebarOpen: state.sidebar.sidebarOpen
 });
 
 const mapDispatchToProps = dispatch => ({
   onAppBarSideNavClicked: () => {
-    dispatch(sideNavToggle());
+    dispatch(toggleSidebar());
   },
   onLogOutClicked: () => {
     dispatch(logoutUser());
