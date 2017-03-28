@@ -21,10 +21,12 @@ export default function sidebar(state=initialState, action) {
   }
 }
 
-export function toggleSidebar() {
-  return { type: TOGGLE };
+export const sidebarActions = {
+  toggle() {
+    return { type: TOGGLE };
+  },
+  close() {
+    return { type: CLOSE };
+  }  
 }
 
-export function closeSidebar() {
-  return { type: CLOSE };
-}

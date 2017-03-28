@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 
 import SidebarMenu from 'dashboard/components/SidebarMenu';
 import {logoutUser} from 'dashboard/actions/logout';
-import {toggleSidebar} from 'dashboard/ducks/sidebar';
+import {sidebarActions} from 'dashboard/ducks/sidebar';
 
 function Appbar(props) {
   const {
@@ -42,7 +42,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onAppBarSidebarClicked: () => {
-    dispatch(toggleSidebar());
+    dispatch(sidebarActions.toggle());
   },
   onLogOutClicked: () => {
     dispatch(logoutUser());
