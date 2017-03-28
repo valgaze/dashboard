@@ -12,7 +12,7 @@ export default function sidebar(state=initialState, action) {
       return Object.assign({}, state, {
         sidebarOpen: !state.sidebarOpen
       });
-    case TOGGLE:
+    case CLOSE:
       return Object.assign({}, state, {
         sidebarOpen: false
       });
