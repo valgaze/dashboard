@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button} from '@blueprintjs/core';
-import {getCsv} from 'dashboard/actions/get-csv';
+import {getCsv} from 'dashboard/actions/csv';
 import moment from 'moment';
 
 import {rawEventsChangePage, rawEventsSetDateRange, rawEventsFetch} from 'dashboard/actions/raw-events';
