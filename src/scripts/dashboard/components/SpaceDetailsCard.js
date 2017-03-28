@@ -28,7 +28,7 @@ function SpaceDetailsCard({
                 <input type="text"
                   className={editingSpaceDetails ? "input editing" : "input"} 
                   disabled={!editingSpaceDetails} 
-                  value={editingSpaceDetails ? tempName : space.name}
+                  value={editingSpaceDetails ? tempName : (space.name || "" )}
                   onChange={onUpdateFormField('tempName')}
                 />
               </td>
@@ -39,7 +39,7 @@ function SpaceDetailsCard({
                 <input type="text"
                   className="input"
                   disabled={true}
-                  value={space.id}
+                  value={space.id || ""}
                 />
               </td>
             </tr>
@@ -49,7 +49,7 @@ function SpaceDetailsCard({
                 <input type="text"
                   className="input"
                   disabled={true}
-                  value={space.timezone}
+                  value={space.timezone || ""}
                 />
               </td>
             </tr>
@@ -59,7 +59,7 @@ function SpaceDetailsCard({
                 <input type="text"
                   className={editingSpaceDetails ? "input editing" : "input"} 
                   disabled={!editingSpaceDetails} 
-                  value={editingSpaceDetails ? tempDailyReset : space.daily_reset}
+                  value={editingSpaceDetails ? tempDailyReset : (space.daily_reset || "")}
                   onChange={onUpdateFormField('tempDailyReset')}
                 />
               </td>
