@@ -1,13 +1,20 @@
+import moment from 'moment';
+
 import {API_URL} from 'dashboard/constants';
 
 export const csv = {
   download(spaceId, startDate, endDate) {
     return (dispatch, getState) => {
       let state = getState();
+      
+      startDate = moment(startDate).format('YYYY-MM-DD');
+      endDate = moment(endDate).add(1, 'd').format('YYYY-MM-DD');
+
       var url = `${API_URL}/csv/?start_time=${startDate}&end_time=${endDate}`;
       if (spaceId) {
         var url = `${url}&space_id=${spaceId}`
       }
+      
       dispatch({type: 'RAW_EVENTS_CSV_REQUEST'});
       fetch(url, {
         method: 'GET',
