@@ -48,7 +48,7 @@ function SpaceDetail({
                   <div className="mobile-hide">
                     <EventCount spaceId={space.id} timeZone={space.timezone} />
                   </div>
-                  <TotalVisits spaceId={space.id} />
+                  <TotalVisits spaceId={space.id} timeZone={space.timezone} />
                   <RawEvents spaceId={space.id} pageSize={10} timeZone={space.timezone} />
                 </div>
               </div>
