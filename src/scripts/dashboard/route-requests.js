@@ -26,16 +26,17 @@ var spacesIndexInterval;
 // ......
 var requestNum = 3; 
 
-history.listen(location => {
-  console.log("location is: " + location);
-  // stupid hack for right now because react-router is poopy
-  if (location.query.code) {
-    console.log("code is: "+location.query.code);
-    store.dispatch(servicesSendSlackCode(location.query.code));
-  } else {
-    console.log("not on that path");
-  }
+// stupid hack for right now because react-router is poopy
+if (window.location.hash.startsWith("#/integrations/alerts?code=")) {
+  var tempCodeWithState = window.location.hash.substring(27);
+  var code = tempCodeWithState.substring(0, tempCodeWithState.length-7);
+  console.log("Using Code: "+code);
+  store.dispatch(servicesSendSlackCode(code));
+} else {
+  console.log(window.location);
+}
 
+history.listen(location => {
   if (requestNum==1 || requestNum==3) {
     clearInterval(spacesIndexInterval);
     clearInterval(spacesReadInterval);
@@ -66,9 +67,11 @@ history.listen(location => {
         store.dispatch(spacesIndex());
       }, 2000);
     } else if (location.pathname === "/integrations/alerts") {
-      store.dispatch(servicesSlackChannels());
-      store.dispatch(alertsIndex());
-      store.dispatch(servicesIndex());
+      if (!location.query.code) {
+        store.dispatch(servicesSlackChannels());
+        store.dispatch(alertsIndex());
+        store.dispatch(servicesIndex());
+      }
       store.dispatch(spacesIndex());
     } else if (location.pathname === "/account/billing") {
       store.dispatch(getCustomer());
