@@ -12,10 +12,9 @@ function Login(props) {
     onLoginPressed,
     onEnterPressed,
     onUpdateLoginField,
-    loading,
     email,
     password,
-    statusText
+    loading
   } = props;
 
   return (
@@ -25,7 +24,6 @@ function Login(props) {
           <div className="col-xs-20 off-xs-2 col-md-8 off-md-8">
             <img className="app-icon" src="/assets/images/density_mark_black.png" alt="Density Logo" />
             <h1>Login</h1>
-            {statusText}
             <input
               className="form-control"
               type="email"
@@ -43,10 +41,12 @@ function Login(props) {
               defaultValue={password}
             />
             <button 
-              className="button button-primary login-button"
+              className={loading ? "button button-primary login-button loading" : "button button-primary login-button"}
               onClick={onLoginPressed(email, password)}
-              type="button">
-              Log in
+              type="button"
+              disabled={loading}>
+              <span className="label">Log in</span>
+              <img className={loading ? "loading-image" : "loading-image"} src="/assets/images/loading.gif" alt="Loading" />
             </button>
             {/*<Link to='/forgot-password' className="forgot-password-link">Forgot password?</Link>*/}
           </div>
@@ -59,7 +59,6 @@ function Login(props) {
 const mapStateToProps = state => ({
   email: state.login.email,
   password: state.login.password,
-  statusText: state.login.statusText,
   loading: state.login.loading
 });
 
@@ -68,7 +67,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(loginFieldUpdate(field, event.target.value));
   },
   onLoginPressed: (email, password) => () => {
-    dispatch(loginSubmit(email, password));    
+    dispatch(loginSubmit(email, password));
   },
   onEnterPressed: (email, password) => event => {
     if (event.key === 'Enter') {

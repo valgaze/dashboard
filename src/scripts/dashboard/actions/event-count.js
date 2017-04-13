@@ -31,7 +31,6 @@ function fetchEventsByPage(dispatch, token, startTime, endTime, spaceId, pageNum
       throw new Error(response.statusText);
     }
   }).then(function(json) {
-    console.log(json);
     events = events.length == 0 ? json.results : events.concat(json.results);
     if (json.next != null) {
       return fetchEventsByPage(dispatch, token, startTime, endTime, spaceId, pageNum+1, pageSize, events);
