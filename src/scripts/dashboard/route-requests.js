@@ -27,15 +27,13 @@ var spacesIndexInterval;
 var requestNum = 3; 
 
 history.listen(location => {
-  
+  console.log("location is: " + location);
   // stupid hack for right now because react-router is poopy
-  if (location.pathname === "/integrations/alerts") {
-    if (location.query.code) {
-      console.log("code is: "+location.query.code);
-      store.dispatch(servicesSendSlackCode(location.query.code));
-    } else {
-      console.log("not on that path");
-    }
+  if (location.query.code) {
+    console.log("code is: "+location.query.code);
+    store.dispatch(servicesSendSlackCode(location.query.code));
+  } else {
+    console.log("not on that path");
   }
 
   if (requestNum==1 || requestNum==3) {
