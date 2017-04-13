@@ -30,10 +30,7 @@ var requestNum = 3;
 if (window.location.hash.startsWith("#/integrations/alerts?code=")) {
   var tempCodeWithState = window.location.hash.substring(27);
   var code = tempCodeWithState.substring(0, tempCodeWithState.length-7);
-  console.log("Using Code: "+code);
   store.dispatch(servicesSendSlackCode(code));
-} else {
-  console.log(window.location);
 }
 
 history.listen(location => {
