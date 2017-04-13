@@ -27,6 +27,14 @@ var spacesIndexInterval;
 var requestNum = 3; 
 
 history.listen(location => {
+  
+  // stupid hack for right now because react-router is poopy
+  if (location.pathname === "/integrations/alerts") {
+    if (location.query.code) {
+      store.dispatch(servicesSendSlackCode(location.query.code));
+    }
+  }
+
   if (requestNum==1 || requestNum==3) {
     clearInterval(spacesIndexInterval);
     clearInterval(spacesReadInterval);
@@ -57,13 +65,9 @@ history.listen(location => {
         store.dispatch(spacesIndex());
       }, 2000);
     } else if (location.pathname === "/integrations/alerts") {
-      if (location.query.code) {
-        store.dispatch(servicesSendSlackCode(location.query.code));
-      } else {
-        store.dispatch(servicesSlackChannels());
-        store.dispatch(alertsIndex());
-        store.dispatch(servicesIndex());
-      }
+      store.dispatch(servicesSlackChannels());
+      store.dispatch(alertsIndex());
+      store.dispatch(servicesIndex());
       store.dispatch(spacesIndex());
     } else if (location.pathname === "/account/billing") {
       store.dispatch(getCustomer());
