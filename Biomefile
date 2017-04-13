@@ -1,5 +1,5 @@
 name=web-dashboard
-ACCOUNTS_URL=https://clerk.density.rodeo
+ACCOUNTS_URL=https://clerk.density.rodeo/v1
 API_URL=https://api.density.rodeo/v1
 BOOKIE_URL=https://bookie.density.io/v2
 INTEGRATIONS_URL=http://localhost:3000/v1

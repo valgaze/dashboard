@@ -9,6 +9,7 @@ import DensityDateRangePicker from 'dashboard/components/DensityDateRangePicker'
 
 function RawEvents({
   spaceId,
+  timeZone,
   onSetDateRange,
   startDate,
   endDate,
@@ -46,7 +47,7 @@ function RawEvents({
       <div className="date-picker">
         <span className="date-picker-text">Date Range:</span>
         <DensityDateRangePicker startDate={startDate} endDate={endDate} onChange={onSetDateRange} />
-        <Button text="Download CSV" className="download-csv-button" onClick={onDownloadCsv(spaceId, startDate, endDate)}/>
+        <Button text="Download CSV" className="download-csv-button" onClick={onDownloadCsv(spaceId, startDate, endDate, timeZone)}/>
         <img className={loadingCSV ? "loading-image" : "hide"} src="/assets/images/loading.gif" alt="Loading" />
       </div>
       <div className="card">
@@ -100,14 +101,14 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onChangePage: (pageNum, pageSize, startDate, endDate) => () => {
     dispatch(rawEventsChangePage(pageNum, pageSize));
-    dispatch(rawEventsFetch(startDate, endDate, pageNum, ownProps.pageSize, ownProps.spaceId));
+    dispatch(rawEventsFetch(startDate, endDate, ownProps.timeZone, pageNum, ownProps.pageSize, ownProps.spaceId));
   },
   onSetDateRange: (value) => {
     dispatch(rawEventsSetDateRange(value));
-    dispatch(rawEventsFetch(value[0].format(), value[1].format(), 1, ownProps.pageSize, ownProps.spaceId));
+    dispatch(rawEventsFetch(value[0].format(), value[1].format(), ownProps.timeZone, 1, ownProps.pageSize, ownProps.spaceId));
   },
-  onDownloadCsv: (spaceId, startDate, endDate) => evt => {
-    dispatch(csv.download(spaceId, startDate, endDate))
+  onDownloadCsv: (spaceId, startDate, endDate, timeZone) => evt => {
+    dispatch(csv.download(spaceId, startDate, endDate, timeZone))
   }
 });
 

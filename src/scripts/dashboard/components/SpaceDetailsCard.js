@@ -23,6 +23,16 @@ function SpaceDetailsCard({
         <table className="table striped">
           <tbody>
             <tr>
+              <td>ID</td>
+              <td>
+                <input type="text"
+                  className="input"
+                  disabled={true}
+                  value={space.id || ""}
+                />
+              </td>
+            </tr>
+            <tr>
               <td>Name</td>
               <td>
                 <input type="text"
@@ -30,16 +40,6 @@ function SpaceDetailsCard({
                   disabled={!editingSpaceDetails} 
                   value={editingSpaceDetails ? tempName : (space.name || "" )}
                   onChange={onUpdateFormField('tempName')}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>ID</td>
-              <td>
-                <input type="text"
-                  className="input"
-                  disabled={true}
-                  value={space.id || ""}
                 />
               </td>
             </tr>

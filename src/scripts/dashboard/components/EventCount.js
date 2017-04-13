@@ -10,6 +10,7 @@ function EventCount({
   spaceId,
   onSetDate,
   date,
+  timeZone,
   timestamps,
   counts,
   loading
@@ -39,7 +40,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSetDate: (value) => {
     dispatch(eventCountSetDate(value));
-    dispatch(eventCountFetch(value, ownProps.spaceId));
+    dispatch(eventCountFetch(value, ownProps.spaceId, ownProps.timeZone));
   }
 });
 

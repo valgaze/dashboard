@@ -42,11 +42,11 @@ ReactDOM.render(
     <Router onUpdate={fireTracking} history={history}>
       <Route path="tokens" component={Tokens} onEnter={requireAuth} />
       <Route path="login" component={Login} />
-      <Route path="integrations/alerts" component={Alerts} />
+      <Route path="integrations/alerts" component={Alerts} onEnter={requireAuth} />
       <Route path="forgot-password" component={ForgotPassword} />
       <Route path="spaces" component={Spaces} onEnter={requireAuth} />
       <Route path="spaces/:spaceId" component={SpaceDetail} onEnter={requireAuth} />
-      <Route path="account/billing" component={Billing} />
+      <Route path="account/billing" component={Billing} onEnter={requireAuth} />
       <Route path="account/change-password" component={ChangePassword} onEnter={requireAuth} />
     </Router>
   </Provider>,

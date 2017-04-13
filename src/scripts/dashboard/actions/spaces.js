@@ -98,7 +98,7 @@ export function spacesIndex() {
   }
 }
 
-export function spacesRead(spaceId) {
+export function spacesRead(spaceId, callback) {
   return (dispatch, getState) => {
     let state = getState();
     dispatch({type: 'SPACES_READ_REQUEST', spaceId: spaceId});
@@ -123,6 +123,7 @@ export function spacesRead(spaceId) {
       }
     }).then(function(json) {
       dispatch({type: 'SPACES_READ_SUCCESS', json: json});
+      if (callback) { callback(); }
     })
   }
 }

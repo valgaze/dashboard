@@ -4,7 +4,7 @@ const localStorageMiddleware = store => next => action => {
       window.localStorage.token = action.token;
       break;
     case 'SAVE_ORG_ID_TO_LOCAL_STORAGE':
-      let orgId = action.json.auth.organization.id;
+      let orgId = action.json.organization.id;
       window.localStorage.orgId = orgId;
       break;
     case 'DELETE_DATA_FROM_LOCAL_STORAGE':

@@ -1,14 +1,16 @@
 import moment from 'moment';
+import 'moment-timezone';
+
 
 import {API_URL} from 'dashboard/constants';
 
 export const csv = {
-  download(spaceId, startDate, endDate) {
+  download(spaceId, startDate, endDate, timeZone) {
     return (dispatch, getState) => {
       let state = getState();
       
-      startDate = moment(startDate).format('YYYY-MM-DD');
-      endDate = moment(endDate).add(1, 'd').format('YYYY-MM-DD');
+      startDate = moment(startDate).tz(timeZone).format("YYYY-MM-DDT00:00:00.000Z");
+      endDate = moment(endDate).tz(timeZone).add(1, 'd').format("YYYY-MM-DDT00:00:00.000Z");
 
       var url = `${API_URL}/csv/?start_time=${startDate}&end_time=${endDate}`;
       if (spaceId) {
