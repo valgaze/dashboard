@@ -3,7 +3,7 @@ import {ACCOUNTS_URL} from 'dashboard/constants';
 export function usersMe() {
   return (dispatch, getState) => {
     let state = getState();
-    return fetch(`${ACCOUNTS_URL}/me/`, {
+    return fetch(`${ACCOUNTS_URL}/users/me/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

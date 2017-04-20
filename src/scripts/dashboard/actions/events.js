@@ -1,9 +1,9 @@
 import {API_URL} from 'dashboard/constants';
 
-export function eventsIndex(pageNum, pageSize) {
+export function eventsIndex(startTime, pageNum, pageSize) {
   return (dispatch, getState) => {
     let state = getState();
-    let url = `${API_URL}/events/?start_time=2016-10-01&page=${pageNum}&page_size=${pageSize}`
+    let url = `${API_URL}/events/?start_time=${startTime}&page=${pageNum}&page_size=${pageSize}`
     return fetch(url, {
       method: 'GET',
       headers: {

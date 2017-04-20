@@ -1,8 +1,8 @@
 name=web-dashboard
-ACCOUNTS_URL=https://clerk.density.rodeo
+ACCOUNTS_URL=https://clerk.density.rodeo/v1
 API_URL=https://api.density.rodeo/v1
 BOOKIE_URL=https://bookie.density.io/v2
-INTEGRATIONS_URL=http://localhost:3000/v1
+INTEGRATIONS_URL=https://density-integrations-staging.herokuapp.com/v1
 SLACK_CLIENT_ID=2180757426.138906558069
 SLACK_REDIRECT_URI=http://localhost:8080/%23/integrations/alerts
 STRIPE_KEY=pk_test_7I4XNXDTskv8K27CAbAxrCj5

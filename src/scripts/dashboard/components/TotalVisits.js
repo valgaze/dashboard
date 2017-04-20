@@ -10,6 +10,7 @@ function TotalVisits({
   onSetDateRange,
   startDate,
   endDate,
+  timeZone,
   totalVisitorCounts,
   dates
 }) {
@@ -36,8 +37,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onSetDateRange: (value) => {
+    console.log("here");
     dispatch(totalVisitsSetDateRange(value));
-    dispatch(totalVisitsFetch(ownProps.spaceId));
+    dispatch(totalVisitsFetch(ownProps.spaceId, ownProps.timeZone));
   }
 });
 

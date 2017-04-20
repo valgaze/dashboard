@@ -14,6 +14,7 @@ import rawEvents from './raw-events';
 import sensors from './sensors';
 import sidebar from 'dashboard/ducks/sidebar';
 import spaces from './spaces';
+import tokens from './tokens';
 import totalVisits from './total-visits';
 import user from './user';
 
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
   sensors,
   sidebar,
   spaces,
+  tokens,
   totalVisits,
   user,
   routing: routerReducer

@@ -26,6 +26,13 @@ var spacesIndexInterval;
 // ......
 var requestNum = 3; 
 
+// stupid hack for right now because react-router is poopy
+if (window.location.hash.startsWith("#/integrations/alerts?code=")) {
+  var tempCodeWithState = window.location.hash.substring(27);
+  var code = tempCodeWithState.substring(0, tempCodeWithState.length-7);
+  store.dispatch(servicesSendSlackCode(code));
+}
+
 history.listen(location => {
   if (requestNum==1 || requestNum==3) {
     clearInterval(spacesIndexInterval);
@@ -36,19 +43,18 @@ history.listen(location => {
       store.dispatch(spacesIndex());
       store.dispatch(doorway.list());
       store.dispatch(token.list());
-      store.dispatch(eventsIndex(1, 10));
+      store.dispatch(eventsIndex('2016-10-01', 1, 10));
     } else if (location.pathname.startsWith("/spaces/") && location.pathname.length > 8) {
-      let state = store.getState();
       var spaceId = fetchParam(location);
       store.dispatch(doorway.list());
-      store.dispatch(spacesRead(spaceId));
+      store.dispatch(spacesRead(spaceId, function() {
+        let state = store.getState();
+        let timeZone = state.spaces.currentObj.timezone;
+        store.dispatch(totalVisitsFetch(spaceId, timeZone));
+        store.dispatch(eventCountFetch(state.eventCount.date, spaceId, timeZone));
+        store.dispatch(rawEventsFetch(state.rawEvents.startDate, state.rawEvents.endDate, timeZone, 1, 10, spaceId));
+      }));
       store.dispatch(sensorsIndex());
-      setTimeout(() => {
-        // TODO: Remove this— it's only necessary right now because we're not passing in the timezone
-        store.dispatch(totalVisitsFetch(spaceId));
-        store.dispatch(eventCountFetch(state.eventCount.date, spaceId));
-      }, 1000);
-      store.dispatch(rawEventsFetch(state.rawEvents.startDate, state.rawEvents.endDate, 1, 10, spaceId));
       spacesReadInterval = setInterval(() => {
         store.dispatch(spacesRead(spaceId));
       }, 2000);
@@ -58,9 +64,7 @@ history.listen(location => {
         store.dispatch(spacesIndex());
       }, 2000);
     } else if (location.pathname === "/integrations/alerts") {
-      if (location.query.code) {
-        store.dispatch(servicesSendSlackCode(location.query.code));
-      } else {
+      if (!location.query.code) {
         store.dispatch(servicesSlackChannels());
         store.dispatch(alertsIndex());
         store.dispatch(servicesIndex());

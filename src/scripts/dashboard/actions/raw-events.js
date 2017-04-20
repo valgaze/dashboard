@@ -1,4 +1,5 @@
 import moment from 'moment';
+import 'moment-timezone';
 
 import {API_URL} from 'dashboard/constants';
 
@@ -19,11 +20,13 @@ export function rawEventsChangePage(pageNum, pageSize) {
 }
 
 
-export function rawEventsFetch(startDate, endDate, pageNum, pageSize, spaceId) {
+export function rawEventsFetch(startDate, endDate, timeZone, pageNum, pageSize, spaceId) {
   return (dispatch, getState) => {
     let state = getState();
-    startDate = moment(startDate).format('YYYY-MM-DD');
-    endDate = moment(endDate).add(1, 'd').format('YYYY-MM-DD');
+    startDate = moment(startDate).tz(timeZone).format('YYYY-MM-DDT00:00:00.000Z');
+    endDate = moment(endDate).tz(timeZone).add(1, 'd').format('YYYY-MM-DDT00:00:00.000Z');
+    
+
     let url = `${API_URL}/events/?start_time=${startDate}&end_time=${endDate}&page=${pageNum}&page_size=${pageSize}&space_id=${spaceId}`
     return fetch(url, {
       method: 'GET',

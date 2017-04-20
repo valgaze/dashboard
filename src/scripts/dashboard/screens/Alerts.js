@@ -42,10 +42,9 @@ function Alerts({
                       </button>
                     </div>
                     <div>
-                      <h1>Alerts via </h1><img className="slack-logo" src="/assets/images/slack.png" />
+                      <h1>Alerts via </h1><img className="slack-logo" src="/assets/images/slack.png" /><img className={slackLoading ? "loading-image" : "hide"} src="/assets/images/loading.gif" alt="Loading" />
                     </div>
                     {slackButton}
-                    <img className={slackLoading ? "loading-image" : "hide"} src="/assets/images/loading.gif" alt="Loading" />
                   </div>
                   <div className="alerts-grid">
                     {(alerts.length == 0 && slackEnabled) ? "Let's add your first alert. Click the blue plus button at the top right of the screen." : ""}

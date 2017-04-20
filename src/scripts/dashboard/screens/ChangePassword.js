@@ -31,7 +31,7 @@ class ChangePassword extends React.Component {
 
   onSubmitPressed() {
     this.setState({statusText: "Updating your password..."});
-    fetch(`${ACCOUNTS_URL}/password_change/`, {
+    fetch(`${ACCOUNTS_URL}/users/me/password`, {
       method: 'POST',
       body: JSON.stringify({
         old_password: this.state.oldPassword,

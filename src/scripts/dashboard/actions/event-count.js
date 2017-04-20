@@ -1,4 +1,5 @@
 import moment from 'moment';
+import 'moment-timezone';
 
 import {API_URL} from 'dashboard/constants';
 
@@ -42,7 +43,7 @@ function fetchEventsByPage(dispatch, token, startTime, endTime, spaceId, pageNum
   })
 }
 
-export function eventCountFetch(date, spaceId) {
+export function eventCountFetch(date, spaceId, timeZone) {
   return (dispatch, getState) => {
     let state = getState();
     let pageSize = 50000;
@@ -50,20 +51,11 @@ export function eventCountFetch(date, spaceId) {
     var eventData = [];
     let token = state.user.token;
     let pageNum = 1;
-    let startTime = moment(date).format("YYYY-MM-DD")+"T09:00:00";
-    let endTime = moment(date).add(1, 'd').format("YYYY-MM-DD")+"T00:00:00";
-
-    let timezone = state.spaces.currentObj.timezone;
-    var tempTimezoneString = "T00:00:00"+timezone;
-    if(timezone==null) {
-      return;
-    }
-
-    let startTimeAdjusted = startTime+tempTimezoneString;
-    let endTimeAdjusted = endTime+tempTimezoneString;
+    let startTime = moment(date).tz(timeZone).format("YYYY-MM-DDT00:00:00.000Z");
+    let endTime = moment(date).tz(timeZone).add(1, 'd').format("YYYY-MM-DDT00:00:00.000Z");
 
     dispatch({type: 'EVENT_COUNT_BEGIN_REQUEST'});
-    fetchEventsByPage(dispatch, token, startTimeAdjusted, endTimeAdjusted, spaceId, pageNum, pageSize);
+    fetchEventsByPage(dispatch, token, startTime, endTime, spaceId, pageNum, pageSize);
   }
 }
 
