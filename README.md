@@ -1,18 +1,8 @@
-# Density Web Dashboard
+<img src="https://cdn.rawgit.com/DensityCo/web-dashboard/master/logo.svg" height="50" />
 
-[![Circle CI](https://circleci.com/gh/DensityCo/web-dashboard.png?style=shield&circle-token=1b5ece9522df300da10bcedd91a24b6f066b9049)](https://circleci.com/gh/DensityCo/web-dashboard)
-[![Coverage Status](https://coveralls.io/repos/github/DensityCo/web-dashboard/badge.svg?branch=trunk&t=lXpRKo)](https://coveralls.io/github/DensityCo/web-dashboard?branch=trunk)
+<br />
 
-The Density Web Dashboard allows customers to manage their account and sensors.
-
-## Running locally
-
-1. Install browserify globally via: `npm install -g browserify`
-1. Run `npm install`
-1. Run `gulp` to start up the express server
-
-## Environment variables
-
-1. Install biome.
-1. Run biome, enter the values.
-1. Run biome use, then start with gulp.
+[![CircleCI](https://circleci.com/gh/DensityCo/web-dashboard.svg?style=shield&circle-token=1b5ece9522df300da10bcedd91a24b6f066b9049)](https://circleci.com/gh/DensityCo/web-dashboard)
+[![Dependency
+Status](https://david-dm.org/densityco/nicss.svg)](https://david-dm.org/densityco/web-dashboard)
+<!-- ![License](https://img.shields.io/badge/License-MIT-green.svg) -->
