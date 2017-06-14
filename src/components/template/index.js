@@ -4,6 +4,6 @@ export default function %COMPONENTUPPERCAMEL%({
   name,
 }) {
   return <div className="%COMPONENTDASH%">
-    {text ? `Hello ${name}` : 'Hello World!'}
+    {name ? `Hello ${name}` : 'Hello World!'}
   </div>;
 }

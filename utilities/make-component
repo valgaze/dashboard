@@ -1,9 +1,17 @@
 #!/bin/bash
 set -e
 
-echo "Let's make a new component."
+# if the user inputted a positional arg, use that as the component dash name.
+# otherwise, prompt.
+if [ -n "$1" ]; then
+  COMPONENTDASH="$1"
+  echo "Cool, we're making a $COMPONENTDASH component."
+else
+  echo "Let's make a new component."
+  printf "Enter the name of your component, in dash-case: "; read COMPONENTDASH
+fi
 
-printf "Enter the name of your component, in dash-case: "; read COMPONENTDASH
+exit
 
 COMPONENTUPPERCAMEL="$(echo "$COMPONENTDASH" | perl -pe 's/(^|-)./uc($&)/ge;s/_//g' | sed 's/-//g')"
 
