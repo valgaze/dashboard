@@ -44,7 +44,7 @@ Advantages to the above approach:
 
 ## Reducers
 
-Reducers are located within `src/reducers`. Each `default`ly exports its reducer:
+Reducers are located within `src/reducers`. Each file `default`ly exports its reducer:
 
 ```
 src/reducers/
@@ -71,4 +71,27 @@ src/actions/
 └── doorways
     ├── list.js
     └── update.js
+```
+
+## Helpers
+
+
+
+
+# Styles
+Many styles and associated variables are brought in from `@density/ui`, our UI framework.
+
+```scss
+// src/styles.scss, the main stylesheet
+
+// Global variables like colors, spacings, etc...
+@import "../node_modules/@density/ui/variables/colors.json";
+@import "../node_modules/@density/ui/variables/spacing.json";
+// (etc...)
+
+// Here's an example component - a navbar. See how variables are required first for the component
+// then the scss for the component which uses those variables is brought in.
+@import "../node_modules/@density/ui-navbar/variables.json";
+@import "../node_modules/@density/ui-navbar/dist/sass";
+
 ```

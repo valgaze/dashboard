@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@density/node-sass-json-importer": "^4.1.0",
+    "@density/ui": "4.0.1",
+    "@density/ui-navbar": "0.0.5",
+    "normalize.css": "^7.0.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },
@@ -14,12 +18,10 @@
   "scripts": {
     "start": "concurrently \"npm run start:react\" \"npm run start:scss\" ",
     "start:react": "react-scripts start",
-    "start:scss": "node-sass --recursive --output src/built-css/ src/styles.scss && node-sass --watch --recursive --output src/built-css/ --source-map true --source-map-contents src/styles.scss",
+    "start:scss": "node-sass --importer node_modules/@density/node-sass-json-importer/dist/node-sass-json-importer.js --recursive --output src/built-css/ src/styles.scss && node-sass --importer node_modules/@density/node-sass-json-importer/dist/node-sass-json-importer.js --watch --recursive --output src/built-css/ --source-map true --source-map-contents src/styles.scss",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-
-
     "make-component": "./utilities/make-component"
   }
 }
