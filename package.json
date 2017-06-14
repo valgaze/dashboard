@@ -22,6 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "make-component": "./utilities/make-component"
+    "make-component": "./utilities/make-component",
+    "make-helper": "./utilities/make-helper"
   }
 }
