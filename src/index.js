@@ -20,9 +20,11 @@ import routeTransitionSpaceList from './actions/route-transition/space-list';
 // Assemble all parts of the reducer
 import activePage from './reducers/activePage';
 import spaces from './reducers/spaces';
+import tokens from './reducers/tokens';
 const reducer = combineReducers({
-  spaces,
   activePage,
+  spaces,
+  tokens,
 });
 
 // Create our redux store for storing the application state.

@@ -1,0 +1,38 @@
+.token-card {
+  @include make-card;
+
+  margin: $padding-vertical-base 0;
+  border-radius: $border-radius-base;
+}
+
+// Token card header
+.token-card h2 {
+  margin-left: $padding-horizontal-large;
+}
+.token-card.token-card-read-only h2:after {
+  content: ' (readwrite)';
+}
+.token-card.token-card-read-write h2:after {
+  content: ' (read)';
+}
+
+// Token card contents
+.token-card .token-card-body {
+  font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
+  border-top: 1px solid $gray-light;
+
+  padding: $padding-vertical-large $padding-horizontal-large;
+  border-bottom-left-radius: $border-radius-base;
+  border-bottom-right-radius: $border-radius-base;
+  font-size: 0.8em;
+
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+}

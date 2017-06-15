@@ -24,7 +24,7 @@ function ActivePage({activePage}) {
   case "SPACE_DETAIL":
     return <div />;
   default:
-    return <UnknownPage />;
+    return <UnknownPage invalidUrl={activePage} />;
   }
 }
 

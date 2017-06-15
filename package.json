@@ -7,6 +7,7 @@
     "@density/node-sass-json-importer": "^4.1.0",
     "@density/ui": "4.0.1",
     "@density/ui-navbar": "0.0.5",
+    "classnames": "^2.2.5",
     "normalize.css": "^7.0.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",

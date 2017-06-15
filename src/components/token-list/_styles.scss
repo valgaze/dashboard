@@ -1,3 +1,9 @@
 .token-list {
-  color: red;
+  @include grid-container;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.token-list-item {
+  @include grid-width(12, 6, 4, 4);
 }
