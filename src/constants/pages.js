@@ -1,0 +1,4 @@
+export const TOKEN_LIST_PAGE = 'TOKEN_LIST_PAGE';
+
+export const SPACE_LIST_PAGE = 'SPACE_LIST_PAGE';
+export const SPACE_DETAIL_PAGE = 'SPACE_DETAIL_PAGE';

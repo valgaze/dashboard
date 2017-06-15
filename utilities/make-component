@@ -11,8 +11,6 @@ else
   printf "Enter the name of your component, in dash-case: "; read COMPONENTDASH
 fi
 
-exit
-
 COMPONENTUPPERCAMEL="$(echo "$COMPONENTDASH" | perl -pe 's/(^|-)./uc($&)/ge;s/_//g' | sed 's/-//g')"
 
 first="$(echo $COMPONENTUPPERCAMEL | cut -c1 | tr [A-Z] [a-z])"
