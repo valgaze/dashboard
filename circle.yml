@@ -65,7 +65,7 @@ test:
           curl -X POST \
           -d "{\"body\": \"Here is a link to the built dashboard: https://densityco.github.io/dashboard/$BRANCH\"}" \
           -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
-          https://api.github.com/repos/densityco/internal-dashboard/issues/$num/comments
+          https://api.github.com/repos/densityco/dashboard/issues/$num/comments
 
         fi
       done
