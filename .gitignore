@@ -3,3 +3,4 @@ build/
 .DS_Store
 
 src/built-css
+npm-debug.log
