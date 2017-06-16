@@ -40,9 +40,9 @@ test:
       cd deploy_dashboard/
       git checkout gh-pages
 
-      echo "* Copying dist to github pages directory..."
+      echo "* Copying build to github pages directory..."
       rm -rf $BRANCH
-      mv ../dist $BRANCH/
+      mv ../build $BRANCH/
       git add $BRANCH/
 
       echo "* Pushing..."
