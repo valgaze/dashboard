@@ -6,6 +6,12 @@ checkout:
   post:
     - echo "//npmregistry.density.rodeo/:_authToken=${PRIVATE_NPM_TOKEN}" >> ~/.npmrc
 
+dependencies:
+  override:
+    - yarn
+  cache_directories:
+    - ~/.cache/yarn
+
 test:
   override:
     - /bin/true
@@ -15,6 +21,7 @@ test:
       set -e
       echo "node -v = $(node -v)"
       echo "npm -v = $(npm -v)"
+      echo "yarn --version = $(yarn --version)"
 
       echo "* Finding / generating branch folder with uuid."
       BRANCH="$(echo $CIRCLE_BRANCH | tr '/' '-')"
