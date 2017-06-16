@@ -17,11 +17,6 @@
 @import "../node_modules/@density/ui-navbar/variables.json";
 @import "../node_modules/@density/ui-navbar/dist/sass";
 
-// Container
-@import "../node_modules/@density/ui-container/variables.json";
-@import "../node_modules/@density/ui-container/dist/sass";
-
-
 @mixin make-card($background: #fff, $foreground: $text-color) {
   box-sizing: border-box;
   background-color: $background;
