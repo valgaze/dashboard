@@ -2,6 +2,19 @@
 # yarn lockfile v1
 
 
+"@density-int/client@1.3.1":
+  version "1.3.1"
+  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-1.3.1.tgz#48b3cf1c61dfbd75b93c5f7556c2df0363d923ae"
+  dependencies:
+    "@density/clientele" "^1.4.1"
+
+"@density/clientele@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@density/clientele/-/clientele-1.4.1.tgz#373104a58a921bef6db60ab7a7f1b6b5445b6231"
+  dependencies:
+    mustache "^2.3.0"
+    qs "^6.4.0"
+
 "@density/conduit@^0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@density/conduit/-/conduit-0.2.1.tgz#1ddf732895aa65c1923c8b1e3aa8d4af8afff30d"
@@ -15,6 +28,10 @@
     babel-preset-es2015 "^6.24.1"
     is-there "^4.0.0"
     lodash "^3.10.1"
+
+"@density/ui-container@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@density/ui-container/-/ui-container-0.0.1.tgz#1ca3a05e7ed6f28230407cb48fa086d811cf3bef"
 
 "@density/ui-navbar@0.0.5":
   version "0.0.5"
@@ -4056,6 +4073,10 @@ ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
+mustache@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/mustache/-/mustache-2.3.0.tgz#4028f7778b17708a489930a6e52ac3bca0da41d0"
+
 mute-stream@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.5.tgz#8fbfabb0a98a253d3184331f9e8deb7372fac6c0"
@@ -4924,7 +4945,7 @@ q@^1.1.2:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.0.tgz#dd01bac9d06d30e6f219aecb8253ee9ebdc308f1"
 
-qs@6.4.0, qs@~6.4.0:
+qs@6.4.0, qs@^6.4.0, qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 

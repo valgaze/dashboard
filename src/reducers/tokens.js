@@ -1,20 +1,21 @@
-export default function tokens(state, action) {
-  return {
-    filters: {},
-    data: [
-      {
-        tokenType: 'readwrite',
-        key: 'IYwr6W3ISktuNVAtoO1p8yhUh7Z%aLW1!HhGQXEvDQ&spPVE%fko6L^jnTMw4wsVO6h9K8U2osYLH$$!kft6Q8@PQpaumGESKOpP',
-      },
-      {
-        tokenType: 'readonly',
-        key: 'tok_IYwr6W3ISktuNVAtoO1p8yhUh7Z%aLW1!HhGQXEvDQ&',
-      },
-      {
-        tokenType: 'readwrite',
-        key: 'tok_ROVJ@03ISktuNVAtoO1p8yhUh7Z%aLW1!HhGQR_@8VH',
-      },
-    ],
+import { COLLECTION_TOKENS_SET } from '../actions/collection/tokens-set';
+import objectSnakeToCamel from '../helpers/object-snake-to-camel/index';
+
+const initialState = {
+  data: [],
+  loading: true,
+};
+
+export default function tokens(state=initialState, action) {
+  switch (action.type) {
+  case COLLECTION_TOKENS_SET:
+    return {
+      ...state,
+      loading: false,
+      data: action.data.map(objectSnakeToCamel),
+    };
+  default:
+    return state;
   }
 }
 

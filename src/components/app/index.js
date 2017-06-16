@@ -1,14 +1,19 @@
 import * as React from 'react';
 import Navbar from '@density/ui-navbar';
 
+import sessionTokenUnset from '../../actions/session-token/unset';
+
 import { connect } from 'react-redux';
 
 import TokenList from '../token-list/index';
+import Login from '../login/index';
 import UnknownPage from '../unknown-page/index';
 
-export function App({activePage}) {
+export function App({activePage, onLogout}) {
   return <div className="app">
-    <Navbar subtitle="Dashboard" />
+    {activePage !== 'LOGIN' ? <Navbar subtitle="Dashboard" /> : null}
+
+    <button onClick={onLogout}>Logout</button>
 
     {/* Insert the currently displayed page into the view */}
     <ActivePage activePage={activePage} />
@@ -17,6 +22,8 @@ export function App({activePage}) {
 
 function ActivePage({activePage}) {
   switch (activePage) {
+  case "LOGIN":
+    return <Login />;
   case "TOKEN_LIST":
     return <TokenList />;
   case "SPACE_LIST":
@@ -34,5 +41,10 @@ export default connect(state => {
     activePage: state.activePage,
   };
 }, dispatch => {
-  return {}
+  return {
+    onLogout() {
+      dispatch(sessionTokenUnset());
+      window.location.hash = '#/login';
+    },
+  }
 })(App);

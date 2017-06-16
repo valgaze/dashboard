@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@density-int/client": "1.3.1",
     "@density/conduit": "^0.2.1",
     "@density/node-sass-json-importer": "^4.1.0",
     "@density/ui": "4.0.1",
+    "@density/ui-container": "^0.0.1",
     "@density/ui-navbar": "0.0.5",
     "classnames": "^2.2.5",
     "normalize.css": "^7.0.0",

@@ -1,0 +1,53 @@
+.login-section {
+  max-width: 500px;
+  margin: 0px auto;
+
+  @include grid-width(12, 12, 5, 3);
+  padding-top: 90px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.login-density-logo {
+  width: 44px;
+  margin: $padding-vertical-base auto;
+  padding-bottom: 60px;
+}
+
+.login-textbox {
+  padding: $padding-vertical-large 0px;
+  margin-top: 20px;
+  background-color: transparent;
+  font-size: 16px;
+
+  transition: all 100ms ease-in-out;
+
+  outline: none;
+  border: 0px;
+  border-bottom: 2px solid $gray;
+  &:focus {
+    border-bottom: 2px solid $brand-primary;
+  }
+}
+
+.login-submit-button {
+  margin-top: 20px;
+
+  border-radius: 20px;
+  height: 40px;
+  font-size: 14px;
+
+  background-color: $brand-primary;
+  border: 0px;
+  color: #FFF;
+  cursor: pointer;
+
+  transition: background-color 400ms ease-in-out;
+  &:hover {
+    background-color: darken($brand-primary, 5%);
+  }
+}
+
+.login-error {
+  color: $brand-danger;
+}

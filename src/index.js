@@ -13,15 +13,18 @@ import thunk from 'redux-thunk';
 import createRouter from '@density/conduit';
 
 // Import all actions required to navigate from one page to another.
+import routeTransitionLogin from './actions/route-transition/login';
 import routeTransitionTokenList from './actions/route-transition/token-list';
 import routeTransitionSpaceDetail from './actions/route-transition/space-detail';
 import routeTransitionSpaceList from './actions/route-transition/space-list';
 
 // Assemble all parts of the reducer
+import sessionToken from './reducers/sessionToken';
 import activePage from './reducers/activePage';
 import spaces from './reducers/spaces';
 import tokens from './reducers/tokens';
 const reducer = combineReducers({
+  sessionToken,
   activePage,
   spaces,
   tokens,
@@ -36,9 +39,15 @@ const store = createStore(reducer, {}, compose(
 // Create a router to listen to the store and dispatch actions when the hash changes.
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
 const router = createRouter(store);
-router.addRoute("tokens", () => routeTransitionTokenList());
-router.addRoute("spaces", () => routeTransitionSpaceList());
-router.addRoute("spaces/:id", ({id}) => routeTransitionSpaceDetail(id));
+router.addRoute('login', () => routeTransitionLogin());
+router.addRoute('tokens', () => routeTransitionTokenList());
+router.addRoute('spaces', () => routeTransitionSpaceList());
+router.addRoute('spaces/:id', ({id}) => routeTransitionSpaceDetail(id));
+
+// If the user isn't logged in, send them to the login page.
+if (store.getState().sessionToken === null) {
+  router.navigate('login');
+}
 
 // Handle the route that the user is currently at.
 router.handle();
