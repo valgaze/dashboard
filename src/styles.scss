@@ -2,6 +2,9 @@
 // Density UI Styles
 // 
 
+// normalize.css @ 7.0.0
+@import "reset";
+
 // Global variables like colors, spacings, etc...
 @import "../node_modules/@density/ui/variables/colors.json";
 @import "../node_modules/@density/ui/variables/spacing.json";
