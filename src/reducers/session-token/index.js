@@ -1,6 +1,6 @@
-import localStorageReducerEnhancer from '../helpers/localstorage-reducer-enhancer/index';
-import { SESSION_TOKEN_SET } from '../actions/session-token/set';
-import { SESSION_TOKEN_UNSET } from '../actions/session-token/unset';
+import localStorageReducerEnhancer from '../../helpers/localstorage-reducer-enhancer/index';
+import { SESSION_TOKEN_SET } from '../../actions/session-token/set';
+import { SESSION_TOKEN_UNSET } from '../../actions/session-token/unset';
 
 import { core, accounts, metrics } from '@density-int/client';
 

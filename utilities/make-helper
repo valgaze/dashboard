@@ -26,7 +26,7 @@ EOF
 cat <<EOF > src/helpers/$NAMEDASH/test.js
 
 import assert from 'assert';
-import $NAMECAMEL from './';
+import $NAMECAMEL from './index';
 
 describe('$NAMEDASH', function() {
   it('should work', function() {

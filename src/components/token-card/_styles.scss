@@ -10,7 +10,7 @@
   margin-left: $padding-horizontal-large;
 }
 .token-card.token-card-read-only h2:after {
-  content: ' (readwrite)';
+  content: ' (read / write)';
 }
 .token-card.token-card-read-write h2:after {
   content: ' (read)';

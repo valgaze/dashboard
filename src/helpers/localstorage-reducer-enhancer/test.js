@@ -1,5 +1,5 @@
 import assert from 'assert';
-import localstorageReducerEnhancer from './';
+import localstorageReducerEnhancer from './index';
 
 describe('localstorage-reducer-enhancer', function() {
   it('should work', function() {
@@ -7,7 +7,7 @@ describe('localstorage-reducer-enhancer', function() {
       return action.value;
     }
 
-    global.localStorage = localStorage = {};
+    global.localStorage = {};
 
     const enhancedReducer = localstorageReducerEnhancer('foo')(reducer);
     const response = enhancedReducer('initialState', {
@@ -16,7 +16,7 @@ describe('localstorage-reducer-enhancer', function() {
     });
 
     assert.equal(response, 'changedState');
-    assert.equal(localStorage.foo, 'changedState');
+    assert.equal(JSON.parse(localStorage.foo), 'changedState');
   });
 });
 

@@ -19,10 +19,10 @@ import routeTransitionSpaceDetail from './actions/route-transition/space-detail'
 import routeTransitionSpaceList from './actions/route-transition/space-list';
 
 // Assemble all parts of the reducer
-import sessionToken from './reducers/sessionToken';
-import activePage from './reducers/activePage';
-import spaces from './reducers/spaces';
-import tokens from './reducers/tokens';
+import sessionToken from './reducers/session-token/index';
+import activePage from './reducers/active-page/index';
+import spaces from './reducers/spaces/index';
+import tokens from './reducers/tokens/index';
 const reducer = combineReducers({
   sessionToken,
   activePage,

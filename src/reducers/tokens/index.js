@@ -1,5 +1,5 @@
-import { COLLECTION_TOKENS_SET } from '../actions/collection/tokens-set';
-import objectSnakeToCamel from '../helpers/object-snake-to-camel/index';
+import { COLLECTION_TOKENS_SET } from '../../actions/collection/tokens-set';
+import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 const initialState = {
   data: [],
@@ -18,5 +18,3 @@ export default function tokens(state=initialState, action) {
     return state;
   }
 }
-
-
