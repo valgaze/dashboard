@@ -29,13 +29,9 @@
     is-there "^4.0.0"
     lodash "^3.10.1"
 
-"@density/ui-container@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@density/ui-container/-/ui-container-0.0.1.tgz#1ca3a05e7ed6f28230407cb48fa086d811cf3bef"
-
-"@density/ui-navbar@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.5.tgz#7ce189264d2be7afd75b9ebbdd1a3e2cdc46e2c7"
+"@density/ui-navbar@0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.8.tgz#12dc785329b90a8b97d41c6c20c5cd408378034a"
 
 "@density/ui@4.0.1":
   version "4.0.1"
