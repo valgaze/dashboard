@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 export function SpaceList({spaces}) {
   return <div className="space-list">
     {spaces.data.map(space => {
-      return <div className="space-list-item">
+      return <div className="space-list-item" key={space.id}>
         <h1>{space.name}</h1>
         <ul>
           <li>Timezone: {space.timezone}</li>
