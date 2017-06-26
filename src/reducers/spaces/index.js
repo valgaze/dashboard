@@ -25,14 +25,24 @@ export default function spaces(state=initialState, action) {
   case COLLECTION_SPACES_PUSH:
     return {
       ...state,
-      data: action.data.map(item => {
-        if (action.item.id === item.id) {
-          return {...item, ...action.item};
-        } else {
-          return item;
-        }
-      }),
-    }
+      data: [
+        // Update existing items
+        ...state.data.map(item => {
+          if (action.item.id === item.id) {
+            return {...item, ...objectSnakeToCamel(action.item)};
+          } else {
+            return item;
+          }
+        }),
+
+        // Add new items
+        ...(
+          state.data.find(i => i.id === action.item.id) === undefined ?
+            [objectSnakeToCamel(action.item)] :
+            []
+        ),
+      ],
+    };
 
   default:
     return state;
