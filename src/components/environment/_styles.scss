@@ -4,6 +4,11 @@
   margin: 20px auto;
 }
 
-.environment-column {
+.space-column {
+  @include grid-width(6, 6, 6, 6);
+  height: calc(100vh - 120px);
+  overflow: scroll;
+}
+.doorway-column {
   @include grid-width(6, 6, 6, 6);
 }

@@ -1,4 +1,6 @@
 .environment-doorway-item {
-  color: red;
+  background: $gray-light;
+  padding: $padding-vertical-base $padding-horizontal-base;
+  margin-bottom: 10px;
   user-select: none;
 }

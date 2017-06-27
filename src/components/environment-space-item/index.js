@@ -13,7 +13,7 @@ const dropTarget = DropTarget('doorway', doorwayTarget, connect => ({
 }));
 
 const EnvironmentSpaceDropItem = dropTarget(function({connectDropTarget}) {
-  return connectDropTarget(<div>Drop a space here.</div>);
+  return connectDropTarget(<div>Drop a doorway here.</div>);
 });
 
 export default function EnvironmentSpaceItem({

@@ -1,9 +1,11 @@
 .environment-space-item {
   color: $text-color;
+  background: gray;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 .environment-space-item-doorways {
   list-style-type: none;
   padding-left: 0px;
-  background: gray;
   padding: 10px;
 }
