@@ -1,0 +1,9 @@
+.environment {
+  @include grid-container;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.environment-column {
+  @include grid-width(6, 6, 6, 6);
+}

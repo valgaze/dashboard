@@ -18,7 +18,7 @@ second="$(echo $COMPONENTUPPERCAMEL | cut -c2-)"
 COMPONENTCAMEL="$first$second"
 
 echo "* Copying template to components/$COMPONENTDASH..."
-cp -R src/components/template src/components/$COMPONENTDASH
+cp -R src/components/.template src/components/$COMPONENTDASH
 
 echo "* Replacing placeholders with variations of $COMPONENTDASH..."
 for f in $(ls src/components/$COMPONENTDASH); do

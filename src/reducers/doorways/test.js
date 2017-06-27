@@ -28,6 +28,28 @@ describe('doorways', function() {
   it('should push doorway when given a doorway update', function() {
     const initialState = doorways(undefined, {});
 
+    // Add a new doorway.
+    const doorwayInCollection = doorways(initialState, collectionDoorwaysPush({
+      id: 0,
+      name: 'foo',
+      sensor_id: SENSOR_ID_ONE
+    }));
+
+    // Update doorway in collection
+    const doorwayUpdatedInCollection = doorways(doorwayInCollection, collectionDoorwaysPush({
+      id: 0,
+      name: 'new name',
+    }));
+
+    assert.deepEqual(doorwayUpdatedInCollection, {
+      ...initialState,
+      loading: false,
+      data: [{id: 0, name: 'new name', sensorId: SENSOR_ID_ONE}],
+    });
+  });
+  it('should push doorway when given a new doorway', function() {
+    const initialState = doorways(undefined, {});
+
     const result = doorways(initialState, collectionDoorwaysPush({
       id: 0,
       name: 'foo',

@@ -8,11 +8,16 @@ import { connect } from 'react-redux';
 import TokenList from '../token-list/index';
 import SpaceList from '../space-list/index';
 import Login from '../login/index';
+import Environment from '../environment/index';
 import UnknownPage from '../unknown-page/index';
 
-export function App({activePage, onLogout}) {
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
+function AppComponent({activePage, onLogout}) {
   return <div className="app">
     {activePage !== 'LOGIN' ? <Navbar subtitle="Dashboard">
+      <a href="#/environment">Environment</a>
       <a href="#/tokens">Tokens</a>
       <a href="#/spaces">Spaces</a>
       <button onClick={onLogout}>Logout</button>
@@ -22,6 +27,7 @@ export function App({activePage, onLogout}) {
     <ActivePage activePage={activePage} />
   </div>;
 }
+const App = DragDropContext(HTML5Backend)(AppComponent);
 
 function ActivePage({activePage}) {
   switch (activePage) {
@@ -33,6 +39,8 @@ function ActivePage({activePage}) {
     return <SpaceList />;
   case "SPACE_DETAIL":
     return <div />;
+  case "ENVIRONMENT":
+    return <Environment />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

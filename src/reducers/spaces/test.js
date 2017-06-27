@@ -25,6 +25,28 @@ describe('spaces', function() {
   it('should push space when given a space update', function() {
     const initialState = spaces(undefined, {});
 
+    // Add a new space.
+    const spaceInCollection = spaces(initialState, collectionSpacesPush({
+      id: 0,
+      name: 'foo',
+      current_count: 4,
+    }));
+
+    // Update space in collection
+    const spaceUpdatedInCollection = spaces(spaceInCollection, collectionSpacesPush({
+      id: 0,
+      name: 'new name',
+    }));
+
+    assert.deepEqual(spaceUpdatedInCollection, {
+      ...initialState,
+      loading: false,
+      data: [{id: 0, name: 'new name', currentCount: 4}],
+    });
+  });
+  it('should push space when given a new space', function() {
+    const initialState = spaces(undefined, {});
+
     const result = spaces(initialState, collectionSpacesPush({
       id: 0,
       name: 'foo',
