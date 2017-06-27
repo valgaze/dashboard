@@ -1,6 +1,7 @@
 import { core } from '@density-int/client';
 import collectionSpacesSet from '../collection/spaces-set';
 import collectionDoorwaysSet from '../collection/doorways-set';
+import collectionLinksSet from '../collection/links-set';
 
 export const ROUTE_TRANSITION_SPACE_LIST = 'ROUTE_TRANSITION_SPACE_LIST';
 
@@ -13,12 +14,12 @@ export default function routeTransitionSpaceList() {
       core.spaces.list(),
       // Fetch a list of all doorways.
       core.doorways.list(),
-      // Fetch all links.
+      // Fetch a list of all links.
       core.links.list(),
     ]).then(([spaces, doorways, links]) => {
       dispatch(collectionSpacesSet(spaces.results));
       dispatch(collectionDoorwaysSet(doorways.results));
-      console.log(links)
+      dispatch(collectionLinksSet(links.results));
     });
   };
 }
