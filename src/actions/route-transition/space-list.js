@@ -13,9 +13,12 @@ export default function routeTransitionSpaceList() {
       core.spaces.list(),
       // Fetch a list of all doorways.
       core.doorways.list(),
-    ]).then(([spaces, doorways]) => {
+      // Fetch all links.
+      core.links.list(),
+    ]).then(([spaces, doorways, links]) => {
       dispatch(collectionSpacesSet(spaces.results));
       dispatch(collectionDoorwaysSet(doorways.results));
+      console.log(links)
     });
   };
 }
