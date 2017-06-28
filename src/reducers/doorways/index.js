@@ -6,6 +6,7 @@ import { COLLECTION_DOORWAYS_FILTER } from '../../actions/collection/doorways-fi
 const initialState = {
   filters: {
     spaceId: null,
+    search: '',
   },
   loading: false,
   data: [],

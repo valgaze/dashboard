@@ -6,6 +6,7 @@ import { COLLECTION_SPACES_FILTER } from '../../actions/collection/spaces-filter
 const initialState = {
   filters: {
     doorwayId: null,
+    search: '',
   },
   loading: false,
   data: [],

@@ -5,9 +5,6 @@ const doorwaySource = {
   beginDrag(props) {
     return {doorway: props.doorway};
   },
-  endDrag(props) {
-    console.log('drag end on source');
-  },
 };
 
 const dragSource = DragSource('doorway', doorwaySource, (connect, monitor) => ({
@@ -18,6 +15,10 @@ const dragSource = DragSource('doorway', doorwaySource, (connect, monitor) => ({
 export function EnvironmentDoorwayItem({doorway, connectDragSource}) {
   return connectDragSource(<div className="environment-doorway-item">
     {doorway.name}
+    <div
+      className="environment-doorway-item-details"
+      onClick={() => alert(`details: ${doorway.id}`)}
+    >...</div>
   </div>);
 }
 

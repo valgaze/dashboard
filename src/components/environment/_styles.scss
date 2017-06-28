@@ -2,6 +2,8 @@
   @include grid-container;
   max-width: 1200px;
   margin: 20px auto;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .space-column {
@@ -14,3 +16,17 @@
   height: calc(100vh - 76px);
   overflow: scroll;
 }
+
+.column-body {
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 8px;
+  margin-top: 16px;
+
+  border: 1px solid $gray-light;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+// remove left padding on `ul`'s inside of columns
+.space-column ul, .doorway-column ul { padding-left: 0px; }

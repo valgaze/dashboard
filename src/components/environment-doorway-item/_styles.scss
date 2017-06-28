@@ -1,6 +1,22 @@
 .environment-doorway-item {
-  background: $gray-light;
-  padding: $padding-vertical-base $padding-horizontal-base;
+  border: 1px solid $gray-light;
+  border-radius: $border-radius-small;
+  margin-right: $padding-horizontal-x-small;
+
+  color: $gray;
+  padding: $padding-vertical-large $padding-horizontal-base;
   margin-bottom: 10px;
   user-select: none;
+
+  display: inline-block;
+}
+
+.environment-doorway-item-details {
+  transform: rotate(90deg);
+  display: inline-block;
+  font-size: 24px;
+  margin-left: 16px;
+}
+.environment-doorway-item-details:active {
+  color: $gray-dark;
 }

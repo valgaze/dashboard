@@ -21,6 +21,7 @@ function allDoorwaysInSpace(doorways, links, space) {
   }
 }
 
+// Used for filtering spaces / doorways in the `Environment` component below.
 const spaceFilter = filterCollection({fields: ['name']});
 const doorwayFilter = filterCollection({fields: ['name']});
 
@@ -35,6 +36,7 @@ export function Environment({
   onSpaceSearch,
 }) {
   return <div className="environment">
+    <div className="space-doorway-create-fab" />
     <div className="space-column">
       <input
         type="text"
@@ -42,18 +44,20 @@ export function Environment({
         value={spaces.filters.search}
         onChange={e => onSpaceSearch(e.target.value)}
       />
-      <ul>
-        {spaceFilter(spaces.data, spaces.filters.search).map(space => {
-          return <EnvironmentSpaceItem
-            key={space.id}
-            space={space}
-            doorways={allDoorwaysInSpace(doorways.data, links.data, space).doorways}
-            links={links.data}
-            onDoorwayDropped={doorway => onLinkDoorwayToSpace(doorway, space, 1)}
-            onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
-          />;
-        })}
-      </ul>
+      <div className="column-body">
+        <ul>
+          {spaceFilter(spaces.data, spaces.filters.search).map(space => {
+            return <EnvironmentSpaceItem
+              key={space.id}
+              space={space}
+              doorways={allDoorwaysInSpace(doorways.data, links.data, space).doorways}
+              links={links.data}
+              onDoorwayDropped={doorway => onLinkDoorwayToSpace(doorway, space, 1)}
+              onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
+            />;
+          })}
+        </ul>
+      </div>
     </div>
     <div className="doorway-column">
       <input
@@ -62,9 +66,11 @@ export function Environment({
         value={doorways.filters.search}
         onChange={e => onDoorwaySearch(e.target.value)}
       />
-      {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
-        return <EnvironmentDoorwayItem key={doorway.id} doorway={doorway} />;
-      })}
+      <div className="column-body">
+        {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
+          return <EnvironmentDoorwayItem key={doorway.id} doorway={doorway} />;
+        })}
+      </div>
     </div>
   </div>;
 }
