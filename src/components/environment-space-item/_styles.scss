@@ -1,11 +1,21 @@
 .environment-space-item {
   color: $text-color;
-  background: gray;
-  padding: 10px;
   margin-bottom: 10px;
+  position: relative;
 }
 .environment-space-item-doorways {
   list-style-type: none;
   padding-left: 0px;
   padding: 10px;
+}
+.environment-space-item-doorways li span {
+  padding-left: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: $brand-danger;
+}
+
+.environment-space-item-doorway-drop {
+  border: 2px dotted $brand-danger;
+  min-height: 200px;
 }

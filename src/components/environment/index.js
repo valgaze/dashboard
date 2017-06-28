@@ -4,17 +4,26 @@ import { connect } from 'react-redux';
 import EnvironmentSpaceItem from '../environment-space-item/index';
 import EnvironmentDoorwayItem from '../environment-doorway-item/index';
 
+import collectionLinksPush from '../../actions/collection/links-push';
+import collectionLinksDelete from '../../actions/collection/links-delete';
+
 // Given a space, use links to determine all doorways in the space and return them.
 function allDoorwaysInSpace(doorways, links, space) {
   const linksForSpace = links.filter(link => link.spaceId === space.id);
   const doorwaysInLinks = linksForSpace.map(link => link.doorwayId);
-  return doorways.filter(doorway => doorwaysInLinks.indexOf(doorway.id) >= 0);
+  return {
+    doorways: doorways.filter(doorway => doorwaysInLinks.indexOf(doorway.id) >= 0),
+    links: linksForSpace,
+  }
 }
 
 export function Environment({
   spaces,
   doorways,
   links,
+
+  onLinkDoorwayToSpace,
+  onUnlinkDoorwayToSpace,
 }) {
   return <div className="environment">
     <div className="space-column">
@@ -23,10 +32,10 @@ export function Environment({
           return <EnvironmentSpaceItem
             key={space.id}
             space={space}
-            doorways={allDoorwaysInSpace(doorways.data, links.data, space)}
-            onDoorwayDropped={doorway => {
-              console.log(`Doorway dropped on space ${space.id}: ${doorway.id}`);
-            }}
+            doorways={allDoorwaysInSpace(doorways.data, links.data, space).doorways}
+            links={links.data}
+            onDoorwayDropped={doorway => onLinkDoorwayToSpace(doorway, space, 1)}
+            onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
           />;
         })}
       </ul>
@@ -46,5 +55,19 @@ export default connect(state => {
     links: state.links,
   };
 }, dispatch => {
-  return {};
+  return {
+    onLinkDoorwayToSpace(doorway, space, sensorPlacement) {
+      dispatch(collectionLinksPush({
+        id: Math.random(),
+        spaceId: space.id,
+        doorwayId: doorway.id,
+        spaceName: space.name,
+        doorwayName: doorway.name,
+        sensorPlacement,
+      }));
+    },
+    onUnlinkDoorwayToSpace(link) {
+      dispatch(collectionLinksDelete(link));
+    }
+  };
 })(Environment);
