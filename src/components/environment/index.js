@@ -4,8 +4,12 @@ import { connect } from 'react-redux';
 import EnvironmentSpaceItem from '../environment-space-item/index';
 import EnvironmentDoorwayItem from '../environment-doorway-item/index';
 
+import filterCollection from '../../helpers/filter-collection/index';
+
 import collectionLinksPush from '../../actions/collection/links-push';
 import collectionLinksDelete from '../../actions/collection/links-delete';
+import collectionDoorwaysFilter from '../../actions/collection/doorways-filter';
+import collectionSpacesFilter from '../../actions/collection/spaces-filter';
 
 // Given a space, use links to determine all doorways in the space and return them.
 function allDoorwaysInSpace(doorways, links, space) {
@@ -17,6 +21,9 @@ function allDoorwaysInSpace(doorways, links, space) {
   }
 }
 
+const spaceFilter = filterCollection({fields: ['name']});
+const doorwayFilter = filterCollection({fields: ['name']});
+
 export function Environment({
   spaces,
   doorways,
@@ -24,11 +31,19 @@ export function Environment({
 
   onLinkDoorwayToSpace,
   onUnlinkDoorwayToSpace,
+  onDoorwaySearch,
+  onSpaceSearch,
 }) {
   return <div className="environment">
     <div className="space-column">
+      <input
+        type="text"
+        placeholder="Search spaces"
+        value={spaces.filters.search}
+        onChange={e => onSpaceSearch(e.target.value)}
+      />
       <ul>
-        {spaces.data.map(space => {
+        {spaceFilter(spaces.data, spaces.filters.search).map(space => {
           return <EnvironmentSpaceItem
             key={space.id}
             space={space}
@@ -41,7 +56,13 @@ export function Environment({
       </ul>
     </div>
     <div className="doorway-column">
-      {doorways.data.map(doorway => {
+      <input
+        type="text"
+        placeholder="Search doorways"
+        value={doorways.filters.search}
+        onChange={e => onDoorwaySearch(e.target.value)}
+      />
+      {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
         return <EnvironmentDoorwayItem key={doorway.id} doorway={doorway} />;
       })}
     </div>
@@ -68,6 +89,12 @@ export default connect(state => {
     },
     onUnlinkDoorwayToSpace(link) {
       dispatch(collectionLinksDelete(link));
-    }
+    },
+    onDoorwaySearch(searchQuery) {
+      dispatch(collectionDoorwaysFilter('search', searchQuery));
+    },
+    onSpaceSearch(searchQuery) {
+      dispatch(collectionSpacesFilter('search', searchQuery));
+    },
   };
 })(Environment);

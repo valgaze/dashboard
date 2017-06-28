@@ -3,10 +3,18 @@
   margin-bottom: 10px;
   position: relative;
 }
+
+// Render each doorway within the space.
 .environment-space-item-doorways {
   list-style-type: none;
   padding-left: 0px;
-  padding: 10px;
+}
+.environment-space-item-doorways li {
+  background-color: $gray;
+  padding: $padding-vertical-small $padding-horizontal-small;
+  display: inline-block;
+  margin-right: $padding-horizontal-small;
+  margin-bottom: $padding-horizontal-small;
 }
 .environment-space-item-doorways li span {
   padding-left: 10px;
@@ -15,7 +23,14 @@
   color: $brand-danger;
 }
 
+// Render the location to drop new doorways.
 .environment-space-item-doorway-drop {
   border: 2px dotted $brand-danger;
-  min-height: 200px;
+  height: 100px;
+  text-align: center;
+}
+.environment-space-item-doorway-drop:before {
+  content: "Drop doorway here";
+  line-height: 100px;
+  color: $brand-danger;
 }

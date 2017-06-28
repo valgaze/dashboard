@@ -6,9 +6,11 @@
 
 .space-column {
   @include grid-width(6, 6, 6, 6);
-  height: calc(100vh - 120px);
+  height: calc(100vh - 76px);
   overflow: scroll;
 }
 .doorway-column {
   @include grid-width(6, 6, 6, 6);
+  height: calc(100vh - 76px);
+  overflow: scroll;
 }
