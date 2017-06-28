@@ -5,23 +5,49 @@
   background-color: $gray-lighter;
 }
 
+.card .card-header.environment-space-item-header {
+  font-size: 16px;
+}
+
+.card .card-body.environment-space-item-body {
+  min-height: 64px;
+}
+
 // Render each doorway within the space.
 .environment-space-item-doorways {
   list-style-type: none;
   padding-left: 0px;
 }
 .environment-space-item-doorways li {
-  background-color: $gray;
-  padding: $padding-vertical-small $padding-horizontal-small;
+  background-color: #fff;
   display: inline-block;
   margin-right: $padding-horizontal-small;
-  margin-bottom: $padding-horizontal-small;
+  margin-top: $padding-horizontal-small;
+  user-select: none;
+  cursor: default;
+
+  font-size: 16px;
+
+  border: 1px solid $gray-light;
+  border-radius: $border-radius-small;
+  margin-right: $padding-horizontal-x-small;
+
+  color: $gray;
+  padding: $padding-vertical-large $padding-horizontal-base;
+  margin-bottom: 10px;
+  user-select: none;
+
+  display: inline-block;
 }
+// The delete button for the doorway
 .environment-space-item-doorways li span {
   padding-left: 10px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 24px;
   color: $brand-danger;
+
+  position: relative;
+  bottom: -4px;
 }
 
 // Render the location to drop new doorways.

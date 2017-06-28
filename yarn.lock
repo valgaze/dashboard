@@ -29,16 +29,21 @@
     is-there "^4.0.0"
     lodash "^3.10.1"
 
+"@density/ui-card@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@density/ui-card/-/ui-card-0.0.3.tgz#778ef6725a392c127fbeba4a1fdf28fd47ed024a"
+
 "@density/ui-navbar@0.0.8":
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.8.tgz#12dc785329b90a8b97d41c6c20c5cd408378034a"
 
-"@density/ui@4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@density/ui/-/ui-4.0.1.tgz#e00f47a9e08047446966b2345f2280583759a9fa"
+"@density/ui@4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@density/ui/-/ui-4.2.0.tgz#d3827e9392156b06eb9567d83faf3daf7a4eba03"
   dependencies:
     classnames "^2.2.5"
     normalize.css "^7.0.0"
+    popper.js "^1.10.2"
     react "^15.5.4"
     react-dom "^15.5.4"
     uuid "^3.0.1"
@@ -4569,6 +4574,10 @@ pkg-up@^1.0.0:
 pluralize@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-1.2.1.tgz#d1a21483fd22bb41e58a12fa3421823140897c45"
+
+popper.js@^1.10.2:
+  version "1.10.6"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.10.6.tgz#0d65754f010cd1d4a2fc6c726eca9f117b59d597"
 
 portfinder@^1.0.9:
   version "1.0.13"

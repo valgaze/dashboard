@@ -1,5 +1,6 @@
 .environment {
   @include grid-container;
+  @include grid-row;
   max-width: 1200px;
   margin: 20px auto;
   padding-left: 10px;

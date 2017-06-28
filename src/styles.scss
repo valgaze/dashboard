@@ -8,6 +8,8 @@
 // Global variables like colors, spacings, etc...
 @import "../node_modules/@density/ui/variables/colors.json";
 @import "../node_modules/@density/ui/variables/spacing.json";
+@import "../node_modules/@density/ui/variables/fonts.json";
+@import "../node_modules/@density/ui/variables/grid.json";
 
 // Non-component bits of density-ui
 @import "../node_modules/@density/ui/styles/font";
@@ -19,6 +21,10 @@
 // Navbar
 @import "../node_modules/@density/ui-navbar/variables.json";
 @import "../node_modules/@density/ui-navbar/dist/sass";
+
+// Card
+@import "../node_modules/@density/ui-card/variables.json";
+@import "../node_modules/@density/ui-card/dist/sass";
 
 @mixin make-card($background: #fff, $foreground: $text-color) {
   box-sizing: border-box;
