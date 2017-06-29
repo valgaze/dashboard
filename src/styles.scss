@@ -26,6 +26,18 @@
 @import "../node_modules/@density/ui-card/variables.json";
 @import "../node_modules/@density/ui-card/dist/sass";
 
+// Modal
+@import "../node_modules/@density/ui-modal/variables.json";
+@import "../node_modules/@density/ui-modal/dist/sass";
+
+// FAB
+@import "../node_modules/@density/ui-fab/variables.json";
+@import "../node_modules/@density/ui-fab/dist/sass";
+
+// Context Menu
+@import "../node_modules/@density/ui-context-menu/variables.json";
+@import "../node_modules/@density/ui-context-menu/dist/sass";
+
 @mixin make-card($background: #fff, $foreground: $text-color) {
   box-sizing: border-box;
   background-color: $background;
@@ -65,3 +77,5 @@ html {
 @import "./components/environment/styles";
 @import "./components/environment-space-item/styles";
 @import "./components/environment-doorway-item/styles";
+@import "./components/environment-modal-create-space/styles";
+@import "./components/environment-modal-create-doorway/styles";

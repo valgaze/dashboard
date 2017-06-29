@@ -39,9 +39,28 @@
 
   display: inline-block;
 }
+
+// The sensor placement button for the doorway
+.environment-space-item-doorways-placement {
+  margin-left: $padding-horizontal-small;
+  margin-right: $padding-horizontal-x-small;
+  cursor: pointer;
+  font-size: 10px;
+  background-color: $brand-primary;
+  color: #fff;
+  padding: $padding-vertical-small $padding-horizontal-small;
+
+  position: relative;
+  top: -2px;
+}
+.environment-space-item-doorways-placement.out {
+  background-color: $gray;
+}
+
 // The delete button for the doorway
-.environment-space-item-doorways li span {
-  padding-left: 10px;
+.environment-space-item-doorways-delete {
+  margin-left: $padding-horizontal-x-small;
+  margin-right: $padding-horizontal-x-small;
   cursor: pointer;
   font-size: 24px;
   color: $brand-danger;

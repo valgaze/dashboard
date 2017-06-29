@@ -1,21 +1,42 @@
 .environment {
   @include grid-container;
-  @include grid-row;
   max-width: 1200px;
   margin: 20px auto;
   padding-left: 10px;
   padding-right: 10px;
+
+  position: relative;
+}
+
+.environment .fab {
+  line-height: 60px;
+  position: absolute;
+  right: 16px;
+}
+
+// The popup that is visible when the user clicks the FAB (ie, create space / create doorway)
+.environment-creation-context-menu {
+  position: absolute;
+  right: 16px;
+  margin-top: 64px;
+  z-index: 1000;
+}
+
+.environment-row {
+  @include grid-row;
 }
 
 .space-column {
   @include grid-width(6, 6, 6, 6);
   height: calc(100vh - 76px);
   overflow: scroll;
+  margin-top: 64px;
 }
 .doorway-column {
   @include grid-width(6, 6, 6, 6);
   height: calc(100vh - 76px);
   overflow: scroll;
+  margin-top: 64px;
 }
 
 .column-body {

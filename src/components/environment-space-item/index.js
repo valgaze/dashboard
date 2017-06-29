@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { DropTarget } from 'react-dnd';
+import classnames from 'classnames';
 
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 
@@ -33,7 +34,14 @@ export function EnvironmentSpaceItem({
             const link = links.find(i => i.doorwayId === doorway.id && i.spaceId === space.id);
             return <li key={doorway.id}>
               {doorway.name}
-              <span onClick={() => onDoorwayLinkDeleted(link)}>&times;</span>
+              <span
+                className={classnames('environment-space-item-doorways-placement', {out: link.sensorPlacement === -1})}
+                onClick={() => alert(link)}
+              >{link.sensorPlacement === 1 ? 'INSIDE' : 'OUTSIDE'}</span>
+              <span
+                className="environment-space-item-doorways-delete"
+                onClick={() => onDoorwayLinkDeleted(link)}
+              >&times;</span>
             </li>
           })}
         </ul>
