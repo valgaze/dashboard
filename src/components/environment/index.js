@@ -5,6 +5,7 @@ import EnvironmentSpaceItem from '../environment-space-item/index';
 import EnvironmentDoorwayItem from '../environment-doorway-item/index';
 import EnvironmentModalCreateSpace from '../environment-modal-create-space/index';
 import EnvironmentModalCreateDoorway from '../environment-modal-create-doorway/index';
+import EnvironmentModalSensorPlacement from '../environment-modal-sensor-placement/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 
@@ -46,12 +47,15 @@ export function Environment({
 
   onLinkDoorwayToSpace,
   onUnlinkDoorwayToSpace,
+  onChangeSensorPlacement,
   onDoorwaySearch,
   onSpaceSearch,
   onCreateSpace,
   onCreateDoorway,
 }) {
   return <div className="environment">
+
+    {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
     <Fab onClick={() => {
       if (activeModal !== 'space-doorway-popup') {
         return onOpenModal('space-doorway-popup');
@@ -73,6 +77,10 @@ export function Environment({
       <ContextMenuItem onClick={() => onOpenModal('create-space')}>Create Space</ContextMenuItem>
       <ContextMenuItem onClick={() => onOpenModal('create-doorway')}>Create Doorway</ContextMenuItem>
     </ContextMenu> : null}
+    {activeModal === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
+      onSubmit={onChangeSensorPlacement}
+      onDismiss={onCloseModal}
+    /> : null}
 
     <div className="environment-row">
       <div className="space-column">
@@ -92,6 +100,7 @@ export function Environment({
                 links={links.data}
                 onDoorwayDropped={doorway => onLinkDoorwayToSpace(doorway, space, 1)}
                 onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
+                onSensorPlacementChange={() => onOpenModal('confirm-sensor-placement-change')}
               />;
             })}
           </ul>
@@ -157,6 +166,10 @@ export default connect(state => {
     onCreateDoorway(doorway) {
       dispatch(collectionDoorwaysCreate(doorway));
       dispatch(hideModal());
+    },
+    onChangeSensorPlacement(link) {
+      const sensorPlacement = link.sensorPlacement === 1 ? -1 : 1;
+      dispatch(collectionLinksPush({id: link.id, sensorPlacement}));
     },
   };
 })(Environment);

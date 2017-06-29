@@ -24,6 +24,7 @@ export function EnvironmentSpaceItem({
 
   onDoorwayDropped,
   onDoorwayLinkDeleted,
+  onSensorPlacementChange,
 }) {
   return connectDropTarget(<div className="environment-space-item">
     <Card>
@@ -36,7 +37,7 @@ export function EnvironmentSpaceItem({
               {doorway.name}
               <span
                 className={classnames('environment-space-item-doorways-placement', {out: link.sensorPlacement === -1})}
-                onClick={() => alert(link)}
+                onClick={onSensorPlacementChange}
               >{link.sensorPlacement === 1 ? 'INSIDE' : 'OUTSIDE'}</span>
               <span
                 className="environment-space-item-doorways-delete"
