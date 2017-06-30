@@ -40,7 +40,6 @@ describe('spaces', function() {
 
     assert.deepEqual(spaceUpdatedInCollection, {
       ...initialState,
-      loading: false,
       data: [{id: 0, name: 'new name', currentCount: 4}],
     });
   });
@@ -55,7 +54,6 @@ describe('spaces', function() {
 
     assert.deepEqual(result, {
       ...initialState,
-      loading: false,
       data: [{id: 0, name: 'foo', currentCount: 5}],
     });
   });

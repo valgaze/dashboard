@@ -8,7 +8,7 @@ const initialState = {
     spaceId: null,
     search: '',
   },
-  loading: false,
+  loading: true,
   data: [],
 };
 

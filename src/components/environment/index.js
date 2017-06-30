@@ -91,6 +91,7 @@ export function Environment({
           onChange={e => onSpaceSearch(e.target.value)}
         />
         <div className="column-body">
+          {spaces.loading ? <p>Loading...</p> : null}
           <ul>
             {spaceFilter(spaces.data, spaces.filters.search).map(space => {
               return <EnvironmentSpaceItem

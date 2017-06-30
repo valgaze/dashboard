@@ -43,7 +43,6 @@ describe('doorways', function() {
 
     assert.deepEqual(doorwayUpdatedInCollection, {
       ...initialState,
-      loading: false,
       data: [{id: 0, name: 'new name', sensorId: SENSOR_ID_ONE}],
     });
   });
@@ -58,7 +57,6 @@ describe('doorways', function() {
 
     assert.deepEqual(result, {
       ...initialState,
-      loading: false,
       data: [{id: 0, name: 'foo', sensorId: SENSOR_ID_ONE}],
     });
   });

@@ -8,7 +8,7 @@ const initialState = {
     doorwayId: null,
     search: '',
   },
-  loading: false,
+  loading: true,
   data: [],
 };
 
