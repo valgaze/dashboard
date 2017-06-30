@@ -2,15 +2,15 @@
 # yarn lockfile v1
 
 
-"@density-int/client@1.4.0":
-  version "1.4.0"
-  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-1.4.0.tgz#7eb385201ec3a59e4d45d118da3e3a2c19737680"
+"@density-int/client@1.4.3":
+  version "1.4.3"
+  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-1.4.3.tgz#c25465bb4763d17cfe5e6843dcdf5b23c9445260"
   dependencies:
-    "@density/clientele" "^1.4.1"
+    "@density/clientele" "^1.5.1"
 
-"@density/clientele@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@density/clientele/-/clientele-1.4.1.tgz#373104a58a921bef6db60ab7a7f1b6b5445b6231"
+"@density/clientele@^1.5.1":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@density/clientele/-/clientele-1.5.0.tgz#db86ed048447bfd41f59b6ee695ec4379b70191a"
   dependencies:
     mustache "^2.3.0"
     qs "^6.4.0"

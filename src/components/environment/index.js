@@ -10,8 +10,8 @@ import EnvironmentModalSensorPlacementAssignment from '../environment-modal-sens
 
 import filterCollection from '../../helpers/filter-collection/index';
 
-import collectionLinksPush from '../../actions/collection/links/push';
-import collectionLinksDelete from '../../actions/collection/links/delete';
+import collectionLinksCreate from '../../actions/collection/links/create';
+import collectionLinksDestroy from '../../actions/collection/links/destroy';
 import collectionLinksUpdateSensorPlacement from '../../actions/collection/links/update-sensor-placement';
 import collectionDoorwaysFilter from '../../actions/collection/doorways/filter';
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
@@ -108,6 +108,7 @@ export function Environment({
         />
         <div className="column-body">
           {spaces.loading ? <p>Loading...</p> : null}
+          {!spaces.loading && spaces.data.length === 0 ? <p>No Spaces</p> : null}
           <ul>
             {spaceFilter(spaces.data, spaces.filters.search).map(space => {
               return <EnvironmentSpaceItem
@@ -132,6 +133,7 @@ export function Environment({
         />
         <div className="column-body">
           {spaces.loading ? <p>Loading...</p> : null}
+          {!spaces.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
           {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
             return <EnvironmentDoorwayItem key={doorway.id} doorway={doorway} />;
           })}
@@ -151,17 +153,10 @@ export default connect(state => {
 }, dispatch => {
   return {
     onLinkDoorwayToSpace(doorway, space, sensorPlacement) {
-      dispatch(collectionLinksPush({
-        id: Math.random(),
-        spaceId: space.id,
-        doorwayId: doorway.id,
-        spaceName: space.name,
-        doorwayName: doorway.name,
-        sensorPlacement,
-      }));
+      dispatch(collectionLinksCreate(space.id, doorway.id, sensorPlacement));
     },
     onUnlinkDoorwayToSpace(link) {
-      dispatch(collectionLinksDelete(link));
+      dispatch(collectionLinksDestroy(link));
     },
     onDoorwaySearch(searchQuery) {
       dispatch(collectionDoorwaysFilter('search', searchQuery));
