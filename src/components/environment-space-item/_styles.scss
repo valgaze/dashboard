@@ -25,6 +25,7 @@
   margin-top: $padding-horizontal-small;
   user-select: none;
   cursor: default;
+  position: relative;
 
   font-size: 16px;
 
@@ -59,24 +60,23 @@
 
 // The delete button for the doorway
 .environment-space-item-doorways-delete {
-  margin-left: $padding-horizontal-x-small;
-  margin-right: $padding-horizontal-x-small;
+  padding: 3px;
+  color: #fff;
+  background-color: $gray-darker;
   cursor: pointer;
-  font-size: 24px;
-  color: $brand-danger;
+  font-size: 16px;
+  border-radius: 50%;
 
-  position: relative;
-  bottom: -4px;
-}
+  width: 10px;
+  height: 10px;
 
-// Render the location to drop new doorways.
-.environment-space-item-doorway-drop {
-  border: 2px dotted $brand-danger;
-  height: 100px;
-  text-align: center;
-}
-.environment-space-item-doorway-drop:before {
-  content: "Drop doorway here";
-  line-height: 100px;
-  color: $brand-danger;
+  position: absolute;
+  top: -8px;
+
+  &:before {
+    content: "\00d7";
+    position: relative;
+    bottom: 2px;
+    left: 0.5px;
+  }
 }

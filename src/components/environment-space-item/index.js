@@ -42,7 +42,7 @@ export function EnvironmentSpaceItem({
               <span
                 className="environment-space-item-doorways-delete"
                 onClick={() => onDoorwayLinkDeleted(link)}
-              >&times;</span>
+              />
             </li>
           })}
         </ul>
