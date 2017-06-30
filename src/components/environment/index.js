@@ -8,6 +8,7 @@ import EnvironmentModalCreateDoorway from '../environment-modal-create-doorway/i
 import EnvironmentModalSensorPlacement from '../environment-modal-sensor-placement/index';
 import EnvironmentModalSensorPlacementAssignment from '../environment-modal-sensor-placement-assignment/index';
 import EnvironmentModalUpdateDoorway from '../environment-modal-update-doorway/index';
+import EnvironmentModalUpdateSpace from '../environment-modal-update-space/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 
@@ -20,6 +21,8 @@ import collectionSpacesCreate from '../../actions/collection/spaces/create';
 import collectionDoorwaysCreate from '../../actions/collection/doorways/create';
 import collectionDoorwaysUpdate from '../../actions/collection/doorways/update';
 import collectionDoorwaysDestroy from '../../actions/collection/doorways/destroy';
+import collectionSpacesUpdate from '../../actions/collection/spaces/update';
+import collectionSpacesDestroy from '../../actions/collection/spaces/destroy';
 
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
@@ -59,6 +62,8 @@ export function Environment({
   onCreateDoorway,
   onChangeDoorway,
   onDeleteDoorway,
+  onChangeSpace,
+  onDeleteSpace,
 }) {
   return <div className="environment">
     {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
@@ -110,6 +115,13 @@ export function Environment({
       onDelete={() => onDeleteDoorway(activeModal.data.doorway)}
       onDismiss={onCloseModal}
     /> : null}
+    {activeModal.name === 'update-space' ? <EnvironmentModalUpdateSpace
+      initialSpace={activeModal.data.space}
+      onSubmit={fields => onChangeSpace(activeModal.data.space, fields)}
+      onDelete={() => onDeleteSpace(activeModal.data.space)}
+      onDismiss={onCloseModal}
+      doorways={allDoorwaysInSpace(doorways.data, links.data, activeModal.data.space).doorways}
+    /> : null}
 
     <div className="environment-row">
       <div className="space-column">
@@ -132,6 +144,7 @@ export function Environment({
                 onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
                 onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
                 onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link})}
+                onClickDetails={() => onOpenModal(`update-space`, {space})}
               />;
             })}
           </ul>
@@ -208,6 +221,14 @@ export default connect(state => {
     },
     onDeleteDoorway(doorway) {
       dispatch(collectionDoorwaysDestroy(doorway));
+      dispatch(hideModal());
+    },
+    onChangeSpace(space, {name, timezone, dailyReset}) {
+      dispatch(collectionSpacesUpdate(Object.assign({}, space, {name, timezone, dailyReset})));
+      dispatch(hideModal());
+    },
+    onDeleteSpace(space) {
+      dispatch(collectionSpacesDestroy(space));
       dispatch(hideModal());
     },
   };

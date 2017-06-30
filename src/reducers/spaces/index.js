@@ -2,6 +2,7 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import { COLLECTION_SPACES_SET } from '../../actions/collection/spaces/set';
 import { COLLECTION_SPACES_PUSH } from '../../actions/collection/spaces/push';
 import { COLLECTION_SPACES_FILTER } from '../../actions/collection/spaces/filter';
+import { COLLECTION_SPACES_DELETE } from '../../actions/collection/spaces/delete';
 
 const initialState = {
   filters: {
@@ -54,6 +55,13 @@ export default function spaces(state=initialState, action) {
         ...state.filters,
         [action.filter]: action.value,
       },
+    };
+
+  // Delete a space from the collection.
+  case COLLECTION_SPACES_DELETE:
+    return {
+      ...state,
+      data: state.data.filter(item => action.item.id !== item.id),
     };
 
   default:

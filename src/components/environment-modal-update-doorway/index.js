@@ -12,7 +12,7 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
     };
   }
   render() {
-    return <div className="environment-modal-create-space">
+    return <div className="environment-modal-update-doorway">
       <Modal onClickBackdrop={this.props.onDismiss}>
         <Card>
           <CardHeader>Doorway Details</CardHeader>
@@ -22,19 +22,19 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
 
             <ul>
               <li>
-                <label htmlFor="create-doorway-name">Doorway Name</label>
+                <label htmlFor="update-doorway-name">Doorway Name</label>
                 <input
                   type="text"
-                  id="create-doorway-name"
+                  id="update-doorway-name"
                   value={this.state.name}
                   onChange={e => this.setState({name: e.target.value})}
                 />
               </li>
               <li>
-                <label htmlFor="create-doorway-desc">Description</label>
+                <label htmlFor="update-doorway-desc">Description</label>
                 <input
                   type="text"
-                  id="create-doorway-description"
+                  id="update-doorway-description"
                   value={this.state.description}
                   onChange={e => this.setState({description: e.target.value})}
                 />

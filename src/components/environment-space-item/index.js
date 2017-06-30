@@ -25,10 +25,14 @@ export function EnvironmentSpaceItem({
   onDoorwayDropped,
   onDoorwayLinkDeleted,
   onSensorPlacementChange,
+  onClickDetails,
 }) {
   return connectDropTarget(<div className="environment-space-item">
     <Card>
-      <CardHeader className="environment-space-item-header">{space.name}</CardHeader>
+      <CardHeader className="environment-space-item-header">
+        <div className="environment-space-item-name">{space.name}</div>
+        <div className="environment-space-item-details" onClick={onClickDetails}>...</div>
+      </CardHeader>
       <CardBody className="environment-space-item-body">
         <ul className="environment-space-item-doorways">
           {doorways.map(doorway => {
