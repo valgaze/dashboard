@@ -4,3 +4,4 @@ build/
 
 src/built-css
 npm-debug.log
+.*.sw*
