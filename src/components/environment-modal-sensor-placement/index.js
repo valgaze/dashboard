@@ -8,9 +8,9 @@ export default function EnvironmentModalSensorPlacement({onSubmit, onDismiss}) {
       <CardHeader>Sensor Placement</CardHeader>
       <CardBody>
         <p>
-          There should be some text here.
+          There should be some text here. Something like "this has sweeping consequences" and "are you REALLY sure?"
         </p>
-        <button onClick={onSubmit}>OK</button>
+        <button onClick={onSubmit}>Swap sensor placement</button>
         <button onClick={onDismiss}>Cancel</button>
       </CardBody>
     </Card>
