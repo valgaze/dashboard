@@ -1,8 +1,8 @@
 import assert from 'assert';
 import doorways from './index';
 
-import collectionDoorwaysSet from '../../actions/collection/doorways-set';
-import collectionDoorwaysPush from '../../actions/collection/doorways-push';
+import collectionDoorwaysSet from '../../actions/collection/doorways/set';
+import collectionDoorwaysPush from '../../actions/collection/doorways/push';
 
 const SENSOR_ID_ONE = 'sen_3wxsa6e8dh5zdnf73ubpnaq37wz2nawcjw8hh5sfawb';
 const SENSOR_ID_TWO = 'sen_aus86m8834xef4cqjeye2hzz3u8j5aafucxjgkn695h';

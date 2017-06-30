@@ -1,7 +1,7 @@
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
-import { COLLECTION_DOORWAYS_SET } from '../../actions/collection/doorways-set';
-import { COLLECTION_DOORWAYS_PUSH } from '../../actions/collection/doorways-push';
-import { COLLECTION_DOORWAYS_FILTER } from '../../actions/collection/doorways-filter';
+import { COLLECTION_DOORWAYS_SET } from '../../actions/collection/doorways/set';
+import { COLLECTION_DOORWAYS_PUSH } from '../../actions/collection/doorways/push';
+import { COLLECTION_DOORWAYS_FILTER } from '../../actions/collection/doorways/filter';
 
 const initialState = {
   filters: {

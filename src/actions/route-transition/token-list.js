@@ -1,5 +1,5 @@
 import { accounts } from '@density-int/client';
-import collectionTokensSet from '../collection/tokens-set';
+import collectionTokensSet from '../collection/tokens/set';
 
 export const ROUTE_TRANSITION_TOKEN_LIST = 'ROUTE_TRANSITION_TOKEN_LIST';
 

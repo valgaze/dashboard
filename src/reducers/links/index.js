@@ -1,7 +1,7 @@
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
-import { COLLECTION_LINKS_SET } from '../../actions/collection/links-set';
-import { COLLECTION_LINKS_PUSH } from '../../actions/collection/links-push';
-import { COLLECTION_LINKS_DELETE } from '../../actions/collection/links-delete';
+import { COLLECTION_LINKS_SET } from '../../actions/collection/links/set';
+import { COLLECTION_LINKS_PUSH } from '../../actions/collection/links/push';
+import { COLLECTION_LINKS_DELETE } from '../../actions/collection/links/delete';
 
 const initialState = {
   filters: {

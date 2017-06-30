@@ -1,4 +1,4 @@
-import collectionSpacesPush from './spaces-push';
+import collectionSpacesPush from './push';
 
 export const COLLECTION_SPACES_CREATE = 'COLLECTION_SPACES_CREATE';
 

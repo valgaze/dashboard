@@ -1,4 +1,4 @@
-import collectionLinksPush from './links-push';
+import collectionLinksPush from './push';
 
 export default function collectionLinksUpdateSensorPlacement(link) {
   return dispatch => {

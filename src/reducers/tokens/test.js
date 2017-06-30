@@ -1,7 +1,7 @@
 import assert from 'assert';
 import tokens from './index';
 
-import collectionTokensSet from '../../actions/collection/tokens-set';
+import collectionTokensSet from '../../actions/collection/tokens/set';
 
 // Don't worry - these tokens are bogus.
 const TOKEN_ONE = 'tok_3wxsa6e8dh5zdnf73ubpnaq37wz2nawcjw8hh5sfawb';

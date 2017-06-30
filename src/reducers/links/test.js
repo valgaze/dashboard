@@ -1,9 +1,8 @@
-
 import assert from 'assert';
 import links from './index';
 
-import collectionLinksSet from '../../actions/collection/links-set';
-import collectionLinksPush from '../../actions/collection/links-push';
+import collectionLinksSet from '../../actions/collection/links/set';
+import collectionLinksPush from '../../actions/collection/links/push';
 
 const SPACE_ID_ONE = 'spc_3wxsa6e8dh5zdnf73ubpna';
 const SPACE_ID_TWO = 'spc_aus86m8834xef4cqjeye2h';

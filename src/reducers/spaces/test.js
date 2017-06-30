@@ -1,8 +1,8 @@
 import assert from 'assert';
 import spaces from './index';
 
-import collectionSpacesSet from '../../actions/collection/spaces-set';
-import collectionSpacesPush from '../../actions/collection/spaces-push';
+import collectionSpacesSet from '../../actions/collection/spaces/set';
+import collectionSpacesPush from '../../actions/collection/spaces/push';
 
 describe('spaces', function() {
   it('should set spaces when given a bunch of spaces', function() {

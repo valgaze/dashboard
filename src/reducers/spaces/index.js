@@ -1,7 +1,7 @@
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
-import { COLLECTION_SPACES_SET } from '../../actions/collection/spaces-set';
-import { COLLECTION_SPACES_PUSH } from '../../actions/collection/spaces-push';
-import { COLLECTION_SPACES_FILTER } from '../../actions/collection/spaces-filter';
+import { COLLECTION_SPACES_SET } from '../../actions/collection/spaces/set';
+import { COLLECTION_SPACES_PUSH } from '../../actions/collection/spaces/push';
+import { COLLECTION_SPACES_FILTER } from '../../actions/collection/spaces/filter';
 
 const initialState = {
   filters: {

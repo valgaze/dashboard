@@ -1,8 +1,8 @@
 import { core } from '@density-int/client';
 
-import collectionSpacesSet from '../collection/spaces-set';
-import collectionDoorwaysSet from '../collection/doorways-set';
-import collectionLinksSet from '../collection/links-set';
+import collectionSpacesSet from '../collection/spaces/set';
+import collectionDoorwaysSet from '../collection/doorways/set';
+import collectionLinksSet from '../collection/links/set';
 
 export const ROUTE_TRANSITION_ENVIRONMENT = 'ROUTE_TRANSITION_ENVIRONMENT';
 

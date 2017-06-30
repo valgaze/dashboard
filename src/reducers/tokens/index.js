@@ -1,4 +1,4 @@
-import { COLLECTION_TOKENS_SET } from '../../actions/collection/tokens-set';
+import { COLLECTION_TOKENS_SET } from '../../actions/collection/tokens/set';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 const initialState = {

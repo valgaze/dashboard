@@ -10,13 +10,13 @@ import EnvironmentModalSensorPlacementAssignment from '../environment-modal-sens
 
 import filterCollection from '../../helpers/filter-collection/index';
 
-import collectionLinksPush from '../../actions/collection/links-push';
-import collectionLinksDelete from '../../actions/collection/links-delete';
-import collectionLinksUpdateSensorPlacement from '../../actions/collection/links-update-sensor-placement';
-import collectionDoorwaysFilter from '../../actions/collection/doorways-filter';
-import collectionSpacesFilter from '../../actions/collection/spaces-filter';
-import collectionSpacesCreate from '../../actions/collection/spaces-create';
-import collectionDoorwaysCreate from '../../actions/collection/doorways-create';
+import collectionLinksPush from '../../actions/collection/links/push';
+import collectionLinksDelete from '../../actions/collection/links/delete';
+import collectionLinksUpdateSensorPlacement from '../../actions/collection/links/update-sensor-placement';
+import collectionDoorwaysFilter from '../../actions/collection/doorways/filter';
+import collectionSpacesFilter from '../../actions/collection/spaces/filter';
+import collectionSpacesCreate from '../../actions/collection/spaces/create';
+import collectionDoorwaysCreate from '../../actions/collection/doorways/create';
 
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
