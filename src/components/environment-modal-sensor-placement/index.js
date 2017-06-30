@@ -3,7 +3,7 @@ import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 
 export default function EnvironmentModalSensorPlacement({onSubmit, onDismiss}) {
-  return <Modal>
+  return <Modal onClickBackdrop={onDismiss}>
     <Card>
       <CardHeader>Sensor Placement</CardHeader>
       <CardBody>

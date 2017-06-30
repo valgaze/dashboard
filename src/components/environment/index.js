@@ -11,6 +11,7 @@ import filterCollection from '../../helpers/filter-collection/index';
 
 import collectionLinksPush from '../../actions/collection/links-push';
 import collectionLinksDelete from '../../actions/collection/links-delete';
+import collectionLinksUpdateSensorPlacement from '../../actions/collection/links-update-sensor-placement';
 import collectionDoorwaysFilter from '../../actions/collection/doorways-filter';
 import collectionSpacesFilter from '../../actions/collection/spaces-filter';
 import collectionSpacesCreate from '../../actions/collection/spaces-create';
@@ -54,31 +55,30 @@ export function Environment({
   onCreateDoorway,
 }) {
   return <div className="environment">
-
     {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
     <Fab onClick={() => {
-      if (activeModal !== 'space-doorway-popup') {
-        return onOpenModal('space-doorway-popup');
-      } else {
+      if (activeModal.name) {
         return onCloseModal();
+      } else {
+        return onOpenModal('space-doorway-popup');
       }
     }}>+</Fab>
 
     {/* Modals that are shown on this page for creating doorways & spaces as well as managing doorways*/}
-    {activeModal === 'create-space' ? <EnvironmentModalCreateSpace
+    {activeModal.name === 'create-space' ? <EnvironmentModalCreateSpace
       onSubmit={onCreateSpace}
       onDismiss={onCloseModal}
     /> : null}
-    {activeModal === 'create-doorway' ? <EnvironmentModalCreateDoorway
+    {activeModal.name === 'create-doorway' ? <EnvironmentModalCreateDoorway
       onSubmit={onCreateDoorway}
       onDismiss={onCloseModal}
     /> : null}
-    {activeModal === 'space-doorway-popup' ? <ContextMenu className="environment-creation-context-menu">
+    {activeModal.name === 'space-doorway-popup' ? <ContextMenu className="environment-creation-context-menu">
       <ContextMenuItem onClick={() => onOpenModal('create-space')}>Create Space</ContextMenuItem>
       <ContextMenuItem onClick={() => onOpenModal('create-doorway')}>Create Doorway</ContextMenuItem>
     </ContextMenu> : null}
-    {activeModal === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
-      onSubmit={onChangeSensorPlacement}
+    {activeModal.name === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
+      onSubmit={() => onChangeSensorPlacement(activeModal.data.link)}
       onDismiss={onCloseModal}
     /> : null}
 
@@ -100,7 +100,7 @@ export function Environment({
                 links={links.data}
                 onDoorwayDropped={doorway => onLinkDoorwayToSpace(doorway, space, 1)}
                 onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
-                onSensorPlacementChange={() => onOpenModal('confirm-sensor-placement-change')}
+                onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link})}
               />;
             })}
           </ul>
@@ -152,8 +152,8 @@ export default connect(state => {
       dispatch(collectionSpacesFilter('search', searchQuery));
     },
 
-    onOpenModal(name) {
-      dispatch(showModal(name));
+    onOpenModal(name, data) {
+      dispatch(showModal(name, data));
     },
     onCloseModal() {
       dispatch(hideModal());
@@ -169,7 +169,8 @@ export default connect(state => {
     },
     onChangeSensorPlacement(link) {
       const sensorPlacement = link.sensorPlacement === 1 ? -1 : 1;
-      dispatch(collectionLinksPush({id: link.id, sensorPlacement}));
+      dispatch(collectionLinksUpdateSensorPlacement({id: link.id, sensorPlacement}));
+      dispatch(hideModal());
     },
   };
 })(Environment);

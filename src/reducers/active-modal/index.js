@@ -1,13 +1,13 @@
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
 
-const initialState = null;
+const initialState = {name: null, data: {}};
 export default function activeModal(state=initialState, action) {
   switch (action.type) {
   case SHOW_MODAL:
-    return action.name;
+    return {name: action.name, data: action.data};
   case HIDE_MODAL:
-    return null;
+    return {name: null, data: {}};
   default:
     return state;
   }
