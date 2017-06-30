@@ -7,6 +7,7 @@ import EnvironmentModalCreateSpace from '../environment-modal-create-space/index
 import EnvironmentModalCreateDoorway from '../environment-modal-create-doorway/index';
 import EnvironmentModalSensorPlacement from '../environment-modal-sensor-placement/index';
 import EnvironmentModalSensorPlacementAssignment from '../environment-modal-sensor-placement-assignment/index';
+import EnvironmentModalUpdateDoorway from '../environment-modal-update-doorway/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 
@@ -54,6 +55,8 @@ export function Environment({
   onSpaceSearch,
   onCreateSpace,
   onCreateDoorway,
+  onChangeDoorway,
+  onDeleteDoorway,
 }) {
   return <div className="environment">
     {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
@@ -98,6 +101,13 @@ export function Environment({
       onDismiss={onCloseModal}
     /> : null}
 
+    {/* Updating spaces and doorways */}
+    {activeModal.name === 'update-doorway' ? <EnvironmentModalUpdateDoorway
+      onSubmit={onChangeDoorway}
+      onDismiss={onCloseModal}
+      onDelete={onDeleteDoorway}
+    /> : null}
+
     <div className="environment-row">
       <div className="space-column">
         <input
@@ -135,7 +145,11 @@ export function Environment({
           {spaces.loading ? <p>Loading...</p> : null}
           {!spaces.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
           {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
-            return <EnvironmentDoorwayItem key={doorway.id} doorway={doorway} />;
+            return <EnvironmentDoorwayItem
+              key={doorway.id}
+              doorway={doorway}
+              onClickDetails={doorway => onOpenModal('update-doorway', {doorway})}
+            />;
           })}
         </div>
       </div>
@@ -184,6 +198,12 @@ export default connect(state => {
       const sensorPlacement = link.sensorPlacement === 1 ? -1 : 1;
       dispatch(collectionLinksUpdateSensorPlacement({id: link.id, sensorPlacement}));
       dispatch(hideModal());
+    },
+    onChangeDoorway(doorway) {
+      console.log('change doorway', doorway);
+    },
+    onDeleteDoorway(doorway) {
+      console.log('delete doorway', doorway);
     },
   };
 })(Environment);

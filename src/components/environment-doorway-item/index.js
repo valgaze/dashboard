@@ -12,12 +12,12 @@ const dragSource = DragSource('doorway', doorwaySource, (connect, monitor) => ({
   isDragging: monitor.isDragging(),
 }))
 
-export function EnvironmentDoorwayItem({doorway, connectDragSource}) {
+export function EnvironmentDoorwayItem({doorway, onClickDetails, connectDragSource}) {
   return connectDragSource(<div className="environment-doorway-item">
     {doorway.name}
     <div
       className="environment-doorway-item-details"
-      onClick={() => alert(`details: ${doorway.id}`)}
+      onClick={onClickDetails}
     >...</div>
   </div>);
 }
