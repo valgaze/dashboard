@@ -6,6 +6,7 @@ import EnvironmentDoorwayItem from '../environment-doorway-item/index';
 import EnvironmentModalCreateSpace from '../environment-modal-create-space/index';
 import EnvironmentModalCreateDoorway from '../environment-modal-create-doorway/index';
 import EnvironmentModalSensorPlacement from '../environment-modal-sensor-placement/index';
+import EnvironmentModalSensorPlacementAssignment from '../environment-modal-sensor-placement-assignment/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 
@@ -64,7 +65,11 @@ export function Environment({
       }
     }}>+</Fab>
 
-    {/* Modals that are shown on this page for creating doorways & spaces as well as managing doorways*/}
+    {/************
+    ** MODALS
+    **************/}
+
+    {/* Create spaces and doorways */}
     {activeModal.name === 'create-space' ? <EnvironmentModalCreateSpace
       onSubmit={onCreateSpace}
       onDismiss={onCloseModal}
@@ -77,8 +82,19 @@ export function Environment({
       <ContextMenuItem onClick={() => onOpenModal('create-space')}>Create Space</ContextMenuItem>
       <ContextMenuItem onClick={() => onOpenModal('create-doorway')}>Create Doorway</ContextMenuItem>
     </ContextMenu> : null}
+
+    {/* When a sensor placement is clicked, open a modal to warn the user prior to changing things. */}
     {activeModal.name === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
       onSubmit={() => onChangeSensorPlacement(activeModal.data.link)}
+      onDismiss={onCloseModal}
+    /> : null}
+
+  {/* When a user drags a doorway into a space, prompt the user for the doorway direction with a modal. */}
+    {activeModal.name === 'assign-sensor-placement' ? <EnvironmentModalSensorPlacementAssignment
+      onSubmit={sensorPlacement => {
+        onLinkDoorwayToSpace(activeModal.data.doorway, activeModal.data.space, sensorPlacement);
+        onCloseModal();
+      }}
       onDismiss={onCloseModal}
     /> : null}
 
@@ -99,7 +115,7 @@ export function Environment({
                 space={space}
                 doorways={allDoorwaysInSpace(doorways.data, links.data, space).doorways}
                 links={links.data}
-                onDoorwayDropped={doorway => onLinkDoorwayToSpace(doorway, space, 1)}
+                onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
                 onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
                 onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link})}
               />;
