@@ -115,6 +115,7 @@ export function Environment({
           onChange={e => onDoorwaySearch(e.target.value)}
         />
         <div className="column-body">
+          {spaces.loading ? <p>Loading...</p> : null}
           {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
             return <EnvironmentDoorwayItem key={doorway.id} doorway={doorway} />;
           })}

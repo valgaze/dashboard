@@ -50,5 +50,8 @@
   background-color: #fff;
 }
 
-// remove left padding on `ul`'s inside of columns
-.space-column ul, .doorway-column ul { padding-left: 0px; }
+// remove left padding and top margin on `ul`'s inside of columns
+.space-column ul, .doorway-column ul {
+  padding-left: 0px;
+  margin-top: 0px;
+}
