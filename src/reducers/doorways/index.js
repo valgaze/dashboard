@@ -2,6 +2,7 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import { COLLECTION_DOORWAYS_SET } from '../../actions/collection/doorways/set';
 import { COLLECTION_DOORWAYS_PUSH } from '../../actions/collection/doorways/push';
 import { COLLECTION_DOORWAYS_FILTER } from '../../actions/collection/doorways/filter';
+import { COLLECTION_DOORWAYS_DELETE } from '../../actions/collection/doorways/delete';
 
 const initialState = {
   filters: {
@@ -54,6 +55,13 @@ export default function doorways(state=initialState, action) {
         ...state.filters,
         [action.filter]: action.value,
       },
+    };
+
+  // Delete a doorway from the collection.
+  case COLLECTION_DOORWAYS_DELETE:
+    return {
+      ...state,
+      data: state.data.filter(item => action.item.id !== item.id),
     };
 
   default:

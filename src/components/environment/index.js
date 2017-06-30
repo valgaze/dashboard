@@ -18,6 +18,8 @@ import collectionDoorwaysFilter from '../../actions/collection/doorways/filter';
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 import collectionSpacesCreate from '../../actions/collection/spaces/create';
 import collectionDoorwaysCreate from '../../actions/collection/doorways/create';
+import collectionDoorwaysUpdate from '../../actions/collection/doorways/update';
+import collectionDoorwaysDestroy from '../../actions/collection/doorways/destroy';
 
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
@@ -103,9 +105,10 @@ export function Environment({
 
     {/* Updating spaces and doorways */}
     {activeModal.name === 'update-doorway' ? <EnvironmentModalUpdateDoorway
-      onSubmit={onChangeDoorway}
+      initialDoorway={activeModal.data.doorway}
+      onSubmit={fields => onChangeDoorway(activeModal.data.doorway, fields)}
+      onDelete={() => onDeleteDoorway(activeModal.data.doorway)}
       onDismiss={onCloseModal}
-      onDelete={onDeleteDoorway}
     /> : null}
 
     <div className="environment-row">
@@ -148,7 +151,7 @@ export function Environment({
             return <EnvironmentDoorwayItem
               key={doorway.id}
               doorway={doorway}
-              onClickDetails={doorway => onOpenModal('update-doorway', {doorway})}
+              onClickDetails={() => onOpenModal('update-doorway', {doorway})}
             />;
           })}
         </div>
@@ -199,11 +202,13 @@ export default connect(state => {
       dispatch(collectionLinksUpdateSensorPlacement({id: link.id, sensorPlacement}));
       dispatch(hideModal());
     },
-    onChangeDoorway(doorway) {
-      console.log('change doorway', doorway);
+    onChangeDoorway(doorway, {name, description}) {
+      dispatch(collectionDoorwaysUpdate(Object.assign({}, doorway, {name, description})));
+      dispatch(hideModal());
     },
     onDeleteDoorway(doorway) {
-      console.log('delete doorway', doorway);
+      dispatch(collectionDoorwaysDestroy(doorway));
+      dispatch(hideModal());
     },
   };
 })(Environment);

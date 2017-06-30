@@ -6,8 +6,8 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      desc: '',
+      name: this.props.initialDoorway.name || '',
+      description: this.props.initialDoorway.description || '',
       isEditing: false,
     };
   }
@@ -34,9 +34,9 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
                 <label htmlFor="create-doorway-desc">Description</label>
                 <input
                   type="text"
-                  id="create-doorway-desc"
-                  value={this.state.desc}
-                  onChange={e => this.setState({desc: e.target.value})}
+                  id="create-doorway-description"
+                  value={this.state.description}
+                  onChange={e => this.setState({description: e.target.value})}
                 />
               </li>
             </ul>
@@ -44,7 +44,7 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
             <button
               disabled={this.state.name.length === 0}
               onClick={() => this.props.onSubmit(this.state)}
-            >Create</button>
+            >Save</button>
           </CardBody>
         </Card>
       </Modal>

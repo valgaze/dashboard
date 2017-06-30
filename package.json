@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@density-int/client": "1.4.3",
+    "@density-int/client": "1.4.6",
     "@density/conduit": "^0.2.1",
     "@density/node-sass-json-importer": "^4.1.0",
     "@density/ui": "4.2.0",
