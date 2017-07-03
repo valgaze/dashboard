@@ -4,6 +4,9 @@ import registerServiceWorker from './registerServiceWorker';
 import './built-css/styles.css';
 import { core, accounts } from '@density-int/client';
 
+import userSet from './actions/user/set';
+import userError from './actions/user/error';
+
 // The main app component that renders everything.
 import App from './components/app';
 
@@ -28,6 +31,7 @@ import links from './reducers/links/index';
 import sessionToken from './reducers/session-token/index';
 import spaces from './reducers/spaces/index';
 import tokens from './reducers/tokens/index';
+import user from './reducers/user/index';
 const reducer = combineReducers({
   activeModal,
   activePage,
@@ -36,6 +40,7 @@ const reducer = combineReducers({
   sessionToken,
   spaces,
   tokens,
+  user,
 });
 
 core.config({core: 'https://api.density.io/v2'});
@@ -60,6 +65,13 @@ router.addRoute('environment', () => routeTransitionEnvironment());
 // If the user isn't logged in, send them to the login page.
 if (store.getState().sessionToken === null) {
   router.navigate('login');
+} else {
+  // Fetch the logged in user's info since there's a session token available.
+  accounts.users.me().then(data => data).catch(err => {
+    store.dispatch(userError(err));
+  }).then(data => {
+    store.dispatch(userSet(data));
+  });
 }
 
 // Handle the route that the user is currently at.

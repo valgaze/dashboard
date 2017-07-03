@@ -42,7 +42,7 @@ export function EnvironmentSpaceItem({
               <span
                 className={classnames('environment-space-item-doorways-placement', {out: link.sensorPlacement === -1})}
                 onClick={() => onSensorPlacementChange(link)}
-              >{link.sensorPlacement === 1 ? 'INSIDE' : 'OUTSIDE'}</span>
+              >{link.sensorPlacement === 1 ? 'Sensor Inside' : 'Sensor Outside'}</span>
               <span
                 className="environment-space-item-doorways-delete"
                 onClick={() => onDoorwayLinkDeleted(link)}
