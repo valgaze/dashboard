@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Modal from '@density/ui-modal';
+import Modal, { ModalClose } from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 import ModalHeaderActionButton from '../modal-header-action-button/index';
@@ -20,11 +20,16 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
         <Card>
           <CardHeader>
             Space Details
+
+            {/* Edit / Delete button */}
             {this.state.isEditing ? <ModalHeaderActionButton
               onClick={this.props.onDelete}
             >Delete</ModalHeaderActionButton> : <ModalHeaderActionButton
               onClick={() => this.setState({isEditing: true})}
             >Edit</ModalHeaderActionButton>}
+
+            {/* Close button */}
+            <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
           <CardBody>
             <ul>
