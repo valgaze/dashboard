@@ -1,3 +1,3 @@
-.environment-modal-update-doorway {
-  color: red;
+.environment-modal-update-doorway input[type=text]:disabled {
+  background-color: $gray-light;
 }
