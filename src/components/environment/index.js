@@ -120,7 +120,7 @@ export function Environment({
       onSubmit={fields => onChangeSpace(activeModal.data.space, fields)}
       onDelete={() => onDeleteSpace(activeModal.data.space)}
       onDismiss={onCloseModal}
-      doorways={allDoorwaysInSpace(doorways.data, links.data, activeModal.data.space).doorways}
+      doorways={activeModal.data.doorways}
     /> : null}
 
     <div className="environment-row">
@@ -144,7 +144,10 @@ export function Environment({
                 onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
                 onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
                 onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link})}
-                onClickDetails={() => onOpenModal(`update-space`, {space})}
+                onClickDetails={() => onOpenModal(`update-space`, {
+                  space,
+                  doorways: allDoorwaysInSpace(doorways.data, links.data, space).doorways,
+                })}
               />;
             })}
           </ul>

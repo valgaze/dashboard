@@ -10,6 +10,7 @@
     "@density/ui-card": "0.0.3",
     "@density/ui-context-menu": "0.0.2",
     "@density/ui-fab": "0.0.2",
+    "@density/ui-input-box": "^0.0.1",
     "@density/ui-modal": "0.0.4",
     "@density/ui-navbar": "0.0.8",
     "classnames": "^2.2.5",
