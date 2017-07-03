@@ -132,6 +132,9 @@ export function Environment({
           onChange={e => onSpaceSearch(e.target.value)}
         />
         <div className="column-body">
+          <p>
+            Edit space details and remove doorways below.
+          </p>
           {spaces.loading ? <p>Loading...</p> : null}
           {!spaces.loading && spaces.data.length === 0 ? <p>No Spaces</p> : null}
           <ul>
@@ -161,6 +164,10 @@ export function Environment({
           onChange={e => onDoorwaySearch(e.target.value)}
         />
         <div className="column-body">
+          <p>
+            To link a doorway to a space, simply drag the doorway
+            from below to a space on the left.
+          </p>
           {spaces.loading ? <p>Loading...</p> : null}
           {!spaces.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
           {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {

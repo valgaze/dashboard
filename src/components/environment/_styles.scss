@@ -27,16 +27,22 @@
 }
 
 .space-column {
-  @include grid-width(6, 6, 6, 6);
+  @include grid-width(12, 6, 6, 6);
   height: calc(100vh - 76px);
   overflow: scroll;
   margin-top: 64px;
 }
 .doorway-column {
-  @include grid-width(6, 6, 6, 6);
+  @include grid-width(0, 6, 6, 6);
   height: calc(100vh - 76px);
-  overflow: scroll;
   margin-top: 64px;
+  overflow: scroll;
+  display: none;
+
+  // Hide doorways column on mobile
+  @media (min-width: $screen-xs-max) {
+    display: flex;
+  }
 }
 
 .column-body {
