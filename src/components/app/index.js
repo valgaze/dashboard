@@ -9,6 +9,7 @@ import TokenList from '../token-list/index';
 import SpaceList from '../space-list/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
+import Account from '../account/index';
 import UnknownPage from '../unknown-page/index';
 
 import { DragDropContext } from 'react-dnd';
@@ -18,6 +19,7 @@ function AppComponent({activePage, onLogout}) {
   return <div className="app">
     {activePage !== 'LOGIN' ? <Navbar subtitle="Dashboard">
       <a href="#/environment">Environment</a>
+      <a href="#/account">Account</a>
       <a href="#/tokens">Tokens</a>
       <a href="#/spaces">Spaces</a>
       <button onClick={onLogout}>Logout</button>
@@ -41,6 +43,8 @@ function ActivePage({activePage}) {
     return <div />;
   case "ENVIRONMENT":
     return <Environment />;
+  case "ACCOUNT":
+    return <Account />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

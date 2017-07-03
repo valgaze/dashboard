@@ -3,6 +3,7 @@ import { ROUTE_TRANSITION_TOKEN_LIST } from '../../actions/route-transition/toke
 import { ROUTE_TRANSITION_SPACE_DETAIL } from '../../actions/route-transition/space-detail';
 import { ROUTE_TRANSITION_SPACE_LIST } from '../../actions/route-transition/space-list';
 import { ROUTE_TRANSITION_ENVIRONMENT } from '../../actions/route-transition/environment';
+import { ROUTE_TRANSITION_ACCOUNT } from '../../actions/route-transition/account';
 
 const initialState = null;
 
@@ -12,6 +13,8 @@ export default function activePage(state=initialState, action) {
     return "LOGIN";
   case ROUTE_TRANSITION_ENVIRONMENT:
     return "ENVIRONMENT";
+  case ROUTE_TRANSITION_ACCOUNT:
+    return "ACCOUNT"
   case ROUTE_TRANSITION_TOKEN_LIST:
     return "TOKEN_LIST";
   case ROUTE_TRANSITION_SPACE_LIST:

@@ -22,6 +22,7 @@ import routeTransitionLogin from './actions/route-transition/login';
 import routeTransitionSpaceDetail from './actions/route-transition/space-detail';
 import routeTransitionSpaceList from './actions/route-transition/space-list';
 import routeTransitionTokenList from './actions/route-transition/token-list';
+import routeTransitionAccount from './actions/route-transition/account';
 
 // Assemble all parts of the reducer
 import activeModal from './reducers/active-modal/index';
@@ -61,6 +62,7 @@ router.addRoute('spaces', () => routeTransitionSpaceList());
 router.addRoute('spaces/:id', ({id}) => routeTransitionSpaceDetail(id));
 
 router.addRoute('environment', () => routeTransitionEnvironment());
+router.addRoute('account', () => routeTransitionAccount());
 
 // If the user isn't logged in, send them to the login page.
 if (store.getState().sessionToken === null) {
