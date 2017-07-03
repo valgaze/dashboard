@@ -1,3 +1,22 @@
-.environment-modal-update-space {
-  color: red;
+.environment-modal-update-space input[type=text]:disabled {
+  background-color: $gray-light;
+}
+
+
+// ----------------------------------------------------------------------------
+// Doorway pill list
+// ----------------------------------------------------------------------------
+
+.environment-modal-update-space-doorway-container div {
+  margin-top: 5px;
+}
+
+.environment-modal-update-space-doorway-pill {
+  background-color: $gray-light;
+  border-radius: $border-radius-small;
+  padding: $padding-vertical-base $padding-horizontal-base;
+  margin: 0px $padding-horizontal-x-small;
+}
+.environment-modal-update-space-doorway-pill:first-child {
+  margin-left: 0px;
 }

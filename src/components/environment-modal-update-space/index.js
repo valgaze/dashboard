@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
+import InputBox from '@density/ui-input-box';
+import ModalHeaderActionButton from '../modal-header-action-button/index';
 
 export default class EnvironmentModalUpdateSpace extends React.Component {
   constructor(props) {
@@ -13,54 +15,64 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
     };
   }
   render() {
-    return <div className="environment-modal-create-space">
+    return <div className="environment-modal-update-space">
       <Modal onClickBackdrop={this.props.onDismiss}>
         <Card>
-          <CardHeader>Space Details</CardHeader>
+          <CardHeader>
+            Space Details
+            {this.state.isEditing ? <ModalHeaderActionButton
+              onClick={this.props.onDelete}
+            >Delete</ModalHeaderActionButton> : <ModalHeaderActionButton
+              onClick={() => this.setState({isEditing: true})}
+            >Edit</ModalHeaderActionButton>}
+          </CardHeader>
           <CardBody>
-            <p onClick={() => this.setState({isEditing: true})}>Edit</p>
-            <p onClick={this.props.onDelete}>Delete</p>
-
             <ul>
               <li>
                 <label htmlFor="update-space-name">Space Name</label>
-                <input
+                <InputBox
                   type="text"
                   id="update-space-name"
                   value={this.state.name}
                   onChange={e => this.setState({name: e.target.value})}
+                  disabled={!this.state.isEditing}
                 />
               </li>
               <li>
                 <label htmlFor="update-space-timezone">Time Zone</label>
-                <input
+                <InputBox
                   type="text"
                   id="update-doorway-timezone"
                   value={this.state.timezone}
                   onChange={e => this.setState({timezone: e.target.value})}
+                  disabled={!this.state.isEditing}
                 />
               </li>
               <li>
                 <label htmlFor="update-space-daily-reset">Daily Reset</label>
-                <input
+                <InputBox
                   type="text"
                   id="update-space-daily-reset"
                   value={this.state.dailyReset}
                   onChange={e => this.setState({dailyReset: e.target.value})}
+                  disabled={!this.state.isEditing}
                 />
               </li>
-              <li>
+              <li className="environment-modal-update-space-doorway-container">
                 <label htmlFor="display-space-doorways">Doorways</label>
                 <div id="display-space-doorways">
-                  {this.props.doorways.forEach(doorway => <code key={doorway.id}>{doorway.name}</code>)}
+                  {this.props.doorways.map(doorway => <span
+                    className="environment-modal-update-space-doorway-pill"
+                    key={doorway.id}
+                  >{doorway.name}</span>)}
                 </div>
               </li>
             </ul>
 
-            <button
+            {this.state.isEditing ? <button
               disabled={this.state.name.length === 0}
               onClick={() => this.props.onSubmit(this.state)}
-            >Save</button>
+            >Save</button> : null}
           </CardBody>
         </Card>
       </Modal>

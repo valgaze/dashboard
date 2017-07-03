@@ -41,6 +41,10 @@
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@density/ui-fab/-/ui-fab-0.0.2.tgz#6243be1672237d6d07141aca3199a3ff04a51c9c"
 
+"@density/ui-input-box@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@density/ui-input-box/-/ui-input-box-0.0.1.tgz#1779ecd44ac79af4ed5cfb69cd5cc730e151eee3"
+
 "@density/ui-modal@0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@density/ui-modal/-/ui-modal-0.0.4.tgz#e61672305b5fb18b0585d5520c352bc810b30edc"

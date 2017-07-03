@@ -1,0 +1,14 @@
+.modal-header-action-button {
+  color: $gray;
+  text-decoration: underline;
+  display: inline-block;
+  font-size: 18px;
+  cursor: pointer;
+}
+.modal-header-action-button:first-child {
+  margin-left: 8px;
+}
+
+.modal-header-action-button:active {
+  color: $gray-darker;
+}
