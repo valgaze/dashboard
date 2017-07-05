@@ -1,0 +1,8 @@
+.account {
+  @include grid-container;
+}
+
+.account-name input {
+  display: inline-block;
+  margin-right: $padding-horizontal-small;
+}

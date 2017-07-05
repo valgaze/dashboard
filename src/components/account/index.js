@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import InputBox from '@density/ui-input-box';
 
 import userResetPassword from '../../actions/user/reset-password';
+import userUpdate from '../../actions/user/update';
 
 export class Account extends React.Component {
   constructor(props) {
@@ -10,54 +11,95 @@ export class Account extends React.Component {
     this.state = {
       password: '',
       currentPassword: '',
+
+      // Initialize with a prop passing the initial value from the store
+      firstName: this.props.initialUser.firstName,
+      lastName: this.props.initialUser.lastName,
+      email: this.props.initialUser.email,
     };
   }
   render() {
     const {
-      user,
+      initialUser,
       onSubmitPassword,
+      onSubmitUserUpdate,
     } = this.props;
 
-    if (user) {
-      return <div className="account">
-        <h1>Account</h1>
-        <p>Name: {user.firstName} {user.lastName}</p>
-        <p>Email: {user.email}</p>
+    return <div className="account">
+      <h1>Account</h1>
 
-        <h2>Reset Password</h2>
+      <label>Name</label>
+      <div className="account-name">
         <InputBox
-          type="password"
-          placeholder="Type old password"
-          value={this.state.currentPassword}
-          onChange={e => this.setState({currentPassword: e.target.value})}
+          type="text"
+          placeholder="First Name"
+          value={this.state.firstName}
+          onChange={e => this.setState({firstName: e.target.value})}
         />
         <InputBox
-          type="password"
-          placeholder="Type new password"
-          value={this.state.password}
-          onChange={e => this.setState({password: e.target.value})}
+          type="text"
+          placeholder="Last Name"
+          value={this.state.lastName}
+          onChange={e => this.setState({lastName: e.target.value})}
         />
-        <button
-          onClick={() => onSubmitPassword(this.state.currentPassword, this.state.password)}
-        >Submit</button>
+      </div>
 
-        <h1>Organization</h1>
-        <p>Name: {user.organization.name}</p>
-      </div>;
-    } else {
-      return <p>Loading...</p>;
-    }
+      <label>Email</label>
+      <InputBox
+        type="text"
+        placeholder="Email"
+        value={this.state.email}
+        onChange={e => this.setState({email: e.target.value})}
+      />
+
+      <button
+        onClick={() => onSubmitUserUpdate(
+          this.state.firstName,
+          this.state.lastName,
+          this.state.email,
+        )}
+      >Submit</button>
+
+      <h2>Reset Password</h2>
+      <InputBox
+        type="password"
+        placeholder="Type old password"
+        value={this.state.currentPassword}
+        onChange={e => this.setState({currentPassword: e.target.value})}
+      />
+      <InputBox
+        type="password"
+        placeholder="Type new password"
+        value={this.state.password}
+        onChange={e => this.setState({password: e.target.value})}
+      />
+      <button
+        onClick={() => onSubmitPassword(this.state.currentPassword, this.state.password)}
+      >Submit</button>
+
+      <h1>Organization</h1>
+      <p>Name: {initialUser.organization.name}</p>
+    </div>;
   }
 }
 
 export default connect(state => {
   return {
-    user: state.user,
+    initialUser: state.user,
   };
 }, dispatch => {
   return {
     onSubmitPassword(currentPassword, password) {
       dispatch(userResetPassword(currentPassword, password));
     },
+    onSubmitUserUpdate(firstName, lastName, email) {
+      dispatch(userUpdate(firstName, lastName, email));
+    },
   };
-})(Account);
+})(function AccountWrapper(props) {
+  if (props.initialUser) {
+    return <Account {...props} />;
+  } else {
+    return <p>Loading...</p>;
+  }
+});
