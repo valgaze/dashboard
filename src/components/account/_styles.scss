@@ -10,3 +10,13 @@
 .account input:disabled {
   background-color: $gray-light;
 }
+
+.account-organization {
+  float: right;
+}
+
+.account-change-password-value {
+  cursor: pointer;
+  text-decoration: underline;
+  float: right;
+}
