@@ -27,13 +27,13 @@
 }
 
 .space-column {
-  @include grid-width(12, 6, 6, 6);
+  @include grid-width(24, 12, 12, 12);
   height: calc(100vh - 76px);
   overflow: scroll;
   margin-top: 64px;
 }
 .doorway-column {
-  @include grid-width(0, 6, 6, 6);
+  @include grid-width(0, 12, 12, 12);
   height: calc(100vh - 76px);
   margin-top: 64px;
   overflow: scroll;
