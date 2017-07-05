@@ -85,7 +85,7 @@ export class Account extends React.Component {
 
 export default connect(state => {
   return {
-    initialUser: state.user,
+    initialUser: state.user.user,
   };
 }, dispatch => {
   return {
