@@ -49,103 +49,108 @@ export class Account extends React.Component {
         </CardHeader>
 
         <CardBody>
-          {this.state.error}
+          <ul>
+            <li className="account-error">
+              {this.state.error}
+            </li>
 
-          <div className="account-email-container">
-            <label htmlFor="account-first-name">First Name</label>
-            <InputBox
-              type="text"
-              placeholder="First Name"
-              value={this.state.firstName}
-              onChange={e => this.setState({firstName: e.target.value})}
-              disabled={this.state.mode !== EDIT}
-              id="account-first-name"
-            />
-          </div>
+            <li className="account-email-container">
+              <label htmlFor="account-first-name">First Name</label>
+              <InputBox
+                type="text"
+                placeholder="First Name"
+                value={this.state.firstName}
+                onChange={e => this.setState({firstName: e.target.value})}
+                disabled={this.state.mode !== EDIT}
+                id="account-first-name"
+              />
+            </li>
 
-          <div className="account-email-container">
-            <label htmlFor="account-last-name">Last Name</label>
-            <InputBox
-              type="text"
-              placeholder="Last Name"
-              value={this.state.lastName}
-              onChange={e => this.setState({lastName: e.target.value})}
-              disabled={this.state.mode !== EDIT}
-              id="account-last-name"
-            />
-          </div>
+            <li className="account-email-container">
+              <label htmlFor="account-last-name">Last Name</label>
+              <InputBox
+                type="text"
+                placeholder="Last Name"
+                value={this.state.lastName}
+                onChange={e => this.setState({lastName: e.target.value})}
+                disabled={this.state.mode !== EDIT}
+                id="account-last-name"
+              />
+            </li>
 
-          <div className="account-email-container">
-            <label htmlFor="account-email">Email</label>
-            <InputBox
-              type="text"
-              placeholder="Email"
-              value={this.state.email}
-              onChange={e => this.setState({email: e.target.value})}
-              disabled={this.state.mode !== EDIT}
-              id="account-email"
-            />
-          </div>
+            <li className="account-email-container">
+              <label htmlFor="account-email">Email</label>
+              <InputBox
+                type="text"
+                placeholder="Email"
+                value={this.state.email}
+                onChange={e => this.setState({email: e.target.value})}
+                disabled={this.state.mode !== EDIT}
+                id="account-email"
+              />
+            </li>
 
-          <div className="account-organization-container">
-            <label htmlFor="account-organization">Organization</label>
-            <div
-              id="account-organization"
-              className="account-organization"
-            >{initialUser.organization.name}</div>
-          </div>
+            <li className="account-organization-container">
+              <label htmlFor="account-organization">Organization</label>
+              <div
+                id="account-organization"
+                className="account-organization"
+              >{initialUser.organization.name}</div>
+            </li>
 
-          {/* Trigger changing the password */}
-          <div className="account-change-password-container">
-            {this.state.mode === NORMAL && <label htmlFor="account-change-password">Password</label>}
-            {this.state.mode === NORMAL && <div id="account-change-password" className="account-change-password-value">
-              <span onClick={() => this.setState({mode: PASSWORD_RESET})}>Reset Password</span>
-            </div>}
-          </div>
+            {/* Trigger changing the password */}
+            <li className="account-change-password-link-container">
+              {this.state.mode === NORMAL && <label htmlFor="account-change-password">Password</label>}
+              {this.state.mode === NORMAL && <div id="account-change-password" className="account-change-password-value">
+                <span onClick={() => this.setState({mode: PASSWORD_RESET})}>Reset Password</span>
+              </div>}
+            </li>
 
-          {/* The form to change the password that is triggered. */}
-          {this.state.mode === PASSWORD_RESET ? <div
-            className="account-change-password-form-container"
-          >
-            <label>Password</label>
-            <InputBox
-              type="password"
-              placeholder="Type old password"
-              value={this.state.currentPassword}
-              onChange={e => this.setState({currentPassword: e.target.value})}
-            />
-            <InputBox
-              type="password"
-              placeholder="Type new password"
-              value={this.state.password}
-              onChange={e => this.setState({password: e.target.value})}
-            />
-            <InputBox
-              type="password"
-              placeholder="Confirm new password"
-              value={this.state.passwordConfirmation}
-              onChange={e => this.setState({passwordConfirmation: e.target.value})}
-            />
-            <button
-              onClick={() => {
-                if (this.state.currentPassword === this.state.passwordConfirmation) {
-                  this.setState({error: null});
-                  return onSubmitPassword(this.state.currentPassword, this.state.password)
-                } else {
-                  this.setState({error: `Passwords don't match.`});
-                }
-              }}
-            >Submit Password</button>
-          </div> : null}
+            {/* The form to change the password that is triggered. */}
+            {this.state.mode === PASSWORD_RESET ? <li
+              className="account-change-password-form-container"
+            >
+              <label>Password</label>
+              <InputBox
+                type="password"
+                placeholder="Type old password"
+                value={this.state.currentPassword}
+                onChange={e => this.setState({currentPassword: e.target.value})}
+              />
+              <InputBox
+                type="password"
+                placeholder="Type new password"
+                value={this.state.password}
+                onChange={e => this.setState({password: e.target.value})}
+              />
+              <InputBox
+                type="password"
+                placeholder="Confirm new password"
+                value={this.state.passwordConfirmation}
+                onChange={e => this.setState({passwordConfirmation: e.target.value})}
+              />
+              <button
+                onClick={() => {
+                  if (this.state.currentPassword === this.state.passwordConfirmation) {
+                    this.setState({error: null});
+                    return onSubmitPassword(this.state.currentPassword, this.state.password)
+                  } else {
+                    this.setState({error: `Passwords don't match.`});
+                  }
+                }}
+              >Submit Password</button>
+            </li> : null}
 
-          {this.state.mode === EDIT ? <button
-            onClick={() => onSubmitUserUpdate(
-              this.state.firstName,
-              this.state.lastName,
-              this.state.email,
-            )}
-          >Submit User Details</button> : null}
-
+            <li className="account-submit-user-details">
+              {this.state.mode === EDIT ? <button
+                onClick={() => onSubmitUserUpdate(
+                  this.state.firstName,
+                  this.state.lastName,
+                  this.state.email,
+                )}
+              >Submit User Details</button> : null}
+            </li>
+          </ul>
         </CardBody>
       </Card>
     </div>;
