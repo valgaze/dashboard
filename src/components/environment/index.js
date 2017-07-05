@@ -29,6 +29,7 @@ import hideModal from '../../actions/modal/hide';
 
 import Fab from '@density/ui-fab';
 import ContextMenu, { ContextMenuItem } from '@density/ui-context-menu';
+import InputBox from '@density/ui-input-box';
 
 // Given a space, use links to determine all doorways in the space and return them.
 function allDoorwaysInSpace(doorways, links, space) {
@@ -125,7 +126,7 @@ export function Environment({
 
     <div className="environment-row">
       <div className="space-column">
-        <input
+        <InputBox
           type="text"
           placeholder="Search spaces"
           value={spaces.filters.search}
@@ -157,7 +158,7 @@ export function Environment({
         </div>
       </div>
       <div className="doorway-column">
-        <input
+        <InputBox
           type="text"
           placeholder="Search doorways"
           value={doorways.filters.search}

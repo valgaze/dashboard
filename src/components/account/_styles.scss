@@ -1,8 +1,12 @@
 .account {
   @include grid-container;
+  max-width: 600px;
 }
 
-.account-name input {
-  display: inline-block;
-  margin-right: $padding-horizontal-small;
+.account-edit-button {
+  float: right;
+}
+
+.account input:disabled {
+  background-color: $gray-light;
 }
