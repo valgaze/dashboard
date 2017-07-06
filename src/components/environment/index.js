@@ -115,6 +115,9 @@ export function Environment({
       onSubmit={fields => onChangeDoorway(activeModal.data.doorway, fields)}
       onDelete={() => onDeleteDoorway(activeModal.data.doorway)}
       onDismiss={onCloseModal}
+
+      /* The dom node to use when positioning the popover - the "target" dom node of the popover */
+      popoverPositionTarget={activeModal.data.popoverPositionTarget}
     /> : null}
     {activeModal.name === 'update-space' ? <EnvironmentModalUpdateSpace
       initialSpace={activeModal.data.space}
@@ -122,6 +125,9 @@ export function Environment({
       onDelete={() => onDeleteSpace(activeModal.data.space)}
       onDismiss={onCloseModal}
       doorways={activeModal.data.doorways}
+
+      /* The dom node to use when positioning the popover - the "target" dom node of the popover */
+      popoverPositionTarget={activeModal.data.popoverPositionTarget}
     /> : null}
 
     <div className="environment-row">
@@ -148,9 +154,10 @@ export function Environment({
                 onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
                 onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
                 onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link})}
-                onClickDetails={() => onOpenModal(`update-space`, {
+                onClickDetails={e => onOpenModal(`update-space`, {
                   space,
                   doorways: allDoorwaysInSpace(doorways.data, links.data, space).doorways,
+                  popoverPositionTarget: e.target,
                 })}
               />;
             })}
@@ -175,7 +182,10 @@ export function Environment({
             return <EnvironmentDoorwayItem
               key={doorway.id}
               doorway={doorway}
-              onClickDetails={() => onOpenModal('update-doorway', {doorway})}
+              onClickDetails={e => onOpenModal('update-doorway', {
+                doorway,
+                popoverPositionTarget: e.target,
+              })}
             />;
           })}
         </div>

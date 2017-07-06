@@ -1,3 +1,9 @@
 .environment-modal-update-doorway input[type=text]:disabled {
   background-color: $gray-light;
 }
+
+// Provide some padding to align the arrow properly with the three dots icon
+.environment-modal-update-doorway.view .popover {
+  margin-left: -4px;
+  margin-top: 4px;
+}

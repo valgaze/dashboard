@@ -2,6 +2,12 @@
   background-color: $gray-light;
 }
 
+// Provide some padding to align the arrow properly with the three dots icon
+.environment-modal-update-space.view .popover {
+  margin-left: -4px;
+  margin-top: 4px;
+}
+
 
 // ----------------------------------------------------------------------------
 // Doorway pill list

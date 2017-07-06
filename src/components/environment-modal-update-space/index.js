@@ -16,7 +16,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
     };
   }
   renderEdit() {
-    return <div className="environment-modal-update-space">
+    return <div className="environment-modal-update-space edit">
       <Modal onClickBackdrop={this.props.onDismiss}>
         <Card>
           <CardHeader>
@@ -137,8 +137,12 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
       </CardBody>
     </Card>;
 
-    return <div className="environment-modal-update-space">
-      <Popover show={true} popover={popover} />
+    return <div className="environment-modal-update-space view">
+      <Popover
+        show={true}
+        popover={popover}
+        target={this.props.popoverPositionTarget}
+      />
     </div>;
   }
 
