@@ -8,9 +8,9 @@ import ModalHeaderActionButton from '../modal-header-action-button/index';
 import userResetPassword from '../../actions/user/reset-password';
 import userUpdate from '../../actions/user/update';
 
-const NORMAL = 0,
-      EDIT = 1,
-      PASSWORD_RESET = 2;
+export const NORMAL = 0;
+export const EDIT = 1;
+export const PASSWORD_RESET = 2;
 
 export class Account extends React.Component {
   constructor(props) {
@@ -54,7 +54,7 @@ export class Account extends React.Component {
               {this.state.error}
             </li>
 
-            <li className="account-email-container">
+            <li className="account-first-name-container">
               <label htmlFor="account-first-name">First Name</label>
               <InputBox
                 type="text"
@@ -66,7 +66,7 @@ export class Account extends React.Component {
               />
             </li>
 
-            <li className="account-email-container">
+            <li className="account-last-name-container">
               <label htmlFor="account-last-name">Last Name</label>
               <InputBox
                 type="text"
