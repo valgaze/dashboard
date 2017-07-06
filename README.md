@@ -13,7 +13,7 @@ Status](https://david-dm.org/densityco/nicss.svg)](https://david-dm.org/densityc
 
 This project is react based, and uses redux for state management.
 
-*NOTE*: all the conventions below are still in flux (ha, get it, redux joke!), and it you have
+*NOTE*: most of the conventions we're using are still in flux (ha, get it, redux joke!), and it you have
 contrary opinions let me know.
 
 # Styles
