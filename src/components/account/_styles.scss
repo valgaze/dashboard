@@ -1,8 +1,27 @@
 .account {
   @include grid-container;
+  max-width: 600px;
 }
 
-.account-name input {
-  display: inline-block;
-  margin-right: $padding-horizontal-small;
+.account ul {
+  padding-left: 0px;
+  list-style-type: none;
+}
+
+.account-edit-button {
+  float: right;
+}
+
+.account input:disabled {
+  background-color: $gray-light;
+}
+
+.account-organization {
+  float: right;
+}
+
+.account-change-password-value {
+  cursor: pointer;
+  text-decoration: underline;
+  float: right;
 }

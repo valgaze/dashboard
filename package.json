@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@density-int/client": "1.4.8",
+    "@density-int/client": "^1.4.9",
     "@density/conduit": "^0.2.1",
     "@density/node-sass-json-importer": "^4.1.0",
     "@density/ui": "4.2.1",
@@ -27,8 +27,10 @@
   },
   "devDependencies": {
     "concurrently": "^3.4.0",
+    "enzyme": "^2.9.1",
     "node-sass": "^4.5.3",
-    "react-scripts": "1.0.7"
+    "react-scripts": "1.0.7",
+    "react-test-renderer": "^15.6.1"
   },
   "scripts": {
     "start": "concurrently \"npm run start:react\" \"npm run start:scss\" ",
