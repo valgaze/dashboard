@@ -24,9 +24,9 @@ export class Account extends React.Component {
       passwordConfirmation: '',
 
       // Initialize with a prop passing the initial value from the store
-      firstName: this.props.initialUser.firstName,
-      lastName: this.props.initialUser.lastName,
-      email: this.props.initialUser.email,
+      firstName: this.props.initialUser.firstName || '',
+      lastName: this.props.initialUser.lastName || '',
+      email: this.props.initialUser.email || '',
     };
   }
   render() {
@@ -81,7 +81,7 @@ export class Account extends React.Component {
             <li className="account-email-container">
               <label htmlFor="account-email">Email</label>
               <InputBox
-                type="text"
+                type="email"
                 placeholder="Email"
                 value={this.state.email}
                 onChange={e => this.setState({email: e.target.value})}
@@ -95,7 +95,7 @@ export class Account extends React.Component {
               <div
                 id="account-organization"
                 className="account-organization"
-              >{initialUser.organization.name}</div>
+              >{initialUser.organization ? initialUser.organization.name : '(unknown organization)'}</div>
             </li>
 
             {/* Trigger changing the password */}
