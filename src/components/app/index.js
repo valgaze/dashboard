@@ -10,6 +10,7 @@ import SpaceList from '../space-list/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
 import Account from '../account/index';
+import WebhookList from '../webhook-list/index';
 import UnknownPage from '../unknown-page/index';
 
 import { DragDropContext } from 'react-dnd';
@@ -21,6 +22,7 @@ function AppComponent({activePage, onLogout}) {
       <a href="#/environment">Environment</a>
       <a href="#/account">Account</a>
       <a href="#/tokens">Tokens</a>
+      <a href="#/webhooks">Webhooks</a>
       <a href="#/spaces">Spaces</a>
       <button onClick={onLogout}>Logout</button>
     </Navbar> : null}
@@ -45,6 +47,8 @@ function ActivePage({activePage}) {
     return <Environment />;
   case "ACCOUNT":
     return <Account />;
+  case "WEBHOOK_LIST":
+    return <WebhookList />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

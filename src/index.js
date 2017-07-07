@@ -22,6 +22,7 @@ import routeTransitionLogin from './actions/route-transition/login';
 import routeTransitionSpaceDetail from './actions/route-transition/space-detail';
 import routeTransitionSpaceList from './actions/route-transition/space-list';
 import routeTransitionTokenList from './actions/route-transition/token-list';
+import routeTransitionWebhookList from './actions/route-transition/webhook-list';
 import routeTransitionAccount from './actions/route-transition/account';
 
 // Assemble all parts of the reducer
@@ -33,6 +34,7 @@ import sessionToken from './reducers/session-token/index';
 import spaces from './reducers/spaces/index';
 import tokens from './reducers/tokens/index';
 import user from './reducers/user/index';
+import webhooks from './reducers/webhooks/index';
 const reducer = combineReducers({
   activeModal,
   activePage,
@@ -42,6 +44,7 @@ const reducer = combineReducers({
   spaces,
   tokens,
   user,
+  webhooks,
 });
 
 core.config({core: 'https://api.density.io/v2'});
@@ -57,12 +60,13 @@ const store = createStore(reducer, {}, compose(
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
-router.addRoute('tokens', () => routeTransitionTokenList());
 router.addRoute('spaces', () => routeTransitionSpaceList());
 router.addRoute('spaces/:id', ({id}) => routeTransitionSpaceDetail(id));
 
 router.addRoute('environment', () => routeTransitionEnvironment());
 router.addRoute('account', () => routeTransitionAccount());
+router.addRoute('tokens', () => routeTransitionTokenList());
+router.addRoute('webhooks', () => routeTransitionWebhookList());
 
 // If the user isn't logged in, send them to the login page.
 if (store.getState().sessionToken === null) {
