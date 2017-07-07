@@ -1,4 +1,5 @@
 import { COLLECTION_TOKENS_SET } from '../../actions/collection/tokens/set';
+import { COLLECTION_TOKENS_PUSH } from '../../actions/collection/tokens/push';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 const initialState = {
@@ -14,6 +15,30 @@ export default function tokens(state=initialState, action) {
       loading: false,
       data: action.data.map(objectSnakeToCamel),
     };
+
+  // Push an update to a token.
+  case COLLECTION_TOKENS_PUSH:
+    return {
+      ...state,
+      data: [
+        // Update existing items
+        ...state.data.map(item => {
+          if (action.item.id === item.id) {
+            return {...item, ...objectSnakeToCamel(action.item)};
+          } else {
+            return item;
+          }
+        }),
+
+        // Add new items
+        ...(
+          state.data.find(i => i.id === action.item.id) === undefined ?
+            [objectSnakeToCamel(action.item)] :
+            []
+        ),
+      ],
+    };
+
   default:
     return state;
   }

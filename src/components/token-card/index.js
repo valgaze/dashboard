@@ -9,9 +9,10 @@ export default function TokenCard({
     'token-card-read-only': tokenType === 'readonly',
     'token-card-read-write': tokenType === 'readwrite',
   })}>
-    <h2>Token</h2>
+    <h2>{token.name || '(untitled)'}</h2>
     <div className="token-card-body">
-      {token}
+      <p>{token.desc}</p>
+      <code>{token.key}</code>
     </div>
   </div>;
 }

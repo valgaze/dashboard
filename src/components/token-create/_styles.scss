@@ -1,0 +1,7 @@
+.token-create {
+}
+
+.token-create-description-field {
+  @include make-input-box;
+  resize: none;
+}
