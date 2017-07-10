@@ -46,21 +46,6 @@
 @import "../node_modules/@density/ui-popover/variables.json";
 @import "../node_modules/@density/ui-popover/dist/sass";
 
-@mixin make-card($background: #fff, $foreground: $text-color) {
-  box-sizing: border-box;
-  background-color: $background;
-  border-radius: $border-radius-base;
-  overflow: hidden;
-  border: none;
-  color: $foreground;
-  box-shadow: 0px 1px 6px rgba(34, 42, 46, 0.16);
-
-  .card-body {
-    padding: $padding-vertical-base $padding-horizontal-base;
-    color: $foreground;
-  }
-}
-
 
 * {
   font-family: 'Sailec', 'Helvetica', 'Arial', sans-serif;
