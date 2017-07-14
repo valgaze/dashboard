@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import TokenList from '../token-list/index';
 import SpaceList from '../space-list/index';
+import SpaceDetail from '../space-detail/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
 import Account from '../account/index';
@@ -42,7 +43,7 @@ function ActivePage({activePage}) {
   case "SPACE_LIST":
     return <SpaceList />;
   case "SPACE_DETAIL":
-    return <div />;
+    return <SpaceDetail />;
   case "ENVIRONMENT":
     return <Environment />;
   case "ACCOUNT":

@@ -4,6 +4,8 @@ import { COLLECTION_SPACES_PUSH } from '../../actions/collection/spaces/push';
 import { COLLECTION_SPACES_FILTER } from '../../actions/collection/spaces/filter';
 import { COLLECTION_SPACES_DELETE } from '../../actions/collection/spaces/delete';
 
+import { ROUTE_TRANSITION_SPACE_DETAIL } from '../../actions/route-transition/space-detail';
+
 const initialState = {
   filters: {
     doorwayId: null,
@@ -11,6 +13,7 @@ const initialState = {
   },
   loading: true,
   data: [],
+  selected: null,
 };
 
 export default function spaces(state=initialState, action) {
@@ -46,6 +49,10 @@ export default function spaces(state=initialState, action) {
         ),
       ],
     };
+
+  // When the user changes the active space, update it in the store.
+  case ROUTE_TRANSITION_SPACE_DETAIL:
+    return {...state, selected: action.id};
 
   // Add a filter to a space
   case COLLECTION_SPACES_FILTER:

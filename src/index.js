@@ -61,7 +61,7 @@ const store = createStore(reducer, {}, compose(
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
 router.addRoute('spaces', () => routeTransitionSpaceList());
-router.addRoute('spaces/:id', ({id}) => routeTransitionSpaceDetail(id));
+router.addRoute('spaces/:id', (id) => routeTransitionSpaceDetail(id));
 
 router.addRoute('environment', () => routeTransitionEnvironment());
 router.addRoute('account', () => routeTransitionAccount());

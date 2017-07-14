@@ -37,6 +37,7 @@ export function SpaceList({spaces}) {
     <div className="space-list-row">
       {spaces.data.map(space => {
         return <div className="space-list-item" key={space.id}>
+          <a href={`#/spaces/${space.id}`}>Go to details for {space.id}</a>
           <SpaceCard space={space} />
         </div>;
       })}
