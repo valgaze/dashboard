@@ -24,8 +24,10 @@ import routeTransitionSpaceList from './actions/route-transition/space-list';
 import routeTransitionTokenList from './actions/route-transition/token-list';
 import routeTransitionWebhookList from './actions/route-transition/webhook-list';
 import routeTransitionAccount from './actions/route-transition/account';
+import routeTransitionAccountRegister from './actions/route-transition/account-register';
 
 // Assemble all parts of the reducer
+import accountRegistration from './reducers/account-registration/index';
 import activeModal from './reducers/active-modal/index';
 import activePage from './reducers/active-page/index';
 import doorways from './reducers/doorways/index';
@@ -36,6 +38,7 @@ import tokens from './reducers/tokens/index';
 import user from './reducers/user/index';
 import webhooks from './reducers/webhooks/index';
 const reducer = combineReducers({
+  accountRegistration,
   activeModal,
   activePage,
   doorways,
@@ -61,24 +64,36 @@ const store = createStore(reducer, {}, compose(
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
 router.addRoute('spaces', () => routeTransitionSpaceList());
-router.addRoute('spaces/:id', (id) => routeTransitionSpaceDetail(id));
+router.addRoute('spaces/:id', id => routeTransitionSpaceDetail(id));
 
 router.addRoute('environment', () => routeTransitionEnvironment());
 router.addRoute('account', () => routeTransitionAccount());
 router.addRoute('tokens', () => routeTransitionTokenList());
 router.addRoute('webhooks', () => routeTransitionWebhookList());
 
-// If the user isn't logged in, send them to the login page.
-if (store.getState().sessionToken === null) {
-  router.navigate('login');
-} else {
-  // Fetch the logged in user's info since there's a session token available.
-  accounts.users.me().then(data => data).catch(err => {
-    store.dispatch(userError(err));
-  }).then(data => {
-    store.dispatch(userSet(data));
-  });
+router.addRoute('account/register/:slug', slug => routeTransitionAccountRegister(slug));
+
+// Make sure that the user is logged in prior to going to a page.
+function preRouteAuthentication() {
+  // If on the account registration page (the only page that doesn't require the user to be logged in)
+  // then don't worry about any of this.
+  if (window.location.hash.startsWith("#/account/register")) {
+    return;
+
+  // If the user isn't logged in, send them to the login page.
+  } else if (store.getState().sessionToken === null) {
+    router.navigate('login');
+
+  // Otherwise, fetch the logged in user's info since there's a session token available.
+  } else {
+    accounts.users.me().then(data => data).catch(err => {
+      store.dispatch(userError(err));
+    }).then(data => {
+      store.dispatch(userSet(data));
+    });
+  }
 }
+preRouteAuthentication();
 
 // Handle the route that the user is currently at.
 router.handle();
