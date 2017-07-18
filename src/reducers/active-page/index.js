@@ -5,6 +5,7 @@ import { ROUTE_TRANSITION_SPACE_LIST } from '../../actions/route-transition/spac
 import { ROUTE_TRANSITION_ENVIRONMENT } from '../../actions/route-transition/environment';
 import { ROUTE_TRANSITION_ACCOUNT } from '../../actions/route-transition/account';
 import { ROUTE_TRANSITION_WEBHOOK_LIST } from '../../actions/route-transition/webhook-list';
+import { ROUTE_TRANSITION_ACCOUNT_REGISTER } from '../../actions/route-transition/account-register';
 
 const initialState = null;
 
@@ -24,6 +25,8 @@ export default function activePage(state=initialState, action) {
     return "SPACE_DETAIL";
   case ROUTE_TRANSITION_WEBHOOK_LIST:
     return "WEBHOOK_LIST";
+  case ROUTE_TRANSITION_ACCOUNT_REGISTER:
+    return "ACCOUNT_REGISTRATION"
   default:
     return state;
   }

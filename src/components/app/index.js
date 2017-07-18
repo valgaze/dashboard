@@ -12,6 +12,7 @@ import Login from '../login/index';
 import Environment from '../environment/index';
 import Account from '../account/index';
 import WebhookList from '../webhook-list/index';
+import AccountRegistration from '../account-registration/index';
 import UnknownPage from '../unknown-page/index';
 
 import { DragDropContext } from 'react-dnd';
@@ -19,7 +20,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 function AppComponent({activePage, onLogout}) {
   return <div className="app">
-    {activePage !== 'LOGIN' ? <Navbar subtitle="Dashboard">
+    {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION') ? <Navbar subtitle="Dashboard">
       <a href="#/environment">Environment</a>
       <a href="#/account">Account</a>
       <a href="#/tokens">Tokens</a>
@@ -50,6 +51,8 @@ function ActivePage({activePage}) {
     return <Account />;
   case "WEBHOOK_LIST":
     return <WebhookList />;
+  case "ACCOUNT_REGISTRATION":
+    return <AccountRegistration />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

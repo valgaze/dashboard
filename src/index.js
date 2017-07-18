@@ -51,7 +51,7 @@ const reducer = combineReducers({
 });
 
 core.config({core: 'https://api.density.io/v2'});
-accounts.config({core: 'https://accounts.density.io/v1'});
+accounts.config({host: 'https://clerk.density.io/v1'});
 
 // Create our redux store for storing the application state.
 const store = createStore(reducer, {}, compose(

@@ -1,0 +1,14 @@
+.account-registration {
+  @include grid-container;
+}
+
+.account-registration-group {
+  margin-bottom: 10px;
+  label {
+    display: inline-block;
+    padding-right: 20px;
+  }
+  input {
+    display: inline-block;
+  }
+}
