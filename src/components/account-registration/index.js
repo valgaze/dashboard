@@ -13,6 +13,8 @@ export class AccountRegistration extends React.Component {
       email: this.props.invitationData.email,
       invitationToken: this.props.invitationData.invitation_token,
 
+      error: null,
+
       fullName: '',
       nickname: '',
       password: '',
@@ -28,10 +30,13 @@ export class AccountRegistration extends React.Component {
       nickname: this.state.nickname,
     }).then(response => {
       return this.props.onUserLoggedIn(response.session_token);
+    }).catch(err => {
+      this.setState({error: err.toString()});
     });
   }
   render() {
     return <div className="account-registration">
+      {this.state.error ? `Error: ${this.state.error}` : null}
       <div className="account-registration-group">
         <label htmlFor="account-registration-email">Email</label>
         <InputBox
