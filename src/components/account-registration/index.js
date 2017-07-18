@@ -27,12 +27,17 @@ export class AccountRegistration extends React.Component {
       invitation_token: this.state.invitationToken,
       password: this.state.password,
       full_name: this.state.fullName,
-      nickname: this.state.nickname,
+      nickname: this.state.nickname || this.generateNickname.apply(this),
     }).then(response => {
       return this.props.onUserLoggedIn(response.session_token);
     }).catch(err => {
       this.setState({error: err.toString()});
     });
+  }
+
+  // Generate the default nickname if one isn't specified.
+  generateNickname() {
+    return this.state.fullName.split(' ')[0];
   }
   render() {
     return <div className="account-registration">
@@ -66,7 +71,7 @@ export class AccountRegistration extends React.Component {
         <InputBox
           type="text"
           id="account-registration-nickname"
-          placeholder={this.state.fullName && this.state.fullName.indexOf(' ') >= 0 ? this.state.fullName.split(' ')[0] : 'J-dawg'}
+          placeholder={this.state.fullName && this.state.fullName.indexOf(' ') >= 0 ? this.generateNickname.apply(this) : 'J-dawg'}
           value={this.state.nickName}
           onChange={e => this.setState({nickname: e.target.value})}
         />
@@ -98,7 +103,6 @@ export class AccountRegistration extends React.Component {
         disabled={!(
           this.state.password.length > 0 &&
           this.state.password === this.state.passwordConfirmation &&
-          this.state.nickname.length > 0 &&
           this.state.fullName.length > 0 &&
           this.state.email.indexOf('@') >= 0
         )}
