@@ -1,30 +1,35 @@
-.token-card {
-  @include make-card;
+// Badge used to display token permissions in the header of the token card
+.token-card-permissions-badge {
+  background-color: $gray-darker;
+  color: #FFF;
+  cursor: default;
+  user-select: none;
 
-  margin: $padding-vertical-base 0;
-  border-radius: $border-radius-base;
-}
-
-// Token card header
-.token-card h2 {
+  display: inline-block;
+  padding: $padding-vertical-small $padding-horizontal-small;
   margin-left: $padding-horizontal-large;
+
+  text-align: center;
+  height: 16px;
+  line-height: 16px;
+  font-size: 14px;
 }
-.token-card.token-card-read-only h2:after {
-  content: ' (read / write)';
-}
-.token-card.token-card-read-write h2:after {
-  content: ' (read)';
+
+.token-card-edit {
+  float: right;
 }
 
 // Token card contents
-.token-card .token-card-body {
+.token-card-token-content {
   font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
   border-top: 1px solid $gray-light;
 
+  display: block;
+
   padding: $padding-vertical-large $padding-horizontal-large;
-  border-bottom-left-radius: $border-radius-base;
-  border-bottom-right-radius: $border-radius-base;
   font-size: 0.8em;
+
+  background-color: $gray-light;
 
   /* These are technically the same, but use both */
   overflow-wrap: break-word;
@@ -35,4 +40,9 @@
   word-break: break-all;
   /* Instead use this non-standard one: */
   word-break: break-word;
+}
+
+.token-card-copy-token-button {
+  width: 100%;
+  margin-top: $padding-vertical-large;
 }
