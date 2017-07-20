@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as classnames from 'classnames';
 
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import ModalHeaderActionButton from '../modal-header-action-button/index';

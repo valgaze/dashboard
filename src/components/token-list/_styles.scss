@@ -2,8 +2,21 @@
   @include grid-container;
   max-width: 1200px;
   margin: 20px auto;
+
+  position: relative;
+}
+
+.token-list-row {
+  @include grid-row;
 }
 
 .token-list-item {
   @include grid-width(24, 12, 12, 12);
+  margin-top: $padding-vertical-large;
+}
+
+.token-list .fab {
+  line-height: 60px;
+  position: absolute;
+  right: 16px;
 }

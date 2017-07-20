@@ -31,34 +31,34 @@ describe('tokens', function() {
 
     // Add a new token.
     const tokenInCollection = tokens(initialState, collectionTokensPush({
-      id: 0,
+      key: 0,
       name: 'foo',
       token_type: 'readonly',
     }));
 
     // Update token in collection
     const tokenUpdatedInCollection = tokens(tokenInCollection, collectionTokensPush({
-      id: 0,
+      key: 0,
       name: 'new name',
     }));
 
     assert.deepEqual(tokenUpdatedInCollection, {
       ...initialState,
-      data: [{id: 0, name: 'new name', tokenType: 'readonly'}],
+      data: [{key: 0, name: 'new name', tokenType: 'readonly'}],
     });
   });
   it('should push token when given a new token', function() {
     const initialState = tokens(undefined, {});
 
     const result = tokens(initialState, collectionTokensPush({
-      id: 0,
+      key: 0,
       name: 'foo',
       tokenType: 'readonly',
     }));
 
     assert.deepEqual(result, {
       ...initialState,
-      data: [{id: 0, name: 'foo', tokenType: 'readonly'}],
+      data: [{key: 0, name: 'foo', tokenType: 'readonly'}],
     });
   });
 });

@@ -22,14 +22,13 @@
 // Token card contents
 .token-card-token-content {
   font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
-  border-top: 1px solid $gray-light;
 
   display: block;
-
   padding: $padding-vertical-large $padding-horizontal-large;
   font-size: 0.8em;
 
-  background-color: $gray-light;
+  background-color: $gray-lighter;
+  color: $gray-darker;
 
   /* These are technically the same, but use both */
   overflow-wrap: break-word;

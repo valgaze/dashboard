@@ -23,7 +23,7 @@ export default function tokens(state=initialState, action) {
       data: [
         // Update existing items
         ...state.data.map(item => {
-          if (action.item.id === item.id) {
+          if (action.item.key === item.key) {
             return {...item, ...objectSnakeToCamel(action.item)};
           } else {
             return item;
@@ -32,7 +32,7 @@ export default function tokens(state=initialState, action) {
 
         // Add new items
         ...(
-          state.data.find(i => i.id === action.item.id) === undefined ?
+          state.data.find(i => i.key === action.item.key) === undefined ?
             [objectSnakeToCamel(action.item)] :
             []
         ),
