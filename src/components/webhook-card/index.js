@@ -16,7 +16,7 @@ export default function WebhookCard({
       <code className="webhook-card-endpoint">{webhook.endpoint}</code>
 
       <div className="webhook-card-active-checkbox">
-        <input type="checkbox" id={`webhook-card-${webhook.id}-active`} />
+        <input defaultChecked={true} type="checkbox" id={`webhook-card-${webhook.id}-active`} />
         <label htmlFor={`webhook-card-${webhook.id}-active`}>Active</label>
       </div>
     </CardBody>

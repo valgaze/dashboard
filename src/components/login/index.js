@@ -91,7 +91,7 @@ export default connect(state => ({}), dispatch => {
   return {
     onUserSuccessfullyLoggedIn(token) {
       dispatch(sessionTokenSet(token));
-      window.location.hash = '#/tokens';
+      window.location.hash = '#/spaces';
     },
   };
 })(Login);

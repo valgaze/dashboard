@@ -28,3 +28,34 @@
   /* Instead use this non-standard one: */
   word-break: break-word;
 }
+
+// The "active" checkbox that indicates if a webhook is enabled or disabled.
+.webhook-card-active-checkbox {
+  margin-top: 10px;
+  input {
+    display: none;
+  }
+  label {
+    user-select: none;
+    color: #CCC;
+  }
+  label:before {
+    content: "X";
+    border: 2px solid #CCC;
+    color: #CCC;
+    border-radius: 2px;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    padding: 1px;
+    margin-right: 0.5em;
+  }
+  input:checked + label {
+    color: #333;
+  }
+  input:checked + label:before {
+    content: "\2713";
+    border-color: #333;
+    color: #333;
+  }
+}
