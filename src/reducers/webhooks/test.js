@@ -3,6 +3,7 @@ import webhooks from './index';
 
 import collectionWebhooksPush from '../../actions/collection/webhooks/push';
 import collectionWebhooksSet from '../../actions/collection/webhooks/set';
+import collectionWebhooksFilter from '../../actions/collection/webhooks/filter';
 
 const WEBHOOK_ID_ONE = 'tok_3wxsa6e8dh5zdnf73ubpnaq37wz2nawcjw8hh5sfawb',
       WEBHOOK_ID_TWO = 'tok_aus86m8834xef4cqjeye2hzz3u8j5aafucxjgkn695h';
@@ -60,4 +61,14 @@ describe('webhooks', function() {
       data: [{id: 0, name: 'foo', endpoint: 'https://density.io'}],
     });
   });
+  it('should add filters to the webhooks collection', function() {
+    const initialState = webhooks(undefined, {});
+
+    const result = webhooks(initialState, collectionWebhooksFilter('search', 'value'))
+
+    assert.deepEqual(result, {
+      ...initialState,
+      filters: {search: 'value'},
+    });
+  })
 });

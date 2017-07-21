@@ -3,6 +3,7 @@ import tokens from './index';
 
 import collectionTokensSet from '../../actions/collection/tokens/set';
 import collectionTokensPush from '../../actions/collection/tokens/push';
+import collectionTokensFilter from '../../actions/collection/tokens/filter';
 
 // Don't worry - these tokens are bogus.
 const TOKEN_ONE = 'tok_3wxsa6e8dh5zdnf73ubpnaq37wz2nawcjw8hh5sfawb';
@@ -59,6 +60,16 @@ describe('tokens', function() {
     assert.deepEqual(result, {
       ...initialState,
       data: [{key: 0, name: 'foo', tokenType: 'readonly'}],
+    });
+  });
+  it('should filter token collection when given a filter', function() {
+    const initialState = tokens(undefined, {});
+
+    const result = tokens(initialState, collectionTokensFilter('search', 'foo'));
+
+    assert.deepEqual(result, {
+      ...initialState,
+      filters: {search: 'foo'},
     });
   });
 });

@@ -1,10 +1,14 @@
 import { COLLECTION_TOKENS_SET } from '../../actions/collection/tokens/set';
 import { COLLECTION_TOKENS_PUSH } from '../../actions/collection/tokens/push';
+import { COLLECTION_TOKENS_FILTER } from '../../actions/collection/tokens/filter';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 const initialState = {
   data: [],
   loading: true,
+  filters: {
+    search: '',
+  },
 };
 
 export default function tokens(state=initialState, action) {
@@ -37,6 +41,16 @@ export default function tokens(state=initialState, action) {
             []
         ),
       ],
+    };
+
+  // Add a filter to the tokens collection.
+  case COLLECTION_TOKENS_FILTER:
+    return {
+      ...state,
+      filters: {
+        ...state.filters,
+        [action.filter]: action.value,
+      },
     };
 
   default:

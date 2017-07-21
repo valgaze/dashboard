@@ -8,8 +8,13 @@ import TokenCard from '../token-card/index';
 import TokenCreateModal from '../token-create-modal/index';
 
 import tokensPush from '../../actions/collection/tokens/push';
+import collectionTokensFilter from '../../actions/collection/tokens/filter';
 
 import Fab from '@density/ui-fab';
+import InputBox from '@density/ui-input-box';
+
+import filterCollection from '../../helpers/filter-collection/index';
+const tokenFilter = filterCollection({fields: ['name', 'key']});
 
 export function TokenList({
   tokens,
@@ -18,8 +23,18 @@ export function TokenList({
   onCreateToken,
   onOpenModal,
   onCloseModal,
+  onFilterTokenList,
 }) {
   return <div className="token-list">
+    <h2>All tokens</h2>
+
+    {/* Search box to filter the list of tokens */}
+    <InputBox
+      placeholder="Search..."
+      value={tokens.filters.search}
+      onChange={e => onFilterTokenList(e.target.value)}
+    />
+
     {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
     <Fab onClick={() => {
       if (activeModal.name) {
@@ -34,9 +49,8 @@ export function TokenList({
       onDismiss={onCloseModal}
     /> : null}
 
-    <h2>All tokens</h2>
     <div className="token-list-row">
-      {tokens.data.map(token => {
+      {tokenFilter(tokens.data, tokens.filters.search).map(token => {
         return <div className="token-list-item" key={token.key}>
           <TokenCard token={token} />
         </div>;
@@ -62,6 +76,9 @@ export default connect(state => {
     },
     onCloseModal() {
       dispatch(hideModal());
+    },
+    onFilterTokenList(value) {
+      dispatch(collectionTokensFilter('search', value));
     },
   }
 })(TokenList);
