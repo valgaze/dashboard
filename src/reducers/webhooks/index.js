@@ -2,11 +2,15 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import { COLLECTION_WEBHOOKS_SET } from '../../actions/collection/webhooks/set';
 import { COLLECTION_WEBHOOKS_PUSH } from '../../actions/collection/webhooks/push';
 import { COLLECTION_WEBHOOKS_DELETE } from '../../actions/collection/webhooks/delete';
+import { COLLECTION_WEBHOOKS_FILTER } from '../../actions/collection/webhooks/filter';
 
 const initialState = {
   data: [],
   loading: false,
   error: false,
+  filters: {
+    search: '',
+  },
 };
 export default function webhooks(state=initialState, action) {
   switch (action.type) {
@@ -47,6 +51,16 @@ export default function webhooks(state=initialState, action) {
     return {
       ...state,
       data: state.data.filter(item => action.item.id !== item.id),
+    };
+
+  // Add a filter to a webhook.
+  case COLLECTION_WEBHOOKS_FILTER:
+    return {
+      ...state,
+      filters: {
+        ...state.filters,
+        [action.filter]: action.value,
+      },
     };
 
   default:

@@ -1,3 +1,19 @@
-.webhook-list {
+.webhook-container {
   @include grid-container;
+  position: relative;
+}
+
+.webhook-list {
+  @include grid-row;
+}
+
+.webhook-list-item {
+  @include grid-width(24, 12, 12, 12);
+}
+
+.webhook-container .fab {
+  line-height: 60px;
+  position: absolute;
+  right: 16px;
+  top: 32px;
 }
