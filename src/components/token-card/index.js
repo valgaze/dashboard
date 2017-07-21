@@ -3,7 +3,7 @@ import * as React from 'react';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import ModalHeaderActionButton from '../modal-header-action-button/index';
 
-export default function TokenCard({token}) {
+export default function TokenCard({token, onClickEdit}) {
   return <Card>
     <CardHeader>
       {token.name}
@@ -12,10 +12,10 @@ export default function TokenCard({token}) {
         {token.tokenType === 'readwrite' ? 'Read/Write' : 'Read Only'}
       </div>
 
-      <ModalHeaderActionButton className="token-card-edit">Edit</ModalHeaderActionButton>
+      <ModalHeaderActionButton onClick={onClickEdit} className="token-card-edit">Edit</ModalHeaderActionButton>
     </CardHeader>
     <CardBody>
-      <p>{token.desc}</p>
+      <p>{token.description}</p>
       <code className="token-card-token-content">{token.key}</code>
       <button
         className="token-card-copy-token-button"
@@ -74,8 +74,7 @@ function copyTextToClipboard(text) {
   textArea.select();
 
   try {
-    var successful = document.execCommand('copy');
-    var msg = successful ? 'successful' : 'unsuccessful';
+    document.execCommand('copy');
   } catch (err) {
     console.error('Oops, unable to copy');
   }

@@ -6,8 +6,10 @@ import hideModal from '../../actions/modal/hide';
 
 import TokenCard from '../token-card/index';
 import TokenCreateModal from '../token-create-modal/index';
+import TokenUpdateModal from '../token-update-modal/index';
 
-import tokensPush from '../../actions/collection/tokens/push';
+import collectionTokensCreate from '../../actions/collection/tokens/create';
+import collectionTokensUpdate from '../../actions/collection/tokens/update';
 import collectionTokensFilter from '../../actions/collection/tokens/filter';
 
 import Fab from '@density/ui-fab';
@@ -21,6 +23,7 @@ export function TokenList({
   activeModal,
 
   onCreateToken,
+  onUpdateToken,
   onOpenModal,
   onCloseModal,
   onFilterTokenList,
@@ -48,11 +51,16 @@ export function TokenList({
       onSubmit={onCreateToken}
       onDismiss={onCloseModal}
     /> : null}
+    {activeModal.name === 'token-update' ? <TokenUpdateModal
+      initialToken={activeModal.data.token}
+      onSubmit={onUpdateToken}
+      onDismiss={onCloseModal}
+    /> : null}
 
     <div className="token-list-row">
       {tokenFilter(tokens.data, tokens.filters.search).map(token => {
         return <div className="token-list-item" key={token.key}>
-          <TokenCard token={token} />
+          <TokenCard token={token} onClickEdit={() => onOpenModal('token-update', {token})} />
         </div>;
       })}
     </div>
@@ -66,8 +74,12 @@ export default connect(state => {
   };
 }, dispatch => {
   return {
-    onCreateToken({name, desc, tokenType}) {
-      dispatch(tokensPush({name, desc, tokenType, key: 'tok_mynewtoken'+Math.random()}));
+    onCreateToken(token) {
+      dispatch(collectionTokensCreate(token));
+      dispatch(hideModal());
+    },
+    onUpdateToken(token) {
+      dispatch(collectionTokensUpdate(token));
       dispatch(hideModal());
     },
 
