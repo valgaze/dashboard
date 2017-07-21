@@ -5,14 +5,13 @@ import ModalHeaderActionButton from '../modal-header-action-button/index';
 
 export default function TokenCard({
   token,
-  tokenType,
 }) {
   return <Card>
     <CardHeader>
       {token.name}
 
       <div className="token-card-permissions-badge">
-        {tokenType === 'readwrite' ? 'Read/Write' : 'Read Only'}
+        {token.tokenType === 'readwrite' ? 'Read/Write' : 'Read Only'}
       </div>
 
       <ModalHeaderActionButton className="token-card-edit">Edit</ModalHeaderActionButton>

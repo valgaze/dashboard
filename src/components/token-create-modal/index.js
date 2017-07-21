@@ -3,7 +3,7 @@ import InputBox from '@density/ui-input-box';
 import Modal, { ModalClose } from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 
-const READONLY = 'READONLY', READWRITE = 'READWRITE';
+const READONLY = 'readonly', READWRITE = 'readwrite';
 
 export default class TokenCreate extends React.Component {
   constructor(props) {
