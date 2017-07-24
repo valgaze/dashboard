@@ -57,7 +57,7 @@ const reducer = combineReducers({
 // Set the location of all services.
 core.config({core: 'https://api.density.io/v2'});
 accounts.config({host: 'https://clerk.density.io/v1'});
-eventSource.setHost('ws://localhost:8080');
+// eventSource.setHost('ws://localhost:8080');
 
 // Create our redux store for storing the application state.
 const store = createStore(reducer, {}, compose(
