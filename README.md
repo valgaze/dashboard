@@ -1,6 +1,5 @@
 <!--
-<img src="https://cdn.rawgit.com/DensityCo/web-dashboard/master/logo.svg" height="50" />
-<br />
+<img src="https://cdn.rawgit.com/DensityCo/web-dashboard/master/logo.svg" height="50" /> <br />
 -->
 
 # Web Dashboard

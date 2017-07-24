@@ -4,6 +4,7 @@ import tokens from './index';
 import collectionTokensSet from '../../actions/collection/tokens/set';
 import collectionTokensPush from '../../actions/collection/tokens/push';
 import collectionTokensFilter from '../../actions/collection/tokens/filter';
+import collectionTokensDelete from '../../actions/collection/tokens/delete';
 
 // Don't worry - these tokens are bogus.
 const TOKEN_ONE = 'tok_3wxsa6e8dh5zdnf73ubpnaq37wz2nawcjw8hh5sfawb';
@@ -71,5 +72,21 @@ describe('tokens', function() {
       ...initialState,
       filters: {search: 'foo'},
     });
+  });
+  it('should delete a token from the tokens collection', function() {
+    const initialState = tokens(undefined, {});
+
+    const TOKEN = {
+      key: 0,
+      name: 'foo',
+      token_type: 'readonly',
+    };
+
+    // Add a token, then delete a token
+    const tokenInCollection = tokens(initialState, collectionTokensPush(TOKEN));
+    const result = tokens(tokenInCollection, collectionTokensDelete(TOKEN));
+
+    // Initial state should then match final state.
+    assert.deepEqual(result, initialState);
   });
 });

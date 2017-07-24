@@ -1,6 +1,7 @@
 import { COLLECTION_TOKENS_SET } from '../../actions/collection/tokens/set';
 import { COLLECTION_TOKENS_PUSH } from '../../actions/collection/tokens/push';
 import { COLLECTION_TOKENS_FILTER } from '../../actions/collection/tokens/filter';
+import { COLLECTION_TOKENS_DELETE } from '../../actions/collection/tokens/delete';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 const initialState = {
@@ -51,6 +52,13 @@ export default function tokens(state=initialState, action) {
         ...state.filters,
         [action.filter]: action.value,
       },
+    };
+
+  // Delete a token from the collection.
+  case COLLECTION_TOKENS_DELETE:
+    return {
+      ...state,
+      data: state.data.filter(item => action.item.id !== item.id),
     };
 
   default:

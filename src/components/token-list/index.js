@@ -11,6 +11,7 @@ import TokenUpdateModal from '../token-update-modal/index';
 import collectionTokensCreate from '../../actions/collection/tokens/create';
 import collectionTokensUpdate from '../../actions/collection/tokens/update';
 import collectionTokensFilter from '../../actions/collection/tokens/filter';
+import collectionTokensDestroy from '../../actions/collection/tokens/destroy';
 
 import Fab from '@density/ui-fab';
 import InputBox from '@density/ui-input-box';
@@ -24,6 +25,7 @@ export function TokenList({
 
   onCreateToken,
   onUpdateToken,
+  onDestroyToken,
   onOpenModal,
   onCloseModal,
   onFilterTokenList,
@@ -55,6 +57,7 @@ export function TokenList({
       initialToken={activeModal.data.token}
       onSubmit={onUpdateToken}
       onDismiss={onCloseModal}
+      onDestroyToken={onDestroyToken}
     /> : null}
 
     <div className="token-list-row">
@@ -81,6 +84,9 @@ export default connect(state => {
     onUpdateToken(token) {
       dispatch(collectionTokensUpdate(token));
       dispatch(hideModal());
+    },
+    onDestroyToken(token) {
+      dispatch(collectionTokensDestroy(token));
     },
 
     onOpenModal(name, data) {
