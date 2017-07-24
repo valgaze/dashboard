@@ -3,6 +3,7 @@ import { SESSION_TOKEN_SET } from '../../actions/session-token/set';
 import { SESSION_TOKEN_UNSET } from '../../actions/session-token/unset';
 
 import { core, accounts, metrics } from '@density-int/client';
+import eventSource from '../../helpers/websocket-event-pusher/index';
 
 const initialState = localStorage.sessionToken !== undefined ? JSON.parse(localStorage.sessionToken) : null;
 export function sessionToken(state=initialState, action) {
@@ -28,6 +29,7 @@ function updateTokensOnApiClients(token) {
   core.config({token});
   accounts.config({token});
   metrics.config({token});
+  eventSource.setToken(token); // Update websockets client
 }
 updateTokensOnApiClients(initialState);
 

@@ -7,6 +7,8 @@ import { core, accounts } from '@density-int/client';
 import userSet from './actions/user/set';
 import userError from './actions/user/error';
 
+import eventSource from './helpers/websocket-event-pusher/index';
+
 // The main app component that renders everything.
 import App from './components/app';
 
@@ -25,6 +27,8 @@ import routeTransitionTokenList from './actions/route-transition/token-list';
 import routeTransitionWebhookList from './actions/route-transition/webhook-list';
 import routeTransitionAccount from './actions/route-transition/account';
 import routeTransitionAccountRegister from './actions/route-transition/account-register';
+
+import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 
 // Assemble all parts of the reducer
 import accountRegistration from './reducers/account-registration/index';
@@ -50,8 +54,10 @@ const reducer = combineReducers({
   webhooks,
 });
 
+// Set the location of all services.
 core.config({core: 'https://api.density.io/v2'});
 accounts.config({host: 'https://clerk.density.io/v1'});
+eventSource.setHost('ws://localhost:8080');
 
 // Create our redux store for storing the application state.
 const store = createStore(reducer, {}, compose(
@@ -97,6 +103,22 @@ preRouteAuthentication();
 
 // Handle the route that the user is currently at.
 router.handle();
+
+
+// ----------------------------------------------------------------------------
+// Real time event source
+// Listen in real time for pushed events via websockets. When we receive
+// events, dispatch them as actions into the system.
+// ----------------------------------------------------------------------------
+eventSource.setToken(store.getState().sessionToken);
+eventSource.events.on('space', countChangeEvent => {
+  store.dispatch(collectionSpacesCountChange({
+    id: countChangeEvent.spaceId,
+    timestamp: countChangeEvent.timestamp,
+    countChange: countChangeEvent.countChange,
+  }));
+});
+window.store = store;
 
 
 ReactDOM.render(

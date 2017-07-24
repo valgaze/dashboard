@@ -7,7 +7,7 @@ import { chartAsReactComponent } from '@density/charts';
 import IngressEgressFn from '@density/chart-ingress-egress';
 const IngressEgressChart = autoRefreshHoc({interval: 1000})(chartAsReactComponent(IngressEgressFn));
 
-function SpaceCard({space}) {
+function SpaceCard({space, events}) {
   if (space) {
     return <Card>
       <CardHeader>{space.name}</CardHeader>
@@ -19,13 +19,7 @@ function SpaceCard({space}) {
         </ul>
       </CardBody>
 
-      <IngressEgressChart
-        events={[
-          {countChange: 1, timestamp: (new Date()).toISOString()},
-          {countChange: -1, timestamp: (new Date()).toISOString()},
-        ]}
-        graphDurationInMin={1}
-      />
+      <IngressEgressChart events={events || []} graphDurationInMin={1} />
     </Card>;
   } else {
     return null;
@@ -38,7 +32,7 @@ export function SpaceList({spaces}) {
       {spaces.data.map(space => {
         return <div className="space-list-item" key={space.id}>
           <a href={`#/spaces/${space.id}`}>Go to details for {space.id}</a>
-          <SpaceCard space={space} />
+          <SpaceCard space={space} events={spaces.events[space.id]} />
         </div>;
       })}
     </div>

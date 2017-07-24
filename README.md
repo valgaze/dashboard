@@ -35,3 +35,8 @@ Many styles and associated variables are brought in from `@density/ui`, our UI f
 @import "../node_modules/@density/ui-navbar/variables.json";
 @import "../node_modules/@density/ui-navbar/dist/sass";
 ```
+
+# Real time events
+Real time events are sent to this service via websockets, via the
+[https://github.com/DensityCo/websocket-server](websocket-server). The websocket client is mostly in
+`src/helpers/websocket-event-pusher/index.js`.
