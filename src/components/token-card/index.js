@@ -6,7 +6,7 @@ import ModalHeaderActionButton from '../modal-header-action-button/index';
 export default function TokenCard({token, onClickEdit}) {
   return <Card>
     <CardHeader>
-      {token.name}
+      {token.name || '(no name)'}
 
       <div className="token-card-permissions-badge">
         {token.tokenType === 'readwrite' ? 'Read/Write' : 'Read Only'}

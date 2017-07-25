@@ -18,14 +18,20 @@ import UnknownPage from '../unknown-page/index';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
+function NavBarItem({activePage, pageName, href, children}) {
+  return <li className={activePage === pageName ? 'active' : ''}>
+    <a href={href}>{children}</a>
+  </li>;
+}
+
 function AppComponent({activePage, onLogout}) {
   return <div className="app">
     {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION') ? <Navbar subtitle="Dashboard">
-      <a href="#/environment">Environment</a>
-      <a href="#/account">Account</a>
-      <a href="#/tokens">Tokens</a>
-      <a href="#/webhooks">Webhooks</a>
-      <a href="#/spaces">Spaces</a>
+      <NavBarItem activePage={activePage} pageName="ENVIRONMENT" href="#/environment">Environment</NavBarItem>
+      <NavBarItem activePage={activePage} pageName="ACCOUNT" href="#/account">Account</NavBarItem>
+      <NavBarItem activePage={activePage} pageName="TOKEN_LIST" href="#/tokens">Tokens</NavBarItem>
+      <NavBarItem activePage={activePage} pageName="WEBHOOK_LIST" href="#/webhooks">Webhooks</NavBarItem>
+      <NavBarItem activePage={activePage} pageName="SPACE_LIST" href="#/spaces">Spaces</NavBarItem>
       <button onClick={onLogout}>Logout</button>
     </Navbar> : null}
 

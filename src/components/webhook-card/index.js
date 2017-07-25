@@ -11,7 +11,10 @@ export default function WebhookCard({
     <CardHeader>
       {webhook.name || '(no name)'}
 
-      <ModalHeaderActionButton onClick={onClickEdit} className="webhook-card-edit">Edit</ModalHeaderActionButton>
+      <ModalHeaderActionButton
+        onClick={onClickEdit}
+        className="webhook-card-edit"
+      >Edit</ModalHeaderActionButton>
     </CardHeader>
     <CardBody>
       <p>{webhook.description || '(No description)'}</p>

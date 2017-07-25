@@ -3,3 +3,33 @@
   background-color: #F0F0F2;
   min-height: 100vh;
 }
+
+.app .navbar {
+  li {
+    list-style-type: none;
+    display: inline-block;
+    border-bottom: 2px solid transparent;
+    height: $navbar-height - 2px;
+
+    &:first-child {
+      margin-left: 20px;
+    }
+
+    // Style each link
+    a {
+      line-height: $navbar-height;
+      color: $gray;
+      text-decoration: none;
+      font-size: 14px;
+
+      padding: 8px 0px;
+      margin: 0px $padding-horizontal-small;
+    }
+
+    // Darken the active item
+    &.active {
+      border-bottom: 2px solid $gray-darker;
+      a { color: $gray-darker; }
+    }
+  }
+}
