@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Modal, { ModalClose } from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
+import { decode } from 'ent';
 
 export default class EnvironmentModalCreateSpace extends React.Component {
   constructor(props) {
@@ -60,7 +61,13 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 this.state.name.length === 0 || this.state.timeZone.length === 0 ||
                 this.state.resetTime.length === 0
               )}
-              onClick={() => this.props.onSubmit(this.state)}
+              onClick={() => this.props.onSubmit({
+                name: this.state.name,
+                resetTime: this.state.resetTime,
+                // this.state.timeZone has html entities in it, ie: `America&#x2F;New_York`.
+                // FIXME: Why is this?
+                timeZone: decode(this.state.timeZone),
+              })}
             >Create</button>
           </CardBody>
         </Card>

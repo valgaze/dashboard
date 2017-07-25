@@ -10,7 +10,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
     super(props);
     this.state = {
       name: this.props.initialSpace.name || '',
-      timezone: this.props.initialSpace.timezone || '',
+      timeZone: this.props.initialSpace.timeZone || '',
       dailyReset: this.props.initialSpace.dailyReset || '',
       isEditing: false,
     };
@@ -46,8 +46,8 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
                 <InputBox
                   type="text"
                   id="update-doorway-timezone"
-                  value={this.state.timezone}
-                  onChange={e => this.setState({timezone: e.target.value})}
+                  value={this.state.timeZone}
+                  onChange={e => this.setState({timeZone: e.target.value})}
                 />
               </li>
               <li>
@@ -109,8 +109,8 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
             <InputBox
               type="text"
               id="update-doorway-timezone"
-              value={this.state.timezone}
-              onChange={e => this.setState({timezone: e.target.value})}
+              value={this.state.timeZone}
+              onChange={e => this.setState({timeZone: e.target.value})}
               disabled
             />
           </li>
