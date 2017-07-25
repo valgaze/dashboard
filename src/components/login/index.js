@@ -73,7 +73,7 @@ export class Login extends React.Component {
           className={classnames('login-submit-button', {loading: this.state.loading})}
           onClick={this.onLogin.bind(this)}
           type="button"
-          disabled={this.state.loading}
+          disabled={this.state.loading || this.state.email.indexOf('@') === -1}
         >
           <span className="label">Login</span>
           {this.state.loading ? <img

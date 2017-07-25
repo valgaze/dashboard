@@ -8,9 +8,12 @@ import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 import collectionWebhooksCreate from '../../actions/collection/webhooks/create';
 import collectionWebhooksFilter from '../../actions/collection/webhooks/filter';
+import collectionWebhooksUpdate from '../../actions/collection/webhooks/update';
+import collectionWebhooksDestroy from '../../actions/collection/webhooks/destroy';
 
 import WebhookCard from '../webhook-card/index';
 import WebhookCreateModal from '../webhook-create/index';
+import WebhookUpdateModal from '../webhook-update-modal/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 
@@ -22,6 +25,8 @@ export function WebhookList({
 
   onCreateWebhook,
   onFilterWebhookList,
+  onUpdateWebhook,
+  onDestroyWebhook,
   onOpenModal,
   onCloseModal,
 }) {
@@ -31,6 +36,13 @@ export function WebhookList({
     {activeModal.name === 'webhook-create' ? <WebhookCreateModal
       onSubmit={onCreateWebhook}
       onDismiss={onCloseModal}
+    /> : null}
+
+    {activeModal.name === 'webhook-update' ? <WebhookUpdateModal
+      initialWebhook={activeModal.data.webhook}
+      onSubmit={onUpdateWebhook}
+      onDismiss={onCloseModal}
+      onDestroyWebhook={onDestroyWebhook}
     /> : null}
 
     {/* Search box to filter webhook list */}
@@ -46,7 +58,10 @@ export function WebhookList({
     <div className="webhook-list">
       {webhookFilter(webhooks.data, webhooks.filters.search).map(webhook => {
         return <div className="webhook-list-item" key={webhook.id}>
-          <WebhookCard webhook={webhook} />
+          <WebhookCard
+            webhook={webhook}
+            onClickEdit={() => onOpenModal('webhook-update', {webhook})}
+          />
         </div>;
       })}
     </div>
@@ -67,6 +82,14 @@ export default connect(state => {
     },
     onFilterWebhookList(value) {
       dispatch(collectionWebhooksFilter('search', value));
+    },
+    onUpdateWebhook(webhook) {
+      dispatch(collectionWebhooksUpdate(webhook));
+      dispatch(hideModal());
+    },
+    onDestroyWebhook(webhook) {
+      dispatch(collectionWebhooksDestroy(webhook));
+      dispatch(hideModal());
     },
 
     onOpenModal(name, data) {
