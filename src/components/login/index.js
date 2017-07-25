@@ -56,6 +56,7 @@ export class Login extends React.Component {
           <InputStackItem
             type="email"
             placeholder="Email Address"
+            invalid={this.state.email.length > 0 && this.state.email.indexOf('@') === -1}
             onChange={e => this.setState({email: e.target.value})}
             onKeyPress={this.onEnter.bind(this)}
             value={this.state.email}
