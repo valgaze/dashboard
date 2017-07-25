@@ -1,5 +1,4 @@
 import assert from 'assert';
-import sinon from 'sinon';
 import { connect, default as eventSource } from './index';
 
 describe('websocket-event-pusher', function() {
