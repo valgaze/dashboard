@@ -1,8 +1,12 @@
 .login-section {
-  max-width: 500px;
   margin: 0px auto;
 
-  @include grid-width(24, 24, 10, 6);
+  // Set an explicit width for the login form.
+  width: 100%;
+  @media (min-width: $screen-sm-min) {
+    width: 350px;
+  }
+
   padding-top: 90px;
   padding-left: 30px;
   padding-right: 30px;
@@ -12,43 +16,25 @@
   width: 44px;
   margin: $padding-vertical-base auto;
   padding-bottom: 60px;
-}
-
-.login-textbox {
-  padding: $padding-vertical-large 0px;
-  margin-top: 20px;
-  background-color: transparent;
-  font-size: 16px;
-  font-family: 'Sailec', 'Helvetica', 'Arial', sans-serif;
-
-  transition: all 100ms ease-in-out;
-
-  outline: none;
-  border: 0px;
-  border-bottom: 2px solid $gray;
-  &:focus {
-    border-bottom: 2px solid $brand-primary;
-  }
-}
-
-.login-submit-button {
-  margin-top: 20px;
-
-  border-radius: 20px;
-  height: 40px;
-  font-size: 14px;
-
-  background-color: $brand-primary;
-  border: 0px;
-  color: #FFF;
-  cursor: pointer;
-
-  transition: background-color 400ms ease-in-out;
-  &:hover {
-    background-color: darken($brand-primary, 5%);
-  }
+  display: block;
 }
 
 .login-error {
   color: $brand-danger;
+}
+
+// The submit button to the login form
+.login-submit-button {
+  margin-top: 30px;
+  height: 50px;
+  background-color: #222A2E;
+  color: #fff;
+  box-shadow: none;
+  border: none;
+  border-radius: 25px;
+  width: 100%;
+}
+
+.login-form {
+  width: calc(100% - 30px);
 }

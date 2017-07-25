@@ -46,6 +46,10 @@
 @import "../node_modules/@density/ui-popover/variables.json";
 @import "../node_modules/@density/ui-popover/dist/sass";
 
+// Input Stack
+@import "../node_modules/@density/ui-input-stack/variables.json";
+@import "../node_modules/@density/ui-input-stack/dist/sass";
+
 
 * {
   font-family: 'Sailec', 'Helvetica', 'Arial', sans-serif;
@@ -53,7 +57,7 @@
 
 html {
   margin: 0px;
-  background-color: $gray-lighter;
+  background-color: #F0F0F2;
 }
 
 // 

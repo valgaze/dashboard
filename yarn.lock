@@ -62,6 +62,10 @@
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@density/ui-input-box/-/ui-input-box-0.0.1.tgz#1779ecd44ac79af4ed5cfb69cd5cc730e151eee3"
 
+"@density/ui-input-stack@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@density/ui-input-stack/-/ui-input-stack-0.0.1.tgz#fbaa847ab4edc915f575781787a92a74c7657d00"
+
 "@density/ui-modal@0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@density/ui-modal/-/ui-modal-0.0.5.tgz#41598167f6e5ad4fb4790dcafba48cea85060801"
