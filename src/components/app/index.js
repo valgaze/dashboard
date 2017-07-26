@@ -26,7 +26,7 @@ function NavBarItem({activePage, pageName, href, children}) {
 
 function AppComponent({activePage, onLogout}) {
   return <div className="app">
-    {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION') ? <Navbar subtitle="Dashboard">
+    {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION') ? <Navbar>
       <NavBarItem activePage={activePage} pageName="ENVIRONMENT" href="#/environment">Environment</NavBarItem>
       <NavBarItem activePage={activePage} pageName="ACCOUNT" href="#/account">Account</NavBarItem>
       <NavBarItem activePage={activePage} pageName="TOKEN_LIST" href="#/tokens">Tokens</NavBarItem>

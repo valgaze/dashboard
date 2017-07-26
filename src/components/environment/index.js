@@ -115,6 +115,9 @@ export function Environment({
       onSubmit={fields => onChangeDoorway(activeModal.data.doorway, fields)}
       onDelete={() => onDeleteDoorway(activeModal.data.doorway)}
       onDismiss={onCloseModal}
+      /* Add a key so that if a new doorway is selected without deselecting the last one, a new
+       * component instance will still be created. */
+      key={activeModal.data.doorway.id}
 
       /* The dom node to use when positioning the popover - the "target" dom node of the popover */
       popoverPositionTarget={activeModal.data.popoverPositionTarget}
@@ -125,6 +128,9 @@ export function Environment({
       onDelete={() => onDeleteSpace(activeModal.data.space)}
       onDismiss={onCloseModal}
       doorways={activeModal.data.doorways}
+      /* Add a key so that if a new space is selected without deselecting the last one, a new
+       * component instance will still be created. */
+      key={activeModal.data.space.id}
 
       /* The dom node to use when positioning the popover - the "target" dom node of the popover */
       popoverPositionTarget={activeModal.data.popoverPositionTarget}
