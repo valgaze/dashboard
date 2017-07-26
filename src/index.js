@@ -13,9 +13,7 @@ import eventSource from './helpers/websocket-event-pusher/index';
 import App from './components/app';
 
 // Redux is used to manage state.
-import {createStore, compose, applyMiddleware, combineReducers} from 'redux';
-import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 import createRouter from '@density/conduit';
 
 // Import all actions required to navigate from one page to another.
@@ -30,40 +28,13 @@ import routeTransitionAccountRegister from './actions/route-transition/account-r
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 
-// Assemble all parts of the reducer
-import accountRegistration from './reducers/account-registration/index';
-import activeModal from './reducers/active-modal/index';
-import activePage from './reducers/active-page/index';
-import doorways from './reducers/doorways/index';
-import links from './reducers/links/index';
-import sessionToken from './reducers/session-token/index';
-import spaces from './reducers/spaces/index';
-import tokens from './reducers/tokens/index';
-import user from './reducers/user/index';
-import webhooks from './reducers/webhooks/index';
-const reducer = combineReducers({
-  accountRegistration,
-  activeModal,
-  activePage,
-  doorways,
-  links,
-  sessionToken,
-  spaces,
-  tokens,
-  user,
-  webhooks,
-});
+// All the reducer and store code is in a seperate file.
+import store from './store';
 
 // Set the location of all services.
 core.config({core: 'https://api.density.io/v2'});
 accounts.config({host: 'https://clerk.density.io/v1'});
 // eventSource.setHost('ws://localhost:8080');
-
-// Create our redux store for storing the application state.
-const store = createStore(reducer, {}, compose(
-  applyMiddleware(thunk),
-  window.devToolsExtension ? window.devToolsExtension() : f => f
-));
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
