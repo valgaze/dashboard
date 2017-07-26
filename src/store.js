@@ -3,6 +3,7 @@ import {createStore, compose, applyMiddleware, combineReducers} from 'redux';
 import thunk from 'redux-thunk';
 
 // Assemble all parts of the reducer
+import accountForgotPassword from './reducers/account-forgot-password/index';
 import accountRegistration from './reducers/account-registration/index';
 import activeModal from './reducers/active-modal/index';
 import activePage from './reducers/active-page/index';
@@ -14,6 +15,7 @@ import tokens from './reducers/tokens/index';
 import user from './reducers/user/index';
 import webhooks from './reducers/webhooks/index';
 const reducer = combineReducers({
+  accountForgotPassword,
   accountRegistration,
   activeModal,
   activePage,

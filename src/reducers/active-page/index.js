@@ -6,6 +6,7 @@ import { ROUTE_TRANSITION_ACCOUNT } from '../../actions/route-transition/account
 import { ROUTE_TRANSITION_DEV_WEBHOOK_LIST } from '../../actions/route-transition/dev-webhook-list';
 import { ROUTE_TRANSITION_DEV_TOKEN_LIST } from '../../actions/route-transition/dev-token-list';
 import { ROUTE_TRANSITION_ACCOUNT_REGISTER } from '../../actions/route-transition/account-register';
+import { ROUTE_TRANSITION_ACCOUNT_FORGOT_PASSWORD } from '../../actions/route-transition/account-forgot-password';
 
 const initialState = null;
 
@@ -30,6 +31,8 @@ export default function activePage(state=initialState, action) {
     return "ACCOUNT"
   case ROUTE_TRANSITION_ACCOUNT_REGISTER:
     return "ACCOUNT_REGISTRATION"
+  case ROUTE_TRANSITION_ACCOUNT_FORGOT_PASSWORD:
+    return "ACCOUNT_FORGOT_PASSWORD"
   default:
     return state;
   }

@@ -13,6 +13,7 @@ import Environment from '../environment/index';
 import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
+import AccountForgotPassword from '../account-forgot-password/index';
 import UnknownPage from '../unknown-page/index';
 
 import { DragDropContext } from 'react-dnd';
@@ -26,7 +27,7 @@ function NavBarItem({activePage, pageName, href, children}) {
 
 function AppComponent({activePage, onLogout}) {
   return <div className="app">
-    {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION') ? <Navbar>
+    {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION' && activePage !== 'ACCOUNT_FORGOT_PASSWORD') ? <Navbar>
       <NavBarItem activePage={activePage} pageName={['VISUALIZATION_SPACE_LIST']} href="#/visualization/spaces">Visualization</NavBarItem>
       <NavBarItem activePage={activePage} pageName={['ENVIRONMENT_SPACE']} href="#/environment/spaces">Environment</NavBarItem>
       <NavBarItem
@@ -62,6 +63,8 @@ function ActivePage({activePage}) {
     return <TokenList />;
   case "ACCOUNT_REGISTRATION":
     return <AccountRegistration />;
+  case "ACCOUNT_FORGOT_PASSWORD":
+    return <AccountForgotPassword />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

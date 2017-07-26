@@ -25,6 +25,7 @@ import routeTransitionDevTokenList from './actions/route-transition/dev-token-li
 import routeTransitionDevWebhookList from './actions/route-transition/dev-webhook-list';
 import routeTransitionAccount from './actions/route-transition/account';
 import routeTransitionAccountRegister from './actions/route-transition/account-register';
+import routeTransitionAccountForgotPassword from './actions/route-transition/account-forgot-password';
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 
@@ -52,6 +53,7 @@ router.addRoute('dev/webhooks', () => routeTransitionDevWebhookList());
 router.addRoute('account', () => routeTransitionAccount());
 
 router.addRoute('account/register/:slug', slug => routeTransitionAccountRegister(slug));
+router.addRoute('account/forgot-password/:token', token => routeTransitionAccountForgotPassword(token));
 
 // Make sure that the user is logged in prior to going to a page.
 function preRouteAuthentication() {
