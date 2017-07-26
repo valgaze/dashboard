@@ -4,11 +4,11 @@ import collectionSpacesSet from '../collection/spaces/set';
 import collectionDoorwaysSet from '../collection/doorways/set';
 import collectionLinksSet from '../collection/links/set';
 
-export const ROUTE_TRANSITION_ENVIRONMENT = 'ROUTE_TRANSITION_ENVIRONMENT';
+export const ROUTE_TRANSITION_ENVIRONMENT_SPACE = 'ROUTE_TRANSITION_ENVIRONMENT_SPACE';
 
 export default function routeTransitionEnvironment() {
   return dispatch => {
-    dispatch({ type: ROUTE_TRANSITION_ENVIRONMENT });
+    dispatch({ type: ROUTE_TRANSITION_ENVIRONMENT_SPACE });
 
     return Promise.all([
       // Fetch a list of all spaces.

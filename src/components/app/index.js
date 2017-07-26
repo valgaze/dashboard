@@ -27,11 +27,11 @@ function NavBarItem({activePage, pageName, href, children}) {
 function AppComponent({activePage, onLogout}) {
   return <div className="app">
     {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION') ? <Navbar>
-      <NavBarItem activePage={activePage} pageName="ENVIRONMENT" href="#/environment">Environment</NavBarItem>
+      <NavBarItem activePage={activePage} pageName="VISUALIZATION_SPACE_LIST" href="#/visualization/spaces">Visualization</NavBarItem>
+      <NavBarItem activePage={activePage} pageName="ENVIRONMENT_SPACE" href="#/environment/spaces">Environment</NavBarItem>
+      <NavBarItem activePage={activePage} pageName="DEV_TOKEN_LIST" href="#/dev/tokens">Tokens</NavBarItem>
+      <NavBarItem activePage={activePage} pageName="DEV_WEBHOOK_LIST" href="#/dev/webhooks">Webhooks</NavBarItem>
       <NavBarItem activePage={activePage} pageName="ACCOUNT" href="#/account">Account</NavBarItem>
-      <NavBarItem activePage={activePage} pageName="TOKEN_LIST" href="#/tokens">Tokens</NavBarItem>
-      <NavBarItem activePage={activePage} pageName="WEBHOOK_LIST" href="#/webhooks">Webhooks</NavBarItem>
-      <NavBarItem activePage={activePage} pageName="SPACE_LIST" href="#/spaces">Spaces</NavBarItem>
       <button onClick={onLogout}>Logout</button>
     </Navbar> : null}
 
@@ -45,18 +45,18 @@ function ActivePage({activePage}) {
   switch (activePage) {
   case "LOGIN":
     return <Login />;
-  case "TOKEN_LIST":
-    return <TokenList />;
-  case "SPACE_LIST":
+  case "VISUALIZATION_SPACE_LIST":
     return <SpaceList />;
-  case "SPACE_DETAIL":
+  case "VISUALIZATION_SPACE_DETAIL":
     return <SpaceDetail />;
-  case "ENVIRONMENT":
+  case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":
     return <Account />;
-  case "WEBHOOK_LIST":
+  case "DEV_WEBHOOK_LIST":
     return <WebhookList />;
+  case "DEV_TOKEN_LIST":
+    return <TokenList />;
   case "ACCOUNT_REGISTRATION":
     return <AccountRegistration />;
   default:

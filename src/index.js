@@ -19,12 +19,12 @@ import thunk from 'redux-thunk';
 import createRouter from '@density/conduit';
 
 // Import all actions required to navigate from one page to another.
-import routeTransitionEnvironment from './actions/route-transition/environment';
+import routeTransitionEnvironmentSpace from './actions/route-transition/environment-space';
 import routeTransitionLogin from './actions/route-transition/login';
-import routeTransitionSpaceDetail from './actions/route-transition/space-detail';
-import routeTransitionSpaceList from './actions/route-transition/space-list';
-import routeTransitionTokenList from './actions/route-transition/token-list';
-import routeTransitionWebhookList from './actions/route-transition/webhook-list';
+import routeTransitionVisualizationSpaceDetail from './actions/route-transition/visualization-space-detail';
+import routeTransitionVisualizationSpaceList from './actions/route-transition/visualization-space-list';
+import routeTransitionDevTokenList from './actions/route-transition/dev-token-list';
+import routeTransitionDevWebhookList from './actions/route-transition/dev-webhook-list';
 import routeTransitionAccount from './actions/route-transition/account';
 import routeTransitionAccountRegister from './actions/route-transition/account-register';
 
@@ -69,13 +69,16 @@ const store = createStore(reducer, {}, compose(
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
-router.addRoute('spaces', () => routeTransitionSpaceList());
-router.addRoute('spaces/:id', id => routeTransitionSpaceDetail(id));
 
-router.addRoute('environment', () => routeTransitionEnvironment());
+router.addRoute('visualization/spaces', () => routeTransitionVisualizationSpaceList());
+router.addRoute('visualization/spaces/:id', id => routeTransitionVisualizationSpaceDetail(id));
+
+router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());
+
+router.addRoute('dev/tokens', () => routeTransitionDevTokenList());
+router.addRoute('dev/webhooks', () => routeTransitionDevWebhookList());
+
 router.addRoute('account', () => routeTransitionAccount());
-router.addRoute('tokens', () => routeTransitionTokenList());
-router.addRoute('webhooks', () => routeTransitionWebhookList());
 
 router.addRoute('account/register/:slug', slug => routeTransitionAccountRegister(slug));
 

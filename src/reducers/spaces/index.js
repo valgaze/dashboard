@@ -7,7 +7,7 @@ import { COLLECTION_SPACES_DELETE } from '../../actions/collection/spaces/delete
 import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/count-change';
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
 
-import { ROUTE_TRANSITION_SPACE_DETAIL } from '../../actions/route-transition/space-detail';
+import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
 
 const initialState = {
   filters: {
@@ -61,7 +61,7 @@ export default function spaces(state=initialState, action) {
     };
 
   // When the user changes the active space, update it in the store.
-  case ROUTE_TRANSITION_SPACE_DETAIL:
+  case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
     return {...state, selected: action.id};
 
   // Add a filter to a space

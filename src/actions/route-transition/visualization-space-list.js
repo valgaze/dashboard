@@ -6,11 +6,11 @@ import collectionSpacesSetEvents from '../collection/spaces/set-events';
 import collectionDoorwaysSet from '../collection/doorways/set';
 import collectionLinksSet from '../collection/links/set';
 
-export const ROUTE_TRANSITION_SPACE_LIST = 'ROUTE_TRANSITION_SPACE_LIST';
+export const ROUTE_TRANSITION_VISUALIZATION_SPACE_LIST = 'ROUTE_TRANSITION_VISUALIZATION_SPACE_LIST';
 
 export default function routeTransitionSpaceList() {
   return dispatch => {
-    dispatch({ type: ROUTE_TRANSITION_SPACE_LIST });
+    dispatch({ type: ROUTE_TRANSITION_VISUALIZATION_SPACE_LIST });
 
     return Promise.all([
       // Fetch a list of all spaces.
