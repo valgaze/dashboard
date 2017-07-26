@@ -5,13 +5,13 @@ import sessionTokenUnset from '../../actions/session-token/unset';
 
 import { connect } from 'react-redux';
 
-import TokenList from '../token-list/index';
-import SpaceList from '../space-list/index';
-import SpaceDetail from '../space-detail/index';
+import TokenList from '../dev-token-list/index';
+import SpaceList from '../visualization-space-list/index';
+import SpaceDetail from '../visualization-space-detail/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
 import Account from '../account/index';
-import WebhookList from '../webhook-list/index';
+import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
 import UnknownPage from '../unknown-page/index';
 

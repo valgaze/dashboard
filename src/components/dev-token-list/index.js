@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 
-import TokenCard from '../token-card/index';
-import TokenCreateModal from '../token-create-modal/index';
-import TokenUpdateModal from '../token-update-modal/index';
+import TokenCard from '../dev-token-card/index';
+import TokenCreateModal from '../dev-token-create-modal/index';
+import TokenUpdateModal from '../dev-token-update-modal/index';
 
 import collectionTokensCreate from '../../actions/collection/tokens/create';
 import collectionTokensUpdate from '../../actions/collection/tokens/update';

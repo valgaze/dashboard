@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import SpaceCard from '../space-card/index';
+import SpaceCard from '../visualization-space-card/index';
 
 export function SpaceList({spaces}) {
   return <div className="space-list">

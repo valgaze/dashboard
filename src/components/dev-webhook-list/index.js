@@ -13,9 +13,9 @@ import collectionWebhooksDestroy from '../../actions/collection/webhooks/destroy
 
 import Subnav, { SubnavItem } from '../subnav/index';
 
-import WebhookCard from '../webhook-card/index';
-import WebhookCreateModal from '../webhook-create/index';
-import WebhookUpdateModal from '../webhook-update-modal/index';
+import WebhookCard from '../dev-webhook-card/index';
+import WebhookCreateModal from '../dev-webhook-create/index';
+import WebhookUpdateModal from '../dev-webhook-update-modal/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 
