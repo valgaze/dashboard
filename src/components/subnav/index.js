@@ -7,8 +7,8 @@ export default function Subnav({children}) {
   </div>;
 }
 
-export function SubnavItem({href, active, children}) {
+export function SubnavItem({href, active, external, children}) {
   return <li className={classnames(`subnav-item`, {active})}>
-    <a href={href}>{children}</a>
+    <a target={external ? '_blank' : '_self'} href={href}>{children}</a>
   </li>;
 }
