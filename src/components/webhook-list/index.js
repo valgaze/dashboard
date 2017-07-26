@@ -36,6 +36,7 @@ export function WebhookList({
     <Subnav>
       <SubnavItem href="#/dev/tokens">Tokens</SubnavItem>
       <SubnavItem active href="#/dev/webhooks">Webhooks</SubnavItem>
+      <SubnavItem external href="http://docs.density.io/">API Documentation</SubnavItem>
     </Subnav>
 
     <div className="webhook-container">

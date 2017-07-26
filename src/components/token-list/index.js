@@ -36,6 +36,7 @@ export function TokenList({
     <Subnav>
       <SubnavItem active href="#/dev/tokens">Tokens</SubnavItem>
       <SubnavItem href="#/dev/webhooks">Webhooks</SubnavItem>
+      <SubnavItem external href="http://docs.density.io/">API Documentation</SubnavItem>
     </Subnav>
 
     <div className="token-list-container">
