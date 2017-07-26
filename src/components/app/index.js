@@ -19,7 +19,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 function NavBarItem({activePage, pageName, href, children}) {
-  return <li className={activePage === pageName ? 'active' : ''}>
+  return <li className={pageName.indexOf(activePage) >= 0 ? 'active' : ''}>
     <a href={href}>{children}</a>
   </li>;
 }
@@ -27,11 +27,14 @@ function NavBarItem({activePage, pageName, href, children}) {
 function AppComponent({activePage, onLogout}) {
   return <div className="app">
     {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION') ? <Navbar>
-      <NavBarItem activePage={activePage} pageName="VISUALIZATION_SPACE_LIST" href="#/visualization/spaces">Visualization</NavBarItem>
-      <NavBarItem activePage={activePage} pageName="ENVIRONMENT_SPACE" href="#/environment/spaces">Environment</NavBarItem>
-      <NavBarItem activePage={activePage} pageName="DEV_TOKEN_LIST" href="#/dev/tokens">Tokens</NavBarItem>
-      <NavBarItem activePage={activePage} pageName="DEV_WEBHOOK_LIST" href="#/dev/webhooks">Webhooks</NavBarItem>
-      <NavBarItem activePage={activePage} pageName="ACCOUNT" href="#/account">Account</NavBarItem>
+      <NavBarItem activePage={activePage} pageName={['VISUALIZATION_SPACE_LIST']} href="#/visualization/spaces">Visualization</NavBarItem>
+      <NavBarItem activePage={activePage} pageName={['ENVIRONMENT_SPACE']} href="#/environment/spaces">Environment</NavBarItem>
+      <NavBarItem
+        activePage={activePage}
+        pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
+        href="#/dev/tokens"
+      >Developer Tools</NavBarItem>
+      <NavBarItem activePage={activePage} pageName={['ACCOUNT']} href="#/account">Account</NavBarItem>
       <button onClick={onLogout}>Logout</button>
     </Navbar> : null}
 

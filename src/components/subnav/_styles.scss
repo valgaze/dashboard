@@ -1,0 +1,31 @@
+// A sub-navbar used on pages to provide a second layer of navigation.
+.subnav {
+  width: 100vw;
+  font-size: 15px;
+  background-color: #fafafa;
+  line-height: 36px;
+  border-top: 1px solid $gray-light;
+  border-bottom: 1px solid $gray-light;
+}
+
+.subnav-items {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0px auto;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.subnav-item {
+  display: inline-block;
+  padding-right: $padding-horizontal-base;
+}
+
+.subnav-item a {
+  color: $gray;
+  text-decoration: none;
+}
+
+.subnav-item.active a {
+  color: $gray-darker;
+}

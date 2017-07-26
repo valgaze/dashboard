@@ -1,6 +1,3 @@
-.space-list { @include grid-container; }
+.space-list-container { @include grid-container; }
 .space-list-row { @include grid-row; }
-
-.space-list-item {
-  @include grid-width(24, 12, 12, 12);
-}
+.space-list-item { @include grid-width(24, 12, 12, 12); }

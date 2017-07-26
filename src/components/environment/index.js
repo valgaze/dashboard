@@ -31,6 +31,8 @@ import Fab from '@density/ui-fab';
 import ContextMenu, { ContextMenuItem } from '@density/ui-context-menu';
 import InputBox from '@density/ui-input-box';
 
+import Subnav, { SubnavItem } from '../subnav/index';
+
 // Given a space, use links to determine all doorways in the space and return them.
 function allDoorwaysInSpace(doorways, links, space) {
   const linksForSpace = links.filter(link => link.spaceId === space.id);
@@ -67,133 +69,140 @@ export function Environment({
   onDeleteSpace,
 }) {
   return <div className="environment">
-    {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
-    <Fab onClick={() => {
-      if (activeModal.name) {
-        return onCloseModal();
-      } else {
-        return onOpenModal('space-doorway-popup');
-      }
-    }}>+</Fab>
+    <Subnav>
+      <SubnavItem active href="#/visualization/spaces">Spaces</SubnavItem>
+      <SubnavItem>Sensors</SubnavItem>
+    </Subnav>
 
-    {/************
-    ** MODALS
-    **************/}
+    <div className="environment-container">
+      {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
+      <Fab onClick={() => {
+        if (activeModal.name) {
+          return onCloseModal();
+        } else {
+          return onOpenModal('space-doorway-popup');
+        }
+      }}>+</Fab>
 
-    {/* Create spaces and doorways */}
-    {activeModal.name === 'create-space' ? <EnvironmentModalCreateSpace
-      onSubmit={onCreateSpace}
-      onDismiss={onCloseModal}
-    /> : null}
-    {activeModal.name === 'create-doorway' ? <EnvironmentModalCreateDoorway
-      onSubmit={onCreateDoorway}
-      onDismiss={onCloseModal}
-    /> : null}
-    {activeModal.name === 'space-doorway-popup' ? <ContextMenu className="environment-creation-context-menu">
-      <ContextMenuItem onClick={() => onOpenModal('create-space')}>Create Space</ContextMenuItem>
-      <ContextMenuItem onClick={() => onOpenModal('create-doorway')}>Create Doorway</ContextMenuItem>
-    </ContextMenu> : null}
+      {/************
+      ** MODALS
+      **************/}
 
-    {/* When a sensor placement is clicked, open a modal to warn the user prior to changing things. */}
-    {activeModal.name === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
-      onSubmit={() => onChangeSensorPlacement(activeModal.data.link)}
-      onDismiss={onCloseModal}
-    /> : null}
+      {/* Create spaces and doorways */}
+      {activeModal.name === 'create-space' ? <EnvironmentModalCreateSpace
+        onSubmit={onCreateSpace}
+        onDismiss={onCloseModal}
+      /> : null}
+      {activeModal.name === 'create-doorway' ? <EnvironmentModalCreateDoorway
+        onSubmit={onCreateDoorway}
+        onDismiss={onCloseModal}
+      /> : null}
+      {activeModal.name === 'space-doorway-popup' ? <ContextMenu className="environment-creation-context-menu">
+        <ContextMenuItem onClick={() => onOpenModal('create-space')}>Create Space</ContextMenuItem>
+        <ContextMenuItem onClick={() => onOpenModal('create-doorway')}>Create Doorway</ContextMenuItem>
+      </ContextMenu> : null}
 
-  {/* When a user drags a doorway into a space, prompt the user for the doorway direction with a modal. */}
-    {activeModal.name === 'assign-sensor-placement' ? <EnvironmentModalSensorPlacementAssignment
-      onSubmit={sensorPlacement => {
-        onLinkDoorwayToSpace(activeModal.data.doorway, activeModal.data.space, sensorPlacement);
-        onCloseModal();
-      }}
-      onDismiss={onCloseModal}
-    /> : null}
+      {/* When a sensor placement is clicked, open a modal to warn the user prior to changing things. */}
+      {activeModal.name === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
+        onSubmit={() => onChangeSensorPlacement(activeModal.data.link)}
+        onDismiss={onCloseModal}
+      /> : null}
 
-    {/* Updating spaces and doorways */}
-    {activeModal.name === 'update-doorway' ? <EnvironmentModalUpdateDoorway
-      initialDoorway={activeModal.data.doorway}
-      onSubmit={fields => onChangeDoorway(activeModal.data.doorway, fields)}
-      onDelete={() => onDeleteDoorway(activeModal.data.doorway)}
-      onDismiss={onCloseModal}
-      /* Add a key so that if a new doorway is selected without deselecting the last one, a new
-       * component instance will still be created. */
-      key={activeModal.data.doorway.id}
+      {/* When a user drags a doorway into a space, prompt the user for the doorway direction with a modal. */}
+      {activeModal.name === 'assign-sensor-placement' ? <EnvironmentModalSensorPlacementAssignment
+        onSubmit={sensorPlacement => {
+          onLinkDoorwayToSpace(activeModal.data.doorway, activeModal.data.space, sensorPlacement);
+          onCloseModal();
+        }}
+        onDismiss={onCloseModal}
+      /> : null}
 
-      /* The dom node to use when positioning the popover - the "target" dom node of the popover */
-      popoverPositionTarget={activeModal.data.popoverPositionTarget}
-    /> : null}
-    {activeModal.name === 'update-space' ? <EnvironmentModalUpdateSpace
-      initialSpace={activeModal.data.space}
-      onSubmit={fields => onChangeSpace(activeModal.data.space, fields)}
-      onDelete={() => onDeleteSpace(activeModal.data.space)}
-      onDismiss={onCloseModal}
-      doorways={activeModal.data.doorways}
-      /* Add a key so that if a new space is selected without deselecting the last one, a new
-       * component instance will still be created. */
-      key={activeModal.data.space.id}
+      {/* Updating spaces and doorways */}
+      {activeModal.name === 'update-doorway' ? <EnvironmentModalUpdateDoorway
+        initialDoorway={activeModal.data.doorway}
+        onSubmit={fields => onChangeDoorway(activeModal.data.doorway, fields)}
+        onDelete={() => onDeleteDoorway(activeModal.data.doorway)}
+        onDismiss={onCloseModal}
+        /* Add a key so that if a new doorway is selected without deselecting the last one, a new
+         * component instance will still be created. */
+        key={activeModal.data.doorway.id}
 
-      /* The dom node to use when positioning the popover - the "target" dom node of the popover */
-      popoverPositionTarget={activeModal.data.popoverPositionTarget}
-    /> : null}
+        /* The dom node to use when positioning the popover - the "target" dom node of the popover */
+        popoverPositionTarget={activeModal.data.popoverPositionTarget}
+      /> : null}
+      {activeModal.name === 'update-space' ? <EnvironmentModalUpdateSpace
+        initialSpace={activeModal.data.space}
+        onSubmit={fields => onChangeSpace(activeModal.data.space, fields)}
+        onDelete={() => onDeleteSpace(activeModal.data.space)}
+        onDismiss={onCloseModal}
+        doorways={activeModal.data.doorways}
+        /* Add a key so that if a new space is selected without deselecting the last one, a new
+         * component instance will still be created. */
+        key={activeModal.data.space.id}
 
-    <div className="environment-row">
-      <div className="space-column">
-        <InputBox
-          type="text"
-          placeholder="Search spaces"
-          value={spaces.filters.search}
-          onChange={e => onSpaceSearch(e.target.value)}
-        />
-        <div className="column-body">
-          <p>
-            Edit space details and remove doorways below.
-          </p>
-          {spaces.loading ? <p>Loading...</p> : null}
-          {!spaces.loading && spaces.data.length === 0 ? <p>No Spaces</p> : null}
-          <ul>
-            {spaceFilter(spaces.data, spaces.filters.search).map(space => {
-              return <EnvironmentSpaceItem
-                key={space.id}
-                space={space}
-                doorways={allDoorwaysInSpace(doorways.data, links.data, space).doorways}
-                links={links.data}
-                onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
-                onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
-                onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link})}
-                onClickDetails={e => onOpenModal(`update-space`, {
-                  space,
-                  doorways: allDoorwaysInSpace(doorways.data, links.data, space).doorways,
+        /* The dom node to use when positioning the popover - the "target" dom node of the popover */
+        popoverPositionTarget={activeModal.data.popoverPositionTarget}
+      /> : null}
+
+      <div className="environment-row">
+        <div className="space-column">
+          <InputBox
+            type="text"
+            placeholder="Search spaces"
+            value={spaces.filters.search}
+            onChange={e => onSpaceSearch(e.target.value)}
+          />
+          <div className="column-body">
+            <p>
+              Edit space details and remove doorways below.
+            </p>
+            {spaces.loading ? <p>Loading...</p> : null}
+            {!spaces.loading && spaces.data.length === 0 ? <p>No Spaces</p> : null}
+            <ul>
+              {spaceFilter(spaces.data, spaces.filters.search).map(space => {
+                return <EnvironmentSpaceItem
+                  key={space.id}
+                  space={space}
+                  doorways={allDoorwaysInSpace(doorways.data, links.data, space).doorways}
+                  links={links.data}
+                  onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
+                  onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
+                  onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link})}
+                  onClickDetails={e => onOpenModal(`update-space`, {
+                    space,
+                    doorways: allDoorwaysInSpace(doorways.data, links.data, space).doorways,
+                    popoverPositionTarget: e.target,
+                  })}
+                />;
+              })}
+            </ul>
+          </div>
+        </div>
+        <div className="doorway-column">
+          <InputBox
+            type="text"
+            placeholder="Search doorways"
+            value={doorways.filters.search}
+            onChange={e => onDoorwaySearch(e.target.value)}
+          />
+          <div className="column-body">
+            <p>
+              To link a doorway to a space, simply drag the doorway
+              from below to a space on the left.
+            </p>
+            {spaces.loading ? <p>Loading...</p> : null}
+            {!spaces.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
+            {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
+              return <EnvironmentDoorwayItem
+                key={doorway.id}
+                doorway={doorway}
+                onClickDetails={e => onOpenModal('update-doorway', {
+                  doorway,
                   popoverPositionTarget: e.target,
                 })}
               />;
             })}
-          </ul>
-        </div>
-      </div>
-      <div className="doorway-column">
-        <InputBox
-          type="text"
-          placeholder="Search doorways"
-          value={doorways.filters.search}
-          onChange={e => onDoorwaySearch(e.target.value)}
-        />
-        <div className="column-body">
-          <p>
-            To link a doorway to a space, simply drag the doorway
-            from below to a space on the left.
-          </p>
-          {spaces.loading ? <p>Loading...</p> : null}
-          {!spaces.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
-          {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
-            return <EnvironmentDoorwayItem
-              key={doorway.id}
-              doorway={doorway}
-              onClickDetails={e => onOpenModal('update-doorway', {
-                doorway,
-                popoverPositionTarget: e.target,
-              })}
-            />;
-          })}
+          </div>
         </div>
       </div>
     </div>
