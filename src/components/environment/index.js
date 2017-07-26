@@ -70,7 +70,7 @@ export function Environment({
 }) {
   return <div className="environment">
     <Subnav>
-      <SubnavItem active href="#/visualization/spaces">Spaces</SubnavItem>
+      <SubnavItem active href="#/environment/spaces">Spaces</SubnavItem>
       <SubnavItem>Sensors</SubnavItem>
     </Subnav>
 
