@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import InputBox from '@density/ui-input-box';
 
+import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
+
 import sessionTokenSet from '../../actions/session-token/set';
 import { accounts } from '@density-int/client';
 
@@ -40,73 +42,59 @@ export class AccountRegistration extends React.Component {
     return this.state.fullName.split(' ')[0];
   }
   render() {
-    return <div className="account-registration">
-      {this.state.error ? `Error: ${this.state.error}` : null}
-      <div className="account-registration-group">
-        <label htmlFor="account-registration-email">Email</label>
-        <InputBox
-          type="text"
-          id="account-registration-email"
-          placeholder="email@example.com"
-          value={this.state.email}
-          onChange={e => this.setState({email: e.target.value})}
-        />
-      </div>
-      <div className="account-registration-group">
-        <label htmlFor="account-registration-full-name">
-          Full Name (What would the government call you?)
-        </label>
-        <InputBox
-          type="text"
-          id="account-registration-full-name"
-          placeholder="John Smith"
-          value={this.state.fullName}
-          onChange={e => this.setState({fullName: e.target.value})}
-        />
-      </div>
-      <div className="account-registration-group">
-        <label htmlFor="account-registration-nickname">
-          Nickname (What do your friends call you?)
-        </label>
-        <InputBox
-          type="text"
-          id="account-registration-nickname"
-          placeholder={this.state.fullName && this.state.fullName.indexOf(' ') >= 0 ? this.generateNickname.apply(this) : 'J-dawg'}
-          value={this.state.nickName}
-          onChange={e => this.setState({nickname: e.target.value})}
-        />
-      </div>
-      <div className="account-registration-group">
-        <label htmlFor="account-registration-password">Password</label>
-        <InputBox
-          type="password"
-          id="account-registration-password"
-          placeholder="correct horse battery staple"
-          value={this.state.password}
-          onChange={e => this.setState({password: e.target.value})}
-        />
-      </div>
-      <div className="account-registration-group">
-        <label htmlFor="account-registration-password-confirmation">Password again</label>
-        <InputBox
-          type="password"
-          id="account-registration-password-confirmation"
-          placeholder="correct horse battery staple"
-          value={this.state.passwordConfirmation}
-          onChange={e => this.setState({passwordConfirmation: e.target.value})}
-        />
-      </div>
+    return <div className="account-registration-container">
+      <div className="account-registration">
+        {this.state.error ? `Error: ${this.state.error}` : null}
 
-      <br/>
-      <button
-        onClick={this.onSubmit.bind(this)}
-        disabled={!(
-          this.state.password.length > 0 &&
-          this.state.password === this.state.passwordConfirmation &&
-          this.state.fullName.length > 0 &&
-          this.state.email.indexOf('@') >= 0
-        )}
-      >Submit</button>
+        <img
+          className="account-registration-density-logo"
+          src="https://dashboard.density.io/assets/images/density_mark_black.png"
+          alt="Density Logo"
+        />
+
+        <p>Let's set up your account, {this.state.email}!</p>
+
+        <InputStackGroup className="account-registration-form">
+          <InputStackItem
+            type="text"
+            placeholder="Full Name"
+            onChange={e => this.setState({fullName: e.target.value})}
+            value={this.state.fullName}
+          />
+          <InputStackItem
+            type="text"
+            placeholder={this.state.fullName && this.state.fullName.indexOf(' ') >= 0 ? this.generateNickname.apply(this) : 'Nickname'}
+            onChange={e => this.setState({nickname: e.target.value})}
+            value={this.state.nickname}
+          />
+          <InputStackItem
+            type="password"
+            placeholder="Password"
+            onChange={e => this.setState({password: e.target.value})}
+            value={this.state.password}
+          />
+          <InputStackItem
+            type="password"
+            placeholder="Confirm password"
+            invalid={this.state.passwordConfirmation.length > 0 ? this.state.password !== this.state.passwordConfirmation : false}
+            onChange={e => this.setState({passwordConfirmation: e.target.value})}
+            value={this.state.passwordConfirmation}
+          />
+        </InputStackGroup>
+
+        <br/>
+        <button
+          className="account-registration-submit-button"
+          onClick={this.onSubmit.bind(this)}
+          disabled={!(
+            this.state.password.length > 0 &&
+            this.state.password === this.state.passwordConfirmation &&
+            this.state.fullName.length > 0 && 
+            (this.state.fullName.indexOf(' ') >= 0 || this.state.nickname.length > 0) &&
+            this.state.email.indexOf('@') >= 0
+          )}
+        >Submit</button>
+      </div>
     </div>;
   }
 }

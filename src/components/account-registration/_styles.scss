@@ -1,5 +1,23 @@
-.account-registration {
+.account-registration-container {
   @include grid-container;
+}
+
+.account-registration {
+  @include grid-width(24, 12, 8, 8);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.account-registration-density-logo {
+  width: 44px;
+  margin: $padding-vertical-base auto;
+  padding-bottom: 40px;
+  padding-top: 60px;
+  display: block;
+}
+
+.account-registration .input-stack-group {
+  width: calc(100% - 30px);
 }
 
 .account-registration-group {
@@ -10,5 +28,20 @@
   }
   input {
     display: inline-block;
+  }
+}
+
+// The submit button to the login form
+.account-registration-submit-button {
+  height: 50px;
+  background-color: #222A2E;
+  color: #fff;
+  box-shadow: none;
+  border: none;
+  border-radius: 25px;
+  width: 100%;
+
+  &:disabled {
+    opacity: 0.5;
   }
 }
