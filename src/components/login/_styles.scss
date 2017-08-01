@@ -2,14 +2,15 @@
   margin: 0px auto;
 
   // Set an explicit width for the login form.
-  width: 100%;
-  @media (min-width: $screen-sm-min) {
+  padding-left: 5px;
+  padding-right: 5px;
+  @media (min-width: 450px) {
     width: 350px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 
   padding-top: 90px;
-  padding-left: 30px;
-  padding-right: 30px;
 }
 
 .login-density-logo {
@@ -33,8 +34,23 @@
   border: none;
   border-radius: 25px;
   width: 100%;
+
+  &:disabled {
+    opacity: 0.5;
+  }
 }
 
-.login-form {
+// Wrapper for the login form
+.login-form-container {
+  text-align: center; // For forgot password link in the login form (goes to forgot password page)
+}
+
+.login-forgot-password-link {
+  margin-top: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.login-form, .login-password-reset-form {
   width: calc(100% - 30px);
 }

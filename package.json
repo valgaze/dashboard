@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@density-int/client": "^1.5.6",
+    "@density-int/client": "^1.5.7",
     "@density/chart-ingress-egress": "^1.0.7",
     "@density/charts": "^0.3.7",
     "@density/conduit": "^0.2.1",
