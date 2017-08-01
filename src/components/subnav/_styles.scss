@@ -29,3 +29,9 @@
 .subnav-item.active a {
   color: $gray-darker;
 }
+
+.subnav-external-arrow {
+  transform: rotate(-55deg);
+  display: inline-block;
+  margin-left: 2px;
+}
