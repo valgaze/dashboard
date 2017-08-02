@@ -7,13 +7,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Add private token to npmrc..."
+          name: "Add private token to npmrc"
           command: echo "//npmregistry.density.rodeo/:_authToken=${PRIVATE_NPM_TOKEN}" >> ~/.npmrc
       - run:
-          name: "Install dependencies..."
+          name: "Install dependencies"
           command: yarn
       - run:
-          name: "Multiline command"
+          name: "Build dashboard"
           command: |
             # Finally, build dashboard.
             echo "node -v = $(node -v)"
