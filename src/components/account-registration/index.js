@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import InputBox from '@density/ui-input-box';
-
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 
 import sessionTokenSet from '../../actions/session-token/set';
