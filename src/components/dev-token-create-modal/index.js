@@ -10,7 +10,7 @@ export default class TokenCreate extends React.Component {
     super(props);
     this.state = {
       name: '',
-      desc: '',
+      description: '',
       tokenType: READONLY,
     };
   }
@@ -41,8 +41,8 @@ export default class TokenCreate extends React.Component {
               className="token-create-description-field"
               id="token-create-desc"
               placeholder="Making the next google"
-              value={this.state.desc}
-              onChange={e => this.setState({desc: e.target.value})}
+              value={this.state.description}
+              onChange={e => this.setState({description: e.target.value})}
             />
           </div>
           <div className="token-create-token-type-container">
@@ -69,7 +69,7 @@ export default class TokenCreate extends React.Component {
             disabled={this.state.name.length === 0}
             onClick={() => this.props.onSubmit({
               name: this.state.name,
-              desc: this.state.desc,
+              description: this.state.description,
               tokenType: this.state.tokenType,
             })}
           >Submit</button>

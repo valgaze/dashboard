@@ -9,7 +9,7 @@ export default function collectionTokensCreate(token) {
 
     return accounts.tokens.create({
       name: token.name,
-      description: token.desc,
+      description: token.description,
       token_type: token.tokenType,
     }).then(tok => {
       dispatch(collectionTokensPush(tok));

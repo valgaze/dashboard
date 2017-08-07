@@ -24,8 +24,8 @@ export class Account extends React.Component {
       passwordConfirmation: '',
 
       // Initialize with a prop passing the initial value from the store
-      firstName: this.props.initialUser.firstName || '',
-      lastName: this.props.initialUser.lastName || '',
+      fullName: this.props.initialUser.fullName || '',
+      nickname: this.props.initialUser.nickname || '',
       email: this.props.initialUser.email || '',
     };
   }
@@ -54,27 +54,27 @@ export class Account extends React.Component {
               {this.state.error}
             </li>
 
-            <li className="account-first-name-container">
-              <label htmlFor="account-first-name">First Name</label>
+            <li className="account-full-name-container">
+              <label htmlFor="account-full-name">Full Name</label>
               <InputBox
                 type="text"
-                placeholder="First Name"
-                value={this.state.firstName}
-                onChange={e => this.setState({firstName: e.target.value})}
+                placeholder="Full Name"
+                value={this.state.fullName}
+                onChange={e => this.setState({fullName: e.target.value})}
                 disabled={this.state.mode !== EDIT}
-                id="account-first-name"
+                id="account-full-name"
               />
             </li>
 
-            <li className="account-last-name-container">
-              <label htmlFor="account-last-name">Last Name</label>
+            <li className="account-nickname-container">
+              <label htmlFor="account-nickname">Nickname</label>
               <InputBox
                 type="text"
-                placeholder="Last Name"
-                value={this.state.lastName}
-                onChange={e => this.setState({lastName: e.target.value})}
+                placeholder="Nickname"
+                value={this.state.nickname}
+                onChange={e => this.setState({nickname: e.target.value})}
                 disabled={this.state.mode !== EDIT}
-                id="account-last-name"
+                id="account-nickname"
               />
             </li>
 
@@ -143,11 +143,12 @@ export class Account extends React.Component {
 
             <li className="account-submit-user-details">
               {this.state.mode === EDIT ? <button
-                onClick={() => onSubmitUserUpdate(
-                  this.state.firstName,
-                  this.state.lastName,
-                  this.state.email,
-                )}
+                onClick={() => {
+                  onSubmitUserUpdate(this.state.fullName, this.state.nickname, this.state.email)
+                  .then(() => {
+                    this.setState({mode: NORMAL});
+                  })
+                }}
               >Submit User Details</button> : null}
             </li>
           </ul>
@@ -166,8 +167,8 @@ export default connect(state => {
     onSubmitPassword(currentPassword, password) {
       dispatch(userResetPassword(currentPassword, password));
     },
-    onSubmitUserUpdate(firstName, lastName, email) {
-      dispatch(userUpdate(firstName, lastName, email));
+    onSubmitUserUpdate(fullName, nickname, email) {
+      return dispatch(userUpdate(fullName, nickname, email));
     },
   };
 })(function AccountWrapper(props) {

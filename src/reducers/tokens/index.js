@@ -58,7 +58,7 @@ export default function tokens(state=initialState, action) {
   case COLLECTION_TOKENS_DELETE:
     return {
       ...state,
-      data: state.data.filter(item => action.item.id !== item.id),
+      data: state.data.filter(item => action.item.key !== item.key),
     };
 
   default:

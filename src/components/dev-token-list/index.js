@@ -97,6 +97,7 @@ export default connect(state => {
     },
     onDestroyToken(token) {
       dispatch(collectionTokensDestroy(token));
+      dispatch(hideModal());
     },
 
     onOpenModal(name, data) {

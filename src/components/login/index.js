@@ -164,7 +164,7 @@ export default connect(state => ({}), dispatch => {
   return {
     onUserSuccessfullyLoggedIn(token) {
       dispatch(sessionTokenSet(token));
-      window.location.hash = '#/spaces';
+      window.location.hash = '#/visualization/spaces';
     },
   };
 })(Login);
