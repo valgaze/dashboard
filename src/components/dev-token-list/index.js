@@ -32,6 +32,10 @@ export function TokenList({
   onCloseModal,
   onFilterTokenList,
 }) {
+  if (tokens.loading) {
+    return <div className="token-list-loading">Loading...</div>;
+  }
+
   return <div className="token-list">
     <Subnav>
       <SubnavItem active href="#/dev/tokens">Tokens</SubnavItem>
@@ -43,11 +47,13 @@ export function TokenList({
       <h2>All tokens</h2>
 
       {/* Search box to filter the list of tokens */}
-      <InputBox
-        placeholder="Search..."
-        value={tokens.filters.search}
-        onChange={e => onFilterTokenList(e.target.value)}
-      />
+      <div className="token-list-search">
+        <InputBox
+          placeholder="Search..."
+          value={tokens.filters.search}
+          onChange={e => onFilterTokenList(e.target.value)}
+        />
+      </div>
 
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
       <Fab onClick={() => {
@@ -59,11 +65,13 @@ export function TokenList({
       }}>+</Fab>
 
       {activeModal.name === 'token-create' ? <TokenCreateModal
+        loading={tokens.loading}
         onSubmit={onCreateToken}
         onDismiss={onCloseModal}
       /> : null}
       {activeModal.name === 'token-update' ? <TokenUpdateModal
         initialToken={activeModal.data.token}
+        loading={tokens.loading}
         onSubmit={onUpdateToken}
         onDismiss={onCloseModal}
         onDestroyToken={onDestroyToken}
@@ -88,8 +96,9 @@ export default connect(state => {
 }, dispatch => {
   return {
     onCreateToken(token) {
-      dispatch(collectionTokensCreate(token));
-      dispatch(hideModal());
+      dispatch(collectionTokensCreate(token)).then(() => {
+        dispatch(hideModal());
+      })
     },
     onUpdateToken(token) {
       dispatch(collectionTokensUpdate(token));

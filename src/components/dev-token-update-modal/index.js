@@ -37,7 +37,7 @@ export default class TokenUpdateModal extends React.Component {
           </CardHeader>
           <CardBody>
             <ul>
-              <li>
+              <li className="update-token-name-container">
                 <label htmlFor="update-token-name">Token Name</label>
                 <InputBox
                   type="text"
@@ -58,6 +58,7 @@ export default class TokenUpdateModal extends React.Component {
             </ul>
 
             <button
+              className="token-update-modal-submit"
               disabled={this.state.name.length === 0}
               onClick={() => this.props.onSubmit({
                 name: this.state.name,

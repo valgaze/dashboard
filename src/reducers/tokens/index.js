@@ -2,11 +2,16 @@ import { COLLECTION_TOKENS_SET } from '../../actions/collection/tokens/set';
 import { COLLECTION_TOKENS_PUSH } from '../../actions/collection/tokens/push';
 import { COLLECTION_TOKENS_FILTER } from '../../actions/collection/tokens/filter';
 import { COLLECTION_TOKENS_DELETE } from '../../actions/collection/tokens/delete';
+import { COLLECTION_TOKENS_DESTROY } from '../../actions/collection/tokens/destroy';
+import { COLLECTION_TOKENS_CREATE } from '../../actions/collection/tokens/create';
+import { COLLECTION_TOKENS_UPDATE } from '../../actions/collection/tokens/update';
+import { COLLECTION_TOKENS_ERROR } from '../../actions/collection/tokens/error';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 const initialState = {
   data: [],
   loading: true,
+  error: null,
   filters: {
     search: '',
   },
@@ -25,6 +30,7 @@ export default function tokens(state=initialState, action) {
   case COLLECTION_TOKENS_PUSH:
     return {
       ...state,
+      loading: false,
       data: [
         // Update existing items
         ...state.data.map(item => {
@@ -44,6 +50,16 @@ export default function tokens(state=initialState, action) {
       ],
     };
 
+  // Token operation has started.
+  case COLLECTION_TOKENS_CREATE:
+  case COLLECTION_TOKENS_DESTROY:
+  case COLLECTION_TOKENS_UPDATE:
+    return {...state, loading: true};
+
+  // Error in performing an operation on the collection.
+  case COLLECTION_TOKENS_ERROR:
+    return {...state, error: action.error};
+
   // Add a filter to the tokens collection.
   case COLLECTION_TOKENS_FILTER:
     return {
@@ -58,6 +74,7 @@ export default function tokens(state=initialState, action) {
   case COLLECTION_TOKENS_DELETE:
     return {
       ...state,
+      loading: false,
       data: state.data.filter(item => action.item.key !== item.key),
     };
 

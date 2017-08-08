@@ -29,6 +29,10 @@ export class Account extends React.Component {
       email: this.props.initialUser.email || '',
     };
   }
+  // Generate the default nickname if one isn't specified.
+  generateNickname() {
+    return this.state.fullName.indexOf(' ') >= 0 ? this.state.fullName.split(' ')[0] : undefined;
+  }
   render() {
     const {
       initialUser,
@@ -70,7 +74,7 @@ export class Account extends React.Component {
               <label htmlFor="account-nickname">Nickname</label>
               <InputBox
                 type="text"
-                placeholder="Nickname"
+                placeholder={this.generateNickname() || 'Nickname'}
                 value={this.state.nickname}
                 onChange={e => this.setState({nickname: e.target.value})}
                 disabled={this.state.mode !== EDIT}

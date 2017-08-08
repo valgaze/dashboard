@@ -5,6 +5,8 @@ import { SESSION_TOKEN_UNSET } from '../../actions/session-token/unset';
 import { core, accounts, metrics } from '@density-int/client';
 import eventSource from '../../helpers/websocket-event-pusher/index';
 
+const localStorage = window.localStorage || global.localStorage || {};
+
 const initialState = localStorage.sessionToken !== undefined ? JSON.parse(localStorage.sessionToken) : null;
 export function sessionToken(state=initialState, action) {
   switch (action.type) {

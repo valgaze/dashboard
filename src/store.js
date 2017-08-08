@@ -29,7 +29,7 @@ const reducer = combineReducers({
 });
 
 // Create our redux store for storing the application state.
-export default createStore(reducer, {}, compose(
+export default () => createStore(reducer, {}, compose(
   applyMiddleware(thunk),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));

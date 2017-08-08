@@ -4,7 +4,9 @@
 export default function localStorageReducerEnhancer(localStorageProperty) {
   return reducer => (state, props) => {
     const result = reducer(state, props);
-    window.localStorage[localStorageProperty] = JSON.stringify(result);
+    if (window.localStorage) {
+      window.localStorage[localStorageProperty] = JSON.stringify(result);
+    }
     return result;
   }
 }

@@ -30,7 +30,8 @@ import routeTransitionAccountForgotPassword from './actions/route-transition/acc
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 
 // All the reducer and store code is in a seperate file.
-import store from './store';
+import storeFactory from './store';
+const store = storeFactory();
 
 // Set the location of all services.
 core.config({core: 'https://api.density.io/v2'});

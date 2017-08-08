@@ -13,6 +13,12 @@
   display: inline-block;
 }
 
+// Styles the drag source, not the transparent overlay. Can't style that without sme hacks it looks
+// like.
+.environment-doorway-item-dragging {
+  opacity: 0.5;
+}
+
 .environment-doorway-item-details {
   transform: rotate(90deg);
   display: inline-block;

@@ -5,8 +5,8 @@ import assert from 'assert';
 import { Account, NORMAL, EDIT, PASSWORD_RESET } from './index';
 
 const user = {
-  firstName: 'foo',
-  lastName: 'bar',
+  fullName: 'foo',
+  nickname: 'bar',
   email: 'foo@density.io',
   organization: {
     name: 'baz',
@@ -20,8 +20,8 @@ describe('Accounts page', function() {
     />);
 
     // Always show name and email inputs
-    assert.notEqual(component.find('.account-first-name-container').length, 0);
-    assert.notEqual(component.find('.account-last-name-container').length, 0);
+    assert.notEqual(component.find('.account-full-name-container').length, 0);
+    assert.notEqual(component.find('.account-nickname-container').length, 0);
     assert.notEqual(component.find('.account-email-container').length, 0);
 
     // Show change password link
@@ -42,8 +42,8 @@ describe('Accounts page', function() {
     component.find('.account-change-password-value span').simulate('click');
 
     // Always show name and email inputs
-    assert.notEqual(component.find('.account-first-name-container').length, 0);
-    assert.notEqual(component.find('.account-last-name-container').length, 0);
+    assert.notEqual(component.find('.account-full-name-container').length, 0);
+    assert.notEqual(component.find('.account-nickname-container').length, 0);
     assert.notEqual(component.find('.account-email-container').length, 0);
 
     // Don't show change password link
@@ -64,8 +64,8 @@ describe('Accounts page', function() {
     component.find('.account-edit-button').simulate('click');
 
     // Always show name and email inputs
-    assert.equal(component.find('.account-first-name-container input').prop('disabled'), false);
-    assert.equal(component.find('.account-last-name-container input').prop('disabled'), false);
+    assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
+    assert.equal(component.find('.account-nickname-container input').prop('disabled'), false);
     assert.equal(component.find('.account-email-container input').prop('disabled'), false);
 
     // Don't show change password link
@@ -76,5 +76,17 @@ describe('Accounts page', function() {
 
     // Show submit user details button
     assert.notEqual(component.find('.account-submit-user-details button').length, 0);
+  });
+  it('sets the nickname to the best guess from the full name', function() {
+    const component = mount(<Account
+      initialUser={user}
+    />);
+
+    // Name defaults to 'Nickname'
+    assert.equal(component.find('.account-nickname-container input').prop('placeholder'), 'Nickname');
+
+    // Nickname changes depending on full name
+    component.setState({fullName: 'Foo Bar'});
+    assert.equal(component.find('.account-nickname-container input').prop('placeholder'), 'Foo');
   });
 });
