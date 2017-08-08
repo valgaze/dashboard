@@ -49,6 +49,7 @@ describe('webhooks', function() {
 
     assert.deepEqual(webhookUpdatedInCollection, {
       ...initialState,
+      loading: false,
       data: [{id: WEBHOOK_ID_ONE, endpoint: 'https://example.com', name: 'foo'}],
     });
   });
@@ -63,6 +64,7 @@ describe('webhooks', function() {
 
     assert.deepEqual(result, {
       ...initialState,
+      loading: false,
       data: [{id: 0, name: 'foo', endpoint: 'https://density.io'}],
     });
   });
@@ -100,7 +102,11 @@ describe('webhooks', function() {
     const errorState = webhooks(initialState, collectionWebhooksError('boom!'));
 
     // Initial state should then match final state.
-    assert.deepEqual(errorState, {...initialState, error: 'boom!'});
+    assert.deepEqual(errorState, {
+      ...initialState,
+      loading: false,
+      error: 'boom!',
+    });
   });
 });
 

@@ -32,33 +32,47 @@ export function WebhookList({
   onOpenModal,
   onCloseModal,
 }) {
+  const modals = <div>
+    {activeModal.name === 'webhook-create' ? <WebhookCreateModal
+      error={webhooks.error}
+      loading={webhooks.loading}
+
+      onSubmit={onCreateWebhook}
+      onDismiss={onCloseModal}
+    /> : null}
+
+    {activeModal.name === 'webhook-update' ? <WebhookUpdateModal
+      initialWebhook={activeModal.data.webhook}
+      error={webhooks.error}
+      loading={webhooks.loading}
+
+      onSubmit={onUpdateWebhook}
+      onDismiss={onCloseModal}
+      onDestroyWebhook={onDestroyWebhook}
+    /> : null}
+  </div>;
+
+  // Sub navigation under the main navbar. USed to navigate within the dev tools section.
+  const subnav = <Subnav>
+    <SubnavItem href="#/dev/tokens">Tokens</SubnavItem>
+    <SubnavItem active href="#/dev/webhooks">Webhooks</SubnavItem>
+    <SubnavItem external href="http://docs.density.io/">API Documentation</SubnavItem>
+  </Subnav>;
+
+  if (webhooks.loading) {
+    return <div className="webhook-list">
+      {modals}
+      {subnav}
+      <div className="webhook-list-loading">Loading...</div>
+    </div>;
+  }
+
   return <div className="webhook">
-    <Subnav>
-      <SubnavItem href="#/dev/tokens">Tokens</SubnavItem>
-      <SubnavItem active href="#/dev/webhooks">Webhooks</SubnavItem>
-      <SubnavItem external href="http://docs.density.io/">API Documentation</SubnavItem>
-    </Subnav>
+    {modals}
+    {subnav}
 
     <div className="webhook-container">
       <h1>Webhooks</h1>
-
-      {activeModal.name === 'webhook-create' ? <WebhookCreateModal
-        error={webhooks.error}
-        loading={webhooks.loading}
-
-        onSubmit={onCreateWebhook}
-        onDismiss={onCloseModal}
-      /> : null}
-
-      {activeModal.name === 'webhook-update' ? <WebhookUpdateModal
-        initialWebhook={activeModal.data.webhook}
-        error={webhooks.error}
-        loading={webhooks.loading}
-
-        onSubmit={onUpdateWebhook}
-        onDismiss={onCloseModal}
-        onDestroyWebhook={onDestroyWebhook}
-      /> : null}
 
       {/* Search box to filter webhook list */}
       <div className="webhook-list-search">

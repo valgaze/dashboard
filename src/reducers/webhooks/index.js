@@ -10,7 +10,7 @@ import { COLLECTION_WEBHOOKS_ERROR } from '../../actions/collection/webhooks/err
 
 const initialState = {
   data: [],
-  loading: false,
+  loading: true,
   error: null,
   filters: {
     search: '',

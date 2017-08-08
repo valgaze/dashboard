@@ -51,21 +51,25 @@ export function TokenList({
     /> : null}
   </div>;
 
+  // Sub navigation under the main navbar. USed to navigate within the dev tools section.
+  const subnav = <Subnav>
+    <SubnavItem active href="#/dev/tokens">Tokens</SubnavItem>
+    <SubnavItem href="#/dev/webhooks">Webhooks</SubnavItem>
+    <SubnavItem external href="http://docs.density.io/">API Documentation</SubnavItem>
+  </Subnav>;
+
+
   if (tokens.loading) {
     return <div className="token-list">
       {modals}
+      {subnav}
       <div className="token-list-loading">Loading...</div>
     </div>;
   }
 
   return <div className="token-list">
     {modals}
-
-    <Subnav>
-      <SubnavItem active href="#/dev/tokens">Tokens</SubnavItem>
-      <SubnavItem href="#/dev/webhooks">Webhooks</SubnavItem>
-      <SubnavItem external href="http://docs.density.io/">API Documentation</SubnavItem>
-    </Subnav>
+    {subnav}
 
     <div className="token-list-container">
       <h2>All tokens</h2>
