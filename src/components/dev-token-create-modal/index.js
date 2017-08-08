@@ -17,6 +17,9 @@ export default class TokenCreate extends React.Component {
   render() {
     return <Modal onClickBackdrop={this.props.onDismiss}>
       <div className="token-create">
+        {this.props.loading ? <span>Loading</span> : null}
+        {this.props.error ? <span>Error: {this.props.error}</span> : null}
+
         <Card>
           <CardHeader>
             Create token

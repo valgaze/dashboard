@@ -102,7 +102,7 @@ describe('token reducer actions', function() {
     const errorState = tokens(initialState, collectionTokensError('boom!'));
 
     // Initial state should then match final state.
-    assert.deepEqual(errorState, {...initialState, error: 'boom!'});
+    assert.deepEqual(errorState, {...initialState, error: 'boom!', loading: false});
   });
 });
 

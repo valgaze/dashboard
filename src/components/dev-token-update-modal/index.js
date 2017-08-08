@@ -57,6 +57,9 @@ export default class TokenUpdateModal extends React.Component {
               </li>
             </ul>
 
+            {this.props.loading ? <span>Loading</span> : null}
+            {this.props.error ? <span>Error: {this.props.error}</span> : null}
+
             <button
               className="token-update-modal-submit"
               disabled={this.state.name.length === 0}
@@ -89,20 +92,26 @@ export default class TokenUpdateModal extends React.Component {
           <CardBody>
             <h1>Are you ABSOLUTELY sure?</h1>
 
+            {this.props.loading ? <span>Loading</span> : null}
+            {this.props.error ? <span>Error: {this.props.error}</span> : null}
+
             <p>
               The act of removing a token is irreversible - ie, you might have the token built into
               a compiled thing somewhere that would be hard / impossible to reassign. Type in the
               name of this token below (<code>{this.state.name}</code>) to remove.
             </p>
 
-            <InputBox
-              type="text"
-              value={this.state.destroyNameConfirmation}
-              placeholder={this.state.name}
-              onChange={e => this.setState({destroyNameConfirmation: e.target.value})}
-            />
+            <div className="token-update-destroy-confirmation">
+              <InputBox
+                type="text"
+                value={this.state.destroyNameConfirmation}
+                placeholder={this.state.name}
+                onChange={e => this.setState({destroyNameConfirmation: e.target.value})}
+              />
+            </div>
 
             <button
+              className="token-update-destroy-submit"
               disabled={this.state.name !== this.state.destroyNameConfirmation}
               onClick={() => this.props.onDestroyToken(this.props.initialToken)}
             >I got it, get rid of my token!</button>

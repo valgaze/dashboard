@@ -32,11 +32,35 @@ export function TokenList({
   onCloseModal,
   onFilterTokenList,
 }) {
+  const modals = <div>
+    {activeModal.name === 'token-create' ? <TokenCreateModal
+      loading={tokens.loading}
+      error={tokens.error}
+
+      onSubmit={onCreateToken}
+      onDismiss={onCloseModal}
+    /> : null}
+    {activeModal.name === 'token-update' ? <TokenUpdateModal
+      initialToken={activeModal.data.token}
+      loading={tokens.loading}
+      error={tokens.error}
+
+      onSubmit={onUpdateToken}
+      onDismiss={onCloseModal}
+      onDestroyToken={onDestroyToken}
+    /> : null}
+  </div>;
+
   if (tokens.loading) {
-    return <div className="token-list-loading">Loading...</div>;
+    return <div className="token-list">
+      {modals}
+      <div className="token-list-loading">Loading...</div>
+    </div>;
   }
 
   return <div className="token-list">
+    {modals}
+
     <Subnav>
       <SubnavItem active href="#/dev/tokens">Tokens</SubnavItem>
       <SubnavItem href="#/dev/webhooks">Webhooks</SubnavItem>
@@ -64,19 +88,6 @@ export function TokenList({
         }
       }}>+</Fab>
 
-      {activeModal.name === 'token-create' ? <TokenCreateModal
-        loading={tokens.loading}
-        onSubmit={onCreateToken}
-        onDismiss={onCloseModal}
-      /> : null}
-      {activeModal.name === 'token-update' ? <TokenUpdateModal
-        initialToken={activeModal.data.token}
-        loading={tokens.loading}
-        onSubmit={onUpdateToken}
-        onDismiss={onCloseModal}
-        onDestroyToken={onDestroyToken}
-      /> : null}
-
       <div className="token-list-row">
         {tokenFilter(tokens.data, tokens.filters.search).map(token => {
           return <div className="token-list-item" key={token.key}>
@@ -101,12 +112,14 @@ export default connect(state => {
       })
     },
     onUpdateToken(token) {
-      dispatch(collectionTokensUpdate(token));
-      dispatch(hideModal());
+      dispatch(collectionTokensUpdate(token)).then(() => {
+        dispatch(hideModal());
+      });
     },
     onDestroyToken(token) {
-      dispatch(collectionTokensDestroy(token));
-      dispatch(hideModal());
+      dispatch(collectionTokensDestroy(token)).then(() => {
+        dispatch(hideModal());
+      });
     },
 
     onOpenModal(name, data) {

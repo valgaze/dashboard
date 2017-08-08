@@ -1,18 +1,24 @@
 import collectionTokensPush from './push';
 import { accounts } from '@density-int/client';
+import collectionTokensError from './error';
 
 export const COLLECTION_TOKENS_CREATE = 'COLLECTION_TOKENS_CREATE';
 
 export default function collectionTokensCreate(token) {
-  return dispatch => {
+  return async dispatch => {
     dispatch({ type: COLLECTION_TOKENS_CREATE, token });
 
-    return accounts.tokens.create({
-      name: token.name,
-      description: token.description,
-      token_type: token.tokenType,
-    }).then(tok => {
-      dispatch(collectionTokensPush(tok));
-    });
+    try {
+      const response = await accounts.tokens.create({
+        name: token.name,
+        description: token.description,
+        token_type: token.tokenType,
+      });
+      dispatch(collectionTokensPush(response));
+      return response;
+    } catch (err) {
+      dispatch(collectionTokensError(err));
+      if (process.env.NODE_ENV !== 'test') { throw err; }
+    }
   };
 }

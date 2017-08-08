@@ -54,11 +54,11 @@ export default function tokens(state=initialState, action) {
   case COLLECTION_TOKENS_CREATE:
   case COLLECTION_TOKENS_DESTROY:
   case COLLECTION_TOKENS_UPDATE:
-    return {...state, loading: true};
+    return {...state, loading: true, error: null};
 
   // Error in performing an operation on the collection.
   case COLLECTION_TOKENS_ERROR:
-    return {...state, error: action.error};
+    return {...state, error: action.error, loading: false};
 
   // Add a filter to the tokens collection.
   case COLLECTION_TOKENS_FILTER:
