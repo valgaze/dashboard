@@ -3,6 +3,10 @@ import { COLLECTION_WEBHOOKS_SET } from '../../actions/collection/webhooks/set';
 import { COLLECTION_WEBHOOKS_PUSH } from '../../actions/collection/webhooks/push';
 import { COLLECTION_WEBHOOKS_DELETE } from '../../actions/collection/webhooks/delete';
 import { COLLECTION_WEBHOOKS_FILTER } from '../../actions/collection/webhooks/filter';
+import { COLLECTION_WEBHOOKS_CREATE } from '../../actions/collection/webhooks/create';
+import { COLLECTION_WEBHOOKS_DESTROY } from '../../actions/collection/webhooks/destroy';
+import { COLLECTION_WEBHOOKS_UPDATE } from '../../actions/collection/webhooks/update';
+import { COLLECTION_WEBHOOKS_ERROR } from '../../actions/collection/webhooks/error';
 
 const initialState = {
   data: [],
@@ -27,6 +31,7 @@ export default function webhooks(state=initialState, action) {
   case COLLECTION_WEBHOOKS_PUSH:
     return {
       ...state,
+      loading: false,
       data: [
         // Update existing items
         ...state.data.map(item => {
@@ -46,10 +51,21 @@ export default function webhooks(state=initialState, action) {
       ],
     };
 
+  // Webhook operation has started.
+  case COLLECTION_WEBHOOKS_CREATE:
+  case COLLECTION_WEBHOOKS_DESTROY:
+  case COLLECTION_WEBHOOKS_UPDATE:
+    return {...state, loading: true};
+
+  // Error in performing an operation on the collection.
+  case COLLECTION_WEBHOOKS_ERROR:
+    return {...state, error: action.error};
+
   // Delete a space from the collection.
   case COLLECTION_WEBHOOKS_DELETE:
     return {
       ...state,
+      loading: false,
       data: state.data.filter(item => action.item.id !== item.id),
     };
 
