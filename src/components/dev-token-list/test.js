@@ -89,7 +89,7 @@ describe('Token list page', function() {
     const newToken = store.getState().tokens.data.find(i => i.name === 'token name');
     assert.notEqual(newToken, undefined);
   });
-  it('should display an error when creating an existing token fails', async function() {
+  it('should display an error when creating a token fails', async function() {
     // Mount the connected version of the component.
     const store = storeFactory();
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);

@@ -43,23 +43,31 @@ export function WebhookList({
       <h1>Webhooks</h1>
 
       {activeModal.name === 'webhook-create' ? <WebhookCreateModal
+        error={webhooks.error}
+        loading={webhooks.loading}
+
         onSubmit={onCreateWebhook}
         onDismiss={onCloseModal}
       /> : null}
 
       {activeModal.name === 'webhook-update' ? <WebhookUpdateModal
         initialWebhook={activeModal.data.webhook}
+        error={webhooks.error}
+        loading={webhooks.loading}
+
         onSubmit={onUpdateWebhook}
         onDismiss={onCloseModal}
         onDestroyWebhook={onDestroyWebhook}
       /> : null}
 
       {/* Search box to filter webhook list */}
-      <InputBox
-        placeholder="Search..."
-        value={webhooks.filters.search}
-        onChange={e => onFilterWebhookList(e.target.value)}
-      />
+      <div className="webhook-list-search">
+        <InputBox
+          placeholder="Search..."
+          value={webhooks.filters.search}
+          onChange={e => onFilterWebhookList(e.target.value)}
+        />
+      </div>
 
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
       <Fab onClick={() => onOpenModal('webhook-create')}>+</Fab>
@@ -87,19 +95,22 @@ export default connect(state => {
 }, dispatch => {
   return {
     onCreateWebhook(webhook) {
-      dispatch(collectionWebhooksCreate(webhook));
-      dispatch(hideModal());
+      dispatch(collectionWebhooksCreate(webhook)).then(() => {
+        dispatch(hideModal());
+      });
     },
     onFilterWebhookList(value) {
       dispatch(collectionWebhooksFilter('search', value));
     },
     onUpdateWebhook(webhook) {
-      dispatch(collectionWebhooksUpdate(webhook));
-      dispatch(hideModal());
+      dispatch(collectionWebhooksUpdate(webhook)).then(() => {
+        dispatch(hideModal());
+      });
     },
     onDestroyWebhook(webhook) {
-      dispatch(collectionWebhooksDestroy(webhook));
-      dispatch(hideModal());
+      dispatch(collectionWebhooksDestroy(webhook)).then(() => {
+        dispatch(hideModal());
+      });
     },
 
     onOpenModal(name, data) {

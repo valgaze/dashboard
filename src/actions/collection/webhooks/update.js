@@ -1,18 +1,25 @@
 import collectionWebhooksPush from './push';
 import { core } from '@density-int/client';
+import collectionWebhooksError from './error';
 
 export const COLLECTION_WEBHOOKS_UPDATE = 'COLLECTION_WEBHOOKS_UPDATE';
 
 export default function collectionWebhooksUpdate(item) {
-  return dispatch => {
+  return async dispatch => {
     dispatch({ type: COLLECTION_WEBHOOKS_UPDATE, item });
 
-    return core.webhooks.update({
-      id: item.id,
-      name: item.name,
-      description: item.description,
-    }).then(whk => {
-      dispatch(collectionWebhooksPush(whk));
-    });
+    try {
+      const response = await core.webhooks.update({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        endpoint: item.endpoint,
+      });
+      dispatch(collectionWebhooksPush(response));
+      return response;
+    } catch (err) {
+      dispatch(collectionWebhooksError(err));
+      if (process.env.NODE_ENV !== 'test') { throw err; }
+    }
   };
 }

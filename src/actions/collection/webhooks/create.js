@@ -1,18 +1,26 @@
 import collectionWebhooksPush from './push';
 import { core } from '@density-int/client';
+import collectionWebhooksError from './error';
 
 export const COLLECTION_WEBHOOKS_CREATE = 'COLLECTION_WEBHOOKS_CREATE';
 
-export default function collectionWebhooksCreate(webhook) {
-  return dispatch => {
-    dispatch({ type: COLLECTION_WEBHOOKS_CREATE, item: webhook });
+export default function collectionWebhooksCreate(item) {
+  return async dispatch => {
+    dispatch({ type: COLLECTION_WEBHOOKS_CREATE, item });
 
-    return core.webhooks.create({
-      name: webhook.name,
-      description: webhook.desc,
-      endpoint: webhook.endpoint,
-    }).then(webhook => {
-      dispatch(collectionWebhooksPush(webhook));
-    });
+    try {
+      const response = await core.webhooks.create({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        endpoint: item.endpoint,
+      });
+      dispatch(collectionWebhooksPush(response));
+      return response;
+    } catch (err) {
+      dispatch(collectionWebhooksError(err));
+      if (process.env.NODE_ENV !== 'test') { throw err; }
+    }
   };
 }
+

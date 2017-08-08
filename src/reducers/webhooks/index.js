@@ -11,7 +11,7 @@ import { COLLECTION_WEBHOOKS_ERROR } from '../../actions/collection/webhooks/err
 const initialState = {
   data: [],
   loading: false,
-  error: false,
+  error: null,
   filters: {
     search: '',
   },
@@ -55,11 +55,11 @@ export default function webhooks(state=initialState, action) {
   case COLLECTION_WEBHOOKS_CREATE:
   case COLLECTION_WEBHOOKS_DESTROY:
   case COLLECTION_WEBHOOKS_UPDATE:
-    return {...state, loading: true};
+    return {...state, loading: true, error: null};
 
   // Error in performing an operation on the collection.
   case COLLECTION_WEBHOOKS_ERROR:
-    return {...state, error: action.error};
+    return {...state, error: action.error, loading: false};
 
   // Delete a space from the collection.
   case COLLECTION_WEBHOOKS_DELETE:

@@ -17,7 +17,7 @@ export default class WebhookUpdateModal extends React.Component {
   }
 
   renderEdit() {
-    return <div className="token-update-modal">
+    return <div className="webhook-update-modal">
       <Modal onClickBackdrop={this.props.onDismiss}>
         <Card>
           <CardHeader>
@@ -25,7 +25,7 @@ export default class WebhookUpdateModal extends React.Component {
 
             {/* Edit button in the header */}
             <ModalHeaderActionButton
-              className="token-update-destroy-link"
+              className="webhook-update-destroy-link"
               onClick={() => this.setState({isDestroying: true})}
             >
               Destroy Webhook
@@ -36,7 +36,7 @@ export default class WebhookUpdateModal extends React.Component {
           </CardHeader>
           <CardBody>
             <ul>
-              <li>
+              <li className="webhook-update-name-container">
                 <label htmlFor="update-webhook-name">Webhook Name</label>
                 <InputBox
                   type="text"
@@ -45,8 +45,8 @@ export default class WebhookUpdateModal extends React.Component {
                   onChange={e => this.setState({name: e.target.value})}
                 />
               </li>
-              <li>
-                <label htmlFor="update-webhook-desc">Description</label>
+              <li className="webhook-update-description-container">
+                <label htmlFor="update-webhook-description">Description</label>
                 <InputBox
                   type="text"
                   id="update-webhook-description"
@@ -56,7 +56,11 @@ export default class WebhookUpdateModal extends React.Component {
               </li>
             </ul>
 
+            {this.props.loading ? <span>Loading</span> : null}
+            {this.props.error ? <span>Error: {this.props.error}</span> : null}
+
             <button
+              className="webhook-update-modal-submit"
               disabled={this.state.name.length === 0}
               onClick={() => this.props.onSubmit({
                 id: this.props.initialWebhook.id,
@@ -92,7 +96,11 @@ export default class WebhookUpdateModal extends React.Component {
               webhook with the same contents.
             </p>
 
+            {this.props.loading ? <span>Loading</span> : null}
+            {this.props.error ? <span>Error: {this.props.error}</span> : null}
+
             <button
+              className="webhook-update-modal-destroy-submit"
               onClick={() => this.props.onDestroyWebhook(this.props.initialWebhook)}
             >Delete</button>
           </CardBody>
