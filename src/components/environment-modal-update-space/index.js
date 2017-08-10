@@ -24,6 +24,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
 
             {/* Edit / Delete button */}
             <ModalHeaderActionButton
+              className="update-space-delete-button"
               onClick={this.props.onDelete}
             >Delete</ModalHeaderActionButton>
 
@@ -31,8 +32,10 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
             <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
           <CardBody>
+            {this.props.loading ? <span>Loading</span> : null}
+            {this.props.error ? <span>Error: {this.props.error}</span> : null}
             <ul>
-              <li>
+              <li className="update-space-name-container">
                 <label htmlFor="update-space-name">Space Name</label>
                 <InputBox
                   type="text"
@@ -41,7 +44,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
                   onChange={e => this.setState({name: e.target.value})}
                 />
               </li>
-              <li>
+              <li className="update-space-time-zone-container">
                 <label htmlFor="update-space-timezone">Time Zone</label>
                 <InputBox
                   type="text"
@@ -50,7 +53,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
                   onChange={e => this.setState({timeZone: e.target.value})}
                 />
               </li>
-              <li>
+              <li className="update-space-daily-reset-container">
                 <label htmlFor="update-space-daily-reset">Daily Reset</label>
                 <InputBox
                   type="text"
@@ -70,10 +73,12 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               </li>
             </ul>
 
-            <button
-              disabled={this.state.name.length === 0}
-              onClick={() => this.props.onSubmit(this.state)}
-            >Save</button>
+            <div className="environment-modal-update-space-submit">
+              <button
+                disabled={this.state.name.length === 0}
+                onClick={() => this.props.onSubmit(this.state)}
+              >Save</button>
+            </div>
           </CardBody>
         </Card>
       </Modal>
@@ -86,6 +91,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
 
         {/* Edit / Delete button */}
         <ModalHeaderActionButton
+          className="update-space-edit-button"
           onClick={() => this.setState({isEditing: true})}
         >Edit</ModalHeaderActionButton>
 
@@ -93,6 +99,8 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
         <ModalClose onClick={this.props.onDismiss} />
       </CardHeader>
       <CardBody>
+        {this.props.loading ? <span>Loading</span> : null}
+        {this.props.error ? <span>Error: {this.props.error}</span> : null}
         <ul>
           <li>
             <label htmlFor="update-space-name">Space Name</label>

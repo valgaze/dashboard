@@ -90,10 +90,14 @@ export function Environment({
 
       {/* Create spaces and doorways */}
       {activeModal.name === 'create-space' ? <EnvironmentModalCreateSpace
+        error={spaces.error}
+        loading={spaces.loading}
         onSubmit={onCreateSpace}
         onDismiss={onCloseModal}
       /> : null}
       {activeModal.name === 'create-doorway' ? <EnvironmentModalCreateDoorway
+        error={spaces.error}
+        loading={spaces.loading}
         onSubmit={onCreateDoorway}
         onDismiss={onCloseModal}
       /> : null}
@@ -104,12 +108,16 @@ export function Environment({
 
       {/* When a sensor placement is clicked, open a modal to warn the user prior to changing things. */}
       {activeModal.name === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
+        error={spaces.error}
+        loading={spaces.loading}
         onSubmit={() => onChangeSensorPlacement(activeModal.data.link)}
         onDismiss={onCloseModal}
       /> : null}
 
       {/* When a user drags a doorway into a space, prompt the user for the doorway direction with a modal. */}
       {activeModal.name === 'assign-sensor-placement' ? <EnvironmentModalSensorPlacementAssignment
+        error={spaces.error}
+        loading={spaces.loading}
         onSubmit={sensorPlacement => {
           onLinkDoorwayToSpace(activeModal.data.doorway, activeModal.data.space, sensorPlacement);
           onCloseModal();
@@ -119,6 +127,8 @@ export function Environment({
 
       {/* Updating spaces and doorways */}
       {activeModal.name === 'update-doorway' ? <EnvironmentModalUpdateDoorway
+        error={spaces.error}
+        loading={spaces.loading}
         initialDoorway={activeModal.data.doorway}
         onSubmit={fields => onChangeDoorway(activeModal.data.doorway, fields)}
         onDelete={() => onDeleteDoorway(activeModal.data.doorway)}
@@ -131,6 +141,8 @@ export function Environment({
         popoverPositionTarget={activeModal.data.popoverPositionTarget}
       /> : null}
       {activeModal.name === 'update-space' ? <EnvironmentModalUpdateSpace
+        error={spaces.error}
+        loading={spaces.loading}
         initialSpace={activeModal.data.space}
         onSubmit={fields => onChangeSpace(activeModal.data.space, fields)}
         onDelete={() => onDeleteSpace(activeModal.data.space)}
@@ -239,8 +251,9 @@ export default connect(state => {
     },
 
     onCreateSpace(space) {
-      dispatch(collectionSpacesCreate(space));
-      dispatch(hideModal());
+      dispatch(collectionSpacesCreate(space)).then(() => {
+        dispatch(hideModal());
+      });
     },
     onCreateDoorway(doorway) {
       dispatch(collectionDoorwaysCreate(doorway));
@@ -256,16 +269,18 @@ export default connect(state => {
       dispatch(hideModal());
     },
     onDeleteDoorway(doorway) {
-      dispatch(collectionDoorwaysDestroy(doorway));
-      dispatch(hideModal());
+      dispatch(collectionDoorwaysDestroy(doorway)).then(() => {
+        dispatch(hideModal());
+      });
     },
     onChangeSpace(space, {name, timezone, dailyReset}) {
       dispatch(collectionSpacesUpdate(Object.assign({}, space, {name, timezone, dailyReset})));
       dispatch(hideModal());
     },
     onDeleteSpace(space) {
-      dispatch(collectionSpacesDestroy(space));
-      dispatch(hideModal());
+      dispatch(collectionSpacesDestroy(space)).then(() => {
+        dispatch(hideModal());
+      });
     },
   };
 })(Environment);

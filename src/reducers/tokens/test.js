@@ -106,7 +106,7 @@ describe('token reducer actions', function() {
   });
 });
 
-// Write tests for each "operation" that can happen to a token, such ad createing, updating, and
+// Write tests for each "operation" that can happen to a token, such as creating, updating, and
 // destroying.
 describe('token operations', function() {
   it('should create a new token', function() {

@@ -74,9 +74,9 @@
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.8.tgz#12dc785329b90a8b97d41c6c20c5cd408378034a"
 
-"@density/ui-popover@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@density/ui-popover/-/ui-popover-0.0.4.tgz#f037d0f6159632b0f5f89319d1d90d3691423b37"
+"@density/ui-popover@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@density/ui-popover/-/ui-popover-0.0.5.tgz#fac62a41a1ab2f3cce676d685bc2e9843eb3e3da"
 
 "@density/ui@4.2.1":
   version "4.2.1"

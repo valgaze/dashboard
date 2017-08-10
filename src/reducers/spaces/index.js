@@ -2,7 +2,11 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import { COLLECTION_SPACES_SET } from '../../actions/collection/spaces/set';
 import { COLLECTION_SPACES_PUSH } from '../../actions/collection/spaces/push';
 import { COLLECTION_SPACES_FILTER } from '../../actions/collection/spaces/filter';
+import { COLLECTION_SPACES_CREATE } from '../../actions/collection/spaces/create';
+import { COLLECTION_SPACES_DESTROY } from '../../actions/collection/spaces/destroy';
+import { COLLECTION_SPACES_UPDATE } from '../../actions/collection/spaces/update';
 import { COLLECTION_SPACES_DELETE } from '../../actions/collection/spaces/delete';
+import { COLLECTION_SPACES_ERROR } from '../../actions/collection/spaces/error';
 
 import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/count-change';
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
@@ -10,13 +14,14 @@ import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/se
 import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
 
 const initialState = {
+  data: [],
+  loading: true,
+  error: null,
+  selected: null,
   filters: {
     doorwayId: null,
     search: '',
   },
-  loading: true,
-  data: [],
-  selected: null,
 
   // An object that maps space id to an array of events
   events: {
@@ -41,6 +46,7 @@ export default function spaces(state=initialState, action) {
   case COLLECTION_SPACES_PUSH:
     return {
       ...state,
+      loading: false,
       data: [
         // Update existing items
         ...state.data.map(item => {
@@ -60,9 +66,15 @@ export default function spaces(state=initialState, action) {
       ],
     };
 
-  // When the user changes the active space, update it in the store.
-  case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
-    return {...state, selected: action.id};
+  // An async operation is starting.
+  case COLLECTION_SPACES_CREATE:
+  case COLLECTION_SPACES_DESTROY:
+  case COLLECTION_SPACES_UPDATE:
+    return {...state, loading: true};
+
+  // When an error happens in the collection, define an error.
+  case COLLECTION_SPACES_ERROR:
+    return {...state, error: action.error, loading: false};
 
   // Add a filter to a space
   case COLLECTION_SPACES_FILTER:
@@ -78,8 +90,13 @@ export default function spaces(state=initialState, action) {
   case COLLECTION_SPACES_DELETE:
     return {
       ...state,
+      loading: false,
       data: state.data.filter(item => action.item.id !== item.id),
     };
+
+  // When the user changes the active space, update it in the store.
+  case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
+    return {...state, selected: action.id};
 
 // ----------------------------------------------------------------------------
 // EVENTS COLLECTION

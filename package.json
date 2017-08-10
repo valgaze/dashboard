@@ -16,7 +16,7 @@
     "@density/ui-input-stack": "^0.0.3",
     "@density/ui-modal": "0.0.5",
     "@density/ui-navbar": "0.0.8",
-    "@density/ui-popover": "^0.0.4",
+    "@density/ui-popover": "^0.0.5",
     "classnames": "^2.2.5",
     "ent": "^2.2.0",
     "fuzzy": "^0.1.3",

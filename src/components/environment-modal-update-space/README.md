@@ -8,6 +8,10 @@ edit a button, a modal appears with the edit view, and all fields are un-disable
 
 ## Component Props
 - `initialSpace: DensitySpace` - The space to update.
+- `loading: bool` - Is the collection currently in a loading state (ie, a request has been sent to
+  the server to create a token?)
+- `error: Error | null` - An error in the given collection (ie, a response from the server contained
+  an error)
 - `onSubmit: ({name, description, timezone, dailyReset}) => any` - A callback that is called with the updated space.
 - `onDismiss: () => any` - A callback that is called when the modal is dismissed.
 - `doorways: [DensityDoorway]` - A list of doorways to render within the card. These are read only.

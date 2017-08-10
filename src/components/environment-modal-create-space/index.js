@@ -23,8 +23,10 @@ export default class EnvironmentModalCreateSpace extends React.Component {
             <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
           <CardBody>
+            {this.props.loading ? <span>Loading</span> : null}
+            {this.props.error ? <span>Error: {this.props.error}</span> : null}
             <ul>
-              <li>
+              <li className="create-space-name-container">
                 <label htmlFor="create-space-name">Space Name</label>
                 <input
                   type="text"
@@ -33,7 +35,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                   onChange={e => this.setState({name: e.target.value})}
                 />
               </li>
-              <li>
+              <li className="create-space-time-zone-container">
                 <label htmlFor="create-space-time-zone">Time Zone</label>
                 <select
                   id="create-space-time-zone"
@@ -45,7 +47,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                   <option>America/Los_Angeles</option>
                 </select>
               </li>
-              <li>
+              <li className="create-space-reset-time-container">
                 <label htmlFor="create-space-reset-time">Reset Time</label>
                 <input
                   type="text"
@@ -56,19 +58,21 @@ export default class EnvironmentModalCreateSpace extends React.Component {
               </li>
             </ul>
 
-            <button
-              disabled={(
-                this.state.name.length === 0 || this.state.timeZone.length === 0 ||
-                this.state.resetTime.length === 0
-              )}
-              onClick={() => this.props.onSubmit({
-                name: this.state.name,
-                resetTime: this.state.resetTime,
-                // this.state.timeZone has html entities in it, ie: `America&#x2F;New_York`.
-                // FIXME: Why is this?
-                timeZone: decode(this.state.timeZone),
-              })}
-            >Create</button>
+            <div className="create-space-submit">
+              <button
+                disabled={(
+                  this.state.name.length === 0 || this.state.timeZone.length === 0 ||
+                  this.state.resetTime.length === 0
+                )}
+                onClick={() => this.props.onSubmit({
+                  name: this.state.name,
+                  resetTime: this.state.resetTime,
+                  // this.state.timeZone has html entities in it, ie: `America&#x2F;New_York`.
+                  // FIXME: Why is this?
+                  timeZone: decode(this.state.timeZone),
+                })}
+              >Create</button>
+            </div>
           </CardBody>
         </Card>
       </Modal>
