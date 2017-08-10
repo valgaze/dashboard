@@ -7,11 +7,11 @@ export default class EnvironmentModalCreateDoorway extends React.Component {
     super(props);
     this.state = {
       name: '',
-      desc: '',
+      description: '',
     };
   }
   render() {
-    return <div className="environment-modal-create-space">
+    return <div className="environment-modal-create-doorway">
       <Modal onClickBackdrop={this.props.onDismiss}>
         <Card>
           <CardHeader>
@@ -21,8 +21,12 @@ export default class EnvironmentModalCreateDoorway extends React.Component {
             <ModalClose onClick={this.props.onDismiss} />
         </CardHeader>
           <CardBody>
+
+            {this.props.loading ? <span>Loading</span> : null}
+            {this.props.error ? <span>Error: {this.props.error}</span> : null}
+
             <ul>
-              <li>
+              <li className="create-doorway-name-container">
                 <label htmlFor="create-doorway-name">Doorway Name</label>
                 <input
                   type="text"
@@ -31,21 +35,23 @@ export default class EnvironmentModalCreateDoorway extends React.Component {
                   onChange={e => this.setState({name: e.target.value})}
                 />
               </li>
-              <li>
-                <label htmlFor="create-doorway-desc">Description</label>
+              <li className="create-doorway-description-container">
+                <label htmlFor="create-doorway-description">Description</label>
                 <input
                   type="text"
-                  id="create-doorway-desc"
-                  value={this.state.desc}
-                  onChange={e => this.setState({desc: e.target.value})}
+                  id="create-doorway-description"
+                  value={this.state.description}
+                  onChange={e => this.setState({description: e.target.value})}
                 />
               </li>
             </ul>
 
-            <button
-              disabled={this.state.name.length === 0}
-              onClick={() => this.props.onSubmit(this.state)}
-            >Create</button>
+            <div className="create-doorway-submit">
+              <button
+                disabled={this.state.name.length === 0}
+                onClick={() => this.props.onSubmit(this.state)}
+              >Create</button>
+            </div>
           </CardBody>
         </Card>
       </Modal>

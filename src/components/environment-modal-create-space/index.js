@@ -25,6 +25,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
           <CardBody>
             {this.props.loading ? <span>Loading</span> : null}
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
+
             <ul>
               <li className="create-space-name-container">
                 <label htmlFor="create-space-name">Space Name</label>

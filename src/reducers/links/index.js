@@ -2,6 +2,8 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import { COLLECTION_LINKS_SET } from '../../actions/collection/links/set';
 import { COLLECTION_LINKS_PUSH } from '../../actions/collection/links/push';
 import { COLLECTION_LINKS_DELETE } from '../../actions/collection/links/delete';
+import { COLLECTION_LINKS_ERROR } from '../../actions/collection/links/error';
+import { COLLECTION_LINKS_UPDATE_SENSOR_PLACEMENT } from '../../actions/collection/links/update-sensor-placement';
 
 const initialState = {
   filters: {
@@ -9,6 +11,7 @@ const initialState = {
     doorwayId: null,
   },
   loading: false,
+  error: null,
   data: [],
 };
 
@@ -27,6 +30,7 @@ export default function links(state=initialState, action) {
   case COLLECTION_LINKS_PUSH:
     return {
       ...state,
+      loading: false,
       data: [
         // Update existing items
         ...state.data.map(item => {
@@ -52,6 +56,14 @@ export default function links(state=initialState, action) {
       ...state,
       data: state.data.filter(item => action.item.id !== item.id),
     };
+
+  // Start an async operation.
+  case COLLECTION_LINKS_UPDATE_SENSOR_PLACEMENT:
+    return {...state, loading: true}
+
+  // An async operation raised an error.
+  case COLLECTION_LINKS_ERROR:
+    return {...state, loading: false, error: action.error};
 
   default:
     return state;

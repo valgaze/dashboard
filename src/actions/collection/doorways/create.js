@@ -1,17 +1,22 @@
 import collectionDoorwaysPush from './push';
+import collectionDoorwaysError from './error';
 import { core } from '@density-int/client';
 
 export const COLLECTION_DOORWAYS_CREATE = 'COLLECTION_DOORWAYS_CREATE';
 
-export default function collectionDoorwaysCreate(doorway) {
-  return dispatch => {
-    dispatch({ type: COLLECTION_DOORWAYS_CREATE, doorway });
+export default function collectionDoorwaysCreate(item) {
+  return async dispatch => {
+    dispatch({ type: COLLECTION_DOORWAYS_CREATE, item });
 
-    return core.doorways.create({
-      name: doorway.name,
-      description: doorway.desc,
-    }).then(doorway => {
-      dispatch(collectionDoorwaysPush(doorway));
-    });
+    try {
+      const response = await core.doorways.create({
+        name: item.name,
+        description: item.desc,
+      });
+      dispatch(collectionDoorwaysPush(response));
+      return response;
+    } catch (err) {
+      dispatch(collectionDoorwaysError(err));
+    }
   };
 }

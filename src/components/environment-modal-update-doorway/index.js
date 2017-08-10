@@ -21,17 +21,22 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
           <CardHeader>
             Doorway Details
 
-            {/* Edit button in the header */}
+            {/* Delete button in the header */}
             <ModalHeaderActionButton
-              onClick={() => this.setState({isEditing: true})}
-            >Edit</ModalHeaderActionButton>
+              className="update-doorway-delete-button"
+              onClick={this.props.onDelete}
+            >Delete</ModalHeaderActionButton>
 
             {/* Close button */}
             <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
           <CardBody>
+
+            {this.props.loading ? <span>Loading</span> : null}
+            {this.props.error ? <span>Error: {this.props.error}</span> : null}
+
             <ul>
-              <li>
+              <li className="update-doorway-name-container">
                 <label htmlFor="update-doorway-name">Doorway Name</label>
                 <InputBox
                   type="text"
@@ -41,8 +46,8 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
                   disabled={!this.state.isEditing}
                 />
               </li>
-              <li>
-                <label htmlFor="update-doorway-desc">Description</label>
+              <li className="update-doorway-description-container">
+                <label htmlFor="update-doorway-description">Description</label>
                 <InputBox
                   type="text"
                   id="update-doorway-description"
@@ -53,10 +58,12 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
               </li>
             </ul>
 
-            {this.state.isEditing ? <button
-              disabled={this.state.name.length === 0}
-              onClick={() => this.props.onSubmit(this.state)}
-            >Save</button> : null}
+            <div className="environment-modal-update-doorway-submit">
+              {this.state.isEditing ? <button
+                disabled={this.state.name.length === 0}
+                onClick={() => this.props.onSubmit(this.state)}
+              >Save</button> : null}
+            </div>
           </CardBody>
         </Card>
       </Modal>
@@ -67,8 +74,9 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
       <CardHeader>
         Doorway Details
 
-        {/* Edit / Delete buttons */}
+        {/* Edit buttons */}
         <ModalHeaderActionButton
+          className="update-doorway-edit-button"
           onClick={() => this.setState({isEditing: true})}
         >Edit</ModalHeaderActionButton>
 
