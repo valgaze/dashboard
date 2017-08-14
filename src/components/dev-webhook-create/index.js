@@ -1,7 +1,7 @@
 import * as React from 'react';
 import InputBox from '@density/ui-input-box';
 
-import Modal, { ModalClose } from '@density/ui-modal';
+import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 
 export default class WebhookCreateModal extends React.Component {
@@ -14,12 +14,11 @@ export default class WebhookCreateModal extends React.Component {
     };
   }
   render() {
-    return <Modal onClickBackdrop={this.props.onDismiss}>
+    return <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
       <div className="webhook-create">
         <Card>
           <CardHeader>
             Create webhook
-            <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
 
           <CardBody>

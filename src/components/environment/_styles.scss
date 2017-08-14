@@ -28,15 +28,13 @@
 
 .space-column {
   @include grid-width(24, 12, 12, 12);
-  height: calc(100vh - 76px);
-  overflow: scroll;
+  height: calc(100vh - 250px);
   margin-top: 64px;
 }
 .doorway-column {
   @include grid-width(0, 12, 12, 12);
-  height: calc(100vh - 76px);
+  height: calc(100vh - 250px);
   margin-top: 64px;
-  overflow: scroll;
   display: none;
 
   // Hide doorways column on mobile
@@ -45,15 +43,17 @@
   }
 }
 
-.column-body {
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 8px;
-  margin-top: 16px;
+// These are the toasts at the top of each column.
+.environment-space-header, .environment-doorway-header {
+  margin-bottom: $padding-vertical-base;
+}
 
-  border: 1px solid $gray-light;
-  border-radius: 4px;
-  background-color: #fff;
+.column-body {
+  @include make-card($background: $gray-lighter);
+  padding: $padding-vertical-base $padding-horizontal-large;
+  min-height: 100%;
+  overflow: scroll;
+  margin-top: $padding-vertical-base;
 }
 
 // remove left padding and top margin on `ul`'s inside of columns

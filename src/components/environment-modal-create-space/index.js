@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Modal, { ModalClose } from '@density/ui-modal';
+import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import { decode } from 'ent';
 
@@ -14,13 +14,10 @@ export default class EnvironmentModalCreateSpace extends React.Component {
   }
   render() {
     return <div className="environment-modal-create-space">
-      <Modal onClickBackdrop={this.props.onDismiss}>
+      <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
         <Card>
           <CardHeader>
             Create Space
-
-            {/* Close button */}
-            <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
           <CardBody>
             {this.props.loading ? <span>Loading</span> : null}

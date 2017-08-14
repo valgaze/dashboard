@@ -1,24 +1,23 @@
 // A sub-navbar used on pages to provide a second layer of navigation.
 .subnav {
   width: 100vw;
-  font-size: 15px;
-  background-color: #fafafa;
+  font-size: $font-size-base;
+  background-color: #222A2E;
   line-height: 36px;
   border-top: 1px solid $gray-light;
   border-bottom: 1px solid $gray-light;
 }
 
 .subnav-items {
-  max-width: 1200px;
+  max-width: 1164px;
   width: 100%;
   margin: 0px auto;
-  padding-left: 18px;
-  padding-right: 18px;
+  padding-left: 0px;
 }
 
 .subnav-item {
   display: inline-block;
-  padding-right: $padding-horizontal-base;
+  margin-right: $padding-horizontal-base;
 }
 
 .subnav-item a {
@@ -26,8 +25,12 @@
   text-decoration: none;
 }
 
+.subnav-item.active {
+  margin-top: 3px;
+  border-bottom: 3px solid $brand-primary;
+}
 .subnav-item.active a {
-  color: $gray-darker;
+  color: #fff;
 }
 
 .subnav-external-arrow {

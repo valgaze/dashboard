@@ -1,34 +1,26 @@
-// Badge used to display token permissions in the header of the token card
-.token-card-permissions-badge {
-  background-color: $gray-darker;
-  color: #FFF;
-  cursor: default;
-  user-select: none;
-
-  display: inline-block;
-  padding: $padding-vertical-small $padding-horizontal-small;
-  margin-left: $padding-horizontal-large;
-
-  text-align: center;
-  height: 16px;
-  line-height: 16px;
-  font-size: 14px;
-}
-
+// Right align the header button in the header of the card.
 .token-card-edit {
   float: right;
+  font-weight: normal;
+}
+
+.token-card-header-text {
+  font-weight: normal;
+}
+
+// Use flexbox to lay out the token text box in the body of the card.
+.token-card-body {
+  display: flex;
+  flex-direction: row;
 }
 
 // Token card contents
 .token-card-token-content {
   font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
+  color: $gray;
 
   display: block;
-  padding: $padding-vertical-large $padding-horizontal-large;
-  font-size: 0.8em;
-
-  background-color: $gray-lighter;
-  color: $gray-darker;
+  flex: 1;
 
   /* These are technically the same, but use both */
   overflow-wrap: break-word;
@@ -41,7 +33,26 @@
   word-break: break-word;
 }
 
-.token-card-copy-token-button {
-  width: 100%;
-  margin-top: $padding-vertical-large;
+// Badge used to display token permissions in the header of the token card. Either contains "Read
+// Only" or "Read / Write".
+.token-card-permissions-badge {
+  background-color: $gray-light;
+  color: $gray;
+  cursor: default;
+  user-select: none;
+
+  display: inline-block;
+  padding: $padding-vertical-x-small $padding-horizontal-small;
+  margin-left: $padding-horizontal-large;
+  border-radius: $border-radius-small;
+
+  height: 16px;
+  line-height: 16px;
+
+  text-align: center;
+  font-size: $font-size-x-small;
+  font-weight: normal;
+
+  position: relative;
+  top: -3px;
 }

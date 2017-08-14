@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Modal, { ModalClose } from '@density/ui-modal';
+import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 import ModalHeaderActionButton from '../modal-header-action-button/index';
@@ -19,7 +19,7 @@ export default class TokenUpdateModal extends React.Component {
 
   renderEdit() {
     return <div className="token-update-modal">
-      <Modal onClickBackdrop={this.props.onDismiss}>
+      <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
         <Card>
           <CardHeader>
             Edit Token
@@ -31,9 +31,6 @@ export default class TokenUpdateModal extends React.Component {
             >
               Destroy Token
             </ModalHeaderActionButton>
-
-            {/* Close button */}
-            <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
           <CardBody>
             <ul>
@@ -76,7 +73,7 @@ export default class TokenUpdateModal extends React.Component {
   }
   renderDestroy() {
     return <div className="token-update-modal">
-      <Modal onClickBackdrop={this.props.onDismiss}>
+      <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
         <Card>
           <CardHeader>
             Destroy Token
@@ -85,9 +82,6 @@ export default class TokenUpdateModal extends React.Component {
             <ModalHeaderActionButton onClick={() => this.setState({isDestroying: false})}>
               Go back to safety
             </ModalHeaderActionButton>
-
-            {/* Close button */}
-            <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
           <CardBody>
             <h1>Are you ABSOLUTELY sure?</h1>

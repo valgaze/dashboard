@@ -5,13 +5,37 @@
   background-color: $gray-lighter;
 }
 
+// Header for the environment space card
 .card .card-header.environment-space-item-header {
-  font-size: 16px;
+  font-size: $font-size-base;
   display: flex;
+  font-weight: normal;
+  line-height: 42px;
+
+  padding: 0px $padding-vertical-base;
+  border-bottom: 1px solid $gray-light;
 }
 
+// Body for the environment space card. Doorways are drawn in here.
+$environment-space-item-minimum-height: 64px;
 .card .card-body.environment-space-item-body {
-  min-height: 64px;
+  min-height: $environment-space-item-minimum-height;
+  background-color: $gray-lighter;
+}
+
+// Center align the empty state.
+.card .card-body.environment-space-item-body.empty { text-align: center; }
+.environment-space-item-body-empty {
+  color: $gray;
+  cursor: default;
+  display: inline-block;
+  user-select: none;
+
+  font-size: $font-size-base;
+  line-height: $environment-space-item-minimum-height;
+}
+.environment-space-item-empty-state-icon {
+  margin-right: $padding-horizontal-base;
 }
 
 // Render each doorway within the space.
@@ -28,14 +52,14 @@
   cursor: default;
   position: relative;
 
-  font-size: 16px;
+  font-size: $font-size-base;
 
   border: 1px solid $gray-light;
   border-radius: $border-radius-small;
   margin-right: $padding-horizontal-x-small;
 
   color: $gray;
-  padding: $padding-vertical-large $padding-horizontal-base;
+  padding: $padding-vertical-small $padding-horizontal-small;
   margin-bottom: 10px;
   user-select: none;
 

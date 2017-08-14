@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Modal, { ModalClose } from '@density/ui-modal';
+  import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 import Popover from '@density/ui-popover';
@@ -17,7 +17,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
   }
   renderEdit() {
     return <div className="environment-modal-update-space edit">
-      <Modal onClickBackdrop={this.props.onDismiss}>
+      <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
         <Card>
           <CardHeader>
             Space Details
@@ -29,7 +29,6 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
             >Delete</ModalHeaderActionButton>
 
             {/* Close button */}
-            <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
           <CardBody>
             {this.props.loading ? <span>Loading</span> : null}
@@ -96,7 +95,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
         >Edit</ModalHeaderActionButton>
 
         {/* Close button */}
-        <ModalClose onClick={this.props.onDismiss} />
+        {/* <ModalClose onClick={this.props.onDismiss} /> */}
       </CardHeader>
       <CardBody>
         {this.props.loading ? <span>Loading</span> : null}

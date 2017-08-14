@@ -1,16 +1,19 @@
 .environment-doorway-item {
+  display: inline-block;
+  cursor: move;
+
+  font-size: $font-size-base;
+
   border: 1px solid $gray-light;
-  border-radius: $border-radius-small;
-  margin-right: $padding-horizontal-x-small;
+  border-radius: $border-radius-base;
 
-  font-size: 16px;
-
-  color: $gray;
-  padding: $padding-vertical-large $padding-horizontal-base;
-  margin-bottom: 10px;
+  color: $text-color;
+  background-color: #FFF;
+  padding: $padding-vertical-small $padding-horizontal-small;
   user-select: none;
 
-  display: inline-block;
+  margin-bottom: 10px;
+  margin-right: $padding-horizontal-x-small;
 }
 
 // Styles the drag source, not the transparent overlay. Can't style that without sme hacks it looks

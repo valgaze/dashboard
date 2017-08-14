@@ -1,6 +1,6 @@
 import * as React from 'react';
 import InputBox from '@density/ui-input-box';
-import Modal, { ModalClose } from '@density/ui-modal';
+import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 
 const READONLY = 'readonly', READWRITE = 'readwrite';
@@ -15,7 +15,7 @@ export default class TokenCreate extends React.Component {
     };
   }
   render() {
-    return <Modal onClickBackdrop={this.props.onDismiss}>
+    return <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
       <div className="token-create">
         {this.props.loading ? <span>Loading</span> : null}
         {this.props.error ? <span>Error: {this.props.error}</span> : null}
@@ -23,9 +23,6 @@ export default class TokenCreate extends React.Component {
         <Card>
           <CardHeader>
             Create token
-
-            {/* Close button */}
-            <ModalClose onClick={this.props.onDismiss} />
           </CardHeader>
 
           <CardBody>

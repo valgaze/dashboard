@@ -176,17 +176,19 @@ describe('Token list page', function() {
     const newToken = store.getState().tokens.data.find(i => i.name === 'token name');
     assert.notEqual(newToken, undefined);
   });
-  it('should copy a token', async function() {
-    // Mount the connected version of the component, with a token.
-    const store = storeFactory();
-    const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
-    store.dispatch(collectionTokensSet([TOKEN]));
-
-    // Click the copy button for the token.
-    document.execCommand = sinon.spy();
-    component.find('.token-card-copy-token-button').simulate('click');
-    assert.equal(document.execCommand.firstCall.args, 'copy');
-  });
+  // NOTE: No longer used. TODO: Remove this test once we are sure that there won't be a copy token
+  // page on the token list page.
+  // it('should copy a token', async function() {
+  //   // Mount the connected version of the component, with a token.
+  //   const store = storeFactory();
+  //   const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
+  //   store.dispatch(collectionTokensSet([TOKEN]));
+  //
+  //   // Click the copy button for the token.
+  //   document.execCommand = sinon.spy();
+  //   component.find('.token-card-copy-token-button').simulate('click');
+  //   assert.equal(document.execCommand.firstCall.args, 'copy');
+  // });
   it('should filter the token list page', async function() {
     // Mount the connected version of the component, with a token.
     const store = storeFactory();

@@ -28,6 +28,7 @@ import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 
 import Fab from '@density/ui-fab';
+import Toast from '@density/ui-toast';
 import ContextMenu, { ContextMenuItem } from '@density/ui-context-menu';
 import InputBox from '@density/ui-input-box';
 
@@ -159,15 +160,16 @@ export function Environment({
       <div className="environment-row">
         <div className="space-column">
           <InputBox
+            className="environment-space-search-box"
             type="text"
             placeholder="Search spaces"
             value={spaces.filters.search}
             onChange={e => onSpaceSearch(e.target.value)}
           />
           <div className="column-body">
-            <p>
+            <Toast className="environment-space-header">
               Edit space details and remove doorways below.
-            </p>
+            </Toast>
             {spaces.loading ? <p>Loading...</p> : null}
             {!spaces.loading && spaces.data.length === 0 ? <p>No Spaces</p> : null}
             <ul>
@@ -192,16 +194,17 @@ export function Environment({
         </div>
         <div className="doorway-column">
           <InputBox
+            className="environment-doorway-search-box"
             type="text"
             placeholder="Search doorways"
             value={doorways.filters.search}
             onChange={e => onDoorwaySearch(e.target.value)}
           />
           <div className="column-body">
-            <p>
+            <Toast className="environment-doorway-header">
               To link a doorway to a space, simply drag the doorway
               from below to a space on the left.
-            </p>
+            </Toast>
             {spaces.loading ? <p>Loading...</p> : null}
             {!spaces.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
             {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
