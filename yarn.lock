@@ -17,6 +17,12 @@
     react "^15.4.2"
     react-dom "^15.4.2"
 
+"@density/chart-linear-progress@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@density/chart-linear-progress/-/chart-linear-progress-0.0.1.tgz#2d4fc3d9be83eef02866bc769147e6d95ef37275"
+  dependencies:
+    d3 "^4.9.1"
+
 "@density/charts@^0.3.7":
   version "0.3.7"
   resolved "https://registry.yarnpkg.com/@density/charts/-/charts-0.3.7.tgz#414b8427f7d869841ad48d492091e41a8776733e"
@@ -46,45 +52,49 @@
     is-there "^4.0.0"
     lodash "^3.10.1"
 
-"@density/ui-card@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@density/ui-card/-/ui-card-0.1.0.tgz#31143d6307e6ed73f577d03b0635c07c83caa823"
+"@density/ui-button@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@density/ui-button/-/ui-button-0.1.2.tgz#2cf7d6111ce7a33e996ae2975fbac1fd5ef3d731"
 
-"@density/ui-context-menu@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@density/ui-context-menu/-/ui-context-menu-0.1.0.tgz#44ff5d0162bdc56d90167d51b69760faec14b3a2"
+"@density/ui-card@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@density/ui-card/-/ui-card-0.4.1.tgz#734f24922c8faa6345c16e65621d83e219c83f4a"
 
-"@density/ui-fab@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@density/ui-fab/-/ui-fab-0.0.3.tgz#0109d7aa1dd525011adf76f674bb61f4be948767"
+"@density/ui-context-menu@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@density/ui-context-menu/-/ui-context-menu-0.2.0.tgz#faf87f1769e9ac9914a6946d9b77a2213dee1353"
 
-"@density/ui-input-box@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@density/ui-input-box/-/ui-input-box-0.1.0.tgz#b917747ae5cdeb43358938b2daef8303e232adac"
+"@density/ui-fab@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@density/ui-fab/-/ui-fab-0.2.0.tgz#234f86ade73384a8dd7bd13c01cbd6ab5631d301"
 
-"@density/ui-input-stack@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@density/ui-input-stack/-/ui-input-stack-0.1.0.tgz#39a09640d46dc89289dc2d6741336fa267236c58"
+"@density/ui-input-box@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@density/ui-input-box/-/ui-input-box-0.2.2.tgz#8d671bd0d6315395ab8bc635919c7664c34edd40"
 
-"@density/ui-modal@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@density/ui-modal/-/ui-modal-0.1.0.tgz#57211b404924328d3a3f0acc62e7a4237cbc0dd7"
+"@density/ui-input-stack@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@density/ui-input-stack/-/ui-input-stack-0.2.0.tgz#5591133493a7620687f8b74c2335ad523992aa3a"
 
-"@density/ui-navbar@0.0.8":
+"@density/ui-modal@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@density/ui-modal/-/ui-modal-0.2.0.tgz#83caa3b84c2c696a333a39afcaec02692bc7c1df"
+
+"@density/ui-navbar@^0.0.8":
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.8.tgz#12dc785329b90a8b97d41c6c20c5cd408378034a"
 
-"@density/ui-popover@^0.1.0":
+"@density/ui-popover@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@density/ui-popover/-/ui-popover-0.2.0.tgz#8e3d8c70b9c489f84c1c38359d18884de9b44909"
+
+"@density/ui-toast@^0.1.0":
   version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@density/ui-popover/-/ui-popover-0.1.0.tgz#c53c2299c57fbc4c7df07955224031a84676144e"
+  resolved "https://registry.yarnpkg.com/@density/ui-toast/-/ui-toast-0.1.0.tgz#db2aba98a4701d6fdd818dff39eba906623038fa"
 
-"@density/ui-toast@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@density/ui-toast/-/ui-toast-0.0.1.tgz#f67303e11514b583237e8a24258e83a5e365a59c"
-
-"@density/ui@4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@density/ui/-/ui-4.3.0.tgz#d7132d0dc8625667bfe1722f7202068bcf6c797f"
+"@density/ui@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@density/ui/-/ui-4.4.0.tgz#927fe05c93f425b7bc149dfde465befa1601d50e"
   dependencies:
     classnames "^2.2.5"
     normalize.css "^7.0.0"
@@ -1899,6 +1909,10 @@ d3-axis@1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/d3-axis/-/d3-axis-1.0.7.tgz#048433d307061f62d1d248e2930c01d7b6738cd8"
 
+d3-axis@1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/d3-axis/-/d3-axis-1.0.8.tgz#31a705a0b535e65759de14173a31933137f18efa"
+
 d3-brush@1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/d3-brush/-/d3-brush-1.0.4.tgz#00c2f238019f24f6c0a194a26d41a1530ffe7bc4"
@@ -1916,7 +1930,7 @@ d3-chord@1.0.4:
     d3-array "1"
     d3-path "1"
 
-d3-collection@1:
+d3-collection@1, d3-collection@1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.4.tgz#342dfd12837c90974f33f1cc0a785aea570dcdc2"
 
@@ -1935,6 +1949,13 @@ d3-dispatch@1, d3-dispatch@1.0.3:
 d3-drag@1, d3-drag@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/d3-drag/-/d3-drag-1.1.0.tgz#4a49b4d77a42e9e3d5a0ef3b492b14aaa2e5a733"
+  dependencies:
+    d3-dispatch "1"
+    d3-selection "1"
+
+d3-drag@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/d3-drag/-/d3-drag-1.1.1.tgz#b5155304433b18ba38726b2184d0098e820dc64b"
   dependencies:
     d3-dispatch "1"
     d3-selection "1"
@@ -1973,6 +1994,10 @@ d3-geo@1.6.4:
 d3-hierarchy@1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/d3-hierarchy/-/d3-hierarchy-1.1.4.tgz#96c3942f3f21cf997a11b4edf00dde2a77b4c6d0"
+
+d3-hierarchy@1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/d3-hierarchy/-/d3-hierarchy-1.1.5.tgz#a1c845c42f84a206bcf1c01c01098ea4ddaa7a26"
 
 d3-interpolate@1, d3-interpolate@1.1.5:
   version "1.1.5"
@@ -2031,13 +2056,19 @@ d3-shape@1.1.1:
   dependencies:
     d3-path "1"
 
+d3-shape@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.2.0.tgz#45d01538f064bafd05ea3d6d2cb748fd8c41f777"
+  dependencies:
+    d3-path "1"
+
 d3-time-format@2, d3-time-format@2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-2.0.5.tgz#9d7780204f7c9119c9170b1a56db4de9a8af972e"
   dependencies:
     d3-time "1"
 
-d3-time@1:
+d3-time@1, d3-time@1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.7.tgz#94caf6edbb7879bb809d0d1f7572bc48482f7270"
 
@@ -2045,7 +2076,7 @@ d3-time@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.6.tgz#a55b13d7d15d3a160ae91708232e0835f1d5e945"
 
-d3-timer@1:
+d3-timer@1, d3-timer@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-1.0.6.tgz#4044bf15d7025c06ce7d1149f73cd07b54dbd784"
 
@@ -2071,6 +2102,16 @@ d3-voronoi@1.1.2:
 d3-zoom@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/d3-zoom/-/d3-zoom-1.2.0.tgz#b3231f4f9386241475defe1c557bfd3fde1065fb"
+  dependencies:
+    d3-dispatch "1"
+    d3-drag "1"
+    d3-interpolate "1"
+    d3-selection "1"
+    d3-transition "1"
+
+d3-zoom@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/d3-zoom/-/d3-zoom-1.5.0.tgz#8417de9a077f98f9ce83b1998efb8ee12b4db26e"
   dependencies:
     d3-dispatch "1"
     d3-drag "1"
@@ -2112,6 +2153,41 @@ d3@^4.8.0:
     d3-transition "1.1.0"
     d3-voronoi "1.1.2"
     d3-zoom "1.2.0"
+
+d3@^4.9.1:
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-4.10.0.tgz#0bcca3a3b614e2fd45b1b5bd0b9164d57352a862"
+  dependencies:
+    d3-array "1.2.0"
+    d3-axis "1.0.8"
+    d3-brush "1.0.4"
+    d3-chord "1.0.4"
+    d3-collection "1.0.4"
+    d3-color "1.0.3"
+    d3-dispatch "1.0.3"
+    d3-drag "1.1.1"
+    d3-dsv "1.0.5"
+    d3-ease "1.0.3"
+    d3-force "1.0.6"
+    d3-format "1.2.0"
+    d3-geo "1.6.4"
+    d3-hierarchy "1.1.5"
+    d3-interpolate "1.1.5"
+    d3-path "1.0.5"
+    d3-polygon "1.0.3"
+    d3-quadtree "1.0.3"
+    d3-queue "3.0.7"
+    d3-random "1.1.0"
+    d3-request "1.0.5"
+    d3-scale "1.0.6"
+    d3-selection "1.1.0"
+    d3-shape "1.2.0"
+    d3-time "1.0.7"
+    d3-time-format "2.0.5"
+    d3-timer "1.0.6"
+    d3-transition "1.1.0"
+    d3-voronoi "1.1.2"
+    d3-zoom "1.5.0"
 
 d@1:
   version "1.0.0"

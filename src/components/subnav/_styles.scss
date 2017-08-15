@@ -4,12 +4,11 @@
   font-size: $font-size-base;
   background-color: #222A2E;
   line-height: 36px;
-  border-top: 1px solid $gray-light;
   border-bottom: 1px solid $gray-light;
 }
 
 .subnav-items {
-  max-width: 1164px;
+  max-width: 1200px;
   width: 100%;
   margin: 0px auto;
   padding-left: 0px;
@@ -17,7 +16,7 @@
 
 .subnav-item {
   display: inline-block;
-  margin-right: $padding-horizontal-base;
+  margin-right: 10px;
 }
 
 .subnav-item a {

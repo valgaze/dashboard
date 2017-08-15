@@ -9,11 +9,11 @@
 
   color: $text-color;
   background-color: #FFF;
-  padding: $padding-vertical-small $padding-horizontal-small;
+  padding: 6px 14px;
   user-select: none;
 
   margin-bottom: 10px;
-  margin-right: $padding-horizontal-x-small;
+  margin-right: 5px;
 }
 
 // Styles the drag source, not the transparent overlay. Can't style that without sme hacks it looks

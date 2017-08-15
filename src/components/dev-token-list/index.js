@@ -72,12 +72,17 @@ export function TokenList({
     {subnav}
 
     <div className="token-list-container">
-      <h2>All tokens</h2>
+      <h1 className="token-list-header">Tokens</h1>
+      <p className="token-list-description">
+        A token is a secret, random string used to authenticate that you have access and authorize
+        permission to Density data. Ready to start using them?
+        <a href="http://docs.density.io" target="_blank" rel="noopener noreferrer">Visit our API Documentation</a>
+      </p>
 
       {/* Search box to filter the list of tokens */}
       <div className="token-list-search">
         <InputBox
-          placeholder="Search..."
+          placeholder="Search tokens ..."
           value={tokens.filters.search}
           onChange={e => onFilterTokenList(e.target.value)}
         />

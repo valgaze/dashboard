@@ -27,33 +27,40 @@
 }
 
 .space-column {
-  @include grid-width(24, 12, 12, 12);
+  @include grid-width(24, 24, 12, 12);
   height: calc(100vh - 250px);
   margin-top: 64px;
 }
 .doorway-column {
-  @include grid-width(0, 12, 12, 12);
+  @include grid-width(0, 0, 12, 12);
   height: calc(100vh - 250px);
   margin-top: 64px;
   display: none;
 
   // Hide doorways column on mobile
-  @media (min-width: $screen-xs-max) {
+  @media (min-width: $screen-sm-max) {
     display: flex;
   }
 }
 
 // These are the toasts at the top of each column.
 .environment-space-header, .environment-doorway-header {
-  margin-bottom: $padding-vertical-base;
+  margin-bottom: 21px;
+}
+
+// Above the two columns, render controls to refine the list of items in each column.
+.environment-space-column-header, .environment-doorway-column-header { display: flex; }
+.environment-space-search-box, .environment-doorway-search-box {
+  width: 200px;
+  margin-right: auto;
 }
 
 .column-body {
-  @include make-card($background: $gray-lighter);
-  padding: $padding-vertical-base $padding-horizontal-large;
+  @include make-card($background: $gray-lightest);
+  padding: 20px;
   min-height: 100%;
   overflow: scroll;
-  margin-top: $padding-vertical-base;
+  margin-top: 72px;
 }
 
 // remove left padding and top margin on `ul`'s inside of columns

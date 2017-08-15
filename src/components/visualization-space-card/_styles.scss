@@ -1,3 +1,46 @@
+.space-card {
+  margin-bottom: 20px;
+}
+.space-card-header {
+  color: $text-color;
+  font-size: $font-size-3;
+  font-weight: $font-weight-3;
+  display: flex;
+
+  &:hover .space-card-header-name {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+.space-card-header-count {
+  margin-left: auto;
+}
+
+.space-card-capacity-information {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+// Add a capacity unit after the capacity number indicator above the progress bar.
+.space-card-capacity-number:before { content: 'Capacity: '; }
+.space-card-capacity-number:empty:before { content: 'No Capacity'; }
+
+// Add a capacity percent unit after the percentage indicator directly above and right from the
+// progress bar.
+.space-card-capacity-percent { margin-left: auto; }
+.space-card-capacity-percent:after { content: '% Full'; }
+.space-card-capacity-percent { color: $brand-primary; }
+.space-card-capacity-percent:empty { color: $gray; }
+
+// Render a progress bar.
+.space-card-capacity-linear-progress {
+  width: 100%;
+  height: 2px;
+  .progress-container, .progress-bar { height: 2px; }
+  .progress-container { fill: $gray-lighter; }
+  .progress-bar { fill: $brand-primary; }
+}
+
 // Ingress Egress chart
 // Styles modified from the stock styles:
 // - border / border radius removed

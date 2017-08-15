@@ -72,12 +72,18 @@ export function WebhookList({
     {subnav}
 
     <div className="webhook-container">
-      <h1>Webhooks</h1>
+      <h1 className="webhook-list-header">Webhooks</h1>
+      <p className="webhook-list-description">
+        A webhook is a connection between Density servers and a customer's servers. Instead of the
+        customer asking us for the data, we push the data to the customer automatically via the
+        webhook. Ready to start using them?
+        <a href="http://docs.density.io" target="_blank" rel="noopener noreferrer">Visit our API Documentation</a>
+      </p>
 
       {/* Search box to filter webhook list */}
       <div className="webhook-list-search">
         <InputBox
-          placeholder="Search..."
+          placeholder="Search Webhooks ..."
           value={webhooks.filters.search}
           onChange={e => onFilterWebhookList(e.target.value)}
         />

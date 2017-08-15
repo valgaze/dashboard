@@ -1,6 +1,28 @@
 .webhook-container {
   @include grid-container;
+  margin: 30px auto;
   position: relative;
+}
+
+// The "webhook" header at the top of the page.
+.webhook-list-header {
+  padding-left: 8px;
+  padding-top: 20px;
+  color: $gray-darkest;
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+}
+// The description of the webhook is underneath the header.
+.webhook-list-description {
+  padding-left: 8px;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  a { margin-left: 1em; }
+}
+
+.webhook-list-search input {
+  margin-left: 8px;
+  width: 200px;
 }
 
 .webhook-list {
@@ -9,11 +31,12 @@
 
 .webhook-list-item {
   @include grid-width(24, 12, 12, 12);
+  margin-top: 40px;
 }
 
 .webhook-container .fab {
   line-height: 60px;
   position: absolute;
   right: 16px;
-  top: 32px;
+  top: 0px;
 }

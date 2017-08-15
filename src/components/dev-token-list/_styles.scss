@@ -1,8 +1,24 @@
 .token-list-container {
   @include grid-container;
-  margin: 20px auto;
+  margin: 30px auto;
 
   position: relative;
+}
+
+// The "Token" header at the top of the page.
+.token-list-header {
+  padding-left: 8px;
+  padding-top: 20px;
+  color: $gray-darkest;
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+}
+// The description of the token is underneath the header.
+.token-list-description {
+  padding-left: 8px;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  a { margin-left: 1em; }
 }
 
 .token-list-row {
@@ -11,12 +27,19 @@
 
 .token-list-item {
   @include grid-width(24, 12, 12, 12);
-  margin-top: $padding-vertical-large;
+  margin-top: 40px;
 }
 
+// The search box used to filter the tokens collection.
+.token-list-search input {
+  width: 200px;
+  margin-left: 8px;
+}
+
+// The FAB used to add a new token.
 .token-list .fab {
   line-height: 60px;
   position: absolute;
   right: 16px;
-  top: 32px;
+  top: 0px;
 }

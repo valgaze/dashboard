@@ -1,3 +1,18 @@
+.space-list-header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 8px;
+
+  color: $gray-darkest;
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+}
+
+.space-list-search-box {
+  margin-bottom: 20px;
+  margin-left: 8px;
+}
+
 .space-list-container { @include grid-container; }
 .space-list-row { @include grid-row; }
 .space-list-item { @include grid-width(24, 12, 12, 12); }

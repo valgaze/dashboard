@@ -1,3 +1,22 @@
 .token-update-destroy-link {
   color: $brand-danger;
 }
+
+// Allow the user to type in the name of a token before removing.
+.token-update-destroy-confirmation {
+  display: flex;
+  margin-bottom: 20px;
+  input { flex: 1; }
+}
+
+// Label text on the destroy page of the update modal.
+.token-update-destroy-warning {
+  font-size: $font-size-3;
+  font-weight: $font-weight-3;
+  color: $brand-danger;
+}
+
+// Submit button for destroy page
+.token-update-destroy-submit {
+  background-color: $brand-danger;
+}

@@ -2,6 +2,7 @@ import * as React from 'react';
 import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
+import Button from '@density/ui-button';
 import ModalHeaderActionButton from '../modal-header-action-button/index';
 
 export default class TokenUpdateModal extends React.Component {
@@ -20,7 +21,7 @@ export default class TokenUpdateModal extends React.Component {
   renderEdit() {
     return <div className="token-update-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
-        <Card>
+        <Card type="modal">
           <CardHeader>
             Edit Token
 
@@ -57,7 +58,7 @@ export default class TokenUpdateModal extends React.Component {
             {this.props.loading ? <span>Loading</span> : null}
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
-            <button
+            <Button
               className="token-update-modal-submit"
               disabled={this.state.name.length === 0}
               onClick={() => this.props.onSubmit({
@@ -65,7 +66,7 @@ export default class TokenUpdateModal extends React.Component {
                 description: this.state.description,
                 key: this.state.key,
               })}
-            >Save</button>
+            >Save Changes</Button>
           </CardBody>
         </Card>
       </Modal>
@@ -74,7 +75,7 @@ export default class TokenUpdateModal extends React.Component {
   renderDestroy() {
     return <div className="token-update-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
-        <Card>
+        <Card type="modal">
           <CardHeader>
             Destroy Token
 
@@ -84,7 +85,7 @@ export default class TokenUpdateModal extends React.Component {
             </ModalHeaderActionButton>
           </CardHeader>
           <CardBody>
-            <h1>Are you ABSOLUTELY sure?</h1>
+            <h2 className="token-update-destroy-warning">Are you ABSOLUTELY sure?</h2>
 
             {this.props.loading ? <span>Loading</span> : null}
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
@@ -99,16 +100,16 @@ export default class TokenUpdateModal extends React.Component {
               <InputBox
                 type="text"
                 value={this.state.destroyNameConfirmation}
-                placeholder={this.state.name}
+                placeholder="Token Name"
                 onChange={e => this.setState({destroyNameConfirmation: e.target.value})}
               />
             </div>
 
-            <button
+            <Button
               className="token-update-destroy-submit"
               disabled={this.state.name !== this.state.destroyNameConfirmation}
               onClick={() => this.props.onDestroyToken(this.props.initialToken)}
-            >I got it, get rid of my token!</button>
+            >I understand the consequences. Delete.</Button>
           </CardBody>
         </Card>
       </Modal>

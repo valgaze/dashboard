@@ -12,7 +12,7 @@
   font-weight: normal;
   line-height: 42px;
 
-  padding: 0px $padding-vertical-base;
+  padding: 0px 20px;
   border-bottom: 1px solid $gray-light;
 }
 
@@ -35,7 +35,7 @@ $environment-space-item-minimum-height: 64px;
   line-height: $environment-space-item-minimum-height;
 }
 .environment-space-item-empty-state-icon {
-  margin-right: $padding-horizontal-base;
+  margin-right: 10px;
 }
 
 // Render each doorway within the space.
@@ -46,8 +46,8 @@ $environment-space-item-minimum-height: 64px;
 .environment-space-item-doorways li {
   background-color: #fff;
   display: inline-block;
-  margin-right: $padding-horizontal-small;
-  margin-top: $padding-horizontal-small;
+  margin-right: 14px;
+  margin-top: 14px;
   user-select: none;
   cursor: default;
   position: relative;
@@ -56,10 +56,10 @@ $environment-space-item-minimum-height: 64px;
 
   border: 1px solid $gray-light;
   border-radius: $border-radius-small;
-  margin-right: $padding-horizontal-x-small;
+  margin-right: 5px;
 
   color: $gray;
-  padding: $padding-vertical-small $padding-horizontal-small;
+  padding: 6px 14px;
   margin-bottom: 10px;
   user-select: none;
 
@@ -68,13 +68,13 @@ $environment-space-item-minimum-height: 64px;
 
 // The sensor placement button for the doorway
 .environment-space-item-doorways-placement {
-  margin-left: $padding-horizontal-small;
-  margin-right: $padding-horizontal-x-small;
+  margin-left: 14px;
+  margin-right: 5px;
   cursor: pointer;
   font-size: 10px;
   background-color: $brand-primary;
   color: #fff;
-  padding: $padding-vertical-small $padding-horizontal-small;
+  padding: 6px 14px;
 
   position: relative;
   top: -2px;

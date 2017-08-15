@@ -1,16 +1,38 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import collectionSpacesFilter from '../../actions/collection/spaces/filter';
+
+import InputBox from '@density/ui-input-box';
 import SpaceCard from '../visualization-space-card/index';
 
-export function SpaceList({spaces}) {
+import filterCollection from '../../helpers/filter-collection/index';
+const spaceFilter = filterCollection({fields: ['name']});
+
+export function SpaceList({
+  spaces,
+
+  onSpaceSearch,
+}) {
   return <div className="space-list">
     <div className="space-list-container">
+      <h2 className="space-list-header">Spaces</h2>
+
+      <InputBox
+        className="space-list-search-box"
+        placeholder="Search ..."
+        value={spaces.filters.search}
+        onChange={e => onSpaceSearch(e.target.value)}
+      />
+
       <div className="space-list-row">
-        {spaces.data.map(space => {
+        {spaceFilter(spaces.data, spaces.filters.search).map(space => {
           return <div className="space-list-item" key={space.id}>
-            <a href={`#/visualization/spaces/${space.id}`}>Go to details for {space.id}</a>
-            <SpaceCard space={space} events={spaces.events[space.id]} />
+            <SpaceCard
+              space={space}
+              events={spaces.events[space.id]}
+              onClick={() => window.location.href = `#/visualization/spaces/${space.id}`}
+            />
           </div>;
         })}
       </div>
@@ -23,5 +45,9 @@ export default connect(state => {
     spaces: state.spaces,
   };
 }, dispatch => {
-  return {};
+  return {
+    onSpaceSearch(searchQuery) {
+      dispatch(collectionSpacesFilter('search', searchQuery));
+    },
+  };
 })(SpaceList);

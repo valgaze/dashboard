@@ -17,7 +17,8 @@
 // Token card contents
 .token-card-token-content {
   font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
-  color: $gray;
+  color: $gray-dark;
+  border-radius: $border-radius-base;
 
   display: block;
   flex: 1;
@@ -37,13 +38,13 @@
 // Only" or "Read / Write".
 .token-card-permissions-badge {
   background-color: $gray-light;
-  color: $gray;
+  color: $gray-dark;
   cursor: default;
   user-select: none;
 
   display: inline-block;
-  padding: $padding-vertical-x-small $padding-horizontal-small;
-  margin-left: $padding-horizontal-large;
+  padding: 1px 14px;
+  margin-left: 20px;
   border-radius: $border-radius-small;
 
   height: 16px;

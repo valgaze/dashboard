@@ -159,13 +159,20 @@ export function Environment({
 
       <div className="environment-row">
         <div className="space-column">
-          <InputBox
-            className="environment-space-search-box"
-            type="text"
-            placeholder="Search spaces"
-            value={spaces.filters.search}
-            onChange={e => onSpaceSearch(e.target.value)}
-          />
+          {/* Header above the column. Allows searching and ordering of data. */}
+          <div className="environment-space-column-header">
+            <InputBox
+              className="environment-space-search-box"
+              type="text"
+              placeholder="Search ..."
+              value={spaces.filters.search}
+              onChange={e => onSpaceSearch(e.target.value)}
+            />
+            <InputBox className="environment-space-order-box" type="select" value={spaces.filters.order}>
+              <option value="newest">Newest</option>
+              <option value="a-z">A - Z</option>
+            </InputBox>
+          </div>
           <div className="column-body">
             <Toast className="environment-space-header">
               Edit space details and remove doorways below.
@@ -193,16 +200,24 @@ export function Environment({
           </div>
         </div>
         <div className="doorway-column">
-          <InputBox
-            className="environment-doorway-search-box"
-            type="text"
-            placeholder="Search doorways"
-            value={doorways.filters.search}
-            onChange={e => onDoorwaySearch(e.target.value)}
-          />
+          {/* Header above the column. Allows searching and ordering of data. */}
+          <div className="environment-doorway-column-header">
+            <InputBox
+              className="environment-doorway-search-box"
+              type="text"
+              placeholder="Search ..."
+              value={doorways.filters.search}
+              onChange={e => onDoorwaySearch(e.target.value)}
+            />
+            <InputBox className="environment-doorway-order-box" type="select" value={doorways.filters.order}>
+              <option value="a-z">A - Z</option>
+              <option value="newest">Newest</option>
+            </InputBox>
+          </div>
+
           <div className="column-body">
             <Toast className="environment-doorway-header">
-              To link a doorway to a space, simply drag the doorway
+              To link a doorway to a space, drag the doorway
               from below to a space on the left.
             </Toast>
             {spaces.loading ? <p>Loading...</p> : null}
