@@ -11,8 +11,10 @@ export default function collectionDoorwaysDestroy(doorway) {
     try {
       await core.doorways.delete({id: doorway.id});
       dispatch(collectionDoorwaysDelete(doorway));
+      return true;
     } catch (err) {
       dispatch(collectionDoorwaysError(err));
+      return false;
     }
   };
 }

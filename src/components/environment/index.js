@@ -254,39 +254,39 @@ export default connect(state => {
     },
 
     onCreateSpace(space) {
-      dispatch(collectionSpacesCreate(space)).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionSpacesCreate(space)).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
     onCreateDoorway(doorway) {
-      dispatch(collectionDoorwaysCreate(doorway)).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionDoorwaysCreate(doorway)).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
     onChangeSensorPlacement(link) {
       const sensorPlacement = link.sensorPlacement === 1 ? -1 : 1;
-      dispatch(collectionLinksUpdateSensorPlacement({id: link.id, sensorPlacement})).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionLinksUpdateSensorPlacement({id: link.id, sensorPlacement})).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
     onChangeDoorway(doorway, {name, description}) {
-      dispatch(collectionDoorwaysUpdate(Object.assign({}, doorway, {name, description}))).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionDoorwaysUpdate(Object.assign({}, doorway, {name, description}))).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
     onDeleteDoorway(doorway) {
-      dispatch(collectionDoorwaysDestroy(doorway)).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionDoorwaysDestroy(doorway)).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
     onChangeSpace(space, {name, timezone, dailyReset}) {
-      dispatch(collectionSpacesUpdate(Object.assign({}, space, {name, timezone, dailyReset}))).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionSpacesUpdate(Object.assign({}, space, {name, timezone, dailyReset}))).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
     onDeleteSpace(space) {
-      dispatch(collectionSpacesDestroy(space)).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionSpacesDestroy(space)).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
   };

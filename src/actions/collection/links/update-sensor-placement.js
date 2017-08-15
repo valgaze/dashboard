@@ -17,6 +17,7 @@ export default function collectionLinksUpdateSensorPlacement(item) {
       dispatch(collectionLinksPush(link));
     } catch (err) {
       dispatch(collectionLinksError(err));
+      return false;
     }
   };
 }

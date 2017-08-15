@@ -14,7 +14,7 @@ export default function collectionWebhooksDestroy(item) {
       return response;
     } catch (err) {
       dispatch(collectionWebhooksError(err));
-      if (process.env.NODE_ENV !== 'test') { throw err; }
+      return false;
     }
   };
 }

@@ -18,6 +18,7 @@ export default function collectionDoorwaysUpdate(item) {
       return response;
     } catch (err) {
       dispatch(collectionDoorwaysError(err));
+      return false;
     }
   };
 }

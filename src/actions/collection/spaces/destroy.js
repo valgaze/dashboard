@@ -11,8 +11,10 @@ export default function collectionSpacesDestroy(space) {
     try {
       await core.spaces.delete({id: space.id});
       dispatch(collectionSpacesDelete(space));
+      return true;
     } catch (err) {
       dispatch(collectionSpacesError(err));
+      return false;
     }
   };
 }

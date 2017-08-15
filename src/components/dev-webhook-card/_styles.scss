@@ -1,19 +1,20 @@
-.webhook-card {
+.webhook-card-header-text {
+  font-weight: normal;
 }
 
 .webhook-card-endpoint-label {
   display: block;
   color: $gray;
   font-weight: 300;
-  margin-bottom: $padding-vertical-base;
+  margin-bottom: $padding-vertical-small;
 }
 
 .webhook-card-endpoint {
   font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
 
   display: block;
-  padding: $padding-vertical-large $padding-horizontal-large;
-  font-size: 0.8em;
+  padding: $padding-vertical-small $padding-horizontal-base;
+  font-size: $font-size-base;
 
   background-color: $gray-lighter;
   color: $gray-darker;

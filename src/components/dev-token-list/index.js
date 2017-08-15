@@ -84,13 +84,17 @@ export function TokenList({
       </div>
 
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
-      <Fab onClick={() => {
-        if (activeModal.name) {
-          return onCloseModal();
-        } else {
-          return onOpenModal('token-create');
-        }
-      }}>+</Fab>
+      <Fab
+        type="primary"
+        className="fab"
+        onClick={() => {
+          if (activeModal.name) {
+            return onCloseModal();
+          } else {
+            return onOpenModal('token-create');
+          }
+        }}
+      >+</Fab>
 
       <div className="token-list-row">
         {tokenFilter(tokens.data, tokens.filters.search).map(token => {
@@ -111,18 +115,18 @@ export default connect(state => {
 }, dispatch => {
   return {
     onCreateToken(token) {
-      dispatch(collectionTokensCreate(token)).then(() => {
-        dispatch(hideModal());
-      })
+      dispatch(collectionTokensCreate(token)).then(ok => {
+        ok && dispatch(hideModal());
+      });
     },
     onUpdateToken(token) {
-      dispatch(collectionTokensUpdate(token)).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionTokensUpdate(token)).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
     onDestroyToken(token) {
-      dispatch(collectionTokensDestroy(token)).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionTokensDestroy(token)).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
 

@@ -17,6 +17,7 @@ export default function collectionDoorwaysCreate(item) {
       return response;
     } catch (err) {
       dispatch(collectionDoorwaysError(err));
+      return false;
     }
   };
 }

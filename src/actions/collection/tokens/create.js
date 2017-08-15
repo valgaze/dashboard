@@ -18,7 +18,7 @@ export default function collectionTokensCreate(token) {
       return response;
     } catch (err) {
       dispatch(collectionTokensError(err));
-      if (process.env.NODE_ENV !== 'test') { throw err; }
+      return false;
     }
   };
 }

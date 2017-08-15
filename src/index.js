@@ -6,6 +6,7 @@ import { core, accounts } from '@density-int/client';
 
 import userSet from './actions/user/set';
 import userError from './actions/user/error';
+import sessionTokenUnSet from './actions/session-token/unset';
 
 import eventSource from './helpers/websocket-event-pusher/index';
 
@@ -69,8 +70,12 @@ function preRouteAuthentication() {
 
   // Otherwise, fetch the logged in user's info since there's a session token available.
   } else {
-    accounts.users.me().then(data => data).catch(err => {
-      store.dispatch(userError(err));
+    return accounts.users.me().then(data => data).catch(err => {
+      // Login failed! Redirect the user to the login page and remove the bad session token from
+      // the reducer.
+      store.dispatch(userError(`User not logged in. Redirecting to login page. ${err}`));
+      store.dispatch(sessionTokenUnSet());
+      router.navigate('login');
     }).then(data => {
       store.dispatch(userSet(data));
     });

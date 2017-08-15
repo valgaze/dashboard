@@ -19,7 +19,7 @@ export default function collectionWebhooksCreate(item) {
       return response;
     } catch (err) {
       dispatch(collectionWebhooksError(err));
-      if (process.env.NODE_ENV !== 'test') { throw err; }
+      return false;
     }
   };
 }

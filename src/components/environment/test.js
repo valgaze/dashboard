@@ -148,6 +148,10 @@ describe('Space workflows', function() {
     // Ensure that the space was added.
     const newSpace = store.getState().spaces.data.find(i => i.name === 'space name');
     assert.notEqual(newSpace, undefined);
+
+    // The modal should no longer be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.environment-modal-create-space').length, 0);
   });
   it('should try to create a space, but instead display an error', async function() {
     // Mount the connected version of the component.
@@ -204,6 +208,10 @@ describe('Space workflows', function() {
     // Ensure that the space was not created, and an error is visible.
     assert.equal(store.getState().spaces.data.length, 0);
     assert.notEqual(store.getState().spaces.error, null);
+
+    // The modal should still be visible.
+    assert.equal(store.getState().activeModal.name, 'create-space');
+    assert.equal(component.find('.environment-modal-create-space').length, 1);
   });
   it('should update a space', async function() {
     // Mount the connected version of the component.
@@ -277,6 +285,10 @@ describe('Space workflows', function() {
     // Ensure that the space was updated.
     const newSpace = store.getState().spaces.data.find(i => i.name === 'foo!');
     assert.notEqual(newSpace, undefined);
+
+    // The popover should no longer be visible
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.environment-modal-update-space').length, 0);
   });
   it('should try to update a space, but instead display an error', async function() {
     // Mount the connected version of the component.
@@ -351,6 +363,10 @@ describe('Space workflows', function() {
     const newSpace = store.getState().spaces.data.find(i => i.name === 'foo!');
     assert.equal(newSpace, undefined);
     assert.notEqual(store.getState().spaces.error, null);
+
+    // The popover should still be visible.
+    assert.equal(store.getState().activeModal.name, 'update-space');
+    assert.equal(component.find('.environment-modal-update-space').length, 1);
   });
   it('should destroy a space', async function() {
     // Mount the connected version of the component.
@@ -400,6 +416,10 @@ describe('Space workflows', function() {
 
     // Ensure that the space was deleted.
     assert.equal(store.getState().spaces.data.length, 0);
+
+    // The popover should no longer visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.environment-modal-update-space').length, 0);
   });
   it('should try to destroy a space, but instead display an error', async function() {
     // Mount the connected version of the component.
@@ -451,6 +471,10 @@ describe('Space workflows', function() {
     // Ensure that the space was not deleted
     assert.equal(store.getState().spaces.data.length, 1);
     assert.notEqual(store.getState().spaces.error, null);
+
+    // The popover should still be visible.
+    assert.equal(store.getState().activeModal.name, 'update-space');
+    assert.equal(component.find('.environment-modal-update-space').length, 1);
   });
 });
 
@@ -637,6 +661,10 @@ describe('Doorway workflows', function() {
     // Ensure that the doorway was updated.
     const newDoorway = store.getState().doorways.data.find(i => i.name === 'foo!');
     assert.notEqual(newDoorway, undefined);
+
+    // The popover should still be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.environment-modal-update-space').length, 0);
   });
   it('should try to update a doorway, but instead display an error', async function() {
     // Mount the connected version of the component.
@@ -707,6 +735,10 @@ describe('Doorway workflows', function() {
     const newDoorway = store.getState().doorways.data.find(i => i.name === 'foo!');
     assert.equal(newDoorway, undefined);
     assert.notEqual(store.getState().doorways.error, null);
+
+    // The popover should still be visible.
+    assert.equal(store.getState().activeModal.name, 'update-doorway');
+    assert.equal(component.find('.environment-modal-update-doorway').length, 1);
   });
   it('should destroy a doorway', async function() {
     // Mount the connected version of the component.
@@ -752,6 +784,10 @@ describe('Doorway workflows', function() {
 
     // Ensure that the doorway was deleted.
     assert.equal(store.getState().doorways.data.length, 0);
+
+    // Popover should no longer be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.environment-modal-update-doorway').length, 0);
   });
   it('should try to destroy a doorway, but instead display an error', async function() {
     // Mount the connected version of the component.
@@ -799,5 +835,9 @@ describe('Doorway workflows', function() {
     // Ensure that the doorway was not deleted
     assert.equal(store.getState().doorways.data.length, 1);
     assert.notEqual(store.getState().doorways.error, null);
+
+    // Popover should still be visible.
+    assert.equal(store.getState().activeModal.name, 'update-doorway');
+    assert.equal(component.find('.environment-modal-update-doorway').length, 1);
   });
 });

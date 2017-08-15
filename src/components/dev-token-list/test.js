@@ -88,6 +88,10 @@ describe('Token list page', function() {
     // Ensure that the token was added.
     const newToken = store.getState().tokens.data.find(i => i.name === 'token name');
     assert.notEqual(newToken, undefined);
+
+    // The modal should no longer be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.token-create').length, 0);
   });
   it('should display an error when creating a token fails', async function() {
     // Mount the connected version of the component.
@@ -129,6 +133,10 @@ describe('Token list page', function() {
     assert.equal(store.getState().tokens.data.length, 0);
     assert.notEqual(store.getState().tokens.error, null);
     assert.equal(store.getState().tokens.loading, false);
+
+    // The modal should still be visible.
+    assert.equal(store.getState().activeModal.name, 'token-create');
+    assert.equal(component.find('.token-create').length, 1);
   });
   it('should update an existing token', async function() {
     // Mount the connected version of the component, with a token.
@@ -175,53 +183,55 @@ describe('Token list page', function() {
     // Ensure that the token was added.
     const newToken = store.getState().tokens.data.find(i => i.name === 'token name');
     assert.notEqual(newToken, undefined);
+
+    // The modal should not longer be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.token-update-modal').length, 0);
   });
-  // NOTE: No longer used. TODO: Remove this test once we are sure that there won't be a copy token
-  // page on the token list page.
-  // it('should copy a token', async function() {
-  //   // Mount the connected version of the component, with a token.
-  //   const store = storeFactory();
-  //   const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
-  //   store.dispatch(collectionTokensSet([TOKEN]));
-  //
-  //   // Click the copy button for the token.
-  //   document.execCommand = sinon.spy();
-  //   component.find('.token-card-copy-token-button').simulate('click');
-  //   assert.equal(document.execCommand.firstCall.args, 'copy');
-  // });
-  it('should filter the token list page', async function() {
+  it('should display an error when updating an existing token fails', async function() {
     // Mount the connected version of the component, with a token.
     const store = storeFactory();
-    store.dispatch(collectionTokensSet([
-      {
-        name: 'pineapple',
-        description: 'bar baz',
-        key: 'tok_ABC',
-        tokenType: 'readonly',
-      },
-      {
-        name: 'apple',
-        description: 'bar baz',
-        key: 'tok_IJK',
-        tokenType: 'readonly',
-      },
-      {
-        name: 'foo',
-        description: 'bar baz',
-        key: 'tok_XYZ',
-        tokenType: 'readonly',
-      },
-    ]));
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
+    store.dispatch(collectionTokensSet([TOKEN]));
 
-    // All three are visible.
-    assert.equal(component.find('.token-list-item').length, 3);
+    // Click on the edit button for the token.
+    component.find('.token-card-edit').simulate('click');
 
-    // Enter a search query to filter the tokens
-    component.find('.token-list-search input').simulate('change', {target: {value: 'apple'}});
+    // The modal should be visible.
+    assert.equal(store.getState().activeModal.name, 'token-update');
+    assert.equal(component.find('.token-update-modal').length, 1);
 
-    // Only `apple` and `pineapple` show up
-    assert.equal(component.find('.token-list-item').length, 2);
+    // The button in the modal should be enabled.
+    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), false);
+
+    // Empty the token name box
+    component.find('.update-token-name-container input').simulate('change', {target: {value: ''}});
+
+    // The button in the modal should now be disabled.
+    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), true);
+
+    // Enter a new name.
+    component.find('.update-token-name-container input').simulate('change', {target: {value: 'token name'}});
+    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), false);
+
+    // Click the button in the modal, which should create a new token on the server.
+    global.fetch = sinon.stub().resolves({
+      status: 403,
+      clone() { return this; },
+      json: () => Promise.resolve({}),
+    });
+    component.find('.token-update-modal-submit').simulate('click');
+
+    // Wait a bit for the promises to settle. FIXME: Not ideal.
+    await timeout(50);
+
+    // Ensure that the token was not updated
+    const newToken = store.getState().tokens.data.find(i => i.name === 'token name');
+    assert.equal(newToken, undefined);
+
+    // The modal should still be visible.
+    assert.equal(store.getState().activeModal.name, 'token-update');
+    assert.equal(component.find('.token-update-modal').length, 1);
   });
   it('should destroy an existing token', async function() {
     // Mount the connected version of the component, with a token.
@@ -264,6 +274,10 @@ describe('Token list page', function() {
 
     // Ensure that the token was removed.
     assert.equal(store.getState().tokens.data.length, 0);
+
+    // The modal should not be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.token-update-modal').length, 0);
   });
   it('should display an error when destroying an existing token fails', async function() {
     // Mount the connected version of the component, with a token.
@@ -306,5 +320,43 @@ describe('Token list page', function() {
     assert.equal(store.getState().tokens.data.length, 1);
     assert.notEqual(store.getState().tokens.error, null);
     assert.equal(store.getState().tokens.loading, false);
+
+    // The modal should still be visible.
+    assert.equal(store.getState().activeModal.name, 'token-update');
+    assert.equal(component.find('.token-update-modal').length, 1);
+  });
+  it('should filter the token list page', async function() {
+    // Mount the connected version of the component, with a token.
+    const store = storeFactory();
+    store.dispatch(collectionTokensSet([
+      {
+        name: 'pineapple',
+        description: 'bar baz',
+        key: 'tok_ABC',
+        tokenType: 'readonly',
+      },
+      {
+        name: 'apple',
+        description: 'bar baz',
+        key: 'tok_IJK',
+        tokenType: 'readonly',
+      },
+      {
+        name: 'foo',
+        description: 'bar baz',
+        key: 'tok_XYZ',
+        tokenType: 'readonly',
+      },
+    ]));
+    const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
+
+    // All three are visible.
+    assert.equal(component.find('.token-list-item').length, 3);
+
+    // Enter a search query to filter the tokens
+    component.find('.token-list-search input').simulate('change', {target: {value: 'apple'}});
+
+    // Only `apple` and `pineapple` show up
+    assert.equal(component.find('.token-list-item').length, 2);
   });
 });

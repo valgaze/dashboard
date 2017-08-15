@@ -14,7 +14,7 @@ export default function collectionTokensDestroy(item) {
       return response;
     } catch (err) {
       dispatch(collectionTokensError(err));
-      if (process.env.NODE_ENV !== 'test') { throw err; }
+      return false;
     }
   };
 }

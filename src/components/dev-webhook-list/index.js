@@ -84,7 +84,7 @@ export function WebhookList({
       </div>
 
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
-      <Fab onClick={() => onOpenModal('webhook-create')}>+</Fab>
+      <Fab type="primary" className="fab" onClick={() => onOpenModal('webhook-create')}>+</Fab>
 
       <div className="webhook-list">
         {webhookFilter(webhooks.data, webhooks.filters.search).map(webhook => {
@@ -109,22 +109,22 @@ export default connect(state => {
 }, dispatch => {
   return {
     onCreateWebhook(webhook) {
-      dispatch(collectionWebhooksCreate(webhook)).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionWebhooksCreate(webhook)).then(ok => {
+        ok && dispatch(hideModal());
+      });
+    },
+    onUpdateWebhook(webhook) {
+      dispatch(collectionWebhooksUpdate(webhook)).then(ok => {
+        ok && dispatch(hideModal());
+      });
+    },
+    onDestroyWebhook(webhook) {
+      dispatch(collectionWebhooksDestroy(webhook)).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
     onFilterWebhookList(value) {
       dispatch(collectionWebhooksFilter('search', value));
-    },
-    onUpdateWebhook(webhook) {
-      dispatch(collectionWebhooksUpdate(webhook)).then(() => {
-        dispatch(hideModal());
-      });
-    },
-    onDestroyWebhook(webhook) {
-      dispatch(collectionWebhooksDestroy(webhook)).then(() => {
-        dispatch(hideModal());
-      });
     },
 
     onOpenModal(name, data) {

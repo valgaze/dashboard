@@ -8,8 +8,8 @@ export default function WebhookCard({
   onClickEdit,
 }) {
   return <Card className="webhook-card">
-    <CardHeader>
-      {webhook.name || '(no name)'}
+    <CardHeader size="small">
+      <span className="webhook-card-header-text">{webhook.name || '(no name)'}</span>
 
       <ModalHeaderActionButton
         onClick={onClickEdit}
@@ -17,9 +17,7 @@ export default function WebhookCard({
       >Edit</ModalHeaderActionButton>
     </CardHeader>
     <CardBody>
-      <p>{webhook.description || '(No description)'}</p>
-
-      <span className="webhook-card-endpoint-label">PAYLOAD URL</span>
+      <span className="webhook-card-endpoint-label">Payload URL</span>
       <code className="webhook-card-endpoint">{webhook.endpoint}</code>
 
       <div className="webhook-card-active-checkbox">

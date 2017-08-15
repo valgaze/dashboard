@@ -89,6 +89,10 @@ describe('Webhook list page', function() {
     // Ensure that the webhook was added.
     const newWebhook = store.getState().webhooks.data.find(i => i.name === 'webhook name');
     assert.notEqual(newWebhook, undefined);
+
+    // The modal should no longer be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.webhook-create').length, 0);
   });
   it('should display an error when creating a new webhook fails', async function() {
     // Mount the connected version of the component.
@@ -131,6 +135,10 @@ describe('Webhook list page', function() {
     assert.equal(store.getState().webhooks.data.length, 0);
     assert.notEqual(store.getState().webhooks.error, null);
     assert.equal(store.getState().webhooks.loading, false);
+
+    // The modal should still be visible.
+    assert.equal(store.getState().activeModal.name, 'webhook-create');
+    assert.equal(component.find('.webhook-create').length, 1);
   });
   it('should update a webhook', async function() {
     // Mount the connected version of the component.
@@ -176,6 +184,10 @@ describe('Webhook list page', function() {
     // Ensure that the webhook was updated.
     const newWebhook = store.getState().webhooks.data.find(i => i.name === 'foo!');
     assert.notEqual(newWebhook, undefined);
+
+    // The modal should not be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.webhook-update-modal').length, 0);
   });
   it('should display an error when updating a webhook fails', async function() {
     // Mount the connected version of the component.
@@ -218,6 +230,10 @@ describe('Webhook list page', function() {
     assert.notEqual(newWebhook, undefined);
     assert.notEqual(store.getState().webhooks.error, null);
     assert.equal(store.getState().webhooks.loading, false);
+
+    // The modal should still be visible.
+    assert.equal(store.getState().activeModal.name, 'webhook-update');
+    assert.equal(component.find('.webhook-update-modal').length, 1);
   });
   it('should destroy a webhook', async function() {
     // Mount the connected version of the component.
@@ -256,6 +272,10 @@ describe('Webhook list page', function() {
 
     // Ensure that the webhook was deleted.
     assert.equal(store.getState().webhooks.data.length, 0);
+
+    // The modal should not be visible.
+    assert.equal(store.getState().activeModal.name, null);
+    assert.equal(component.find('.webhook-update-modal').length, 0);
   });
   it('should display an error when destroying a webhook fails', async function() {
     // Mount the connected version of the component.
@@ -291,6 +311,10 @@ describe('Webhook list page', function() {
     assert.equal(store.getState().webhooks.data.length, 1);
     assert.notEqual(store.getState().webhooks.error, null);
     assert.equal(store.getState().webhooks.loading, false);
+
+    // The modal should still be visible.
+    assert.equal(store.getState().activeModal.name, 'webhook-update');
+    assert.equal(component.find('.webhook-update-modal').length, 1);
   });
   it('should filter the webhook page', async function() {
     // Mount the connected version of the component, with a token.

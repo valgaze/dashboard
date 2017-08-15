@@ -18,6 +18,7 @@ export default function collectionSpacesUpdate(item) {
       return response;
     } catch (err) {
       dispatch(collectionSpacesError(err));
+      return false;
     }
   };
 }

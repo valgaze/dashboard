@@ -19,6 +19,7 @@ export default function collectionSpacesCreate(item) {
       return response;
     } catch (err) {
       dispatch(collectionSpacesError(err));
+      return false;
     }
   };
 }
