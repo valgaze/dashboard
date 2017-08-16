@@ -1,8 +1,10 @@
 import * as React from 'react';
 import Modal from '@density/ui-modal';
-import Card, { CardHeader, CardBody } from '@density/ui-card';
+import Card, { CardHeader, CardLoading, CardBody } from '@density/ui-card';
+import Button from '@density/ui-button';
 import InputBox from '@density/ui-input-box';
 import ModalHeaderActionButton from '../modal-header-action-button/index';
+import FormLabel from '../form-label/index';
 
 export default class WebhookUpdateModal extends React.Component {
   constructor(props) {
@@ -19,7 +21,8 @@ export default class WebhookUpdateModal extends React.Component {
   renderEdit() {
     return <div className="webhook-update-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
-        <Card>
+        <Card type="modal">
+          {this.props.loading ? <CardLoading indeterminate /> : null}
           <CardHeader>
             Edit Webhook
 
@@ -28,35 +31,36 @@ export default class WebhookUpdateModal extends React.Component {
               className="webhook-update-destroy-link"
               onClick={() => this.setState({isDestroying: true})}
             >
-              Destroy Webhook
+              Destroy
             </ModalHeaderActionButton>
           </CardHeader>
           <CardBody>
-            <ul>
-              <li className="webhook-update-name-container">
-                <label htmlFor="update-webhook-name">Webhook Name</label>
-                <InputBox
-                  type="text"
-                  id="update-webhook-name"
-                  value={this.state.name}
-                  onChange={e => this.setState({name: e.target.value})}
-                />
-              </li>
-              <li className="webhook-update-description-container">
-                <label htmlFor="update-webhook-description">Description</label>
-                <InputBox
-                  type="text"
-                  id="update-webhook-description"
-                  value={this.state.description}
-                  onChange={e => this.setState({description: e.target.value})}
-                />
-              </li>
-            </ul>
+            <FormLabel
+              className="webhook-update-name-container"
+              htmlFor="update-webhook-name"
+              label="Webhook Name"
+              input={<InputBox
+                type="text"
+                id="update-webhook-name"
+                value={this.state.name}
+                onChange={e => this.setState({name: e.target.value})}
+              />}
+            />
+            <FormLabel
+              className="webhook-update-description-container"
+              htmlFor="update-webhook-description"
+              label="Description"
+              input={<InputBox
+                type="text"
+                id="update-webhook-description"
+                value={this.state.description}
+                onChange={e => this.setState({description: e.target.value})}
+              />}
+            />
 
-            {this.props.loading ? <span>Loading</span> : null}
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
-            <button
+            <Button
               className="webhook-update-modal-submit"
               disabled={this.state.name.length === 0}
               onClick={() => this.props.onSubmit({
@@ -65,7 +69,7 @@ export default class WebhookUpdateModal extends React.Component {
                 description: this.state.description,
                 key: this.state.key,
               })}
-            >Save</button>
+            >Save</Button>
           </CardBody>
         </Card>
       </Modal>
@@ -74,7 +78,8 @@ export default class WebhookUpdateModal extends React.Component {
   renderDestroy() {
     return <div className="webhook-update-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
-        <Card>
+        <Card type="modal">
+          {this.props.loading ? <CardLoading indeterminate /> : null}
           <CardHeader>
             Destroy Webhook
 
@@ -90,13 +95,12 @@ export default class WebhookUpdateModal extends React.Component {
               webhook with the same contents.
             </p>
 
-            {this.props.loading ? <span>Loading</span> : null}
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
-            <button
+            <Button
               className="webhook-update-modal-destroy-submit"
               onClick={() => this.props.onDestroyWebhook(this.props.initialWebhook)}
-            >Delete</button>
+            >Destroy Webhook</Button>
           </CardBody>
         </Card>
       </Modal>

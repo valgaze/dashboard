@@ -14,7 +14,7 @@
     "@density/ui-card": "^0.4.1",
     "@density/ui-context-menu": "^0.2.0",
     "@density/ui-fab": "^0.2.0",
-    "@density/ui-input-box": "0.2.2",
+    "@density/ui-input-box": "^0.2.5",
     "@density/ui-input-stack": "0.2.0",
     "@density/ui-modal": "^0.2.0",
     "@density/ui-navbar": "^0.0.8",

@@ -119,10 +119,7 @@ export function Environment({
       {activeModal.name === 'assign-sensor-placement' ? <EnvironmentModalSensorPlacementAssignment
         error={links.error}
         loading={links.loading}
-        onSubmit={sensorPlacement => {
-          onLinkDoorwayToSpace(activeModal.data.doorway, activeModal.data.space, sensorPlacement);
-          onCloseModal();
-        }}
+        onSubmit={sensorPlacement => onLinkDoorwayToSpace(activeModal.data.doorway, activeModal.data.space, sensorPlacement)}
         onDismiss={onCloseModal}
       /> : null}
 
@@ -249,7 +246,9 @@ export default connect(state => {
 }, dispatch => {
   return {
     onLinkDoorwayToSpace(doorway, space, sensorPlacement) {
-      dispatch(collectionLinksCreate(space.id, doorway.id, sensorPlacement));
+      dispatch(collectionLinksCreate(space.id, doorway.id, sensorPlacement)).then(ok => {
+        ok && dispatch(hideModal());
+      });
     },
     onUnlinkDoorwayToSpace(link) {
       dispatch(collectionLinksDestroy(link));

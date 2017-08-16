@@ -68,9 +68,9 @@
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@density/ui-fab/-/ui-fab-0.2.0.tgz#234f86ade73384a8dd7bd13c01cbd6ab5631d301"
 
-"@density/ui-input-box@0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@density/ui-input-box/-/ui-input-box-0.2.2.tgz#8d671bd0d6315395ab8bc635919c7664c34edd40"
+"@density/ui-input-box@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@density/ui-input-box/-/ui-input-box-0.2.5.tgz#3b968be094256018d49e007117064b9252f274d3"
 
 "@density/ui-input-stack@0.2.0":
   version "0.2.0"

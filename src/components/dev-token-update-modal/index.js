@@ -1,9 +1,10 @@
 import * as React from 'react';
 import Modal from '@density/ui-modal';
-import Card, { CardHeader, CardBody } from '@density/ui-card';
+import Card, { CardHeader, CardLoading, CardBody } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 import Button from '@density/ui-button';
 import ModalHeaderActionButton from '../modal-header-action-button/index';
+import FormLabel from '../form-label/index';
 
 export default class TokenUpdateModal extends React.Component {
   constructor(props) {
@@ -22,6 +23,8 @@ export default class TokenUpdateModal extends React.Component {
     return <div className="token-update-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
         <Card type="modal">
+          {this.props.loading ? <CardLoading indeterminate /> : null}
+
           <CardHeader>
             Edit Token
 
@@ -30,32 +33,39 @@ export default class TokenUpdateModal extends React.Component {
               className="token-update-destroy-link"
               onClick={() => this.setState({isDestroying: true})}
             >
-              Destroy Token
+              Destroy
             </ModalHeaderActionButton>
           </CardHeader>
           <CardBody>
-            <ul>
-              <li className="update-token-name-container">
-                <label htmlFor="update-token-name">Token Name</label>
-                <InputBox
-                  type="text"
-                  id="update-token-name"
-                  value={this.state.name}
-                  onChange={e => this.setState({name: e.target.value})}
-                />
-              </li>
-              <li>
-                <label htmlFor="update-token-desc">Description</label>
-                <InputBox
-                  type="text"
-                  id="update-token-description"
-                  value={this.state.description}
-                  onChange={e => this.setState({description: e.target.value})}
-                />
-              </li>
-            </ul>
+            <FormLabel
+              className="update-token-name-container"
+              label="Token Name"
+              htmlFor="update-token-name"
+              input={<InputBox
+                type="text"
+                id="update-token-name"
+                value={this.state.name}
+                onChange={e => this.setState({name: e.target.value})}
+              />}
+            />
+            <FormLabel
+              className="update-token-description-container"
+              label="Description"
+              htmlFor="update-token-description"
+              input={<InputBox
+                type="text"
+                id="update-token-description"
+                value={this.state.description}
+                onChange={e => this.setState({description: e.target.value})}
+              />}
+            />
+            <FormLabel
+              className="update-token-permissions-container"
+              label="Permissions"
+              htmlFor="update-token-permissions"
+              input={<span>To update permissions you must create a new token.</span>}
+            />
 
-            {this.props.loading ? <span>Loading</span> : null}
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
             <Button
@@ -76,6 +86,7 @@ export default class TokenUpdateModal extends React.Component {
     return <div className="token-update-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
         <Card type="modal">
+          {this.props.loading ? <CardLoading indeterminate /> : null}
           <CardHeader>
             Destroy Token
 
@@ -87,7 +98,6 @@ export default class TokenUpdateModal extends React.Component {
           <CardBody>
             <h2 className="token-update-destroy-warning">Are you ABSOLUTELY sure?</h2>
 
-            {this.props.loading ? <span>Loading</span> : null}
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
             <p>

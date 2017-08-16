@@ -7,3 +7,10 @@
   margin-left: -4px;
   margin-top: 4px;
 }
+
+// Textarea used to enter description for the doorway
+.update-doorway-description-container { margin-bottom: 10px; }
+.update-doorway-description-container textarea {
+  min-height: 10em;
+  resize: vertical;
+}

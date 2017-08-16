@@ -510,7 +510,7 @@ describe('Doorway workflows', function() {
 
     // Add a doorway name and description
     component.find('.create-doorway-name-container input').simulate('change', {target: {value: 'doorway name'}});
-    component.find('.create-doorway-description-container input').simulate('change', {target: {value: 'doorway desc'}});
+    component.find('.create-doorway-description-container textarea').simulate('change', {target: {value: 'doorway desc'}});
 
     // The button in the modal should now be enabled.
     assert.equal(component.find('.create-doorway-submit button').prop('disabled'), false);
@@ -567,9 +567,9 @@ describe('Doorway workflows', function() {
     // But the button in the modal should be disabled by default.
     assert.equal(component.find('.create-doorway-submit button').prop('disabled'), true);
 
-    // Add a doorway name, time zone and reset time
+    // Add a doorway name and description
     component.find('.create-doorway-name-container input').simulate('change', {target: {value: 'doorway name'}});
-    component.find('.create-doorway-description-container input').simulate('change', {target: {value: 'doorway desc'}});
+    component.find('.create-doorway-description-container textarea').simulate('change', {target: {value: 'doorway desc'}});
 
     // The button in the modal should now be enabled.
     assert.equal(component.find('.create-doorway-submit button').prop('disabled'), false);

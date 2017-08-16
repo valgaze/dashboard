@@ -15,8 +15,10 @@ export default function collectionLinksCreate(spaceId, doorwayId, sensorPlacemen
         sensor_placement: sensorPlacement,
       });
       dispatch(collectionLinksPush(link));
+      return link;
     } catch (err) {
       dispatch(collectionLinksError(err));
+      return false;
     }
   };
 }

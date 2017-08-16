@@ -1,9 +1,11 @@
 import * as React from 'react';
 import Modal from '@density/ui-modal';
-import Card, { CardHeader, CardBody } from '@density/ui-card';
+import Card, { CardHeader, CardLoading, CardBody } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 import Popover from '@density/ui-popover';
 import ModalHeaderActionButton from '../modal-header-action-button/index';
+import FormLabel from '../form-label/index';
+import Button from '@density/ui-button';
 
 export default class EnvironmentModalUpdateDoorway extends React.Component {
   constructor(props) {
@@ -17,7 +19,8 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
   renderEdit() {
     return <div className="environment-modal-update-doorway edit">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
-        <Card>
+        <Card type="modal">
+          {this.props.loading ? <CardLoading indeterminate /> : null}
           <CardHeader>
             Doorway Details
 
@@ -29,37 +32,38 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
           </CardHeader>
           <CardBody>
 
-            {this.props.loading ? <span>Loading</span> : null}
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
-            <ul>
-              <li className="update-doorway-name-container">
-                <label htmlFor="update-doorway-name">Doorway Name</label>
-                <InputBox
-                  type="text"
-                  id="update-doorway-name"
-                  value={this.state.name}
-                  onChange={e => this.setState({name: e.target.value})}
-                  disabled={!this.state.isEditing}
-                />
-              </li>
-              <li className="update-doorway-description-container">
-                <label htmlFor="update-doorway-description">Description</label>
-                <InputBox
-                  type="text"
-                  id="update-doorway-description"
-                  value={this.state.description}
-                  onChange={e => this.setState({description: e.target.value})}
-                  disabled={!this.state.isEditing}
-                />
-              </li>
-            </ul>
+            <FormLabel
+              className="update-doorway-name-container"
+              htmlFor="update-doorway-name"
+              label="Doorway Name"
+              input={<InputBox
+                type="text"
+                id="update-doorway-name"
+                value={this.state.name}
+                onChange={e => this.setState({name: e.target.value})}
+                disabled={!this.state.isEditing}
+              />}
+            />
+            <FormLabel
+              className="update-doorway-description-container"
+              htmlFor="update-doorway-description"
+              label="Description"
+              input={<InputBox
+                type="textarea"
+                id="update-doorway-description"
+                value={this.state.description}
+                onChange={e => this.setState({description: e.target.value})}
+                disabled={!this.state.isEditing}
+              />}
+            />
 
             <div className="environment-modal-update-doorway-submit">
-              {this.state.isEditing ? <button
+              {this.state.isEditing ? <Button
                 disabled={this.state.name.length === 0}
                 onClick={() => this.props.onSubmit(this.state)}
-              >Save</button> : null}
+              >Save</Button> : null}
             </div>
           </CardBody>
         </Card>
@@ -81,28 +85,18 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
         {/* <ModalClose onClick={this.props.onDismiss} /> */}
       </CardHeader>
       <CardBody>
-        <ul>
-          <li>
-            <label htmlFor="update-doorway-name">Doorway Name</label>
-            <InputBox
-              type="text"
-              id="update-doorway-name"
-              value={this.state.name}
-              onChange={e => this.setState({name: e.target.value})}
-              disabled
-            />
-          </li>
-          <li>
-            <label htmlFor="update-doorway-desc">Description</label>
-            <InputBox
-              type="text"
-              id="update-doorway-description"
-              value={this.state.description}
-              onChange={e => this.setState({description: e.target.value})}
-              disabled
-            />
-          </li>
-        </ul>
+        <FormLabel
+          className="update-doorway-name-readonly"
+          htmlFor="update-doorway-name-readonly"
+          label="Doorway Name"
+          input={<span id="update-doorway-name-readonly">{this.state.name}</span>}
+        />
+        <FormLabel
+          className="update-doorway-description-readonly"
+          htmlFor="update-doorway-description-readonly"
+          label="Description"
+          input={<span id="update-doorway-description-readonly">{this.state.description}</span>}
+        />
       </CardBody>
     </Card>;
 

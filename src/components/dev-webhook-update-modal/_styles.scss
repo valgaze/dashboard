@@ -1,3 +1,6 @@
-.webhook-update-modal {
-  color: red;
+.webhook-update-destroy-link {
+  color: $brand-danger;
+}
+.webhook-update-modal-destroy-submit {
+  background-color: $brand-danger;
 }
