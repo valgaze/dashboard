@@ -5,7 +5,8 @@
 }
 
 .token-card-header-text {
-  font-weight: normal;
+  font-size: $font-size-3;
+  font-weight: $font-weight-3;
 }
 
 // Use flexbox to lay out the token text box in the body of the card.
@@ -17,7 +18,7 @@
 // Token card contents
 .token-card-token-content {
   font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
-  color: $gray-dark;
+  color: $gray-darkest;
 
   display: block;
   flex: 1;
@@ -42,16 +43,19 @@
   user-select: none;
 
   display: inline-block;
-  padding: 1px 14px;
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
   margin-left: 20px;
   border-radius: $border-radius-small;
 
-  height: 16px;
-  line-height: 16px;
+  height: 23px;
+  line-height: 23px;
 
   text-align: center;
-  font-size: $font-size-x-small;
-  font-weight: normal;
+  font-size: $font-size-6;
+  font-weight: $font-weight-6;
 
   position: relative;
   top: -3px;

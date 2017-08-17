@@ -20,6 +20,9 @@
 $environment-space-item-minimum-height: 64px;
 .card .card-body.environment-space-item-body {
   min-height: $environment-space-item-minimum-height;
+  background-color: $gray-lightest;
+}
+.card .card-body.environment-space-item-body.is-dropping {
   background-color: $gray-lighter;
 }
 
@@ -46,48 +49,98 @@ $environment-space-item-minimum-height: 64px;
 .environment-space-item-doorways li {
   background-color: #fff;
   display: inline-block;
-  margin-right: 14px;
-  margin-top: 14px;
-  user-select: none;
-  cursor: default;
   position: relative;
+  height: (43px - 2px - 8px - 8px);
+
+  cursor: default;
+  user-select: none;
 
   font-size: $font-size-base;
 
   border: 1px solid $gray-light;
   border-radius: $border-radius-small;
-  margin-right: 5px;
 
-  color: $gray;
-  padding: 6px 14px;
-  margin-bottom: 10px;
-  user-select: none;
+  color: $gray-darkest;
+  padding: 8px;
+  // margin-top: 14px;
+  margin-right: 10px;
+  // margin-bottom: 10px;
+}
+.environment-space-item-doorways-name {
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
 
-  display: inline-block;
+  // Center the doorway name vertically.
+  position: relative;
+  top: 2px;
 }
 
 // The sensor placement button for the doorway
+$environment-space-item-doorways-placement-padding: 6px;
 .environment-space-item-doorways-placement {
-  margin-left: 14px;
-  margin-right: 5px;
+  font-size: $font-size-6;
+  font-weight: $font-weight-6;
+
+  color: $brand-primary;
+  background-color: #fff;
+
+  padding-top: $environment-space-item-doorways-placement-padding;
+  padding-bottom: $environment-space-item-doorways-placement-padding;
+  margin-left: 10px;
+  margin-bottom: -1 * $environment-space-item-doorways-placement-padding;
+}
+.environment-space-item-doorways-placement-label {
+  color: $brand-primary;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  transition: all 100ms ease-in-out;
+
+  border-top: 1px solid $gray-light;
+  border-left: 1px solid $gray-light;
+  border-bottom: 1px solid $gray-light;
+  border-top-left-radius: $border-radius-small;
+  border-bottom-left-radius: $border-radius-small;
+
+  // Vertically center the label within the outlined portion of the cell
+  position: relative;
+  top: 1px;
+  padding-top: $environment-space-item-doorways-placement-padding - 1px + 1px;
+  padding-bottom: $environment-space-item-doorways-placement-padding - 1px - 1px;
+}
+.environment-space-item-doorways-placement-button {
+  color: #fff;
+  background-color: $brand-primary;
+
   cursor: pointer;
   font-size: 10px;
-  background-color: $brand-primary;
-  color: #fff;
-  padding: 6px 14px;
 
-  position: relative;
-  top: -2px;
+  padding-top: $environment-space-item-doorways-placement-padding;
+  padding-bottom: $environment-space-item-doorways-placement-padding;
+  padding-left: $environment-space-item-doorways-placement-padding;
+  border-top-right-radius: $border-radius-small;
+  border-bottom-right-radius: $border-radius-small;
+
+  svg {
+    position: relative;
+    bottom: -6px;
+  }
 }
-.environment-space-item-doorways-placement.out {
-  background-color: $gray;
+// On hover, make the outline on the sensor direction tag blue.
+.environment-space-item-doorways-placement:hover .environment-space-item-doorways-placement-label {
+  border-color: $brand-primary;
 }
+// On active, add a similar effect to buttons.
+.environment-space-item-doorways-placement:hover { opacity: 0.9; }
+.environment-space-item-doorways-placement:active { opacity: 1; }
+
+
 
 // The delete button for the doorway
 .environment-space-item-doorways-delete {
   padding: 3px;
   color: #fff;
-  background-color: $gray-darker;
+  background-color: $gray;
   cursor: pointer;
   font-size: 16px;
   border-radius: 50%;
@@ -106,7 +159,15 @@ $environment-space-item-minimum-height: 64px;
   }
 }
 
-.environment-space-item-name { flex: 1; }
+.environment-space-item-name {
+  flex: 1;
+  font-size: $font-size-4;
+  font-weight: $font-weight-4;
+
+  // Move title text upward to center within the header row.
+  padding-top: 2px;
+  height: 38px;
+}
 
 // The ellipsis for the space
 .environment-space-item-details {

@@ -13,11 +13,14 @@ export default function EnvironmentModalSensorPlacementAssignment({loading, erro
         {error ? <span>Error: {this.props.error}</span> : null}
 
         <p>
-          There should be some text here.
+          There should be some text here. And probably a graphic.
         </p>
-        <Button onClick={() => onSubmit(-1)}>Outside the space</Button>
-        <Button onClick={() => onSubmit(1)}>Inside the space</Button>
-        <Button onClick={onDismiss}>Cancel</Button>
+
+        <div className="environment-modal-sensor-placement-assignment-button-group">
+          <Button onClick={() => onSubmit(-1)}>Outside the space</Button>
+          <Button onClick={() => onSubmit(1)}>Inside the space</Button>
+        </div>
+        <Button className="environment-modal-sensor-placement-assignment-button-close" onClick={onDismiss}>Cancel</Button>
       </CardBody>
     </Card>
   </Modal>;

@@ -12,10 +12,14 @@ export default function EnvironmentModalSensorPlacement({loading, error, onSubmi
         {error ? <span>Error: {this.props.error}</span> : null}
 
         <p>
-          There should be some text here. Something like "this has sweeping consequences" and "are you REALLY sure?"
+          Would you like to swap sensor placement?
+          There should be some text here. And probably a graphic.
         </p>
-        <Button onClick={onSubmit}>Swap sensor placement</Button>
-        <Button onClick={onDismiss}>Cancel</Button>
+
+        <div className="environment-modal-sensor-placement-button-group">
+          <Button className="environment-modal-sensor-placement-button-yes" onClick={onDismiss}>No</Button>
+          <Button className="environment-modal-sensor-placement-button-no" onClick={onSubmit}>Yes</Button>
+        </div>
       </CardBody>
     </Card>
   </Modal>;

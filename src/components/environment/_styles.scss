@@ -8,7 +8,7 @@
   position: relative;
 }
 
-.environment .fab {
+.environment .fab-primary {
   line-height: 60px;
   position: absolute;
   right: 16px;
@@ -60,7 +60,7 @@
   padding: 20px;
   min-height: 100%;
   overflow: scroll;
-  margin-top: 72px;
+  margin-top: (34px + 20px);
 }
 
 // remove left padding and top margin on `ul`'s inside of columns

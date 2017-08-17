@@ -51,11 +51,16 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               htmlFor="update-space-timezone"
               label="Time Zone"
               input={<InputBox
-                type="text"
+                type="select"
                 id="update-doorway-timezone"
                 value={this.state.timeZone}
                 onChange={e => this.setState({timeZone: e.target.value})}
-              />}
+              >
+                <option value="America/New_York">America &mdash; NY</option>
+                <option value="America/Chicago">America &mdash; CHI</option>
+                <option value="America/Phoenix">America &mdash; PHX</option>
+                <option value="America/Los_Angeles">America &mdash; LA</option>
+              </InputBox>}
             />
             <FormLabel
               className="update-space-daily-reset-container"
@@ -78,6 +83,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
                   key={doorway.id}
                 >{doorway.name}</span>)}
               </div>}
+              editable={false}
             />
 
             <div className="environment-modal-update-space-submit">
@@ -95,8 +101,6 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
     const popover = <Card>
       {this.props.loading ? <CardLoading indeterminate /> : null}
       <CardHeader>
-        Space Details
-
         {/* Edit / Delete button */}
         <ModalHeaderActionButton
           className="update-space-edit-button"
@@ -108,47 +112,40 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
       </CardHeader>
       <CardBody>
         {this.props.error ? <span>Error: {this.props.error}</span> : null}
-        <ul>
-          <li>
-            <label htmlFor="update-space-name">Space Name</label>
-            <InputBox
-              type="text"
-              id="update-space-name"
-              value={this.state.name}
-              onChange={e => this.setState({name: e.target.value})}
-              disabled
-            />
-          </li>
-          <li>
-            <label htmlFor="update-space-timezone">Time Zone</label>
-            <InputBox
-              type="text"
-              id="update-doorway-timezone"
-              value={this.state.timeZone}
-              onChange={e => this.setState({timeZone: e.target.value})}
-              disabled
-            />
-          </li>
-          <li>
-            <label htmlFor="update-space-daily-reset">Daily Reset</label>
-            <InputBox
-              type="text"
-              id="update-space-daily-reset"
-              value={this.state.dailyReset}
-              onChange={e => this.setState({dailyReset: e.target.value})}
-              disabled
-            />
-          </li>
-          <li className="environment-modal-update-space-doorway-container">
-            <label htmlFor="display-space-doorways">Doorways</label>
-            <div id="display-space-doorways">
-              {this.props.doorways.map(doorway => <span
-                className="environment-modal-update-space-doorway-pill"
-                key={doorway.id}
-              >{doorway.name}</span>)}
-            </div>
-          </li>
-        </ul>
+
+        <FormLabel
+          htmlFor="update-space-name"
+          label="Space Name"
+          input={<span>{this.state.name}</span>}
+          editable={false}
+        />
+
+        <FormLabel
+          htmlFor="update-space-timezone"
+          label="Time Zone"
+          input={<span>{this.state.timeZone}</span>}
+          editable={false}
+        />
+
+        <FormLabel
+          htmlFor="update-space-daily-reset"
+          label="Daily Reset"
+          input={<span>{this.state.dailyReset}</span>}
+          editable={false}
+        />
+
+        <FormLabel
+          className="environment-modal-update-space-doorway-container"
+          htmlFor="display-space-doorways"
+          label="Doorways"
+          input={<div id="display-space-doorways">
+            {this.props.doorways.map(doorway => <span
+              className="environment-modal-update-space-doorway-pill"
+              key={doorway.id}
+            >{doorway.name}</span>)}
+          </div>}
+          editable={false}
+        />
       </CardBody>
     </Card>;
 
@@ -157,6 +154,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
         show={true}
         popover={popover}
         target={this.props.popoverPositionTarget}
+        onDismiss={this.props.onDismiss}
       />
     </div>;
   }

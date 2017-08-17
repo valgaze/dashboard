@@ -22,8 +22,9 @@
 }
 
 // Add a capacity unit after the capacity number indicator above the progress bar.
+.space-card-capacity-number { color: $gray; }
 .space-card-capacity-number:before { content: 'Capacity: '; }
-.space-card-capacity-number:empty:before { content: 'No Capacity'; }
+.space-card-capacity-number:empty:before { content: 'Max capacity not specified'; }
 
 // Add a capacity percent unit after the percentage indicator directly above and right from the
 // progress bar.

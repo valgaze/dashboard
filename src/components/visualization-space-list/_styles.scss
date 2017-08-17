@@ -11,6 +11,17 @@
 .space-list-search-box {
   margin-bottom: 20px;
   margin-left: 8px;
+  width: 200px;
+
+  color: $gray-darker;
+  &::placeholder,
+  &::-webkit-input-placeholder,
+  &::-moz-placeholder,
+  &:-ms-input-placeholder,
+  &:-moz-placeholder {
+    color: $gray;
+    opacity: 1; // Placeholders in firefox have opacity be default. Undo that.
+  }
 }
 
 .space-list-container { @include grid-container; }

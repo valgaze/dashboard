@@ -8,12 +8,14 @@
 // The actual label element within the `form-label`
 .form-label-label {
   display: block;
-  margin-top: 15px;
   margin-bottom: 10px;
   font-size: $font-size-base;
   font-weight: $font-weight-base;
   user-select: none;
   color: $gray;
+}
+.form-label-editable {
+  margin-bottom: 40px;
 }
 // The first .form-label-label should not have a top margin.
 .form-label:first-child .form-label-label {

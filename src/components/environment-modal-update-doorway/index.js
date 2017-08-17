@@ -73,8 +73,6 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
   renderView() {
     const popover = <Card>
       <CardHeader>
-        Doorway Details
-
         {/* Edit buttons */}
         <ModalHeaderActionButton
           className="update-doorway-edit-button"
@@ -90,12 +88,14 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
           htmlFor="update-doorway-name-readonly"
           label="Doorway Name"
           input={<span id="update-doorway-name-readonly">{this.state.name}</span>}
+          editable={false}
         />
         <FormLabel
           className="update-doorway-description-readonly"
           htmlFor="update-doorway-description-readonly"
           label="Description"
           input={<span id="update-doorway-description-readonly">{this.state.description}</span>}
+          editable={false}
         />
       </CardBody>
     </Card>;
@@ -105,6 +105,7 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
         show={true}
         popover={popover}
         target={this.props.popoverPositionTarget}
+        onDismiss={this.props.onDismiss}
       />
     </div>;
   }

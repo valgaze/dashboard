@@ -41,7 +41,8 @@ export default class TokenCreate extends React.Component {
               className="token-create-description-container"
               label="Token description"
               htmlFor="token-create-desc"
-              input={<textarea
+              input={<InputBox
+                type="textarea"
                 className="token-create-description-field"
                 id="token-create-desc"
                 value={this.state.description}
@@ -52,22 +53,25 @@ export default class TokenCreate extends React.Component {
               className="token-create-token-type-container"
               label="Token Type"
               htmlFor=""
-              input={<div>
-                <label htmlFor="token-create-token-type-read-only">Read Only</label>
-                <input
-                  type="radio"
-                  id="token-create-token-type-read-only"
-                  onChange={() => this.setState({tokenType: READONLY})}
-                  checked={this.state.tokenType === READONLY}
-                />
-                <br/>
-                <label htmlFor="token-create-token-type-read-write">Read Write</label>
-                <input
-                  type="radio"
-                  id="token-create-token-type-read-write"
-                  onChange={() => this.setState({tokenType: READWRITE})}
-                  checked={this.state.tokenType === READWRITE}
-                />
+              input={<div className="token-create-token-type-radio-group">
+                <div className="token-create-token-type-radio-item">
+                  <input
+                    type="radio"
+                    id="token-create-token-type-read-only"
+                    onChange={() => this.setState({tokenType: READONLY})}
+                    checked={this.state.tokenType === READONLY}
+                  />
+                  <label htmlFor="token-create-token-type-read-only">Read Only</label>
+                </div>
+                <div className="token-create-token-type-radio-item">
+                  <input
+                    type="radio"
+                    id="token-create-token-type-read-write"
+                    onChange={() => this.setState({tokenType: READWRITE})}
+                    checked={this.state.tokenType === READWRITE}
+                  />
+                  <label htmlFor="token-create-token-type-read-write">Read Write</label>
+                </div>
                 </div>}
             />
 

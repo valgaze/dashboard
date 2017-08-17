@@ -99,7 +99,7 @@ describe('Space workflows', function() {
     store.dispatch(collectionLinksSet([]));
 
     // Click on the new button
-    component.find('.fab').simulate('click');
+    component.find('.fab-primary').simulate('click');
 
     // The context menu should be visible.
     assert.equal(store.getState().activeModal.name, 'space-doorway-popup');
@@ -166,7 +166,7 @@ describe('Space workflows', function() {
     store.dispatch(collectionLinksSet([]));
 
     // Click on the new button
-    component.find('.fab').simulate('click');
+    component.find('.fab-primary').simulate('click');
 
     // The context menu should be visible.
     assert.equal(store.getState().activeModal.name, 'space-doorway-popup');
@@ -492,7 +492,7 @@ describe('Doorway workflows', function() {
     store.dispatch(collectionLinksSet([]));
 
     // Click on the new button
-    component.find('.fab').simulate('click');
+    component.find('.fab-primary').simulate('click');
 
     // The context menu should be visible.
     assert.equal(store.getState().activeModal.name, 'space-doorway-popup');
@@ -551,7 +551,7 @@ describe('Doorway workflows', function() {
     store.dispatch(collectionLinksSet([]));
 
     // Click on the new button
-    component.find('.fab').simulate('click');
+    component.find('.fab-primary').simulate('click');
 
     // The context menu should be visible.
     assert.equal(store.getState().activeModal.name, 'space-doorway-popup');

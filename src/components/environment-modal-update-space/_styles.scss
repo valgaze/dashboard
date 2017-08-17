@@ -1,11 +1,20 @@
-.environment-modal-update-space input[type=text]:disabled {
-  background-color: $gray-light;
-}
-
 // Provide some padding to align the arrow properly with the three dots icon
 .environment-modal-update-space.view .popover {
   margin-left: -4px;
   margin-top: 4px;
+  width: 350px;
+}
+
+// Move the body up a bit so that the card header (with the edit button) doesn't have its own row.
+.environment-modal-update-space.view .card-body {
+  margin-top: -15px;
+  padding: 25px;
+}
+
+// Float the edit button to the right.
+.update-space-edit-button {
+  float: right;
+  padding: 10px;
 }
 
 
@@ -14,11 +23,14 @@
 // ----------------------------------------------------------------------------
 
 .environment-modal-update-space-doorway-container div {
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 
 .environment-modal-update-space-doorway-pill {
-  padding: 4px 10px;
+  padding-top: 6px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
   margin-left: 4px;
 
   font-size: $font-size-6;

@@ -20,7 +20,7 @@ export function SpaceList({
 
       <InputBox
         className="space-list-search-box"
-        placeholder="Search ..."
+        placeholder="Filter Spaces ..."
         value={spaces.filters.search}
         onChange={e => onSpaceSearch(e.target.value)}
       />

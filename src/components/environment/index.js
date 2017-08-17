@@ -77,13 +77,16 @@ export function Environment({
 
     <div className="environment-container">
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
-      <Fab onClick={() => {
-        if (activeModal.name) {
-          return onCloseModal();
-        } else {
-          return onOpenModal('space-doorway-popup');
-        }
-      }}>+</Fab>
+      <Fab
+        type="primary"
+        onClick={() => {
+          if (activeModal.name) {
+            return onCloseModal();
+          } else {
+            return onOpenModal('space-doorway-popup');
+          }
+        }}
+      >+</Fab>
 
       {/************
       ** MODALS

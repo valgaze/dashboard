@@ -47,8 +47,10 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 onChange={e => this.setState({timeZone: e.target.value})}
               >
                 <option>(choose time zone)</option>
-                <option value="America/New_York">America - NY</option>
-                <option value="America/Los_Angeles">America - LA</option>
+                <option value="America/New_York">America &mdash; NY</option>
+                <option value="America/Chicago">America &mdash; CHI</option>
+                <option value="America/Phoenix">America &mdash; PHX</option>
+                <option value="America/Los_Angeles">America &mdash; LA</option>
               </InputBox>}
             />
             <FormLabel
