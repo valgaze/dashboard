@@ -633,6 +633,9 @@ describe('Doorway workflows', function() {
     // Then, update the doorway name
     component.find('.update-doorway-name-container input').simulate('change', {target: {value: 'foo!'}});
 
+    // Also update the space description
+    component.find('.update-doorway-description-container textarea').simulate('change', {target: {value: 'bar'}});
+
     // The button in the modal should be enabled again.
     assert.equal(component.find('.environment-modal-update-doorway-submit button').prop('disabled'), false);
 
@@ -641,9 +644,9 @@ describe('Doorway workflows', function() {
       status: 201,
       clone() { return this; },
       json: () => Promise.resolve({
-        id: 'spc_1',
+        id: 'drw_1',
         name: 'foo!',
-        description: '',
+        description: 'bar',
         time_zone: 'America/New_York',
         daily_reset: '12:00',
         current_count: 0,
@@ -658,9 +661,13 @@ describe('Doorway workflows', function() {
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(25);
 
+    // Ensure that loading spinner is no longer visible.
+    assert.equal(store.getState().doorways.loading, false);
+
     // Ensure that the doorway was updated.
     const newDoorway = store.getState().doorways.data.find(i => i.name === 'foo!');
     assert.notEqual(newDoorway, undefined);
+    assert.equal(newDoorway.description, 'bar');
 
     // The popover should still be visible.
     assert.equal(store.getState().activeModal.name, null);
@@ -714,7 +721,7 @@ describe('Doorway workflows', function() {
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({
-        id: 'spc_1',
+        id: 'drw_1',
         name: 'foo!',
         description: '',
         time_zone: 'America/New_York',

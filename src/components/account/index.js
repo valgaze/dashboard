@@ -2,6 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import InputBox from '@density/ui-input-box';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
+import FormLabel from '../form-label/index';
+import Button from '@density/ui-button';
 
 import ModalHeaderActionButton from '../modal-header-action-button/index';
 
@@ -41,9 +43,9 @@ export class Account extends React.Component {
     } = this.props;
 
     return <div className="account">
-      <Card>
+      <Card type="modal">
         <CardHeader>
-          Account
+          {this.state.mode === EDIT ? 'Edit Account' : 'Account'}
 
           {/* Edit / Cancel button */}
           <ModalHeaderActionButton
@@ -53,109 +55,118 @@ export class Account extends React.Component {
         </CardHeader>
 
         <CardBody>
-          <ul>
-            <li className="account-error">
-              {this.state.error}
-            </li>
+          <div className="account-error">{this.state.error}</div>
 
-            <li className="account-full-name-container">
-              <label htmlFor="account-full-name">Full Name</label>
-              <InputBox
+          <div className="account-name-container">
+            <FormLabel
+              className="account-full-name-container"
+              htmlFor="account-full-name"
+              label="Full Name"
+              input={<InputBox
                 type="text"
                 placeholder="Full Name"
                 value={this.state.fullName}
                 onChange={e => this.setState({fullName: e.target.value})}
                 disabled={this.state.mode !== EDIT}
                 id="account-full-name"
-              />
-            </li>
+              />}
+            />
 
-            <li className="account-nickname-container">
-              <label htmlFor="account-nickname">Nickname</label>
-              <InputBox
+            <FormLabel
+              className="account-nickname-container"
+              htmlFor="account-nickname"
+              label="Nickname"
+              input={<InputBox
                 type="text"
                 placeholder={this.generateNickname() || 'Nickname'}
                 value={this.state.nickname}
                 onChange={e => this.setState({nickname: e.target.value})}
                 disabled={this.state.mode !== EDIT}
                 id="account-nickname"
-              />
-            </li>
+              />}
+            />
+          </div>
 
-            <li className="account-email-container">
-              <label htmlFor="account-email">Email</label>
-              <InputBox
-                type="email"
-                placeholder="Email"
-                value={this.state.email}
-                onChange={e => this.setState({email: e.target.value})}
-                disabled={this.state.mode !== EDIT}
-                id="account-email"
-              />
-            </li>
+          <FormLabel
+            className="account-email-container"
+            htmlFor="account-email"
+            label="Email"
+            input={<InputBox
+              type="email"
+              placeholder="Email"
+              value={this.state.email}
+              onChange={e => this.setState({email: e.target.value})}
+              disabled={this.state.mode !== EDIT}
+              id="account-email"
+            />}
+          />
 
-            <li className="account-organization-container">
-              <label htmlFor="account-organization">Organization</label>
-              <div
-                id="account-organization"
-                className="account-organization"
-              >{initialUser.organization ? initialUser.organization.name : '(unknown organization)'}</div>
-            </li>
+          <FormLabel
+            className="account-organization-container"
+            htmlFor="account-organization"
+            label="Organization"
+            input={<InputBox
+              type="text"
+              value={initialUser.organization ? initialUser.organization.name : '(unknown organization)'}
+              onChange={e => this.setState({email: e.target.value})}
+              disabled={true}
+              id="account-organization"
+            />}
+          />
 
-            {/* Trigger changing the password */}
-            <li className="account-change-password-link-container">
-              {this.state.mode === NORMAL && <label htmlFor="account-change-password">Password</label>}
-              {this.state.mode === NORMAL && <div id="account-change-password" className="account-change-password-value">
-                <span onClick={() => this.setState({mode: PASSWORD_RESET})}>Reset Password</span>
-              </div>}
-            </li>
+          {/* Trigger changing the password */}
+          {this.state.mode === NORMAL ? <FormLabel
+            className="account-change-password-link-container"
+            label="Password"
+            htmlFor="account-change-password"
+            input={ <div id="account-change-password" className="account-change-password-value">
+              <span onClick={() => this.setState({mode: PASSWORD_RESET})}>Change Password</span>
+            </div>}
+          /> : null}
 
-            {/* The form to change the password that is triggered. */}
-            {this.state.mode === PASSWORD_RESET ? <li
-              className="account-change-password-form-container"
-            >
-              <label>Password</label>
-              <InputBox
-                type="password"
-                placeholder="Type old password"
-                value={this.state.currentPassword}
-                onChange={e => this.setState({currentPassword: e.target.value})}
-              />
-              <InputBox
-                type="password"
-                placeholder="Type new password"
-                value={this.state.password}
-                onChange={e => this.setState({password: e.target.value})}
-              />
-              <InputBox
-                type="password"
-                placeholder="Confirm new password"
-                value={this.state.passwordConfirmation}
-                onChange={e => this.setState({passwordConfirmation: e.target.value})}
-              />
-              <button
-                onClick={() => {
-                  if (this.state.currentPassword === this.state.passwordConfirmation) {
-                    this.setState({error: null});
-                    return onSubmitPassword(this.state.currentPassword, this.state.password)
-                  } else {
-                    this.setState({error: `Passwords don't match.`});
-                  }
-                }}
-              >Submit Password</button>
-            </li> : null}
+          {/* The form to change the password that is triggered. */}
+          {this.state.mode === PASSWORD_RESET ? <div className="account-change-password-form-container">
+            <label className="account-change-password-form-header">Password</label>
+            <InputBox
+              type="password"
+              placeholder="Type old password"
+              value={this.state.currentPassword}
+              onChange={e => this.setState({currentPassword: e.target.value})}
+            />
+            <InputBox
+              type="password"
+              placeholder="Type new password"
+              value={this.state.password}
+              onChange={e => this.setState({password: e.target.value})}
+            />
+            <InputBox
+              type="password"
+              placeholder="Confirm new password"
+              value={this.state.passwordConfirmation}
+              onChange={e => this.setState({passwordConfirmation: e.target.value})}
+            />
+            <Button
+              onClick={() => {
+                if (this.state.currentPassword === this.state.passwordConfirmation) {
+                  this.setState({error: null});
+                  return onSubmitPassword(this.state.currentPassword, this.state.password)
+                } else {
+                  this.setState({error: `Passwords don't match.`});
+                }
+              }}
+            >Change Password</Button>
+          </div> : null}
 
-            <li className="account-submit-user-details">
-              {this.state.mode === EDIT ? <button
-                onClick={() => {
-                  onSubmitUserUpdate(this.state.fullName, this.state.nickname, this.state.email)
-                  .then(() => {
-                    this.setState({mode: NORMAL});
-                  })
-                }}
-              >Submit User Details</button> : null}
-            </li>
-          </ul>
+          <div className="account-submit-user-details">
+            {this.state.mode === EDIT ? <Button
+              onClick={() => {
+                onSubmitUserUpdate(this.state.fullName, this.state.nickname, this.state.email)
+                .then(() => {
+                  this.setState({mode: NORMAL});
+                })
+              }}
+            >Save Changes</Button> : null}
+          </div>
         </CardBody>
       </Card>
     </div>;

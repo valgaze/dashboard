@@ -73,18 +73,6 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
                 onChange={e => this.setState({dailyReset: e.target.value})}
               />}
             />
-            <FormLabel
-              className="environment-modal-update-space-doorway-container"
-              htmlFor="display-space-doorways"
-              label="Doorways"
-              input={<div id="display-space-doorways">
-                {this.props.doorways.map(doorway => <span
-                  className="environment-modal-update-space-doorway-pill"
-                  key={doorway.id}
-                >{doorway.name}</span>)}
-              </div>}
-              editable={false}
-            />
 
             <div className="environment-modal-update-space-submit">
               <Button

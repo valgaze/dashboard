@@ -1,2 +1,24 @@
-.webhook-create {
+.webhook-create-example {
+  color: $gray-darkest;
+  margin-bottom: 40px;
+
+  p a { margin-left: 10px; }
+}
+
+// Set a height on the description box
+.webhook-create-description-container .input-box {
+  height: 5em;
+}
+
+.webhook-create-example-payload {
+  background-color: $gray-lightest;
+  color: $gray-darker;
+  border: 1px solid $gray-light;
+  border-radius: $border-radius-base;
+
+  font-family: $font-monospace;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+
+  padding: 10px;
 }

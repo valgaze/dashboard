@@ -3,25 +3,50 @@
   max-width: 600px;
 }
 
-.account ul {
-  padding-left: 0px;
-  list-style-type: none;
-}
-
-.account-edit-button {
-  float: right;
-}
-
-.account input:disabled {
-  background-color: $gray-light;
-}
-
-.account-organization {
-  float: right;
-}
+.account-edit-button { float: right; }
 
 .account-change-password-value {
   cursor: pointer;
   text-decoration: underline;
   float: right;
+
+  color: $brand-primary;
+}
+
+// Full name / Nickname fields
+.account-name-container {
+  display: block;
+
+  // On larger screens, full name / nickname should be side-by-side.
+  @media (min-width: $screen-xs-max) { display: flex; }
+}
+.account-name-container .account-full-name-container {
+  flex: 1;
+  margin-right: 5px;
+  // On larger screens, full name / nickname should have a set height to make sure that when side by
+  // side one isn't taller.
+  @media (min-width: $screen-xs-max) { max-height: 70px; }
+}
+.account-name-container .account-nickname-container:last-of-type {
+  flex: 1;
+  margin-left: 5px;
+  margin-bottom: 40px;
+
+  // On larger screens, full name / nickname should have a set height to make sure that when side by
+  // side one isn't taller.
+  @media (min-width: $screen-xs-max) { max-height: 70px; }
+}
+
+// The password reset form.
+.account-change-password-form-header {
+  margin-bottom: 10px;
+}
+
+.account-change-password-form-container {
+  display: flex;
+  flex-direction: column;
+}
+.account-change-password-form-container input {
+  flex: 1;
+  margin-bottom: 40px;
 }

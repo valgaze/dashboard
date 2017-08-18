@@ -51,7 +51,7 @@ export default class WebhookUpdateModal extends React.Component {
               htmlFor="update-webhook-description"
               label="Description"
               input={<InputBox
-                type="text"
+                type="textarea"
                 id="update-webhook-description"
                 value={this.state.description}
                 onChange={e => this.setState({description: e.target.value})}

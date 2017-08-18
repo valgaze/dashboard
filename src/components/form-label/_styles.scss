@@ -14,9 +14,6 @@
   user-select: none;
   color: $gray;
 }
-.form-label-editable {
-  margin-bottom: 40px;
-}
 // The first .form-label-label should not have a top margin.
 .form-label:first-child .form-label-label {
   margin-top: 0px;
@@ -25,6 +22,11 @@
 // The last .form-label should have some bottom margin.
 .form-label:last-child, .form-label:last-of-type {
   margin-bottom: 10px;
+}
+
+// Editable fields always have bottom margin.
+.form-label-editable, .form-label-editable:last-of-type {
+  margin-bottom: 40px;
 }
 
 .form-label input {

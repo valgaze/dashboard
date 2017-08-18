@@ -12,7 +12,7 @@ export default function collectionDoorwaysUpdate(item) {
       const response = await core.doorways.update({
         id: item.id,
         name: item.name,
-        description: item.desc,
+        description: item.description,
       });
       dispatch(collectionDoorwaysPush(response));
       return response;
