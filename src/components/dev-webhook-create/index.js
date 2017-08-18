@@ -58,8 +58,8 @@ export default class WebhookCreateModal extends React.Component {
             />
 
             <div className="webhook-create-example">
+              <p>Webhooks will be sent as POST requests to the url specified above as JSON.</p>
               <p>
-                Webhooks will be sent as POST requests to the url specified above as json.
                 Here's an example webhook payload:
                 <a
                   target="_blank"

@@ -63,10 +63,9 @@ describe('Accounts page', function() {
     // Click change password
     component.find('.account-edit-button').simulate('click');
 
-    // Always show name and email inputs
+    // Always show full-name and nickname inputs
     assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
     assert.equal(component.find('.account-nickname-container input').prop('disabled'), false);
-    assert.equal(component.find('.account-email-container input').prop('disabled'), false);
 
     // Don't show change password link
     assert.equal(component.find('.account-change-password-value span').length, 0);

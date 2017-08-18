@@ -27,17 +27,7 @@
 // The submit button to the login form
 .login-submit-button {
   margin-top: 30px;
-  height: 50px;
-  background-color: #222A2E;
-  color: #fff;
-  box-shadow: none;
-  border: none;
-  border-radius: 25px;
   width: 100%;
-
-  &:disabled {
-    opacity: 0.5;
-  }
 }
 
 // Wrapper for the login form

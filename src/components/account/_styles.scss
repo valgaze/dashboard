@@ -1,9 +1,18 @@
 .account {
   @include grid-container;
   max-width: 600px;
+  margin-top: 40px;
 }
 
 .account-edit-button { float: right; }
+
+// Change color of all text in text fields
+.account-full-name-container input,
+.account-nickname-container input,
+.account-email-container input,
+.account-organization-container input {
+  color: $gray-darkest;
+}
 
 .account-change-password-value {
   cursor: pointer;

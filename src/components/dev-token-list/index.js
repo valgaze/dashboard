@@ -7,6 +7,7 @@ import hideModal from '../../actions/modal/hide';
 import TokenCard from '../dev-token-card/index';
 import TokenCreateModal from '../dev-token-create-modal/index';
 import TokenUpdateModal from '../dev-token-update-modal/index';
+import DescriptionModal from '../dev-description-popover/index';
 
 import collectionTokensCreate from '../../actions/collection/tokens/create';
 import collectionTokensUpdate from '../../actions/collection/tokens/update';
@@ -73,11 +74,18 @@ export function TokenList({
 
     <div className="token-list-container">
       <h1 className="token-list-header">Tokens</h1>
-      <p className="token-list-description">
-        A token is a secret, random string used to authenticate that you have access and authorize
-        permission to Density data. Ready to start using them?
-        <a href="http://docs.density.io" target="_blank" rel="noopener noreferrer">Visit our API Documentation</a>
-      </p>
+      <DescriptionModal>
+        <p>
+          A token is a secret, random string used to authenticate that you have access and authorize
+          permission to Density data. Ready to start using them?
+        </p>
+        <a
+          className="token-list-description-link"
+          href="http://docs.density.io"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Visit our API Documentation</a>
+      </DescriptionModal>
 
       {/* Search box to filter the list of tokens */}
       <div className="token-list-search">

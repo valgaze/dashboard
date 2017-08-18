@@ -6,6 +6,7 @@ import { accounts } from '@density-int/client';
 import sessionTokenSet from '../../actions/session-token/set';
 
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
+import Button from '@density/ui-button';
 
 const LOGIN = 'LOGIN', FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 
@@ -21,7 +22,7 @@ export class Login extends React.Component {
     };
   }
 
-  onEnter(e) {
+  ;onEnter(e) {
     if (e.key === 'Enter') {
       this.onLogin();
     }
@@ -79,7 +80,7 @@ export class Login extends React.Component {
       >Forgot Password</div>
 
       {/* Submit the form! */}
-      <button 
+      <Button 
         className={classnames('login-submit-button', {loading: this.state.loading})}
         onClick={this.onLogin.bind(this)}
         type="button"
@@ -91,7 +92,7 @@ export class Login extends React.Component {
           src="/assets/images/loading.gif"
           alt="Loading"
         /> : null}
-      </button>
+      </Button>
     </div>;
   }
 

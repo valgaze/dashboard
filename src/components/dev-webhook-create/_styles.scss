@@ -3,6 +3,7 @@
   margin-bottom: 40px;
 
   p a { margin-left: 10px; }
+  p:first-child { margin-bottom: 20px; }
 }
 
 // Set a height on the description box
@@ -20,5 +21,5 @@
   font-size: $font-size-base;
   font-weight: $font-weight-base;
 
-  padding: 10px;
+  padding: 20px;
 }

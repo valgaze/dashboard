@@ -96,7 +96,7 @@ export class Account extends React.Component {
               placeholder="Email"
               value={this.state.email}
               onChange={e => this.setState({email: e.target.value})}
-              disabled={this.state.mode !== EDIT}
+              disabled={true}
               id="account-email"
             />}
           />

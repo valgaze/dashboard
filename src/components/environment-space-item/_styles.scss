@@ -101,6 +101,12 @@ $environment-space-item-doorways-placement-padding: 6px;
   border-bottom: 1px solid $gray-light;
   border-top-left-radius: $border-radius-small;
   border-bottom-left-radius: $border-radius-small;
+  // On mobile, since the action button is hidden, add borders to the rest of the cards.
+  @media (max-width: $screen-sm-max) {
+    border-right: 1px solid $gray-light;
+    border-top-right-radius: $border-radius-small;
+    border-bottom-right-radius: $border-radius-small;
+  }  
 
   // Vertically center the label within the outlined portion of the cell
   position: relative;
@@ -125,6 +131,11 @@ $environment-space-item-doorways-placement-padding: 6px;
     position: relative;
     bottom: -6px;
   }
+
+  // On mobile, hide the button to switch the sensor direction.
+  @media (max-width: $screen-sm-max) {
+    display: none;
+  }  
 }
 // On hover, make the outline on the sensor direction tag blue.
 .environment-space-item-doorways-placement:hover .environment-space-item-doorways-placement-label {
