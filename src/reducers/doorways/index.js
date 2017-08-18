@@ -59,7 +59,7 @@ export default function doorways(state=initialState, action) {
   case COLLECTION_DOORWAYS_CREATE:
   case COLLECTION_DOORWAYS_UPDATE:
   case COLLECTION_DOORWAYS_DESTROY:
-    return {...state, loading: true};
+    return {...state, error: null, loading: true};
 
   // An error occurred.
   case COLLECTION_DOORWAYS_ERROR:

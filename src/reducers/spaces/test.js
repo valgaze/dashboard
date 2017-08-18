@@ -6,6 +6,7 @@ import collectionSpacesPush from '../../actions/collection/spaces/push';
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 import collectionSpacesDelete from '../../actions/collection/spaces/delete';
 import collectionSpacesError from '../../actions/collection/spaces/error';
+import { COLLECTION_SPACES_UPDATE } from '../../actions/collection/spaces/update'; 
 
 describe('spaces', function() {
   it('should set spaces when given a bunch of spaces', function() {
@@ -96,5 +97,17 @@ describe('spaces', function() {
 
     // Initial state should then match final state.
     assert.deepEqual(errorState, {...initialState, error: 'boom!', loading: false});
+  });
+  it('should clear an error when an async operation starts.', function() {
+    const initialState = spaces(undefined, {});
+
+    // Add an error to the state.
+    const errorState = spaces(initialState, collectionSpacesError('boom!'));
+
+    // Then, update a space.
+    const state = spaces(errorState, {type: COLLECTION_SPACES_UPDATE});
+
+    // Initial state should then have error: null
+    assert.deepEqual(state, {...initialState, error: null, loading: true});
   });
 });

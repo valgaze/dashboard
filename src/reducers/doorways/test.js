@@ -6,6 +6,7 @@ import collectionDoorwaysPush from '../../actions/collection/doorways/push';
 import collectionDoorwaysFilter from '../../actions/collection/doorways/filter';
 import collectionDoorwaysDelete from '../../actions/collection/doorways/delete';
 import collectionDoorwaysError from '../../actions/collection/doorways/error';
+import { COLLECTION_DOORWAYS_UPDATE } from '../../actions/collection/doorways/update';
 
 const SENSOR_ID_ONE = 'sen_3wxsa6e8dh5zdnf73ubpnaq37wz2nawcjw8hh5sfawb';
 const SENSOR_ID_TWO = 'sen_aus86m8834xef4cqjeye2hzz3u8j5aafucxjgkn695h';
@@ -99,5 +100,17 @@ describe('doorways', function() {
 
     // Then, make sure that the error state was set.
     assert.deepEqual(errorState, {...initialState, error: 'boom!', loading: false});
+  });
+  it('should clear an error when an async operation starts.', function() {
+    const initialState = doorways(undefined, {});
+
+    // Add an error to the state.
+    const errorState = doorways(initialState, collectionDoorwaysError('boom!'));
+
+    // Then, update a space.
+    const state = doorways(errorState, {type: COLLECTION_DOORWAYS_UPDATE});
+
+    // Initial state should then have error: null
+    assert.deepEqual(state, {...initialState, error: null, loading: true});
   });
 });

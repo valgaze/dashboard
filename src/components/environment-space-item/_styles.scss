@@ -64,7 +64,7 @@ $environment-space-item-minimum-height: 64px;
   padding: 8px;
   // margin-top: 14px;
   margin-right: 10px;
-  // margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 .environment-space-item-doorways-name {
   font-size: $font-size-base;
@@ -157,6 +157,9 @@ $environment-space-item-doorways-placement-padding: 6px;
     bottom: 2px;
     left: 0.5px;
   }
+
+  // On small screens, the environment page is immutable.
+  @media (max-width: $screen-sm-max) { display: none; }
 }
 
 .environment-space-item-name {

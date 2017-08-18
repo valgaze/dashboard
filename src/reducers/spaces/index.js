@@ -70,7 +70,7 @@ export default function spaces(state=initialState, action) {
   case COLLECTION_SPACES_CREATE:
   case COLLECTION_SPACES_DESTROY:
   case COLLECTION_SPACES_UPDATE:
-    return {...state, loading: true};
+    return {...state, error: null, loading: true};
 
   // When an error happens in the collection, define an error.
   case COLLECTION_SPACES_ERROR:
