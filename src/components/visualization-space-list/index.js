@@ -16,14 +16,15 @@ export function SpaceList({
 }) {
   return <div className="space-list">
     <div className="space-list-container">
-      <h2 className="space-list-header">Spaces</h2>
-
-      <InputBox
-        className="space-list-search-box"
-        placeholder="Filter Spaces ..."
-        value={spaces.filters.search}
-        onChange={e => onSpaceSearch(e.target.value)}
-      />
+      <div className="space-list-header">
+        <h2 className="space-list-header-text">Spaces</h2>
+        <InputBox
+          className="space-list-search-box"
+          placeholder="Filter Spaces ..."
+          value={spaces.filters.search}
+          onChange={e => onSpaceSearch(e.target.value)}
+        />
+      </div>
 
       <div className="space-list-row">
         {spaceFilter(spaces.data, spaces.filters.search).map(space => {

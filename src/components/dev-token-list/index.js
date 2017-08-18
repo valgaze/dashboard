@@ -73,27 +73,31 @@ export function TokenList({
     {subnav}
 
     <div className="token-list-container">
-      <h1 className="token-list-header">Tokens</h1>
-      <DescriptionModal>
-        <p>
-          A token is a secret, random string used to authenticate that you have access and authorize
-          permission to Density data. Ready to start using them?
-        </p>
-        <a
-          className="token-list-description-link"
-          href="http://docs.density.io"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Visit our API Documentation</a>
-      </DescriptionModal>
+      <div className="token-list-header">
+        <span>
+          <h1 className="token-list-header-text">Tokens</h1>
+          <DescriptionModal>
+            <p>
+              A token is a secret, random string used to authenticate that you have access and authorize
+              permission to Density data. Ready to start using them?
+            </p>
+            <a
+              className="token-list-description-link"
+              href="http://docs.density.io"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Visit our API Documentation</a>
+          </DescriptionModal>
+        </span>
 
-      {/* Search box to filter the list of tokens */}
-      <div className="token-list-search">
-        <InputBox
-          placeholder="Search tokens ..."
-          value={tokens.filters.search}
-          onChange={e => onFilterTokenList(e.target.value)}
-        />
+        {/* Search box to filter the list of tokens */}
+        <div className="token-list-search">
+          <InputBox
+            placeholder="Search tokens ..."
+            value={tokens.filters.search}
+            onChange={e => onFilterTokenList(e.target.value)}
+          />
+        </div>
       </div>
 
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}

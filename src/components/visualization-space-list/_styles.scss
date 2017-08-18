@@ -1,7 +1,16 @@
+// Header for the space list view. Contians a label and a search box.
 .space-list-header {
   padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 8px;
+  @media (min-width: $screen-xs-max) {
+    display: flex;
+  }
+}
+.space-list-header-text {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 
   color: $gray-darkest;
   font-size: $font-size-2;
@@ -10,7 +19,8 @@
 
 .space-list-search-box {
   margin-bottom: 20px;
-  margin-left: 8px;
+  margin-right: 10px;
+  /* margin-left: auto; is below in the @media rule */
   width: 200px;
 
   color: $gray-darker;
@@ -21,6 +31,14 @@
   &:-moz-placeholder {
     color: $gray;
     opacity: 1; // Placeholders in firefox have opacity be default. Undo that.
+  }
+
+  // When the space list is on mobile, the search box is on a new line.
+  margin-left: 10px;
+  margin-top: 20px;
+  @media (min-width: $screen-xs-max) {
+    margin-left: auto;
+    margin-top: 0px;
   }
 }
 

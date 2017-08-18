@@ -5,19 +5,27 @@
   position: relative;
 }
 
-// The "Token" header at the top of the page.
 .token-list-header {
-  padding-left: 8px;
-  padding-top: 20px;
+  margin-top: 40px;
+  @media (min-width: $screen-xs-max) {
+    display: flex;
+  }
+}
+
+// The "Token" header at the top of the page.
+.token-list-header-text {
+  display: inline-block;
+
   color: $gray-darkest;
   font-size: $font-size-2;
   font-weight: $font-weight-2;
 
-  // Allow the description icon to lie to the right, inline.
-  display: inline-block;
+  padding-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .token-list-description-link {
-  padding-top: 10px;
+  margin-top: 10px;
   display: block;
 }
 
@@ -31,9 +39,18 @@
 }
 
 // The search box used to filter the tokens collection.
+.token-list-search {
+  // When the token list is shown on mobile, the search box is on a new line.
+  margin-left: 10px;
+  margin-top: 20px;
+  @media (min-width: $screen-xs-max) {
+    margin-left: auto;
+    margin-top: 0px;
+  }
+}
 .token-list-search input {
   width: 200px;
-  margin-left: 8px;
+  margin-right: 10px;
 }
 
 // The FAB used to add a new token.
@@ -41,5 +58,5 @@
   line-height: 60px;
   position: absolute;
   right: 16px;
-  top: 0px;
+  top: 50px;
 }
