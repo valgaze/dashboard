@@ -6,7 +6,7 @@ function joinKeys(item, keys) {
 
 export default function filterCollection({fields}) {
   fields = fields || ['name'];
-  return (collection, query) => {
+  return (collection, query, sortMethod) => {
     if (query) {
       const collectionSearchQueries = collection.map(item => joinKeys(item, fields));
       const output = fuzzy.filter(query, collectionSearchQueries);

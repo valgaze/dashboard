@@ -8,10 +8,21 @@
   position: relative;
 }
 
+// The button used to open the environment creation context menu to let a user add a space or
+// doorway.
 .environment .fab-primary {
-  line-height: 60px;
+  line-height: 55px;
   position: absolute;
+  top: -2px;
   right: 16px;
+
+  font-family: "Densicons";
+  font-size: $font-size-base;
+
+  // Hide the fab
+  @media (max-width: $screen-sm-max) {
+    display: none;
+  }
 }
 
 // The popup that is visible when the user clicks the FAB (ie, create space / create doorway)
@@ -20,6 +31,16 @@
   right: 16px;
   margin-top: 64px;
   z-index: 1000;
+}
+// Icons to the left of the context menu creation options
+.environment-creation-context-menu-icon {
+  font-family: "Densicons";
+  font-size: $font-size-base;
+
+  color: $brand-primary;
+  position: relative;
+  top: 1px;
+  margin-right: 10px;
 }
 
 .environment-row {

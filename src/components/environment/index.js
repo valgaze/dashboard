@@ -11,6 +11,7 @@ import EnvironmentModalUpdateDoorway from '../environment-modal-update-doorway/i
 import EnvironmentModalUpdateSpace from '../environment-modal-update-space/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
+import sortCollection, { SORT_A_Z, SORT_NEWEST } from '../../helpers/sort-collection/index';
 
 import collectionLinksCreate from '../../actions/collection/links/create';
 import collectionLinksDestroy from '../../actions/collection/links/destroy';
@@ -62,6 +63,8 @@ export function Environment({
   onChangeSensorPlacement,
   onDoorwaySearch,
   onSpaceSearch,
+  onDoorwaySort,
+  onSpaceSort,
   onCreateSpace,
   onCreateDoorway,
   onChangeDoorway,
@@ -86,7 +89,8 @@ export function Environment({
             return onOpenModal('space-doorway-popup');
           }
         }}
-      >+</Fab>
+        aria-label="Add Space or Doorway"
+      >&#xe92b;</Fab>
 
       {/************
       ** MODALS
@@ -106,8 +110,14 @@ export function Environment({
         onDismiss={onCloseModal}
       /> : null}
       {activeModal.name === 'space-doorway-popup' ? <ContextMenu className="environment-creation-context-menu">
-        <ContextMenuItem onClick={() => onOpenModal('create-space')}>Create Space</ContextMenuItem>
-        <ContextMenuItem onClick={() => onOpenModal('create-doorway')}>Create Doorway</ContextMenuItem>
+        <ContextMenuItem onClick={() => onOpenModal('create-space')}>
+          <span className="environment-creation-context-menu-icon">&#xe92c;</span>
+          Create Space
+        </ContextMenuItem>
+        <ContextMenuItem onClick={() => onOpenModal('create-doorway')}>
+          <span className="environment-creation-context-menu-icon">&#xe92c;</span>
+          Create Doorway
+        </ContextMenuItem>
       </ContextMenu> : null}
 
       {/* When a sensor placement is clicked, open a modal to warn the user prior to changing things. */}
@@ -168,19 +178,24 @@ export function Environment({
               value={spaces.filters.search}
               onChange={e => onSpaceSearch(e.target.value)}
             />
-            <InputBox className="environment-space-order-box" type="select" value={spaces.filters.order}>
-              <option value="newest">Newest</option>
-              <option value="a-z">A - Z</option>
+            <InputBox
+              className="environment-space-order-box"
+              type="select"
+              value={spaces.filters.order}
+              onChange={e => onSpaceSort(e.target.value)}
+            >
+              <option value={SORT_NEWEST}>Newest</option>
+              <option value={SORT_A_Z}>A - Z</option>
             </InputBox>
           </div>
           <div className="column-body">
-            <Toast className="environment-space-header">
+            <Toast className="environment-space-header" icon="&#xe91e;">
               Edit space details and remove doorways below.
             </Toast>
             {spaces.loading ? <p>Loading...</p> : null}
             {!spaces.loading && spaces.data.length === 0 ? <p>No Spaces</p> : null}
             <ul>
-              {spaceFilter(spaces.data, spaces.filters.search).map(space => {
+              {sortCollection(spaceFilter(spaces.data, spaces.filters.search), spaces.filters.sort).map(space => {
                 return <EnvironmentSpaceItem
                   key={space.id}
                   space={space}
@@ -209,20 +224,25 @@ export function Environment({
               value={doorways.filters.search}
               onChange={e => onDoorwaySearch(e.target.value)}
             />
-            <InputBox className="environment-doorway-order-box" type="select" value={doorways.filters.order}>
-              <option value="a-z">A - Z</option>
-              <option value="newest">Newest</option>
+            <InputBox
+              className="environment-doorway-order-box"
+              type="select"
+              value={doorways.filters.order}
+              onChange={e => onDoorwaySort(e.target.value)}
+            >
+              <option value={SORT_NEWEST}>Newest</option>
+              <option value={SORT_A_Z}>A - Z</option>
             </InputBox>
           </div>
 
           <div className="column-body">
-            <Toast className="environment-doorway-header">
+            <Toast className="environment-doorway-header" icon="&#xe91e;">
               To link a doorway to a space, drag the doorway
               from below to a space on the left.
             </Toast>
             {spaces.loading ? <p>Loading...</p> : null}
             {!spaces.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
-            {doorwayFilter(doorways.data, doorways.filters.search).map(doorway => {
+            {sortCollection(doorwayFilter(doorways.data, doorways.filters.search), doorways.filters.sort).map(doorway => {
               return <EnvironmentDoorwayItem
                 key={doorway.id}
                 doorway={doorway}
@@ -261,6 +281,12 @@ export default connect(state => {
     },
     onSpaceSearch(searchQuery) {
       dispatch(collectionSpacesFilter('search', searchQuery));
+    },
+    onDoorwaySort(sortQuery) {
+      dispatch(collectionDoorwaysFilter('sort', sortQuery));
+    },
+    onSpaceSort(sortQuery) {
+      dispatch(collectionSpacesFilter('sort', sortQuery));
     },
 
     onOpenModal(name, data) {

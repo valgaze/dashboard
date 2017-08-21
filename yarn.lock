@@ -92,13 +92,13 @@
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@density/ui-popover/-/ui-popover-0.2.3.tgz#d9ecae149eb37891facbef9bbed193f98d077d8c"
 
-"@density/ui-toast@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@density/ui-toast/-/ui-toast-0.1.0.tgz#db2aba98a4701d6fdd818dff39eba906623038fa"
+"@density/ui-toast@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@density/ui-toast/-/ui-toast-0.1.1.tgz#cb61d8569ce55178e705ff38f4acbeeaaab377e4"
 
-"@density/ui@^4.5.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@density/ui/-/ui-4.5.0.tgz#5eee3315ec39d432d03d738de8e640be79da4a86"
+"@density/ui@^4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@density/ui/-/ui-4.7.0.tgz#ecf4c7b211481c37f986aee64be22ed3413c253c"
   dependencies:
     classnames "^2.2.5"
     normalize.css "^7.0.0"

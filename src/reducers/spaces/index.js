@@ -1,4 +1,5 @@
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
+import { SORT_NEWEST } from '../../helpers/sort-collection/index';
 import { COLLECTION_SPACES_SET } from '../../actions/collection/spaces/set';
 import { COLLECTION_SPACES_PUSH } from '../../actions/collection/spaces/push';
 import { COLLECTION_SPACES_FILTER } from '../../actions/collection/spaces/filter';
@@ -21,6 +22,7 @@ const initialState = {
   filters: {
     doorwayId: null,
     search: '',
+    sort: SORT_NEWEST,
   },
 
   // An object that maps space id to an array of events

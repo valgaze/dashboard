@@ -61,11 +61,25 @@ $environment-space-item-minimum-height: 64px;
   border-radius: $border-radius-small;
 
   color: $gray-darkest;
-  padding: 8px;
-  // margin-top: 14px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 10px;
+  padding-right: 8px;
+
   margin-right: 10px;
   margin-bottom: 10px;
 }
+// Add a doorway icon to the left of the doorway title.
+.environment-space-item-doorways li:before {
+  font-family: "Densicons";
+  content: "\e936";
+  margin-right: 10px;
+
+  position: relative;
+  top: 3px;
+  color: $brand-primary;
+}
+
 .environment-space-item-doorways-name {
   font-size: $font-size-base;
   font-weight: $font-weight-base;
@@ -183,12 +197,10 @@ $environment-space-item-doorways-placement-padding: 6px;
   height: 38px;
 }
 
-// The ellipsis for the space
+// The list icon to open up the detail for a space.
 .environment-space-item-details {
-  transform: rotate(90deg);
-  display: inline-block;
-  font-size: 24px;
-  margin-left: 16px;
+  font-family: "Densicons";
+  font-size: $font-base;
   cursor: pointer;
   user-select: none;
 }

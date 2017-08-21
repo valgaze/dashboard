@@ -22,7 +22,7 @@ export function EnvironmentDoorwayItem({doorway, onClickDetails, connectDragSour
     <div
       className="environment-doorway-item-details"
       onClick={onClickDetails}
-    >...</div>
+    >&#xe922;</div>
   </div>);
 }
 

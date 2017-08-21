@@ -35,7 +35,7 @@ export function EnvironmentSpaceItem({
     <Card>
       <CardHeader size="small" className="environment-space-item-header">
         <div className="environment-space-item-name">{space.name}</div>
-        <div className="environment-space-item-details" onClick={onClickDetails}>...</div>
+        <div className="environment-space-item-details" onClick={onClickDetails}>&#xe922;</div>
       </CardHeader>
       <CardBody className={classnames(
         'environment-space-item-body',
