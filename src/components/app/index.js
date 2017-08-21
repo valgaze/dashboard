@@ -19,6 +19,9 @@ import UnknownPage from '../unknown-page/index';
 
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import TouchBackend from 'react-dnd-touch-backend';
+import MultiBackend, { TouchTransition, Preview } from 'react-dnd-multi-backend';
+ 
 
 class NavbarWrapper extends React.Component {
   constructor(props) {
@@ -93,11 +96,26 @@ function AppComponent({activePage, onLogout}) {
       <NavbarWrapper activePage={activePage} onLogout={onLogout} />
       : null}
 
+    {/* Render dragging preview when an item is being dragged */}
+    <Preview generator={(type, item, style) => <div style={style} />} />
+
     {/* Insert the currently displayed page into the view */}
     <ActivePage activePage={activePage} />
   </div>;
 }
-const App = DragDropContext(HTML5Backend)(AppComponent);
+const HTML5toTouch = {
+  backends: [
+    {
+      backend: HTML5Backend,
+    },
+    {
+      backend: TouchBackend({enableMouseEvents: true}),
+      preview: true,
+      transition: TouchTransition,
+    },
+  ],
+};
+const App = DragDropContext(MultiBackend(HTML5toTouch))(AppComponent);
 
 function ActivePage({activePage}) {
   switch (activePage) {
