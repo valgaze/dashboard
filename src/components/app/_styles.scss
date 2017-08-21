@@ -42,6 +42,28 @@
     margin-top: $navbar-height;
   }
 }
+// The sidebar button rendered in the nav by the navbar component. Only visible on mobile.
+.navbar-sidebar-button {
+  @include make-navbar-item;
+  background-color: transparent;
+  border-width: 0px;
+  float: left;
+
+  user-select: none;
+  margin-left: 0px;
+  margin-right: 10px;
+  font-size: 0;
+
+  &:before {
+    content: '\e924';
+
+    font-family: "Densicons";
+    cursor: pointer;
+    font-size: $font-size-base;
+    &:hover { opacity: 0.8; }
+    &:active { opacity: 1; }
+  }
+}
 
 
 
