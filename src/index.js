@@ -41,6 +41,7 @@ accounts.config({host: 'https://clerk.density.io/v1'});
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
+const initialRoute = '#/visualization/spaces';
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
 
@@ -59,9 +60,13 @@ router.addRoute('account/forgot-password/:token', token => routeTransitionAccoun
 
 // Make sure that the user is logged in prior to going to a page.
 function preRouteAuthentication() {
+  // If at the root page and logged in, redirect to the initial route.
+  if (store.getState().sessionToken !== null && ['', '#', '#/'].indexOf(window.location.hash) >= 0) {
+    window.location.hash = initialRoute;
+
   // If on the account registration page (the only page that doesn't require the user to be logged in)
   // then don't worry about any of this.
-  if (window.location.hash.startsWith("#/account/register")) {
+  } else if (window.location.hash.startsWith("#/account/register")) {
     return;
 
   // If the user isn't logged in, send them to the login page.
