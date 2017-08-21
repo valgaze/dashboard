@@ -80,9 +80,13 @@
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@density/ui-modal/-/ui-modal-0.2.1.tgz#1a991bdee66c0b09b96ca49b7edaa35a540504e4"
 
-"@density/ui-navbar@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.8.tgz#12dc785329b90a8b97d41c6c20c5cd408378034a"
+"@density/ui-navbar-sidebar@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@density/ui-navbar-sidebar/-/ui-navbar-sidebar-0.0.3.tgz#d71f734d31fedecd1ca3bb891eff67f90102b2e7"
+
+"@density/ui-navbar@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.11.tgz#cc8ef963c69e99999f961ce87a3fe8052cc1ee18"
 
 "@density/ui-popover@^0.2.3":
   version "0.2.3"

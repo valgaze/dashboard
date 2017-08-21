@@ -1,5 +1,6 @@
 import * as React from 'react';
-import Navbar from '@density/ui-navbar';
+import Navbar, { NavbarItem } from '@density/ui-navbar';
+import NavbarSidebar, { NavbarSidebarItem } from '@density/ui-navbar-sidebar';
 
 import sessionTokenUnset from '../../actions/session-token/unset';
 
@@ -19,25 +20,78 @@ import UnknownPage from '../unknown-page/index';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-function NavBarItem({activePage, pageName, href, children}) {
-  return <li className={pageName.indexOf(activePage) >= 0 ? 'active' : ''}>
-    <a href={href}>{children}</a>
-  </li>;
+class NavbarWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { show: false };
+  }
+  render() {
+    return <Navbar onClickSidebarButton={() => this.setState({show: !this.state.show})}>
+      <NavbarItem
+        activePage={this.props.activePage}
+        pageName={['VISUALIZATION_SPACE_LIST']}
+        href="#/visualization/spaces"
+      >Visualization</NavbarItem>
+      <NavbarItem
+        activePage={this.props.activePage}
+        pageName={['ENVIRONMENT_SPACE']}
+        href="#/environment/spaces"
+      >Environment</NavbarItem>
+      <NavbarItem
+        activePage={this.props.activePage}
+        pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
+        href="#/dev/tokens"
+      >Developer Tools</NavbarItem>
+      <NavbarItem
+        activePage={this.props.activePage}
+        pageName={['ACCOUNT']}
+        href="#/account"
+      >Account</NavbarItem>
+      <button onClick={this.props.onLogout}>Logout</button>
+
+      <NavbarSidebar show={this.state.show}>
+        <NavbarSidebarItem
+          header={true}
+          activePage={this.props.activePage}
+          pageName={['VISUALIZATION_SPACE_LIST']}
+          href="#/visualization/spaces"
+        >Visualization</NavbarSidebarItem>
+
+        <NavbarSidebarItem
+          header={true}
+          activePage={this.props.activePage}
+          pageName={['ENVIRONMENT_SPACE', 'ENVIRONMENT_SENSOR']}
+          href="#/environment/spaces"
+        >Environment</NavbarSidebarItem>
+        <NavbarSidebarItem activePage={this.props.activePage} pageName="ENVIRONMENT_SPACE" href="#/environment/spaces">Spaces</NavbarSidebarItem>
+        <NavbarSidebarItem activePage={this.props.activePage} pageName='ENVIRONMENT_SENSOR' href="#/environment/sensors">Sensors</NavbarSidebarItem>
+
+        <NavbarSidebarItem
+          header={true}
+          activePage={this.props.activePage}
+          pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
+          href="#/dev/tokens"
+        >Developer Tools</NavbarSidebarItem>
+        <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_TOKEN_LIST']} href="#/dev/tokens">Tokens</NavbarSidebarItem>
+        <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_WEBHOOK_LIST']} href="#/dev/webhooks">Webhooks</NavbarSidebarItem>
+
+        <NavbarSidebarItem
+          header={true}
+          activePage={this.props.activePage}
+          pageName={['ACCOUNT']}
+          href={['#/account']}
+        >Account</NavbarSidebarItem>
+      </NavbarSidebar>
+    </Navbar>;
+  }
 }
 
 function AppComponent({activePage, onLogout}) {
   return <div className="app">
-    {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION' && activePage !== 'ACCOUNT_FORGOT_PASSWORD') ? <Navbar>
-      <NavBarItem activePage={activePage} pageName={['VISUALIZATION_SPACE_LIST']} href="#/visualization/spaces">Visualization</NavBarItem>
-      <NavBarItem activePage={activePage} pageName={['ENVIRONMENT_SPACE']} href="#/environment/spaces">Environment</NavBarItem>
-      <NavBarItem
-        activePage={activePage}
-        pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
-        href="#/dev/tokens"
-      >Developer Tools</NavBarItem>
-      <NavBarItem activePage={activePage} pageName={['ACCOUNT']} href="#/account">Account</NavBarItem>
-      <button onClick={onLogout}>Logout</button>
-    </Navbar> : null}
+    {/* Render the navbar */}
+    {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION' && activePage !== 'ACCOUNT_FORGOT_PASSWORD') ?
+      <NavbarWrapper activePage={activePage} onLogout={onLogout} />
+      : null}
 
     {/* Insert the currently displayed page into the view */}
     <ActivePage activePage={activePage} />

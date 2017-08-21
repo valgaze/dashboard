@@ -4,35 +4,35 @@
   min-height: 100vh;
 }
 
-// Navbar item styles.
-// TODO: Once in a design refinement phase, move these to @density/ui
+// Navbar styles.
+// On mobile:
+// - Navbar is position fixed.
+// - Navbar top nav items are hidden.
+// - App container has a margin-top of the navbar height, so that the content isn't behind the top
+//   nav.
+// - Sidebar has a margin-bottom of 0 to eliminate bottom spacing in the navbar.
+// On desktop:
+// - Top nav items are shown.
+// - Navbar is statically positioned.
+// - Sidebar menu in the navbar is hidden.
 .app .navbar {
-  li {
-    list-style-type: none;
-    display: inline-block;
-    border-bottom: 2px solid transparent;
-    height: $navbar-height - 2px;
+  .navbar-sidebar { margin-bottom: 0px; }
+  .navbar-sidebar-button { display: none; }
 
-    &:first-child {
-      margin-left: 20px;
+  // Hide the top nav on mobile.
+  @media (max-width: $screen-xs-max) {
+    position: fixed;
+    top: 0px;
+
+    .navbar-items > li {
+      display: none;
     }
+    .navbar-sidebar-button { display: inline-block; }
+  }
+}
 
-    // Style each link
-    a {
-      line-height: $navbar-height;
-      color: $gray;
-      text-decoration: none;
-      font-size: 14px;
-
-      padding: 8px 0px;
-      margin: 0px 14px;
-    }
-
-    // Darken the active item
-    &.active {
-      border-bottom: 2px solid $brand-primary;
-      margin-bottom: -1px;
-      a { color: $gray-darkest; }
-    }
+.app {
+  @media (max-width: $screen-xs-max) {
+    margin-top: $navbar-height;
   }
 }
