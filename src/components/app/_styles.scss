@@ -11,6 +11,7 @@
 // - App container has a margin-top of the navbar height, so that the content isn't behind the top
 //   nav.
 // - Sidebar has a margin-bottom of 0 to eliminate bottom spacing in the navbar.
+// - Subnav is hidden.
 // On desktop:
 // - Top nav items are shown.
 // - Navbar is statically positioned.
@@ -28,6 +29,11 @@
       display: none;
     }
     .navbar-sidebar-button { display: inline-block; }
+  }
+}
+.app .subnav {
+  @media (max-width: $screen-xs-max) {
+    display: none;
   }
 }
 
