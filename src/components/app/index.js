@@ -50,7 +50,9 @@ class NavbarWrapper extends React.Component {
         pageName={['ACCOUNT']}
         href="#/account"
       >Account</NavbarItem>
-      <button onClick={this.props.onLogout}>Logout</button>
+      <span aria-label="Logout" title="Logout" className="navbar-item-logout">
+        <a onClick={this.props.onLogout}>&#xe923;</a>
+      </span>
 
       <NavbarSidebar show={this.state.show}>
         <NavbarSidebarItem

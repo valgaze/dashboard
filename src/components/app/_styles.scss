@@ -42,3 +42,23 @@
     margin-top: $navbar-height;
   }
 }
+
+
+
+
+// The logout icon in the navbar.
+.navbar-item-logout {
+  @include make-navbar-item;
+  float: right;
+  user-select: none;
+  margin-right: 10px;
+
+  // The link within the item.
+  & > a {
+    font-family: "Densicons";
+    cursor: pointer;
+    font-size: $font-size-base;
+    &:hover { opacity: 0.8; }
+    &:active { opacity: 1; }
+  }
+}
