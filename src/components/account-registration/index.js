@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
+import ErrorBar from '../error-bar/index';
 
 import sessionTokenSet from '../../actions/session-token/set';
 import { accounts } from '@density-int/client';
@@ -42,7 +43,7 @@ export class AccountRegistration extends React.Component {
   render() {
     return <div className="account-registration-container">
       <div className="account-registration">
-        {this.state.error ? `Error: ${this.state.error}` : null}
+        {this.state.error ? <ErrorBar message={this.state.error} showRefresh /> : null}
 
         <img
           className="account-registration-density-logo"
