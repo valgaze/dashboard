@@ -8,6 +8,7 @@ import TokenCard from '../dev-token-card/index';
 import TokenCreateModal from '../dev-token-create-modal/index';
 import TokenUpdateModal from '../dev-token-update-modal/index';
 import DescriptionModal from '../dev-description-popover/index';
+import LoadingSpinner from '../loading-spinner/index';
 
 import collectionTokensCreate from '../../actions/collection/tokens/create';
 import collectionTokensUpdate from '../../actions/collection/tokens/update';
@@ -64,7 +65,7 @@ export function TokenList({
     return <div className="token-list">
       {modals}
       {subnav}
-      <div className="token-list-loading">Loading...</div>
+      <div className="token-list-loading"><LoadingSpinner /></div>
     </div>;
   }
 

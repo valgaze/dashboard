@@ -6,6 +6,7 @@ import FormLabel from '../form-label/index';
 import Button from '@density/ui-button';
 
 import ModalHeaderActionButton from '../modal-header-action-button/index';
+import LoadingSpinner from '../loading-spinner/index';
 
 import userResetPassword from '../../actions/user/reset-password';
 import userUpdate from '../../actions/user/update';
@@ -190,6 +191,6 @@ export default connect(state => {
   if (props.initialUser) {
     return <Account {...props} />;
   } else {
-    return <p>Loading...</p>;
+    return <LoadingSpinner />;
   }
 });

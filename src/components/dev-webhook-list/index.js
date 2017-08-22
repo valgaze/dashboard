@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import Fab from '@density/ui-fab';
 import InputBox from '@density/ui-input-box';
-// import Popover from '@density/ui-popover';
 
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
@@ -11,6 +10,7 @@ import collectionWebhooksCreate from '../../actions/collection/webhooks/create';
 import collectionWebhooksFilter from '../../actions/collection/webhooks/filter';
 import collectionWebhooksUpdate from '../../actions/collection/webhooks/update';
 import collectionWebhooksDestroy from '../../actions/collection/webhooks/destroy';
+import LoadingSpinner from '../loading-spinner/index';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 
@@ -65,7 +65,7 @@ export function WebhookList({
     return <div className="webhook-list">
       {modals}
       {subnav}
-      <div className="webhook-list-loading">Loading...</div>
+      <div className="webhook-list-loading"><LoadingSpinner /></div>
     </div>;
   }
 

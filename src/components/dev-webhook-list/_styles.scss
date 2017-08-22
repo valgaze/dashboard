@@ -50,6 +50,11 @@
   margin-top: 40px;
 }
 
+// The loading indicator's container. Make sure it is full width.
+.webhook-list-loading {
+  width: 100%;
+}
+
 .webhook-container .fab {
   line-height: 60px;
   position: absolute;

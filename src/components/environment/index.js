@@ -9,6 +9,7 @@ import EnvironmentModalSensorPlacement from '../environment-modal-sensor-placeme
 import EnvironmentModalSensorPlacementAssignment from '../environment-modal-sensor-placement-assignment/index';
 import EnvironmentModalUpdateDoorway from '../environment-modal-update-doorway/index';
 import EnvironmentModalUpdateSpace from '../environment-modal-update-space/index';
+import LoadingSpinner from '../loading-spinner/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 import sortCollection, { SORT_A_Z, SORT_NEWEST } from '../../helpers/sort-collection/index';
@@ -192,7 +193,7 @@ export function Environment({
             <Toast className="environment-space-header" icon="&#xe91e;">
               Edit space details and remove doorways below.
             </Toast>
-            {spaces.loading ? <p>Loading...</p> : null}
+            {spaces.loading ? <LoadingSpinner /> : null}
             {!spaces.loading && spaces.data.length === 0 ? <p>No Spaces</p> : null}
             <ul>
               {sortCollection(spaceFilter(spaces.data, spaces.filters.search), spaces.filters.sort).map(space => {
@@ -240,8 +241,8 @@ export function Environment({
               To link a doorway to a space, drag the doorway
               from below to a space on the left.
             </Toast>
-            {spaces.loading ? <p>Loading...</p> : null}
-            {!spaces.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
+            {doorways.loading ? <LoadingSpinner /> : null}
+            {!doorways.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
             {sortCollection(doorwayFilter(doorways.data, doorways.filters.search), doorways.filters.sort).map(doorway => {
               return <EnvironmentDoorwayItem
                 key={doorway.id}
