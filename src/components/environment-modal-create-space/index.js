@@ -6,6 +6,7 @@ import Card, { CardHeader, CardLoading, CardBody } from '@density/ui-card';
 import { decode } from 'ent';
 
 import FormLabel from '../form-label/index';
+import generateLocalResetTimeChoices from '../../helpers/generate-local-reset-time-choices/index';
 
 export default class EnvironmentModalCreateSpace extends React.Component {
   constructor(props) {
@@ -47,7 +48,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 <option>(choose time zone)</option>
                 <option value="America/New_York">America &mdash; NY</option>
                 <option value="America/Chicago">America &mdash; CHI</option>
-                <option value="America/Phoenix">America &mdash; PHX</option>
+                <option value="America/Denver">America &mdash; DEN</option>
                 <option value="America/Los_Angeles">America &mdash; LA</option>
               </InputBox>}
             />
@@ -56,11 +57,16 @@ export default class EnvironmentModalCreateSpace extends React.Component {
               htmlFor="create-space-reset-time"
               label="Reset Time"
               input={<InputBox
-                type="text"
+                type="select"
                 id="create-space-reset-time"
                 value={this.state.resetTime}
                 onChange={e => this.setState({resetTime: e.target.value})}
-              />}
+              >
+                {this.state.timeZone ?
+                  generateLocalResetTimeChoices(this.state.timeZone)
+                    .map(({localTime, utc}) => <option key={utc} value={utc}>{localTime}</option>)
+                : null}
+              </InputBox>}
             />
 
             <div className="create-space-submit">

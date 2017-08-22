@@ -121,7 +121,7 @@ describe('Space workflows', function() {
     // Add a space name, time zone and reset time
     component.find('.create-space-name-container input').simulate('change', {target: {value: 'space name'}});
     component.find('.create-space-time-zone-container select').simulate('change', {target: {value: 'America/New_York'}});
-    component.find('.create-space-reset-time-container input').simulate('change', {target: {value: '12:00'}});
+    component.find('.create-space-reset-time-container select').simulate('change', {target: {value: '12:00'}});
 
     // The button in the modal should now be enabled.
     assert.equal(component.find('.create-space-submit button').prop('disabled'), false);
@@ -188,7 +188,7 @@ describe('Space workflows', function() {
     // Add a space name, time zone and reset time
     component.find('.create-space-name-container input').simulate('change', {target: {value: 'space name'}});
     component.find('.create-space-time-zone-container select').simulate('change', {target: {value: 'America/New_York'}});
-    component.find('.create-space-reset-time-container input').simulate('change', {target: {value: '12:00'}});
+    component.find('.create-space-reset-time-container select').simulate('change', {target: {value: '12:00'}});
 
     // The button in the modal should now be enabled.
     assert.equal(component.find('.create-space-submit button').prop('disabled'), false);
