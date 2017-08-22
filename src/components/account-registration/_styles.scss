@@ -1,6 +1,23 @@
 .account-registration-container {
   @include grid-container;
+  font-family: $font-base;
 }
+
+// The opening message to the registration screen.
+.account-registration-lead-in {
+  text-align: center;
+  font-size: $font-size-3;
+
+  margin-bottom: 20px;
+
+  // On desktop, center align a div a bit wider than the container.
+  @media (min-width: $screen-xs-max) {
+    width: 150%;
+    margin-left: -25%;
+    margin-bottom: 40px;
+  }
+}
+.account-registration-lead-in-email { color: $gray-cinder; }
 
 .account-registration {
   @include grid-width(24, 12, 8, 8);
@@ -16,8 +33,12 @@
   display: block;
 }
 
+// The second part of the form. Provide some spacing between it and the first part.
+.account-registration-password-form { margin-top: 20px; }
+
+// NOTE: The below isn't great. Seems the widths won't work out here?
 .account-registration .input-stack-group {
-  width: calc(100% - 30px);
+  width: calc(100% - 22px);
 }
 
 .account-registration-group {
@@ -28,20 +49,5 @@
   }
   input {
     display: inline-block;
-  }
-}
-
-// The submit button to the login form
-.account-registration-submit-button {
-  height: 50px;
-  background-color: #222A2E;
-  color: #fff;
-  box-shadow: none;
-  border: none;
-  border-radius: 25px;
-  width: 100%;
-
-  &:disabled {
-    opacity: 0.5;
   }
 }

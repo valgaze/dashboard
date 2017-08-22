@@ -41,6 +41,7 @@
   cursor: pointer;
 }
 
+// NOTE: The below isn't great. Seems the widths won't work out here?
 .login-form, .login-password-reset-form {
-  width: calc(100% - 30px);
+  width: calc(100% - 22px);
 }

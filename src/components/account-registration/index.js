@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
+import Button from '@density/ui-button';
 import ErrorBar from '../error-bar/index';
 
 import sessionTokenSet from '../../actions/session-token/set';
@@ -43,7 +44,7 @@ export class AccountRegistration extends React.Component {
   render() {
     return <div className="account-registration-container">
       <div className="account-registration">
-        {this.state.error ? <ErrorBar message={this.state.error} showRefresh /> : null}
+        <ErrorBar message={this.state.error} showRefresh />
 
         <img
           className="account-registration-density-logo"
@@ -51,9 +52,11 @@ export class AccountRegistration extends React.Component {
           alt="Density Logo"
         />
 
-        <p>Let's set up your account, {this.state.email}!</p>
+        <p className="account-registration-lead-in">
+          Let's get your account set up, <span className="account-registration-lead-in-email">{this.state.email}</span>!
+        </p>
 
-        <InputStackGroup className="account-registration-form">
+        <InputStackGroup className="account-registration-name-form">
           <InputStackItem
             type="text"
             placeholder="Full Name"
@@ -66,6 +69,8 @@ export class AccountRegistration extends React.Component {
             onChange={e => this.setState({nickname: e.target.value})}
             value={this.state.nickname}
           />
+        </InputStackGroup>
+        <InputStackGroup className="account-registration-password-form">
           <InputStackItem
             type="password"
             placeholder="Password"
@@ -82,7 +87,7 @@ export class AccountRegistration extends React.Component {
         </InputStackGroup>
 
         <br/>
-        <button
+        <Button
           className="account-registration-submit-button"
           onClick={this.onSubmit.bind(this)}
           disabled={!(
@@ -92,7 +97,7 @@ export class AccountRegistration extends React.Component {
             (this.state.fullName.indexOf(' ') >= 0 || this.state.nickname.length > 0) &&
             this.state.email.indexOf('@') >= 0
           )}
-        >Submit</button>
+        >Create Account</Button>
       </div>
     </div>;
   }

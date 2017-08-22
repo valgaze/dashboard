@@ -64,9 +64,13 @@
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@density/ui-context-menu/-/ui-context-menu-0.2.0.tgz#faf87f1769e9ac9914a6946d9b77a2213dee1353"
 
-"@density/ui-fab@^0.2.0":
+"@density/ui-density-mark@^0.2.0":
   version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@density/ui-fab/-/ui-fab-0.2.0.tgz#234f86ade73384a8dd7bd13c01cbd6ab5631d301"
+  resolved "https://registry.yarnpkg.com/@density/ui-density-mark/-/ui-density-mark-0.2.0.tgz#58b3e528c585e4cc24e317a1c3e0bb10234488e9"
+
+"@density/ui-fab@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@density/ui-fab/-/ui-fab-0.2.1.tgz#b2ec57df537ffd760a87bd573f903de121e72d53"
 
 "@density/ui-input-box@^0.2.8":
   version "0.2.8"

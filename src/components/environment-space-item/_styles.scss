@@ -94,6 +94,7 @@ $environment-space-item-doorways-placement-padding: 6px;
 .environment-space-item-doorways-placement {
   font-size: $font-size-6;
   font-weight: $font-weight-6;
+  white-space: nowrap;
 
   color: $brand-primary;
   background-color: #fff;

@@ -50,12 +50,12 @@
 .space-column {
   @include grid-width(24, 24, 12, 12);
   height: calc(100vh - 250px);
-  margin-top: 64px;
+  margin-top: 40px;
 }
 .doorway-column {
   @include grid-width(0, 0, 12, 12);
   height: calc(100vh - 250px);
-  margin-top: 64px;
+  margin-top: 40px;
   display: none;
 
   // Hide doorways column on mobile
@@ -71,6 +71,13 @@
   // Don't show the toasts on mobile, as they explain the dragging functionality that the page
   // doesn't support on mobile.
   @media (max-width: $screen-sm-max) { display: none; }
+}
+
+// These are the labels above each column on the environment page.
+.environment-space-header-text, .environment-doorway-header-text {
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+  color: $gray-darkest;
 }
 
 // Above the two columns, render controls to refine the list of items in each column.

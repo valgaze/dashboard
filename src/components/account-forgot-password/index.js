@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import InputBox from '@density/ui-input-box';
+import Button from '@density/ui-button';
+import Mark from '@density/ui-density-mark';
+import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import ErrorBar from '../error-bar/index';
 
 import sessionTokenSet from '../../actions/session-token/set';
@@ -23,7 +25,6 @@ export class AccountRegistration extends React.Component {
       new_password: this.state.password,
       confirm_password: this.state.password,
     }).then(response => {
-      console.log('forgot password respose', response);
       return this.props.onUserLoggedIn(response.session_token);
     }).catch(err => {
       this.setState({error: err.toString()});
@@ -32,34 +33,34 @@ export class AccountRegistration extends React.Component {
 
   render() {
     return <div className="account-forgot-password">
-      {this.state.error ? <ErrorBar message={this.state.error} showRefresh /> : null}
+      <ErrorBar message={this.state.error} showRefresh />
 
-      <div className="account-forgot-password-group">
-        <label htmlFor="account-forgot-password-password">Password</label>
-        <InputBox
+      <Mark className="account-forgot-password-mark" />
+
+      <p className="account-forgot-password-lead-in">
+        Password change request:
+      </p>
+
+      <InputStackGroup className="account-forgot-password-form">
+        <InputStackItem
           type="password"
-          id="account-forgot-password-password"
-          placeholder="correct horse battery staple"
+          placeholder="New Password"
           value={this.state.password}
           onChange={e => this.setState({password: e.target.value})}
         />
-      </div>
-      <div className="account-forgot-password-group">
-        <label htmlFor="account-forgot-password-password-confirmation">Password again</label>
-        <InputBox
+        <InputStackItem
           type="password"
-          id="account-forgot-password-password-confirmation"
-          placeholder="correct horse battery staple"
+          placeholder="Confirm Password"
+          invalid={this.state.passwordConfirmation.length > 0 && this.state.password !== this.state.passwordConfirmation}
           value={this.state.passwordConfirmation}
           onChange={e => this.setState({passwordConfirmation: e.target.value})}
         />
-      </div>
+      </InputStackGroup>
 
-      <br/>
-      <button
+      <Button
         onClick={this.onSubmit.bind(this)}
         disabled={!(this.state.password.length > 0 && this.state.password === this.state.passwordConfirmation)}
-      >Submit</button>
+      >Update Password</Button>
     </div>;
   }
 }

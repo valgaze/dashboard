@@ -176,6 +176,7 @@ export function Environment({
 
       <div className="environment-row">
         <div className="space-column">
+          <h2 className="environment-space-header-text">Spaces</h2>
           {/* Header above the column. Allows searching and ordering of data. */}
           <div className="environment-space-column-header">
             <InputBox
@@ -222,6 +223,7 @@ export function Environment({
           </div>
         </div>
         <div className="doorway-column">
+          <h2 className="environment-doorway-header-text">Doorways</h2>
           {/* Header above the column. Allows searching and ordering of data. */}
           <div className="environment-doorway-column-header">
             <InputBox
