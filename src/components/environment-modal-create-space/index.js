@@ -23,8 +23,6 @@ export default class EnvironmentModalCreateSpace extends React.Component {
           {this.props.loading ? <CardLoading indeterminate /> : null}
           <CardHeader>Create Space</CardHeader>
           <CardBody>
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
-
             <FormLabel
               className="create-space-name-container"
               htmlFor="create-space-name"

@@ -60,6 +60,7 @@ export class AccountRegistration extends React.Component {
       <Button
         onClick={this.onSubmit.bind(this)}
         disabled={!(this.state.password.length > 0 && this.state.password === this.state.passwordConfirmation)}
+        size="large"
       >Update Password</Button>
     </div>;
   }

@@ -75,7 +75,7 @@ export function WebhookList({
     {subnav}
 
     {/* Render any errors for the page */}
-    <ErrorBar message={webhooks.error} showRefresh />
+    <ErrorBar message={webhooks.error} showRefresh modalOpen={Boolean(activeModal)} />
 
     <div className="webhook-container">
 
@@ -108,7 +108,7 @@ export function WebhookList({
       </div>
 
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
-      <Fab type="primary" className="fab" onClick={() => onOpenModal('webhook-create')}>+</Fab>
+      <Fab type="primary" className="fab" onClick={() => onOpenModal('webhook-create')}>&#xe92b;</Fab>
 
       <div className="webhook-list">
         {webhookFilter(webhooks.data, webhooks.filters.search).map(webhook => {

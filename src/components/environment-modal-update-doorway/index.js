@@ -31,9 +31,6 @@ export default class EnvironmentModalUpdateDoorway extends React.Component {
             >Delete</ModalHeaderActionButton>
           </CardHeader>
           <CardBody>
-
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
-
             <FormLabel
               className="update-doorway-name-container"
               htmlFor="update-doorway-name"

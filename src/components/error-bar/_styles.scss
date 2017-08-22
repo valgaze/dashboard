@@ -15,7 +15,7 @@
 
   text-align: center;
   line-height: 34px;
-  z-index: 1000;
+  z-index: 10000;
 
   // Hide the error bar.
   display: none;
@@ -23,6 +23,9 @@
 .error-bar-visible {
   display: block;
 }
+
+// When a modal is visible, show the error bar at the very top of the screen.
+.error-bar-over-modal { top: 2px; }
 
 // THe "refresh" link on the error bar, which is optional.
 .error-bar-link {

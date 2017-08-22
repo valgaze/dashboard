@@ -56,8 +56,11 @@
 }
 
 .webhook-container .fab {
-  line-height: 60px;
   position: absolute;
   right: 16px;
   top: 50px;
+
+  line-height: 55px;
+  font-family: "Densicons";
+  font-size: $font-size-base;
 }

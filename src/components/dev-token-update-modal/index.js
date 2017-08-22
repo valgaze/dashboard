@@ -66,8 +66,6 @@ export default class TokenUpdateModal extends React.Component {
               input={<span>To update permissions you must create a new token.</span>}
             />
 
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
-
             <Button
               className="token-update-modal-submit"
               disabled={this.state.name.length === 0}
@@ -97,8 +95,6 @@ export default class TokenUpdateModal extends React.Component {
           </CardHeader>
           <CardBody>
             <h2 className="token-update-destroy-warning">Are you ABSOLUTELY sure?</h2>
-
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
             <p>
               The act of removing a token is irreversible - ie, you might have the token built into

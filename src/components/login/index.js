@@ -82,8 +82,8 @@ export class Login extends React.Component {
       {/* Submit the form! */}
       <Button 
         className={classnames('login-submit-button', {loading: this.state.loading})}
+        size="large"
         onClick={this.onLogin.bind(this)}
-        type="button"
         disabled={this.state.loading || this.state.email.indexOf('@') === -1}
       >
         <span className="label">Login</span>
@@ -97,14 +97,8 @@ export class Login extends React.Component {
   }
 
   renderForgotPasswordForm() {
-    return <div>
-      {/* Move to back to login page */}
-      <span onClick={() => this.setState({view: LOGIN, error: null})}>Back to login</span>
-
-      <p>
-        You forgot your password? Enter your email below and we'll send you the old password reset
-        email thingy:
-      </p>
+    return <div className="login-form-container">
+      <h2 className="login-password-reset-title">Forgot your password</h2>
       <InputStackGroup className="login-password-reset-form">
         <InputStackItem
           type="email"
@@ -121,19 +115,25 @@ export class Login extends React.Component {
       </span> : null}
 
       {/* Submit the form! */}
-      <button 
+      <Button 
         className={classnames('login-submit-button', {loading: this.state.loading})}
         onClick={this.onForgotPassword.bind(this)}
-        type="button"
+        size="large"
         disabled={this.state.loading || this.state.email.indexOf('@') === -1}
       >
-        <span className="label">Forgot password</span>
+        <span className="label">Send password reset email</span>
         {this.state.loading ? <img
           className="loading-image"
           src="/assets/images/loading.gif"
           alt="Loading"
         /> : null}
-      </button>
+      </Button>
+
+      {/* Move to back to login page */}
+      <div
+        className="login-forgot-password-back-link"
+        onClick={() => this.setState({view: LOGIN, error: null})}
+      >Back to login</div>
     </div>;
   }
 

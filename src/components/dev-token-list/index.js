@@ -75,7 +75,7 @@ export function TokenList({
     {subnav}
 
     {/* Show errors in the tokens collection */}
-    <ErrorBar message={tokens.error} showRefresh />
+    <ErrorBar message={tokens.error} showRefresh modalOpen={Boolean(activeModal)} />
 
     <div className="token-list-container">
       <div className="token-list-header">
@@ -116,7 +116,7 @@ export function TokenList({
             return onOpenModal('token-create');
           }
         }}
-      >+</Fab>
+      >&#xe92b;</Fab>
 
       <div className="token-list-row">
         {tokenFilter(tokens.data, tokens.filters.search).map(token => {

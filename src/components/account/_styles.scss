@@ -10,7 +10,10 @@
   top: 40px;
 }
 
-.account-edit-button { float: right; }
+.account-edit-button {
+  float: right; 
+  font-weight: normal;
+}
 
 // Change color of all text in text fields
 .account-full-name-container input,

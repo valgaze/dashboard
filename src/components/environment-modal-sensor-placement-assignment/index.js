@@ -9,9 +9,6 @@ export default function EnvironmentModalSensorPlacementAssignment({loading, erro
       {loading ? <CardLoading indeterminate /> : null}
       <CardHeader>Assign Sensor Placement</CardHeader>
       <CardBody>
-
-        {error ? <span>Error: {this.props.error}</span> : null}
-
         <p>
           There should be some text here. And probably a graphic.
         </p>

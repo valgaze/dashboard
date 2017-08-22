@@ -22,8 +22,6 @@ export default class EnvironmentModalCreateDoorway extends React.Component {
           <CardHeader>Create Doorway</CardHeader>
 
           <CardBody>
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
-
             <FormLabel
               className="create-doorway-name-container"
               htmlFor="create-doorway-name"

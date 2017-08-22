@@ -20,7 +20,7 @@ export default class DescriptionModal extends React.Component {
       <span
         className="dev-description-icon"
         onClick={() => this.setState({show: !this.state.show})}
-      >(i)</span>
+      >&#xe91e;</span>
     </Popover>;
   }
 }

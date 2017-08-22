@@ -9,8 +9,6 @@ export default function EnvironmentModalSensorPlacement({loading, error, onSubmi
       {loading ? <CardLoading indeterminate /> : null}
       <CardHeader>Sensor Placement</CardHeader>
       <CardBody>
-        {error ? <span>Error: {this.props.error}</span> : null}
-
         <p>
           Would you like to swap sensor placement?
           There should be some text here. And probably a graphic.

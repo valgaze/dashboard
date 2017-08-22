@@ -32,7 +32,6 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
             >Delete</ModalHeaderActionButton>
           </CardHeader>
           <CardBody>
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
             <FormLabel
               className="update-space-name-container"
               htmlFor="update-space-name"
@@ -99,8 +98,6 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
         {/* <ModalClose onClick={this.props.onDismiss} /> */}
       </CardHeader>
       <CardBody>
-        {this.props.error ? <span>Error: {this.props.error}</span> : null}
-
         <FormLabel
           htmlFor="update-space-name"
           label="Space Name"

@@ -58,8 +58,6 @@ export default class WebhookUpdateModal extends React.Component {
               />}
             />
 
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
-
             <Button
               className="webhook-update-modal-submit"
               disabled={this.state.name.length === 0}
@@ -94,8 +92,6 @@ export default class WebhookUpdateModal extends React.Component {
               events. This operation is reversable though unlike deleting a token - just create a
               webhook with the same contents.
             </p>
-
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
             <Button
               className="webhook-update-modal-destroy-submit"

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
+import Mark from '@density/ui-density-mark';
 import Button from '@density/ui-button';
 import ErrorBar from '../error-bar/index';
 
@@ -46,11 +47,7 @@ export class AccountRegistration extends React.Component {
       <div className="account-registration">
         <ErrorBar message={this.state.error} showRefresh />
 
-        <img
-          className="account-registration-density-logo"
-          src="https://dashboard.density.io/assets/images/density_mark_black.png"
-          alt="Density Logo"
-        />
+        <Mark className="account-registration-density-logo" />
 
         <p className="account-registration-lead-in">
           Let's get your account set up, <span className="account-registration-lead-in-email">{this.state.email}</span>!
@@ -89,6 +86,7 @@ export class AccountRegistration extends React.Component {
         <br/>
         <Button
           className="account-registration-submit-button"
+          size="large"
           onClick={this.onSubmit.bind(this)}
           disabled={!(
             this.state.password.length > 0 &&
