@@ -151,9 +151,11 @@ $environment-space-item-doorways-placement-padding: 6px;
     display: none;
   }  
 }
-// On hover, make the outline on the sensor direction tag blue.
+// On hover on a computer (not a phone), make the outline on the sensor direction tag blue.
 .environment-space-item-doorways-placement:hover .environment-space-item-doorways-placement-label {
-  border-color: $brand-primary;
+  @media (min-width: $screen-sm-max) {
+    border-color: $brand-primary;
+  }
 }
 // On active, add a similar effect to buttons.
 .environment-space-item-doorways-placement:hover { opacity: 0.9; }
@@ -203,6 +205,9 @@ $environment-space-item-doorways-placement-padding: 6px;
   font-size: $font-base;
   cursor: pointer;
   user-select: none;
+
+  // Don't show the icon on mobile.
+  @media (max-width: $screen-sm-max) { display: none; }
 }
 .environment-space-item-details:active {
   color: $gray-dark;

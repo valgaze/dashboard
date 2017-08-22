@@ -359,4 +359,12 @@ describe('Token list page', function() {
     // Only `apple` and `pineapple` show up
     assert.equal(component.find('.token-list-item').length, 2);
   });
+  it('should show a loading state when no tokens are loaded', async function() {
+    // Mount the connected version of the component, with a token.
+    const store = storeFactory();
+    const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
+
+    // Loading spinner is visible.
+    assert.equal(component.find('.loading-spinner').length, 1);
+  });
 });

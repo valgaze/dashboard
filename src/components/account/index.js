@@ -7,6 +7,7 @@ import Button from '@density/ui-button';
 
 import ModalHeaderActionButton from '../modal-header-action-button/index';
 import LoadingSpinner from '../loading-spinner/index';
+import ErrorBar from '../error-bar/index';
 
 import userResetPassword from '../../actions/user/reset-password';
 import userUpdate from '../../actions/user/update';
@@ -44,7 +45,11 @@ export class Account extends React.Component {
     } = this.props;
 
     return <div className="account">
-      <Card type="modal">
+
+      {/* Render any errors from the server */}
+      <ErrorBar message={this.state.error} showRefresh />
+
+      <Card className="account-card" type="modal">
         <CardHeader>
           {this.state.mode === EDIT ? 'Edit Account' : 'Account'}
 
@@ -56,8 +61,6 @@ export class Account extends React.Component {
         </CardHeader>
 
         <CardBody>
-          <div className="account-error">{this.state.error}</div>
-
           <div className="account-name-container">
             <FormLabel
               className="account-full-name-container"
@@ -164,7 +167,9 @@ export class Account extends React.Component {
                 onSubmitUserUpdate(this.state.fullName, this.state.nickname, this.state.email)
                 .then(() => {
                   this.setState({mode: NORMAL});
-                })
+                }).catch(error => {
+                  this.setState({error});
+                });
               }}
             >Save Changes</Button> : null}
           </div>

@@ -9,6 +9,7 @@ import TokenCreateModal from '../dev-token-create-modal/index';
 import TokenUpdateModal from '../dev-token-update-modal/index';
 import DescriptionModal from '../dev-description-popover/index';
 import LoadingSpinner from '../loading-spinner/index';
+import ErrorBar from '../error-bar/index';
 
 import collectionTokensCreate from '../../actions/collection/tokens/create';
 import collectionTokensUpdate from '../../actions/collection/tokens/update';
@@ -72,6 +73,9 @@ export function TokenList({
   return <div className="token-list">
     {modals}
     {subnav}
+
+    {/* Show errors in the tokens collection */}
+    <ErrorBar message={tokens.error} showRefresh />
 
     <div className="token-list-container">
       <div className="token-list-header">

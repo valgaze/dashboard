@@ -2,7 +2,10 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import assert from 'assert';
 
-import { Account, NORMAL, EDIT, PASSWORD_RESET } from './index';
+import { Provider } from 'react-redux';
+import storeFactory from '../../store';
+
+import ConnectedAccount, { Account, NORMAL, EDIT, PASSWORD_RESET } from './index';
 
 const user = {
   fullName: 'foo',
@@ -87,5 +90,24 @@ describe('Accounts page', function() {
     // Nickname changes depending on full name
     component.setState({fullName: 'Foo Bar'});
     assert.equal(component.find('.account-nickname-container input').prop('placeholder'), 'Foo');
+  });
+
+
+  it(`shows a loading state when the user isn't loaded`, function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    const component = mount(<Provider store={store}><ConnectedAccount /></Provider>);
+
+    // Make sure a loading indicator is visible.
+    assert.equal(component.find('.loading-spinner').length, 1);
+  });
+  it('shows a error bar when there is an error', function() {
+    const component = mount(<Account initialUser={user} />);
+
+    // Set an error.
+    component.setState({error: 'boom!'});
+
+    // Make sure an error bar is visible.
+    assert.equal(component.find('.error-bar').length, 1);
   });
 });

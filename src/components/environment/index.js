@@ -10,6 +10,7 @@ import EnvironmentModalSensorPlacementAssignment from '../environment-modal-sens
 import EnvironmentModalUpdateDoorway from '../environment-modal-update-doorway/index';
 import EnvironmentModalUpdateSpace from '../environment-modal-update-space/index';
 import LoadingSpinner from '../loading-spinner/index';
+import ErrorBar from '../error-bar/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 import sortCollection, { SORT_A_Z, SORT_NEWEST } from '../../helpers/sort-collection/index';
@@ -78,6 +79,11 @@ export function Environment({
       <SubnavItem active href="#/environment/spaces">Spaces</SubnavItem>
       <SubnavItem>Sensors</SubnavItem>
     </Subnav>
+
+    {/* Render any errors for the spaces or doorways collections. */}
+    <ErrorBar message={spaces.error} showRefresh />
+    <ErrorBar message={doorways.error} showRefresh />
+    <ErrorBar message={links.error} showRefresh />
 
     <div className="environment-container">
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}

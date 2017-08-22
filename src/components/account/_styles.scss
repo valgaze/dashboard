@@ -1,7 +1,13 @@
 .account {
   @include grid-container;
   max-width: 600px;
-  margin-top: 40px;
+  margin-top: 0px;
+}
+// Position the account card below the navbar. I would have used margin here, but the error bar
+// somehow is spaced with margin there too?
+.account-card {
+  position: relative;
+  top: 40px;
 }
 
 .account-edit-button { float: right; }

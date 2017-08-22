@@ -42,6 +42,9 @@
   }
 }
 
-.space-list-container { @include grid-container; }
+.space-list-container {
+  @include grid-container;
+  margin-top: 2px;
+}
 .space-list-row { @include grid-row; }
 .space-list-item { @include grid-width(24, 12, 12, 12); }

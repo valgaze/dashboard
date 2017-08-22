@@ -67,6 +67,10 @@
 // These are the toasts at the top of each column.
 .environment-space-header, .environment-doorway-header {
   margin-bottom: 21px;
+
+  // Don't show the toasts on mobile, as they explain the dragging functionality that the page
+  // doesn't support on mobile.
+  @media (max-width: $screen-sm-max) { display: none; }
 }
 
 // Above the two columns, render controls to refine the list of items in each column.

@@ -9,8 +9,11 @@ import storeFactory from '../../store';
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 import collectionSpacesSet from '../../actions/collection/spaces/set';
+import collectionSpacesError from '../../actions/collection/spaces/error';
 import collectionDoorwaysSet from '../../actions/collection/doorways/set';
+import collectionDoorwaysError from '../../actions/collection/doorways/error';
 import collectionLinksSet from '../../actions/collection/links/set';
+import collectionLinksError from '../../actions/collection/links/error';
 
 import ConnectedEnvionment, { Environment } from './index';
 
@@ -476,6 +479,33 @@ describe('Space workflows', function() {
     assert.equal(store.getState().activeModal.name, 'update-space');
     assert.equal(component.find('.environment-modal-update-space').length, 1);
   });
+  it('should show an error bar on a space error', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+    store.dispatch(collectionSpacesError('boom!'));
+    store.dispatch(collectionDoorwaysSet([]));
+    store.dispatch(collectionLinksSet([]));
+
+    // The error bar should be shown.
+    assert.equal(component.find('.error-bar-visible').length, 1);
+  });
+  it('should show a loading state when no doorways are loaded', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+
+    // Loading spinner is visible.
+    assert.equal(component.find('.space-column .loading-spinner').length, 1);
+  });
 });
 
 describe('Doorway workflows', function() {
@@ -846,5 +876,32 @@ describe('Doorway workflows', function() {
     // Popover should still be visible.
     assert.equal(store.getState().activeModal.name, 'update-doorway');
     assert.equal(component.find('.environment-modal-update-doorway').length, 1);
+  });
+  it('should show an error bar on a doorway error', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+    store.dispatch(collectionSpacesSet([]));
+    store.dispatch(collectionDoorwaysError('boom!'));
+    store.dispatch(collectionLinksSet([]));
+
+    // The error bar should be shown.
+    assert.equal(component.find('.error-bar-visible').length, 1);
+  });
+  it('should show a loading state when no doorways are loaded', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+
+    // Loading spinner is visible.
+    assert.equal(component.find('.doorway-column .loading-spinner').length, 1);
   });
 });

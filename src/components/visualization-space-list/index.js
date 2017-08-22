@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import ErrorBar from '../error-bar/index';
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
@@ -15,6 +16,9 @@ export function SpaceList({
   onSpaceSearch,
 }) {
   return <div className="space-list">
+    {/* Show errors in the spaces collection. */}
+    <ErrorBar message={spaces.error} showRefresh />
+
     <div className="space-list-container">
       <div className="space-list-header">
         <h2 className="space-list-header-text">Spaces</h2>

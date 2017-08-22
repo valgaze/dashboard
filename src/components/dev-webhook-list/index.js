@@ -11,6 +11,7 @@ import collectionWebhooksFilter from '../../actions/collection/webhooks/filter';
 import collectionWebhooksUpdate from '../../actions/collection/webhooks/update';
 import collectionWebhooksDestroy from '../../actions/collection/webhooks/destroy';
 import LoadingSpinner from '../loading-spinner/index';
+import ErrorBar from '../error-bar/index';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 
@@ -72,6 +73,9 @@ export function WebhookList({
   return <div className="webhook">
     {modals}
     {subnav}
+
+    {/* Render any errors for the page */}
+    <ErrorBar message={webhooks.error} showRefresh />
 
     <div className="webhook-container">
 
