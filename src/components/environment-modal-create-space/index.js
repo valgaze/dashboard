@@ -45,7 +45,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 value={this.state.timeZone}
                 onChange={e => this.setState({timeZone: e.target.value})}
               >
-                <option>(choose time zone)</option>
+                <option value="">(choose time zone)</option>
                 <option value="America/New_York">America &mdash; NY</option>
                 <option value="America/Chicago">America &mdash; CHI</option>
                 <option value="America/Denver">America &mdash; DEN</option>
@@ -60,6 +60,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 type="select"
                 id="create-space-reset-time"
                 value={this.state.resetTime}
+                disabled={this.state.timeZone.length === 0}
                 onChange={e => this.setState({resetTime: e.target.value})}
               >
                 {this.state.timeZone ?
