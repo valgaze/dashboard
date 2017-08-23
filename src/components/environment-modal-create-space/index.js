@@ -14,7 +14,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
     this.state = {
       name: '',
       timeZone: '',
-      dailyReset: '',
+      dailyReset: '12:00',
     };
   }
   render() {

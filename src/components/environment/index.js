@@ -81,9 +81,9 @@ export function Environment({
     </Subnav>
 
     {/* Render any errors for the spaces or doorways collections. */}
-    <ErrorBar message={spaces.error} showRefresh modalOpen={Boolean(activeModal)} />
-    <ErrorBar message={doorways.error} showRefresh modalOpen={Boolean(activeModal)} />
-    <ErrorBar message={links.error} showRefresh modalOpen={Boolean(activeModal)} />
+    <ErrorBar message={spaces.error} showRefresh modalOpen={Boolean(activeModal.name)} />
+    <ErrorBar message={doorways.error} showRefresh modalOpen={Boolean(activeModal.name)} />
+    <ErrorBar message={links.error} showRefresh modalOpen={Boolean(activeModal.name)} />
 
     <div className="environment-container">
       {/* The Fab triggers the space doorway context menu to make a new space or doorway */}

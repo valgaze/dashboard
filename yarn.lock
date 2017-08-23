@@ -2,11 +2,11 @@
 # yarn lockfile v1
 
 
-"@density-int/client@^1.6.0":
-  version "1.6.0"
-  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-1.6.0.tgz#88f0b5633f8206d4e611327326022f2ad2339928"
+"@density-int/client@^2.0.5":
+  version "2.0.5"
+  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-2.0.5.tgz#966b7e4764e8621930e910f836c85c34edf7b5da"
   dependencies:
-    "@density/clientele" "^1.5.0"
+    "@density/clientele" "^2.0.3"
 
 "@density/chart-ingress-egress@^1.0.7":
   version "1.0.7"
@@ -31,9 +31,9 @@
     react "^15.4.2"
     react-dom "^15.4.2"
 
-"@density/clientele@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@density/clientele/-/clientele-1.5.0.tgz#db86ed048447bfd41f59b6ee695ec4379b70191a"
+"@density/clientele@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@density/clientele/-/clientele-2.0.3.tgz#ded455610978a9269328e5a070e224eede5e9745"
   dependencies:
     mustache "^2.3.0"
     qs "^6.4.0"

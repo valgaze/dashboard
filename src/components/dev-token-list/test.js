@@ -71,6 +71,7 @@ describe('Token list page', function() {
 
     // Click the button in the modal, which should create a new token on the server.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 201,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -117,6 +118,7 @@ describe('Token list page', function() {
 
     // Click the button in the modal, which should deestroy the token.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
@@ -166,6 +168,7 @@ describe('Token list page', function() {
 
     // Click the button in the modal, which should create a new token on the server.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 200,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -216,6 +219,7 @@ describe('Token list page', function() {
 
     // Click the button in the modal, which should create a new token on the server.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({}),
@@ -258,6 +262,7 @@ describe('Token list page', function() {
 
     // Click the button in the modal, which should deestroy the token.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 200,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -304,6 +309,7 @@ describe('Token list page', function() {
 
     // Click the button in the modal, which should deestroy the token.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),

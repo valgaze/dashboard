@@ -75,7 +75,7 @@ export function TokenList({
     {subnav}
 
     {/* Show errors in the tokens collection */}
-    <ErrorBar message={tokens.error} showRefresh modalOpen={Boolean(activeModal)} />
+    <ErrorBar message={tokens.error} showRefresh modalOpen={Boolean(activeModal.name)} />
 
     <div className="token-list-container">
       <div className="token-list-header">

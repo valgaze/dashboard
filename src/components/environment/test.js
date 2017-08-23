@@ -136,6 +136,7 @@ describe('Space workflows', function() {
 
     // Click the button in the modal, which should create a new space on the server.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 201,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -204,6 +205,7 @@ describe('Space workflows', function() {
     // Click the button in the modal, which should attempt to create a new space on the server but
     // fail.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({}),
@@ -275,6 +277,7 @@ describe('Space workflows', function() {
 
     // Click the button in the modal, which should update the space on the server.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 201,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -367,6 +370,7 @@ describe('Space workflows', function() {
 
     // Click the button in the modal, which should update the space on the server.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -430,6 +434,7 @@ describe('Space workflows', function() {
 
     // Click on the delete button, which makes an ajax request to delete the space.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 204,
       clone() { return this; },
       json: () => Promise.resolve({}),
@@ -484,6 +489,7 @@ describe('Space workflows', function() {
     // Click on the delete button, which tries to make a request to delete the space. However, this
     // isn't successful.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({}),
@@ -572,6 +578,7 @@ describe('Doorway workflows', function() {
 
     // Click the button in the modal, which should create a new doorway on the server.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 201,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -632,6 +639,7 @@ describe('Doorway workflows', function() {
     // Click the button in the modal, which should attempt to create a new doorway on the server but
     // fail.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({}),
@@ -696,6 +704,7 @@ describe('Doorway workflows', function() {
 
     // Click the button in the modal, which should update the doorway on the server.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 201,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -773,6 +782,7 @@ describe('Doorway workflows', function() {
 
     // Click the button in the modal, which should update the doorway on the server.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -832,6 +842,7 @@ describe('Doorway workflows', function() {
 
     // Click on the delete button, which makes an ajax request to delete the doorway.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 204,
       clone() { return this; },
       json: () => Promise.resolve({}),
@@ -882,6 +893,7 @@ describe('Doorway workflows', function() {
     // Click on the delete button, which tries to make a request to delete the doorway. However, this
     // isn't successful.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({}),

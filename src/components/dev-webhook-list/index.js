@@ -75,7 +75,7 @@ export function WebhookList({
     {subnav}
 
     {/* Render any errors for the page */}
-    <ErrorBar message={webhooks.error} showRefresh modalOpen={Boolean(activeModal)} />
+    <ErrorBar message={webhooks.error} showRefresh modalOpen={Boolean(activeModal.name)} />
 
     <div className="webhook-container">
 

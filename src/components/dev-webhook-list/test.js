@@ -69,6 +69,7 @@ describe('Webhook list page', function() {
 
     // Click the button in the modal, which should create a new webhook on the server.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 201,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -119,6 +120,7 @@ describe('Webhook list page', function() {
 
     // Click the button in the modal, which should create a new webhook on the server.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
@@ -164,6 +166,7 @@ describe('Webhook list page', function() {
 
     // Click the button in the modal, which should create a new webhook on the server.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 200,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -213,6 +216,7 @@ describe('Webhook list page', function() {
 
     // Click the button in the modal, which should attempt to update the webhook.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
@@ -253,6 +257,7 @@ describe('Webhook list page', function() {
 
     // Click the button in the modal, which should destroy the webhook.
     global.fetch = sinon.stub().resolves({
+      ok: true,
       status: 200,
       clone() { return this; },
       json: () => Promise.resolve({
@@ -295,6 +300,7 @@ describe('Webhook list page', function() {
 
     // Click the button in the modal, which should attempt to destroy the webhook.
     global.fetch = sinon.stub().resolves({
+      ok: false,
       status: 403,
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
