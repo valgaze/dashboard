@@ -118,9 +118,17 @@ describe('Space workflows', function() {
     // But the button in the modal should be disabled by default.
     assert.equal(component.find('.create-space-submit button').prop('disabled'), true);
 
-    // Add a space name, time zone and reset time
+    // Also, the reset time picker should be disabled by default.
+    assert.equal(component.find('.create-space-reset-time-container select').prop('disabled'), true);
+
+    // Add a space name and time zone 
     component.find('.create-space-name-container input').simulate('change', {target: {value: 'space name'}});
     component.find('.create-space-time-zone-container select').simulate('change', {target: {value: 'America/New_York'}});
+
+    // Now, reset tiem picker should be enabled.
+    assert.equal(component.find('.create-space-reset-time-container select').prop('disabled'), false);
+
+    // Choose a reset time.
     component.find('.create-space-reset-time-container select').simulate('change', {target: {value: '12:00'}});
 
     // The button in the modal should now be enabled.

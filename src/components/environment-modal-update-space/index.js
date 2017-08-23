@@ -1,11 +1,14 @@
 import * as React from 'react';
+
 import Modal from '@density/ui-modal';
 import Button from '@density/ui-button';
 import Card, { CardHeader, CardLoading, CardBody } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 import Popover from '@density/ui-popover';
+
 import ModalHeaderActionButton from '../modal-header-action-button/index';
 import FormLabel from '../form-label/index';
+import generateLocalResetTimeChoices from '../../helpers/generate-local-reset-time-choices/index';
 
 export default class EnvironmentModalUpdateSpace extends React.Component {
   constructor(props) {
@@ -57,7 +60,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               >
                 <option value="America/New_York">America &mdash; NY</option>
                 <option value="America/Chicago">America &mdash; CHI</option>
-                <option value="America/Phoenix">America &mdash; PHX</option>
+                <option value="America/Denver">America &mdash; DEN</option>
                 <option value="America/Los_Angeles">America &mdash; LA</option>
               </InputBox>}
             />
@@ -66,11 +69,14 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               htmlFor="update-space-daily-reset"
               label="Daily Reset"
               input={<InputBox
-                type="text"
+                type="select"
                 id="update-space-daily-reset"
                 value={this.state.dailyReset}
                 onChange={e => this.setState({dailyReset: e.target.value})}
-              />}
+              >
+                {generateLocalResetTimeChoices(this.state.timeZone).map(({localTime, utc}) =>
+                  <option key={utc} value={utc}>{localTime}</option>)}
+              </InputBox>}
             />
 
             <div className="environment-modal-update-space-submit">
