@@ -323,8 +323,8 @@ export default connect(state => {
         ok && dispatch(hideModal());
       });
     },
-    onChangeDoorway(doorway, {name, description}) {
-      dispatch(collectionDoorwaysUpdate(Object.assign({}, doorway, {name, description}))).then(ok => {
+    onChangeDoorway(doorway, fields) {
+      dispatch(collectionDoorwaysUpdate(Object.assign({}, doorway, fields))).then(ok => {
         ok && dispatch(hideModal());
       });
     },
@@ -333,8 +333,8 @@ export default connect(state => {
         ok && dispatch(hideModal());
       });
     },
-    onChangeSpace(space, {name, timezone, dailyReset}) {
-      dispatch(collectionSpacesUpdate(Object.assign({}, space, {name, timezone, dailyReset}))).then(ok => {
+    onChangeSpace(space, fields) {
+      dispatch(collectionSpacesUpdate(Object.assign({}, space, fields))).then(ok => {
         ok && dispatch(hideModal());
       });
     },

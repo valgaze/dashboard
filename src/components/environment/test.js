@@ -265,8 +265,10 @@ describe('Space workflows', function() {
     // Verify the button is disabled.
     assert.equal(component.find('.environment-modal-update-space-submit button').prop('disabled'), true);
 
-    // Then, update the space name
+    // Then, update the space name, timezone, and reset time
     component.find('.update-space-name-container input').simulate('change', {target: {value: 'foo!'}});
+    component.find('.update-space-time-zone-container select').simulate('change', {target: {value: 'America/Denver'}});
+    component.find('.update-space-daily-reset-container select').simulate('change', {target: {value: '16:00'}});
 
     // The button in the modal should be enabled again.
     assert.equal(component.find('.environment-modal-update-space-submit button').prop('disabled'), false);
@@ -279,8 +281,8 @@ describe('Space workflows', function() {
         id: 'spc_1',
         name: 'foo!',
         description: '',
-        time_zone: 'America/New_York',
-        daily_reset: '12:00',
+        time_zone: 'America/Denver',
+        daily_reset: '16:00',
         current_count: 0,
         capacity: null,
       }),
@@ -296,6 +298,21 @@ describe('Space workflows', function() {
     // Ensure that the space was updated.
     const newSpace = store.getState().spaces.data.find(i => i.name === 'foo!');
     assert.notEqual(newSpace, undefined);
+    assert.equal(newSpace.timeZone, 'America/Denver');
+    assert.equal(newSpace.dailyReset, '16:00');
+
+    // Ensure that the fetch call was made correctly.
+    assert.deepEqual(global.fetch.firstCall.args, [
+        'https://api.density.io/v1//spaces/spc_1/',
+      { method: 'PUT',
+        url: 'https://api.density.io/v1//spaces/spc_1/',
+        desc: 'Update a space.',
+        headers: 
+         { 'Content-Type': 'application/json',
+           Accept: 'application/json',
+           Authorization: 'Bearer ' },
+        body: '{"name":"foo!","time_zone":"America/Denver","daily_reset":"16:00"}' }
+    ]);
 
     // The popover should no longer be visible
     assert.equal(store.getState().activeModal.name, null);

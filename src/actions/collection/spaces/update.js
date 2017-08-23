@@ -12,7 +12,9 @@ export default function collectionSpacesUpdate(item) {
       const response = await core.spaces.update({
         id: item.id,
         name: item.name,
-        description: item.desc,
+        description: item.description,
+        daily_reset: item.dailyReset,
+        time_zone: item.timeZone,
       });
       dispatch(collectionSpacesPush(response));
       return response;

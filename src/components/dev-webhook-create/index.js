@@ -69,8 +69,8 @@ export default class WebhookCreateModal extends React.Component {
               </p>
               <pre className="webhook-create-example-payload">{
                 JSON.stringify({
-                  "space_id": "2Azy0AUKO4LbG0RmNCO0zU",
-                  "doorway_id": "bG0RmNCO0zU2Azy0AUKO4L",
+                  "space_id": "spc_12284369797403919085",
+                  "doorway_id": "drw_16131794227371328677",
                   "direction": 1,
                   "count": 32
                 }, null, 2)

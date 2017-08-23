@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { decode } from 'ent';
 
 import Modal from '@density/ui-modal';
 import Button from '@density/ui-button';
@@ -82,7 +83,13 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
             <div className="environment-modal-update-space-submit">
               <Button
                 disabled={this.state.name.length === 0}
-                onClick={() => this.props.onSubmit(this.state)}
+                onClick={() => this.props.onSubmit({
+                  name: this.state.name,
+                  dailyReset: this.state.dailyReset,
+                  // this.state.timeZone has html entities in it, ie: `America&#x2F;New_York`.
+                  // FIXME: Why is this?
+                  timeZone: decode(this.state.timeZone),
+                })}
               >Save</Button>
             </div>
           </CardBody>

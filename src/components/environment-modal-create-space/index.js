@@ -14,7 +14,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
     this.state = {
       name: '',
       timeZone: '',
-      resetTime: '',
+      dailyReset: '',
     };
   }
   render() {
@@ -59,9 +59,9 @@ export default class EnvironmentModalCreateSpace extends React.Component {
               input={<InputBox
                 type="select"
                 id="create-space-reset-time"
-                value={this.state.resetTime}
+                value={this.state.dailyReset}
                 disabled={this.state.timeZone.length === 0}
-                onChange={e => this.setState({resetTime: e.target.value})}
+                onChange={e => this.setState({dailyReset: e.target.value})}
               >
                 {this.state.timeZone ?
                   generateLocalResetTimeChoices(this.state.timeZone)
@@ -75,11 +75,11 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 disabled={(
                   this.state.name.length === 0 ||
                   this.state.timeZone.length === 0 ||
-                  this.state.resetTime.length === 0
+                  this.state.dailyReset.length === 0
                 )}
                 onClick={() => this.props.onSubmit({
                   name: this.state.name,
-                  resetTime: this.state.resetTime,
+                  dailyReset: this.state.dailyReset,
                   // this.state.timeZone has html entities in it, ie: `America&#x2F;New_York`.
                   // FIXME: Why is this?
                   timeZone: decode(this.state.timeZone),
