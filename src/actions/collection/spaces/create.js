@@ -11,9 +11,9 @@ export default function collectionSpacesCreate(item) {
     try {
       const response = await core.spaces.create({
         name: item.name,
-        description: item.desc,
+        description: item.description,
         timezone: item.timeZone,
-        daily_reset: item.resetTime,
+        daily_reset: item.dailyReset,
       });
       dispatch(collectionSpacesPush(response));
       return response;
