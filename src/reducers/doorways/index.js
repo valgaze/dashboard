@@ -8,6 +8,9 @@ import { COLLECTION_DOORWAYS_CREATE } from '../../actions/collection/doorways/cr
 import { COLLECTION_DOORWAYS_UPDATE } from '../../actions/collection/doorways/update';
 import { COLLECTION_DOORWAYS_DESTROY } from '../../actions/collection/doorways/destroy';
 
+import { SHOW_MODAL } from '../../actions/modal/show';
+import { HIDE_MODAL } from '../../actions/modal/hide';
+
 const initialState = {
   filters: {
     spaceId: null,
@@ -83,6 +86,11 @@ export default function doorways(state=initialState, action) {
       error: null,
       data: state.data.filter(item => action.item.id !== item.id),
     };
+
+  // Also, when a modal is shown or hidden, clear the error from the state.
+  case SHOW_MODAL:
+  case HIDE_MODAL:
+    return {...state, error: null};
 
   default:
     return state;

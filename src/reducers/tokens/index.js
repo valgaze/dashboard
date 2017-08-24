@@ -8,6 +8,9 @@ import { COLLECTION_TOKENS_UPDATE } from '../../actions/collection/tokens/update
 import { COLLECTION_TOKENS_ERROR } from '../../actions/collection/tokens/error';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
+import { SHOW_MODAL } from '../../actions/modal/show';
+import { HIDE_MODAL } from '../../actions/modal/hide';
+
 const initialState = {
   data: [],
   loading: true,
@@ -77,6 +80,11 @@ export default function tokens(state=initialState, action) {
       loading: false,
       data: state.data.filter(item => action.item.key !== item.key),
     };
+
+  // When a modal is closed, clear any errors on in the store in this reducer.
+  case SHOW_MODAL:
+  case HIDE_MODAL:
+    return {...state, error: null};
 
   default:
     return state;

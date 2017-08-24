@@ -5,6 +5,9 @@ import { COLLECTION_LINKS_DELETE } from '../../actions/collection/links/delete';
 import { COLLECTION_LINKS_ERROR } from '../../actions/collection/links/error';
 import { COLLECTION_LINKS_UPDATE_SENSOR_PLACEMENT } from '../../actions/collection/links/update-sensor-placement';
 
+import { SHOW_MODAL } from '../../actions/modal/show';
+import { HIDE_MODAL } from '../../actions/modal/hide';
+
 const initialState = {
   filters: {
     spaceId: null,
@@ -64,6 +67,11 @@ export default function links(state=initialState, action) {
   // An async operation raised an error.
   case COLLECTION_LINKS_ERROR:
     return {...state, loading: false, error: action.error};
+
+  // When a modal is closed, clear any errors on in the store in this reducer.
+  case SHOW_MODAL:
+  case HIDE_MODAL:
+    return {...state, error: null};
 
   default:
     return state;

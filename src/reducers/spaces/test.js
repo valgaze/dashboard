@@ -8,6 +8,9 @@ import collectionSpacesDelete from '../../actions/collection/spaces/delete';
 import collectionSpacesError from '../../actions/collection/spaces/error';
 import { COLLECTION_SPACES_UPDATE } from '../../actions/collection/spaces/update'; 
 
+import showModal from '../../actions/modal/show';
+import hideModal from '../../actions/modal/hide';
+
 describe('spaces', function() {
   it('should set spaces when given a bunch of spaces', function() {
     const initialState = spaces(undefined, {});
@@ -98,7 +101,7 @@ describe('spaces', function() {
     // Initial state should then match final state.
     assert.deepEqual(errorState, {...initialState, error: 'boom!', loading: false});
   });
-  it('should clear an error when an async operation starts.', function() {
+  it('should clear an error and start loading when an async operation starts.', function() {
     const initialState = spaces(undefined, {});
 
     // Add an error to the state.
@@ -109,5 +112,28 @@ describe('spaces', function() {
 
     // Initial state should then have error: null
     assert.deepEqual(state, {...initialState, error: null, loading: true});
+  });
+
+  describe('clearing errors on different actions', function() {
+    it(`should clear an error when modals open`, function() {
+      const initialState = spaces(undefined, {});
+      const errorState = spaces(initialState, collectionSpacesError('My error'));
+
+      // Show the modal
+      const showModalAttemptState = spaces(errorState, showModal('my-modal'));
+
+      // Initial state should then have error: null
+      assert.deepEqual(showModalAttemptState, {...initialState, error: null, loading: false});
+    });
+    it(`should clear an error when modals close`, function() {
+      const initialState = spaces(undefined, {});
+      const errorState = spaces(initialState, collectionSpacesError('My error'));
+
+      // Hide the modal
+      const hideModalAttemptState = spaces(errorState, hideModal('my-modal'));
+
+      // Initial state should then have error: null
+      assert.deepEqual(hideModalAttemptState, {...initialState, error: null, loading: false});
+    });
   });
 });
