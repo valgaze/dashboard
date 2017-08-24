@@ -20,10 +20,6 @@
   display: block;
 }
 
-.login-error {
-  color: $brand-danger;
-}
-
 // The submit button to the login form
 .login-submit-button {
   margin-top: 30px;
@@ -36,6 +32,7 @@
 }
 
 .login-forgot-password-link {
+  display: inline-block;
   margin-top: 20px;
   cursor: pointer;
   text-decoration: underline;
@@ -45,6 +42,19 @@
 // NOTE: The below isn't great. Seems the widths won't work out here?
 .login-form, .login-password-reset-form {
   width: calc(100% - 22px);
+}
+
+// Show an error when there's an error on the login page.
+.login-error { margin-top: 20px; }
+.login-error-header {
+  color: $brand-danger;
+  font-size: $font-size-4;
+  font-weight: $font-weight-4;
+  margin-bottom: 8px;
+}
+.login-error-icon {
+  font-family: "Densicons";
+  font-size: $font-size-3;
 }
 
 

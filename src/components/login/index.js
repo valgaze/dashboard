@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 
 import { accounts } from '@density-int/client';
 import sessionTokenSet from '../../actions/session-token/set';
+import LoadingSpinner from '../loading-spinner/index';
 
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import Button from '@density/ui-button';
+import Toast from '@density/ui-toast';
 
 const LOGIN = 'LOGIN', FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 
@@ -22,7 +24,7 @@ export class Login extends React.Component {
     };
   }
 
-  ;onEnter(e) {
+  onEnter(e) {
     if (e.key === 'Enter') {
       this.onLogin();
     }
@@ -37,7 +39,7 @@ export class Login extends React.Component {
       this.setState({loading: false, error: null});
       this.props.onUserSuccessfullyLoggedIn(token);
     }).catch(error => {
-      this.setState({loading: false, error: error.message});
+      this.setState({loading: false, error});
     });
   }
 
@@ -85,14 +87,10 @@ export class Login extends React.Component {
         size="large"
         onClick={this.onLogin.bind(this)}
         disabled={this.state.loading || this.state.email.indexOf('@') === -1}
-      >
-        <span className="label">Login</span>
-        {this.state.loading ? <img
-          className="loading-image"
-          src="/assets/images/loading.gif"
-          alt="Loading"
-        /> : null}
-      </Button>
+      >Login</Button>
+
+      {/* Loading spinner is shown when the login is pending */}
+      {this.state.loading ? <LoadingSpinner /> : null}
     </div>;
   }
 
@@ -120,20 +118,16 @@ export class Login extends React.Component {
         onClick={this.onForgotPassword.bind(this)}
         size="large"
         disabled={this.state.loading || this.state.email.indexOf('@') === -1}
-      >
-        <span className="label">Send password reset email</span>
-        {this.state.loading ? <img
-          className="loading-image"
-          src="/assets/images/loading.gif"
-          alt="Loading"
-        /> : null}
-      </Button>
+      >Send password reset email</Button>
 
       {/* Move to back to login page */}
       <div
         className="login-forgot-password-back-link"
         onClick={() => this.setState({view: LOGIN, error: null})}
       >Back to login</div>
+
+      {/* Loading spinner is shown when the login is pending */}
+      {this.state.loading ? <LoadingSpinner /> : null}
     </div>;
   }
 
@@ -146,15 +140,16 @@ export class Login extends React.Component {
           alt="Density Logo"
         />
 
-        {/* Render any errors with previous login attempts */}
-        {this.state.error ? <span className="login-error">
-          {this.state.error}
-        </span> : null}
-
         {/* Login inputs */}
         {this.state.view === LOGIN ?
           this.renderLoginForm.apply(this) :
           this.renderForgotPasswordForm.apply(this)}
+
+        {/* Render any errors with previous login attempts */}
+        {this.state.error ? <Toast className="login-error" type="danger" icon={<span className="login-error-icon">&#xe928;</span>}>
+          <h3 className="login-error-header">Incorrect password</h3>
+          <p>{this.state.error}</p>
+        </Toast> : null}
       </div>
     </div>;
   }
