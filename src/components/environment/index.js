@@ -34,6 +34,7 @@ import Fab from '@density/ui-fab';
 import Toast from '@density/ui-toast';
 import ContextMenu, { ContextMenuItem } from '@density/ui-context-menu';
 import InputBox from '@density/ui-input-box';
+import Button from '@density/ui-button';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 
@@ -185,12 +186,14 @@ export function Environment({
               placeholder="Search ..."
               value={spaces.filters.search}
               onChange={e => onSpaceSearch(e.target.value)}
+              disabled={spaces.data.length === 0}
             />
             <InputBox
               className="environment-space-order-box"
               type="select"
               value={spaces.filters.order}
               onChange={e => onSpaceSort(e.target.value)}
+              disabled={spaces.data.length === 0}
             >
               <option value={SORT_NEWEST}>Newest</option>
               <option value={SORT_A_Z}>A - Z</option>
@@ -200,7 +203,13 @@ export function Environment({
             <Toast className="environment-space-header" icon="&#xe91e;">
               Edit space details and remove doorways below.
             </Toast>
-            {!spaces.loading && spaces.data.length === 0 ? <p>No Spaces</p> : null}
+
+            {/* Space column, empty state */}
+            {!spaces.loading && spaces.data.length === 0 ? <div className="environment-space-empty">
+              <div className="environment-space-empty-label">Here is where you manage spaces</div>
+              <Button onClick={() => onOpenModal('create-space')}>Create a Space</Button>
+            </div> : null}
+
             <ul>
               {sortCollection(spaceFilter(spaces.data, spaces.filters.search), spaces.filters.sort).map(space => {
                 return <EnvironmentSpaceItem
@@ -233,12 +242,14 @@ export function Environment({
               placeholder="Search ..."
               value={doorways.filters.search}
               onChange={e => onDoorwaySearch(e.target.value)}
+              disabled={doorways.data.length === 0}
             />
             <InputBox
               className="environment-doorway-order-box"
               type="select"
               value={doorways.filters.order}
               onChange={e => onDoorwaySort(e.target.value)}
+              disabled={doorways.data.length === 0}
             >
               <option value={SORT_NEWEST}>Newest</option>
               <option value={SORT_A_Z}>A - Z</option>
@@ -250,7 +261,12 @@ export function Environment({
               To link a doorway to a space, drag the doorway
               from below to a space on the left.
             </Toast>
-            {!doorways.loading && doorways.data.length === 0 ? <p>No Doorways</p> : null}
+            {/* Doorway column, empty state */}
+            {!doorways.loading && doorways.data.length === 0 ? <div className="environment-doorway-empty">
+              <div className="environment-doorway-empty-label">Here is where you manage doorways</div>
+              <Button onClick={() => onOpenModal('create-doorway')}>Create a Doorway</Button>
+            </div> : null}
+
             {sortCollection(doorwayFilter(doorways.data, doorways.filters.search), doorways.filters.sort).map(doorway => {
               return <EnvironmentDoorwayItem
                 key={doorway.id}

@@ -599,6 +599,7 @@ describe('Doorway workflows', function() {
     // Ensure that the doorway was added.
     const newDoorway = store.getState().doorways.data.find(i => i.name === 'doorway name');
     assert.notEqual(newDoorway, undefined);
+    assert.equal(newDoorway.description, 'doorway desc');
   });
   it('should try to create a doorway, but instead display an error', async function() {
     // Mount the connected version of the component.
@@ -940,5 +941,32 @@ describe('Doorway workflows', function() {
 
     // Loading spinner is visible.
     assert.equal(component.find('.doorway-column .loading-spinner').length, 1);
+  });
+});
+
+describe('Empty state, without doorways or spaces', function() {
+  it('should render correctly', function() {
+    const component = mount(<DragDropWrapper>
+      <Environment
+        activeModal={{name: null, data: {}}}
+        spaces={{data: [], loading: false, filters: {search: ''}}}
+        doorways={{data: [], loading: false, filters: {search: ''}}}
+        links={{data: [], loading: false}}
+      />
+    </DragDropWrapper>);
+
+    // Should render the empty state for the space
+    assert.equal(component.find('.environment-space-empty').length, 1);
+
+    // Should disable the search and filter box for the space
+    assert.equal(component.find('.environment-space-search-box').prop('disabled'), true);
+    assert.equal(component.find('.environment-space-order-box').prop('disabled'), true);
+
+    // Should render the empty state for the doorway
+    assert.equal(component.find('.environment-doorway-empty').length, 1);
+
+    // Should disable the search and filter box for the doorway
+    assert.equal(component.find('.environment-space-search-box').prop('disabled'), true);
+    assert.equal(component.find('.environment-space-order-box').prop('disabled'), true);
   });
 });
