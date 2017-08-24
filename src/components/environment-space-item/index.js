@@ -11,12 +11,33 @@ const doorwayTarget = {
   drop(props, monitor, component) {
     props.onDoorwayDropped(monitor.getItem().doorway);
   },
+  // Allow a doorway to be dropped if there isn't already a link between it and the space it is
+  // being dropped on (ie, don't create duplicate links).
+  canDrop({links, space}, monitor) {
+    const item = monitor.getItem();
+    if (item) {
+      return !doorwayHasLinkToSpace(links, space, item.doorway);
+    } else {
+      return false;
+    }
+  }
 };
 
 const dropTarget = DropTarget('doorway', doorwayTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOverCurrent: monitor.isOver({ shallow: true }),
+  currentlyDraggedDoorway: monitor.getItem(),
 }));
+
+// Given a list of links, and a space/doorway, return the first link that attaches the space and
+// doorway together. Used to see if a doorway can be dropped on a space when dragged overtop.
+function doorwayHasLinkToSpace(links, space, doorway) {
+  if (!doorway) {
+    return false;
+  } else {
+    return links.find(link => link.spaceId === space.id && link.doorwayId === doorway.id);
+  }
+}
 
 export function EnvironmentSpaceItem({
   space,
@@ -25,12 +46,18 @@ export function EnvironmentSpaceItem({
 
   connectDropTarget,
   isOverCurrent,
+  currentlyDraggedDoorway,
 
   onDoorwayDropped,
   onDoorwayLinkDeleted,
   onSensorPlacementChange,
   onClickDetails,
 }) {
+  // If a doorway is currently being dragged, then render the drop target in a special way.
+  const isDoorwayAlreadyLinkedToSpace = currentlyDraggedDoorway ?
+    doorwayHasLinkToSpace(links, space, currentlyDraggedDoorway.doorway) :
+    false;
+
   return connectDropTarget(<div className="environment-space-item">
     <Card>
       <CardHeader size="small" className="environment-space-item-header">
@@ -40,7 +67,8 @@ export function EnvironmentSpaceItem({
       <CardBody className={classnames(
         'environment-space-item-body',
         doorways.length === 0 ? 'empty' : null,
-        isOverCurrent ? 'is-dropping' : null
+        isOverCurrent ? 'is-dropping' : null,
+        isDoorwayAlreadyLinkedToSpace ? 'is-dropping-invalid' : null,
       )}>
         <ul className="environment-space-item-doorways">
           {doorways.map(doorway => {

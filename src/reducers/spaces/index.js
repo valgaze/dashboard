@@ -1,5 +1,4 @@
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
-import { SORT_NEWEST } from '../../helpers/sort-collection/index';
 import { COLLECTION_SPACES_SET } from '../../actions/collection/spaces/set';
 import { COLLECTION_SPACES_PUSH } from '../../actions/collection/spaces/push';
 import { COLLECTION_SPACES_FILTER } from '../../actions/collection/spaces/filter';
@@ -13,6 +12,9 @@ import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
 
 import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
+import { SORT_NEWEST } from '../../helpers/sort-collection/index';
+import { SHOW_MODAL } from '../../actions/modal/show';
+import { HIDE_MODAL } from '../../actions/modal/hide';
 
 const initialState = {
   data: [],
@@ -98,7 +100,12 @@ export default function spaces(state=initialState, action) {
 
   // When the user changes the active space, update it in the store.
   case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
-    return {...state, selected: action.id};
+    return {...state, error: null, selected: action.id};
+
+  // Also, when a modal is shown or hidden, clear the error from the state.
+  case SHOW_MODAL:
+  case HIDE_MODAL:
+    return {...state, error: null};
 
 // ----------------------------------------------------------------------------
 // EVENTS COLLECTION
