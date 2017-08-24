@@ -335,12 +335,12 @@ export default connect(state => {
     },
     onChangeSensorPlacement(link) {
       const sensorPlacement = link.sensorPlacement === 1 ? -1 : 1;
-      dispatch(collectionLinksUpdateSensorPlacement({id: link.id, sensorPlacement})).then(ok => {
+      dispatch(collectionLinksUpdateSensorPlacement({...link, sensorPlacement})).then(ok => {
         ok && dispatch(hideModal());
       });
     },
     onChangeDoorway(doorway, fields) {
-      dispatch(collectionDoorwaysUpdate(Object.assign({}, doorway, fields))).then(ok => {
+      dispatch(collectionDoorwaysUpdate({...doorway, ...fields})).then(ok => {
         ok && dispatch(hideModal());
       });
     },
@@ -350,7 +350,7 @@ export default connect(state => {
       });
     },
     onChangeSpace(space, fields) {
-      dispatch(collectionSpacesUpdate(Object.assign({}, space, fields))).then(ok => {
+      dispatch(collectionSpacesUpdate({...space, ...fields})).then(ok => {
         ok && dispatch(hideModal());
       });
     },
