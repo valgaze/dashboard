@@ -11,7 +11,11 @@ import sessionTokenUnSet from './actions/session-token/unset';
 import eventSource from './helpers/websocket-event-pusher/index';
 
 // The main app component that renders everything.
-import App from './components/app';
+import App from './components/app/index';
+
+// The Environment switcher, used to switch between sets of servers that should be communicated
+// with.
+import EnvironmentSwitcher, { getActiveEnvironments } from './components/environment-switcher/index';
 
 // Redux is used to manage state.
 import { Provider } from 'react-redux';
@@ -34,10 +38,63 @@ import collectionSpacesCountChange from './actions/collection/spaces/count-chang
 import storeFactory from './store';
 const store = storeFactory();
 
-// Set the location of all services.
-core.config({core: 'https://api.density.io/v2'});
-accounts.config({host: 'https://clerk.density.io/v1'});
-// eventSource.setHost('ws://localhost:8080');
+
+// ----------------------------------------------------------------------------
+// Set the location of all microservices.
+// Here's how it works:
+// ----------------------------------------------------------------------------
+//
+// 1. All microservice names and cofigurations are defined in `fields`. `setServiceLocations` is
+// called, passing the active environment names. By setting this initially before the react render
+// happens, calls that happen before the render are able to take advantage of the custom
+// environments that have been defined.
+//
+// 2. Developer opens the environment switcher modal, changes an environment variable, then clicks
+// "ok". The `EnvironmentSwitcher` component's `onChange` is fired, which calls
+// `setServiceLocations`. The locations of all the services update.
+//
+const fields = [
+  {
+    name: 'Core API',
+    slug: 'core',
+    defaults: {
+      'Production': 'https://api.density.io/v2',
+      'Local': 'http://localhost:8000/v2',
+      'Env (REACT_APP_CORE_API_URL)': process.env.REACT_APP_CORE_API_URL,
+    },
+    default: 'Production',
+  },
+  {
+    name: 'Accounts API',
+    slug: 'accounts',
+    defaults: {
+      'Production': 'https://clerk.density.io/v1',
+      'Local': 'http://localhost:8001/v1',
+      'Env (REACT_APP_ACCOUNTS_API_URL)': process.env.REACT_APP_ACCOUNTS_API_URL,
+    },
+    default: 'Production',
+  },
+  {
+    name: 'Event source (websockets server)',
+    slug: 'eventsource',
+    defaults: {
+      'None': 'false',
+      'Production': 'wss://socket.density.io',
+      'Local': 'ws://localhost:8080',
+      'Env (REACT_APP_EVENTSOURCE_API_URL)': process.env.REACT_APP_EVENTSOURCE_API_URL,
+    },
+    default: 'None',
+  },
+];
+function setServiceLocations(data) {
+  core.config({core: data.core});
+  accounts.config({host: data.accounts});
+  if (data.eventsource !== 'false') {
+    eventSource.setHost(data.eventsource);
+  }
+}
+setServiceLocations(getActiveEnvironments(fields)); /* step 1 above */
+
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
@@ -110,7 +167,15 @@ window.store = store;
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <div>
+      <App />
+
+      <EnvironmentSwitcher
+        keys={['!', '!', '`', ' ']} // Press '!!` ' to open environment switcher.
+        fields={fields}
+        onChange={setServiceLocations}
+      />
+    </div>
   </Provider>,
   document.getElementById('root')
 );
