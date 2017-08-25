@@ -49,12 +49,12 @@
 
 .space-column {
   @include grid-width(24, 24, 12, 12);
-  height: calc(100vh - 250px);
+  height: calc(100vh - 300px);
   margin-top: 40px;
 }
 .doorway-column {
   @include grid-width(0, 0, 12, 12);
-  height: calc(100vh - 250px);
+  height: calc(100vh - 300px);
   margin-top: 40px;
   display: none;
 

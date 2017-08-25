@@ -15,8 +15,8 @@ export default function EnvironmentModalSensorPlacement({loading, error, onSubmi
         </p>
 
         <div className="environment-modal-sensor-placement-button-group">
-          <Button className="environment-modal-sensor-placement-button-yes" onClick={onDismiss}>No</Button>
-          <Button className="environment-modal-sensor-placement-button-no" onClick={onSubmit}>Yes</Button>
+          <Button className="environment-modal-sensor-placement-button-no" onClick={onDismiss}>No</Button>
+          <Button className="environment-modal-sensor-placement-button-yes" onClick={onSubmit}>Yes</Button>
         </div>
       </CardBody>
     </Card>

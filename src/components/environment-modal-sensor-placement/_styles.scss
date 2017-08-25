@@ -19,10 +19,10 @@
   &:last-child { margin-left: 10px; }
 }
 
-// Color the yes button green, and the no button gray.
-.environment-modal-sensor-placement-button-yes {
+// Color the yes button primary, and the no button gray.
+.environment-modal-sensor-placement-button-no {
   background-color: $gray-darkest;
 }
-.environment-modal-sensor-placement-button-no {
+.environment-modal-sensor-placement-button-yes {
   background-color: $brand-primary;
 }

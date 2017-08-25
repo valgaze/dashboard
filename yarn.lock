@@ -5690,6 +5690,12 @@ react-dnd-multi-backend@^2.3.7:
     react-dnd-html5-backend "*"
     react-dnd-touch-backend "*"
 
+react-dnd-test-backend@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-dnd-test-backend/-/react-dnd-test-backend-2.4.0.tgz#007039c9f4e4b76e30dabfe4ae286097032f5e64"
+  dependencies:
+    dnd-core "^2.4.0"
+
 react-dnd-touch-backend@*, react-dnd-touch-backend@^0.3.13:
   version "0.3.13"
   resolved "https://registry.yarnpkg.com/react-dnd-touch-backend/-/react-dnd-touch-backend-0.3.13.tgz#5d577ecba65ef8b37cd92d5342902ae5aace952d"

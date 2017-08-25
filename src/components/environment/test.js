@@ -24,8 +24,8 @@ function timeout(delay) {
 // In order for the drag-drop studd to properly work, create a drag-drop context wrapper that can be
 // used to inject a drag-drop context.
 import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-const DragDropWrapper = DragDropContext(HTML5Backend)(props => <div {...props} />);
+import TestBackend from 'react-dnd-test-backend';
+const DragDropWrapper = DragDropContext(TestBackend)(props => <div {...props} />);
 
 describe('Environment page', function() {
   it('should render the page (smoke test)', function() {
@@ -968,5 +968,285 @@ describe('Empty state, without doorways or spaces', function() {
     // Should disable the search and filter box for the doorway
     assert.equal(component.find('.environment-space-search-box').prop('disabled'), true);
     assert.equal(component.find('.environment-space-order-box').prop('disabled'), true);
+  });
+});
+
+// Find a doorway source and space target to use for the drag operation.
+function getDragSourceAndTarget(backend, registry) {
+  return {
+    sourceId: Object.keys(registry.handlers).reverse().find(k => k[0] === 'S'),
+    targetId: Object.keys(registry.handlers).reverse().find(k => k[0] === 'T'),
+  };
+}
+
+describe('Link workflows (aka, dragging doorways to spaces)', function() {
+  it('should link a doorway to a space when the doorway is dragged into the space', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    let root;
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper ref={ref => { root = ref; }}>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+    store.dispatch(collectionDoorwaysSet([
+      {
+        id: 'drw_1',
+        name: 'my doorway',
+        description: '',
+      },
+    ]));
+    store.dispatch(collectionSpacesSet([
+      {
+        id: 'spc_0',
+        name: 'my space',
+        description: '',
+        timeZone: 'America/New_York',
+        dailyReset: '12:00',
+        currentCount: 0,
+        capacity: null,
+      },
+    ]));
+    store.dispatch(collectionLinksSet([]));
+
+    // Get reference to introspection handles within react-dnd.
+    const backend = root.getManager().getBackend();
+    const registry = root.getManager().getRegistry();
+    const {sourceId, targetId} = getDragSourceAndTarget(backend, registry);
+
+    // Initially, there should be no doorways in the space.
+    assert.equal(component.find('.environment-space-item-body .environment-space-item-doorways li').length, 0);
+
+    // Start dragging the doorway.
+    backend.simulateBeginDrag([sourceId]);
+
+    // The doorway should be styled like it is being dragged.
+    assert(component.find('.environment-doorway-item').hasClass('environment-doorway-item-dragging'));
+
+    // Hover over the space to drop the doorway into.
+    backend.simulateHover([targetId]);
+
+    // The space should change style to indicate that it can accept the doorway.
+    assert(component.find('.environment-space-item-body').hasClass('is-dropping'));
+
+    // Drop the doorway onto the space.
+    backend.simulateDrop();
+
+    // Now, the sensor direction assignment modal should pop up.
+    assert.equal(store.getState().activeModal.name, 'assign-sensor-placement');
+    assert.equal(component.find('.environment-modal-sensor-placement-assignment').length, 1);
+
+    // Click the 'Inside the space' button, which kicks off an ajax request to the server.
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 201,
+      clone() { return this; },
+      json: () => Promise.resolve({
+        id: 'lnk_1',
+        space_id: 'spc_0',
+        doorway_id: 'drw_1',
+      }),
+    });
+    component.find('.environment-modal-sensor-placement-assignment-button-group button').first().simulate('click');
+
+    // Wait a bit for the promises to settle. FIXME: Not ideal.
+    await timeout(25);
+
+    // There should be a doorway in the space at this point, created by the drag operation.
+    assert.equal(component.find('.environment-space-item-body .environment-space-item-doorways li').length, 1);
+
+    // Complete the drag operation.
+    backend.simulateEndDrag();
+  });
+  it('should not link a doorway to a space when the doorway is already in the space', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    let root;
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper ref={ref => { root = ref; }}>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+    store.dispatch(collectionDoorwaysSet([
+      {
+        id: 'drw_1',
+        name: 'my doorway',
+        description: '',
+      },
+    ]));
+    store.dispatch(collectionSpacesSet([
+      {
+        id: 'spc_0',
+        name: 'my space',
+        description: '',
+        timeZone: 'America/New_York',
+        dailyReset: '12:00',
+        currentCount: 0,
+        capacity: null,
+      },
+    ]));
+    store.dispatch(collectionLinksSet([
+      {
+        id: 'lnk_2',
+        space_id: 'spc_0',
+        doorway_id: 'drw_1',
+      },
+    ]));
+
+    // Get reference to introspection handles within react-dnd.
+    const backend = root.getManager().getBackend();
+    const registry = root.getManager().getRegistry();
+    const {sourceId, targetId} = getDragSourceAndTarget(backend, registry);
+
+    // Initially, there should be a single doorway in the space.
+    assert.equal(component.find('.environment-space-item-body .environment-space-item-doorways li').length, 1);
+
+    // Start dragging the same doorway.
+    backend.simulateBeginDrag([sourceId]);
+
+    // The doorway should be styled like it is being dragged.
+    assert(component.find('.environment-doorway-item').hasClass('environment-doorway-item-dragging'));
+
+    // Hover over the space to drop the doorway into.
+    backend.simulateHover([targetId]);
+
+    // The space should change style to indicate that it can not accept the doorway.
+    assert(component.find('.environment-space-item-body').hasClass('is-dropping-invalid'));
+
+    // Drop the doorway onto the space.
+    backend.simulateDrop();
+
+    // No modal should show up.
+    assert.equal(store.getState().activeModal.name, null);
+
+    // Complete the drag operation.
+    backend.simulateEndDrag();
+  });
+  it('should unlink a doorway from a space when the x is clicked on the doorway', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    let root;
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper ref={ref => { root = ref; }}>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+    store.dispatch(collectionDoorwaysSet([
+      {
+        id: 'drw_1',
+        name: 'my doorway',
+        description: '',
+      },
+    ]));
+    store.dispatch(collectionSpacesSet([
+      {
+        id: 'spc_0',
+        name: 'my space',
+        description: '',
+        timeZone: 'America/New_York',
+        dailyReset: '12:00',
+        currentCount: 0,
+        capacity: null,
+      },
+    ]));
+    store.dispatch(collectionLinksSet([
+      {
+        id: 'lnk_2',
+        space_id: 'spc_0',
+        doorway_id: 'drw_1',
+      },
+    ]));
+
+    // Initially, there should be a single doorway in the space.
+    assert.equal(component.find('.environment-space-item-body .environment-space-item-doorways li').length, 1);
+
+    // Click the delete button on the doorway.
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 204,
+      clone() { return this; },
+      json: () => Promise.resolve({}),
+    });
+    component.find('.environment-space-item-doorways-delete').simulate('click');
+
+    // Wait a bit for the promises to settle. FIXME: Not ideal.
+    await timeout(25);
+
+    // There should no longer be a doorway linked to the space.
+    assert.equal(component.find('.environment-space-item-body .environment-space-item-doorways li').length, 0);
+  });
+  it('should swap sensor placement on a doorway in a space by deleting then creating a link', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    let root;
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper ref={ref => { root = ref; }}>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+    store.dispatch(collectionDoorwaysSet([
+      {
+        id: 'drw_1',
+        name: 'my doorway',
+        description: '',
+      },
+    ]));
+    store.dispatch(collectionSpacesSet([
+      {
+        id: 'spc_0',
+        name: 'my space',
+        description: '',
+        timeZone: 'America/New_York',
+        dailyReset: '12:00',
+        currentCount: 0,
+        capacity: null,
+      },
+    ]));
+    store.dispatch(collectionLinksSet([
+      {
+        id: 'lnk_2',
+        space_id: 'spc_0',
+        doorway_id: 'drw_1',
+        sensor_placement: -1,
+      },
+    ]));
+
+    // Initially, there should be a single doorway in the space.
+    assert.equal(component.find('.environment-space-item-body .environment-space-item-doorways li').length, 1);
+
+    // Click the swap sensor placement button
+    component.find('.environment-space-item-doorways-placement-button').simulate('click');
+
+    // The modal to swap the sensor placement should show up.
+    assert.equal(store.getState().activeModal.name, 'confirm-sensor-placement-change');
+    assert.equal(component.find('.environment-modal-sensor-placement').length, 1);
+
+    // Click the yes button in the modal, and kick off the operation.
+    global.fetch = sinon.stub();
+    global.fetch.onCall(0).resolves({ /* First, the delete */
+      ok: true,
+      status: 204,
+      clone() { return this; },
+      json: () => Promise.resolve({}),
+    });
+    global.fetch.onCall(1).resolves({ /* Then, the add */
+      ok: true,
+      status: 201,
+      clone() { return this; },
+      json: () => Promise.resolve({
+        id: 'lnk_999',
+        space_id: 'spc_0',
+        doorway_id: 'drw_1',
+        sensor_placement: 1,
+      }),
+    });
+    component.find('.environment-modal-sensor-placement-button-yes').simulate('click');
+
+    // Wait a bit for the promises to settle. FIXME: Not ideal.
+    await timeout(25);
+
+    // Verify the link was changed and the sensor placement was swapped.
+    assert.equal(store.getState().links.data[0].id, 'lnk_999');
+    assert.equal(store.getState().links.data[0].sensorPlacement, 1);
   });
 });
