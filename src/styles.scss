@@ -89,6 +89,10 @@ p {
 pre {
   line-height: $line-height-base;
 }
+// Change autofill color in chrome to be white.
+input[type=input], input[type=password] { &:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+} }
 
 // 
 // Component styles are included below for each component in the src/components folder.
