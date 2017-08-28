@@ -229,7 +229,8 @@ export function Environment({
               })}
             </ul>
 
-            {spaces.loading ? <LoadingSpinner /> : null}
+            {/* Show a loading spinner on the page when the collection is loading and no modal popup is visible. */}
+            {spaces.loading && activeModal.name === null ? <LoadingSpinner /> : null}
           </div>
         </div>
         <div className="doorway-column">
@@ -278,7 +279,8 @@ export function Environment({
               />;
             })}
 
-            {doorways.loading ? <LoadingSpinner /> : null}
+            {/* Show a loading spinner on the page when the collection is loading and no modal popup is visible. */}
+            {doorways.loading && activeModal.name === null ? <LoadingSpinner /> : null}
           </div>
         </div>
       </div>

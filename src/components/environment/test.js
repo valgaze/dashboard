@@ -525,12 +525,12 @@ describe('Space workflows', function() {
     // The error bar should be shown.
     assert.equal(component.find('.error-bar-visible').length, 1);
   });
-  it('should show a loading state when no doorways are loaded', async function() {
+  it('should show a loading state when no spaces are loaded', async function() {
     // Mount the connected version of the component.
     const store = storeFactory();
     const component = mount(<Provider store={store}>
       <DragDropWrapper>
-        <ConnectedEnvionment />
+        <ConnectedEnvionment activeModal={{type: null}} />
       </DragDropWrapper>
     </Provider>);
 
@@ -935,7 +935,7 @@ describe('Doorway workflows', function() {
     const store = storeFactory();
     const component = mount(<Provider store={store}>
       <DragDropWrapper>
-        <ConnectedEnvionment />
+        <ConnectedEnvionment activeModal={{type: null}} />
       </DragDropWrapper>
     </Provider>);
 
