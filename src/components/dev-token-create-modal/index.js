@@ -51,6 +51,7 @@ export default class TokenCreate extends React.Component {
               className="token-create-token-type-container"
               label="Token Type"
               htmlFor=""
+              editable={false}
               input={<div className="token-create-token-type-radio-group">
                 <div className="token-create-token-type-radio-item">
                   <input
@@ -70,7 +71,7 @@ export default class TokenCreate extends React.Component {
                   />
                   <label htmlFor="token-create-token-type-read-write">Read Write</label>
                 </div>
-                </div>}
+              </div>}
             />
 
             <Button
