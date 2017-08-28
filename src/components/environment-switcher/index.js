@@ -17,7 +17,7 @@ export function getActiveEnvironments(fields) {
   fields.forEach(f => {
     data[f.slug] = values[f.slug] || f.defaults[f.default];
   });
-  return values;
+  return data;
 }
 
 export default class EnvironmentSwitcher extends React.Component {
