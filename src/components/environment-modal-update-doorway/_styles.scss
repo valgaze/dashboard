@@ -15,6 +15,7 @@
 .update-doorway-edit-button {
   float: right;
   padding: 10px;
+  font-weight: normal;
 }
 
 // Textarea used to enter description for the doorway
@@ -22,4 +23,10 @@
 .update-doorway-description-container textarea {
   min-height: 5em;
   resize: vertical;
+}
+
+// Suffix after the doorway name
+.update-doorway-name-readonly span:after {
+  content: " Doorway";
+  color: $gray;
 }

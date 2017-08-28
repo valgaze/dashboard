@@ -55,7 +55,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               label="Time Zone"
               input={<InputBox
                 type="select"
-                id="update-doorway-timezone"
+                id="update-space-timezone"
                 value={this.state.timeZone}
                 onChange={e => this.setState({timeZone: e.target.value})}
               >
