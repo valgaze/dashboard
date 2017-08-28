@@ -537,6 +537,53 @@ describe('Space workflows', function() {
     // Loading spinner is visible.
     assert.equal(component.find('.space-column .loading-spinner').length, 1);
   });
+  it('should show loading in a space modal and not in the environment page when a modal is open', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+    store.dispatch(collectionSpacesSet([
+      {
+        id: 'spc_1',
+        name: 'my space',
+        description: '',
+        timeZone: 'America/New_York',
+        dailyReset: '12:00',
+        currentCount: 0,
+        capacity: null,
+      },
+    ]));
+    store.dispatch(collectionDoorwaysSet([]));
+    store.dispatch(collectionLinksSet([]));
+
+    // Click on the edit for the space
+    component.find('.environment-space-item-details').simulate('click');
+
+    // The popover should be visible.
+    assert.equal(store.getState().activeModal.name, 'update-space');
+    assert.equal(component.find('.environment-modal-update-space').length, 1);
+
+    // Click on the edit button
+    component.find('.update-space-edit-button').first().simulate('click');
+
+    // Click on the delete button, which makes an ajax request to delete the space.
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 204,
+      clone() { return this; },
+      json: () => Promise.resolve({}),
+    });
+    component.find('.update-space-delete-button').simulate('click');
+
+    // Ensure that loading spinner is visible in the card.
+    assert.equal(component.find('.card-loading-indeterminate').length, 1);
+
+    // And that the loading spinner is not visible on the environment page
+    assert.equal(component.find('.loading-spinner').length, 0);
+  });
 });
 
 describe('Doorway workflows', function() {
@@ -941,6 +988,49 @@ describe('Doorway workflows', function() {
 
     // Loading spinner is visible.
     assert.equal(component.find('.doorway-column .loading-spinner').length, 1);
+  });
+  it('should show loading in a doorway modal and not in the environment page when a modal is open', async function() {
+    // Mount the connected version of the component.
+    const store = storeFactory();
+    const component = mount(<Provider store={store}>
+      <DragDropWrapper>
+        <ConnectedEnvionment />
+      </DragDropWrapper>
+    </Provider>);
+    store.dispatch(collectionSpacesSet([]));
+    store.dispatch(collectionDoorwaysSet([
+      {
+        id: 'drw_1',
+        name: 'my doorway',
+        description: '',
+      },
+    ]));
+    store.dispatch(collectionLinksSet([]));
+
+    // Click on the edit for the doorway
+    component.find('.environment-doorway-item-details').simulate('click');
+
+    // The popover should be visible.
+    assert.equal(store.getState().activeModal.name, 'update-doorway');
+    assert.equal(component.find('.environment-modal-update-doorway').length, 1);
+
+    // Click on the edit button
+    component.find('.update-doorway-edit-button').first().simulate('click');
+
+    // Click on the delete button, which makes an ajax request to delete the doorway.
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 204,
+      clone() { return this; },
+      json: () => Promise.resolve({}),
+    });
+    component.find('.update-doorway-delete-button').simulate('click');
+
+    // Ensure that loading spinner is visible in the card.
+    assert.equal(component.find('.card-loading-indeterminate').length, 1);
+
+    // And that the loading spinner is not visible on the environment page
+    assert.equal(component.find('.loading-spinner').length, 0);
   });
 });
 
