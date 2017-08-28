@@ -51,7 +51,7 @@ export class Login extends React.Component {
     }).then(resp => {
       this.setState({loading: false, error: null, forgotPasswordConfirmation: resp.message});
     }).catch(error => {
-      this.setState({loading: false, error: error.message});
+      this.setState({loading: false, error});
     });
   }
 
@@ -97,7 +97,15 @@ export class Login extends React.Component {
 
   renderForgotPasswordForm() {
     return <div className="login-form-container">
-      <h2 className="login-password-reset-title">Forgot your password</h2>
+      {this.state.forgotPasswordConfirmation ? <Toast
+        className="login-toast"
+        type="success"
+        icon={<span className="login-toast-icon">&#xe908;</span>}
+      >
+        <p>{this.state.forgotPasswordConfirmation}</p>
+      </Toast> : null}
+
+      <h2 className="login-password-reset-title">Send password change request</h2>
       <InputStackGroup className="login-password-reset-form">
         <InputStackItem
           type="email"
@@ -109,17 +117,13 @@ export class Login extends React.Component {
         />
       </InputStackGroup>
 
-      {this.state.forgotPasswordConfirmation ? <span className="login-forgot-password-message">
-        {this.state.forgotPasswordConfirmation}
-      </span> : null}
-
       {/* Submit the form! */}
       <Button 
         className={classnames('login-submit-button', {loading: this.state.loading})}
         onClick={this.onForgotPassword.bind(this)}
         size="large"
         disabled={this.state.loading || this.state.email.indexOf('@') === -1}
-      >Send password reset email</Button>
+      >Send Request</Button>
 
       {/* Move to back to login page */}
       <div
@@ -137,8 +141,8 @@ export class Login extends React.Component {
       <Navbar />
 
       {/* Render any errors with previous login attempts */}
-      {this.state.error ? <Toast className="login-error" type="danger" icon={<span className="login-error-icon">&#xe928;</span>}>
-        <h3 className="login-error-header">Incorrect password</h3>
+      {this.state.error ? <Toast className="login-toast" type="danger" icon={<span className="login-toast-icon">&#xe928;</span>}>
+        <h3 className="login-toast-header">Incorrect password</h3>
         <p>{this.state.error}</p>
       </Toast> : null}
 

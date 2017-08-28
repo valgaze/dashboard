@@ -5,7 +5,7 @@
   padding-left: 5px;
   padding-right: 5px;
   @media (min-width: 450px) {
-    width: 350px;
+    width: 420px;
     padding-left: 30px;
     padding-right: 30px;
   }
@@ -45,7 +45,7 @@
 }
 
 // Show an error when there's an error on the login page.
-.login-error {
+.login-toast {
   position: absolute;
   top: 20px;
   z-index: 2000;
@@ -54,21 +54,21 @@
   width: calc(100% - 10px);
   margin-left: 5px;
 
-  // On Desktop, the error should be 350px wide.
+  // On Desktop, the error should be 420px wide.
   @media (min-width: 450px) {
-    width: 350px;
+    width: 420px;
     left: 50%;
-    margin-left: -(350px / 2);
+    margin-left: -(420px / 2);
   }
 }
-.login-error-header {
+.login-toast-header {
   color: $brand-danger;
   font-size: $font-size-4;
   font-weight: $font-weight-4;
   margin-bottom: 8px;
   margin-top: 8px;
 }
-.login-error-icon {
+.login-toast-icon {
   font-family: "Densicons";
   font-size: $font-size-3;
 }
@@ -78,7 +78,8 @@
 // Title on the top of the forgot password page
 .login-password-reset-title {
   font-size: $font-size-3;
-  font-weight: $font-weight-3;
+  font-weight: normal;
+  margin-bottom: 40px;
 }
 
 // Back link to the login page on the forgot password page
