@@ -9,6 +9,7 @@ import LoadingSpinner from '../loading-spinner/index';
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import Button from '@density/ui-button';
 import Toast from '@density/ui-toast';
+import Navbar from '@density/ui-navbar';
 
 const LOGIN = 'LOGIN', FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 
@@ -133,6 +134,14 @@ export class Login extends React.Component {
 
   render() {
     return <div className="login">
+      <Navbar />
+
+      {/* Render any errors with previous login attempts */}
+      {this.state.error ? <Toast className="login-error" type="danger" icon={<span className="login-error-icon">&#xe928;</span>}>
+        <h3 className="login-error-header">Incorrect password</h3>
+        <p>{this.state.error}</p>
+      </Toast> : null}
+
       <div className="login-section">
         <img
           className="login-density-logo"
@@ -144,12 +153,6 @@ export class Login extends React.Component {
         {this.state.view === LOGIN ?
           this.renderLoginForm.apply(this) :
           this.renderForgotPasswordForm.apply(this)}
-
-        {/* Render any errors with previous login attempts */}
-        {this.state.error ? <Toast className="login-error" type="danger" icon={<span className="login-error-icon">&#xe928;</span>}>
-          <h3 className="login-error-header">Incorrect password</h3>
-          <p>{this.state.error}</p>
-        </Toast> : null}
       </div>
     </div>;
   }
