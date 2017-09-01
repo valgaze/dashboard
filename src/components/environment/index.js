@@ -228,11 +228,19 @@ export function Environment({
                   onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
                   onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
                   onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link, space})}
-                  onClickDetails={e => onOpenModal(`update-space`, {
-                    space,
-                    doorways: allDoorwaysInSpace(doorways.data, links.data, space).doorways,
-                    popoverPositionTarget: e.target,
-                  })}
+                  onClickDetails={e => {
+                    // When the details button on a space is clicked, toggle the state of the
+                    // popover.
+                    if (!activeModal.name) {
+                      onOpenModal(`update-space`, {
+                        space,
+                        doorways: allDoorwaysInSpace(doorways.data, links.data, space).doorways,
+                        popoverPositionTarget: e.target,
+                      });
+                    } else {
+                      onCloseModal();
+                    }
+                  }}
                 />;
               })}
             </ul>
@@ -284,10 +292,18 @@ export function Environment({
               return <EnvironmentDoorwayItem
                 key={doorway.id}
                 doorway={doorway}
-                onClickDetails={e => onOpenModal('update-doorway', {
-                  doorway,
-                  popoverPositionTarget: e.target,
-                })}
+                onClickDetails={e => {
+                  // When the details button on a doorway is clicked, toggle the state of the
+                  // popover.
+                  if (!activeModal.name) {
+                    onOpenModal('update-doorway', {
+                      doorway,
+                      popoverPositionTarget: e.target,
+                    })
+                  } else {
+                    onCloseModal();
+                  }
+                }}
               />;
             })}
 
