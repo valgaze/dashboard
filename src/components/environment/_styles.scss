@@ -95,6 +95,8 @@
   position: relative;
   top: (34px + 20px);
 }
+// When a popover is open, keep the column from scrolling.
+.column-body-locked { overflow: hidden; }
 
 // Within each column, if its empty, show a button to create a space or doorway.
 .environment-space-empty, .environment-doorway-empty {

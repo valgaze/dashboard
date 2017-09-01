@@ -13,6 +13,7 @@
   font-weight: $font-weight-base;
   user-select: none;
   color: $gray;
+  position: relative;
 }
 // The first .form-label-label should not have a top margin.
 .form-label:first-child .form-label-label {
@@ -35,4 +36,13 @@
 .form-label span {
   flex: 1;
   height: 34px;
+}
+
+.form-label-info-icon {
+  font-family: "Densicons";
+  font-size: $font-size-3;
+
+  position: absolute;
+  top: -4px;
+  right: 0px;
 }

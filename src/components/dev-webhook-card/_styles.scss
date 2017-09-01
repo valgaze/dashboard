@@ -7,6 +7,11 @@
   font-weight: normal;
 }
 
+.webhook-card-body {
+  display: flex;
+  flex-direction: column;
+}
+
 .webhook-card-endpoint-label {
   display: block;
   color: $gray;
@@ -16,14 +21,10 @@
 
 .webhook-card-endpoint {
   font-family: $font-monospace;
+  color: $gray-darkest;
 
   display: block;
-  padding: 13.5px 10px;
-  font-size: $font-size-base;
-
-  background-color: $gray-lighter;
-  color: $gray-darker;
-  border-radius: $border-radius-base;
+  flex: 1;
 
   /* These are technically the same, but use both */
   overflow-wrap: break-word;

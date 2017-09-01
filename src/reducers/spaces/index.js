@@ -12,7 +12,7 @@ import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
 
 import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
-import { SORT_NEWEST } from '../../helpers/sort-collection/index';
+import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
 
@@ -24,7 +24,7 @@ const initialState = {
   filters: {
     doorwayId: null,
     search: '',
-    sort: SORT_NEWEST,
+    sort: SORT_A_Z,
   },
 
   // An object that maps space id to an array of events

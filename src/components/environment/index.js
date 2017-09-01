@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import EnvironmentSpaceItem from '../environment-space-item/index';
 import EnvironmentDoorwayItem from '../environment-doorway-item/index';
@@ -78,7 +79,7 @@ export function Environment({
   return <div className="environment">
     <Subnav>
       <SubnavItem active href="#/environment/spaces">Spaces</SubnavItem>
-      <SubnavItem>Sensors</SubnavItem>
+      {/* <SubnavItem>Sensors</SubnavItem> */}
     </Subnav>
 
     {/* Render any errors for the spaces or doorways collections. */}
@@ -132,6 +133,8 @@ export function Environment({
       {activeModal.name === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
         error={links.error}
         loading={links.loading}
+        link={activeModal.data.link}
+        space={activeModal.data.space}
         onSubmit={() => onChangeSensorPlacement(activeModal.data.link)}
         onDismiss={onCloseModal}
       /> : null}
@@ -140,6 +143,7 @@ export function Environment({
       {activeModal.name === 'assign-sensor-placement' ? <EnvironmentModalSensorPlacementAssignment
         error={links.error}
         loading={links.loading}
+        space={activeModal.data.space}
         onSubmit={sensorPlacement => onLinkDoorwayToSpace(activeModal.data.doorway, activeModal.data.space, sensorPlacement)}
         onDismiss={onCloseModal}
       /> : null}
@@ -183,7 +187,7 @@ export function Environment({
             <InputBox
               className="environment-space-search-box"
               type="text"
-              placeholder="Search ..."
+              placeholder="Filter spaces ..."
               value={spaces.filters.search}
               onChange={e => onSpaceSearch(e.target.value)}
               disabled={spaces.data.length === 0}
@@ -191,15 +195,15 @@ export function Environment({
             <InputBox
               className="environment-space-order-box"
               type="select"
-              value={spaces.filters.order}
+              value={spaces.filters.sort}
               onChange={e => onSpaceSort(e.target.value)}
               disabled={spaces.data.length === 0}
             >
-              <option value={SORT_NEWEST}>Newest</option>
               <option value={SORT_A_Z}>A - Z</option>
+              <option value={SORT_NEWEST}>Newest</option>
             </InputBox>
           </div>
-          <div className="column-body">
+          <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>
             <Toast className="environment-space-header" icon="&#xe91e;">
               Edit space details and remove doorways below.
             </Toast>
@@ -219,7 +223,7 @@ export function Environment({
                   links={links.data}
                   onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
                   onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
-                  onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link})}
+                  onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link, space})}
                   onClickDetails={e => onOpenModal(`update-space`, {
                     space,
                     doorways: allDoorwaysInSpace(doorways.data, links.data, space).doorways,
@@ -240,7 +244,7 @@ export function Environment({
             <InputBox
               className="environment-doorway-search-box"
               type="text"
-              placeholder="Search ..."
+              placeholder="Filter doorways ..."
               value={doorways.filters.search}
               onChange={e => onDoorwaySearch(e.target.value)}
               disabled={doorways.data.length === 0}
@@ -248,16 +252,16 @@ export function Environment({
             <InputBox
               className="environment-doorway-order-box"
               type="select"
-              value={doorways.filters.order}
+              value={doorways.filters.sort}
               onChange={e => onDoorwaySort(e.target.value)}
               disabled={doorways.data.length === 0}
             >
-              <option value={SORT_NEWEST}>Newest</option>
               <option value={SORT_A_Z}>A - Z</option>
+              <option value={SORT_NEWEST}>Newest</option>
             </InputBox>
           </div>
 
-          <div className="column-body">
+          <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>
             <Toast className="environment-doorway-header" icon="&#xe91e;">
               To link a doorway to a space, drag the doorway
               from below to a space on the left.

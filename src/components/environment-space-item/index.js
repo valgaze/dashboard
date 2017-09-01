@@ -93,8 +93,11 @@ export function EnvironmentSpaceItem({
 
           {/* Empty state */}
           {doorways.length === 0 ? <span className="environment-space-item-body-empty">
-            <IconDragDrop className="environment-space-item-empty-state-icon" />
-            Drag and Drop Doorways Here
+            <span className="environment-space-item-empty-state-label-desktop">
+              <IconDragDrop className="environment-space-item-empty-state-icon" />
+              Drag and Drop Doorways Here
+            </span>
+            <span className="environment-space-item-empty-state-label-mobile">No Doorways linked to space</span>
           </span> : null}
         </ul>
       </CardBody>

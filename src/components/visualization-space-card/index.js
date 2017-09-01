@@ -25,27 +25,29 @@ export default function SpaceCard({space, events, onClick}) {
   if (space) {
     const capacityPercent = space.capacity ? (space.currentCount / space.capacity) * 100 : null;
     return <Card className="space-card">
-      <CardHeader className="space-card-header" onClick={onClick}>
-        <span className="space-card-header-name">{space.name}</span>
-        <span className="space-card-header-count">
-          {/* The below prints `1 person` or `n people` */}
-          <CountLabel count={space.currentCount} />
-        </span>
-      </CardHeader>
-      <CardBody>
-        <div className="space-card-capacity-container">
-          <div className="space-card-capacity-information">
-            <div className="space-card-capacity-number">
-              {/* The below prints `1 person` or `n people`. If `space.capacity` is null, leaves the element empty.*/}
-              <CountLabel count={space.capacity} />
+      <div className="space-card-click-region" onClick={onClick}>
+        <CardHeader className="space-card-header">
+          <span className="space-card-header-name">{space.name}</span>
+          <span className="space-card-header-count">
+            {/* The below prints `1 person` or `n people` */}
+            <CountLabel count={space.currentCount} />
+          </span>
+        </CardHeader>
+        <CardBody>
+          <div className="space-card-capacity-container">
+            <div className="space-card-capacity-information">
+              <div className="space-card-capacity-number">
+                {/* The below prints `1 person` or `n people`. If `space.capacity` is null, leaves the element empty.*/}
+                <CountLabel count={space.capacity} />
+              </div>
+              <div className="space-card-capacity-percent">{capacityPercent}</div>
             </div>
-            <div className="space-card-capacity-percent">{capacityPercent}</div>
+            <div className="space-card-capacity-linear-progress">
+              <LinearProgress percentFull={capacityPercent || 0} transitionDuration={timings.timingBase} />
+            </div>
           </div>
-          <div className="space-card-capacity-linear-progress">
-            <LinearProgress percentFull={capacityPercent || 0} transitionDuration={timings.timingBase} />
-          </div>
-        </div>
-      </CardBody>
+        </CardBody>
+      </div>
 
       <div className="space-card-chart">
         <IngressEgressChart events={events || []} graphDurationInMin={1} />

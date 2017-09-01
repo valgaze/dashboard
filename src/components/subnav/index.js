@@ -8,10 +8,9 @@ export default function Subnav({children}) {
 }
 
 export function SubnavItem({href, active, external, children}) {
-  return <li className={classnames(`subnav-item`, {active})}>
+  return <li className={classnames(`subnav-item`, {active, external})}>
     <a target={external ? '_blank' : '_self'} href={href}>
       {children}
-      {external ? <span className="subnav-external-arrow">&rarr;</span> : null}
     </a>
   </li>;
 }

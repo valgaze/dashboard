@@ -98,7 +98,7 @@ export function TokenList({
         {/* Search box to filter the list of tokens */}
         <div className="token-list-search">
           <InputBox
-            placeholder="Search tokens ..."
+            placeholder="Filter tokens ..."
             value={tokens.filters.search}
             onChange={e => onFilterTokenList(e.target.value)}
           />

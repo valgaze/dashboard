@@ -76,12 +76,6 @@ export class Login extends React.Component {
         />
       </InputStackGroup>
 
-      {/* Move to forgot password view */}
-      <div
-        className="login-forgot-password-link"
-        onClick={() => this.setState({view: FORGOT_PASSWORD, error: null})}
-      >Forgot Password</div>
-
       {/* Submit the form! */}
       <Button 
         className={classnames('login-submit-button', {loading: this.state.loading})}
@@ -89,6 +83,13 @@ export class Login extends React.Component {
         onClick={this.onLogin.bind(this)}
         disabled={this.state.loading || this.state.email.indexOf('@') === -1}
       >Login</Button>
+
+      {/* Move to forgot password view */}
+      <div
+        className="login-forgot-password-link"
+        onClick={() => this.setState({view: FORGOT_PASSWORD, error: null})}
+      >Forgot Password</div>
+
 
       {/* Loading spinner is shown when the login is pending */}
       {this.state.loading ? <LoadingSpinner /> : null}

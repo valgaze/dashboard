@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import ModalHeaderActionButton from '../modal-header-action-button/index';
+import InputBox from '@density/ui-input-box';
 
 export default function WebhookCard({
   webhook,
@@ -16,9 +17,18 @@ export default function WebhookCard({
         className="webhook-card-edit"
       >Edit</ModalHeaderActionButton>
     </CardHeader>
-    <CardBody>
+    <CardBody className="webhook-card-body">
       <span className="webhook-card-endpoint-label">Payload URL</span>
-      <code className="webhook-card-endpoint">{webhook.endpoint}</code>
+      <InputBox
+        className="webhook-card-endpoint"
+        value={webhook.endpoint}
+        readOnly={true}
+        // Text box is read only and does not contain data that can be spell-checked.
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
+      />
 
       <div className="webhook-card-active-checkbox">
         <input defaultChecked={true} type="checkbox" id={`webhook-card-${webhook.id}-active`} />

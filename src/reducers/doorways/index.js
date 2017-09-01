@@ -8,6 +8,7 @@ import { COLLECTION_DOORWAYS_CREATE } from '../../actions/collection/doorways/cr
 import { COLLECTION_DOORWAYS_UPDATE } from '../../actions/collection/doorways/update';
 import { COLLECTION_DOORWAYS_DESTROY } from '../../actions/collection/doorways/destroy';
 
+import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
 
@@ -15,6 +16,7 @@ const initialState = {
   filters: {
     spaceId: null,
     search: '',
+    sort: SORT_A_Z,
   },
   loading: true,
   error: null,

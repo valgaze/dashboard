@@ -69,6 +69,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               className="update-space-daily-reset-container"
               htmlFor="update-space-daily-reset"
               label="Daily Reset"
+              infoLabel="info for resets goes here."
               input={<InputBox
                 type="select"
                 id="update-space-daily-reset"
@@ -128,7 +129,10 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
         <FormLabel
           htmlFor="update-space-daily-reset"
           label="Daily Reset"
-          input={<span>{this.state.dailyReset}</span>}
+          input={<span>{(function(timeZone, dailyReset) {
+            const resetTime = generateLocalResetTimeChoices(timeZone).find(i => i.utc === dailyReset)
+            return resetTime ? resetTime.localTime : `${dailyReset} UTC`;
+          })(this.state.timeZone, this.state.dailyReset)}</span>}
           editable={false}
         />
 

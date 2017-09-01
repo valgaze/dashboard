@@ -36,9 +36,21 @@ $environment-space-item-minimum-height: 64px;
   font-size: $font-size-base;
   line-height: $environment-space-item-minimum-height;
 }
-.environment-space-item-empty-state-icon {
-  margin-right: 10px;
+// On desktop/laptop, show this label.
+.environment-space-item-empty-state-label-desktop {
+  display: none;
+  @media (min-width: $screen-md-min) {
+    display: block;
+  }
 }
+// On mobile, show this label.
+.environment-space-item-empty-state-label-mobile {
+  display: block;
+  @media (min-width: $screen-md-min) {
+    display: none;
+  }
+}
+.environment-space-item-empty-state-icon { margin-right: 10px; }
 
 // Render each doorway within the space.
 .environment-space-item-doorways {
@@ -189,6 +201,17 @@ $environment-space-item-doorways-placement-padding: 6px;
   @media (max-width: $screen-sm-max) { display: none; }
 }
 
+// By default, hide the delete button on doorways in a space that aren't being hovered over.
+.environment-space-item-doorways li .environment-space-item-doorways-delete {
+  transition: all $timing-small ease-in-out;
+  opacity: 0;
+}
+// When the user hovers over a doorway inside of the space body, show the `x` in the corner of the
+// space.
+.environment-space-item-doorways li:hover .environment-space-item-doorways-delete { opacity: 1; }
+
+
+// The title of the space card, rendered inside of the .card-header
 .environment-space-item-name {
   flex: 1;
   font-size: $font-size-4;

@@ -16,6 +16,7 @@ export default class DescriptionModal extends React.Component {
       show={this.state.show}
       popover={popover}
       onDismiss={() => this.setState({show: false})}
+      className="dev-description-popover"
     >
       <span
         className="dev-description-icon"

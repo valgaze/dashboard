@@ -3,15 +3,25 @@ import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardLoading, CardBody } from '@density/ui-card';
 import Button from '@density/ui-button';
 
-export default function EnvironmentModalSensorPlacement({loading, error, onSubmit, onDismiss}) {
+export default function EnvironmentModalSensorPlacement({
+  loading,
+  space,
+  link,
+
+  onSubmit,
+  onDismiss,
+}) {
   return <Modal onClickBackdrop={onDismiss}>
     <Card type="modal" className="environment-modal-sensor-placement">
       {loading ? <CardLoading indeterminate /> : null}
       <CardHeader>Sensor Placement</CardHeader>
       <CardBody>
         <p>
-          Would you like to swap sensor placement?
-          There should be some text here. And probably a graphic.
+          Are you sure you want to move the sensor from the
+          <strong> {link.sensorPlacement === 1 ? 'inside' : 'outside'} </strong>
+          to the
+          <strong> {link.sensorPlacement === 1 ? 'outside' : 'inside'} </strong>
+          of <strong>{space.name}</strong>?
         </p>
 
         <div className="environment-modal-sensor-placement-button-group">

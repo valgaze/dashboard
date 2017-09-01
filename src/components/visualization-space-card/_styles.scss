@@ -6,15 +6,17 @@
   font-size: $font-size-3;
   font-weight: $font-weight-3;
   display: flex;
-
-  &:hover .space-card-header-name {
-    text-decoration: underline;
-    cursor: pointer;
-  }
 }
 .space-card-header-count {
   margin-left: auto;
 }
+
+// The white, top section of thec ard should be clickable.
+.space-card-click-region { cursor: pointer; }
+
+// When the user hovers over the entire card white section, underline the card title sicne the card
+// is clickable.
+.space-card-click-region:hover .space-card-header-name { text-decoration: underline; }
 
 .space-card-capacity-information {
   display: flex;

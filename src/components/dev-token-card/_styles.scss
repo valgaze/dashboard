@@ -17,7 +17,7 @@
 
 // Token card contents
 .token-card-token-content {
-  font-family: "Menlo", "Monaco", "Consolas", "Courier New", monospace;
+  font-family: $font-monospace;
   color: $gray-darkest;
 
   display: block;
