@@ -12,6 +12,7 @@ import EnvironmentModalUpdateDoorway from '../environment-modal-update-doorway/i
 import EnvironmentModalUpdateSpace from '../environment-modal-update-space/index';
 import LoadingSpinner from '../loading-spinner/index';
 import ErrorBar from '../error-bar/index';
+import DismissableToast from '../environment-space-dismissable-toast/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 import sortCollection, { SORT_A_Z, SORT_NEWEST } from '../../helpers/sort-collection/index';
@@ -32,7 +33,6 @@ import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 
 import Fab from '@density/ui-fab';
-import Toast from '@density/ui-toast';
 import ContextMenu, { ContextMenuItem } from '@density/ui-context-menu';
 import InputBox from '@density/ui-input-box';
 import Button from '@density/ui-button';
@@ -204,9 +204,13 @@ export function Environment({
             </InputBox>
           </div>
           <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>
-            <Toast className="environment-space-header" icon="&#xe91e;">
+            <DismissableToast
+              storageKey="environment-space-space-column"
+              className="environment-space-header"
+              icon="&#xe91e;"
+            >
               Edit space details and remove doorways below.
-            </Toast>
+            </DismissableToast>
 
             {/* Space column, empty state */}
             {!spaces.loading && spaces.data.length === 0 ? <div className="environment-space-empty">
@@ -262,10 +266,14 @@ export function Environment({
           </div>
 
           <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>
-            <Toast className="environment-doorway-header" icon="&#xe91e;">
+            <DismissableToast
+              storageKey="environment-space-doorway-column"
+              className="environment-doorway-header"
+              icon="&#xe91e;"
+            >
               To link a doorway to a space, drag the doorway
               from below to a space on the left.
-            </Toast>
+            </DismissableToast>
             {/* Doorway column, empty state */}
             {!doorways.loading && doorways.data.length === 0 ? <div className="environment-doorway-empty">
               <div className="environment-doorway-empty-label">Here is where you manage doorways</div>

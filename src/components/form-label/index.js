@@ -1,7 +1,5 @@
 import * as React from 'react';
 import classnames from 'classnames';
-import Popover from '@density/ui-popover';
-import Card, { CardBody } from '@density/ui-card';
 
 export default function FormLabel({label, infoLabel, input, htmlFor, className, editable}) {
   // `editable` should default to true if unset.
