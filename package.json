@@ -15,7 +15,7 @@
     "@density/ui-context-menu": "^0.2.0",
     "@density/ui-density-mark": "^0.2.0",
     "@density/ui-fab": "^0.2.1",
-    "@density/ui-input-box": "^0.2.8",
+    "@density/ui-input-box": "^0.3.0",
     "@density/ui-input-stack": "0.2.0",
     "@density/ui-modal": "^0.2.1",
     "@density/ui-navbar": "^0.0.11",
