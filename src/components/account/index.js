@@ -47,7 +47,7 @@ export class Account extends React.Component {
     return <div className="account">
 
       {/* Render any errors from the server */}
-      <ErrorBar message={this.state.error} showRefresh />
+      <ErrorBar message={this.state.error} />
 
       <Card className="account-card" type="modal">
         <CardHeader>
