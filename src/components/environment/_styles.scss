@@ -20,7 +20,7 @@
   font-size: $font-size-base;
 
   // Hide the fab
-  @media (max-width: $screen-sm-max) {
+  @media (max-width: $screen-xs-max) {
     display: none;
   }
 }
@@ -62,18 +62,18 @@
 }
 
 .space-column {
-  @include grid-width(24, 24, 12, 12);
+  @include grid-width(24, 12, 12, 12);
   height: calc(100vh - 300px);
   margin-top: 40px;
 }
 .doorway-column {
-  @include grid-width(0, 0, 12, 12);
+  @include grid-width(0, 12, 12, 12);
   height: calc(100vh - 300px);
   margin-top: 40px;
   display: none;
 
   // Hide doorways column on mobile
-  @media (min-width: $screen-sm-max) {
+  @media (min-width: $screen-xs-max) {
     display: flex;
   }
 }
@@ -84,7 +84,7 @@
 
   // Don't show the toasts on mobile, as they explain the dragging functionality that the page
   // doesn't support on mobile.
-  @media (max-width: $screen-sm-max) { display: none; }
+  @media (max-width: $screen-xs-max) { display: none; }
 }
 
 // These are the labels above each column on the environment page.

@@ -39,14 +39,14 @@ $environment-space-item-minimum-height: 64px;
 // On desktop/laptop, show this label.
 .environment-space-item-empty-state-label-desktop {
   display: none;
-  @media (min-width: $screen-md-min) {
+  @media (min-width: $screen-xs-max) {
     display: block;
   }
 }
 // On mobile, show this label.
 .environment-space-item-empty-state-label-mobile {
   display: block;
-  @media (min-width: $screen-md-min) {
+  @media (min-width: $screen-xs-max) {
     display: none;
   }
 }
@@ -128,7 +128,7 @@ $environment-space-item-doorways-placement-padding: 6px;
   border-top-left-radius: $border-radius-small;
   border-bottom-left-radius: $border-radius-small;
   // On mobile, since the action button is hidden, add borders to the rest of the cards.
-  @media (max-width: $screen-sm-max) {
+  @media (max-width: $screen-xs-max) {
     border-right: 1px solid $gray-light;
     border-top-right-radius: $border-radius-small;
     border-bottom-right-radius: $border-radius-small;
@@ -159,13 +159,13 @@ $environment-space-item-doorways-placement-padding: 6px;
   }
 
   // On mobile, hide the button to switch the sensor direction.
-  @media (max-width: $screen-sm-max) {
+  @media (max-width: $screen-xs-max) {
     display: none;
   }  
 }
 // On hover on a computer (not a phone), make the outline on the sensor direction tag blue.
 .environment-space-item-doorways-placement:hover .environment-space-item-doorways-placement-label {
-  @media (min-width: $screen-sm-max) {
+  @media (min-width: $screen-xs-max) {
     border-color: $brand-primary;
   }
 }
@@ -198,7 +198,7 @@ $environment-space-item-doorways-placement-padding: 6px;
   }
 
   // On small screens, the environment page is immutable.
-  @media (max-width: $screen-sm-max) { display: none; }
+  @media (max-width: $screen-xs-max) { display: none; }
 }
 
 // By default, hide the delete button on doorways in a space that aren't being hovered over.
@@ -230,7 +230,7 @@ $environment-space-item-doorways-placement-padding: 6px;
   user-select: none;
 
   // Don't show the icon on mobile.
-  @media (max-width: $screen-sm-max) { display: none; }
+  @media (max-width: $screen-xs-max) { display: none; }
 }
 .environment-space-item-details:active {
   color: $gray-dark;
