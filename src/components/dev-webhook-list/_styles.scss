@@ -6,8 +6,14 @@
 
 .webhook-list-header {
   margin-top: 40px;
+
+  // On a computer:
+  // 1. Decrease the padding along the top edge.
+  // 2. Make the header container full width on a computer so that the search box moves all the way
+  // to the right.
   @media (min-width: $screen-xs-max) {
-    display: flex;
+    margin-top: 40px; /* 1 */
+    display: flex; /* 2 */
   }
 }
 // The "webhook" header at the top of the page.
@@ -40,6 +46,11 @@
   width: 200px;
   margin-right: 10px;
   margin-top: 70px;
+
+  margin-top: 0px; // On mobile
+  @media (min-width: $screen-xs-max) {
+    margin-top: 70px; // On a computer
+  }
 }
 
 .webhook-list {
