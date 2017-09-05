@@ -63,11 +63,13 @@
 
 .space-column {
   @include grid-width(24, 12, 12, 12);
-  height: calc(100vh - 300px);
 
-  // On a computer, add a space between the top of the column and the nav.
+  // On a computer:
+  // 1. Set a fixed height on the columns. FIXME: This sucks currently. There's got to be a better way.
+  // 2. Add a space between the top of the column and the nav.
   @media (min-width: $screen-xs-max) {
-    margin-top: 40px;
+    height: calc(100vh - 300px); /* 1 */
+    margin-top: 40px; /* 2 */
   }
 }
 .doorway-column {
