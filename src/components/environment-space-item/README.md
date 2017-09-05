@@ -9,3 +9,5 @@ list.
   within the space.
 - `onDoorwayDropped: (space) => any` - A callback that is called when the user drops a doorway onto
   a space.
+- `onDoorwayDroppedAlreadyInSpace: (doorway) => any` - A vallback that is called when a doorway is
+  dropped into a space that it is already linked to.

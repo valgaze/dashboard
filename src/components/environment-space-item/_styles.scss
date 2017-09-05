@@ -23,7 +23,6 @@ $environment-space-item-minimum-height: 64px;
   background-color: $gray-lightest;
 }
 .card .card-body.environment-space-item-body.is-dropping { background-color: $gray-lighter; }
-.card .card-body.environment-space-item-body.is-dropping-invalid { background-color: $brand-danger; }
 
 // Center align the empty state.
 .card .card-body.environment-space-item-body.empty { text-align: center; }

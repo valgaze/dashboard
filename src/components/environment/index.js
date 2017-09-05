@@ -10,6 +10,7 @@ import EnvironmentModalSensorPlacement from '../environment-modal-sensor-placeme
 import EnvironmentModalSensorPlacementAssignment from '../environment-modal-sensor-placement-assignment/index';
 import EnvironmentModalUpdateDoorway from '../environment-modal-update-doorway/index';
 import EnvironmentModalUpdateSpace from '../environment-modal-update-space/index';
+import EnvironmentModalDoorwayAlreadyInSpace from '../environment-modal-doorway-already-in-space/index';
 import LoadingSpinner from '../loading-spinner/index';
 import ErrorBar from '../error-bar/index';
 import DismissableToast from '../environment-space-dismissable-toast/index';
@@ -148,6 +149,13 @@ export function Environment({
         onDismiss={onCloseModal}
       /> : null}
 
+      {/* Dropping a doorway into a space where the doorway is already linked to the space should show an error. */}
+      {activeModal.name === 'doorway-already-in-space' ? <EnvironmentModalDoorwayAlreadyInSpace
+        doorway={activeModal.data.doorway}
+        space={activeModal.data.space}
+        onDismiss={onCloseModal}
+      /> : null}
+
       {/* Updating spaces and doorways */}
       {activeModal.name === 'update-doorway' ? <EnvironmentModalUpdateDoorway
         error={doorways.error}
@@ -225,7 +233,14 @@ export function Environment({
                   space={space}
                   doorways={allDoorwaysInSpace(doorways.data, links.data, space).doorways}
                   links={links.data}
+
+                  // Called when the user drags a space into a doorway.
                   onDoorwayDropped={doorway => onOpenModal('assign-sensor-placement', {doorway, space})}
+
+                  // If the user drops a doorway into a space that that doorway is already linked
+                  // to, show an error.
+                  onDoorwayDroppedAlreadyInSpace={doorway => onOpenModal('doorway-already-in-space', {doorway, space})}
+
                   onDoorwayLinkDeleted={onUnlinkDoorwayToSpace}
                   onSensorPlacementChange={link => onOpenModal(`confirm-sensor-placement-change`, {link, space})}
                   onClickDetails={e => {

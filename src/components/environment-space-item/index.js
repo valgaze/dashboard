@@ -7,20 +7,20 @@ import Card, { CardHeader, CardBody } from '@density/ui-card';
 import { IconDragDrop, IconSwitch } from '../icons/index';
 
 const doorwayTarget = {
-  // When a doorway is dropped onto the space card, then call the `onDoorwayDropped` callback.
+  // Handle dropping a doorway into a space.
   drop(props, monitor, component) {
-    props.onDoorwayDropped(monitor.getItem().doorway);
-  },
-  // Allow a doorway to be dropped if there isn't already a link between it and the space it is
-  // being dropped on (ie, don't create duplicate links).
-  canDrop({links, space}, monitor) {
     const item = monitor.getItem();
     if (item) {
-      return !doorwayHasLinkToSpace(links, space, item.doorway);
-    } else {
-      return false;
+      if (doorwayHasLinkToSpace(props.links, props.space, item.doorway)) {
+        // The user tried to drop a doorway that is already linked to the given space. Show an error.
+        props.onDoorwayDroppedAlreadyInSpace(item.doorway);
+      } else {
+        // The given doorway isn't in the space. Create a link between the dragged doorway and the
+        // space the doroway has been dropped within.
+        props.onDoorwayDropped(monitor.getItem().doorway);
+      }
     }
-  }
+  },
 };
 
 const dropTarget = DropTarget('doorway', doorwayTarget, (connect, monitor) => ({
