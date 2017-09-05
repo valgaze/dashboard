@@ -39,6 +39,7 @@
 .webhook-list-search input {
   width: 200px;
   margin-right: 10px;
+  margin-top: 70px;
 }
 
 .webhook-list {
@@ -47,7 +48,7 @@
 
 .webhook-list-item {
   @include grid-width(24, 12, 12, 12);
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 // The loading indicator's container. Make sure it is full width.
@@ -58,7 +59,7 @@
 .webhook-container .fab {
   position: absolute;
   right: 16px;
-  top: 50px;
+  top: -2px;
 
   line-height: 55px;
   font-family: "Densicons";
