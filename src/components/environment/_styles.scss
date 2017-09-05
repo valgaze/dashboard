@@ -64,17 +64,22 @@
 .space-column {
   @include grid-width(24, 12, 12, 12);
   height: calc(100vh - 300px);
-  margin-top: 40px;
+
+  // On a computer, add a space between the top of the column and the nav.
+  @media (min-width: $screen-xs-max) {
+    margin-top: 40px;
+  }
 }
 .doorway-column {
   @include grid-width(0, 12, 12, 12);
   height: calc(100vh - 300px);
-  margin-top: 40px;
   display: none;
 
-  // Hide doorways column on mobile
+  // Hide doorways column on mobile. Also, on a computer, add a space between the top of the column
+  // and the nav.
   @media (min-width: $screen-xs-max) {
     display: flex;
+    margin-top: 40px;
   }
 }
 
