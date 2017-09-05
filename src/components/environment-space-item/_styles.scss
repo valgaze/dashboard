@@ -61,7 +61,6 @@ $environment-space-item-minimum-height: 64px;
   background-color: #fff;
   display: inline-block;
   position: relative;
-  height: (43px - 2px - 8px - 8px);
 
   cursor: default;
   user-select: none;
@@ -72,8 +71,9 @@ $environment-space-item-minimum-height: 64px;
   border-radius: $border-radius-small;
 
   color: $gray-darkest;
+  // These paddings are carefully tuned to make the height of the doorway exactly 43px.
   padding-top: 8px;
-  padding-bottom: 8px;
+  padding-bottom: 13px;
   padding-left: 10px;
   padding-right: 8px;
 
