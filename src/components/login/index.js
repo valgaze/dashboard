@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { accounts } from '@density-int/client';
 import sessionTokenSet from '../../actions/session-token/set';
-import LoadingSpinner from '../loading-spinner/index';
 
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import Button from '@density/ui-button';
@@ -89,10 +88,6 @@ export class Login extends React.Component {
         className="login-forgot-password-link"
         onClick={() => this.setState({view: FORGOT_PASSWORD, error: null})}
       >Forgot Password</div>
-
-
-      {/* Loading spinner is shown when the login is pending */}
-      {this.state.loading ? <LoadingSpinner /> : null}
     </div>;
   }
 
@@ -131,15 +126,13 @@ export class Login extends React.Component {
         className="login-forgot-password-back-link"
         onClick={() => this.setState({view: LOGIN, error: null})}
       >Back to login</div>
-
-      {/* Loading spinner is shown when the login is pending */}
-      {this.state.loading ? <LoadingSpinner /> : null}
     </div>;
   }
 
   render() {
     return <div className="login">
       <Navbar />
+      { this.state.loading ? <div className="login-navbar-loading" /> : null }
 
       {/* Render any errors with previous login attempts */}
       {this.state.error ? <Toast className="login-toast" type="danger" icon={<span className="login-toast-icon">&#xe928;</span>}>
