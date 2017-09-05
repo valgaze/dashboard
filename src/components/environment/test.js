@@ -1203,14 +1203,19 @@ describe('Link workflows (aka, dragging doorways to spaces)', function() {
     // The space should change style to indicate that it can not accept the doorway.
     assert(component.find('.environment-space-item-body').hasClass('is-dropping-invalid'));
 
-    // Drop the doorway onto the space.
+    // Drop the doorway onto the space, and complete the drag operation.
     backend.simulateDrop();
-
-    // No modal should show up.
-    assert.equal(store.getState().activeModal.name, null);
-
-    // Complete the drag operation.
     backend.simulateEndDrag();
+
+    // Open the modal to tell the user that what they just did won't work
+    assert.equal(store.getState().activeModal.name, 'doorway-already-in-space');
+    assert.equal(component.find('.environment-modal-doorway-already-in-space').length, 1);
+
+    // Click the dismiss button on the modal.
+    component.find('.environment-modal-doorway-already-in-space-button').simulate('click');
+
+    // Modal should be closed.
+    assert.equal(store.getState().activeModal.name, null);
   });
   it('should unlink a doorway from a space when the x is clicked on the doorway', async function() {
     // Mount the connected version of the component.
