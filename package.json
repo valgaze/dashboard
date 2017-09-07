@@ -19,7 +19,7 @@
     "@density/ui-input-stack": "0.2.0",
     "@density/ui-modal": "^0.2.1",
     "@density/ui-navbar": "^0.0.11",
-    "@density/ui-navbar-sidebar": "^0.0.3",
+    "@density/ui-navbar-sidebar": "^0.1.2",
     "@density/ui-popover": "^0.2.3",
     "@density/ui-toast": "^0.1.1",
     "classnames": "^2.2.5",

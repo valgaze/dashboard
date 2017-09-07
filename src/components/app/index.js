@@ -69,7 +69,7 @@ class NavbarWrapper extends React.Component {
           href="#/environment/spaces"
         >Environment</NavbarSidebarItem>
         <NavbarSidebarItem activePage={this.props.activePage} pageName="ENVIRONMENT_SPACE" href="#/environment/spaces">Spaces</NavbarSidebarItem>
-        <NavbarSidebarItem activePage={this.props.activePage} pageName='ENVIRONMENT_SENSOR' href="#/environment/sensors">Sensors</NavbarSidebarItem>
+        {/* <NavbarSidebarItem activePage={this.props.activePage} pageName='ENVIRONMENT_SENSOR' href="#/environment/sensors">Sensors</NavbarSidebarItem> */}
 
         <NavbarSidebarItem
           header={true}
@@ -79,6 +79,10 @@ class NavbarWrapper extends React.Component {
         >Developer Tools</NavbarSidebarItem>
         <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_TOKEN_LIST']} href="#/dev/tokens">Tokens</NavbarSidebarItem>
         <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_WEBHOOK_LIST']} href="#/dev/webhooks">Webhooks</NavbarSidebarItem>
+        <NavbarSidebarItem activePage={false} pageName={[]} href="http://docs.density.io">
+          API Documentation
+          <span className="app-api-docs-icon">&#xe91b;</span>
+        </NavbarSidebarItem>
 
         <NavbarSidebarItem
           header={true}

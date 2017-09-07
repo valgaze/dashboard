@@ -84,9 +84,9 @@
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@density/ui-modal/-/ui-modal-0.2.1.tgz#1a991bdee66c0b09b96ca49b7edaa35a540504e4"
 
-"@density/ui-navbar-sidebar@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@density/ui-navbar-sidebar/-/ui-navbar-sidebar-0.0.3.tgz#d71f734d31fedecd1ca3bb891eff67f90102b2e7"
+"@density/ui-navbar-sidebar@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@density/ui-navbar-sidebar/-/ui-navbar-sidebar-0.1.2.tgz#3c31e6266ec6c66b0d7bd7fb20608338d6c7ad3d"
 
 "@density/ui-navbar@^0.0.11":
   version "0.0.11"

@@ -48,6 +48,7 @@
   background-color: transparent;
   border-width: 0px;
   float: left;
+  outline: none;
 
   user-select: none;
   margin-left: 0px;
@@ -65,6 +66,13 @@
   }
 }
 
+// Icon that is used in the side navbar.
+.app-api-docs-icon {
+  font-family: "Densicons";
+  position: relative;
+  top: 2px;
+  left: 10px;
+}
 
 
 
@@ -83,4 +91,72 @@
     &:hover { opacity: 0.8; }
     &:active { opacity: 1; }
   }
+}
+
+
+
+
+
+@mixin make-navbar-sidebar-hidden {
+  max-width: 0px;
+
+  & > li {
+    display: none;
+  }
+}
+
+@mixin make-navbar-sidebar-visible($width: 350px, $background-color: #fff) {
+  max-width: $width;
+  width: 100%;
+  background-color: $background-color;
+  list-style-type: none;
+
+  z-index: $navbar-sidebar-zindex;
+
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  border-right: 1px solid $gray-dark;
+
+  padding-left: 20px;
+
+  & > li {
+    display: block;
+  }
+}
+
+@mixin make-navbar-sidebar-item(
+  $color: $gray,
+  $font-size: $font-size-base,
+  $font-weight: $font-weight-base,
+  $pad-left: 0px
+) {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: $pad-left;
+
+  & > a {
+    color: $color;
+    text-decoration: none;
+
+    font-family: $font-base;
+    font-size: $font-size;
+    font-weight: $font-weight;
+  }
+}
+
+.navbar-sidebar { @include make-navbar-sidebar-hidden; }
+.navbar-sidebar.visible { @include make-navbar-sidebar-visible; }
+
+.navbar-sidebar-item { @include make-navbar-sidebar-item($pad-left: 10px); }
+.navbar-sidebar-item-active {
+  @include make-navbar-sidebar-item($pad-left: 10px, $color: $brand-primary, $font-weight: bold);
+}
+
+.navbar-sidebar-item-header {
+  @include make-navbar-sidebar-item;
+}
+.navbar-sidebar-item-header-active {
+  @include make-navbar-sidebar-item($color: $brand-primary);
 }

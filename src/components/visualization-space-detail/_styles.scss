@@ -1,3 +1,57 @@
-.space-detail {
-  color: red;
+.visualization-space-detail {
+  @include grid-container;
+}
+
+.visualization-space-detail-card {
+  margin-top: 40px;
+}
+
+
+// The well is the darker section in the card that is darker than the surroundings. It has a number
+// of sections that are line seperated that each contain a numberic value and a label below.
+.visualization-space-detail-well {
+  display: flex;
+  flex-direction: row;
+
+  height: 150px;
+  background-color: $gray-lighter;
+  margin-top: 20px;
+}
+.visualization-space-detail-well-section {
+  flex: 1;
+
+  border-left: 2px solid $gray;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  text-align: center;
+}
+.visualization-space-detail-well-section:first-child { border-left-width: 0px; }
+
+.visualization-space-detail-well-section-quantity {
+  display: block;
+  color: $brand-primary;
+  font-size: $font-size-1;
+  font-weight: $font-weight-1;
+  padding-top: 4px;
+}
+
+
+.visualization-space-detail-card-table-row {
+  display: flex;
+  list-style-type: none;
+  padding-top: 13px !important;
+  padding-bottom: 13px !important;
+
+  font-size: $font-size-base;
+  color: $gray-cinder;
+  border-top: 1px solid $gray-light;
+}
+.visualization-space-detail-card-table-row li {
+  flex: 1;
+}
+
+.visualization-space-detail-card-table-row.header {
+  font-weight: bold;
+  margin-top: 20px;
 }
