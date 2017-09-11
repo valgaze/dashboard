@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@density-int/client": "^2.1.0",
+    "@density-int/client": "^2.2.0",
+    "@density/chart-historical-counts": "^1.1.4",
     "@density/chart-ingress-egress": "^1.0.7",
     "@density/chart-linear-progress": "^0.0.1",
     "@density/charts": "^0.3.7",

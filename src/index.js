@@ -38,7 +38,6 @@ import collectionSpacesCountChange from './actions/collection/spaces/count-chang
 import storeFactory from './store';
 const store = storeFactory();
 
-
 // ----------------------------------------------------------------------------
 // Set the location of all microservices.
 // Here's how it works:

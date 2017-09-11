@@ -94,6 +94,11 @@ input[type=input], input[type=password] { &:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
 } }
 
+//
+// Charts
+//
+@import "../node_modules/@density/chart-historical-counts/dist/sass";
+
 // 
 // Component styles are included below for each component in the src/components folder.
 // 

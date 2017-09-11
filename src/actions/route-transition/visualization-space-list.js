@@ -28,16 +28,16 @@ export default function routeTransitionSpaceList() {
       // This is used to populate each space's events collection with all the events from the last
       // minute so that the real time event charts all display as "full" when the page reloads.
       return Promise.all(spaces.results.map(space => {
-        return core.events.list({
-          start_time: moment().subtract(1, 'minute'),
-          space_id: space.id,
+        return core.spaces.events({
+          id: space.id,
+          start_time: moment().subtract(1, 'minute').format(),
+          end_time: moment().utc().format(),
         });
       })).then(spaceEventSets => {
         spaceEventSets.forEach((spaceEventSet, ct) => {
           dispatch(collectionSpacesSetEvents(spaces.results[ct], spaceEventSet.results));
         });
       });
-
     });
   };
 }
