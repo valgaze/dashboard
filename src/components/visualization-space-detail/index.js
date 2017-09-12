@@ -13,113 +13,151 @@ const HistoricalCountsComponent = chartAsReactComponent(historicalCounts);
 
 const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
-      VISIBLE = 'VISIBLE';
+      VISIBLE = 'VISIBLE',
+      ERROR = 'ERROR';
 
-export class SpaceDetail extends React.Component {
+class TwentyFourHourChart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { state: LOADING, data: null };
+    this.state = {
+      state: LOADING,
+      data: null,
+      dataSpaceId: null,
+      hoursOffsetFromUtc: 0,
+    };
   }
-  componentWillMount() {
-    const {initialSpace} = this.props;
-    const hoursOffsetFromUtc = parseInt(moment.tz(initialSpace.timeZone).format('Z').split(':')[0], 10);
+  fetchData() {
+    const {space} = this.props;
+    const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
     const startTime = moment.utc().startOf('day').add(hoursOffsetFromUtc, 'hours');
     const endTime = startTime.clone().add(24, 'hours');
 
     return core.spaces.counts({
-      id: initialSpace.id,
+      id: space.id,
       start_time: startTime.format(),
       end_time: endTime.format(),
-      interval: '1m',
+      interval: '5m',
+      page_size: 1000,
     }).then(data => {
       if (data.results.length > 0) {
         this.setState({
           state: VISIBLE,
+          dataSpaceId: space.id,
+          hoursOffsetFromUtc,
           data,
         });
       } else {
-        this.setState({state: EMPTY});
+        this.setState({
+          state: EMPTY,
+          dataSpaceId: space.id,
+          hoursOffsetFromUtc,
+        });
       }
-    }).catch(err => {
-      console.error('error', err);
+    }).catch(error => {
+      this.setState({
+        state: ERROR,
+        error,
+        dataSpaceId: space.id,
+        hoursOffsetFromUtc,
+      });
     });
   }
   render() {
-    const {initialSpace} = this.props;
-    if (initialSpace) {
-      return <div className="visualization-space-detail">
+    const {space} = this.props;
+    if (space && space.id !== this.state.dataSpaceId) {
+      this.fetchData.call(this);
+    }
 
-        {/* 24 hour chart card */}
-        <Card className="visualization-space-detail-card">
-          <CardHeader>24 Hour Chart</CardHeader>
+    if (space) {
+      const min = this.state.data ? Math.min.apply(Math, this.state.data.results.map(i => i.count)) : '-';
+      const max = this.state.data ? Math.max.apply(Math, this.state.data.results.map(i => i.count)) : '-';
+      return <Card className="visualization-space-detail-card">
+        <CardHeader>
+          24 Hour Chart
+          <InputBox
+            type="select"
+          >
+          </InputBox>
+        </CardHeader>
 
-          <div className="visualization-space-detail-well">
-            <div className="visualization-space-detail-well-section">
-              <span className="visualization-space-detail-well-section-quantity">0</span>
-              <span className="visualization-space-detail-well-section-label">Minimum</span>
-            </div>
-            <div className="visualization-space-detail-well-section">
-              <span className="visualization-space-detail-well-section-quantity">0</span>
-              <span className="visualization-space-detail-well-section-label">Maximum</span>
-            </div>
+        <div className="visualization-space-detail-well">
+          <div className="visualization-space-detail-well-section">
+            <span className="visualization-space-detail-well-section-quantity">{space.capacity}</span>
+            <span className="visualization-space-detail-well-section-label">Capacity</span>
           </div>
+          <div className="visualization-space-detail-well-section">
+            <span className="visualization-space-detail-well-section-quantity">{min}</span>
+            <span className="visualization-space-detail-well-section-label">Minimum</span>
+          </div>
+          <div className="visualization-space-detail-well-section">
+            <span className="visualization-space-detail-well-section-quantity">{max}</span>
+            <span className="visualization-space-detail-well-section-label">Maximum</span>
+          </div>
+        </div>
 
-          <CardBody>
-            {this.state.state === VISIBLE ? <HistoricalCountsComponent
-              width={900}
-              data={this.state.data.results}
-              capacity={initialSpace.capacity}
-            /> : null}
-          </CardBody>
-        </Card>
-
-        {/* Total visits chart */}
-        <Card className="visualization-space-detail-card">
-          <CardHeader>Total Visits</CardHeader>
-          <CardBody>
-            lorem ipsum
-          </CardBody>
-        </Card>
-
-        {/* Raw Events chart */}
-        <Card className="visualization-space-detail-card">
-          <CardHeader>Raw Events</CardHeader>
-          <CardBody className="visualization-space-detail-card-table-row header">
-            <li>Timestamp</li>
-            <li>Event</li>
-            <li>Doorway</li>
-            <li>Count</li>
-          </CardBody>
-          <CardBody className="visualization-space-detail-card-table-row">
-            <li>Sep 5, 2017 @ 12:00:00</li>
-            <li>Ingress</li>
-            <li>My doorway</li>
-            <li>123</li>
-          </CardBody>
-          <CardBody className="visualization-space-detail-card-table-row">
-            <li>Sep 5, 2017 @ 12:00:00</li>
-            <li>Ingress</li>
-            <li>My doorway</li>
-            <li>123</li>
-          </CardBody>
-        </Card>
-      </div>;
+        <CardBody className="visualization-space-detail-24-hour-card-body">
+          {this.state.state === VISIBLE ? <HistoricalCountsComponent
+            width={930}
+            data={this.state.data.results}
+            capacity={space.capacity}
+            timeZoneLabel="ET"
+            timeZoneOffset={this.state.hoursOffsetFromUtc}
+          /> : null}
+        </CardBody>
+      </Card>;
     } else {
       return <span>This space doesn't exist.</span>;
     }
   }
 }
 
+export function SpaceDetail({space}) {
+  if (space) {
+    return <div className="visualization-space-detail">
+
+      {/* 24 hour chart card */}
+      <TwentyFourHourChart space={space} />
+
+      {/* Total visits chart */}
+      <Card className="visualization-space-detail-card">
+        <CardHeader>Total Visits</CardHeader>
+        <CardBody>
+          lorem ipsum
+        </CardBody>
+      </Card>
+
+      {/* Raw Events chart */}
+      <Card className="visualization-space-detail-card">
+        <CardHeader>Raw Events</CardHeader>
+        <CardBody className="visualization-space-detail-card-table-row header">
+          <li>Timestamp</li>
+          <li>Event</li>
+          <li>Doorway</li>
+          <li>Count</li>
+        </CardBody>
+        <CardBody className="visualization-space-detail-card-table-row">
+          <li>Sep 5, 2017 @ 12:00:00</li>
+          <li>Ingress</li>
+          <li>My doorway</li>
+          <li>123</li>
+        </CardBody>
+        <CardBody className="visualization-space-detail-card-table-row">
+          <li>Sep 5, 2017 @ 12:00:00</li>
+          <li>Ingress</li>
+          <li>My doorway</li>
+          <li>123</li>
+        </CardBody>
+      </Card>
+    </div>;
+  } else {
+    return <span>This space doesn't exist.</span>;
+  }
+}
+
 export default connect(state => {
   return {
-    initialSpace: state.spaces.data.find(space => space.id === state.spaces.selected),
+    space: state.spaces.data.find(space => space.id === state.spaces.selected),
   };
 }, dispatch => {
   return {};
-})(function SpaceDetailWrapper(props) {
-  if (props.initialSpace) {
-    return <SpaceDetail {...props} />;
-  } else {
-    return <p>Loading...</p>;
-  }
-});
+})(SpaceDetail);

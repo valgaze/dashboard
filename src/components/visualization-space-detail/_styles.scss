@@ -14,7 +14,7 @@
   flex-direction: row;
 
   height: 150px;
-  background-color: $gray-lighter;
+  background-color: $gray-lightest;
   margin-top: 20px;
 }
 .visualization-space-detail-well-section {
@@ -33,9 +33,9 @@
   color: $brand-primary;
   font-size: $font-size-1;
   font-weight: $font-weight-1;
-  padding-top: 4px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
-
 
 .visualization-space-detail-card-table-row {
   display: flex;
@@ -55,3 +55,10 @@
   font-weight: bold;
   margin-top: 20px;
 }
+
+
+
+
+
+
+.card .visualization-space-detail-24-hour-card-body { padding: 0px; }
