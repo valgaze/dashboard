@@ -2,6 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { core } from '@density-int/client';
 
+import { isInclusivelyBeforeDay } from '@density/react-dates';
+import DatePicker, { ANCHOR_RIGHT } from '@density/ui-date-picker';
+
 import moment from 'moment';
 import 'moment-timezone';
 
@@ -16,6 +19,7 @@ const LOADING = 'LOADING',
       VISIBLE = 'VISIBLE',
       ERROR = 'ERROR';
 
+console.log('picker', DatePicker)
 class TwentyFourHourChart extends React.Component {
   constructor(props) {
     super(props);
@@ -23,13 +27,15 @@ class TwentyFourHourChart extends React.Component {
       state: LOADING,
       data: null,
       dataSpaceId: null,
+      datePickerOpen: false,
       hoursOffsetFromUtc: 0,
+      date: moment.utc().format(),
     };
   }
   fetchData() {
     const {space} = this.props;
     const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-    const startTime = moment.utc().startOf('day').add(hoursOffsetFromUtc, 'hours');
+    const startTime = moment.utc(this.state.date).startOf('day').subtract(hoursOffsetFromUtc, 'hours');
     const endTime = startTime.clone().add(24, 'hours');
 
     return core.spaces.counts({
@@ -68,16 +74,30 @@ class TwentyFourHourChart extends React.Component {
       this.fetchData.call(this);
     }
 
+    const min = this.state.data ? Math.min.apply(Math, this.state.data.results.map(i => i.count)) : '-';
+    const max = this.state.data ? Math.max.apply(Math, this.state.data.results.map(i => i.count)) : '-';
+
     if (space) {
-      const min = this.state.data ? Math.min.apply(Math, this.state.data.results.map(i => i.count)) : '-';
-      const max = this.state.data ? Math.max.apply(Math, this.state.data.results.map(i => i.count)) : '-';
       return <Card className="visualization-space-detail-card">
-        <CardHeader>
-          24 Hour Chart
-          <InputBox
-            type="select"
-          >
-          </InputBox>
+        <CardHeader className="visualization-space-detail-24-hour-card-header">
+          <span className="visualization-space-detail-24-hour-card-header-label">24 Hour Chart</span>
+          <div className="visualization-space-detail-24-hour-card-date-picker">
+            <DatePicker
+              date={moment.utc(this.state.date).add(this.state.hoursOffsetFromUtc, 'hours')}
+              onChange={date => {
+                this.setState({
+                  state: LOADING,
+                  data: null,
+                  date: date.format(),
+                }, () => this.fetchData());
+              }}
+              focused={this.state.datePickerOpen}
+              onFocusChange={({focused}) => this.setState({datePickerOpen: focused})}
+              anchor={ANCHOR_RIGHT}
+
+              isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc())}
+            />
+          </div>
         </CardHeader>
 
         <div className="visualization-space-detail-well">

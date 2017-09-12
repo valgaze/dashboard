@@ -8,22 +8,9 @@
   dependencies:
     "@density/clientele" "^2.0.3"
 
-"@density-int/react-dates@^10.1.2":
-  version "10.1.2"
-  resolved "http://npmregistry.density.rodeo/@density-int%2freact-dates/-/react-dates-10.1.2.tgz#6e120e5158195938155aea3ee3ed5cfbee897f82"
-  dependencies:
-    airbnb-prop-types "^2.4.1"
-    array-includes "^3.0.2"
-    classnames "^2.2.5"
-    consolidated-events "^1.0.1"
-    lodash.throttle "^4.1.1"
-    prop-types "^15.5.6"
-    react-moment-proptypes "^1.3.0"
-    react-portal "^3.0.0"
-
-"@density/chart-historical-counts@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@density/chart-historical-counts/-/chart-historical-counts-1.4.1.tgz#6381ddc0c694641986b86dd30c65e4b1bf6f24ef"
+"@density/chart-historical-counts@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@density/chart-historical-counts/-/chart-historical-counts-1.4.2.tgz#fa624881a2c92eea7d071ae2e0d0a1598d200691"
   dependencies:
     d3 "^4.7.4"
 
@@ -71,6 +58,21 @@
     is-there "^4.0.0"
     lodash "^3.10.1"
 
+"@density/react-dates@^12.6.0":
+  version "12.6.0"
+  resolved "https://registry.yarnpkg.com/@density/react-dates/-/react-dates-12.6.0.tgz#8e433b1ea7858c83d8338620e76b4694df299070"
+  dependencies:
+    airbnb-prop-types "^2.8.1"
+    classnames "^2.2.5"
+    consolidated-events "^1.1.0"
+    is-touch-device "^1.0.1"
+    lodash "^4.1.1"
+    object.assign "^4.0.4"
+    object.values "^1.0.4"
+    prop-types "^15.5.10"
+    react-moment-proptypes "^1.5.0"
+    react-portal "^3.1.0"
+
 "@density/ui-button@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@density/ui-button/-/ui-button-0.1.3.tgz#7c170a3724ac0178b69b52ac2215ccac66d2976a"
@@ -82,6 +84,14 @@
 "@density/ui-context-menu@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@density/ui-context-menu/-/ui-context-menu-0.2.0.tgz#faf87f1769e9ac9914a6946d9b77a2213dee1353"
+
+"@density/ui-date-picker@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@density/ui-date-picker/-/ui-date-picker-0.0.2.tgz#391d7c74b59800b333701a1284a81a874cfa4fa6"
+  dependencies:
+    "@density/react-dates" "^12.6.0"
+    moment "^2.18.1"
+    react-addons-shallow-compare "^15.6.0"
 
 "@density/ui-density-mark@^0.2.0":
   version "0.2.0"
@@ -179,7 +189,7 @@ address@1.0.2, address@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.2.tgz#480081e82b587ba319459fef512f516fe03d58af"
 
-airbnb-prop-types@^2.4.1:
+airbnb-prop-types@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/airbnb-prop-types/-/airbnb-prop-types-2.8.1.tgz#b9e31f08a7ed77b213fefc33b53a8c6e1dd8b885"
   dependencies:
@@ -342,7 +352,7 @@ array-flatten@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-1.1.1.tgz#9a5f699051b1e7073328f2a008968b64ea2955d2"
 
-array-includes@^3.0.2, array-includes@^3.0.3:
+array-includes@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/array-includes/-/array-includes-3.0.3.tgz#184b48f62d92d7452bb31b323165c7f8bd02266d"
   dependencies:
@@ -1709,7 +1719,7 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
 
-consolidated-events@^1.0.1:
+consolidated-events@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/consolidated-events/-/consolidated-events-1.1.1.tgz#25395465b35e531395418b7bbecb5ecaf198d179"
 
@@ -3038,6 +3048,18 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
+fbjs@^0.8.4:
+  version "0.8.15"
+  resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.15.tgz#4f0695fdfcc16c37c0b07facec8cb4c4091685b9"
+  dependencies:
+    core-js "^1.0.0"
+    isomorphic-fetch "^2.1.1"
+    loose-envify "^1.0.0"
+    object-assign "^4.1.0"
+    promise "^7.1.1"
+    setimmediate "^1.0.5"
+    ua-parser-js "^0.7.9"
+
 fbjs@^0.8.9:
   version "0.8.12"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.12.tgz#10b5d92f76d45575fd63a217d4ea02bea2f8ed04"
@@ -3931,6 +3953,10 @@ is-there@^4.0.0:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/is-there/-/is-there-4.4.2.tgz#44e3e03381f90613796b1edc3d41e59d555a6fe5"
 
+is-touch-device@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/is-touch-device/-/is-touch-device-1.0.1.tgz#9a2fd59f689e9a9bf6ae9a86924c4ba805a42eab"
+
 is-typedarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
@@ -4562,15 +4588,11 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "~3.0.0"
 
-lodash.throttle@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
-
 lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1, lodash@~4.17.4:
+"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.1.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1, lodash@~4.17.4:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -5669,7 +5691,7 @@ prop-types-exact@^1.1.1:
     has "^1.0.1"
     object.assign "^4.0.4"
 
-prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.8:
+prop-types@^15.5.10, prop-types@^15.5.8:
   version "15.5.10"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
   dependencies:
@@ -5770,6 +5792,13 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-addons-shallow-compare@^15.6.0:
+  version "15.6.0"
+  resolved "https://registry.yarnpkg.com/react-addons-shallow-compare/-/react-addons-shallow-compare-15.6.0.tgz#b7a4e5ff9f2704c20cf686dd8a05dd08b26de252"
+  dependencies:
+    fbjs "^0.8.4"
+    object-assign "^4.1.0"
+
 react-dev-utils@^3.0.0, react-dev-utils@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-3.0.2.tgz#1a42263e9b6aa11dcb45d69dfe5eb1b354bd5531"
@@ -5852,13 +5881,13 @@ react-error-overlay@^1.0.7:
     settle-promise "1.0.0"
     source-map "0.5.6"
 
-react-moment-proptypes@^1.3.0:
+react-moment-proptypes@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-moment-proptypes/-/react-moment-proptypes-1.5.0.tgz#4a448cd6479efc5dd509283f361f3753c3abe60e"
   dependencies:
     moment ">=1.6.0"
 
-react-portal@^3.0.0:
+react-portal@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-portal/-/react-portal-3.1.0.tgz#865c44fb72a1da106c649206936559ce891ee899"
   dependencies:
