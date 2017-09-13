@@ -80,7 +80,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
           <span className="visualization-space-detail-24-hour-card-header-label">24 Hour Chart</span>
           <div className="visualization-space-detail-24-hour-card-date-picker">
             <DatePicker
-              date={moment.utc(this.state.date).add(this.state.hoursOffsetFromUtc, 'hours')}
+              date={moment.utc(this.state.date)}
               onChange={date => {
                 this.setState({
                   state: LOADING,
@@ -98,15 +98,15 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
         </CardHeader>
 
         <div className="visualization-space-detail-well">
-          <div className="visualization-space-detail-well-section">
+          <div className="visualization-space-detail-well-section capacity">
             <span className="visualization-space-detail-well-section-quantity">{space.capacity}</span>
             <span className="visualization-space-detail-well-section-label">Capacity</span>
           </div>
-          <div className="visualization-space-detail-well-section">
+          <div className="visualization-space-detail-well-section minimum">
             <span className="visualization-space-detail-well-section-quantity">{min}</span>
             <span className="visualization-space-detail-well-section-label">Minimum</span>
           </div>
-          <div className="visualization-space-detail-well-section">
+          <div className="visualization-space-detail-well-section maximum">
             <span className="visualization-space-detail-well-section-quantity">{max}</span>
             <span className="visualization-space-detail-well-section-label">Maximum</span>
           </div>
