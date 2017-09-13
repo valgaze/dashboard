@@ -306,5 +306,23 @@ describe('Visualization space 24 hour chart', function() {
       assert.equal(renderedMinimum, '-');
       assert.equal(renderedMaximum, '-');
     });
+    it('should show dashes in capacity well section when capacity is missing', async function() {
+      const space = {
+        id: 'spc_123',
+        name: 'foo',
+        currentCount: 5,
+        timeZone: `America/New_York`,
+        /* no capacity */
+      };
+
+      // Render the component
+      const component = mount(<VisualizationSpaceDetail24HourChart space={space} />);
+
+      // Don't wait for loading to happen!
+
+      // Capacity should not be set.
+      const renderedCapacity = component.find('.visualization-space-detail-well-section.capacity .visualization-space-detail-well-section-quantity').text();
+      assert.equal(renderedCapacity, '-');
+    });
   });
 });

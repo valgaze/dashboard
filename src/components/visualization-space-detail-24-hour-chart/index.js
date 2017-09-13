@@ -99,7 +99,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
 
         <div className="visualization-space-detail-well">
           <div className="visualization-space-detail-well-section capacity">
-            <span className="visualization-space-detail-well-section-quantity">{space.capacity}</span>
+            <span className="visualization-space-detail-well-section-quantity">{space.capacity || '-'}</span>
             <span className="visualization-space-detail-well-section-label">Capacity</span>
           </div>
           <div className="visualization-space-detail-well-section minimum">
