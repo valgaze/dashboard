@@ -19,7 +19,6 @@ const LOADING = 'LOADING',
       VISIBLE = 'VISIBLE',
       ERROR = 'ERROR';
 
-console.log('picker', DatePicker)
 class TwentyFourHourChart extends React.Component {
   constructor(props) {
     super(props);
