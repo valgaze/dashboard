@@ -6,9 +6,9 @@ import Card, { CardHeader, CardBody } from '@density/ui-card';
 import autoRefreshHoc from '../../helpers/auto-refresh-hoc/index';
 
 import { chartAsReactComponent } from '@density/charts';
-import IngressEgressFn from '@density/chart-ingress-egress';
+import RealTimeCountFn from '@density/chart-real-time-count';
 import LinearProgressFn from '@density/chart-linear-progress';
-const IngressEgressChart = autoRefreshHoc({interval: 1000})(chartAsReactComponent(IngressEgressFn));
+const RealTimeCountChart = autoRefreshHoc({interval: 1000})(chartAsReactComponent(RealTimeCountFn));
 const LinearProgress = chartAsReactComponent(LinearProgressFn);
 
 function CountLabel({count}) {
@@ -50,7 +50,7 @@ export default function SpaceCard({space, events, onClick}) {
       </div>
 
       <div className="space-card-chart">
-        <IngressEgressChart events={events || []} graphDurationInMin={1} />
+        <RealTimeCountChart events={events || []} />
       </div>
     </Card>;
   } else {

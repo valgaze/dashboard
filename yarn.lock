@@ -14,20 +14,21 @@
   dependencies:
     d3 "^4.7.4"
 
-"@density/chart-ingress-egress@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@density/chart-ingress-egress/-/chart-ingress-egress-1.0.7.tgz#0be7fa115ac2de2af05ac2535cf18feaae9feded"
-  dependencies:
-    d3 "^4.8.0"
-    moment "^2.18.1"
-    react "^15.4.2"
-    react-dom "^15.4.2"
-
 "@density/chart-linear-progress@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@density/chart-linear-progress/-/chart-linear-progress-0.0.1.tgz#2d4fc3d9be83eef02866bc769147e6d95ef37275"
   dependencies:
     d3 "^4.9.1"
+
+"@density/chart-real-time-count@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@density/chart-real-time-count/-/chart-real-time-count-1.0.2.tgz#12700e104b48eb4f87e71d5d21672400e8df5d14"
+  dependencies:
+    classnames "^2.2.5"
+    d3 "^4.8.0"
+    moment "^2.18.1"
+    react "^15.4.2"
+    react-dom "^15.4.2"
 
 "@density/charts@^0.3.7":
   version "0.3.7"

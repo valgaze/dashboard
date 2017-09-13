@@ -102,6 +102,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 // Charts
 //
 @import "../node_modules/@density/chart-historical-counts/dist/sass";
+@import "../node_modules/@density/chart-real-time-count/dist/sass";
 
 // 
 // Component styles are included below for each component in the src/components folder.
