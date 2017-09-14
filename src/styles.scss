@@ -67,6 +67,10 @@
 @import "../node_modules/@density/ui-date-picker/variables.json";
 @import "../node_modules/@density/ui-date-picker/dist/sass";
 
+// Date Range Picker
+@import "../node_modules/@density/ui-date-range-picker/variables.json";
+@import "../node_modules/@density/ui-date-range-picker/dist/sass";
+
 $font-size-x-small: 10px;
 
 
@@ -103,6 +107,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 //
 @import "../node_modules/@density/chart-historical-counts/dist/sass";
 @import "../node_modules/@density/chart-real-time-count/dist/sass";
+@import "../node_modules/@density/chart-daily-metrics/dist/sass";
 
 // 
 // Component styles are included below for each component in the src/components folder.
@@ -147,3 +152,4 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/environment-space-dismissable-toast/styles";
 @import "./components/environment-modal-doorway-already-in-space/styles";
 @import "./components/visualization-space-detail-24-hour-chart/styles";
+@import "./components/visualization-space-detail-daily-metrics-card/styles";

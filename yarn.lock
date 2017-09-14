@@ -2,11 +2,18 @@
 # yarn lockfile v1
 
 
-"@density-int/client@^2.3.0":
-  version "2.3.0"
-  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-2.3.0.tgz#75dca53563d3c69aea7ef9761bc4a7794478ca9b"
+"@density-int/client@^2.3.1":
+  version "2.3.1"
+  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-2.3.1.tgz#9877a59d9d7b4dc09d3c29152fcc5269b23c2cea"
   dependencies:
     "@density/clientele" "^2.0.3"
+
+"@density/chart-daily-metrics@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@density/chart-daily-metrics/-/chart-daily-metrics-0.0.1.tgz#8343cb3e0206a01f55d22aa8db1bb0d6d2b40f49"
+  dependencies:
+    d3 "^4.10.2"
+    moment "^2.18.1"
 
 "@density/chart-historical-counts@^1.4.2":
   version "1.4.2"
@@ -86,12 +93,19 @@
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@density/ui-context-menu/-/ui-context-menu-0.2.0.tgz#faf87f1769e9ac9914a6946d9b77a2213dee1353"
 
-"@density/ui-date-picker@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@density/ui-date-picker/-/ui-date-picker-0.0.2.tgz#391d7c74b59800b333701a1284a81a874cfa4fa6"
+"@density/ui-date-picker@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@density/ui-date-picker/-/ui-date-picker-0.0.4.tgz#c15915c7ace32bdb5aad10735446ddcf43ff9a47"
   dependencies:
     "@density/react-dates" "^12.6.0"
     moment "^2.18.1"
+    react-addons-shallow-compare "^15.6.0"
+
+"@density/ui-date-range-picker@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@density/ui-date-range-picker/-/ui-date-range-picker-0.0.2.tgz#e985623ae0ceee8ca467e8fc1ddc8ed3d2c5c3c5"
+  dependencies:
+    "@density/react-dates" "^12.6.0"
     react-addons-shallow-compare "^15.6.0"
 
 "@density/ui-density-mark@^0.2.0":
@@ -2202,7 +2216,7 @@ d3-zoom@1.5.0:
     d3-selection "1"
     d3-transition "1"
 
-d3@^4.7.4:
+d3@^4.10.2, d3@^4.7.4:
   version "4.10.2"
   resolved "https://registry.yarnpkg.com/d3/-/d3-4.10.2.tgz#d401b2bc0372a77e6822f278c0e4b4090206babd"
   dependencies:

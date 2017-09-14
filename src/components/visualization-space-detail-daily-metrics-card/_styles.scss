@@ -1,0 +1,18 @@
+.visualization-space-detail-daily-metrics-card { margin-top: 40px; }
+
+.card .visualization-space-detail-daily-metrics-card-body {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 355px;
+}
+.visualization-space-detail-daily-metrics-card-header { display: flex; }
+.visualization-space-detail-daily-metrics-card-header-label { line-height: 43px; }
+.visualization-space-detail-daily-metrics-card-metric-picker {
+  margin-left: auto;
+  .input-box { color: $gray-cinder; }
+}
+.visualization-space-detail-daily-metrics-card-date-picker {
+  margin-left: 20px;
+}

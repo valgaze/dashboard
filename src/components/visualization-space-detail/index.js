@@ -3,23 +3,19 @@ import { connect } from 'react-redux';
 
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 
-import TwentyFourHourChart from '../visualization-space-detail-24-hour-chart/index';
+import TwentyFourHourCard from '../visualization-space-detail-24-hour-chart/index';
+import DailyMetricsCard from '../visualization-space-detail-daily-metrics-card/index';
 
 export function SpaceDetail({space}) {
   if (space) {
     return <div className="visualization-space-detail">
       {/* 24 hour chart card */}
-      <TwentyFourHourChart space={space} />
+      <TwentyFourHourCard space={space} />
 
-      {/* Total visits chart */}
-      <Card className="visualization-space-detail-card">
-        <CardHeader>Total Visits</CardHeader>
-        <CardBody>
-          lorem ipsum
-        </CardBody>
-      </Card>
+      {/* Daily Metrics chart card */}
+      <DailyMetricsCard space={space} />
 
-      {/* Raw Events chart */}
+      {/* Raw Events chart card */}
       <Card className="visualization-space-detail-card">
         <CardHeader>Raw Events</CardHeader>
         <CardBody className="visualization-space-detail-card-table-row header">

@@ -35,7 +35,10 @@ export default function routeTransitionSpaceList() {
         });
       })).then(spaceEventSets => {
         spaceEventSets.forEach((spaceEventSet, ct) => {
-          dispatch(collectionSpacesSetEvents(spaces.results[ct], spaceEventSet.results));
+          dispatch(collectionSpacesSetEvents(spaces.results[ct], spaceEventSet.results.map(i => ({
+            countChange: i.direction,
+            timestamp: i.timestamp,
+          }))));
         });
       });
     });
