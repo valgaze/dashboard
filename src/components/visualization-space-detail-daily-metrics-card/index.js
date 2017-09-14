@@ -4,7 +4,7 @@ import moment from 'moment';
 import 'moment-timezone';
 
 import { core } from '@density-int/client';
-import Card, { CardHeader, CardBody } from '@density/ui-card';
+import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import DateRangePicker, { ANCHOR_RIGHT } from '@density/ui-date-range-picker';
 import InputBox from '@density/ui-input-box';
@@ -193,12 +193,14 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
 
     if (space) {
       return <Card className="visualization-space-detail-card">
+        { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="visualization-space-detail-daily-metrics-card-header">
           <span className="visualization-space-detail-daily-metrics-card-header-label">Daily Metrics</span>
           <div className="visualization-space-detail-daily-metrics-card-metric-picker">
             <InputBox
               type="select"
               value={this.state.metricToDisplay}
+              disabled={this.state.state === EMPTY || this.state.state === ERROR}
               onChange={e => {
                 this.setState({
                   state: LOADING,
@@ -260,7 +262,15 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             })}
             width={930}
             height={350}
-          /> : <div className="visualization-space-detail-daily-metrics-card-body-empty" />}
+          /> : <div className="visualization-space-detail-daily-metrics-card-body-placeholder">
+            {this.state.state === ERROR ? <span className="visualization-space-detail-daily-metrics-card-body-error">
+              <span className="visualization-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
+              {this.state.error}
+            </span> : null }
+            {this.state.state === EMPTY ? <span className="visualization-space-detail-daily-metrics-card-body-info">
+              No data available for this time range.
+            </span> : null }
+          </div>}
         </CardBody>
       </Card>;
     } else {
