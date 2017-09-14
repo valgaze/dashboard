@@ -24,6 +24,24 @@ const MAXIMUM_DAY_LENGTH = 14;
 // the range up to a maximum length of `MAXIMUM_DAY_LENGTH` though.
 const INITIAL_RANGE_SELECTION = MAXIMUM_DAY_LENGTH / 2;
 
+// Given a day on the calendar and the current day, determine if the square on the calendar should
+// be grayed out or not.
+export function isOutsideRange(startISOTime, datePickerInput, day) {
+  const startDate = moment.utc(startISOTime);
+  if (day.isAfter(moment.utc())) {
+    return true;
+  }
+
+  if (datePickerInput === 'endDate') {
+    return datePickerInput === 'endDate' && startDate &&
+      !( // Is the given `day` within `MAXIMUM_DAY_LENGTH` days from the start date?
+        isInclusivelyAfterDay(day, startDate) &&
+        isInclusivelyBeforeDay(day, startDate.clone().add(MAXIMUM_DAY_LENGTH - 1, 'days'))
+      );
+  }
+  return false;
+}
+
 export default class VisualizationSpaceDetailDailyMetricsCard extends React.Component {
   constructor(props) {
     super(props);
@@ -92,7 +110,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
           const initialDays = {};
 
           // Preset all days in the date range to zero within an object.
-          let dayAccumulator = startTime.clone();
+          let dayAccumulator = startTime.clone().subtract(this.state.hoursOffsetFromUtc, 'hours');
           while (endTime.diff(dayAccumulator, 'days') > 0) {
             initialDays[dayAccumulator.startOf('day').format()] = 0;
             dayAccumulator = dayAccumulator.add(1, 'day');
@@ -222,28 +240,18 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
               onFocusChange={focused => this.setState({datePickerInput: focused})}
               anchor={ANCHOR_RIGHT}
 
-              isOutsideRange={day => {
-                const startDate = moment.utc(this.state.startDate);
-                if (day.isAfter(moment.utc())) {
-                  return true;
-                }
-
-                if (this.state.datePickerInput === 'endDate') {
-                  return this.state.datePickerInput === 'endDate' && startDate &&
-                    !( // Is the given `day` within `MAXIMUM_DAY_LENGTH` days from the start date?
-                      isInclusivelyAfterDay(day, startDate) &&
-                      isInclusivelyBeforeDay(day, startDate.clone().add(MAXIMUM_DAY_LENGTH - 1, 'days'))
-                    );
-                }
-                return false;
-              }}
+              isOutsideRange={day => isOutsideRange(
+                this.state.startDate,
+                this.state.datePickerInput,
+                day
+              )}
             />
           </div>
         </CardHeader>
 
         <CardBody className="visualization-space-detail-daily-metrics-card-body">
           {this.state.state === VISIBLE ? <DailyMetricsComponent
-e           data={this.state.data.map(i => {
+            data={this.state.data.map(i => {
               return {
                 // Remove the offset that was added when the data was fetched.
                 label: moment.utc(i.timestamp).subtract(this.state.hoursOffsetFromUtc, 'hours').format('MM/DD'),
