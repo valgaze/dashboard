@@ -53,6 +53,19 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       page: this.state.page,
       page_size: this.state.pageSize,
     }).then(preData => {
+      // No results returned? Transition to EMPTY state.
+      if (preData.results.length === 0) {
+        this.setState({
+          state: EMPTY,
+          dataSpaceId: space.id,
+
+          data: null,
+          nextPageAvailable: false,
+          previousPageAvailable: false,
+        });
+        return
+      }
+
       // Convert all keys in the response to camelcase. Also, reverse data so it is ordered from
       const data = preData.results
         .map(i => objectSnakeToCamel(i))
@@ -79,30 +92,30 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         }
       });
 
-      return Promise.all([preData, data, uniqueArrayOfDoorways, Promise.all(doorwayResponses)]);
-    }).then(([preData, data, uniqueArrayOfDoorways, doorwayResponses]) => {
-      // Add all the new doorways to the state.
-      const doorwayLookup = this.state.doorwayLookup;
-      uniqueArrayOfDoorways.forEach((id, index) => {
-        doorwayLookup[id] = doorwayResponses[index];
-      });
+      return Promise.all(doorwayResponses).then(doorwayResponses => {
+        // Add all the new doorways to the state.
+        const doorwayLookup = this.state.doorwayLookup;
+        uniqueArrayOfDoorways.forEach((id, index) => {
+          doorwayLookup[id] = doorwayResponses[index];
+        });
 
-      // Update the state to reflect that the data fetching is complete.
-      this.setState({
-        state: VISIBLE,
+        // Update the state to reflect that the data fetching is complete.
+        this.setState({
+          state: VISIBLE,
 
-        data,
-        nextPageAvailable: Boolean(preData.next),
-        previousPageAvailable: Boolean(preData.previous),
+          data,
+          nextPageAvailable: Boolean(preData.next),
+          previousPageAvailable: Boolean(preData.previous),
 
-        dataSpaceId: space.id,
+          dataSpaceId: space.id,
 
-        doorwayLookup,
+          doorwayLookup,
+        });
       });
     }).catch(error => {
       this.setState({
         state: ERROR,
-        error,
+        error: error.toString(),
         data: null,
         nextPageAvailable: false,
         previousPageAvailable: false,
@@ -146,19 +159,19 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       </CardHeader>
 
       {this.state.state === VISIBLE ? <div>
-        <CardBody className="visualization-space-detail-card-table-row header">
+        <CardBody className="visualization-space-detail-raw-events-card-table-row header">
           <li>Timestamp</li>
           <li>Event</li>
           <li>Doorway</li>
         </CardBody>
 
-        {this.state.data.map(item => (
-          <CardBody key={item.id} className="visualization-space-detail-card-table-row">
+        {this.state.data.map(item => {
+          return <CardBody key={item.id} className="visualization-space-detail-raw-events-card-table-row">
             <li>{item.timestamp}</li>
             <li>{item.direction === 1 ? 'Ingress' : 'Egress'}</li>
             <li>{this.state.doorwayLookup[item.doorwayId] ? this.state.doorwayLookup[item.doorwayId].name : item.doorwayId}</li>
           </CardBody>
-        ))}
+        })}
       </div> : null}
 
       {this.state.state === EMPTY ? <div className="visualization-space-detail-raw-events-card-body-placeholder">
