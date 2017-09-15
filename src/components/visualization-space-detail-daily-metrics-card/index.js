@@ -126,7 +126,16 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
       return <Card className="visualization-space-detail-card">
         { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="visualization-space-detail-daily-metrics-card-header">
-          <span className="visualization-space-detail-daily-metrics-card-header-label">Daily Metrics</span>
+          <span className="visualization-space-detail-daily-metrics-card-header-label">
+            Daily Metrics
+            <span
+              className="visualization-space-detail-daily-metrics-card-header-refresh"
+              onClick={() => this.setState({
+                state: LOADING,
+                data: null,
+              }, () => this.fetchData.call(this))}
+            />
+          </span>
           <div className="visualization-space-detail-daily-metrics-card-metric-picker">
             <InputBox
               type="select"

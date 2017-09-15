@@ -74,7 +74,16 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
       return <Card className="visualization-space-detail-card">
         { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="visualization-space-detail-24-hour-card-header">
-          <span className="visualization-space-detail-24-hour-card-header-label">24 Hour Chart</span>
+          <span className="visualization-space-detail-24-hour-card-header-label">
+            24 Hour Chart
+            <span
+              className="visualization-space-detail-24-hour-card-header-refresh"
+              onClick={() => this.setState({
+                state: LOADING,
+                data: null,
+              }, () => this.fetchData.call(this))}
+            />
+          </span>
           <div className="visualization-space-detail-24-hour-card-date-picker">
             <DatePicker
               date={moment.utc(this.state.date).tz(space.timeZone).startOf('day').tz('UTC')}

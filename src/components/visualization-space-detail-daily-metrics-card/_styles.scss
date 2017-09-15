@@ -38,3 +38,15 @@
   position: relative;
   top: -2px;
 }
+
+// Refresh icon to refetch data
+.visualization-space-detail-daily-metrics-card-header-refresh:before {
+  content: '\e92d';
+  font-family: "Densicons";
+  margin-left: 10px;
+  font-size: $font-size-base;
+  color: $brand-primary;
+  cursor: pointer;
+}
+.visualization-space-detail-daily-metrics-card-header-refresh:hover { opacity: 0.8; }
+.visualization-space-detail-daily-metrics-card-header-refresh:active { opacity: 1; }

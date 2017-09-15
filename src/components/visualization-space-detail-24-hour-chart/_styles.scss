@@ -38,3 +38,17 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
+
+// Refresh icon to refetch data
+
+.visualization-space-detail-24-hour-card-header-refresh:before {
+  content: '\e92d';
+  font-family: "Densicons";
+  margin-left: 10px;
+  font-size: $font-size-base;
+  color: $brand-primary;
+  cursor: pointer;
+}
+.visualization-space-detail-24-hour-card-header-refresh:hover { opacity: 0.8; }
+.visualization-space-detail-24-hour-card-header-refresh:active { opacity: 1; }
