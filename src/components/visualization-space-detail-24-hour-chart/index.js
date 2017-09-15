@@ -4,7 +4,7 @@ import moment from 'moment';
 import 'moment-timezone';
 
 import { core } from '@density-int/client';
-import Card, { CardHeader, CardBody } from '@density/ui-card';
+import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
 import DatePicker, { ANCHOR_RIGHT } from '@density/ui-date-picker';
 
@@ -25,15 +25,13 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
       data: null,
       dataSpaceId: null,
       datePickerOpen: false,
-      hoursOffsetFromUtc: 0,
       date: moment.utc().format(),
     };
   }
   fetchData() {
     const {space} = this.props;
-    const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-    const startTime = moment.utc(this.state.date).startOf('day').add(hoursOffsetFromUtc, 'hours');
-    const endTime = startTime.clone().add(24, 'hours');
+    const startTime = moment.utc(this.state.date).tz(space.timeZone).startOf('day');
+    const endTime = startTime.clone().add(1, 'day');
 
     return core.spaces.counts({
       id: space.id,
@@ -46,14 +44,12 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
         this.setState({
           state: VISIBLE,
           dataSpaceId: space.id,
-          hoursOffsetFromUtc,
           data,
         });
       } else {
         this.setState({
           state: EMPTY,
           dataSpaceId: space.id,
-          hoursOffsetFromUtc,
         });
       }
     }).catch(error => {
@@ -61,7 +57,6 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
         state: ERROR,
         error,
         dataSpaceId: space.id,
-        hoursOffsetFromUtc,
       });
     });
   }
@@ -76,11 +71,12 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
 
     if (space) {
       return <Card className="visualization-space-detail-card">
+        { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="visualization-space-detail-24-hour-card-header">
           <span className="visualization-space-detail-24-hour-card-header-label">24 Hour Chart</span>
           <div className="visualization-space-detail-24-hour-card-date-picker">
             <DatePicker
-              date={moment.utc(this.state.date)}
+              date={moment.utc(this.state.date).tz(space.timeZone).startOf('day').tz('UTC')}
               onChange={date => {
                 this.setState({
                   state: LOADING,
@@ -92,7 +88,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
               onFocusChange={({focused}) => this.setState({datePickerOpen: focused})}
               anchor={ANCHOR_RIGHT}
 
-              isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc())}
+              isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc().tz(space.timeZone).startOf('day').tz('UTC'))}
             />
           </div>
         </CardHeader>
@@ -118,7 +114,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
             data={this.state.data.results}
             capacity={space.capacity}
             timeZoneLabel="ET"
-            timeZoneOffset={-1 * this.state.hoursOffsetFromUtc}
+            timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
           /> : <div className="visualization-space-detail-24-hour-card-body-placeholder" />}
         </CardBody>
       </Card>;

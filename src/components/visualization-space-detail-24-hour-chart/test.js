@@ -76,8 +76,8 @@ describe('Visualization space 24 hour chart', function() {
       // Make sure the request was correctly formulated for the `America/New_York` time zone.
       // On January 1st, the offset is NYC is 5 hours.
       const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-      assert.equal(requestParameters[1].qs.start_time, '2016-12-31T19:00:00Z');
-      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T19:00:00Z');
+      assert.equal(requestParameters[1].qs.start_time, '2017-01-01T00:00:00-05:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-02T00:00:00-05:00');
 
       // Verify that the correct day was auto-inserted into the date input field, according to the
       // mocked current day.
@@ -142,8 +142,8 @@ describe('Visualization space 24 hour chart', function() {
       // Make sure the request was correctly formulated for the `America/New_York` time zone.
       // On January 1st, the offset is NYC is 4 hours.
       const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-      assert.equal(requestParameters[1].qs.start_time, '2017-09-13T20:00:00Z');
-      assert.equal(requestParameters[1].qs.end_time, '2017-09-14T20:00:00Z');
+      assert.equal(requestParameters[1].qs.start_time, '2017-09-14T00:00:00-04:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-09-15T00:00:00-04:00');
     });
     it('should fetch data and display it in a different time zone', async function() {
       const space = {
@@ -204,12 +204,12 @@ describe('Visualization space 24 hour chart', function() {
       // Make sure the request was correctly formulated for the `America/New_York` time zone.
       // On January 1st, the offset is NYC is 5 hours.
       const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-      assert.equal(requestParameters[1].qs.start_time, '2016-12-31T16:00:00Z');
-      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T16:00:00Z');
+      assert.equal(requestParameters[1].qs.start_time, '2016-12-31T00:00:00-08:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T00:00:00-08:00');
 
       // Verify that the correct day was auto-inserted into the date input field, according to the
       // mocked current day.
-      assert.equal(component.find('.DateInput__display-text').text(), '01/01/2017');
+      assert.equal(component.find('.DateInput__display-text').text(), '12/31/2016');
     });
   });
 

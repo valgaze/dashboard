@@ -64,126 +64,57 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
 
     // Add timezone offset to both start and end times prior to querying for the count.
     const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-    const startTime = moment.utc(this.state.startDate).startOf('day').subtract(hoursOffsetFromUtc, 'hours');
-    const endTime = moment.utc(this.state.endDate).startOf('day').add(1, 'day').subtract(hoursOffsetFromUtc, 'hours');
+    const startTime = moment.utc(this.state.startDate).tz(space.timeZone).startOf('day');
+    const endTime = moment.utc(this.state.endDate).tz(space.timeZone).startOf('day');
 
-    // There are two different endpoints thata re used here for data fetching.
-    // 1. The events endpoint, for fetching total entrances, exits, and all events in a range of time
-    // 2. The counts endpoint, for fetching peak count for a range of time.
-    if (metric === 'entrances' || metric === 'exits' || metric === 'total-events') {
-      // Events endpoint
-      // Recursively fetch as many pages of events as possible within the defined region of time.
-      // This is required because we are aggregating events, and want to make sure we have all
-      // events for the time range, even if there are more events than the `page_size`.
-      function fetchAllEvents(page=1) {
-        return core.spaces.events({
-          id: space.id,
-          start_time: startTime.format(),
-          end_time: endTime.format(),
-          page,
-          page_size: 1000,
-
-          // Filter by direction?
-          direction: (function(metric) {
-            if (metric === 'entrances') {
-              return 1;
-            } else if (metric === 'exits') {
-              return -1;
-            } else {
-              return '';
-            }
-          })(metric),
-        }).then(data => {
-          if (data.next) {
-            return fetchAllEvents(page + 1).then(nextData => {
-              return [...data.results, ...nextData];
-            });
-          } else {
-            // Hit end of range. All events fetched!
-            return data.results;
-          }
+    // Fetch data from the server for the day-long window.
+    return core.spaces.counts({
+      id: space.id,
+      start_time: startTime.format(),
+      // Add a day to the end of the range to return a final bar of the data for the uncompleted
+      // current day.
+      end_time: endTime.add(1, 'day').format(),
+      interval: '1d',
+    }).then(data => {
+      if (data.results.length > 0) {
+        this.setState({
+          state: VISIBLE,
+          dataSpaceId: space.id,
+          hoursOffsetFromUtc,
+          // Return the metric requested within the range of time.
+          data: data.results.reverse().map(i => ({
+            timestamp: i.timestamp,
+            value: (function(i, metric) {
+              switch (metric) {
+              case 'entrances':
+                return i.interval.analytics.entrances;
+              case 'exits':
+                return i.interval.analytics.exits;
+              case 'total-events':
+                return i.interval.analytics.events;
+              case 'peak-counts':
+                return i.interval.analytics.max;
+              default:
+                return false
+              }
+            })(i, metric) || 0,
+          })),
+        });
+      } else {
+        this.setState({
+          state: EMPTY,
+          dataSpaceId: space.id,
+          hoursOffsetFromUtc,
         });
       }
-
-      return fetchAllEvents().then(data => {
-        if (data.length > 0) {
-          const initialDays = {};
-
-          // Preset all days in the date range to zero within an object.
-          let dayAccumulator = startTime.clone().subtract(this.state.hoursOffsetFromUtc, 'hours');
-          while (endTime.diff(dayAccumulator, 'days') > 0) {
-            initialDays[dayAccumulator.startOf('day').format()] = 0;
-            dayAccumulator = dayAccumulator.add(1, 'day');
-          }
-
-          // Determine the number of events that were returned per day, and add them to this object.
-          const eventsPerDay = data.reduce((acc, i) => {
-            const day = moment.utc(i.timestamp).startOf('day').format();
-            return {...acc, [day]: acc[day] + 1};
-          }, initialDays);
-
-          // Convert the object into an array.
-          let events = [];
-          for (const i in eventsPerDay) {
-            events.push({timestamp: i, value: eventsPerDay[i]});
-          }
-
-          this.setState({
-            state: VISIBLE,
-            dataSpaceId: space.id,
-            hoursOffsetFromUtc,
-            data: events,
-          });
-        } else {
-          this.setState({
-            state: EMPTY,
-            dataSpaceId: space.id,
-            hoursOffsetFromUtc,
-          });
-        }
-      }).catch(error => {
-        this.setState({
-          state: ERROR,
-          error,
-          dataSpaceId: space.id,
-          hoursOffsetFromUtc,
-        });
+    }).catch(error => {
+      this.setState({
+        state: ERROR,
+        error,
+        dataSpaceId: space.id,
+        hoursOffsetFromUtc,
       });
-    } else {
-      // Counts endpoint
-      return core.spaces.counts({
-        id: space.id,
-        start_time: startTime.format(),
-        end_time: endTime.format(),
-        interval: '1d',
-      }).then(data => {
-        if (data.results.length > 0) {
-          this.setState({
-            state: VISIBLE,
-            dataSpaceId: space.id,
-            hoursOffsetFromUtc,
-            // Return the maximum count within the window of time.
-            data: data.results.reverse().map(i => ({
-              timestamp: i.timestamp,
-              value: i.interval.analytics.max,
-            })),
-          });
-        } else {
-          this.setState({
-            state: EMPTY,
-            dataSpaceId: space.id,
-            hoursOffsetFromUtc,
-          });
-        }
-      }).catch(error => {
-        this.setState({
-          state: ERROR,
-          error,
-          dataSpaceId: space.id,
-          hoursOffsetFromUtc,
-        });
-      });
-    }
+    });
   }
   render() {
     const {space} = this.props;
@@ -217,8 +148,8 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
           </div>
           <div className="visualization-space-detail-daily-metrics-card-date-picker">
             <DateRangePicker
-              startDate={moment.utc(this.state.startDate)}
-              endDate={moment.utc(this.state.endDate)}
+              startDate={moment.utc(this.state.startDate).tz(space.timeZone).startOf('day')}
+              endDate={moment.utc(this.state.endDate).tz(space.timeZone).startOf('day')}
               onChange={({startDate, endDate}) => {
                 // If the user selected over 14 days, then clamp them back to 14 days.
                 if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
@@ -256,7 +187,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             data={this.state.data.map(i => {
               return {
                 // Remove the offset that was added when the data was fetched.
-                label: moment.utc(i.timestamp).subtract(this.state.hoursOffsetFromUtc, 'hours').format('MM/DD'),
+                label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
                 value: i.value,
               };
             })}
