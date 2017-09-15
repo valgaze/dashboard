@@ -32,7 +32,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
   fetchData() {
     const {space} = this.props;
     const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-    const startTime = moment.utc(this.state.date).startOf('day').subtract(hoursOffsetFromUtc, 'hours');
+    const startTime = moment.utc(this.state.date).startOf('day').add(hoursOffsetFromUtc, 'hours');
     const endTime = startTime.clone().add(24, 'hours');
 
     return core.spaces.counts({
@@ -118,8 +118,8 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
             data={this.state.data.results}
             capacity={space.capacity}
             timeZoneLabel="ET"
-            timeZoneOffset={this.state.hoursOffsetFromUtc}
-          /> : null}
+            timeZoneOffset={-1 * this.state.hoursOffsetFromUtc}
+          /> : <div className="visualization-space-detail-24-hour-card-body-placeholder" />}
         </CardBody>
       </Card>;
     } else {
