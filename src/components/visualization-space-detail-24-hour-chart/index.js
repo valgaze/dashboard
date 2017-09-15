@@ -7,6 +7,7 @@ import { core } from '@density-int/client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
 import DatePicker, { ANCHOR_RIGHT } from '@density/ui-date-picker';
+import getTimeZoneGeneralizedShortName from '../../helpers/get-time-zone-generalized-short-name/index';
 
 import historicalCounts from '@density/chart-historical-counts';
 import { chartAsReactComponent } from '@density/charts';
@@ -113,7 +114,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
             width={930}
             data={this.state.data.results}
             capacity={space.capacity}
-            timeZoneLabel="ET"
+            timeZoneLabel={getTimeZoneGeneralizedShortName(space.timeZone)}
             timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
           /> : <div className="visualization-space-detail-24-hour-card-body-placeholder" />}
         </CardBody>
