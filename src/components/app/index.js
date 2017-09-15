@@ -32,7 +32,7 @@ class NavbarWrapper extends React.Component {
     return <Navbar onClickSidebarButton={() => this.setState({show: !this.state.show})}>
       <NavbarItem
         activePage={this.props.activePage}
-        pageName={['VISUALIZATION_SPACE_LIST']}
+        pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
         href="#/visualization/spaces"
       >Visualization</NavbarItem>
       <NavbarItem
@@ -58,7 +58,7 @@ class NavbarWrapper extends React.Component {
         <NavbarSidebarItem
           header={true}
           activePage={this.props.activePage}
-          pageName={['VISUALIZATION_SPACE_LIST']}
+          pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
           href="#/visualization/spaces"
         >Visualization</NavbarSidebarItem>
 

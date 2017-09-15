@@ -8,6 +8,15 @@ import RawEventsCard from '../visualization-space-detail-raw-events-card/index';
 export function SpaceDetail({space}) {
   if (space) {
     return <div className="visualization-space-detail">
+      {/* Page header */}
+      <div className="visualization-space-detail-header">
+        <h1 className="visualization-space-detail-header-container">
+          <a href="#/visualization/spaces" className="visualization-space-detail-header-back-section">Spaces</a>
+          <span className="visualization-space-detail-header-title">{space.name}</span>
+        </h1>
+        <div className="visualization-space-detail-header-tag">Historical</div>
+      </div>
+
       {/* 24 hour chart card */}
       <TwentyFourHourCard space={space} />
 

@@ -55,3 +55,44 @@
   font-weight: bold;
   margin-top: 20px;
 }
+
+
+
+.visualization-space-detail-header-container { margin-bottom: 0px; }
+.visualization-space-detail-header { display: flex; }
+
+.visualization-space-detail-header-back-section {
+  color: $gray-dark;
+  text-decoration: none;
+  font-size: $font-size-2;
+  font-weight: normal;
+}
+.visualization-space-detail-header-back-section:after {
+  content: '/';
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.visualization-space-detail-header-title {
+  color: $gray-cinder;
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+}
+
+.visualization-space-detail-header-tag {
+  display: inline-table;
+
+  margin-left: 20px;
+  margin-top: 29px;
+
+  padding-top: 6px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  font-size: $font-size-small;
+  font-weight: 500;
+  color: $brand-primary;
+
+  border: 1px solid $brand-primary;
+  border-radius: $border-radius-base;
+}
