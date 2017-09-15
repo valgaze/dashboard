@@ -6,3 +6,35 @@
 .visualization-space-detail-24-hour-card-body-placeholder {
   height: 405px;
 }
+
+
+
+// The well is the darker section in the card that is darker than the surroundings. It has a number
+// of sections that are line seperated that each contain a numberic value and a label below.
+.visualization-space-detail-well {
+  display: flex;
+  flex-direction: row;
+
+  height: 150px;
+  background-color: $gray-lightest;
+  margin-top: 20px;
+}
+.visualization-space-detail-well-section {
+  flex: 1;
+
+  border-left: 2px solid $gray;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  text-align: center;
+}
+.visualization-space-detail-well-section:first-child { border-left-width: 0px; }
+
+.visualization-space-detail-well-section-quantity {
+  display: block;
+  color: $brand-primary;
+  font-size: $font-size-1;
+  font-weight: $font-weight-1;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

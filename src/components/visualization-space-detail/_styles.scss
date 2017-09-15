@@ -7,60 +7,12 @@
 }
 
 
-// The well is the darker section in the card that is darker than the surroundings. It has a number
-// of sections that are line seperated that each contain a numberic value and a label below.
-.visualization-space-detail-well {
-  display: flex;
-  flex-direction: row;
 
-  height: 150px;
-  background-color: $gray-lightest;
-  margin-top: 20px;
-}
-.visualization-space-detail-well-section {
-  flex: 1;
-
-  border-left: 2px solid $gray;
-  margin-top: 30px;
-  margin-bottom: 30px;
-
-  text-align: center;
-}
-.visualization-space-detail-well-section:first-child { border-left-width: 0px; }
-
-.visualization-space-detail-well-section-quantity {
-  display: block;
-  color: $brand-primary;
-  font-size: $font-size-1;
-  font-weight: $font-weight-1;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.visualization-space-detail-card-table-row {
-  display: flex;
-  list-style-type: none;
-  padding-top: 13px !important;
-  padding-bottom: 13px !important;
-
-  font-size: $font-size-base;
-  color: $gray-cinder;
-  border-top: 1px solid $gray-light;
-}
-.visualization-space-detail-card-table-row li {
-  flex: 1;
-}
-
-.visualization-space-detail-card-table-row.header {
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-
-
+// The header for the page
 .visualization-space-detail-header-container { margin-bottom: 0px; }
 .visualization-space-detail-header { display: flex; }
 
+// "Spaces /" prefix on the page header label.
 .visualization-space-detail-header-back-section {
   color: $gray-dark;
   text-decoration: none;
@@ -72,12 +24,15 @@
   margin-left: 10px;
   margin-right: 10px;
 }
+
+// Actual space name (after the prefix on the page header label)
 .visualization-space-detail-header-title {
   color: $gray-cinder;
   font-size: $font-size-2;
   font-weight: $font-weight-2;
 }
 
+// "Historical" tag after the page title.
 .visualization-space-detail-header-tag {
   display: inline-table;
 
