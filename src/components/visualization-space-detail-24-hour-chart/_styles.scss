@@ -3,10 +3,6 @@
 .visualization-space-detail-24-hour-card-header-label { line-height: 43px; }
 .visualization-space-detail-24-hour-card-date-picker { margin-left: auto; }
 
-.visualization-space-detail-24-hour-card-body-placeholder {
-  height: 405px;
-}
-
 
 
 // The well is the darker section in the card that is darker than the surroundings. It has a number
@@ -41,7 +37,6 @@
 
 
 // Refresh icon to refetch data
-
 .visualization-space-detail-24-hour-card-header-refresh:before {
   content: '\e92d';
   font-family: "Densicons";
@@ -52,3 +47,24 @@
 }
 .visualization-space-detail-24-hour-card-header-refresh:hover { opacity: 0.8; }
 .visualization-space-detail-24-hour-card-header-refresh:active { opacity: 1; }
+
+
+// Horizontally and vertically center errors and info messages in the 24 hour card.
+.visualization-space-detail-24-hour-card-body-info,
+.visualization-space-detail-24-hour-card-body-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  height: 405px;
+
+  font-size: $font-size-base;
+  color: $gray-cinder;
+}
+// Errors should be prefixed by the error icon
+.visualization-space-detail-24-hour-card-body-error-icon {
+  color: $brand-danger;
+  font-family: "Densicons";
+  margin-right: 10px;
+  position: relative;
+}

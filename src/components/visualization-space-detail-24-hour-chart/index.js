@@ -125,7 +125,20 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
             capacity={space.capacity}
             timeZoneLabel={getTimeZoneGeneralizedShortName(space.timeZone)}
             timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
-          /> : <div className="visualization-space-detail-24-hour-card-body-placeholder" />}
+          /> : null}
+
+        {this.state.state === LOADING ? <div className="visualization-space-detail-24-hour-card-body-info">
+          <span>Generating Data...</span>
+        </div> : null}
+        {this.state.state === EMPTY ? <div className="visualization-space-detail-24-hour-card-body-info">
+          <span>No data found in date range.</span>
+        </div> : null}
+        {this.state.state === ERROR ? <div className="visualization-space-detail-24-hour-card-body-info">
+          <span>
+            <span className="visualization-space-detail-24-hour-card-body-error-icon">&#xe91a;</span>
+            {this.state.error}
+          </span>
+        </div> : null}
         </CardBody>
       </Card>;
     } else {

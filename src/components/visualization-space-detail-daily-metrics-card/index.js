@@ -202,15 +202,22 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             })}
             width={930}
             height={350}
-          /> : <div className="visualization-space-detail-daily-metrics-card-body-placeholder">
-            {this.state.state === ERROR ? <span className="visualization-space-detail-daily-metrics-card-body-error">
+          /> : null}
+
+          {this.state.state === ERROR ? <div className="visualization-space-detail-daily-metrics-card-body-error">
+            <span>
               <span className="visualization-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
               {this.state.error}
-            </span> : null }
-            {this.state.state === EMPTY ? <span className="visualization-space-detail-daily-metrics-card-body-info">
-              No data available for this time range.
-            </span> : null }
-          </div>}
+            </span>
+          </div> : null }
+
+          {this.state.state === EMPTY ? <div className="visualization-space-detail-daily-metrics-card-body-info">
+            No data available for this time range.
+          </div> : null }
+
+          {this.state.state === LOADING ? <div className="visualization-space-detail-daily-metrics-card-body-info">
+            Generating data...
+          </div> : null }
         </CardBody>
       </Card>;
     } else {
