@@ -6,7 +6,7 @@ import TwentyFourHourCard from '../visualization-space-detail-24-hour-chart/inde
 import DailyMetricsCard from '../visualization-space-detail-daily-metrics-card/index';
 import RawEventsCard from '../visualization-space-detail-raw-events-card/index';
 
-export function SpaceDetail({space, activeModal, onOpenModal, onCloseModal}) {
+export function SpaceDetail({space, spacesLoading, activeModal, onOpenModal, onCloseModal}) {
   if (space) {
     return <div className="visualization-space-detail">
       {/* Real time bar */}
@@ -32,6 +32,8 @@ export function SpaceDetail({space, activeModal, onOpenModal, onCloseModal}) {
         <RawEventsCard space={space} />
       </div>
     </div>;
+  } else if (spacesLoading) {
+    return <div className="visualization-space-detail-loading">Loading Space...</div>;
   } else {
     return <span>This space doesn't exist.</span>;
   }
@@ -40,6 +42,7 @@ export function SpaceDetail({space, activeModal, onOpenModal, onCloseModal}) {
 export default connect(state => {
   return {
     space: state.spaces.data.find(space => space.id === state.spaces.selected),
+    spacesLoading: state.spaces.loading,
   };
 }, dispatch => {
   return {};

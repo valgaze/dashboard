@@ -50,3 +50,10 @@
   border: 1px solid $brand-primary;
   border-radius: $border-radius-base;
 }
+
+// Loading state for whole page
+.visualization-space-detail-loading {
+  width: 100%;
+  text-align: center;
+  margin-top: 100px;
+}
