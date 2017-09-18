@@ -6,6 +6,9 @@
   padding-top: 20px;
   padding-bottom: 20px;
   height: 355px;
+
+  border-top: 1px solid $gray-light;
+  margin-top: 20px;
 }
 .visualization-space-detail-daily-metrics-card-header { display: flex; }
 .visualization-space-detail-daily-metrics-card-header-label { line-height: 43px; }
