@@ -10,6 +10,22 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import DateRangePicker, { ANCHOR_RIGHT } from '@density/ui-date-range-picker';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
 
+function getDifferenceBetweenDates(a, b) {
+  const diff = moment.utc(a).valueOf() - moment.utc(b).valueOf();
+  const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+  const hours = Math.floor(diff / (60 * 60 * 1000)) - (days * 24);
+  const minutes = Math.floor(diff / (60 * 1000)) - (hours * 60);
+  const seconds = Math.floor(diff / 1000) - (minutes * 60);
+
+  let total = '';
+  if (days) { total += `${days}d `; }
+  if (hours) { total += `${hours}h `; }
+  if (minutes) { total += `${minutes}m `; }
+  if (seconds) { total += `${seconds}s `; }
+
+  return total;
+}
+
 const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
       VISIBLE = 'VISIBLE',
@@ -69,7 +85,6 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       // Convert all keys in the response to camelcase. Also, reverse data so it is ordered from
       const data = preData.results
         .map(i => objectSnakeToCamel(i))
-        // .sort((a, b) => moment.utc(a.timestamp).diff(moment.utc(b.timestamp)) ? 1 : -1);
         .sort((a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf());
 
       // Calculate a unique array of all doorways that are referenced by each event that was
@@ -163,14 +178,17 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           <li>Timestamp</li>
           <li>Event</li>
           <li>Doorway</li>
+          <li>Previous Event</li>
         </CardBody>
 
-        {this.state.data.map(item => {
+        {this.state.data.map((item, ct) => {
+          let lastItem = ct > 0 ? this.state.data[ct - 1] : null;
           return <CardBody key={item.id} className="visualization-space-detail-raw-events-card-table-row">
             <li>{item.timestamp}</li>
             <li>{item.direction === 1 ? 'Ingress' : 'Egress'}</li>
             <li>{this.state.doorwayLookup[item.doorwayId] ? this.state.doorwayLookup[item.doorwayId].name : item.doorwayId}</li>
-          </CardBody>
+            <li>{lastItem ? `${getDifferenceBetweenDates(item.timestamp, lastItem.timestamp)} ago` : 'N/A'}</li>
+          </CardBody>;
         })}
       </div> : null}
 
