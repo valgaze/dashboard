@@ -16,7 +16,7 @@ export default class VisualizationSpaceDetailSpaceUpdateModal extends React.Comp
     return <div className="visualization-space-detail-space-update-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
         <Card type="modal">
-          {false ? <CardLoading indeterminate /> : null}
+          {this.props.loading ? <CardLoading indeterminate /> : null}
           <CardHeader>
             Update Count
             <span
@@ -58,6 +58,7 @@ export default class VisualizationSpaceDetailSpaceUpdateModal extends React.Comp
             </div>
 
             <Button
+              className="visualization-space-detail-space-update-modal-submit"
               onClick={() => this.props.onSubmit(this.state.count)}
             >Save changes</Button>
           </CardBody>

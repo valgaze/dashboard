@@ -9,3 +9,4 @@ contains the intermediate values of the modal prior to their submission to the s
 - `onDismiss: () => any`: A callback that is called when the modal is dismissed.
 - `onSubmit: (count) => any`: A callback that is called when the modal is submitted. The count that
   was chosen is passed.
+- `loading: bool`: Should the modal show a loading state?
