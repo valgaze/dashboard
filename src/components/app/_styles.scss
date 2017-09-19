@@ -17,8 +17,14 @@
 // - Navbar is statically positioned.
 // - Sidebar menu in the navbar is hidden.
 .app .navbar {
+  padding-left: 0px;
+  padding-right: 0px;
   .navbar-sidebar { margin-bottom: 0px; }
   .navbar-sidebar-button { display: none; }
+  .navbar-container {
+    padding-left: 40px;
+    padding-right: 20px;
+  }
 
   // Hide the top nav on mobile.
   @media (max-width: $screen-xs-max) {

@@ -93,17 +93,17 @@
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@density/ui-context-menu/-/ui-context-menu-0.2.0.tgz#faf87f1769e9ac9914a6946d9b77a2213dee1353"
 
-"@density/ui-date-picker@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@density/ui-date-picker/-/ui-date-picker-0.0.4.tgz#c15915c7ace32bdb5aad10735446ddcf43ff9a47"
+"@density/ui-date-picker@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@density/ui-date-picker/-/ui-date-picker-0.0.5.tgz#17816103ef472f00021d543d8b49ad496385e5c8"
   dependencies:
     "@density/react-dates" "^12.6.0"
     moment "^2.18.1"
     react-addons-shallow-compare "^15.6.0"
 
-"@density/ui-date-range-picker@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@density/ui-date-range-picker/-/ui-date-range-picker-0.0.2.tgz#e985623ae0ceee8ca467e8fc1ddc8ed3d2c5c3c5"
+"@density/ui-date-range-picker@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@density/ui-date-range-picker/-/ui-date-range-picker-0.0.3.tgz#0f41895b43bde092c8eaab5c0f0edf447419c306"
   dependencies:
     "@density/react-dates" "^12.6.0"
     react-addons-shallow-compare "^15.6.0"

@@ -9,15 +9,36 @@
 
   border-top: 1px solid $gray-light;
   margin-top: 20px;
+
+  // Make the chart horizontally scrolalble below widths of 978px.
+  overflow-x: auto;
+  & > div { width: 978px; }
 }
-.visualization-space-detail-daily-metrics-card-header { display: flex; }
+
+// On mobile, break the pickers to a second row. On a computer, put them all in one row.
+.visualization-space-detail-daily-metrics-card-header {
+  display: block;
+  @media (min-width: $screen-xs-max) {
+    display: flex;
+  }
+}
 .visualization-space-detail-daily-metrics-card-header-label { line-height: 43px; }
 .visualization-space-detail-daily-metrics-card-metric-picker {
-  margin-left: auto;
+  margin-left: 0px;
   .input-box { color: $gray-cinder; }
+
+  @media (min-width: $screen-xs-max) {
+    margin-left: auto;
+  }
 }
 .visualization-space-detail-daily-metrics-card-date-picker {
-  margin-left: 20px;
+  margin-top: 10px;
+  margin-left: 0px;
+
+  @media (min-width: $screen-xs-max) {
+    margin-top: 0px;
+    margin-left: 20px;
+  }
 }
 
 

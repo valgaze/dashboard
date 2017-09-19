@@ -1,7 +1,13 @@
-.card .visualization-space-detail-24-hour-card-body { padding: 0px; }
 .visualization-space-detail-24-hour-card-header { display: flex; }
 .visualization-space-detail-24-hour-card-header-label { line-height: 43px; }
 .visualization-space-detail-24-hour-card-date-picker { margin-left: auto; }
+
+// The 24 hour chart is a fixed width and is scrolalble within the card.
+.card .visualization-space-detail-24-hour-card-body {
+  padding: 0px;
+  overflow-x: auto;
+  & > div { width: 978px; }
+}
 
 
 
@@ -9,9 +15,16 @@
 // of sections that are line seperated that each contain a numberic value and a label below.
 .visualization-space-detail-well {
   display: flex;
-  flex-direction: row;
 
-  height: 150px;
+  // On mobile, stack items vertically.
+  flex-direction: column;
+
+  // On a computer, stack horizontally.
+  @media (min-width: $screen-xs-max) {
+    flex-direction: row;
+    height: 150px;
+  }
+
   background-color: $gray-lightest;
   margin-top: 20px;
 }
@@ -19,20 +32,36 @@
   flex: 1;
 
   border-left: 2px solid $gray-light;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 
   text-align: center;
+
+  // On a computer, add more spacing above and below each cell.
+  @media (min-width: $screen-xs-max) {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
 }
 .visualization-space-detail-well-section:first-child { border-left-width: 0px; }
 
 .visualization-space-detail-well-section-quantity {
-  display: block;
   color: $brand-primary;
-  font-size: $font-size-1;
-  font-weight: $font-weight-1;
+  font-size: $font-size-3;
+  font-weight: $font-weight-3;
   padding-top: 5px;
   padding-bottom: 5px;
+
+  // Space the quantity a bit apart from the section label.
+  margin-right: 10px;
+
+  // On a computer, make the quantity big and above the the section label.
+  @media (min-width: $screen-xs-max) {
+    display: block;
+    font-size: $font-size-1;
+    font-weight: $font-weight-1;
+    margin-right: 0px; // Undo spacing above.
+  }
 }
 
 
