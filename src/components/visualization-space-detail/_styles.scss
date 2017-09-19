@@ -8,7 +8,10 @@
 
 
 // The header for the page
-.visualization-space-detail-header-container { margin-bottom: 0px; }
+.visualization-space-detail-header-container {
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
 .visualization-space-detail-header { display: flex; }
 
 // "Spaces /" prefix on the page header label.
@@ -49,6 +52,19 @@
 
   border: 1px solid $brand-primary;
   border-radius: $border-radius-base;
+}
+
+// Time zone label in the right hand corner.
+.visualization-space-detail-header-time-zone {
+  margin-top: 30px;
+  margin-left: auto;
+
+  font-size: $font-size-2;
+  font-weight: normal;
+  color: $gray-cinder;
+}
+.visualization-space-detail-header-time-zone:before {
+  content: 'Timezone: ';
 }
 
 // Loading state for whole page

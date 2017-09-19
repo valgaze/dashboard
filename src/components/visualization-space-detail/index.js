@@ -20,6 +20,14 @@ export function SpaceDetail({space, spacesLoading, activeModal, onOpenModal, onC
             <span className="visualization-space-detail-header-title">{space.name}</span>
           </h1>
           <div className="visualization-space-detail-header-tag">Historical</div>
+
+          {/* Attempt to display a nicer representation of the time zone, but fall back on the time zone name */}
+          <div className="visualization-space-detail-header-time-zone">{({
+            'America/New_York': 'Eastern',
+            'America/Chicago': 'Central',
+            'America/Denver': 'Mountain',
+            'America/Los_Angeles': 'Pacific',
+          })[space.timeZone] || space.timeZone}</div>
         </div>
 
         {/* 24 hour chart card */}
