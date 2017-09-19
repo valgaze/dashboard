@@ -37,6 +37,12 @@
 // The live capacity indicator for the space, ie, `Capacity: 2% Full`
 .visualization-space-detail-real-time-bar-capacity {
   margin-left: auto;
+  display: none;
+
+  // On a computer, make the thing visible.
+  @media (min-width: $screen-xs-max) {
+    display: block;
+  }
 }
 
 .visualization-space-detail-real-time-bar-capacity {

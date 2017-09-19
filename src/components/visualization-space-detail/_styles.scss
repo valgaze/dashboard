@@ -12,14 +12,27 @@
   margin-top: 20px;
   margin-bottom: 0px;
 }
-.visualization-space-detail-header { display: flex; }
+.visualization-space-detail-header {
+  display: flex;
+  flex-direction: column;
+
+  // On a computer, use flex-direction row so the items sprawl horizontally.
+  @media (min-width: $screen-xs-max) {
+    flex-direction: row;
+  }
+}
 
 // "Spaces /" prefix on the page header label.
 .visualization-space-detail-header-back-section {
   color: $gray-dark;
   text-decoration: none;
-  font-size: $font-size-2;
+  font-size: $font-size-3;
   font-weight: normal;
+
+  // On a computer, make the ehader bigger.
+  @media (min-width: $screen-xs-max) {
+    font-size: $font-size-2;
+  }
 }
 .visualization-space-detail-header-back-section:after {
   content: '/';
@@ -31,12 +44,19 @@
 .visualization-space-detail-header-title {
   color: $gray-cinder;
   font-size: $font-size-2;
-  font-weight: $font-weight-2;
+  font-size: $font-size-3;
+  font-weight: $font-weight-3;
+
+  // On a computer, make the ehader bigger.
+  @media (min-width: $screen-xs-max) {
+    font-size: $font-size-2;
+    font-weight: $font-weight-2;
+  }
 }
 
 // "Historical" tag after the page title.
 .visualization-space-detail-header-tag {
-  display: inline-table;
+  display: none;
 
   margin-left: 20px;
   margin-top: 29px;
@@ -52,16 +72,29 @@
 
   border: 1px solid $brand-primary;
   border-radius: $border-radius-base;
+
+  // On a computer, make the thing visible.
+  @media (min-width: $screen-xs-max) {
+    display: inline-table;
+  }
 }
 
 // Time zone label in the right hand corner.
 .visualization-space-detail-header-time-zone {
   margin-top: 30px;
-  margin-left: auto;
 
-  font-size: $font-size-2;
-  font-weight: normal;
   color: $gray-cinder;
+  font-size: $font-size-3;
+  font-weight: normal;
+
+  // On a computer, add a margin left of auto to push the time zone over to the right.
+  // Also, make the text size larger.
+  @media (min-width: $screen-xs-max) {
+    margin-left: auto;
+
+    font-size: $font-size-2;
+    font-weight: normal;
+  }
 }
 .visualization-space-detail-header-time-zone:before {
   content: 'Timezone: ';
