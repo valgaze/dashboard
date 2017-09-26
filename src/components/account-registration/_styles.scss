@@ -20,7 +20,7 @@
 .account-registration-lead-in-email { color: $gray-cinder; }
 
 .account-registration {
-  @include grid-width(24, 12, 8, 8);
+  @include grid-width(24, 12, 10, 10);
   margin-left: auto;
   margin-right: auto;
 }
