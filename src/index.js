@@ -116,8 +116,10 @@ router.addRoute('account/forgot-password/:token', token => routeTransitionAccoun
 
 // Make sure that the user is logged in prior to going to a page.
 function preRouteAuthentication() {
+  const loggedIn = store.getState().sessionToken === null;
+
   // If at the root page and logged in, redirect to the initial route.
-  if (store.getState().sessionToken !== null && ['', '#', '#/'].indexOf(window.location.hash) >= 0) {
+  if (loggedIn && store.getState().sessionToken !== null && ['', '#', '#/'].indexOf(window.location.hash) >= 0) {
     window.location.hash = initialRoute;
 
   // If on the account registration page (the only page that doesn't require the user to be logged in)
@@ -126,7 +128,7 @@ function preRouteAuthentication() {
     return;
 
   // If the user isn't logged in, send them to the login page.
-  } else if (store.getState().sessionToken === null) {
+  } else if (!loggedIn) {
     router.navigate('login');
 
   // Otherwise, fetch the logged in user's info since there's a session token available.
