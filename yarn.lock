@@ -136,6 +136,10 @@
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.14.tgz#22c49aaaf0c4ad86b617d815206083de2716c760"
 
+"@density/ui-pager-button-group@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@density/ui-pager-button-group/-/ui-pager-button-group-0.0.1.tgz#7ce6d5a0be728774d9b4ec66ad084695f2d54673"
+
 "@density/ui-popover@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@density/ui-popover/-/ui-popover-0.2.3.tgz#d9ecae149eb37891facbef9bbed193f98d077d8c"

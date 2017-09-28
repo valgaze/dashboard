@@ -1,14 +1,18 @@
 import * as React from 'react';
+import classnames from 'classnames';
 
 import moment from 'moment';
 import 'moment-timezone';
 
-import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { core } from '@density-int/client';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
+import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
+
 import DateRangePicker, { ANCHOR_RIGHT } from '@density/ui-date-range-picker';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
+
+import RawEventsPager from '../visualization-space-detail-raw-events-pager/index';
 
 function getDifferenceBetweenDates(a, b) {
   const diff = moment.utc(a).valueOf() - moment.utc(b).valueOf();
@@ -42,6 +46,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       previousPageAvailable: false,
       page: 1,
       pageSize: 20,
+      total: 0,
       error: null,
 
       dataSpaceId: null,
@@ -119,6 +124,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           state: VISIBLE,
 
           data,
+          total: preData.total,
           nextPageAvailable: Boolean(preData.next),
           previousPageAvailable: Boolean(preData.previous),
 
@@ -135,7 +141,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         nextPageAvailable: false,
         previousPageAvailable: false,
       });
-    })
+    });
   }
   render() {
     const {space} = this.props;
@@ -143,61 +149,95 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       this.fetchData.call(this);
     }
 
-    return <Card className="visualization-space-detail-card">
-      {this.state.state === LOADING ? <CardLoading indeterminate /> : null}
-      <CardHeader className="visualization-space-detail-raw-event-card-header">
-        <span className="visualization-space-detail-raw-events-card-header-label">Raw Events</span>
-        <div className="visualization-space-detail-raw-events-card-date-picker">
-          <DateRangePicker
-            startDate={moment.utc(this.state.startDate).tz(space.timeZone).startOf('day')}
-            endDate={moment.utc(this.state.endDate).tz(space.timeZone).startOf('day')}
-            onChange={({startDate, endDate}) => {
-              // Update the start and end date with the values selected.
-              this.setState({
-                startDate: startDate ? startDate.format() : undefined,
-                endDate: endDate ? endDate.format() : undefined,
-              }, () => {
-                // If the start date and end date were both set, then load data.
-                if (this.state.startDate && this.state.endDate) {
-                  this.setState({ state: LOADING, data: null}, () => {
-                    this.fetchData();
-                  });
-                }
-              });
-            }}
-            focusedInput={this.state.datePickerInput}
-            onFocusChange={focused => this.setState({datePickerInput: focused})}
-            anchor={ANCHOR_RIGHT}
-            isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc())}
-          />
-        </div>
-      </CardHeader>
+    return <div>
+      <Card className="visualization-space-detail-card">
+        {this.state.state === LOADING ? <CardLoading indeterminate /> : null}
+        <CardHeader className="visualization-space-detail-raw-event-card-header">
+          <span className="visualization-space-detail-raw-events-card-header-label">
+            Raw Events
+            <span
+              className="visualization-space-detail-raw-events-card-header-refresh"
+              onClick={() => this.setState({
+                state: LOADING,
+                data: null,
+                page: 1,
+              }, () => this.fetchData.call(this))}
+            />
+          </span>
 
-      {this.state.state === VISIBLE ? <div>
-        <CardBody className="visualization-space-detail-raw-events-card-table-row header">
-          <li>Timestamp</li>
-          <li>Event</li>
-          <li>Doorway</li>
-          <li>Previous Event</li>
-        </CardBody>
+          {/* Download a CSV for that contains the given raw events in the data range */}
+          <span className={classnames('visualization-space-detail-raw-events-card-csv-download', {
+            disabled: this.state.state === EMPTY,
+          })}>CSV Download</span>
 
-        {this.state.data.map((item, ct) => {
-          let lastItem = ct > 0 ? this.state.data[ct - 1] : null;
-          return <CardBody key={item.id} className="visualization-space-detail-raw-events-card-table-row">
-            <li>{item.timestamp}</li>
-            <li>{item.direction === 1 ? 'Ingress' : 'Egress'}</li>
-            <li>{this.state.doorwayLookup[item.doorwayId] ? this.state.doorwayLookup[item.doorwayId].name : item.doorwayId}</li>
-            <li>{lastItem ? `${getDifferenceBetweenDates(item.timestamp, lastItem.timestamp)} ago` : 'N/A'}</li>
-          </CardBody>;
-        })}
-      </div> : null}
+          {/* Select the date range for the data to display */}
+          <div className="visualization-space-detail-raw-events-card-date-picker">
+            <DateRangePicker
+              startDate={moment.utc(this.state.startDate).tz(space.timeZone).startOf('day')}
+              endDate={moment.utc(this.state.endDate).tz(space.timeZone).startOf('day')}
+              onChange={({startDate, endDate}) => {
+                // Update the start and end date with the values selected.
+                this.setState({
+                  startDate: startDate ? startDate.format() : undefined,
+                  endDate: endDate ? endDate.format() : undefined,
+                }, () => {
+                  // If the start date and end date were both set, then load data.
+                  if (this.state.startDate && this.state.endDate) {
+                    this.setState({ state: LOADING, data: null, page: 1}, () => {
+                      this.fetchData();
+                    });
+                  }
+                });
+              }}
+              focusedInput={this.state.datePickerInput}
+              onFocusChange={focused => this.setState({datePickerInput: focused})}
+              anchor={ANCHOR_RIGHT}
+              isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc())}
+            />
+          </div>
+        </CardHeader>
 
-      {this.state.state === EMPTY ? <div className="visualization-space-detail-raw-events-card-body-placeholder">
-        No data available for this time period.
-      </div> : null}
-      {this.state.state === ERROR ? <div className="visualization-space-detail-raw-events-card-body-placeholder">
-        {this.state.error}
-      </div> : null}
-    </Card>
+        {this.state.state === VISIBLE ? <div>
+          <CardBody className="visualization-space-detail-raw-events-card-table-row header">
+            <li>Timestamp</li>
+            <li>Event</li>
+            <li>Doorway</li>
+            <li>Previous Event</li>
+          </CardBody>
+
+          {this.state.data.map((item, ct) => {
+            let lastItem = ct > 0 ? this.state.data[ct - 1] : null;
+            return <CardBody key={item.id} className="visualization-space-detail-raw-events-card-table-row">
+              <li>{item.timestamp}</li>
+              <li>{item.direction === 1 ? 'Ingress' : 'Egress'}</li>
+              <li>{this.state.doorwayLookup[item.doorwayId] ? this.state.doorwayLookup[item.doorwayId].name : item.doorwayId}</li>
+              <li>{lastItem ? `${getDifferenceBetweenDates(item.timestamp, lastItem.timestamp)} ago` : 'N/A'}</li>
+            </CardBody>;
+          })}
+        </div> : null}
+
+        {this.state.state === EMPTY ? <div className="visualization-space-detail-raw-events-card-body-info">
+          No data available for this time period.
+        </div> : null}
+        {this.state.state === LOADING ? <div className="visualization-space-detail-raw-events-card-body-info">
+          Fetching events...
+        </div> : null}
+        {this.state.state === ERROR ? <div className="visualization-space-detail-raw-events-card-body-error">
+          <span>
+            <span className="visualization-space-detail-raw-events-card-body-error-icon">&#xe91a;</span>
+            {this.state.error}
+          </span>
+        </div> : null}
+      </Card>
+
+      {this.state.state === VISIBLE ? <RawEventsPager
+        page={this.state.page}
+        totalPages={Math.ceil(this.state.total / this.state.pageSize)}
+        totalEvents={this.state.total}
+        onChange={page => {
+          this.setState({page}, () => this.fetchData());
+        }}
+      /> : null}
+    </div>;
   }
 }

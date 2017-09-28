@@ -1,8 +1,5 @@
 .visualization-space-detail-raw-event-card-header { display: flex; }
 .visualization-space-detail-raw-events-card-header-label { line-height: 43px; }
-.visualization-space-detail-raw-events-card-date-picker {
-  margin-left: auto;
-}
 
 .visualization-space-detail-raw-events-card-body-placeholder {
   height: 500px;
@@ -25,4 +22,52 @@
 .visualization-space-detail-raw-events-card-table-row.header {
   font-weight: bold;
   margin-top: 20px;
+}
+
+
+// CSV Download link to the left of the date range selector.
+.visualization-space-detail-raw-events-card-csv-download {
+  margin-left: auto;
+  margin-right: 20px;
+
+  line-height: 43px;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+
+  color: $brand-primary;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+// Horizontally and vertically center errors and info messages in the daily metrics card.
+.visualization-space-detail-raw-events-card-body-info,
+.visualization-space-detail-raw-events-card-body-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  height: 355px;
+
+  font-size: $font-size-base;
+  color: $gray-cinder;
+}
+// Errors should be prefixed by the error icon
+.visualization-space-detail-raw-events-card-body-error-icon {
+  color: $brand-danger;
+  font-family: "Densicons";
+  margin-right: 10px;
+  position: relative;
+  top: -2px;
+}
+
+
+// Refresh icon to refetch data
+.visualization-space-detail-raw-events-card-header-refresh:before {
+  content: '\e92d';
+  font-family: "Densicons";
+  margin-left: 10px;
+  font-size: $font-size-base;
+  color: $brand-primary;
+  cursor: pointer;
 }

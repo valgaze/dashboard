@@ -71,6 +71,10 @@
 @import "../node_modules/@density/ui-date-range-picker/variables.json";
 @import "../node_modules/@density/ui-date-range-picker/dist/sass";
 
+// Pager Button group
+@import "../node_modules/@density/ui-pager-button-group/variables.json";
+@import "../node_modules/@density/ui-pager-button-group/dist/sass";
+
 $font-size-x-small: 10px;
 
 
@@ -156,3 +160,4 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/visualization-space-detail-raw-events-card/styles";
 @import "./components/visualization-space-detail-real-time-bar/styles";
 @import "./components/visualization-space-detail-space-update-modal/styles";
+@import "./components/visualization-space-detail-raw-events-pager/styles";
