@@ -38,6 +38,10 @@
   text-decoration: underline;
   cursor: pointer;
 }
+.visualization-space-detail-raw-events-card-csv-download.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 
 
 // Horizontally and vertically center errors and info messages in the daily metrics card.

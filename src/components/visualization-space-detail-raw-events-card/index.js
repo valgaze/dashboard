@@ -143,6 +143,33 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       });
     });
   }
+
+  // If there are events to download, download a csv containing all the events displayed to the
+  // user's system.
+  downloadCsv() {
+    if (this.state.state !== EMPTY) {
+      return core.spaces.csv({
+        id: this.props.space.id,
+        start_time: this.state.startDate,
+        end_time: this.state.endDate,
+      }).then(csv => {
+
+        // This is a workaround to allow a user to download this csv data, or if that doesn't work,
+        // then at least open it in a new tab for them to view and copy to the clipboard.
+        // 1. Create a new blob url.
+        // 2. Redirect the user to it in a new tab.
+        const data = new window.Blob([csv], {type: 'text/csv'});
+        const csvURL = window.URL.createObjectURL(data);
+
+        const tempLink = document.createElement('a');
+        document.body.appendChild(tempLink);
+        tempLink.href = csvURL;
+        tempLink.setAttribute('download', `${this.props.space.id}: ${this.state.startDate} - ${this.state.endDate}.csv`);
+        tempLink.click();
+      });
+    }
+  }
+
   render() {
     const {space} = this.props;
     if (space && space.id !== this.state.dataSpaceId) {
@@ -166,9 +193,12 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           </span>
 
           {/* Download a CSV for that contains the given raw events in the data range */}
-          <span className={classnames('visualization-space-detail-raw-events-card-csv-download', {
-            disabled: this.state.state === EMPTY,
-          })}>CSV Download</span>
+          <span
+            className={classnames('visualization-space-detail-raw-events-card-csv-download', {
+              disabled: this.state.state === EMPTY,
+            })}
+            onClick={this.downloadCsv.bind(this)}
+          >CSV Download</span>
 
           {/* Select the date range for the data to display */}
           <div className="visualization-space-detail-raw-events-card-date-picker">

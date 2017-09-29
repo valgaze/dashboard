@@ -17,7 +17,6 @@ export default class VisualizationSpaceDetailRawEventsPager extends React.Compon
       totalEvents,
       onChange,
     } = this.props;
-
     return <div className={classnames('visualization-space-detail-raw-events-pager', {disabled})}>
       <div className="visualization-space-detail-raw-events-pager-total">
         {totalEvents || 0} Events...
