@@ -13,6 +13,7 @@ export default function collectionTokensUpdate(token) {
         name: token.name,
         description: token.description,
         token_type: token.tokenType,
+        key: token.key,
       });
       dispatch(collectionTokensPush(response));
       return response;
