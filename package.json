@@ -25,7 +25,7 @@
     "@density/ui-modal": "^0.2.1",
     "@density/ui-navbar": "^0.0.14",
     "@density/ui-navbar-sidebar": "^0.1.2",
-    "@density/ui-pager-button-group": "^0.0.1",
+    "@density/ui-pager-button-group": "^0.1.4",
     "@density/ui-popover": "^0.2.3",
     "@density/ui-toast": "^0.1.1",
     "classnames": "^2.2.5",

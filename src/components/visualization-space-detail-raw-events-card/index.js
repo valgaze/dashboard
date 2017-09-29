@@ -230,14 +230,15 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         </div> : null}
       </Card>
 
-      {this.state.state === VISIBLE ? <RawEventsPager
+      <RawEventsPager
+        disabled={this.state.state !== VISIBLE}
         page={this.state.page}
         totalPages={Math.ceil(this.state.total / this.state.pageSize)}
         totalEvents={this.state.total}
         onChange={page => {
-          this.setState({page}, () => this.fetchData());
+          this.setState({state: LOADING, data: null, page}, () => this.fetchData());
         }}
-      /> : null}
+      />
     </div>;
   }
 }
