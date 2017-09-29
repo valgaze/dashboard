@@ -30,7 +30,7 @@ function getDifferenceBetweenDates(a, b) {
   return total;
 }
 
-const LOADING = 'LOADING',
+export const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
       VISIBLE = 'VISIBLE',
       ERROR = 'ERROR';
@@ -158,8 +158,8 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         // then at least open it in a new tab for them to view and copy to the clipboard.
         // 1. Create a new blob url.
         // 2. Redirect the user to it in a new tab.
-        const data = new window.Blob([csv], {type: 'text/csv'});
-        const csvURL = window.URL.createObjectURL(data);
+        const data = new Blob([csv], {type: 'text/csv'});
+        const csvURL = URL.createObjectURL(data);
 
         const tempLink = document.createElement('a');
         document.body.appendChild(tempLink);
@@ -177,7 +177,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     }
 
     return <div>
-      <Card className="visualization-space-detail-card">
+      <Card className="visualization-space-detail-raw-events-card">
         {this.state.state === LOADING ? <CardLoading indeterminate /> : null}
         <CardHeader className="visualization-space-detail-raw-event-card-header">
           <span className="visualization-space-detail-raw-events-card-header-label">
@@ -227,7 +227,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           </div>
         </CardHeader>
 
-        {this.state.state === VISIBLE ? <div>
+        {this.state.state === VISIBLE ? <div className="visualization-space-detail-raw-events-card-table">
           <CardBody className="visualization-space-detail-raw-events-card-table-row header">
             <li>Timestamp</li>
             <li>Event</li>

@@ -1,9 +1,23 @@
-.visualization-space-detail-raw-event-card-header { display: flex; }
+.visualization-space-detail-raw-event-card-header {
+  display: flex;
+
+  // On mobile, orient the header vertically.
+  flex-direction: column;
+  @media (min-width: $screen-sm-min) {
+    flex-direction: row;
+  }
+}
 .visualization-space-detail-raw-events-card-header-label { line-height: 43px; }
 
 .visualization-space-detail-raw-events-card-body-placeholder {
   height: 500px;
 }
+
+// Add spacing to the top of the card
+.visualization-space-detail-raw-events-card { margin-top: 40px; }
+
+// On mobile, allow the event table to be horizontally scrollable.
+.visualization-space-detail-raw-events-card-table { overflow-y: auto; }
 
 .visualization-space-detail-raw-events-card-table-row {
   display: flex;
@@ -14,6 +28,9 @@
   font-size: $font-size-base;
   color: $gray-cinder;
   border-top: 1px solid $gray-light;
+
+  // THe max width caps the row width, making the table row scrollable on mobile.
+  min-width: 800px;
 }
 .visualization-space-detail-raw-events-card-table-row li {
   flex: 1;
@@ -27,7 +44,6 @@
 
 // CSV Download link to the left of the date range selector.
 .visualization-space-detail-raw-events-card-csv-download {
-  margin-left: auto;
   margin-right: 20px;
 
   line-height: 43px;
@@ -37,6 +53,17 @@
   color: $brand-primary;
   text-decoration: underline;
   cursor: pointer;
+
+  // On mobile, add spacing above and below the csv download link
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  // On desktop, remove the vertical spacing but right align the csv download button.
+  @media (min-width: $screen-sm-min) {
+    margin-left: auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
 }
 .visualization-space-detail-raw-events-card-csv-download.disabled {
   opacity: 0.5;
