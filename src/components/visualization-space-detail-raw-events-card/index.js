@@ -9,8 +9,10 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 
-import DateRangePicker, { ANCHOR_RIGHT } from '@density/ui-date-range-picker';
+import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
+
+import gridVariables from '@density/ui/variables/grid.json'
 
 import RawEventsPager from '../visualization-space-detail-raw-events-pager/index';
 
@@ -195,7 +197,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           {/* Download a CSV for that contains the given raw events in the data range */}
           <span
             className={classnames('visualization-space-detail-raw-events-card-csv-download', {
-              disabled: this.state.state === EMPTY,
+              disabled: this.state.state === EMPTY || this.state.state === LOADING,
             })}
             onClick={this.downloadCsv.bind(this)}
           >CSV Download</span>
@@ -221,7 +223,12 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
               }}
               focusedInput={this.state.datePickerInput}
               onFocusChange={focused => this.setState({datePickerInput: focused})}
-              anchor={ANCHOR_RIGHT}
+
+              // On mobile, make the calendar one month wide and left aligned.
+              // On desktop, the calendar is two months wide and right aligned.
+              anchor={document.body && document.body.clientWidth > gridVariables.screenSmMin ? ANCHOR_RIGHT : ANCHOR_LEFT}
+              numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
+
               isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc())}
             />
           </div>

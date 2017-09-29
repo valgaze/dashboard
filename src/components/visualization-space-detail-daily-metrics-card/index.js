@@ -6,8 +6,10 @@ import 'moment-timezone';
 import { core } from '@density-int/client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
-import DateRangePicker, { ANCHOR_RIGHT } from '@density/ui-date-range-picker';
+import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 import InputBox from '@density/ui-input-box';
+
+import gridVariables from '@density/ui/variables/grid.json'
 
 import dailyMetrics from '@density/chart-daily-metrics';
 import { chartAsReactComponent } from '@density/charts';
@@ -180,7 +182,11 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
               }}
               focusedInput={this.state.datePickerInput}
               onFocusChange={focused => this.setState({datePickerInput: focused})}
-              anchor={ANCHOR_RIGHT}
+
+              // On mobile, make the calendar one month wide and left aligned.
+              // On desktop, the calendar is two months wide and right aligned.
+              anchor={document.body && document.body.clientWidth > gridVariables.screenSmMin ? ANCHOR_RIGHT : ANCHOR_LEFT}
+              numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
 
               isOutsideRange={day => isOutsideRange(
                 this.state.startDate,
