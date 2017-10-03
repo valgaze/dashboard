@@ -9,7 +9,7 @@ export default function collectionSpacesDestroy(space) {
     dispatch({ type: COLLECTION_SPACES_DESTROY, space });
 
     try {
-      await core.spaces.delete({id: space.id});
+      await core.spaces.delete({id: space.id, name: space.name});
       dispatch(collectionSpacesDelete(space));
       return true;
     } catch (err) {

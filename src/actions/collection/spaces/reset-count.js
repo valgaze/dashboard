@@ -2,6 +2,8 @@ import collectionSpacesPush from './push';
 import collectionSpacesError from './error';
 import { core } from '@density-int/client';
 
+import moment from 'moment';
+
 export const COLLECTION_SPACES_RESET_COUNT = 'COLLECTION_SPACES_RESET_COUNT';
 
 export default function collectionSpacesResetCount(item, newCount) {
@@ -12,6 +14,7 @@ export default function collectionSpacesResetCount(item, newCount) {
       const response = await core.spaces.reset({
         id: item.id,
         count: newCount,
+        timestamp: moment.utc().format(),
       });
       dispatch(collectionSpacesPush({...item, currentCount: newCount}));
       return response;
