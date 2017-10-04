@@ -39,7 +39,7 @@ export class Login extends React.Component {
       this.setState({loading: false, error: null});
       this.props.onUserSuccessfullyLoggedIn(token);
     }).catch(error => {
-      this.setState({loading: false, error});
+      this.setState({loading: false, error: error.toString()});
     });
   }
 

@@ -3,7 +3,9 @@ import * as React from 'react';
 import timings from '@density/ui/variables/timings';
 
 import Card, { CardHeader, CardBody } from '@density/ui-card';
+
 import autoRefreshHoc from '../../helpers/auto-refresh-hoc/index';
+import formatCapacityPercentage from '../../helpers/format-capacity-percentage/index';
 
 import { chartAsReactComponent } from '@density/charts';
 import RealTimeCountFn from '@density/chart-real-time-count';
@@ -40,7 +42,9 @@ export default function SpaceCard({space, events, onClick}) {
                 {/* The below prints `1 person` or `n people`. If `space.capacity` is null, leaves the element empty.*/}
                 <CountLabel count={space.capacity} />
               </div>
-              <div className="space-card-capacity-percent">{capacityPercent}</div>
+              <div className="space-card-capacity-percent">
+                {space.capacity ? formatCapacityPercentage(space.currentCount, space.capacity) : null}
+              </div>
             </div>
             <div className="space-card-capacity-linear-progress">
               <LinearProgress percentFull={capacityPercent || 0} transitionDuration={timings.timingBase} />
