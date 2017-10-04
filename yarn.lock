@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@density-int/client@^2.7.1":
-  version "2.7.1"
-  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-2.7.1.tgz#e1935e982ec5d79cfc3ea89f7ddcb7734c49a3e5"
+"@density-int/client@^2.7.2":
+  version "2.7.2"
+  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-2.7.2.tgz#124145ead72481803a4841a3f7c58d7a8dafe1bb"
   dependencies:
     "@density/clientele" "^2.0.3"
 

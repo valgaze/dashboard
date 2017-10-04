@@ -17,19 +17,7 @@ import gridVariables from '@density/ui/variables/grid.json'
 import RawEventsPager from '../visualization-space-detail-raw-events-pager/index';
 
 function getDifferenceBetweenDates(a, b) {
-  const diff = moment.utc(a).valueOf() - moment.utc(b).valueOf();
-  const days = Math.floor(diff / (24 * 60 * 60 * 1000));
-  const hours = Math.floor(diff / (60 * 60 * 1000)) - (days * 24);
-  const minutes = Math.floor(diff / (60 * 1000)) - (hours * 60);
-  const seconds = Math.floor(diff / 1000) - (minutes * 60);
-
-  let total = '';
-  if (days) { total += `${days}d `; }
-  if (hours) { total += `${hours}h `; }
-  if (minutes) { total += `${minutes}m `; }
-  if (seconds) { total += `${seconds}s `; }
-
-  return total;
+  return moment.utc(a).from(moment.utc(b)).replace(/^in/, '');
 }
 
 export const LOADING = 'LOADING',
@@ -245,10 +233,10 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           {this.state.data.map((item, ct) => {
             let lastItem = ct > 0 ? this.state.data[ct - 1] : null;
             return <CardBody key={item.id} className="visualization-space-detail-raw-events-card-table-row">
-              <li>{item.timestamp}</li>
+              <li>{moment.utc(item.timestamp).format('MMM Do YYYY, h:mm:ss a')}</li>
               <li>{item.direction === 1 ? 'Ingress' : 'Egress'}</li>
               <li>{this.state.doorwayLookup[item.doorwayId] ? this.state.doorwayLookup[item.doorwayId].name : item.doorwayId}</li>
-              <li>{lastItem ? `${getDifferenceBetweenDates(item.timestamp, lastItem.timestamp)} ago` : 'N/A'}</li>
+              <li>{lastItem ? `${getDifferenceBetweenDates(item.timestamp, lastItem.timestamp)} ago` : <span>&mdash;</span>}</li>
             </CardBody>;
           })}
         </div> : null}
