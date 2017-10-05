@@ -16,10 +16,6 @@ import gridVariables from '@density/ui/variables/grid.json'
 
 import RawEventsPager from '../visualization-space-detail-raw-events-pager/index';
 
-function getDifferenceBetweenDates(a, b) {
-  return moment.utc(a).from(moment.utc(b)).replace(/^in/, '');
-}
-
 export const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
       VISIBLE = 'VISIBLE',
@@ -227,7 +223,6 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
             <li>Timestamp</li>
             <li>Event</li>
             <li>Doorway</li>
-            <li>Previous Event</li>
           </CardBody>
 
           {this.state.data.map((item, ct) => {
@@ -236,7 +231,6 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
               <li>{moment.utc(item.timestamp).format('MMM Do YYYY, h:mm:ss a')}</li>
               <li>{item.direction === 1 ? 'Ingress' : 'Egress'}</li>
               <li>{this.state.doorwayLookup[item.doorwayId] ? this.state.doorwayLookup[item.doorwayId].name : item.doorwayId}</li>
-              <li>{lastItem ? `${getDifferenceBetweenDates(item.timestamp, lastItem.timestamp)} ago` : <span>&mdash;</span>}</li>
             </CardBody>;
           })}
         </div> : null}
