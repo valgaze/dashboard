@@ -206,7 +206,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                 value: i.value,
               };
             })}
-            width={930}
+            width={975}
             height={350}
           /> : null}
 
