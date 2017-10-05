@@ -1,4 +1,11 @@
 .environment-container {
+  position: absolute;
+  top: 100px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+.environment-center-wrapper {
   @include grid-container;
   max-width: 1200px;
   margin: 20px auto;
@@ -63,6 +70,7 @@
 
 .space-column {
   @include grid-width(24, 12, 12, 12);
+  padding-bottom: 20px;
 
   // On a computer:
   // 1. Set a fixed height on the columns. FIXME: This sucks currently. There's got to be a better way.
@@ -76,6 +84,7 @@
   @include grid-width(0, 12, 12, 12);
   height: calc(100vh - 300px);
   display: none;
+  padding-bottom: 20px;
 
   // Hide doorways column on mobile. Also, on a computer, add a space between the top of the column
   // and the nav.
