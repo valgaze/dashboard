@@ -77,7 +77,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
       // current day.
       end_time: endTime.add(1, 'day').format(),
       interval: '1d',
-      order: 'desc',
+      order: 'asc',
     }).then(data => {
       if (data.results.length > 0) {
         this.setState({
@@ -85,7 +85,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
           dataSpaceId: space.id,
           hoursOffsetFromUtc,
           // Return the metric requested within the range of time.
-          data: data.results.reverse().map(i => ({
+          data: data.results.map(i => ({
             timestamp: i.timestamp,
             value: (function(i, metric) {
               switch (metric) {
