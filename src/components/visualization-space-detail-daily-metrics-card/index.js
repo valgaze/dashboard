@@ -95,7 +95,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                 return i.interval.analytics.exits;
               case 'total-events':
                 return i.interval.analytics.events;
-              case 'peak-counts':
+              case 'peak-occupancy':
                 return i.interval.analytics.max;
               default:
                 return false
@@ -155,7 +155,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
               <option value="entrances">Entrances</option>
               <option value="exits">Exits</option>
               <option value="total-events">Total Events</option>
-              <option value="peak-counts">Peak Counts</option>
+              <option value="peak-occupancy">Peak Occupancy</option>
             </InputBox>
           </div>
           <div className="visualization-space-detail-daily-metrics-card-date-picker">

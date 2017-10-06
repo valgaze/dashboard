@@ -100,7 +100,7 @@ export function WebhookList({
         {/* Search box to filter webhook list */}
         <div className="webhook-list-search">
           <InputBox
-            placeholder="Search Webhooks ..."
+            placeholder="Filter Webhooks ..."
             value={webhooks.filters.search}
             onChange={e => onFilterWebhookList(e.target.value)}
           />

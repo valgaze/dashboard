@@ -43,3 +43,9 @@
   .progress-container { fill: $gray-lighter; }
   .progress-bar { fill: $brand-primary; }
 }
+
+// Remove the border radius on the top of the ingress egress chart
+.space-card .ingress-egress-card {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
