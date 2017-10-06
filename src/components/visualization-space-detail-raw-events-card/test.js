@@ -106,7 +106,7 @@ describe('raw events pager', function() {
     // And just for giggles, pull out a random value in the table to make sure that it's correct.
     assert.equal(
       component.find('.visualization-space-detail-raw-events-card-table-row').last().find('li').first().text(),
-      '2017-01-01T00:00:30-05:00'
+      'Jan 1st 2017, 5:00:30 am'
     );
   });
 
@@ -220,7 +220,7 @@ describe('raw events pager', function() {
     // And just for giggles, pull out a random value in the table to make sure that it's correct.
     assert.equal(
       component.find('.visualization-space-detail-raw-events-card-table-row').last().find('li').first().text(),
-      '2017-11-01T00:00:30-05:00'
+      'Nov 1st 2017, 5:00:30 am'
     );
   });
 

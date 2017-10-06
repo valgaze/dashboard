@@ -2,22 +2,22 @@
 # yarn lockfile v1
 
 
-"@density-int/client@^2.7.2":
-  version "2.7.2"
-  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-2.7.2.tgz#124145ead72481803a4841a3f7c58d7a8dafe1bb"
+"@density-int/client@2.8.0":
+  version "2.8.0"
+  resolved "http://npmregistry.density.rodeo/@density-int%2fclient/-/client-2.8.0.tgz#ff531298ec46cd6c55c03613dd48d7d8a697aafe"
   dependencies:
     "@density/clientele" "^2.0.3"
 
-"@density/chart-daily-metrics@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@density/chart-daily-metrics/-/chart-daily-metrics-0.0.1.tgz#8343cb3e0206a01f55d22aa8db1bb0d6d2b40f49"
+"@density/chart-daily-metrics@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@density/chart-daily-metrics/-/chart-daily-metrics-0.2.0.tgz#121506a6583dcfa7939c0597c1009fb7935891a9"
   dependencies:
     d3 "^4.10.2"
     moment "^2.18.1"
 
-"@density/chart-historical-counts@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@density/chart-historical-counts/-/chart-historical-counts-1.4.2.tgz#fa624881a2c92eea7d071ae2e0d0a1598d200691"
+"@density/chart-historical-counts@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@density/chart-historical-counts/-/chart-historical-counts-1.5.0.tgz#a4383f00e484111fe6ba75e34086a200e48b6ab0"
   dependencies:
     d3 "^4.7.4"
 
