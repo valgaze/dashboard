@@ -6,8 +6,8 @@
 }
 .visualization-space-detail-real-time-bar {
   @include grid-container;
-  margin-top: 0px;
-  margin-bottom: 0px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
   display: flex;
 }
 
