@@ -77,6 +77,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
       // current day.
       end_time: endTime.add(1, 'day').format(),
       interval: '1d',
+      order: 'desc',
     }).then(data => {
       if (data.results.length > 0) {
         this.setState({
