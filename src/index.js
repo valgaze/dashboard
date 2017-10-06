@@ -78,7 +78,7 @@ const fields = [
     slug: 'eventsource',
     defaults: {
       'None': 'false',
-      'Production': 'wss://socket.density.rodeo',
+      'Production': 'wss://socket.density.io',
       'Local': 'ws://localhost:8080',
       'Env (REACT_APP_EVENTSOURCE_API_URL)': process.env.REACT_APP_EVENTSOURCE_API_URL,
     },
