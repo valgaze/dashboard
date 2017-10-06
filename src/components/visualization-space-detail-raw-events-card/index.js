@@ -92,10 +92,10 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       // Fetch information about each doorway in each event, if the doorway information isn't
       // already known.
       const doorwayResponses = uniqueArrayOfDoorways.map(doorwayId => {
-        if (!this.state.doorwayLookup[doorwayId]) {
-          return core.doorways.get({id: doorwayId});
+        if (this.state.doorwayLookup[doorwayId]) {
+          return this.state.doorwayLookup[doorwayId];
         } else {
-          return false;
+          return core.doorways.get({id: doorwayId});
         }
       });
 

@@ -109,6 +109,89 @@ describe('raw events pager', function() {
       'Jan 1st 2017, 5:00:30 am'
     );
   });
+  it('should render the card with a single page of events, refresh, and events should still be displayed', async function() {
+    mockdate.set('1/1/2017');
+
+    // Mock out the api call to get the event data.
+    // - If the user calls /doorways/drw_foo, return an appropriate response.
+    // - If the user calls /spaces/spc_bar/events, return an appropriate response.
+    global.fetch = sinon.stub().callsFake(async url => {
+      if (url.indexOf('doorways/drw_') !== -1)  {
+        return {
+          ok: true,
+          status: 201,
+          clone() { return this; },
+          json: () => Promise.resolve({
+            id: 'drw_3',
+            name: `My Fancy doorway`,
+          }),
+        };
+      } else {
+        return {
+          ok: true,
+          status: 201,
+          clone() { return this; },
+          json: () => Promise.resolve({
+            total: 2,
+            next: null,
+            previous: null,
+            results: [
+              {id: 'evt_a', sensor_id: 'snr_2', doorway_id: 'drw_3', timestamp: '2017-01-01T00:00:10-05:00'},
+              {id: 'evt_b', sensor_id: 'snr_2', doorway_id: 'drw_3', timestamp: '2017-01-01T00:00:20-05:00'},
+              {id: 'evt_c', sensor_id: 'snr_2', doorway_id: 'drw_4', timestamp: '2017-01-01T00:00:30-05:00'},
+            ],
+          }),
+        };
+      }
+    });
+
+    // Render the component
+    const component = mount(<RawEventsCard space={{id: 'spc_1', name: 'My Space', timeZone: 'America/New_York'}} />);
+
+    // The card starts in a loading state
+    assert.equal(component.state('state'), LOADING);
+
+    // Ensure the data fetch was issued to the server.
+    // 1 request made to get all the events
+    // 2 requests made to get doorway info (one for each unique doorway)
+    await timeout(250);
+    assert.equal(global.fetch.callCount, 1 + 2);
+
+    // Make sure the card state is set properly.
+    assert.equal(component.state('state'), VISIBLE);
+
+    // Then, ensure the card is in fact showing events.
+    // 1 row for the header
+    // 3 rows for the items in the table
+    assert.equal(component.find('.visualization-space-detail-raw-events-card-table-row').length, 1 + 3);
+
+    // And just for giggles, pull out a random value in the table to make sure that it's correct.
+    assert.equal(
+      component.find('.visualization-space-detail-raw-events-card-table-row').last().find('li').last().text(),
+      'My Fancy doorway'
+    );
+
+    // Then click the refresh button.
+    component.find('.visualization-space-detail-raw-events-card-header-refresh').simulate('click');
+
+    // Ensure the data fetch was issued to the server.
+    // 3 requests made in the last section.
+    // 1 request made to get all the events
+    // 0 requests were made to get doorway information, because that info was already cached.
+    await timeout(250);
+    assert.equal(global.fetch.callCount, 4);
+
+    // Assert that the same number of items were rendered to the screen.
+    // 1 row for the header
+    // 3 rows for the items in the table
+    assert.equal(component.find('.visualization-space-detail-raw-events-card-table-row').length, 1 + 3);
+
+    // And just for giggles, pull out a random value in the table to make sure that it's correct.
+    assert.equal(
+      component.find('.visualization-space-detail-raw-events-card-table-row').last().find('li').last().text(),
+      'My Fancy doorway'
+    );
+  });
 
   it('should change the date range and have the raw event display reflect that change', async function() {
     mockdate.set('1/1/2017');
