@@ -59,6 +59,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       end_time: endTime.format(),
       page: this.state.page,
       page_size: this.state.pageSize,
+      order: 'asc',
     }).then(preData => {
       // No results returned? Transition to EMPTY state.
       if (preData.results.length === 0) {
