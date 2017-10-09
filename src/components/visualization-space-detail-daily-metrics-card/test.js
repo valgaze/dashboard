@@ -255,13 +255,13 @@ describe('Visualization space 24 hour chart', function() {
       // Also, verify that the correct data was passed to the chart given what the ajax return data.
       const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body').children().nodes[0].props;
       assert.deepEqual(chartProps.data, [
-        {label: '01/01', value: 0},
-        {label: '01/02', value: 0},
-        {label: '01/03', value: 0},
-        {label: '01/04', value: 0},
-        {label: '01/05', value: 0},
-        {label: '01/06', value: 0},
         {label: '01/07', value: 10},
+        {label: '01/06', value: 0},
+        {label: '01/05', value: 0},
+        {label: '01/04', value: 0},
+        {label: '01/03', value: 0},
+        {label: '01/02', value: 0},
+        {label: '01/01', value: 0},
       ]);
     });
     it('should fetch exit data and display it during a different part of the year', async function() {
@@ -393,13 +393,13 @@ describe('Visualization space 24 hour chart', function() {
       // Also, verify that the correct data was passed to the chart given what the ajax return data.
       const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body').children().nodes[0].props;
       assert.deepEqual(chartProps.data, [
-        {label: '09/14', value: 0},
-        {label: '09/15', value: 0},
-        {label: '09/16', value: 0},
-        {label: '09/17', value: 0},
-        {label: '09/18', value: 0},
-        {label: '09/19', value: 0},
         {label: '09/20', value: 0},
+        {label: '09/19', value: 0},
+        {label: '09/18', value: 0},
+        {label: '09/17', value: 0},
+        {label: '09/16', value: 0},
+        {label: '09/15', value: 0},
+        {label: '09/14', value: 0},
       ]);
     });
     it('should fetch data and display it in a different time zone', async function() {
@@ -531,13 +531,13 @@ describe('Visualization space 24 hour chart', function() {
       // Also, verify that the correct data was passed to the chart given what the ajax return data.
       const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body').children().nodes[0].props;
       assert.deepEqual(chartProps.data, [
-        {label: '09/07', value: 0},
-        {label: '09/08', value: 0},
-        {label: '09/09', value: 0},
-        {label: '09/10', value: 0},
-        {label: '09/11', value: 0},
-        {label: '09/12', value: 0},
         {label: '09/13', value: 0},
+        {label: '09/12', value: 0},
+        {label: '09/11', value: 0},
+        {label: '09/10', value: 0},
+        {label: '09/09', value: 0},
+        {label: '09/08', value: 0},
+        {label: '09/07', value: 0},
       ]);
     });
   });
@@ -856,14 +856,14 @@ describe('Visualization space 24 hour chart', function() {
     // Also, verify that the correct data was passed to the chart given what the ajax return data.
     const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body').children().nodes[0].props;
     assert.deepEqual(chartProps.data, [
-      { label: '10/31', value: 3 },
-      { label: '11/01', value: 0 },
-      { label: '11/02', value: 0 },
-      { label: '11/03', value: 0 },
-      { label: '11/04', value: 0 },
-      { label: '11/05', value: 0 },
-      { label: '11/05', value: 0 },
       { label: '11/06', value: 0 },
+      { label: '11/05', value: 0 },
+      { label: '11/05', value: 0 },
+      { label: '11/04', value: 0 },
+      { label: '11/03', value: 0 },
+      { label: '11/02', value: 0 },
+      { label: '11/01', value: 0 },
+      { label: '10/31', value: 3 },
     ]);
   });
 });
