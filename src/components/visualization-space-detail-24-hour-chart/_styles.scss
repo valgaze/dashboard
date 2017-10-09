@@ -30,17 +30,22 @@
 }
 .visualization-space-detail-well-section {
   flex: 1;
+  // On mobile, make each item a flex parent so that the order of items can be changed with `order`.
+  display: flex;
 
-  border-left: 2px solid $gray-light;
   margin-top: 20px;
   margin-bottom: 20px;
 
   text-align: center;
 
-  // On a computer, add more spacing above and below each cell.
+  // On a computer, add more spacing above and below each cell. Also, change the display property
+  // back to block because the items don't need reordering.
   @media (min-width: $screen-xs-max) {
     margin-top: 30px;
     margin-bottom: 30px;
+    display: block;
+
+    border-left: 2px solid $gray-light;
   }
 }
 .visualization-space-detail-well-section:first-child { border-left-width: 0px; }
@@ -49,18 +54,36 @@
   color: $brand-primary;
   font-size: $font-size-3;
   font-weight: $font-weight-3;
-  padding-top: 5px;
-  padding-bottom: 5px;
+
+  // On mobile, place the quantity contents before the label.
+  order: 2;
 
   // Space the quantity a bit apart from the section label.
-  margin-right: 10px;
+  margin-left: 10px;
 
   // On a computer, make the quantity big and above the the section label.
   @media (min-width: $screen-xs-max) {
     display: block;
     font-size: $font-size-1;
     font-weight: $font-weight-1;
-    margin-right: 0px; // Undo spacing above.
+    margin-left: 0px; // Undo spacing above.
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
+.visualization-space-detail-well-section-label {
+  margin-left: 20px;
+
+  // On mobile, place the quantity label after the contents.
+  order: 1;
+
+  // Add a colon after the label of the cell.
+  &:after { content: ': '; }
+
+  // Remove the colon on desktop
+  @media (min-width: $screen-xs-max) {
+    margin-left: 0px;
+    &:after { content: ''; }
   }
 }
 
