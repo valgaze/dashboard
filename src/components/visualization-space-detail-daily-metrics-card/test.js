@@ -13,7 +13,7 @@ function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
 
-describe('Visualization space 24 hour chart', function() {
+describe('Visualization space daily metrics chart', function() {
   afterEach(() => mockdate.reset());
 
   // Used to figure out which days are visible and which days are hidden within the date range
