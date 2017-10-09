@@ -229,7 +229,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           {this.state.data.map((item, ct) => {
             return <CardBody key={item.id} className="visualization-space-detail-raw-events-card-table-row">
               <li>{moment.utc(item.timestamp).format('MMM Do YYYY, h:mm:ss a')}</li>
-              <li>{item.direction === 1 ? 'Ingress' : 'Egress'}</li>
+              <li>{item.direction === 1 ? 'Entrance' : 'Exit'}</li>
               <li>{this.state.doorwayLookup[item.doorwayId] ? this.state.doorwayLookup[item.doorwayId].name : item.doorwayId}</li>
             </CardBody>;
           })}
