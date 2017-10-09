@@ -15,10 +15,16 @@
 }
 
 .login-density-logo {
-  width: 44px;
-  margin: 20px auto;
-  padding-bottom: 60px;
+  width: 100px;
+  height: 100px;
   display: block;
+
+  margin: 0px auto;
+  padding-bottom: 40px;
+
+  svg {
+    width: 100px;
+  }
 }
 
 // The submit button to the login form

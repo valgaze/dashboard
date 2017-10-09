@@ -10,6 +10,8 @@ import Button from '@density/ui-button';
 import Toast from '@density/ui-toast';
 import Navbar from '@density/ui-navbar';
 
+import Mark from '@density/ui-density-mark';
+
 const LOGIN = 'LOGIN', FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 
 export class Login extends React.Component {
@@ -141,11 +143,7 @@ export class Login extends React.Component {
       </Toast> : null}
 
       <div className="login-section">
-        <img
-          className="login-density-logo"
-          src="https://dashboard.density.io/assets/images/density_mark_black.png"
-          alt="Density Logo"
-        />
+        <Mark className="login-density-logo" />
 
         {/* Login inputs */}
         {this.state.view === LOGIN ?
