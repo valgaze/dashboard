@@ -13,6 +13,9 @@ jobs:
           name: "Install dependencies"
           command: yarn
       - run:
+          name: "Run tests"
+          command: yarn test
+      - run:
           name: "Build dashboard"
           command: |
             # Finally, build dashboard.
