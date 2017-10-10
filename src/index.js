@@ -160,7 +160,10 @@ eventSource.events.on('space', countChangeEvent => {
   store.dispatch(collectionSpacesCountChange({
     id: countChangeEvent.spaceId,
     timestamp: countChangeEvent.timestamp,
-    countChange: countChangeEvent.countChange,
+    // In v2, the API uses "direction" to for a count change, due to a traffic event, at a space.
+    // In the future "count change" should refer to ANY count change at a space, including resets.
+    // TODO: The UI does not show "live" resets, so review other instances of `countChange`.
+    countChange: countChangeEvent.direction,
   }));
 });
 window.store = store;
