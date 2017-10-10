@@ -24,9 +24,3 @@
   min-height: 5em;
   resize: vertical;
 }
-
-// Suffix after the doorway name
-.update-doorway-name-readonly span:after {
-  content: " Doorway";
-  color: $gray;
-}

@@ -33,8 +33,6 @@ import collectionSpacesDestroy from '../../actions/collection/spaces/destroy';
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 
-import Fab from '@density/ui-fab';
-import ContextMenu, { ContextMenuItem } from '@density/ui-context-menu';
 import InputBox from '@density/ui-input-box';
 import Button from '@density/ui-button';
 
@@ -90,19 +88,6 @@ export function Environment({
 
     <div className="environment-container">
       <div className="environment-center-wrapper">
-        {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
-        <Fab
-          type="primary"
-          onClick={() => {
-            if (activeModal.name) {
-              return onCloseModal();
-            } else {
-              return onOpenModal('space-doorway-popup');
-            }
-          }}
-          aria-label="Add Space or Doorway"
-        >&#xe92b;</Fab>
-
         {/************
         ** MODALS
         **************/}
@@ -120,16 +105,6 @@ export function Environment({
           onSubmit={onCreateDoorway}
           onDismiss={onCloseModal}
         /> : null}
-        {activeModal.name === 'space-doorway-popup' ? <ContextMenu className="environment-creation-context-menu">
-          <ContextMenuItem onClick={() => onOpenModal('create-space')}>
-            <span className="environment-creation-context-menu-icon">&#xe92c;</span>
-            Create Space
-          </ContextMenuItem>
-          <ContextMenuItem onClick={() => onOpenModal('create-doorway')}>
-            <span className="environment-creation-context-menu-icon">&#xe92c;</span>
-            Create Doorway
-          </ContextMenuItem>
-        </ContextMenu> : null}
 
         {/* When a sensor placement is clicked, open a modal to warn the user prior to changing things. */}
         {activeModal.name === 'confirm-sensor-placement-change' ? <EnvironmentModalSensorPlacement
@@ -190,9 +165,19 @@ export function Environment({
 
         <div className="environment-row">
           <div className="space-column">
-            <h2 className="environment-space-header-text">Spaces</h2>
+            {/* Header row one above the column. On left, show column title, on right, show add a
+              space button. */}
+            <div className="environment-space-column-header-row1">
+              <h2 className="environment-space-header-text">Spaces</h2>
+              <span
+                className="environment-space-header-create-link"
+                role="button"
+                onClick={() => onOpenModal('create-space')}
+              >Add a Space</span>
+            </div>
+
             {/* Header above the column. Allows searching and ordering of data. */}
-            <div className="environment-space-column-header">
+            <div className="environment-space-column-header-row2">
               <InputBox
                 className="environment-space-search-box"
                 type="text"
@@ -266,9 +251,19 @@ export function Environment({
             </div>
           </div>
           <div className="doorway-column">
-            <h2 className="environment-doorway-header-text">Doorways</h2>
+            {/* Header row one above the column. On left, show column title, on right, show add a
+              space button. */}
+            <div className="environment-doorway-column-header-row1">
+              <h2 className="environment-doorway-header-text">Doorways</h2>
+              <span
+                className="environment-doorway-header-create-link"
+                role="button"
+                onClick={() => onOpenModal('create-doorway')}
+              >Add a Doorway</span>
+            </div>
+
             {/* Header above the column. Allows searching and ordering of data. */}
-            <div className="environment-doorway-column-header">
+            <div className="environment-doorway-column-header-row2">
               <InputBox
                 className="environment-doorway-search-box"
                 type="text"

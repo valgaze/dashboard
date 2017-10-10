@@ -72,12 +72,10 @@
   @include grid-width(24, 12, 12, 12);
   padding-bottom: 20px;
 
-  // On a computer:
-  // 1. Set a fixed height on the columns. FIXME: This sucks currently. There's got to be a better way.
-  // 2. Add a space between the top of the column and the nav.
+  // On a computer, set a fixed height on the columns.
+  // FIXME: This sucks currently. There's got to be a better way.
   @media (min-width: $screen-xs-max) {
-    height: calc(100vh - 300px); /* 1 */
-    margin-top: 40px; /* 2 */
+    height: calc(100vh - 300px);
   }
 }
 .doorway-column {
@@ -86,12 +84,57 @@
   display: none;
   padding-bottom: 20px;
 
-  // Hide doorways column on mobile. Also, on a computer, add a space between the top of the column
-  // and the nav.
+  // Hide doorways column on mobile.
   @media (min-width: $screen-xs-max) {
     display: flex;
-    margin-top: 40px;
   }
+}
+
+// Above the two columns, render controls to refine the list of items in each column.
+.environment-space-column-header-row1, .environment-doorway-column-header-row1 {
+  display: flex;
+  margin-top: 10px;
+}
+.environment-space-column-header-row2, .environment-doorway-column-header-row2 {
+  display: flex;
+  margin-top: 40px;
+}
+
+// These are the "Filter thing..." boxes above each column.
+.environment-space-search-box, .environment-doorway-search-box {
+  width: 200px;
+  margin-right: auto;
+}
+
+// These are the labels above each column on the environment page.
+.environment-space-header-text, .environment-doorway-header-text {
+  font-size: $font-size-3;
+  font-weight: $font-weight-3;
+  color: $gray-darkest;
+
+  margin-top: 0px;
+  margin-right: auto;
+}
+
+// The links in the headers used to create spaces and doorways on the environment page.
+.environment-space-header-create-link, .environment-doorway-header-create-link {
+  cursor: pointer;
+  user-select: none;
+  color: $gray-cinder;
+  margin-top: -3px;
+
+  &:before {
+    color: $brand-primary;
+
+    font-family: 'Densicons';
+    content: "\e92c";
+
+    margin-right: 8px;
+    margin-left: 10px;
+  }
+
+  &:hover { opacity: 0.8; }
+  &:active { opacity: 1; }
 }
 
 // These are the toasts at the top of each column.
@@ -101,20 +144,6 @@
   // Don't show the toasts on mobile, as they explain the dragging functionality that the page
   // doesn't support on mobile.
   @media (max-width: $screen-xs-max) { display: none; }
-}
-
-// These are the labels above each column on the environment page.
-.environment-space-header-text, .environment-doorway-header-text {
-  font-size: $font-size-2;
-  font-weight: $font-weight-2;
-  color: $gray-darkest;
-}
-
-// Above the two columns, render controls to refine the list of items in each column.
-.environment-space-column-header, .environment-doorway-column-header { display: flex; }
-.environment-space-search-box, .environment-doorway-search-box {
-  width: 200px;
-  margin-right: auto;
 }
 
 .column-body {

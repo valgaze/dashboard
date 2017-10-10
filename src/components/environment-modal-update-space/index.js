@@ -69,7 +69,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               className="update-space-daily-reset-container"
               htmlFor="update-space-daily-reset"
               label="Daily Reset"
-              infoLabel="info for resets goes here."
+              infoLabel="The time each day that the space resets its count back to zero. Typically in the middle of the night or at the star tof a work day."
               input={<InputBox
                 type="select"
                 id="update-space-daily-reset"
