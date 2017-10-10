@@ -16,9 +16,7 @@ import collectionTokensUpdate from '../../actions/collection/tokens/update';
 import collectionTokensFilter from '../../actions/collection/tokens/filter';
 import collectionTokensDestroy from '../../actions/collection/tokens/destroy';
 
-import Fab from '@density/ui-fab';
 import InputBox from '@density/ui-input-box';
-import Card from '@density/ui-card';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 
@@ -112,7 +110,7 @@ export function TokenList({
         role="button"
         onClick={() => onOpenModal('token-create')}
       >
-        Create new token
+        Add a Token
       </div>
 
       <div className="token-list-row">

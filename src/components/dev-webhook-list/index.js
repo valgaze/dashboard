@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import Fab from '@density/ui-fab';
 import InputBox from '@density/ui-input-box';
 
 import showModal from '../../actions/modal/show';
@@ -107,8 +106,15 @@ export function WebhookList({
         </div>
       </div>
 
-      {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
-      <Fab type="primary" className="fab" onClick={() => onOpenModal('webhook-create')}>&#xe92b;</Fab>
+      {/* Link to create new webhook */}
+      <div
+        className="webhook-list-create-webhook-link"
+        role="button"
+        onClick={() => onOpenModal('webhook-create')}
+      >
+        Add a Webhook
+      </div>
+
 
       <div className="webhook-list">
         {webhookFilter(webhooks.data, webhooks.filters.search).map(webhook => {

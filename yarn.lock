@@ -124,9 +124,11 @@
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@density/ui-input-stack/-/ui-input-stack-0.2.0.tgz#5591133493a7620687f8b74c2335ad523992aa3a"
 
-"@density/ui-modal@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@density/ui-modal/-/ui-modal-0.2.1.tgz#1a991bdee66c0b09b96ca49b7edaa35a540504e4"
+"@density/ui-modal@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@density/ui-modal/-/ui-modal-0.3.0.tgz#49fbf71ba7d6b52cd93c1d61908af6065f0c0814"
+  dependencies:
+    classnames "^2.2.5"
 
 "@density/ui-navbar-sidebar@^0.1.2":
   version "0.1.2"

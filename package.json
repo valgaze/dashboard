@@ -22,7 +22,7 @@
     "@density/ui-fab": "^0.2.1",
     "@density/ui-input-box": "^0.3.0",
     "@density/ui-input-stack": "0.2.0",
-    "@density/ui-modal": "^0.2.1",
+    "@density/ui-modal": "^0.3.0",
     "@density/ui-navbar": "^0.0.14",
     "@density/ui-navbar-sidebar": "^0.1.2",
     "@density/ui-pager-button-group": "^0.1.4",

@@ -51,7 +51,7 @@ describe('Webhook list page', function() {
     store.dispatch(collectionWebhooksSet([]));
 
     // Click on the new button
-    component.find('.fab').simulate('click');
+    component.find('.webhook-list-create-webhook-link').simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'webhook-create');
@@ -102,7 +102,7 @@ describe('Webhook list page', function() {
     store.dispatch(collectionWebhooksSet([]));
 
     // Click on the new button
-    component.find('.fab').simulate('click');
+    component.find('.webhook-list-create-webhook-link').simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'webhook-create');

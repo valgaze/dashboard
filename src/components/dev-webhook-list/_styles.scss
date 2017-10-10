@@ -48,9 +48,6 @@
   margin-top: 70px;
 
   margin-top: 0px; // On mobile
-  @media (min-width: $screen-xs-max) {
-    margin-top: 70px; // On a computer
-  }
 }
 
 .webhook-list {
@@ -67,12 +64,24 @@
   width: 100%;
 }
 
-.webhook-container .fab {
-  position: absolute;
-  right: 16px;
-  top: -2px;
+// Link used to create a new webhook.
+.webhook-list-create-webhook-link {
+  cursor: pointer;
+  user-select: none;
+  color: $gray-cinder;
 
-  line-height: 55px;
-  font-family: "Densicons";
-  font-size: $font-size-base;
+  margin-top: 20px;
+
+  &:before {
+    color: $brand-primary;
+
+    font-family: 'Densicons';
+    content: "\e92c";
+
+    margin-right: 8px;
+    margin-left: 10px;
+  }
+
+  &:hover { opacity: 0.8; }
+  &:active { opacity: 1; }
 }
