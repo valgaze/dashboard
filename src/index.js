@@ -82,7 +82,7 @@ const fields = [
       'Local': 'ws://localhost:8080',
       'Env (REACT_APP_EVENTSOURCE_API_URL)': process.env.REACT_APP_EVENTSOURCE_API_URL,
     },
-    default: 'None',
+    default: 'Production',
   },
 ];
 function setServiceLocations(data) {
