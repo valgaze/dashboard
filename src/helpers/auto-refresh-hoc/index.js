@@ -23,12 +23,12 @@ export default function autoRefresh({interval}) {
         return React.createElement(Component, this.props);
         // return <Component {...this.props}>;
       }
-
-      displayName = `AutoRefresh(${
-        Component.displayName || Component.name || 'Component'
-      })`
     }
 
+
+    RealtimeComponent.displayName = `AutoRefresh(${
+      Component.displayName || Component.name || 'Component'
+    })`
     return RealtimeComponent;
   };
 }
