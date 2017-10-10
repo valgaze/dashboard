@@ -54,7 +54,7 @@ describe('Token list page', function() {
     store.dispatch(collectionTokensSet([]));
 
     // Click on the new button
-    component.find('.fab').simulate('click');
+    component.find('.token-list-create-token-link').simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'token-create');
@@ -101,7 +101,7 @@ describe('Token list page', function() {
     store.dispatch(collectionTokensSet([]));
 
     // Click on the new button
-    component.find('.fab').simulate('click');
+    component.find('.token-list-create-token-link').simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'token-create');

@@ -18,6 +18,7 @@ import collectionTokensDestroy from '../../actions/collection/tokens/destroy';
 
 import Fab from '@density/ui-fab';
 import InputBox from '@density/ui-input-box';
+import Card from '@density/ui-card';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 
@@ -105,18 +106,14 @@ export function TokenList({
         </div>
       </div>
 
-      {/* The Fab triggers the space doorway context menu to make a new space or doorway */}
-      <Fab
-        type="primary"
-        className="fab"
-        onClick={() => {
-          if (activeModal.name) {
-            return onCloseModal();
-          } else {
-            return onOpenModal('token-create');
-          }
-        }}
-      >&#xe92b;</Fab>
+      {/* Link to create new token */}
+      <div
+        className="token-list-create-token-link"
+        role="button"
+        onClick={() => onOpenModal('token-create')}
+      >
+        Create new token
+      </div>
 
       <div className="token-list-row">
         {tokenFilter(tokens.data, tokens.filters.search).map(token => {
