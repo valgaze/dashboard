@@ -102,14 +102,7 @@ describe('Space workflows', function() {
     store.dispatch(collectionLinksSet([]));
 
     // Click on the new button
-    component.find('.fab-primary').simulate('click');
-
-    // The context menu should be visible.
-    assert.equal(store.getState().activeModal.name, 'space-doorway-popup');
-    assert.equal(component.find('.environment-creation-context-menu').length, 1);
-
-    // Click on 'create space'
-    component.find('.environment-creation-context-menu .context-menu-item').first().simulate('click');
+    component.find('.environment-space-header-create-link').simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'create-space');
@@ -178,14 +171,7 @@ describe('Space workflows', function() {
     store.dispatch(collectionLinksSet([]));
 
     // Click on the new button
-    component.find('.fab-primary').simulate('click');
-
-    // The context menu should be visible.
-    assert.equal(store.getState().activeModal.name, 'space-doorway-popup');
-    assert.equal(component.find('.environment-creation-context-menu').length, 1);
-
-    // Click on 'create space'
-    component.find('.environment-creation-context-menu .context-menu-item').first().simulate('click');
+    component.find('.environment-space-header-create-link').simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'create-space');
@@ -600,14 +586,7 @@ describe('Doorway workflows', function() {
     store.dispatch(collectionLinksSet([]));
 
     // Click on the new button
-    component.find('.fab-primary').simulate('click');
-
-    // The context menu should be visible.
-    assert.equal(store.getState().activeModal.name, 'space-doorway-popup');
-    assert.equal(component.find('.environment-creation-context-menu').length, 1);
-
-    // Click on 'create doorway'
-    component.find('.environment-creation-context-menu .context-menu-item').last().simulate('click');
+    component.find('.environment-doorway-header-create-link').simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'create-doorway');
@@ -661,14 +640,7 @@ describe('Doorway workflows', function() {
     store.dispatch(collectionLinksSet([]));
 
     // Click on the new button
-    component.find('.fab-primary').simulate('click');
-
-    // The context menu should be visible.
-    assert.equal(store.getState().activeModal.name, 'space-doorway-popup');
-    assert.equal(component.find('.environment-creation-context-menu').length, 1);
-
-    // Click on 'create doorway'
-    component.find('.environment-creation-context-menu .context-menu-item').last().simulate('click');
+    component.find('.environment-doorway-header-create-link').simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'create-doorway');
