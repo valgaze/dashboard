@@ -1,9 +1,13 @@
 .environment-container {
   position: absolute;
-  top: 100px;
+  top: 50px;
   left: 0px;
   right: 0px;
   bottom: 0px;
+
+  @media (min-width: $screen-xs-max) {
+    top: 100px;
+  }
 }
 .environment-center-wrapper {
   @include grid-container;
@@ -15,59 +19,9 @@
   position: relative;
 }
 
-// The button used to open the environment creation context menu to let a user add a space or
-// doorway.
-.environment .fab-primary {
-  line-height: 55px;
-  position: absolute;
-  top: -2px;
-  right: 16px;
+.environment-row { @include grid-row; }
 
-  font-family: "Densicons";
-  font-size: $font-size-base;
-
-  // Hide the fab
-  @media (max-width: $screen-xs-max) {
-    display: none;
-  }
-}
-
-// The popup that is visible when the user clicks the FAB (ie, create space / create doorway)
-.environment-creation-context-menu {
-  position: absolute;
-  right: 16px;
-  margin-top: 64px;
-  z-index: 1000;
-  overflow: visible;
-}
-.environment-creation-context-menu:before {
-  content: ' ';
-
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 8px 8px 8px;
-  border-color: transparent transparent #ffffff transparent;
-
-  position: absolute;
-  left: 80%;
-  top: -8px;
-}
-// Icons to the left of the context menu creation options
-.environment-creation-context-menu-icon {
-  font-family: "Densicons";
-  font-size: $font-size-base;
-
-  color: $brand-primary;
-  position: relative;
-  top: 1px;
-  margin-right: 10px;
-}
-
-.environment-row {
-  @include grid-row;
-}
-
+// The column container divs for both the spaces and doorways column.
 .space-column {
   @include grid-width(24, 12, 12, 12);
   padding-bottom: 20px;
@@ -75,12 +29,12 @@
   // On a computer, set a fixed height on the columns.
   // FIXME: This sucks currently. There's got to be a better way.
   @media (min-width: $screen-xs-max) {
-    height: calc(100vh - 300px);
+    height: calc(100vh - 225px);
   }
 }
 .doorway-column {
   @include grid-width(0, 12, 12, 12);
-  height: calc(100vh - 300px);
+  height: calc(100vh - 225px);
   display: none;
   padding-bottom: 20px;
 
@@ -135,6 +89,12 @@
 
   &:hover { opacity: 0.8; }
   &:active { opacity: 1; }
+
+  // On mobile, hide links to create spaces and doorways.
+  display: none;
+  @media (min-width: $screen-xs-max) {
+    display: block;
+  }
 }
 
 // These are the toasts at the top of each column.
