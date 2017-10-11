@@ -106,7 +106,7 @@ describe('raw events pager', function() {
     // And just for giggles, pull out a random value in the table to make sure that it's correct.
     assert.equal(
       component.find('.visualization-space-detail-raw-events-card-table-row').last().find('li').first().text(),
-      'Jan 1st 2017, 5:00:30 am'
+      'Jan 1st 2017, 12:00:30 am'
     );
   });
   it('should render the card with a single page of events, refresh, and events should still be displayed', async function() {
@@ -303,7 +303,7 @@ describe('raw events pager', function() {
     // And just for giggles, pull out a random value in the table to make sure that it's correct.
     assert.equal(
       component.find('.visualization-space-detail-raw-events-card-table-row').last().find('li').first().text(),
-      'Nov 1st 2017, 5:00:30 am'
+      'Nov 1st 2017, 1:00:30 am'
     );
   });
 
