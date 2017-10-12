@@ -21,13 +21,18 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import MultiBackend, { TouchTransition, Preview } from 'react-dnd-multi-backend';
- 
+
 
 class NavbarWrapper extends React.Component {
   constructor(props) {
     super(props);
     this.state = { show: false };
   }
+
+  closeSidebar() {
+    this.setState({ show: false })
+  }
+
   render() {
     return <Navbar onClickSidebarButton={() => this.setState({show: !this.state.show})}>
       <NavbarItem
@@ -35,11 +40,11 @@ class NavbarWrapper extends React.Component {
         pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
         href="#/visualization/spaces"
       >Visualization</NavbarItem>
-      <NavbarItem
+      {/* <NavbarItem
         activePage={this.props.activePage}
         pageName={['ENVIRONMENT_SPACE']}
         href="#/environment/spaces"
-      >Environment</NavbarItem>
+      >Environment</NavbarItem> */}
       <NavbarItem
         activePage={this.props.activePage}
         pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
@@ -60,15 +65,19 @@ class NavbarWrapper extends React.Component {
           activePage={this.props.activePage}
           pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
           href="#/visualization/spaces"
+          onClick={this.closeSidebar.bind(this)}
         >Visualization</NavbarSidebarItem>
 
-        <NavbarSidebarItem
+        {/* <NavbarSidebarItem
           header={true}
           activePage={this.props.activePage}
           pageName={['ENVIRONMENT_SPACE', 'ENVIRONMENT_SENSOR']}
           href="#/environment/spaces"
+          onClick={this.closeSidebar.bind(this)}
         >Environment</NavbarSidebarItem>
-        <NavbarSidebarItem activePage={this.props.activePage} pageName="ENVIRONMENT_SPACE" href="#/environment/spaces">Spaces</NavbarSidebarItem>
+        <NavbarSidebarItem activePage={this.props.activePage} pageName="ENVIRONMENT_SPACE" href="#/environment/spaces"
+          onClick={this.closeSidebar.bind(this)}
+          >Spaces</NavbarSidebarItem> */}
         {/* <NavbarSidebarItem activePage={this.props.activePage} pageName='ENVIRONMENT_SENSOR' href="#/environment/sensors">Sensors</NavbarSidebarItem> */}
 
         <NavbarSidebarItem
@@ -76,9 +85,10 @@ class NavbarWrapper extends React.Component {
           activePage={this.props.activePage}
           pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
           href="#/dev/tokens"
+          onClick={this.closeSidebar.bind(this)}
         >Developer Tools</NavbarSidebarItem>
-        <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_TOKEN_LIST']} href="#/dev/tokens">Tokens</NavbarSidebarItem>
-        <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_WEBHOOK_LIST']} href="#/dev/webhooks">Webhooks</NavbarSidebarItem>
+        <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_TOKEN_LIST']} href="#/dev/tokens" onClick={this.closeSidebar.bind(this)}>Tokens</NavbarSidebarItem>
+        <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_WEBHOOK_LIST']} href="#/dev/webhooks" onClick={this.closeSidebar.bind(this)}>Webhooks</NavbarSidebarItem>
         <NavbarSidebarItem activePage={false} pageName={[]} href="http://docs.density.io">
           API Documentation
           <span className="app-api-docs-icon">&#xe91b;</span>
@@ -89,6 +99,7 @@ class NavbarWrapper extends React.Component {
           activePage={this.props.activePage}
           pageName={['ACCOUNT']}
           href={['#/account']}
+          onClick={this.closeSidebar.bind(this)}
         >Account</NavbarSidebarItem>
       </NavbarSidebar>
     </Navbar>;
