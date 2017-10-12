@@ -31,6 +31,11 @@
     position: fixed;
     top: 0px;
 
+    .navbar-container {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
     .navbar-items > li {
       display: none;
     }
