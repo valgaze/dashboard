@@ -13,7 +13,9 @@ import LinearProgressFn from '@density/chart-linear-progress';
 const LinearProgress = chartAsReactComponent(LinearProgressFn);
 const RealTimeCountChart = autoRefreshHoc({
   interval: 50,
-  shouldComponentUpdate: props => { return props.events.length }
+  shouldComponentUpdate: function (nextProps) {
+    return this.props.events.length || nextProps.events.length;
+  }
 })(chartAsReactComponent(RealTimeCountFn));
 
 function CountLabel({count}) {
