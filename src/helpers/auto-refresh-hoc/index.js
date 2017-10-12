@@ -6,19 +6,20 @@ import * as React from 'react';
  * // Every 500 ms, NewComponent will be updated every 500 seconds.
  */
 
-export default function autoRefresh({interval}) {
+export default function autoRefresh({interval, shouldComponentUpdate}) {
   return Component => {
     class RealtimeComponent extends React.Component {
       constructor(props) {
         super(props);
-        this.state = {
-          interval: setInterval(this.forceUpdate.bind(this), interval || 5000),
-        };
+        this.state = { lastFrame: Date.now() };
+        this.shouldComponentUpdate = shouldComponentUpdate || this.shouldComponentUpdate;
+        requestAnimationFrame(this.tick.bind(this));
       }
-      componentWillUnmount() {
-        clearInterval(this.state.interval);
+      tick() {
+        var now = Date.now();
+        if (now - this.state.lastFrame > interval) { this.setState({ lastFrame: now }); }
+        requestAnimationFrame(this.tick.bind(this));
       }
-
       render() {
         return React.createElement(Component, this.props);
         // return <Component {...this.props}>;

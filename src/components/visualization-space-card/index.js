@@ -10,8 +10,11 @@ import formatCapacityPercentage from '../../helpers/format-capacity-percentage/i
 import { chartAsReactComponent } from '@density/charts';
 import RealTimeCountFn from '@density/chart-real-time-count';
 import LinearProgressFn from '@density/chart-linear-progress';
-const RealTimeCountChart = autoRefreshHoc({interval: 100})(chartAsReactComponent(RealTimeCountFn));
 const LinearProgress = chartAsReactComponent(LinearProgressFn);
+const RealTimeCountChart = autoRefreshHoc({
+  interval: 50,
+  shouldComponentUpdate: props => { return props.events.length }
+})(chartAsReactComponent(RealTimeCountFn));
 
 function CountLabel({count}) {
   if (typeof count !== 'number') {
