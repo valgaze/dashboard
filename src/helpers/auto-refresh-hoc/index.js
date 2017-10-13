@@ -16,15 +16,15 @@ export default function autoRefresh({interval, shouldComponentUpdate}) {
         this.tick = this.tick.bind(this);
       }
       componentDidMount() {
-        this.raf = window.requestAnimationFrame(this.raf);
+        this.raf = window.requestAnimationFrame(this.tick);
       }
       componentWillUnmount() {
-        window.clearAnimationFrame(this.raf);
+        window.cancelAnimationFrame(this.raf);
       }
       tick() {
         var now = Date.now();
         if (now - this.state.lastFrame > interval) { this.setState({ lastFrame: now }); }
-        requestAnimationFrame(this.tick.bind(this));
+        this.raf = window.requestAnimationFrame(this.tick);
       }
       render() {
         return React.createElement(Component, this.props);
