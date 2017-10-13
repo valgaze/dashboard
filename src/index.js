@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 import './built-css/styles.css';
 import { core, accounts } from '@density-int/client';
+import ReactGA from 'react-ga';
 
 import userSet from './actions/user/set';
 import userError from './actions/user/error';
 import sessionTokenUnSet from './actions/session-token/unset';
 
 import eventSource from './helpers/websocket-event-pusher/index';
+import mixpanelTrack from './helpers/mixpanel-track/index';
 
 // The main app component that renders everything.
 import App from './components/app/index';
@@ -93,6 +95,21 @@ function setServiceLocations(data) {
   }
 }
 setServiceLocations(getActiveEnvironments(fields)); /* step 1 above */
+
+
+// Send metrics to google analytics and mixpanel when the page url changes.
+if (process.env.REACT_APP_GA_TRACKING_CODE) {
+  ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_CODE);
+}
+window.addEventListener('hashchange', () => {
+  // Mixpanel: track url change
+  mixpanelTrack('URL Change', { url: window.localtion.hash });
+
+  // Google analytics: track page view
+  if (process.env.REACT_APP_GA_TRACKING_CODE) {
+    ReactGA.pageview(window.location.hash);
+  }
+});
 
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
