@@ -101,7 +101,7 @@ setServiceLocations(getActiveEnvironments(fields)); /* step 1 above */
 if (process.env.REACT_APP_GA_TRACKING_CODE) {
   ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_CODE);
 }
-window.addEventListener('hashchange', () => {
+function trackHashChange() {
   // Mixpanel: track url change
   mixpanelTrack('URL Change', { url: window.location.hash });
 
@@ -109,7 +109,9 @@ window.addEventListener('hashchange', () => {
   if (process.env.REACT_APP_GA_TRACKING_CODE) {
     ReactGA.pageview(window.location.hash);
   }
-});
+};
+window.addEventListener('hashchange', trackHashChange);
+trackHashChange();
 
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
