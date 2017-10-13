@@ -1,6 +1,8 @@
 import { USER_SET } from '../../actions/user/set';
 import { USER_PUSH } from '../../actions/user/push';
+
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
+import mixpanelUserReducerEnhancer from '../../helpers/mixpanel-user-reducer-enhancer/index';
 
 const initialState = {
   user: null,
@@ -8,7 +10,7 @@ const initialState = {
   error: false,
 };
 
-export default function user(state=initialState, action) {
+export function user(state=initialState, action) {
   switch (action.type) {
   case USER_SET:
     return {...state, user: objectSnakeToCamel(action.data)};
@@ -18,3 +20,5 @@ export default function user(state=initialState, action) {
     return state;
   }
 }
+
+export default mixpanelUserReducerEnhancer(user);

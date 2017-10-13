@@ -39,3 +39,8 @@ Many styles and associated variables are brought in from `@density/ui`, our UI f
 Real time events are sent to this service via websockets, via the
 [https://github.com/DensityCo/websocket-server](websocket-server). The websocket client is mostly in
 `src/helpers/websocket-event-pusher/index.js`.
+
+
+## Environment variables
+- `REACT_APP_GA_TRACKING_CODE`: Optional google analytics tracking code for tracking metrics.
+- `REACT_APP_MIXPANEL_TOKEN`: Optional mixpanel token for tracking user interactions.

@@ -13,12 +13,18 @@ export default function autoRefresh({interval, shouldComponentUpdate}) {
         super(props);
         this.state = { lastFrame: Date.now() };
         this.shouldComponentUpdate = shouldComponentUpdate || this.shouldComponentUpdate;
-        requestAnimationFrame(this.tick.bind(this));
+        this.tick = this.tick.bind(this);
+      }
+      componentDidMount() {
+        this.raf = window.requestAnimationFrame(this.tick);
+      }
+      componentWillUnmount() {
+        window.cancelAnimationFrame(this.raf);
       }
       tick() {
         var now = Date.now();
         if (now - this.state.lastFrame > interval) { this.setState({ lastFrame: now }); }
-        requestAnimationFrame(this.tick.bind(this));
+        this.raf = window.requestAnimationFrame(this.tick);
       }
       render() {
         return React.createElement(Component, this.props);
