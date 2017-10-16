@@ -143,7 +143,10 @@ function preRouteAuthentication() {
 
   // If on the account registration page (the only page that doesn't require the user to be logged in)
   // then don't worry about any of this.
-  } else if (window.location.hash.startsWith("#/account/register")) {
+  } else if (
+    window.location.hash.startsWith("#/account/register") ||
+    window.location.hash.startsWith("#/account/forgot-password")
+  ) {
     return;
 
   // If the user isn't logged in, send them to the login page.
