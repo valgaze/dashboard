@@ -83,16 +83,14 @@ export function WebhookList({
           <h1 className="webhook-list-header-text">Webhooks</h1>
           <DescriptionModal>
             <p>
-              A webhook is a connection between Density servers and a customer's servers. Instead of the
-              customer asking us for the data, we push the data to the customer automatically via the
-              webhook. Ready to start using them?
+              Webhooks allow us to push you data whenever your Density sensors count an event. Create a webhook, tell us what endpoint to hit, and we'll send you a payload over HTTP.
             </p>
             <a
               className="webhook-list-description-link"
               href="http://docs.density.io"
               target="_blank"
               rel="noopener noreferrer"
-            >Visit our API Documentation</a>
+            >View our API Documentation</a>
           </DescriptionModal>
         </span>
 
