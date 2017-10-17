@@ -72,7 +72,7 @@ export default connect(state => {
   return {
     onUserLoggedIn(token) {
       dispatch(sessionTokenSet(token));
-      window.location.hash = '#/spaces';
+      window.location.hash = '#/visualization/spaces';
     },
   };
 })(AccountRegistration);
