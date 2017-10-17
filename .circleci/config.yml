@@ -24,14 +24,23 @@ jobs:
 
             if [ "$CIRCLE_BRANCH" == "master" ]; then
               # Build dashboard in production
-              REACT_APP_MIXPANEL_TOKEN=foo \
-              REACT_APP_GA_TRACKING_CODE=bar \
-              NODE_ENV=production \
-              npm run build
-              aws s3 sync build/ s3://dashboard.density.rodeo/ --region us-east-1
+              echo "* Building production dashboard..."
 
+              # NOTE: These are not secrets, they're public identifiers that are built into the
+              # final webapp.
+              REACT_APP_MIXPANEL_TOKEN="7c185b134a7efa7fb736698dd4860557" \
+              REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
+              NODE_ENV=production \
+              yarn build
+
+              echo "* Installing amazon's cli..."
+              sudo apt-get update
+              sudo apt-get install -y awscli
+
+              echo "* Copying to S3..."
+              aws s3 sync build/ s3://dashboard.density.rodeo/ --region us-east-1
             else
-              # Build dashboard on branches
+              # Build dashboard for an arbitrary branch
               echo "* Finding / generating branch folder with uuid."
               BRANCH="$(echo $CIRCLE_BRANCH | tr '/' '-')"
               echo "* BRANCH = $BRANCH"
