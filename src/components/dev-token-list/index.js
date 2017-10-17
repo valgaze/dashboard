@@ -82,15 +82,15 @@ export function TokenList({
           <h1 className="token-list-header-text">Tokens</h1>
           <DescriptionModal>
             <p>
-              A token is a secret, random string used to authenticate that you have access and authorize
-              permission to Density data. Ready to start using them?
+              Tokens are randomized strings that are used to access your Density data via our API. Keep these secret!
             </p>
+
             <a
               className="token-list-description-link"
               href="http://docs.density.io"
               target="_blank"
               rel="noopener noreferrer"
-            >Visit our API Documentation</a>
+            >View our documentation</a>
           </DescriptionModal>
         </span>
 
