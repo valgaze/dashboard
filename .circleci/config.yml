@@ -18,54 +18,64 @@ jobs:
       - run:
           name: "Build dashboard"
           command: |
-            # Finally, build dashboard.
             echo "node -v = $(node -v)"
             echo "npm -v = $(npm -v)"
             echo "yarn --version = $(yarn --version)"
 
-            echo "* Finding / generating branch folder with uuid."
-            BRANCH="$(echo $CIRCLE_BRANCH | tr '/' '-')"
-            echo "* BRANCH = $BRANCH"
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+              # Build dashboard in production
+              REACT_APP_MIXPANEL_TOKEN=foo \
+              REACT_APP_GA_TRACKING_CODE=bar \
+              NODE_ENV=production \
+              npm run build
+              aws s3 sync build/ s3://dashboard.density.rodeo/ --region us-east-1
 
-            echo "* Adding homepage to package.json for create-react-app deploy..."
-            jq ".homepage = \"https://densityco.github.io/dashboard/$BRANCH\"" package.json > /tmp/pkg
-            mv /tmp/pkg package.json
+            else
+              # Build dashboard on branches
+              echo "* Finding / generating branch folder with uuid."
+              BRANCH="$(echo $CIRCLE_BRANCH | tr '/' '-')"
+              echo "* BRANCH = $BRANCH"
 
-            echo "* Building dashboard..."
-            npm rebuild node-sass --force
-            npm run build
+              echo "* Adding homepage to package.json for create-react-app deploy..."
+              jq ".homepage = \"https://densityco.github.io/dashboard/$BRANCH\"" package.json > /tmp/pkg
+              mv /tmp/pkg package.json
 
-            echo "* Pulling seperate copy to check out gh-pages..."
-            git clone git@github.com:densityco/dashboard.git deploy_dashboard/
-            cd deploy_dashboard/
-            git checkout gh-pages
+              echo "* Building dashboard..."
+              npm rebuild node-sass --force
+              npm run build
 
-            echo "* Copying build to github pages directory..."
-            rm -rf $BRANCH
-            mv ../build $BRANCH/
-            git add $BRANCH/
+              echo "* Pulling seperate copy to check out gh-pages..."
+              git clone git@github.com:densityco/dashboard.git deploy_dashboard/
+              cd deploy_dashboard/
+              git checkout gh-pages
 
-            echo "* Pushing..."
-            git config user.email "engineering@density.io"
-            git config user.name "CI"
-            git commit --allow-empty -m "Deploy branch $BRANCH to Github Pages [ci skip]"
-            git push origin gh-pages --force
+              echo "* Copying build to github pages directory..."
+              rm -rf $BRANCH
+              mv ../build $BRANCH/
+              git add $BRANCH/
 
-            # Post a link to the branch as a comment in the PR
-            echo "* Pull requests this commit is part of: $CI_PULL_REQUESTS"
-            export IFS=","
-            for pr in $CI_PULL_REQUESTS; do
-              num="$(echo $pr | awk -F'/' '{ print $NF }')"
-              if [ -z \
-                "$(curl -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
-                https://api.github.com/repos/densityco/internal-dashboard/issues/$num/comments \
-                | jq .[].user.login \
-                | grep density-machine-user)" ]; then
+              echo "* Pushing..."
+              git config user.email "engineering@density.io"
+              git config user.name "CI"
+              git commit --allow-empty -m "Deploy branch $BRANCH to Github Pages [ci skip]"
+              git push origin gh-pages --force
 
-                curl -X POST \
-                -d "{\"body\": \"Here is a link to the built dashboard: https://densityco.github.io/dashboard/$BRANCH\"}" \
-                -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
-                https://api.github.com/repos/densityco/dashboard/issues/$num/comments
+              # Post a link to the branch as a comment in the PR
+              echo "* Pull requests this commit is part of: $CI_PULL_REQUESTS"
+              export IFS=","
+              for pr in $CI_PULL_REQUESTS; do
+                num="$(echo $pr | awk -F'/' '{ print $NF }')"
+                if [ -z \
+                  "$(curl -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
+                  https://api.github.com/repos/densityco/internal-dashboard/issues/$num/comments \
+                  | jq .[].user.login \
+                  | grep density-machine-user)" ]; then
 
-              fi
-            done
+                  curl -X POST \
+                  -d "{\"body\": \"Here is a link to the built dashboard: https://densityco.github.io/dashboard/$BRANCH\"}" \
+                  -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
+                  https://api.github.com/repos/densityco/dashboard/issues/$num/comments
+
+                fi
+              done
+            fi
