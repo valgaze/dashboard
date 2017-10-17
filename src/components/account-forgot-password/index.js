@@ -21,7 +21,7 @@ export class AccountRegistration extends React.Component {
   }
   onSubmit() {
     return accounts.users.password_reset({
-      reset_token: this.props.forgotPasswordToken,
+      password_reset_token: this.props.forgotPasswordToken,
       new_password: this.state.password,
       confirm_password: this.state.password,
     }).then(response => {
