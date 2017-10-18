@@ -44,3 +44,4 @@ Real time events are sent to this service via websockets, via the
 ## Environment variables
 - `REACT_APP_GA_TRACKING_CODE`: Optional google analytics tracking code for tracking metrics.
 - `REACT_APP_MIXPANEL_TOKEN`: Optional mixpanel token for tracking user interactions.
+- `REACT_APP_ENVIRONMENT`: Optional parameter to set which set of APIs to use (production vs staging). Used by CircleCi and in `src/index.js`.
