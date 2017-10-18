@@ -103,7 +103,7 @@ if (process.env.REACT_APP_GA_TRACKING_CODE) {
 }
 function trackHashChange() {
   // Mixpanel: track url change
-  mixpanelTrack('URL Change', { url: window.location.hash });
+  mixpanelTrack('Pageview', { url: window.location.hash });
 
   // Google analytics: track page view
   if (process.env.REACT_APP_GA_TRACKING_CODE) {

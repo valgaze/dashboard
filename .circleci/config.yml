@@ -39,6 +39,23 @@ jobs:
 
               echo "* Copying to S3..."
               aws s3 sync build/ s3://dashboard.density.io/ --region us-east-1
+            elif [ "$CIRCLE_BRANCH" == "staging" ]; then
+              # Build dashboard in staging
+              echo "* Building staging dashboard..."
+
+              # NOTE: These are not secrets, they're public identifiers that are built into the
+              # final webapp.
+              REACT_APP_MIXPANEL_TOKEN="7c185b134a7efa7fb736698dd4860557" \
+              REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
+              NODE_ENV=staging \
+              yarn build
+
+              echo "* Installing amazon's cli..."
+              sudo apt-get update
+              sudo apt-get install -y awscli
+
+              echo "* Copying to S3..."
+              aws s3 sync build/ s3://dashboard.density.rodeo/ --region us-east-1
             else
               # Build dashboard for an arbitrary branch
               echo "* Finding / generating branch folder with uuid."
