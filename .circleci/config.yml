@@ -30,6 +30,7 @@ jobs:
               # final webapp.
               REACT_APP_MIXPANEL_TOKEN="7c185b134a7efa7fb736698dd4860557" \
               REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
+              REACT_APP_ENVIRONMENT="production" \
               NODE_ENV=production \
               yarn build
 
@@ -47,7 +48,8 @@ jobs:
               # final webapp.
               REACT_APP_MIXPANEL_TOKEN="7c185b134a7efa7fb736698dd4860557" \
               REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
-              NODE_ENV=staging \
+              REACT_APP_ENVIRONMENT="staging" \
+              NODE_ENV=production \
               yarn build
 
               echo "* Installing amazon's cli..."

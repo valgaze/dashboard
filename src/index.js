@@ -54,37 +54,41 @@ const store = storeFactory();
 // "ok". The `EnvironmentSwitcher` component's `onChange` is fired, which calls
 // `setServiceLocations`. The locations of all the services update.
 //
+
 const fields = [
   {
     name: 'Core API',
     slug: 'core',
     defaults: {
-      'Production': 'https://api.density.io/v2',
-      'Local': 'http://localhost:8000/v2',
-      'Env (REACT_APP_CORE_API_URL)': process.env.REACT_APP_CORE_API_URL,
+      'production': 'https://api.density.io/v2',
+      'staging': 'https://core-staging.branch.density.io/v2',
+      'local': 'http://localhost:8000/v2',
+      'env (REACT_APP_CORE_API_URL)': process.env.REACT_APP_CORE_API_URL,
     },
-    default: 'Production',
+    default: process.env.REACT_APP_ENVIRONMENT || 'production',
   },
   {
     name: 'Accounts API',
     slug: 'accounts',
     defaults: {
-      'Production': 'https://clerk.density.io/v1',
-      'Local': 'http://localhost:8001/v1',
-      'Env (REACT_APP_ACCOUNTS_API_URL)': process.env.REACT_APP_ACCOUNTS_API_URL,
+      'production': 'https://clerk.density.io/v1',
+      'staging': 'https://accounts-staging.branch.density.io/v1',
+      'local': 'http://localhost:8001/v1',
+      'env (REACT_APP_ACCOUNTS_API_URL)': process.env.REACT_APP_ACCOUNTS_API_URL,
     },
-    default: 'Production',
+    default: process.env.REACT_APP_ENVIRONMENT || 'production',
   },
   {
     name: 'Event source (websockets server)',
     slug: 'eventsource',
     defaults: {
-      'None': 'false',
-      'Production': 'wss://socket.density.io',
-      'Local': 'ws://localhost:8080',
-      'Env (REACT_APP_EVENTSOURCE_API_URL)': process.env.REACT_APP_EVENTSOURCE_API_URL,
+      'none': 'false',
+      'production': 'wss://socket.density.io',
+      'staging': 'wss://socket.density.rodeo',
+      'local': 'ws://localhost:8080',
+      'env (REACT_APP_EVENTSOURCE_API_URL)': process.env.REACT_APP_EVENTSOURCE_API_URL,
     },
-    default: 'Production',
+    default: process.env.REACT_APP_ENVIRONMENT || 'production',
   },
 ];
 function setServiceLocations(data) {
