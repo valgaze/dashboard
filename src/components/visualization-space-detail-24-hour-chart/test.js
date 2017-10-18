@@ -63,7 +63,7 @@ describe('Visualization space 24 hour chart', function() {
           ],
         }),
       });
-      mockdate.set('1/1/2017', 240);
+      mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
       // Render the component
       const component = mount(<VisualizationSpaceDetail24HourChart space={space} />);
@@ -129,7 +129,7 @@ describe('Visualization space 24 hour chart', function() {
           ],
         }),
       });
-      mockdate.set('9/14/2017', 240);
+      mockdate.set(moment('2017-09-14T00:00:00-05:00'));
 
       // Render the component
       const component = mount(<VisualizationSpaceDetail24HourChart space={space} />);
@@ -191,7 +191,7 @@ describe('Visualization space 24 hour chart', function() {
           ],
         }),
       });
-      mockdate.set('1/1/2017', 240);
+      mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
       // Render the component
       const component = mount(<VisualizationSpaceDetail24HourChart space={space} />);
@@ -253,7 +253,7 @@ describe('Visualization space 24 hour chart', function() {
           ],
         }),
       });
-      mockdate.set('1/1/2017', 240);
+      mockdate.set(moment('2017-01-01T00:00:00-05:00'));
     });
 
     it('should fetch data and display it', async function() {

@@ -12,9 +12,9 @@ jobs:
       - run:
           name: "Install dependencies"
           command: yarn
-      # - run:
-      #     name: "Run tests"
-      #     command: yarn test
+      - run:
+          name: "Run tests"
+          command: yarn test
       - run:
           name: "Build dashboard"
           command: |
@@ -50,7 +50,6 @@ jobs:
               mv /tmp/pkg package.json
 
               echo "* Building dashboard..."
-              npm rebuild node-sass --force
               npm run build
 
               echo "* Pulling seperate copy to check out gh-pages..."

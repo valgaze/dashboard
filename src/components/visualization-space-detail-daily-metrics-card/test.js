@@ -20,7 +20,7 @@ describe('Visualization space daily metrics chart', function() {
   // picker.
   describe('isOutsideRange', function() {
     // Mock the current date for the tests.
-    beforeEach(() => mockdate.set('1/1/2017'));
+    beforeEach(() => mockdate.set(moment('2017-01-01T00:00:00-05:00')));
 
     it('should block out two weeks way before the current date', function() {
       // Start a date selection. 
@@ -231,7 +231,7 @@ describe('Visualization space daily metrics chart', function() {
           ]
         }),
       });
-      mockdate.set('1/1/2017');
+      mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
       // Render the component
       const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
@@ -369,7 +369,7 @@ describe('Visualization space daily metrics chart', function() {
           ],
         }),
       });
-      mockdate.set('9/14/2017');
+      mockdate.set(moment('2017-09-14T00:00:00-05:00'));
 
       // Render the component
       const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
@@ -507,7 +507,7 @@ describe('Visualization space daily metrics chart', function() {
           ]
         }),
       });
-      mockdate.set('9/14/2017');
+      mockdate.set(moment('2017-09-14T00:00:00-05:00'));
 
       // Render the component
       const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
@@ -688,7 +688,7 @@ describe('Visualization space daily metrics chart', function() {
         ]
       }),
     });
-    mockdate.set('1/1/2017');
+    mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
     // Render the component
     const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
