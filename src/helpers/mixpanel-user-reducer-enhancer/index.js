@@ -11,8 +11,7 @@ export default function mixpanelUserReducerEnhancer(reducer) {
       // Update the user on mixpanel if the user info changed.
       window.mixpanel.identify(result.user.id);
       window.mixpanel.people.set({
-         $first_name: result.user.fullName,
-         $last_name: '',
+         $name: result.user.fullName,
          $email: result.user.email,
          organization_id: result.user.organization.id,
          organization: result.user.organization.name,
