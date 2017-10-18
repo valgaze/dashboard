@@ -50,7 +50,6 @@ jobs:
               mv /tmp/pkg package.json
 
               echo "* Building dashboard..."
-              npm rebuild node-sass --force
               npm run build
 
               echo "* Pulling seperate copy to check out gh-pages..."
