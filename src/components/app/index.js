@@ -11,6 +11,7 @@ import SpaceList from '../visualization-space-list/index';
 import SpaceDetail from '../visualization-space-detail/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
+import Pilot from '../pilot/index';
 import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
@@ -154,6 +155,8 @@ function ActivePage({activePage}) {
     return <AccountRegistration />;
   case "ACCOUNT_FORGOT_PASSWORD":
     return <AccountForgotPassword />;
+  case "PILOT":
+    return <Pilot />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

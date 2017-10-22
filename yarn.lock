@@ -1893,6 +1893,10 @@ cosmiconfig@^2.1.0, cosmiconfig@^2.1.1:
     parse-json "^2.2.0"
     require-from-string "^1.1.0"
 
+countup.js@^1.8.5:
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/countup.js/-/countup.js-1.9.2.tgz#a9cd7eb39e96d381ddc19943d3f5b6613f139640"
+
 create-ecdh@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.0.tgz#888c723596cdf7612f6498233eebd7a35301737d"
@@ -6255,6 +6259,12 @@ react-addons-shallow-compare@^15.6.0:
   dependencies:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
+
+react-countup@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-countup/-/react-countup-2.3.0.tgz#c9acd9447609d581186240c8654c2ef0e40667ed"
+  dependencies:
+    countup.js "^1.8.5"
 
 react-dev-utils@^3.0.0, react-dev-utils@^3.0.2:
   version "3.0.2"

@@ -1,0 +1,23 @@
+.pilot-container {
+  @include grid-container;
+}
+
+.doorway-list-header h2 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 20px;
+  margin-top: 40px;
+  margin-bottom: 0px;
+
+  color: $gray-darkest;
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+}
+
+.doorway-list-row {
+  padding-top:20px;
+  @include grid-row;
+}
+
+.doorway-list-item { @include grid-width(24, 12, 12, 12); }
+
