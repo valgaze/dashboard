@@ -1,79 +1,59 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import InputBox from '@density/ui-input-box';
-import Card, { CardHeader, CardBody } from '@density/ui-card';
-import Button from '@density/ui-button';
 import CountUp from 'react-countup';
+import { DefaultPlayer as Video } from 'react-html5video';
+import 'react-html5video/dist/styles.css';
 
-// TODO: start at random time in video
-// 2 column, 5 row display
-// Contiguous vs Algo
-// Humans per hour
-// Total # Humans seen
+import Card, { CardBody } from '@density/ui-card';
 
 
-export class Pilot extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  render() {
-    const {} = this.props;
+export function Pilot({
+  pilot
+}) {
+  return <div className="pilot">
+    <div className="pilot-container">
 
-    let doorways = [
-      {
-        id: 123,
-        name: "Elevator A Installation",
-        uptime: "99%",
-        accuracy: "97%",
-        humansPerHour: 140,
-        totalHumansSeen: 1400
-      },
-      {
-        id: 345,
-        name: "Elevator B Installation",
-        uptime: "99%",
-        accuracy: "95%",
-        humansPerHour: 20,
-        totalHumansSeen: 2319
-      },
-    ]
-
-    return <div className="pilot">
-      <div className="pilot-container">
-
-        {doorways.map(doorway => {
-          return <div key={doorway.id}>
-            <div className="doorway-list-header">
-              <h2>{doorway.name}</h2>
+      {pilot.doorways.map(doorway => {
+        return <div key={doorway.id}>
+          <div className="doorway-list-header">
+            <h2>{doorway.name}</h2>
+          </div>
+          <div className="doorway-list-row">
+            <div className="doorway-list-item">
+              <Card className="pilot-doorway-card">
+                <CardBody>
+                <Video className="video-player" autoPlay loop muted
+                  controls={['PlayPause', 'Seek']}>
+                    <source src={doorway.rawVideo} type="video/mp4" />
+                </Video>
+                  <h3>Humans Per Hour: {doorway.humansPerHour==0 ? "--" : doorway.humansPerHour } h/hr</h3>
+                  <h3>Total Humans Seen: {doorway.totalHumansSeen==0 ? "--" : doorway.totalHumansSeen } humans</h3>
+                </CardBody>
+              </Card>
             </div>
-            <div className="doorway-list-row">
-              <div className="doorway-list-item">
-                <Card className="pilot-doorway-card">
-                  <CardBody>
-                    <p>Humans Per Hour: {doorway.humansPerHour}</p>
-                    <p>Total Humans Seen: <CountUp start={0} end={doorway.totalHumansSeen} duration={1.5} /></p>
-                  </CardBody>
-                </Card>
-              </div>
-              <div className="doorway-list-item">
-                <Card className="pilot-doorway-card">
-                  <CardBody>
-                    <p>{doorway.accuracy} accuracy</p>
-                    <p>{doorway.uptime} uptime</p>
-                  </CardBody>
-                </Card>
-              </div>
+            <div className="doorway-list-item">
+              <Card className="pilot-doorway-card">
+                <CardBody>
+                  <Video className="video-player" autoPlay loop muted
+                    controls={['PlayPause', 'Seek']}>
+                      <source src={doorway.algoVideo} type="video/mp4" />
+                  </Video>
+                  <h3>Doorway Accuracy: {doorway.accuracy}</h3>
+                  <h3>Sensor Uptime: {doorway.uptime}</h3>
+                </CardBody>
+              </Card>
             </div>
           </div>
-        })}
-      </div>
-    </div>;
-  }
+        </div>
+      })}
+    </div>
+  </div>;
 }
 
 export default connect(state => {
-  return {};
+  return {
+    pilot: state.pilot
+  };
 }, dispatch => {
   
 })(Pilot);
