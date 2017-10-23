@@ -9,6 +9,9 @@ import Card, { CardBody } from '@density/ui-card';
 export function Pilot({
   pilot
 }) {
+  function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   return <div className="pilot">
     <div className="pilot-container">
 
@@ -21,24 +24,28 @@ export function Pilot({
             <div className="doorway-list-item">
               <Card className="pilot-doorway-card">
                 <CardBody>
-                <Video className="video-player" autoPlay loop muted
-                  controls={['PlayPause', 'Seek']}>
-                    <source src={doorway.rawVideo} type="video/mp4" />
-                </Video>
-                  <h3>Humans Per Hour: {doorway.humansPerHour === 0 ? "--" : doorway.humansPerHour } h/hr</h3>
-                  <h3>Total Humans Seen: {doorway.totalHumansSeen === 0 ? "--" : doorway.totalHumansSeen } humans</h3>
+                  <h2>What our sensor sees</h2>
+                  <Video className="video-player" autoPlay loop muted
+                    controls={['PlayPause', 'Seek']}>
+                      <source src={doorway.rawVideo} type="video/mp4" />
+                  </Video>
+                  <h4>Sensor Stats:</h4>
+                  <h3>Humans Per Hour: <strong>{doorway.humansPerHour === 0 ? "--" : doorway.humansPerHour } h/hr</strong></h3>
+                  <h3>Total Humans Seen: <strong>{doorway.totalHumansSeen === 0 ? "--" : numberWithCommas(doorway.totalHumansSeen) } humans</strong></h3>
                 </CardBody>
               </Card>
             </div>
             <div className="doorway-list-item">
               <Card className="pilot-doorway-card">
                 <CardBody>
+                  <h2>What our algorithm sees</h2>
                   <Video className="video-player" autoPlay loop muted
                     controls={['PlayPause', 'Seek']}>
                       <source src={doorway.algoVideo} type="video/mp4" />
                   </Video>
-                  <h3>Doorway Accuracy: {doorway.accuracy}</h3>
-                  <h3>Sensor Uptime: {doorway.uptime}</h3>
+                  <h4>Algo v0.1.15 Stats:</h4>
+                  <h3>Doorway Accuracy: <strong>{doorway.accuracy}</strong></h3>
+                  <h3>Sensor Uptime: <strong>{doorway.uptime}</strong></h3>
                 </CardBody>
               </Card>
             </div>
