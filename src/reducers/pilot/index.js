@@ -13,8 +13,8 @@ function doorwaysWithUpdatedCountAndHourly(doorways, doorwayId, totalEvents, sin
   for (var i = 0; i < doorways.length; i++) {
     if (doorwayId === doorways[i]['id']) {
       var hourlyDifference = moment().diff(moment(sinceDate), 'hours');
-      var workWeekDifference = parseInt(hourlyDifference)*(5/7); // assuming you work M-F
-      var workDayDifference = parseInt(workWeekDifference)*(1/2); // assuming you work for 12 hours
+      var workWeekDifference = parseInt(hourlyDifference, 10)*(5/7); // assuming you work M-F
+      var workDayDifference = parseInt(workWeekDifference, 10)*(1/2); // assuming you work for 12 hours
       doorways[i]['humansPerHour'] = Math.round(totalEvents/workDayDifference);
       doorways[i]['totalHumansSeen'] = totalEvents;
     }
