@@ -47,7 +47,7 @@ class NavbarWrapper extends React.Component {
         href="#/environment/spaces"
       >Environment</NavbarItem> */}
       
-      {this.props.user.user && this.props.user.user.organization && this.props.user.user.organization.id === 'org_162164766972838168' ?  <NavbarItem
+      {this.props.user.user && this.props.user.user.organization && this.props.user.user.organization.id === 'org_162164766972838168NOSHOW' ?  <NavbarItem
         activePage={this.props.activePage}
         pageName={['PILOT']}
         href="#/pilot"
