@@ -2,6 +2,12 @@
   @include grid-container;
 }
 
+@media (max-width: $screen-sm-min) {
+  .pilot-container {
+    margin-top: 100px;
+  }
+}
+
 .doorway-list-header h2 {
   padding-top: 0px;
   padding-bottom: 0px;
