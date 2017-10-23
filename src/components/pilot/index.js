@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import CountUp from 'react-countup';
 import { DefaultPlayer as Video } from 'react-html5video';
 import 'react-html5video/dist/styles.css';
 
@@ -26,8 +25,8 @@ export function Pilot({
                   controls={['PlayPause', 'Seek']}>
                     <source src={doorway.rawVideo} type="video/mp4" />
                 </Video>
-                  <h3>Humans Per Hour: {doorway.humansPerHour==0 ? "--" : doorway.humansPerHour } h/hr</h3>
-                  <h3>Total Humans Seen: {doorway.totalHumansSeen==0 ? "--" : doorway.totalHumansSeen } humans</h3>
+                  <h3>Humans Per Hour: {doorway.humansPerHour === 0 ? "--" : doorway.humansPerHour } h/hr</h3>
+                  <h3>Total Humans Seen: {doorway.totalHumansSeen === 0 ? "--" : doorway.totalHumansSeen } humans</h3>
                 </CardBody>
               </Card>
             </div>
@@ -55,5 +54,5 @@ export default connect(state => {
     pilot: state.pilot
   };
 }, dispatch => {
-  
+  return {};
 })(Pilot);

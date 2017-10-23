@@ -46,6 +46,13 @@ class NavbarWrapper extends React.Component {
         pageName={['ENVIRONMENT_SPACE']}
         href="#/environment/spaces"
       >Environment</NavbarItem> */}
+      
+      {this.props.user.user && this.props.user.user.organization && this.props.user.user.organization.id === 'org_162164766972838168' ?  <NavbarItem
+        activePage={this.props.activePage}
+        pageName={['PILOT']}
+        href="#/pilot"
+      >Pilot</NavbarItem> : null}
+
       <NavbarItem
         activePage={this.props.activePage}
         pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
@@ -107,11 +114,11 @@ class NavbarWrapper extends React.Component {
   }
 }
 
-function AppComponent({activePage, onLogout}) {
+function AppComponent({activePage, user, onLogout}) {
   return <div className="app">
     {/* Render the navbar */}
     {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION' && activePage !== 'ACCOUNT_FORGOT_PASSWORD') ?
-      <NavbarWrapper activePage={activePage} onLogout={onLogout} />
+      <NavbarWrapper activePage={activePage} onLogout={onLogout} user={user} />
       : null}
 
     {/* Render dragging preview when an item is being dragged */}
@@ -166,6 +173,7 @@ function ActivePage({activePage}) {
 export default connect(state => {
   return {
     activePage: state.activePage,
+    user: state.user
   };
 }, dispatch => {
   return {
