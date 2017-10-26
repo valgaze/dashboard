@@ -9,12 +9,13 @@ export default function mixpanelUserReducerEnhancer(reducer) {
       mixpanelInitialize();
 
       // Update the user on mixpanel if the user info changed.
+      // "Organization" is capitalized for consistency across multiple products
       window.mixpanel.identify(result.user.id);
       window.mixpanel.people.set({
          $name: result.user.fullName,
          $email: result.user.email,
+         Organization: result.user.organization.name,
          organization_id: result.user.organization.id,
-         organization: result.user.organization.name,
          is_admin: result.user.is_admin,
       });
     }
