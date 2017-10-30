@@ -46,6 +46,8 @@
 
 // CSV Download link to the left of the date range selector.
 .visualization-space-detail-raw-events-card-csv-download {
+  position: relative;
+  display: inline-block;
   margin-right: 20px;
 
   line-height: 43px;
@@ -67,11 +69,11 @@
     margin-bottom: 0px;
   }
 }
+// When the download link is disabled, gray it out.
 .visualization-space-detail-raw-events-card-csv-download.disabled {
-  opacity: 0.5;
   cursor: default;
+  color: $gray-light;
 }
-
 
 // Horizontally and vertically center errors and info messages in the daily metrics card.
 .visualization-space-detail-raw-events-card-body-info,
