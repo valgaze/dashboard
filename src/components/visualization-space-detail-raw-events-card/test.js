@@ -385,4 +385,156 @@ describe('raw events pager', function() {
     // Lastly, make sure the a tag was added to the body as expected.
     assert.equal(document.querySelector('body > a:last-child').href, 'http://localhost/1234-567890-123456-7890');
   });
+  it('should show a loading indicator when loading is started, and hide when loading is complete', async function() {
+    mockdate.set('1/1/2017');
+
+    // Mock out the api call to get the event data.
+    // - If the user calls /doorways/drw_foo, return an appropriate response.
+    // - If the user calls /spaces/spc_bar/events, return an appropriate response.
+    global.fetch = sinon.stub().callsFake(async url => {
+      if (url.indexOf('doorways/drw_') !== -1)  {
+        return {
+          ok: true,
+          status: 201,
+          clone() { return this; },
+          json: () => Promise.resolve({
+            id: 'drw_3',
+            name: `My Fancy doorway: ${Math.random()}`,
+          }),
+        };
+      } else {
+        return {
+          ok: true,
+          status: 201,
+          clone() { return this; },
+          json: () => Promise.resolve({
+            total: 2,
+            next: null,
+            previous: null,
+            results: [
+              {id: 'evt_a', sensor_id: 'snr_2', doorway_id: 'drw_3', timestamp: '2017-01-01T00:00:10-05:00'},
+              {id: 'evt_b', sensor_id: 'snr_2', doorway_id: 'drw_3', timestamp: '2017-01-01T00:00:20-05:00'},
+              {id: 'evt_c', sensor_id: 'snr_2', doorway_id: 'drw_4', timestamp: '2017-01-01T00:00:30-05:00'},
+            ],
+          }),
+        };
+      }
+    });
+
+    // Render the component
+    const component = mount(<RawEventsCard space={{id: 'spc_1', name: 'My Space', timeZone: 'America/New_York'}} />);
+
+    // Ensure the intial data fetch was issued to the server.
+    // 1 request made to get all the events
+    // 2 requests made to get doorway info (one for each unique doorway)
+    await timeout(250);
+    assert.equal(global.fetch.callCount, 1 + 2);
+
+    // Mock out a couple objects needed to download the csv
+    global.Blob = sinon.stub();
+    const CSV_URL = '1234-567890-123456-7890';
+    global.URL = {
+      createObjectURL: () => {
+        // Verify that the loading indicator is visible when we create the object url.
+        assert.equal(component.find('.card-loading.card-loading-indeterminate').length, 1);
+
+        // Make sure that the text changes when the loading is in progress.
+        assert.equal(
+          component.find('.visualization-space-detail-raw-events-card-csv-download').text(),
+          'CSV Downloading...'
+        );
+
+        return CSV_URL;
+      },
+    };
+
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 201,
+      clone() { return this; },
+      json: () => Promise.reject(),
+      text: () => Promise.resolve(SAMPLE_CSV_DATA),
+    });
+
+    // Click the `CSV Download` link
+    component.find('.visualization-space-detail-raw-events-card-csv-download').simulate('click');
+
+    // Wait for the async stuff to settle.
+    // FIXME: got to be a better way to do this?
+    await timeout(250);
+
+    // Verify that the loading indicator is hidden when the operation is complete.
+    assert.equal(component.find('.card-loading card-loading-indeterminate').length, 0);
+  });
+  it('should only download a csv once if clicked multiple times in a row', async function() {
+    mockdate.set('1/1/2017');
+
+    // Mock out the api call to get the event data.
+    // - If the user calls /doorways/drw_foo, return an appropriate response.
+    // - If the user calls /spaces/spc_bar/events, return an appropriate response.
+    global.fetch = sinon.stub().callsFake(async url => {
+      if (url.indexOf('doorways/drw_') !== -1)  {
+        return {
+          ok: true,
+          status: 201,
+          clone() { return this; },
+          json: () => Promise.resolve({
+            id: 'drw_3',
+            name: `My Fancy doorway: ${Math.random()}`,
+          }),
+        };
+      } else {
+        return {
+          ok: true,
+          status: 201,
+          clone() { return this; },
+          json: () => Promise.resolve({
+            total: 2,
+            next: null,
+            previous: null,
+            results: [
+              {id: 'evt_a', sensor_id: 'snr_2', doorway_id: 'drw_3', timestamp: '2017-01-01T00:00:10-05:00'},
+              {id: 'evt_b', sensor_id: 'snr_2', doorway_id: 'drw_3', timestamp: '2017-01-01T00:00:20-05:00'},
+              {id: 'evt_c', sensor_id: 'snr_2', doorway_id: 'drw_4', timestamp: '2017-01-01T00:00:30-05:00'},
+            ],
+          }),
+        };
+      }
+    });
+
+    // Render the component
+    const component = mount(<RawEventsCard space={{id: 'spc_1', name: 'My Space', timeZone: 'America/New_York'}} />);
+
+    // Ensure the intial data fetch was issued to the server.
+    // 1 request made to get all the events
+    // 2 requests made to get doorway info (one for each unique doorway)
+    await timeout(250);
+    assert.equal(global.fetch.callCount, 1 + 2);
+
+    // Mock out a couple objects needed to download the csv
+    global.Blob = sinon.stub();
+    const CSV_URL = '1234-567890-123456-7890';
+    global.URL = { createObjectURL: sinon.stub().returns(CSV_URL) };
+
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 201,
+      clone() { return this; },
+      json: () => Promise.reject(),
+      text: () => Promise.resolve(SAMPLE_CSV_DATA),
+    });
+
+    // Click the `CSV Download` link
+    component.find('.visualization-space-detail-raw-events-card-csv-download').simulate('click');
+
+    // Wait for the async stuff to settle.
+    // FIXME: got to be a better way to do this?
+    await timeout(250);
+
+    // Click the `CSV Download` link again.
+    component.find('.visualization-space-detail-raw-events-card-csv-download').simulate('click');
+
+    // Ensure that only one download happened.
+    assert.equal(global.Blob.callCount, 1);
+  });
 });
