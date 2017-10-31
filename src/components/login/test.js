@@ -5,10 +5,6 @@ import sinon from 'sinon';
 
 import { Login, LOGIN, FORGOT_PASSWORD } from './index';
 
-function timeout(delay) {
-  return new Promise(r => setTimeout(r, delay));
-}
-
 describe('Login page', function() {
   it('should switch to forgot password page when the forgot password link is clicked, and back again', function() {
     const component = mount(<Login />);
