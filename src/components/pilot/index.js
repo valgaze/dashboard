@@ -29,9 +29,9 @@ export function Pilot({
                     controls={['PlayPause', 'Seek']}>
                       <source src={doorway.rawVideo} type="video/mp4" />
                   </Video>
-                  <h4>Sensor Stats:</h4>
+                  <h2>Sensor Stats:</h2>
                   <h3>Humans Per Hour: <strong>{doorway.humansPerHour === 0 ? "--" : doorway.humansPerHour } h/hr</strong></h3>
-                  <h3>Total Humans Seen: <strong>{doorway.totalHumansSeen === 0 ? "--" : numberWithCommas(doorway.totalHumansSeen) } humans</strong></h3>
+                  <h3>Total Number of Events: <strong>{doorway.totalHumansSeen === 0 ? "--" : numberWithCommas(doorway.totalHumansSeen) } humans since {doorway.firstEvent}</strong></h3>
                 </CardBody>
               </Card>
             </div>
@@ -43,9 +43,9 @@ export function Pilot({
                     controls={['PlayPause', 'Seek']}>
                       <source src={doorway.algoVideo} type="video/mp4" />
                   </Video>
-                  <h4>Algo v0.1.15 Stats:</h4>
+                  <h2>Metro v0.1.15 Stats:</h2>
                   <h3>Doorway Accuracy: <strong>{doorway.accuracy}</strong></h3>
-                  <h3>Sensor Uptime: <strong>{doorway.uptime}</strong></h3>
+                  <h3>Device Uptime: <strong>{doorway.uptime}</strong></h3>
                 </CardBody>
               </Card>
             </div>
