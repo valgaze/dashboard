@@ -31,7 +31,7 @@ export function Pilot({
                   </Video>
                   <h2>Sensor Stats:</h2>
                   <h3>Humans Per Hour: <strong>{doorway.humansPerHour === 0 ? "--" : doorway.humansPerHour } h/hr</strong></h3>
-                  <h3>Total Number of Events: <strong>{doorway.totalHumansSeen === 0 ? "--" : numberWithCommas(doorway.totalHumansSeen) } humans since {doorway.firstEvent}</strong></h3>
+                  <h3>Total Number of Events Since {doorway.firstEvent}: <strong>{doorway.totalHumansSeen === 0 ? "--" : numberWithCommas(doorway.totalHumansSeen) }</strong></h3>
                 </CardBody>
               </Card>
             </div>
