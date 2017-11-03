@@ -1,47 +1,18 @@
-<!--
-<img src="https://cdn.rawgit.com/DensityCo/web-dashboard/master/logo.svg" height="50" /> <br />
--->
-
-# Web Dashboard
+<img src="https://densityco.github.io/assets/images/dashboard-logo.4031835b.svg" height="50" /> <br />
 
 [![CircleCI](https://circleci.com/gh/DensityCo/web-dashboard.svg?style=shield&circle-token=1b5ece9522df300da10bcedd91a24b6f066b9049)](https://circleci.com/gh/DensityCo/web-dashboard)
 [![Dependency
 Status](https://david-dm.org/densityco/nicss.svg)](https://david-dm.org/densityco/web-dashboard)
-<!-- ![License](https://img.shields.io/badge/License-MIT-green.svg) -->
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
+The Density Dashboard is an interface for visualizing real time and historical count data of spaces. 
 
-This project is react based, and uses redux for state management.
+Density's main product is our API. While it already has [excellent documentation](http://docs.density.io), we're open sourcing our Dashboard to help document how we're using the API and provide usage patterns that we're confident in around Density data. We hope that this project will help guide developers into integrating Density into their own systems.
 
-*NOTE*: most of the conventions we're using are still in flux (ha, get it, redux joke!), and it you have
-contrary opinions let me know.
+The Dashboard depends on a couple of other in-house built dependencies:
+- [`@density/charts`](https://github.com/densityco/charts) - an open-source library of visualizations and diagrams used by the Dashboard as well as other internal Density systems. [Here's a preview.](https://densityco.github.io/charts/master/)
+- [`@density/ui`](https://github.com/densityco/ui) - an open-source library of react-based ui components with html fallbacks. This is the ui toolkit we use throughout most of our Density tools. [Here's a preview.](https://densityco.github.io/ui/master/)
+- [`@density/client`](https://github.com/densityco/client-js) - A javascript-based api client built using [clientele](https://github.com/DensityCo/clientele), an api client generator. This allows us to more clearly express the intent of an api call by using a syntax such as `api.spaces.get({id: 'spc_XXX'})` instead of a long ajax call.
+- [`@density/conduit`](https://github.com/densityco/conduit) - A redux-based micro router for react applications.
 
-# Styles
-Many styles and associated variables are brought in from `@density/ui`, our UI framework.
-
-```scss
-// src/styles.scss, the main stylesheet
-
-// CSS reset - normalize.css
-@import "../node_modules/normalize.css/normalize.css";
-
-// Global variables like colors, spacings, etc...
-@import "../node_modules/@density/ui/variables/colors.json";
-@import "../node_modules/@density/ui/variables/spacing.json";
-// (etc...)
-
-// Here's an example component - a navbar. See how variables are required first for the component
-// then the scss for the component which uses those variables is brought in.
-@import "../node_modules/@density/ui-navbar/variables.json";
-@import "../node_modules/@density/ui-navbar/dist/sass";
-```
-
-# Real time events
-Real time events are sent to this service via websockets, via the
-[https://github.com/DensityCo/websocket-server](websocket-server). The websocket client is mostly in
-`src/helpers/websocket-event-pusher/index.js`.
-
-
-## Environment variables
-- `REACT_APP_GA_TRACKING_CODE`: Optional google analytics tracking code for tracking metrics.
-- `REACT_APP_MIXPANEL_TOKEN`: Optional mixpanel token for tracking user interactions.
-- `REACT_APP_ENVIRONMENT`: Optional parameter to set which set of APIs to use (production vs staging). Used by CircleCi and in `src/index.js`.
+We also have forked a couple open source projects and added density-specific changes - a few are `node-sass-json-importer` and `react-dates`.
