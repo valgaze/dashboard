@@ -15,4 +15,35 @@ The Dashboard depends on a couple of other in-house built dependencies:
 - [`@density/client`](https://github.com/densityco/client-js) - A javascript-based api client built using [clientele](https://github.com/DensityCo/clientele), an api client generator. This allows us to more clearly express the intent of an api call by using a syntax such as `api.spaces.get({id: 'spc_XXX'})` instead of a long ajax call.
 - [`@density/conduit`](https://github.com/densityco/conduit) - A redux-based micro router for react applications.
 
-We also have forked a couple open source projects and added density-specific changes - a few are `node-sass-json-importer` and `react-dates`.
+We also have forked a couple open source npm packages and added density-specific changes - a few are `node-sass-json-importer` and `react-dates`.
+
+## Getting Started
+This project uses `create-react-app` to build the frontend code, and `yarn` to manage dependencies.
+Make sure you've installed yarn with `npm i -g yarn` prior to trying out this project in
+development.
+```sh
+# Download code
+git clone git@github.com:densityco/dashboard.git
+cd dashboard/
+
+# Install dependencies
+yarn
+
+# Start it up!
+yarn start
+
+# Run the tests
+yarn test
+```
+
+### Environment variables
+None of these variables are required. They enable optional features that are useful in production.
+- `REACT_APP_GA_TRACKING_CODE`: Optional google analytics tracking code for tracking metrics.
+- `REACT_APP_MIXPANEL_TOKEN`: Optional mixpanel token for tracking user interactions.
+- `REACT_APP_ENVIRONMENT`: Optional parameter to set which set of APIs to use (production vs staging). Used by CircleCi and in `src/index.js`.
+
+## Note on undocumented APIs
+Since this dashboard does a number of tasks other than just displaying spaces, it uses a number of
+internal services that aren't mentioned in our [API documentation](http://docs.density.io). While
+you can use the undocumented endpoints, we only support our documented endpoints and make no
+guarantees on the long term stability or existance of our undocumented software.

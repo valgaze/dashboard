@@ -134,9 +134,11 @@
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@density/ui-navbar-sidebar/-/ui-navbar-sidebar-0.1.3.tgz#6a533d6556298971e4598359a3c4f2f2970e9915"
 
-"@density/ui-navbar@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.14.tgz#22c49aaaf0c4ad86b617d815206083de2716c760"
+"@density/ui-navbar@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@density/ui-navbar/-/ui-navbar-0.0.15.tgz#76ed9fc136e142819707b4f0037bad36941eadf4"
+  dependencies:
+    classnames "^2.2.5"
 
 "@density/ui-pager-button-group@^0.1.4":
   version "0.1.4"

@@ -6,6 +6,7 @@ import { core, accounts } from '@density-int/client';
 import ReactGA from 'react-ga';
 
 import userSet from './actions/user/set';
+import userPush from './actions/user/push';
 import userError from './actions/user/error';
 import sessionTokenUnSet from './actions/session-token/unset';
 
@@ -166,11 +167,30 @@ function preRouteAuthentication() {
       store.dispatch(sessionTokenUnSet());
       router.navigate('login');
     }).then(data => {
-      store.dispatch(userSet(data));
+      store.dispatch(userSet({
+        ...data,
+        features: {
+          visualizationPageLocked: 'false',
+          environmentPageVisible: 'false',
+        },
+      }));
     });
   }
 }
 preRouteAuthentication();
+
+// Set a feature flag from the console.
+window.setFeatureFlag = function setFeatureFlag(flag, value) {
+  const user = store.getState().user.user;
+  if (!user) {
+    throw new Error('Please wait for the user collection to load before changing feature flags.');
+  }
+
+  const features = { [flag]: value };
+  store.dispatch(userPush({
+    features: {...user.features, ...features},
+  }));
+}
 
 // Handle the route that the user is currently at.
 router.handle();

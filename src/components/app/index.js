@@ -6,6 +6,8 @@ import sessionTokenUnset from '../../actions/session-token/unset';
 
 import { connect } from 'react-redux';
 
+import featureFlagEnabled from '../../helpers/feature-flag-enabled/index';
+
 import TokenList from '../dev-token-list/index';
 import SpaceList from '../visualization-space-list/index';
 import SpaceDetail from '../visualization-space-detail/index';
@@ -34,17 +36,26 @@ class NavbarWrapper extends React.Component {
   }
 
   render() {
+    const {features} = this.props;
     return <Navbar onClickSidebarButton={() => this.setState({show: !this.state.show})}>
       <NavbarItem
         activePage={this.props.activePage}
         pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
+
+        // Feature flag: Do not allow the user to visit the visualizations page until it has been
+        // unlocked. During the onboarding process, the organization will not have spaces / doorways
+        // so this page does not make sense.
+        locked={featureFlagEnabled(features.visualizationPageLocked)}
         href="#/visualization/spaces"
       >Visualization</NavbarItem>
-      {/* <NavbarItem
+
+      {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
+      {featureFlagEnabled(features.environmentPageVisible) ? <NavbarItem
         activePage={this.props.activePage}
         pageName={['ENVIRONMENT_SPACE']}
         href="#/environment/spaces"
-      >Environment</NavbarItem> */}
+      >Environment</NavbarItem> : null}
+
       <NavbarItem
         activePage={this.props.activePage}
         pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
@@ -106,12 +117,18 @@ class NavbarWrapper extends React.Component {
   }
 }
 
-function AppComponent({activePage, onLogout}) {
+function AppComponent({activePage, features, onLogout}) {
   return <div className="app">
     {/* Render the navbar */}
-    {(activePage !== 'LOGIN' && activePage !== 'ACCOUNT_REGISTRATION' && activePage !== 'ACCOUNT_FORGOT_PASSWORD') ?
-      <NavbarWrapper activePage={activePage} onLogout={onLogout} />
-      : null}
+    {(
+      activePage !== 'LOGIN' &&
+      activePage !== 'ACCOUNT_REGISTRATION' &&
+      activePage !== 'ACCOUNT_FORGOT_PASSWORD'
+    ) ? <NavbarWrapper
+      activePage={activePage}
+      features={features}
+      onLogout={onLogout}
+    /> : null}
 
     {/* Render dragging preview when an item is being dragged */}
     <Preview generator={(type, item, style) => <div style={style} />} />
@@ -163,6 +180,7 @@ function ActivePage({activePage}) {
 export default connect(state => {
   return {
     activePage: state.activePage,
+    features: (state.user && state.user.user && state.user.user.features) || {},
   };
 }, dispatch => {
   return {
