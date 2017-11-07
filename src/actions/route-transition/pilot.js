@@ -25,7 +25,7 @@ export default function routeTransitionPilot() {
         dispatch(pilotSet(json));
         let doorways = json.doorways;
         for (var i = 0; i < doorways.length; i++) {
-          dispatch(pilotUpdate(doorways[i]['id']), doorways[i]['spaceId']));
+          dispatch(pilotUpdate(doorways[i]['id']), doorways[i]['spaceId']);
         }
       });
 
