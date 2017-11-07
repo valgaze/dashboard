@@ -4,7 +4,6 @@ import { PILOT_SET } from '../../actions/pilot/set';
 import { PILOT_UPDATE } from '../../actions/pilot/update';
 
 const initialState = {
-  spaceId: null,
   updated: new Date(),
   doorways: []
 };
@@ -27,7 +26,10 @@ export default function pilot(state=initialState, action) {
   case PILOT_SET:
     return action.data;
   case PILOT_UPDATE:
-    return {...state, updated: new Date(), doorways: doorwaysWithUpdatedCountAndHourly(state.doorways, action.doorwayId, action.totalEvents, action.sinceDate)}
+    return {
+      ...state, 
+      updated: new Date(), 
+      doorways: doorwaysWithUpdatedCountAndHourly(state.doorways, action.doorwayId, action.totalEvents, action.sinceDate)}
   default:
     return state;
   }

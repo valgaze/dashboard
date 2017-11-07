@@ -3,12 +3,11 @@ import { core } from '@density-int/client';
 export const PILOT_UPDATE = 'PILOT_UPDATE';
 
 
-export default function pilotUpdate(doorwayId) {
+export default function pilotUpdate(doorwayId, spaceId) {
   return async (dispatch, getState) => {
-    let state = getState();
     try {
       const response = await core.spaces.events({
-        id: state.pilot.spaceId,
+        id: spaceId,
         doorway_id: doorwayId, 
         start_time: "2016-09-19",
         end_time: "2019-09-19",
