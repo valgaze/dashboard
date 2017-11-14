@@ -5,6 +5,8 @@ import Button from '@density/ui-button';
 import Card, { CardBody } from '@density/ui-card';
 import Subnav, { SubnavItem } from '../subnav/index';
 
+import AccountSetupHeader from '../account-setup-header/index';
+
 export function AccountSetupOverview({user, onGetStarted}) {
   if (user.user) {
     return <div className="account-setup-overview-container">
@@ -13,16 +15,10 @@ export function AccountSetupOverview({user, onGetStarted}) {
         <SubnavItem>Doorways</SubnavItem>
       </Subnav>
 
-      <div className="account-setup-overview-header-container">
-        <div className="account-setup-overview-header">
-          <div className="account-setup-overview-header-greeter">
-            Welcome, {user.user.nickname || user.user.fullName}
-          </div>
-          <div className="account-setup-overview-header-detail">
-            Let's prep your space for installation.
-          </div>
-        </div>
-      </div>
+      <AccountSetupHeader
+        greeter={`Welcome, ${user.user.nickname || user.user.fullName}`}
+        detail="Let's prep your space for installation."
+      />
 
       <div className="account-setup-overview-body-container">
         <h1 className="account-setup-overview-title">Onboarding overview</h1>
@@ -54,6 +50,6 @@ export default connect(state => {
     // Move to the doorway list page in the setup flow.
     onGetStarted() {
       window.location.href = '#/account/setup/doorways';
-    }
+    },
   };
 })(AccountSetupOverview);
