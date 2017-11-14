@@ -1,0 +1,5 @@
+export const ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL = 'ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL';
+
+export default function routeTransitionAccountSetupDoorwayDetail() {
+  return { type: ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL };
+}

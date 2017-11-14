@@ -13,6 +13,7 @@ export default function sessionTokenSet(token) {
       dispatch(userError(err));
     }).then(data => {
       dispatch(userSet(data));
+      return data;
     });
   }
 }

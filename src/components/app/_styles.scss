@@ -43,9 +43,13 @@
   }
 }
 .app .subnav {
+  // Hide the subnav on mobile...
   @media (max-width: $screen-xs-max) {
     display: none;
   }
+
+  // ...Unless it's always visible
+  &.subnav-visible { display: block; }
 }
 
 .app {

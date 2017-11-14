@@ -34,6 +34,9 @@ import routeTransitionDevWebhookList from './actions/route-transition/dev-webhoo
 import routeTransitionAccount from './actions/route-transition/account';
 import routeTransitionAccountRegister from './actions/route-transition/account-register';
 import routeTransitionAccountForgotPassword from './actions/route-transition/account-forgot-password';
+import routeTransitionAccountSetupOverview from './actions/route-transition/account-setup-overview';
+import routeTransitionAccountSetupDoorwayList from './actions/route-transition/account-setup-doorway-list';
+import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition/account-setup-doorway-detail';
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 
@@ -135,8 +138,20 @@ router.addRoute('dev/webhooks', () => routeTransitionDevWebhookList());
 
 router.addRoute('account', () => routeTransitionAccount());
 
+// User registration and password resetting
 router.addRoute('account/register/:slug', slug => routeTransitionAccountRegister(slug));
 router.addRoute('account/forgot-password/:token', token => routeTransitionAccountForgotPassword(token));
+
+// Onboarding flow
+router.addRoute('account/setup/overview', () => {
+  // FIXME: After the user registers, their token is added to the store. But, they never actually
+  // have their user information fetched. This call fetches that user information and puts it into
+  // the `user` section of the store before continuing with the onboarding process.
+  preRouteAuthentication();
+  return routeTransitionAccountSetupOverview();
+});
+router.addRoute('account/setup/doorways', () => routeTransitionAccountSetupDoorwayList());
+router.addRoute('account/setup/doorways/:id', id => routeTransitionAccountSetupDoorwayDetail(id));
 
 // Make sure that the user is logged in prior to going to a page.
 function preRouteAuthentication() {

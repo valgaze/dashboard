@@ -17,6 +17,9 @@ import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
 import AccountForgotPassword from '../account-forgot-password/index';
+
+import AccountSetupOverview from '../account-setup-overview/index';
+
 import UnknownPage from '../unknown-page/index';
 
 import { DragDropContext } from 'react-dnd';
@@ -171,6 +174,8 @@ function ActivePage({activePage}) {
     return <AccountRegistration />;
   case "ACCOUNT_FORGOT_PASSWORD":
     return <AccountForgotPassword />;
+  case "ACCOUNT_SETUP_OVERVIEW":
+    return <AccountSetupOverview />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

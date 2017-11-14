@@ -1,8 +1,8 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
-export default function Subnav({children}) {
-  return <div className="subnav">
+export default function Subnav({children, visible}) {
+  return <div className={classnames('subnav', {'subnav-visible': visible})}>
     <ul className="subnav-items">{children}</ul>
   </div>;
 }

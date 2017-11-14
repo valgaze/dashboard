@@ -1,0 +1,54 @@
+// Style the header at the top of the page such that a 500px wide inner section is centered
+// within the container, and that when less than 500px the text is 20px from the left side of the
+// screen.
+.account-setup-overview-header-container {
+  color: #fff;
+  background-color: $gray-darker;
+  padding-top: 50px;
+  padding-bottom: 50px;
+
+  margin-bottom: 30px;
+}
+.account-setup-overview-header {
+  max-width: 1020px;
+  margin: 0px auto;
+}
+
+// The two items within the header at the top of the page.
+.account-setup-overview-header-greeter {
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+.account-setup-overview-header-detail {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.account-setup-overview-title {
+  color: $gray-cinder;
+
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+}
+
+.account-setup-overview-body-container {
+  max-width: 500px;
+  margin: 0px auto;
+}
+.account-setup-overview-body {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.account-setup-submit {
+  margin-top: 20px;
+}
