@@ -19,6 +19,7 @@ import AccountRegistration from '../account-registration/index';
 import AccountForgotPassword from '../account-forgot-password/index';
 
 import AccountSetupOverview from '../account-setup-overview/index';
+import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
 
 import UnknownPage from '../unknown-page/index';
 
@@ -82,16 +83,20 @@ class NavbarWrapper extends React.Component {
           onClick={this.closeSidebar.bind(this)}
         >Visualization</NavbarSidebarItem>
 
-        {/* <NavbarSidebarItem
+        {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
+        {featureFlagEnabled(features.environmentPageVisible) ? <NavbarSidebarItem
           header={true}
           activePage={this.props.activePage}
           pageName={['ENVIRONMENT_SPACE', 'ENVIRONMENT_SENSOR']}
           href="#/environment/spaces"
           onClick={this.closeSidebar.bind(this)}
-        >Environment</NavbarSidebarItem>
-        <NavbarSidebarItem activePage={this.props.activePage} pageName="ENVIRONMENT_SPACE" href="#/environment/spaces"
+        >Environment</NavbarSidebarItem> : null}
+        {featureFlagEnabled(features.environmentPageVisible) ? <NavbarSidebarItem
+          activePage={this.props.activePage}
+          pageName="ENVIRONMENT_SPACE"
+          href="#/environment/spaces"
           onClick={this.closeSidebar.bind(this)}
-          >Spaces</NavbarSidebarItem> */}
+        >Spaces</NavbarSidebarItem> : null}
         {/* <NavbarSidebarItem activePage={this.props.activePage} pageName='ENVIRONMENT_SENSOR' href="#/environment/sensors">Sensors</NavbarSidebarItem> */}
 
         <NavbarSidebarItem
@@ -176,6 +181,8 @@ function ActivePage({activePage}) {
     return <AccountForgotPassword />;
   case "ACCOUNT_SETUP_OVERVIEW":
     return <AccountSetupOverview />;
+  case "ACCOUNT_SETUP_DOORWAY_LIST":
+    return <AccountSetupDoorwayList />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

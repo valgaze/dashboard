@@ -1,0 +1,78 @@
+import * as React from 'react';
+import { connect } from 'react-redux';
+
+import Button from '@density/ui-button';
+import Card, { CardBody, CardLoading } from '@density/ui-card';
+import Subnav, { SubnavItem } from '../subnav/index';
+
+import AccountSetupHeader from '../account-setup-header/index';
+
+export function AccountSetupDoorwayList({
+  doorways,
+
+  onCreateDoorway,
+}) {
+  return <div className="account-setup-doorway-list">
+    <Subnav visible>
+      <SubnavItem href="#/account/setup/overview">Overview</SubnavItem>
+      <SubnavItem active >Doorways</SubnavItem>
+    </Subnav>
+
+    <AccountSetupHeader
+      greeter="Doorways"
+      detail="Provide more information about your doorways to guide installation."
+    />
+
+    <div className="account-setup-doorway-list-body-container">
+      <h1 className="account-setup-doorway-list-title">
+        Your Doorways
+        <span
+          className="account-setup-doorways-list-add-doorway-link"
+          role="button"
+          onClick={onCreateDoorway}
+        >Add a doorway</span>
+      </h1>
+      <Card className="account-setup-doorway-list-body">
+        {/* If the doorways collection is still loading, show the card in a loading state */}
+        {doorways.loading ? <CardLoading indeterminate /> : null}
+
+        {/* The doorway list */}
+        {(function(doorways) {
+          if (doorways.data.length > 0) {
+            return <CardBody>
+              <ul>
+                {doorways.data.map(doorway => {
+                  return <li key={doorway.id}>
+                    <a href={`#/account/setup/doorways/${doorway.id}`}>{doorway.name}</a>
+                  </li>;
+                })}
+              </ul>
+            </CardBody>;
+          } else if (doorways.loading) {
+            return <CardBody>Loading doorways...</CardBody>;
+          } else {
+            // When no doorways are visible, add a button to create the first doorway.
+            return <CardBody>
+              <Button
+                className="account-setup-doorway-list-create"
+                onClick={onCreateDoorway}
+              >
+                Create your first doorway
+              </Button>
+            </CardBody>;
+          }
+        })(doorways)}
+      </Card>
+    </div>
+  </div>;
+}
+
+export default connect(state => {
+  return { doorways: state.doorways };
+}, dispatch => {
+  return {
+    onCreateDoorway() {
+      console.log('Create doorway!');
+    },
+  };
+})(AccountSetupDoorwayList);

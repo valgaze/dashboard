@@ -1,0 +1,56 @@
+// This element is the smaller title that's visible above the card. It's roughly centered within the
+// card's width.
+.account-setup-doorway-list-title {
+  color: $gray-cinder;
+
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+
+  display: flex;
+}
+
+// The main card, which shows a list of all doorways in the organization.
+.account-setup-doorway-list-body-container {
+  max-width: 500px;
+  margin: 0px auto;
+}
+.account-setup-doorway-list-body {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+// The create doorway button that's visible when an organization has no doorways.
+.account-setup-doorway-list-create { margin-top: 20px; }
+
+// The add doorway link that's next to the list title that is visible when the organization already
+// has doorways.
+.account-setup-doorways-list-add-doorway-link {
+  cursor: pointer;
+  user-select: none;
+  color: $gray-cinder;
+  margin-top: 3px;
+
+  margin-left: auto;
+
+  font-size: 16px; // FIXME: ugh, a font size that's not one of the presets?
+  font-weight: normal;
+  white-space: nowrap;
+
+  &:before {
+    color: $brand-primary;
+
+    font-family: 'Densicons';
+    content: "\e92c";
+
+    margin-right: 8px;
+    margin-left: 10px;
+  }
+
+  &:hover { opacity: 0.8; }
+  &:active { opacity: 1; }
+}
