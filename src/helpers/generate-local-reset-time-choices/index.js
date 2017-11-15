@@ -19,12 +19,15 @@ export default function generateLocalResetTimeChoices(zone) {
   }
 
   let resetTimeOptions = [];
-  for (let i = 0; i < (24 - hoursOffsetFromUtc); i++) {
-    const timeZoneHour = i + hoursOffsetFromUtc;
-    if (timeZoneHour < 0) { continue; }
+  const startOfDay = moment.utc().tz(zone).startOf('day').subtract(1, 'hour');
+  for (let i = 0; i < 24; i++) {
+    const time = startOfDay.add(1, 'hours');
 
     // Add the option to the selectbox.
-    resetTimeOptions.push({localTime: formatTime(timeZoneHour), utc: `${i % 24}:00`});
+    resetTimeOptions.push({
+      localTime: time.tz(zone).format('h:mm a'),
+      utc: time.utc().format('H:mm'),
+    });
   }
 
   return resetTimeOptions;
