@@ -8,11 +8,11 @@ import Subnav, { SubnavItem } from '../subnav/index';
 
 import AccountSetupHeader from '../account-setup-header/index';
 
-const IMPERIAL = 'IMPERIAL',
-      METRIC = 'METRIC';
+const IMPERIAL = 'IMPERIAL'; //,
+  //METRIC = 'METRIC';
 
-const AC_OUTLET = 'AC_OUTLET',
-      POWER_OVER_ETHERNET = 'POWER_OVER_ETHERNET';
+const AC_OUTLET = 'AC_OUTLET'; //,
+// POWER_OVER_ETHERNET = 'POWER_OVER_ETHERNET';
 
 export class AccountSetupDoorwayDetail extends React.Component {
   constructor(props) {
