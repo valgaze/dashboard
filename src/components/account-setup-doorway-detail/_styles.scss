@@ -1,0 +1,49 @@
+// This element is the smaller title that's visible above the card. It's roughly centered within the
+// card's width.
+.account-setup-doorway-detail-title {
+  color: $gray-cinder;
+
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+}
+// This element is the subtitle underneath of the main title.
+.account-setup-doorway-list-subtitle {
+  color: $brand-primary;
+
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+
+  font-size: $font-size-4;
+  font-weight: normal;
+  font-style: italic;
+}
+
+// The main card, which shows a bunch of static content informing the user about the process they
+// are about to go through.
+.account-setup-doorway-detail-body-container {
+  max-width: 500px;
+  margin: 0px auto;
+}
+.account-setup-doorway-detail-body {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.account-setup-doorway-detail-body-header {
+  color: $gray-cinder;
+}
+
+.account-setup-doorway-detail-body-image-upload {
+}
+
+// The submit button, which moves to the next page of the process.
+.account-setup-doorway-detail-submit {
+  margin-top: 20px;
+}

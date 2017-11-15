@@ -185,7 +185,7 @@ function preRouteAuthentication() {
       store.dispatch(userSet({
         ...data,
         features: {
-          visualizationPageLocked: 'false',
+          visualizationPageLocked: 'true',
           environmentPageVisible: 'false',
         },
       }));

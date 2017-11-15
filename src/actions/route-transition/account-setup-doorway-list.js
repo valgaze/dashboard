@@ -1,6 +1,7 @@
 import { core } from '@density-int/client';
 
 import collectionDoorwaysSet from '../collection/doorways/set';
+import collectionTokensError from '../collection/doorways/error';
 
 export const ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_LIST = 'ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_LIST';
 
@@ -10,6 +11,8 @@ export default function routeTransitionAccountSetupDoorwayList() {
 
     return core.doorways.list().then(doorways => {
       dispatch(collectionDoorwaysSet(doorways.results));
+    }).catch(error => {
+      dispatch(collectionTokensError(error));
     });
   };
 }

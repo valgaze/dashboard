@@ -25,8 +25,8 @@ export default function generateLocalResetTimeChoices(zone) {
 
     // Add the option to the selectbox.
     resetTimeOptions.push({
-      localTime: time.tz(zone).format('h:mm a'),
-      utc: time.utc().format('H:mm'),
+      localTime: time.tz(zone).format('h:mm a'), // 12 hour, include am/pm
+      utc: time.utc().format('H:mm'), // 24 hour, no am/pm
     });
   }
 

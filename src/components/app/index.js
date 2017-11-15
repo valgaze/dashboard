@@ -20,6 +20,7 @@ import AccountForgotPassword from '../account-forgot-password/index';
 
 import AccountSetupOverview from '../account-setup-overview/index';
 import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
+import AccountSetupDoorwayDetail from '../account-setup-doorway-detail/index';
 
 import UnknownPage from '../unknown-page/index';
 
@@ -183,6 +184,8 @@ function ActivePage({activePage}) {
     return <AccountSetupOverview />;
   case "ACCOUNT_SETUP_DOORWAY_LIST":
     return <AccountSetupDoorwayList />;
+  case "ACCOUNT_SETUP_DOORWAY_DETAIL":
+    return <AccountSetupDoorwayDetail />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

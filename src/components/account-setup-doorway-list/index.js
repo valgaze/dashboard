@@ -72,7 +72,7 @@ export default connect(state => {
 }, dispatch => {
   return {
     onCreateDoorway() {
-      console.log('Create doorway!');
+      window.location.href = '#/account/setup/doorways/new';
     },
   };
 })(AccountSetupDoorwayList);

@@ -9,6 +9,8 @@ import ErrorBar from '../error-bar/index';
 import sessionTokenSet from '../../actions/session-token/set';
 import { accounts } from '@density-int/client';
 
+import featureFlagEnabled from '../../helpers/feature-flag-enabled/index';
+
 export class AccountRegistration extends React.Component {
   constructor(props) {
     super(props);
@@ -106,8 +108,14 @@ export default connect(state => {
 }, dispatch => {
   return {
     onUserLoggedIn(token) {
-      dispatch(sessionTokenSet(token));
-      window.location.hash = '#/visualization/spaces';
+      dispatch(sessionTokenSet(token)).then(user => {
+        // If the visualizations page is locked, instead redirect to the onboarding flow.
+        if (featureFlagEnabled(user.features.visualizationPageLocked)) {
+          window.location.hash = '#/account/setup/overview';
+        } else {
+          window.location.hash = '#/visualization/spaces';
+        }
+      });
     },
   };
 })(AccountRegistration);
