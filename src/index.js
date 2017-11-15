@@ -143,6 +143,13 @@ router.addRoute('account/register/:slug', slug => routeTransitionAccountRegister
 router.addRoute('account/forgot-password/:token', token => routeTransitionAccountForgotPassword(token));
 
 // Onboarding flow
+// Redirect #/account/setup => #/account/setup/overview
+router.addRoute('account/setup', () => {
+  window.location.href = '#/account/setup/overview';
+  // FIXME: Conduit shouldn't dispatch an action if a function returns undefined. That would let the
+  // below line be removed.
+  return {type: 'NOOP'};
+});
 router.addRoute('account/setup/overview', () => {
   // FIXME: After the user registers, their token is added to the store. But, they never actually
   // have their user information fetched. This call fetches that user information and puts it into
@@ -227,8 +234,6 @@ eventSource.events.on('space', countChangeEvent => {
     countChange: countChangeEvent.direction,
   }));
 });
-window.store = store;
-
 
 ReactDOM.render(
   <Provider store={store}>

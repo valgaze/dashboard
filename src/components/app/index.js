@@ -45,6 +45,16 @@ class NavbarWrapper extends React.Component {
     return <Navbar onClickSidebarButton={() => this.setState({show: !this.state.show})}>
       <NavbarItem
         activePage={this.props.activePage}
+        pageName={[
+          'ACCOUNT_SETUP_OVERVIEW',
+          'ACCOUNT_SETUP_DOORWAY_LIST',
+          'ACCOUNT_SETUP_DOORWAY_DETAIL',
+        ]}
+        href="#/account/setup/overview"
+      >Onboarding</NavbarItem>
+
+      <NavbarItem
+        activePage={this.props.activePage}
         pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
 
         // Feature flag: Do not allow the user to visit the visualizations page until it has been
