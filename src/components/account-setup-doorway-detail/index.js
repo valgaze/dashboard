@@ -9,11 +9,13 @@ import Subnav, { SubnavItem } from '../subnav/index';
 import AccountSetupHeader from '../account-setup-header/index';
 import AccountSetupDoorwayDetailImageUpload from '../account-setup-doorway-detail-image-upload/index';
 
-const IMPERIAL = 'IMPERIAL'; //,
-  //METRIC = 'METRIC';
+const CENTIMETERS_PER_INCH = 2.54;
 
-const AC_OUTLET = 'AC_OUTLET'; //,
-// POWER_OVER_ETHERNET = 'POWER_OVER_ETHERNET';
+const IMPERIAL = 'IMPERIAL',
+  METRIC = 'METRIC';
+
+const AC_OUTLET = 'AC_OUTLET',
+      POWER_OVER_ETHERNET = 'POWER_OVER_ETHERNET';
 
 export class AccountSetupDoorwayDetail extends React.Component {
   constructor(props) {
@@ -25,13 +27,13 @@ export class AccountSetupDoorwayDetail extends React.Component {
       insideImage: null,
       outsideImage: null,
 
-      measurementUnit: IMPERIAL,
-      inputWidth: '',
-      inputHeight: '',
+      measurementUnit: METRIC,
+      inputWidth: '12',
+      inputHeight: '100',
 
       hasClearance: true,
 
-      powerType: AC_OUTLET,
+      powerType: POWER_OVER_ETHERNET,
     };
   }
   render() {
@@ -99,7 +101,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
             /> : null}
 
             <h2 className="account-setup-doorway-detail-body-header">2 &mdash; Name this doorway</h2>
-            <label htmlFor="account-setup-forway-detail-body-doorway-name">Doorway Name</label>
+            <label htmlFor="account-setup-doorway-detail-body-doorway-name">Doorway Name</label>
             <InputBox
               placeholder="Doorway Name"
               onChange={e => this.setState({doorway: {...this.state.doorway, name: e.target.value}})}
@@ -107,10 +109,79 @@ export class AccountSetupDoorwayDetail extends React.Component {
             />
 
             <h2 className="account-setup-doorway-detail-body-header">3 &mdash; Measure your doorway</h2>
-            <span>Not done yet!</span>
+            <input
+              type="radio"
+              checked={this.state.measurementUnit === METRIC}
+              onChange={() => {
+                this.setState({
+                  measurementUnit: METRIC,
+                  inputWidth: this.state.inputWidth * CENTIMETERS_PER_INCH,
+                  inputHeight: this.state.inputHeight * CENTIMETERS_PER_INCH,
+                });
+              }}
+            /> Metric
+            <input
+              type="radio"
+              checked={this.state.measurementUnit === IMPERIAL}
+              onChange={() => {
+                this.setState({
+                  measurementUnit: IMPERIAL,
+                  inputWidth: parseInt(this.state.inputWidth, 10) / CENTIMETERS_PER_INCH,
+                  inputHeight: parseInt(this.state.inputHeight, 10) / CENTIMETERS_PER_INCH,
+                });
+              }}
+            /> Imperial
+            <br/>
+
+            <span>Doorway width</span>
+            <InputBox
+              placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
+              value={this.state.inputWidth}
+              onChange={e => this.setState({inputWidth: e.target.value})}
+            />
+
+            <span>Doorway height</span>
+            <InputBox
+              placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
+              value={this.state.inputHeight}
+              onChange={e => this.setState({inputHeight: e.target.value})}
+            />
+
+            <br/>
+            <span>Does doorway have at least 5in (0.13m) of clearance above the door to mount a unit?</span>
+            <br/>
+            <input
+              type="radio"
+              checked={this.state.hasClearance}
+              onChange={() => this.setState({hasClearance: true})}
+            /> Yes
+            <br/>
+            <input
+              type="radio"
+              checked={!this.state.hasClearance}
+              onChange={() => this.setState({hasClearance: false})}
+            /> No
 
             <h2 className="account-setup-doorway-detail-body-header">4 &mdash; Choose power option</h2>
+
+            <span>How will you provide power to the unit?</span>
+            <br/>
+            <input
+              type="radio"
+              checked={this.state.powerType === POWER_OVER_ETHERNET}
+              onChange={() => this.setState({powerType: POWER_OVER_ETHERNET})}
+            /> Power over Ethernet (PoE)
+            <br/>
+            <input
+              type="radio"
+              checked={this.state.powerType === AC_OUTLET}
+              onChange={() => this.setState({powerType: AC_OUTLET})}
+            /> Standard 120-240V outlet
+            <br/>
+            <br/>
+
             <Button>Save &amp; Close</Button>
+            <br/>
             <Button>Save &amp; Add Another Doorway</Button>
           </CardBody>
         </Card>
