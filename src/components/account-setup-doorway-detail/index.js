@@ -7,6 +7,7 @@ import Card, { CardBody } from '@density/ui-card';
 import Subnav, { SubnavItem } from '../subnav/index';
 
 import AccountSetupHeader from '../account-setup-header/index';
+import AccountSetupDoorwayDetailImageUpload from '../account-setup-doorway-detail-image-upload/index';
 
 const IMPERIAL = 'IMPERIAL'; //,
   //METRIC = 'METRIC';
@@ -55,21 +56,18 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
             <h2 className="account-setup-doorway-detail-body-header">1 &mdash; Upload images</h2>
 
-            <input
-              type="file"
-              className="account-setup-doorway-detail-body-image-upload"
-              ref={ref => { this.insideImageRef = ref; }}
-              onChange={() => {
-                if (this.insideImageRef.files.length === 1) {
-                  const file = this.insideImageRef.files[0];
-
+            <span>Image taken from inside the space</span>
+            <AccountSetupDoorwayDetailImageUpload
+              value={this.state.insideImage}
+              onChange={file => {
+                if (file) {
                   const reader = new FileReader();
                   reader.readAsDataURL(file);
                   reader.onload = () => {
                     this.setState({insideImage: reader.result});
                   };
                 } else {
-                  console.error('No file selected or more than one file selected!');
+                  this.setState({insideImage: null});
                 }
               }}
             />
@@ -79,21 +77,18 @@ export class AccountSetupDoorwayDetail extends React.Component {
               alt="Inside of Doorway"
             /> : null}
 
-            <input
-              type="file"
-              className="account-setup-doorway-detail-body-image-upload"
-              ref={ref => { this.outsideImageRef = ref; }}
-              onChange={() => {
-                if (this.outsideImageRef.files.length === 1) {
-                  const file = this.outsideImageRef.files[0];
-
+            <span>Image taken from outside the space</span>
+            <AccountSetupDoorwayDetailImageUpload
+              value={this.state.outsideImage}
+              onChange={file => {
+                if (file) {
                   const reader = new FileReader();
                   reader.readAsDataURL(file);
                   reader.onload = () => {
                     this.setState({outsideImage: reader.result});
                   };
                 } else {
-                  console.error('No file selected or more than one file selected!');
+                  this.setState({outsideImage: null});
                 }
               }}
             />
