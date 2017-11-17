@@ -41,7 +41,7 @@ class NavbarWrapper extends React.Component {
   }
 
   render() {
-    const {features} = this.props;
+    const {settings} = this.props;
     return <Navbar onClickSidebarButton={() => this.setState({show: !this.state.show})}>
       <NavbarItem
         activePage={this.props.activePage}
@@ -60,12 +60,12 @@ class NavbarWrapper extends React.Component {
         // Feature flag: Do not allow the user to visit the visualizations page until it has been
         // unlocked. During the onboarding process, the organization will not have spaces / doorways
         // so this page does not make sense.
-        locked={featureFlagEnabled(features.visualizationPageLocked)}
+        locked={featureFlagEnabled(settings.visualizationPageLocked)}
         href="#/visualization/spaces"
       >Visualization</NavbarItem>
 
       {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
-      {featureFlagEnabled(features.environmentPageVisible) ? <NavbarItem
+      {featureFlagEnabled(settings.environmentPageVisible) ? <NavbarItem
         activePage={this.props.activePage}
         pageName={['ENVIRONMENT_SPACE']}
         href="#/environment/spaces"
@@ -95,14 +95,14 @@ class NavbarWrapper extends React.Component {
         >Visualization</NavbarSidebarItem>
 
         {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
-        {featureFlagEnabled(features.environmentPageVisible) ? <NavbarSidebarItem
+        {featureFlagEnabled(settings.environmentPageVisible) ? <NavbarSidebarItem
           header={true}
           activePage={this.props.activePage}
           pageName={['ENVIRONMENT_SPACE', 'ENVIRONMENT_SENSOR']}
           href="#/environment/spaces"
           onClick={this.closeSidebar.bind(this)}
         >Environment</NavbarSidebarItem> : null}
-        {featureFlagEnabled(features.environmentPageVisible) ? <NavbarSidebarItem
+        {featureFlagEnabled(settings.environmentPageVisible) ? <NavbarSidebarItem
           activePage={this.props.activePage}
           pageName="ENVIRONMENT_SPACE"
           href="#/environment/spaces"
@@ -136,7 +136,7 @@ class NavbarWrapper extends React.Component {
   }
 }
 
-function AppComponent({activePage, features, onLogout}) {
+function AppComponent({activePage, settings, onLogout}) {
   return <div className="app">
     {/* Render the navbar */}
     {(
@@ -145,7 +145,7 @@ function AppComponent({activePage, features, onLogout}) {
       activePage !== 'ACCOUNT_FORGOT_PASSWORD'
     ) ? <NavbarWrapper
       activePage={activePage}
-      features={features}
+      settings={settings}
       onLogout={onLogout}
     /> : null}
 
@@ -205,7 +205,12 @@ function ActivePage({activePage}) {
 export default connect(state => {
   return {
     activePage: state.activePage,
-    features: (state.user && state.user.user && state.user.user.features) || {},
+    settings: (
+      state.user &&
+      state.user.user &&
+      state.user.user.organization &&
+      state.user.user.organization.settings
+    ) || {},
   };
 }, dispatch => {
   return {

@@ -191,9 +191,12 @@ function preRouteAuthentication() {
     }).then(data => {
       store.dispatch(userSet({
         ...data,
-        features: {
-          visualizationPageLocked: 'true',
-          environmentPageVisible: 'false',
+        organization: {
+          ...data.organization,
+          settings: {
+            visualizationPageLocked: 'true',
+            environmentPageVisible: 'false',
+          },
         },
       }));
     });
