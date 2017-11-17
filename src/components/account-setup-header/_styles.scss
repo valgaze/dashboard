@@ -2,8 +2,7 @@
 // within the container, and that when less than 500px the text is 20px from the left side of the
 // screen.
 .account-setup-header-container {
-  color: #fff;
-  background-color: $gray-darker;
+  background-color: #fff;
   padding-top: 50px;
   padding-bottom: 50px;
 
@@ -19,6 +18,7 @@
 .account-setup-header-greeter {
   font-size: $font-size-2;
   font-weight: $font-weight-2;
+  color: $gray-cinder;
 
   margin-left: 20px;
   margin-right: 20px;
@@ -27,4 +27,5 @@
 .account-setup-header-detail {
   margin-left: 20px;
   margin-right: 20px;
+  color: $gray-dark;
 }

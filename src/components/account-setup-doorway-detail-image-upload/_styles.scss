@@ -1,11 +1,12 @@
 // The main container for the image uploader.
 .account-setup-doorway-detail-image-upload {
-  background-color: $gray-lighter;
+  background-color: $gray-lightest;
+
   margin-top: 10px;
   margin-bottom: 10px;
-  padding: 30px;
+  height: 200px;
 
-  border: 2px dotted $gray;
+  border: 2px dotted $gray-lighter;
   border-radius: 4px;
 
   cursor: pointer;
@@ -21,21 +22,29 @@
 // The image uploader is powered by an input[type=form], but we don't want that to be visible.
 .account-setup-doorway-detail-form-element { display: none; }
 
-// The first visible flex child in the main container is a status icon.
+// The first visible flex child (in the empty state) in the main container is a status icon.
 .account-setup-doorway-detail-image-upload-icon {
   font-family: 'Densicons';
   font-size: 18px;
   margin-bottom: 20px;
   color: $gray;
+
+  // Add spacing above the first item in the container.
+  padding-top: 75px;
 }
 // When the user has uploaded an image, render the icon in a different color.
 .account-setup-doorway-detail-image-upload-icon.uploaded { color: $gray-cinder; }
 
-// The second visible flex child is a upload link.
+// The second visible flex child (in the empty state) is a upload link.
 .account-setup-doorway-detail-image-upload-link {
-  color: $gray-cinder;
+  color: $brand-primary;
   font-size: $font-size-5;
   text-decoration: underline;
+}
+
+// Once the user has uploaded an image, show it in the preview box.
+.account-setup-doorway-detail-image-upload-preview {
+  height: 200px;
 }
 
 // Change the opacity of the upload link and upload icon on hover and on active. This is hte same

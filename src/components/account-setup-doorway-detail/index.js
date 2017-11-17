@@ -73,11 +73,6 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 }
               }}
             />
-            {this.state.insideImage ? <img
-              style={{width: 100}}
-              src={this.state.insideImage}
-              alt="Inside of Doorway"
-            /> : null}
 
             <span>Image taken from outside the space</span>
             <AccountSetupDoorwayDetailImageUpload
@@ -94,11 +89,6 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 }
               }}
             />
-            {this.state.outsideImage ? <img
-              style={{width: 100}}
-              src={this.state.outsideImage}
-              alt="Outside of Doorway"
-            /> : null}
 
             <h2 className="account-setup-doorway-detail-body-header">2 &mdash; Name this doorway</h2>
             <label htmlFor="account-setup-doorway-detail-body-doorway-name">Doorway Name</label>

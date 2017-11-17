@@ -66,16 +66,24 @@ export default class AccountSetupDoorwayDetailImageUpload extends React.Componen
         onChange={() => this.fileUploaded.call(this, this.fileinput.files)}
       />
 
+      {/* Render empty state of image picker */}
       {
-        this.state.state === UPLOADED ?
-        <span className="account-setup-doorway-detail-image-upload-icon uploaded">&#xe908;</span> :
-        <span className="account-setup-doorway-detail-image-upload-icon empty">&#xe91d;</span>
+        this.state.state !== UPLOADED ?
+        <span className="account-setup-doorway-detail-image-upload-icon empty">&#xe91d;</span> :
+        null
       }
       {
-        this.state.state === UPLOADED ?
-        <span className="account-setup-doorway-detail-image-upload-link">Select new file</span> :
-        <span className="account-setup-doorway-detail-image-upload-link">Take a picture or upload file</span>
+        this.state.state !== UPLOADED ?
+        <span className="account-setup-doorway-detail-image-upload-link">Take a picture or upload file</span> :
+        null
       }
+
+      {/* Render full state of image picker */}
+      {this.state.state === UPLOADED ? <img
+        className="account-setup-doorway-detail-image-upload-preview"
+        src={this.props.value}
+        alt=""
+      /> : null}
     </div>;
   }
 }
