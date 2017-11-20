@@ -51,7 +51,7 @@ class NavbarWrapper extends React.Component {
           'ACCOUNT_SETUP_DOORWAY_DETAIL',
         ]}
         href="#/account/setup/overview"
-      >Onboarding</NavbarItem>
+      >Unit Setup</NavbarItem>
 
       <NavbarItem
         activePage={this.props.activePage}
@@ -62,7 +62,7 @@ class NavbarWrapper extends React.Component {
         // so this page does not make sense.
         locked={featureFlagEnabled(settings.visualizationPageLocked)}
         href="#/visualization/spaces"
-      >Visualization</NavbarItem>
+      >Insights</NavbarItem>
 
       {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
       {featureFlagEnabled(settings.environmentPageVisible) ? <NavbarItem
