@@ -56,7 +56,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
           <CardBody>
             {JSON.stringify(this.state.doorway, null, 2)}
 
-            <h2 className="account-setup-doorway-detail-body-header">1 &mdash; Upload images</h2>
+            <h2 className="account-setup-doorway-detail-body-header">
+              <em>1 &mdash;</em>
+              Upload images
+            </h2>
 
             <span>Image taken from inside the space</span>
             <AccountSetupDoorwayDetailImageUpload
@@ -90,7 +93,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
               }}
             />
 
-            <h2 className="account-setup-doorway-detail-body-header">2 &mdash; Name this doorway</h2>
+            <h2 className="account-setup-doorway-detail-body-header">
+              <em>2 &mdash;</em>
+              Name this doorway
+            </h2>
             <label htmlFor="account-setup-doorway-detail-body-doorway-name">Doorway Name</label>
             <InputBox
               placeholder="Doorway Name"
@@ -98,7 +104,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
               value={this.state.doorway.name}
             />
 
-            <h2 className="account-setup-doorway-detail-body-header">3 &mdash; Measure your doorway</h2>
+            <h2 className="account-setup-doorway-detail-body-header">
+              <em>3 &mdash;</em>
+              Measure your doorway
+            </h2>
             <input
               type="radio"
               checked={this.state.measurementUnit === METRIC}
@@ -152,7 +161,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
               onChange={() => this.setState({hasClearance: false})}
             /> No
 
-            <h2 className="account-setup-doorway-detail-body-header">4 &mdash; Choose power option</h2>
+            <h2 className="account-setup-doorway-detail-body-header">
+              <em>4 &mdash;</em>
+              Choose power option
+            </h2>
 
             <span>How will you provide power to the unit?</span>
             <br/>

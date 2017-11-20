@@ -17,12 +17,69 @@
 // The main card, which shows a list of all doorways in the organization.
 .account-setup-doorway-list-body-container {
   max-width: 500px;
-  margin: 0px auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
 }
 .account-setup-doorway-list-body {
   margin-left: 20px;
   margin-right: 20px;
 }
+
+// The styles for the wrapping ul for all the list items within the card.
+.account-detail-doorway-list {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+
+// This element forms the parent of each doorway item within the list. It acts as a flex parent
+// toward all its children.
+.account-setup-doorway-list-item {
+  color: $text-color;
+  text-decoration: none;
+
+  height: 48px;
+  line-height: 48px;
+
+  display: flex;
+  flex-direction: row;
+
+  border: 1px solid $gray-light;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+.account-setup-doorway-list-item-image {
+  width: 48px;
+  text-align: center;
+  margin-right: 20px;
+}
+.account-setup-doorway-list-item-image.empty { background-color: $gray; }
+.account-setup-doorway-list-item-image.empty:before {
+  font-family: 'Densicons';
+  content: '\e914';
+  color: $gray-dark;
+}
+// The name is the second element in each doorway item.
+.account-setup-doorway-list-item-name {
+  font-weight: bold;
+
+  /* Hack: adjust vertical centering of text within cell. */
+  position: relative;
+  top: 2px;
+}
+// The arrow is the last element, it just renders a blue arrow for the user to click on to move to
+// the details for that doorway.
+.account-setup-doorway-list-item-arrow {
+  font-family: 'Densicons';
+  font-size: $font-size-3;
+
+  color: $brand-primary;
+
+  margin-left: auto;
+  margin-right: 20px;
+}
+
 
 // The create doorway button that's visible when an organization has no doorways.
 .account-setup-doorway-list-create {

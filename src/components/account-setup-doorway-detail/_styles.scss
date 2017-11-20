@@ -38,9 +38,12 @@
 
 .account-setup-doorway-detail-body-header {
   color: $gray-cinder;
+  font-size: $font-size-2;
 }
-
-.account-setup-doorway-detail-body-image-upload {
+.account-setup-doorway-detail-body-header em {
+  font-style: normal;
+  color: $brand-primary;
+  margin-right: 8px; /* Needed to increase the distance between the mdash and the header */
 }
 
 // The submit button, which moves to the next page of the process.

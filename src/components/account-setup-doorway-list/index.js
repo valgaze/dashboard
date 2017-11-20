@@ -40,10 +40,25 @@ export function AccountSetupDoorwayList({
         {(function(doorways) {
           if (doorways.data.length > 0) {
             return <CardBody>
-              <ul>
+              <ul className="account-detail-doorway-list">
                 {doorways.data.map(doorway => {
                   return <li key={doorway.id}>
-                    <a href={`#/account/setup/doorways/${doorway.id}`}>{doorway.name}</a>
+                    <a
+                      className="account-setup-doorway-list-item"
+                      href={`#/account/setup/doorways/${doorway.id}`}
+                    >
+                      {doorway.insideImageUrl ? <img
+                        className="account-setup-doorway-list-item-image"
+                        src={doorway.insideImageUrl}
+                        alt="Front of doorway"
+                      /> : <div className="account-setup-doorway-list-item-image empty" />}
+
+                      <span className="account-setup-doorway-list-item-name">
+                        {doorway.name}
+                      </span>
+
+                      <span className="account-setup-doorway-list-item-arrow">&#59651;</span>
+                    </a>
                   </li>;
                 })}
               </ul>
