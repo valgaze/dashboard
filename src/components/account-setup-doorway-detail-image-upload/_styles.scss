@@ -1,3 +1,25 @@
+// The header above the image uploader. This contains the label for the image uploader as well as an
+// edit button to change its contents when full.
+.account-setup-doorway-detail-image-upload-header {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  color: $gray-cinder;
+}
+.account-setup-doorway-detail-image-upload-header-label {
+  font-weight: bold;
+}
+.account-setup-doorway-detail-image-upload-header-edit {
+  color: $brand-primary;
+  text-decoration: underline;
+  cursor: pointer;
+
+  margin-left: auto;
+  font-size: $font-size-base;
+}
+.account-setup-doorway-detail-image-upload-header-edit:hover { opacity: 0.8; }
+.account-setup-doorway-detail-image-upload-header-edit:active { opacity: 1; }
+
 // The main container for the image uploader.
 .account-setup-doorway-detail-image-upload {
   background-color: $gray-lightest;

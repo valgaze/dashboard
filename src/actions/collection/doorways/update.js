@@ -13,6 +13,10 @@ export default function collectionDoorwaysUpdate(item) {
         id: item.id,
         name: item.name,
         description: item.description,
+        width: item.width,
+        height: item.height,
+        clearance: item.clearance,
+        power_type: item.powerType,
       });
       dispatch(collectionDoorwaysPush(response));
       return response;

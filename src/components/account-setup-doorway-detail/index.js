@@ -4,10 +4,14 @@ import { connect } from 'react-redux';
 import Button from '@density/ui-button';
 import InputBox from '@density/ui-input-box';
 import Card, { CardBody } from '@density/ui-card';
+import RadioButton from '@density/ui-radio-button';
 import Subnav, { SubnavItem } from '../subnav/index';
 
 import AccountSetupHeader from '../account-setup-header/index';
 import AccountSetupDoorwayDetailImageUpload from '../account-setup-doorway-detail-image-upload/index';
+
+import collectionDoorwaysUpdate from '../../actions/collection/doorways/update';
+import collectionDoorwaysCreate from '../../actions/collection/doorways/create';
 
 const CENTIMETERS_PER_INCH = 2.54;
 
@@ -54,15 +58,29 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
         <Card className="account-setup-doorway-detail-body">
           <CardBody>
-            {JSON.stringify(this.state.doorway, null, 2)}
+            {/* {JSON.stringify(this.state.doorway, null, 2)} */}
 
             <h2 className="account-setup-doorway-detail-body-header">
               <em>1 &mdash;</em>
               Upload images
             </h2>
 
-            <span>Image taken from inside the space</span>
+            <p className="account-setup-doorway-detail-body-section">
+              When taking photos, please follow these guidelines:
+            </p>
+
+            <div className="account-setup-doorway-detail-body-guidelines-box">
+              Stand at least 10ft away from the center of the doorway to capture the following:
+              <ul>
+                <li>Full, unobstructed view of the door</li>
+                <li>Mounting space above the door</li>
+                <li>Surrounding walls</li>
+                <li>If there is a door, please prop open when capturing the image if possible</li>
+              </ul>
+            </div>
+
             <AccountSetupDoorwayDetailImageUpload
+              label="Image taken from inside the space"
               value={this.state.insideImage}
               onChange={file => {
                 if (file) {
@@ -77,8 +95,8 @@ export class AccountSetupDoorwayDetail extends React.Component {
               }}
             />
 
-            <span>Image taken from outside the space</span>
             <AccountSetupDoorwayDetailImageUpload
+              label="Image taken from outside the space"
               value={this.state.outsideImage}
               onChange={file => {
                 if (file) {
@@ -93,98 +111,184 @@ export class AccountSetupDoorwayDetail extends React.Component {
               }}
             />
 
+
             <h2 className="account-setup-doorway-detail-body-header">
-              <em>2 &mdash;</em>
-              Name this doorway
+              <em>2 &mdash;</em> Name this doorway
             </h2>
-            <label htmlFor="account-setup-doorway-detail-body-doorway-name">Doorway Name</label>
+            <p className="account-setup-doorway-detail-body-section">
+              Create a name for this doorway to be used in the Dashboard.
+            </p>
+            <label
+              className="account-setup-doorway-detail-body-input-label"
+              htmlFor="account-setup-doorway-detail-body-doorway-name"
+            >Doorway Name</label>
             <InputBox
+              className="account-setup-doorway-detail-body-input"
               placeholder="Doorway Name"
               onChange={e => this.setState({doorway: {...this.state.doorway, name: e.target.value}})}
               value={this.state.doorway.name}
             />
 
+
             <h2 className="account-setup-doorway-detail-body-header">
               <em>3 &mdash;</em>
               Measure your doorway
             </h2>
-            <input
-              type="radio"
-              checked={this.state.measurementUnit === METRIC}
-              onChange={() => {
-                this.setState({
-                  measurementUnit: METRIC,
-                  inputWidth: this.state.inputWidth * CENTIMETERS_PER_INCH,
-                  inputHeight: this.state.inputHeight * CENTIMETERS_PER_INCH,
-                });
-              }}
-            /> Metric
-            <input
-              type="radio"
-              checked={this.state.measurementUnit === IMPERIAL}
-              onChange={() => {
-                this.setState({
-                  measurementUnit: IMPERIAL,
-                  inputWidth: parseInt(this.state.inputWidth, 10) / CENTIMETERS_PER_INCH,
-                  inputHeight: parseInt(this.state.inputHeight, 10) / CENTIMETERS_PER_INCH,
-                });
-              }}
-            /> Imperial
+            <p className="account-setup-doorway-detail-body-section">
+              Please provide a height and width measurement.
+            </p>
+            <div className="account-setup-doorway-detail-body-guidelines-box">
+              <ul>
+                <li>Height measurements should be from floor to top of door frame</li>
+                <li>Width measurements should be from frame to frame</li>
+                <li>Mounting space above door should be at least 5in</li>
+              </ul>
+            </div>
+
+            <div className="account-setup-doorway-detail-body-measurement-radio-container">
+              <RadioButton
+                text="Metric"
+                checked={this.state.measurementUnit === METRIC}
+                onChange={() => {
+                  this.setState({
+                    measurementUnit: METRIC,
+                    inputWidth: this.state.inputWidth * CENTIMETERS_PER_INCH,
+                    inputHeight: this.state.inputHeight * CENTIMETERS_PER_INCH,
+                  });
+                }}
+              />
+              <RadioButton
+                text="Imperial"
+                checked={this.state.measurementUnit === IMPERIAL}
+                onChange={() => {
+                  this.setState({
+                    measurementUnit: IMPERIAL,
+                    inputWidth: parseFloat(this.state.inputWidth, 10) / CENTIMETERS_PER_INCH,
+                    inputHeight: parseFloat(this.state.inputHeight, 10) / CENTIMETERS_PER_INCH,
+                  });
+                }}
+              />
+            </div>
             <br/>
 
-            <span>Doorway width</span>
+            <label className="account-setup-doorway-detail-body-input-label">
+              Doorway Width
+              <span className="account-setup-doorway-detail-body-input-label-highlight">
+                {this.state.measurementUnit === METRIC ? '(Centimeters)' : '(Inches)'}
+              </span>
+            </label>
             <InputBox
+              className="account-setup-doorway-detail-body-input"
               placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
               value={this.state.inputWidth}
               onChange={e => this.setState({inputWidth: e.target.value})}
             />
 
-            <span>Doorway height</span>
+            <br/>
+            <label className="account-setup-doorway-detail-body-input-label">
+              Doorway Height
+              <span className="account-setup-doorway-detail-body-input-label-highlight">
+                {this.state.measurementUnit === METRIC ? '(Centimeters)' : '(Inches)'}
+              </span>
+            </label>
             <InputBox
+              className="account-setup-doorway-detail-body-input"
               placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
               value={this.state.inputHeight}
               onChange={e => this.setState({inputHeight: e.target.value})}
             />
 
             <br/>
-            <span>Does doorway have at least 5in (0.13m) of clearance above the door to mount a unit?</span>
-            <br/>
-            <input
-              type="radio"
-              checked={this.state.hasClearance}
-              onChange={() => this.setState({hasClearance: true})}
-            /> Yes
-            <br/>
-            <input
-              type="radio"
-              checked={!this.state.hasClearance}
-              onChange={() => this.setState({hasClearance: false})}
-            /> No
+            <label
+              className="account-setup-doorway-detail-body-input-label mounting-space"
+            >Mounting space</label>
+            <p className="account-setup-doorway-detail-body-section-clearance">
+              Does this doorway have at least 5in (0.13m) of clearance above the door to mount a unit?
+            </p>
+
+            <svg
+              className="account-setup-doorway-detail-clearance-graphic"
+              width="422px"
+              height="217px"
+              viewBox="0 0 422 217"
+              version="1.1"
+            >
+              <g id="Onboarding-Web" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                  <g id="ob-v1-r1-004-1" transform="translate(-429.000000, -2535.000000)">
+                      <g id="content" transform="translate(410.000000, 370.000000)">
+                          <g id="step-3" transform="translate(20.000000, 1519.000000)">
+                              <g id="scene" transform="translate(0.000000, 647.000000)">
+                                  <rect id="door" stroke="#B4B8BF" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round" x="0" y="61.4299828" width="420" height="154.078481"></rect>
+                                  <rect id="door" stroke="#B4B8BF" fill="#FFFFFF" strokeLinecap="round" strokeLinejoin="round" x="21.0501193" y="82.5780097" width="378.902148" height="132.930455"></rect>
+                                  <g id="r60-front" transform="translate(185.441527, 28.197369)" stroke="#B4B8BF">
+                                      <path d="M15.3787213,11.0775379 L37.7477704,11.0775379 L37.7477704,31.2326136 L37.7477704,31.2326136 C37.7477704,32.3371831 36.8523399,33.2326136 35.7477704,33.2326136 L17.3787213,33.2326136 L17.3787213,33.2326136 C16.2741518,33.2326136 15.3787213,32.3371831 15.3787213,31.2326136 L15.3787213,11.0775379 Z" id="mount" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round"></path>
+                                      <path d="M0.162956884,20.7703835 C1.30923909,22.6166398 2.29345712,23.539768 3.11561097,23.539768 C4.34884174,23.539768 48.5271043,23.3910693 49.8183736,23.3910693 C50.6792198,23.3910693 51.7517142,22.5175074 53.0358569,20.7703835 L0.162956884,20.7703835 Z" id="window" fill="#B4B8BF" strokeLinecap="round" strokeLinejoin="round"></path>
+                                      <path d="M0.965858065,2.85340573 C0.54871463,5.70544631 0.266651737,8.56472301 0.119669386,11.4312358 C-0.0398897952,14.5430274 -0.0398897952,17.6560766 0.119669386,20.7703835 L53.0227182,20.7703835 C53.1610828,17.6282524 53.1610828,14.5084501 53.0227182,11.4109765 C52.8952077,8.55648453 52.6493786,5.70281009 52.2852309,2.84995315 L52.2852338,2.84995279 C52.2297872,2.41556544 51.8981613,2.06778413 51.4669003,1.99175359 C43.935141,0.663917864 35.9940108,0 27.6435097,0 C19.2560581,0 10.6433742,0.669806479 1.80545792,2.00941944 L1.80545924,2.00942813 C1.37037955,2.07537561 1.02954271,2.41798907 0.965858065,2.85340573 Z" id="enclosure" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round"></path>
+                                      <path d="M1.39806557,4.15407671 C9.78645899,3.23094855 18.1748524,2.76938447 26.5632458,2.76938447 C34.9516392,2.76938447 43.3400327,3.23094855 51.7284261,4.15407671" id="curve" strokeWidth="0.5" strokeDasharray="2"></path>
+                                  </g>
+                                  <g id="measurements" transform="translate(105.250597, 0.000000)">
+                                      <polyline id="Path-11" stroke="#4198FF" points="56.9945046 61.0564073 46.1018586 61.0564073 46.1018586 0.00272682807 56.9945046 0.00272682807"></polyline>
+                                      <text id="5-in" fontFamily=".AppleSystemUIFont" fontSize="14" fontWeight="normal" fill="#4198FF">
+                                          <tspan x="5.54118889" y="30.4533413">5 in</tspan>
+                                      </text>
+                                  </g>
+                              </g>
+                          </g>
+                      </g>
+                  </g>
+              </g>
+            </svg>
+
+            <div className="account-setup-doorway-detail-body-clearance-radio-container">
+              <RadioButton
+                text="Yes"
+                checked={this.state.hasClearance}
+                onChange={() => this.setState({hasClearance: true})}
+              />
+              <RadioButton
+                text="No"
+                checked={!this.state.hasClearance}
+                onChange={() => this.setState({hasClearance: false})}
+              />
+            </div>
 
             <h2 className="account-setup-doorway-detail-body-header">
               <em>4 &mdash;</em>
-              Choose power option
+              Choose a power option
             </h2>
 
-            <span>How will you provide power to the unit?</span>
-            <br/>
-            <input
-              type="radio"
+            <p className="account-setup-doorway-detail-body-section-clearance">
+              How will you power the unit?
+            </p>
+            <RadioButton
+              text="Power over Ethernet (PoE)"
               checked={this.state.powerType === POWER_OVER_ETHERNET}
               onChange={() => this.setState({powerType: POWER_OVER_ETHERNET})}
-            /> Power over Ethernet (PoE)
-            <br/>
-            <input
-              type="radio"
+            />
+            <div className="account-setup-doorway-detail-body-power-radio-button-spacer" />
+            <RadioButton
+              text="Standard 100-240V AC outlet"
               checked={this.state.powerType === AC_OUTLET}
               onChange={() => this.setState({powerType: AC_OUTLET})}
-            /> Standard 120-240V outlet
+            />
+            <br/>
+            <br/>
             <br/>
             <br/>
 
-            <Button>Save &amp; Close</Button>
+            <Button onClick={() => {
+              return this.props.onSave(this.state.doorway).then(() => {
+                // Once complete, redirect back to the main page.
+                window.location.href = '#/account/setup/doorways';
+              });
+            }}>Save &amp; Close</Button>
             <br/>
-            <Button>Save &amp; Add Another Doorway</Button>
+            <Button onClick={() => {
+              return this.props.onSave(this.state.doorway).then(() => {
+                // Once complete, reset the state of the form.
+                this.setState({doorway: {}});
+              });
+            }}>Save &amp; Add Another Doorway</Button>
           </CardBody>
         </Card>
       </div>
@@ -199,7 +303,15 @@ export default connect(state => {
     doorwayCollectionLoading: state.doorways.loading,
   };
 }, dispatch => {
-  return {};
+  return {
+    onSave(doorway) {
+      if (doorway.id) {
+        return dispatch(collectionDoorwaysUpdate(doorway));
+      } else {
+        return dispatch(collectionDoorwaysCreate(doorway));
+      }
+    },
+  };
 })(function AccountSetupDoorwayDetailWrapper(props) {
   if (typeof props.initialDoorway !== 'undefined') {
     return <AccountSetupDoorwayDetail {...props} />;

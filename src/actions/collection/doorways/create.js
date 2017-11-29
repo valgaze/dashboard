@@ -12,6 +12,10 @@ export default function collectionDoorwaysCreate(item) {
       const response = await core.doorways.create({
         name: item.name,
         description: item.description,
+        width: item.width,
+        height: item.height,
+        clearance: item.clearance,
+        power_type: item.powerType,
       });
       dispatch(collectionDoorwaysPush(response));
       return response;

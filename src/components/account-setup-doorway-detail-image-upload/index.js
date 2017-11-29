@@ -54,36 +54,45 @@ export default class AccountSetupDoorwayDetailImageUpload extends React.Componen
   }
 
   render() {
-    return <div
-      className="account-setup-doorway-detail-image-upload"
-      onClick={() => this.fileinput.click()}
-    >
-      {/* This input[type=file] is hidden. It's "clicked" when its parent is clicked. */}
-      <input
-        type="file"
-        className="account-setup-doorway-detail-form-element"
-        ref={ref => { this.fileinput = ref; }}
-        onChange={() => this.fileUploaded.call(this, this.fileinput.files)}
-      />
+    return <div className="account-setup-doorway-detail-image-upload-container">
+      <div className="account-setup-doorway-detail-image-upload-header">
+        <span className="account-setup-doorway-detail-image-upload-header-label">{this.props.label}</span>
+        {this.state.state === UPLOADED ? <span
+          className="account-setup-doorway-detail-image-upload-header-edit"
+          onClick={() => this.fileinput.click()}
+        >Edit</span> : null}
+      </div>
+      <div
+        className="account-setup-doorway-detail-image-upload"
+        onClick={() => this.fileinput.click()}
+      >
+        {/* This input[type=file] is hidden. It's "clicked" when its parent is clicked. */}
+        <input
+          type="file"
+          className="account-setup-doorway-detail-form-element"
+          ref={ref => { this.fileinput = ref; }}
+          onChange={() => this.fileUploaded.call(this, this.fileinput.files)}
+        />
 
-      {/* Render empty state of image picker */}
-      {
-        this.state.state !== UPLOADED ?
-        <span className="account-setup-doorway-detail-image-upload-icon empty">&#xe91d;</span> :
-        null
-      }
-      {
-        this.state.state !== UPLOADED ?
-        <span className="account-setup-doorway-detail-image-upload-link">Take a picture or upload file</span> :
-        null
-      }
+        {/* Render empty state of image picker */}
+        {
+          this.state.state !== UPLOADED ?
+          <span className="account-setup-doorway-detail-image-upload-icon empty">&#xe91d;</span> :
+          null
+        }
+        {
+          this.state.state !== UPLOADED ?
+          <span className="account-setup-doorway-detail-image-upload-link">Take a picture or upload file</span> :
+          null
+        }
 
-      {/* Render full state of image picker */}
-      {this.state.state === UPLOADED ? <img
-        className="account-setup-doorway-detail-image-upload-preview"
-        src={this.props.value}
-        alt=""
-      /> : null}
+        {/* Render full state of image picker */}
+        {this.state.state === UPLOADED ? <img
+          className="account-setup-doorway-detail-image-upload-preview"
+          src={this.props.value}
+          alt=""
+        /> : null}
+      </div>
     </div>;
   }
 }

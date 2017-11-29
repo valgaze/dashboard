@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Navbar, { NavbarItem } from '@density/ui-navbar';
-import NavbarSidebar, { NavbarSidebarItem } from '@density/ui-navbar-sidebar';
+import Navbar, { NavbarItem, NavbarMobileItem } from '@density/ui-navbar';
 
 import sessionTokenUnset from '../../actions/session-token/unset';
 
@@ -31,18 +30,85 @@ import MultiBackend, { TouchTransition, Preview } from 'react-dnd-multi-backend'
 
 
 class NavbarWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { show: false };
-  }
-
-  closeSidebar() {
-    this.setState({ show: false })
-  }
-
   render() {
     const {settings} = this.props;
-    return <Navbar onClickSidebarButton={() => this.setState({show: !this.state.show})}>
+    return <Navbar mobileSidebar={[
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={[
+          'ACCOUNT_SETUP_OVERVIEW',
+          'ACCOUNT_SETUP_DOORWAY_LIST',
+          'ACCOUNT_SETUP_DOORWAY_DETAIL',
+        ]}
+        href="#/account/setup/overview"
+      >Unit Setup</NavbarMobileItem>,
+
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={['ACCOUNT_SETUP_OVERVIEW']}
+        href="#/account/setup/overview"
+        indent={2}
+      >Overview</NavbarMobileItem>,
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={['ACCOUNT_SETUP_DOORWAY_LIST']}
+        href="#/account/setup/doorways"
+        indent={2}
+      >Doorways</NavbarMobileItem>,
+
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
+
+        // Feature flag: Do not allow the user to visit the visualizations page until it has been
+        // unlocked. During the onboarding process, the organization will not have spaces / doorways
+        // so this page does not make sense.
+        locked={featureFlagEnabled(settings.visualizationPageLocked)}
+        href="#/visualization/spaces"
+      >Insights</NavbarMobileItem>,
+
+      /* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */
+      featureFlagEnabled(settings.environmentPageVisible) ? <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={['ENVIRONMENT_SPACE']}
+        href="#/environment/spaces"
+      >Environment</NavbarMobileItem> : null,
+
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
+        href="#/dev/tokens"
+      >Developer Tools</NavbarMobileItem>,
+
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={['DEV_TOKEN_LIST']}
+        href="#/dev/tokens"
+        indent={2}
+      >Tokens</NavbarMobileItem>,
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={['DEV_WEBHOOK_LIST']}
+        href="#/dev/webhooks"
+        indent={2}
+      >Webhooks</NavbarMobileItem>,
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={[]}
+        href="http://docs.density.io"
+        indent={2}
+      >API Documentation</NavbarMobileItem>,
+
+      <NavbarMobileItem
+        activePage={this.props.activePage}
+        pageName={['ACCOUNT']}
+        href="#/account"
+      >Account</NavbarMobileItem>,
+
+      <li className="navbar-mobile-item">
+        <span onClick={this.props.onLogout}>Logout</span>
+      </li>,
+    ]}>
       <NavbarItem
         activePage={this.props.activePage}
         pageName={[
@@ -84,54 +150,6 @@ class NavbarWrapper extends React.Component {
       <span aria-label="Logout" title="Logout" className="navbar-item-logout">
         <a onClick={this.props.onLogout}>&#xe923;</a>
       </span>
-
-      <NavbarSidebar show={this.state.show}>
-        <NavbarSidebarItem
-          header={true}
-          activePage={this.props.activePage}
-          pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
-          href="#/visualization/spaces"
-          onClick={this.closeSidebar.bind(this)}
-        >Visualization</NavbarSidebarItem>
-
-        {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
-        {featureFlagEnabled(settings.environmentPageVisible) ? <NavbarSidebarItem
-          header={true}
-          activePage={this.props.activePage}
-          pageName={['ENVIRONMENT_SPACE', 'ENVIRONMENT_SENSOR']}
-          href="#/environment/spaces"
-          onClick={this.closeSidebar.bind(this)}
-        >Environment</NavbarSidebarItem> : null}
-        {featureFlagEnabled(settings.environmentPageVisible) ? <NavbarSidebarItem
-          activePage={this.props.activePage}
-          pageName="ENVIRONMENT_SPACE"
-          href="#/environment/spaces"
-          onClick={this.closeSidebar.bind(this)}
-        >Spaces</NavbarSidebarItem> : null}
-        {/* <NavbarSidebarItem activePage={this.props.activePage} pageName='ENVIRONMENT_SENSOR' href="#/environment/sensors">Sensors</NavbarSidebarItem> */}
-
-        <NavbarSidebarItem
-          header={true}
-          activePage={this.props.activePage}
-          pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
-          href="#/dev/tokens"
-          onClick={this.closeSidebar.bind(this)}
-        >Developer Tools</NavbarSidebarItem>
-        <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_TOKEN_LIST']} href="#/dev/tokens" onClick={this.closeSidebar.bind(this)}>Tokens</NavbarSidebarItem>
-        <NavbarSidebarItem activePage={this.props.activePage} pageName={['DEV_WEBHOOK_LIST']} href="#/dev/webhooks" onClick={this.closeSidebar.bind(this)}>Webhooks</NavbarSidebarItem>
-        <NavbarSidebarItem activePage={false} pageName={[]} href="http://docs.density.io">
-          API Documentation
-          <span className="app-api-docs-icon">&#xe91b;</span>
-        </NavbarSidebarItem>
-
-        <NavbarSidebarItem
-          header={true}
-          activePage={this.props.activePage}
-          pageName={['ACCOUNT']}
-          href={['#/account']}
-          onClick={this.closeSidebar.bind(this)}
-        >Account</NavbarSidebarItem>
-      </NavbarSidebar>
     </Navbar>;
   }
 }
