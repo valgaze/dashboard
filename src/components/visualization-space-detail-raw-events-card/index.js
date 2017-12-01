@@ -35,6 +35,11 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       total: 0,
       error: null,
 
+      // By default, csv isn't downloading.
+      // Later, it's used as a lock to lock the downloading functionality when the download is
+      // already pending.
+      currentlyDownloadingCsv: false,
+
       dataSpaceId: null,
       datePickerInput: null,
 
@@ -134,7 +139,10 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
   // If there are events to download, download a csv containing all the events displayed to the
   // user's system.
   downloadCsv() {
-    if (this.state.state !== EMPTY) {
+    if (this.state.state !== EMPTY && this.state.currentlyDownloadingCsv === false) {
+      // Show the download spinner
+      this.setState({currentlyDownloadingCsv: true});
+
       return fetch(
         `https://api.density.io/v1/csv/?space_id=${this.props.space.id}&start_time=${this.state.startDate}&end_time=${this.state.endDate}`,
         {
@@ -144,6 +152,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           },
         }
       ).then(response => response.text()).then(csv => {
+
         // This is a workaround to allow a user to download this csv data, or if that doesn't work,
         // then at least open it in a new tab for them to view and copy to the clipboard.
         // 1. Create a new blob url.
@@ -151,12 +160,22 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         const data = new Blob([csv], {type: 'text/csv'});
         const csvURL = URL.createObjectURL(data);
 
+        // Hide the download spinner once csv has been downloaded and blob url has been created.
+        this.setState({currentlyDownloadingCsv: false});
+
         const tempLink = document.createElement('a');
         document.body.appendChild(tempLink);
         tempLink.href = csvURL;
         tempLink.setAttribute('download', `${this.props.space.id}: ${this.state.startDate} - ${this.state.endDate}.csv`);
         tempLink.click();
-      });
+      }).catch(error => {
+        // When something goes wrong, update the state of the card.
+        this.setState({
+          currentlyDownloadingCsv: false,
+          state: ERROR,
+          error: `Error downloading CSV: ${error.message}`,
+        });
+      })
     }
   }
 
@@ -168,7 +187,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
 
     return <div>
       <Card className="visualization-space-detail-raw-events-card">
-        {this.state.state === LOADING ? <CardLoading indeterminate /> : null}
+        {this.state.state === LOADING || this.state.currentlyDownloadingCsv ? <CardLoading indeterminate /> : null}
         <CardHeader className="visualization-space-detail-raw-event-card-header">
           <span className="visualization-space-detail-raw-events-card-header-label">
             Raw Events
@@ -185,10 +204,10 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           {/* Download a CSV for that contains the given raw events in the data range */}
           <span
             className={classnames('visualization-space-detail-raw-events-card-csv-download', {
-              disabled: this.state.state === EMPTY || this.state.state === LOADING,
+              disabled: this.state.state === EMPTY || this.state.state === LOADING || this.state.currentlyDownloadingCsv,
             })}
             onClick={this.downloadCsv.bind(this)}
-          >CSV Download</span>
+          >{this.state.currentlyDownloadingCsv ? 'CSV Downloading...' : 'CSV Download'}</span>
 
           {/* Select the date range for the data to display */}
           <div className="visualization-space-detail-raw-events-card-date-picker">
