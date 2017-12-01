@@ -135,12 +135,15 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
   // user's system.
   downloadCsv() {
     if (this.state.state !== EMPTY) {
-      return core.spaces.csv({
-        id: this.props.space.id,
-        start_time: this.state.startDate,
-        end_time: this.state.endDate,
-      }).then(csv => {
-
+      return fetch(
+        `https://api.density.io/v1/csv/?space_id=${this.props.space.id}&start_time=${this.state.startDate}&end_time=${this.state.endDate}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${JSON.parse(localStorage.sessionToken)}`
+          },
+        }
+      ).then(response => response.text()).then(csv => {
         // This is a workaround to allow a user to download this csv data, or if that doesn't work,
         // then at least open it in a new tab for them to view and copy to the clipboard.
         // 1. Create a new blob url.
