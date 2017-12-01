@@ -33,7 +33,6 @@ import routeTransitionDevWebhookList from './actions/route-transition/dev-webhoo
 import routeTransitionAccount from './actions/route-transition/account';
 import routeTransitionAccountRegister from './actions/route-transition/account-register';
 import routeTransitionAccountForgotPassword from './actions/route-transition/account-forgot-password';
-import routeTransitionPilot from './actions/route-transition/pilot';
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 
@@ -132,8 +131,6 @@ router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());
 
 router.addRoute('dev/tokens', () => routeTransitionDevTokenList());
 router.addRoute('dev/webhooks', () => routeTransitionDevWebhookList());
-
-router.addRoute('pilot', () => routeTransitionPilot());
 
 router.addRoute('account', () => routeTransitionAccount());
 
