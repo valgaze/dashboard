@@ -12,7 +12,8 @@ import Navbar from '@density/ui-navbar';
 
 import Mark from '@density/ui-density-mark';
 
-const LOGIN = 'LOGIN', FORGOT_PASSWORD = 'FORGOT_PASSWORD';
+export const LOGIN = 'LOGIN',
+             FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 
 export class Login extends React.Component {
   constructor(props) {
@@ -26,9 +27,26 @@ export class Login extends React.Component {
     };
   }
 
+  isLoginFormValid() {
+    return this.state.view === LOGIN &&
+      this.state.email.indexOf('@') >= 0 &&
+      this.state.password.length > 0 &&
+      !this.state.loading;
+  }
+
+  isForgotPasswordFormValid() {
+    return this.state.view === FORGOT_PASSWORD &&
+      this.state.email.indexOf('@') >= 0 &&
+      !this.state.loading;
+  }
+
   onEnter(e) {
     if (e.key === 'Enter') {
-      this.onLogin();
+      if (this.isLoginFormValid.apply(this)) {
+        this.onLogin();
+      } else if (this.isForgotPasswordFormValid.apply(this)) {
+        this.onForgotPassword();
+      }
     }
   }
 
@@ -82,7 +100,7 @@ export class Login extends React.Component {
         className={classnames('login-submit-button', {loading: this.state.loading})}
         size="large"
         onClick={this.onLogin.bind(this)}
-        disabled={this.state.loading || this.state.email.indexOf('@') === -1}
+        disabled={!this.isLoginFormValid.apply(this)}
       >Login</Button>
 
       {/* Move to forgot password view */}
@@ -120,7 +138,7 @@ export class Login extends React.Component {
         className={classnames('login-submit-button', {loading: this.state.loading})}
         onClick={this.onForgotPassword.bind(this)}
         size="large"
-        disabled={this.state.loading || this.state.email.indexOf('@') === -1}
+        disabled={!this.isForgotPasswordFormValid.apply(this)}
       >Send Request</Button>
 
       {/* Move to back to login page */}

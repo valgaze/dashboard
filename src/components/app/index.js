@@ -12,6 +12,7 @@ import SpaceList from '../visualization-space-list/index';
 import SpaceDetail from '../visualization-space-detail/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
+import Pilot from '../pilot/index';
 import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
@@ -136,6 +137,12 @@ class NavbarWrapper extends React.Component {
         pageName={['ENVIRONMENT_SPACE']}
         href="#/environment/spaces"
       >Environment</NavbarItem> : null}
+      
+      {this.props.user.user && this.props.user.user.organization && this.props.user.user.organization.id === 'org_162164766972838168NOSHOW' ?  <NavbarItem
+        activePage={this.props.activePage}
+        pageName={['PILOT']}
+        href="#/pilot"
+      >Pilot</NavbarItem> : null}
 
       <NavbarItem
         activePage={this.props.activePage}
@@ -154,7 +161,7 @@ class NavbarWrapper extends React.Component {
   }
 }
 
-function AppComponent({activePage, settings, onLogout}) {
+function AppComponent({activePage, settings, user, onLogout}) {
   return <div className="app">
     {/* Render the navbar */}
     {(
@@ -165,6 +172,7 @@ function AppComponent({activePage, settings, onLogout}) {
       activePage={activePage}
       settings={settings}
       onLogout={onLogout}
+      user={user}
     /> : null}
 
     {/* Render dragging preview when an item is being dragged */}
@@ -214,6 +222,8 @@ function ActivePage({activePage}) {
     return <AccountSetupDoorwayList />;
   case "ACCOUNT_SETUP_DOORWAY_DETAIL":
     return <AccountSetupDoorwayDetail />;
+  case "PILOT":
+    return <Pilot />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }
@@ -229,6 +239,7 @@ export default connect(state => {
       state.user.user.organization &&
       state.user.user.organization.settings
     ) || {},
+    user: state.user
   };
 }, dispatch => {
   return {
