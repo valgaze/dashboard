@@ -17,7 +17,7 @@ function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
 
-describe('raw events pager', function() {
+describe.skip('raw events pager', function() {
   afterEach(() => mockdate.reset());
 
   it('should render the card without any events', async function() {
