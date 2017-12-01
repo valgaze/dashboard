@@ -47,14 +47,14 @@
 
   border: 1px solid $gray-light;
   border-radius: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .account-setup-doorway-list-item-image {
   width: 48px;
   text-align: center;
   margin-right: 20px;
 }
-.account-setup-doorway-list-item-image.empty { background-color: $gray; }
+.account-setup-doorway-list-item-image.empty { background-color: $gray-lighter; }
 .account-setup-doorway-list-item-image.empty:before {
   font-family: 'Densicons';
   content: '\e914';

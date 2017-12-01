@@ -17,15 +17,33 @@
 .account-setup-overview-body-container {
   max-width: 500px;
   margin: 0px auto;
+  line-height: 2;
 }
 .account-setup-overview-body {
   margin-left: 20px;
   margin-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.account-setup-overview-body-list { padding-left: 20px; }
+.account-setup-overview-body-emphesis {
+  color: $gray;
+  margin-left: 5px;
 }
 
 // The submit button, which moves to the next page of the process.
 .account-setup-overview-submit {
   margin-top: 20px;
+}
+
+.account-setup-overview-glyph {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 
 // When loading, report status messages in the center of the screen.

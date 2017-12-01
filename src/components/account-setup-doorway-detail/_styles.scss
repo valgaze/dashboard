@@ -58,6 +58,7 @@
   font-weight: lighter;
 }
 
+// The box that contains the guidelines for the user when measuring the doorway
 .account-setup-doorway-detail-body-guidelines-box {
   background-color: $gray-lightest;
   border-radius: $border-radius-base;
@@ -74,6 +75,9 @@
   width: calc(100% - 30px);
 }
 .account-setup-doorway-detail-body-guidelines-box ul { padding-left: 20px; }
+
+// Container that has within the "ideal doorway" image.
+.account-setup-doorway-detail-body-ideal-image-box { width: 100%; }
 
 
 // A container to hold the 'Metric' and 'Imperial' radio buttons for picking the proper unit of

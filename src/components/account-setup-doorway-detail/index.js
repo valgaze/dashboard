@@ -79,6 +79,16 @@ export class AccountSetupDoorwayDetail extends React.Component {
               </ul>
             </div>
 
+            <p className="account-setup-doorway-detail-body-section">
+              Here's an example of an ideal image:
+            </p>
+
+            <img
+              className="account-setup-doorway-detail-body-ideal-image-box"
+              src="https://densityco.github.io/assets/images/r57-doorway-blue-edit2.c7f85388.png"
+              alt="Ideal doorway"
+            />
+
             <AccountSetupDoorwayDetailImageUpload
               label="Image taken from inside the space"
               value={this.state.insideImage}
