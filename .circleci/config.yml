@@ -22,26 +22,7 @@ jobs:
             echo "npm -v = $(npm -v)"
             echo "yarn --version = $(yarn --version)"
 
-            # if [ "$CIRCLE_BRANCH" == "master" ]; then
-            #   # Build dashboard in production
-            #   echo "* Building production dashboard..."
-
-            #   # NOTE: These are not secrets, they're public identifiers that are built into the
-            #   # final webapp.
-            #   REACT_APP_MIXPANEL_TOKEN="eb87b138bbb5d556fcf53bebac24b935" \
-            #   REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
-            #   REACT_APP_ENVIRONMENT="production" \
-            #   NODE_ENV=production \
-            #   yarn build
-
-            #   echo "* Installing amazon's cli..."
-            #   sudo apt-get update
-            #   sudo apt-get install -y awscli
-
-            #   echo "* Copying to S3..."
-            #   aws s3 sync build/ s3://dashboard.density.io/ --region us-east-1
-            if [ "$CIRCLE_BRANCH" == "pilot" ]; then
-              # Currently deploying pilot (and not master) when testing with LinkedIn
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
               # Build dashboard in production
               echo "* Building production dashboard..."
 
