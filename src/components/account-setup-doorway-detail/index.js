@@ -292,8 +292,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 window.location.href = '#/account/setup/doorways';
               });
             }}>Save &amp; Close</Button>
-            <br/>
-            <Button onClick={() => {
+            <Button className="account-setup-doorway-detail-save-add-another-button" onClick={() => {
               return this.props.onSave(this.state.doorway).then(() => {
                 // Once complete, reset the state of the form.
                 this.setState({doorway: {}});
