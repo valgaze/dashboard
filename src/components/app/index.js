@@ -33,7 +33,7 @@ import MultiBackend, { TouchTransition, Preview } from 'react-dnd-multi-backend'
 class NavbarWrapper extends React.Component {
   render() {
     const {settings} = this.props;
-    return <Navbar mobileSidebar={[
+    return <Navbar mobileSidebar={closeSidebar => [
       <NavbarMobileItem
         activePage={this.props.activePage}
         pageName={[
@@ -42,6 +42,7 @@ class NavbarWrapper extends React.Component {
           'ACCOUNT_SETUP_DOORWAY_DETAIL',
         ]}
         href="#/account/setup/overview"
+        onClick={closeSidebar}
       >Unit Setup</NavbarMobileItem>,
 
       <NavbarMobileItem
@@ -49,12 +50,14 @@ class NavbarWrapper extends React.Component {
         pageName={['ACCOUNT_SETUP_OVERVIEW']}
         href="#/account/setup/overview"
         indent={2}
+        onClick={closeSidebar}
       >Overview</NavbarMobileItem>,
       <NavbarMobileItem
         activePage={this.props.activePage}
         pageName={['ACCOUNT_SETUP_DOORWAY_LIST']}
         href="#/account/setup/doorways"
         indent={2}
+        onClick={closeSidebar}
       >Doorways</NavbarMobileItem>,
 
       <NavbarMobileItem
@@ -66,6 +69,7 @@ class NavbarWrapper extends React.Component {
         // so this page does not make sense.
         locked={featureFlagEnabled(settings.visualizationPageLocked)}
         href="#/visualization/spaces"
+        onClick={closeSidebar}
       >Insights</NavbarMobileItem>,
 
       /* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */
@@ -73,12 +77,14 @@ class NavbarWrapper extends React.Component {
         activePage={this.props.activePage}
         pageName={['ENVIRONMENT_SPACE']}
         href="#/environment/spaces"
+        onClick={closeSidebar}
       >Environment</NavbarMobileItem> : null,
 
       <NavbarMobileItem
         activePage={this.props.activePage}
         pageName={['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST']}
         href="#/dev/tokens"
+        onClick={closeSidebar}
       >Developer Tools</NavbarMobileItem>,
 
       <NavbarMobileItem
@@ -86,12 +92,14 @@ class NavbarWrapper extends React.Component {
         pageName={['DEV_TOKEN_LIST']}
         href="#/dev/tokens"
         indent={2}
+        onClick={closeSidebar}
       >Tokens</NavbarMobileItem>,
       <NavbarMobileItem
         activePage={this.props.activePage}
         pageName={['DEV_WEBHOOK_LIST']}
         href="#/dev/webhooks"
         indent={2}
+        onClick={closeSidebar}
       >Webhooks</NavbarMobileItem>,
       <NavbarMobileItem
         activePage={this.props.activePage}
@@ -104,6 +112,7 @@ class NavbarWrapper extends React.Component {
         activePage={this.props.activePage}
         pageName={['ACCOUNT']}
         href="#/account"
+        onClick={closeSidebar}
       >Account</NavbarMobileItem>,
 
       <li className="navbar-mobile-item">
