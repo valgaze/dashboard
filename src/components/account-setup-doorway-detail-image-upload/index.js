@@ -77,7 +77,7 @@ export default class AccountSetupDoorwayDetailImageUpload extends React.Componen
         {/* Render empty state of image picker */}
         {
           this.state.state !== UPLOADED ?
-          <span className="account-setup-doorway-detail-image-upload-icon empty">&#xe91d;</span> :
+          <span className="account-setup-doorway-detail-image-upload-icon empty">&#xe942;</span> :
           null
         }
         {
