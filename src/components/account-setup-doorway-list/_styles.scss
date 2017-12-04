@@ -19,7 +19,7 @@
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 40px;
+  margin-bottom: 100px;
 }
 .account-setup-doorway-list-body {
   margin-left: 20px;
@@ -130,4 +130,40 @@
 
   &:hover { opacity: 0.8; }
   &:active { opacity: 1; }
+}
+
+
+// Once a doorway is saved, show a success toast ifnorming the user that the process worked.
+.account-setup-doorway-list-success-toast {
+  width: 458px; /* Same width as the column below */
+  margin: 0px auto;
+}
+
+// The success toast is dismissable with a little x in the corner. When that little x is pressed, an
+// action is dispatched to close the modal.
+.account-setup-doorway-list-success-toast-dismiss {
+  position: absolute;
+  right: 0px;
+  font-size: $font-size-3;
+  color: $gray;
+}
+
+// Update the body of the success toast to contain a properly colored header and description.
+.account-setup-doorway-list-success-toast-header {
+  color: $brand-success;
+  margin-bottom: 5px;
+}
+.account-setup-doorway-list-success-toast .toast-body {
+  position: relative;
+  color: $gray-cinder;
+  padding-top: 5px;
+  height: 85px;
+}
+
+// Lastly, change the icon in the success toast to display a "checkmark" icon
+.account-setup-doorway-list-success-toast-icon {
+  font-family: 'Densicons';
+  font-size: $font-size-3;
+  position: relative;
+  top: 8px; /* Center the icon vertically */
 }

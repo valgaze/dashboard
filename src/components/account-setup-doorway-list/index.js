@@ -1,16 +1,21 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import hideModal from '../../actions/modal/hide';
+
 import Button from '@density/ui-button';
 import Card, { CardBody, CardLoading } from '@density/ui-card';
 import Subnav, { SubnavItem } from '../subnav/index';
+import Toast from '@density/ui-toast';
 
 import AccountSetupHeader from '../account-setup-header/index';
 
 export function AccountSetupDoorwayList({
   doorways,
+  activeModal,
 
   onCreateDoorway,
+  onHideSuccessToast,
 }) {
   return <div className="account-setup-doorway-list">
     <Subnav visible>
@@ -22,6 +27,20 @@ export function AccountSetupDoorwayList({
       greeter="Doorways"
       detail="Provide more information about your doorways to guide installation."
     />
+
+    {activeModal.name === 'unit-setup-added-doorway' ? <div className="account-setup-doorway-list-success-toast">
+      <Toast
+        type="success"
+        icon={<span className="account-setup-doorway-list-success-toast-icon">&#xe908;</span>}
+      >
+        <span
+          className="account-setup-doorway-list-success-toast-dismiss"
+          onClick={onHideSuccessToast}
+        >&times;</span>
+        <div className="account-setup-doorway-list-success-toast-header" role="heading">Doorway saved!</div>
+        Great, we've added your doorway(s) for review! We'll be in touch shortly!
+      </Toast>
+    </div> : null}
 
     <div className="account-setup-doorway-list-body-container">
       <h1 className="account-setup-doorway-list-title">
@@ -83,11 +102,17 @@ export function AccountSetupDoorwayList({
 }
 
 export default connect(state => {
-  return { doorways: state.doorways };
+  return {
+    doorways: state.doorways,
+    activeModal: state.activeModal,
+  };
 }, dispatch => {
   return {
     onCreateDoorway() {
       window.location.href = '#/account/setup/doorways/new';
+    },
+    onHideSuccessToast() {
+      dispatch(hideModal());
     },
   };
 })(AccountSetupDoorwayList);
