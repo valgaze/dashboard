@@ -125,12 +125,12 @@ trackHashChange();
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
-const initialRoute = '#/visualization/spaces';
+const initialRoute = '#/insights/spaces';
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
 
-router.addRoute('visualization/spaces', () => routeTransitionVisualizationSpaceList());
-router.addRoute('visualization/spaces/:id', id => routeTransitionVisualizationSpaceDetail(id));
+router.addRoute('insights/spaces', () => routeTransitionVisualizationSpaceList());
+router.addRoute('insights/spaces/:id', id => routeTransitionVisualizationSpaceDetail(id));
 
 router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());
 
