@@ -41,6 +41,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
     };
   }
   render() {
+    // A doorway is being created if the doorway passed in is truthy and has an id key within it.
+    // Otherwise, the doorway is being modified.
+    const isCreatingNewDoorway = !this.state.doorway || !this.state.doorway.id;
+
     return <div className="account-setup-doorway-detail">
       <Subnav visible>
         <SubnavItem href="#/account/setup/overview">Overview</SubnavItem>
@@ -53,7 +57,9 @@ export class AccountSetupDoorwayDetail extends React.Component {
       />
 
       <div className="account-setup-doorway-detail-body-container">
-        <h1 className="account-setup-doorway-list-title">Create a doorway</h1>
+        <h1 className="account-setup-doorway-list-title">
+          {isCreatingNewDoorway ? "Create a doorway" : this.state.doorway.name}
+        </h1>
         <h3 className="account-setup-doorway-list-subtitle">Tools needed: Tape measure</h3>
 
         <Card className="account-setup-doorway-detail-body">
