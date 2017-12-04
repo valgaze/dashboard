@@ -1,6 +1,19 @@
-// 
-// Density UI Styles
-// 
+/*
+ * Density Dashboard styles
+ *
+ * This is the master stylesheet for the Density dashboard, and pulls in styles for a css reset, all
+ * of the user interface components from Density UI, global style variables, charts styles and all
+ * the component styles from all the components inside of src/components in this project.
+ *
+ * NB: When reading through the imports, you'll probably notice that some of them are pointing to
+ * json files, not other sass files! What's up with that? Well, we're using this sass plugin called
+ * node-sass-json-importer (https://github.com/DensityCo/node-sass-json-importer) that allows json
+ * files to be imported and their keys used as sass variables. If might seem a bit strange, but
+ * abstracting variables out into json like this means that variables can be accessed from both
+ * javascript and from sass (webpack/node's `require` function can also accept the path to a json
+ * file)
+ *
+ */
 
 // normalize.css @ 7.0.0
 @import "reset";
