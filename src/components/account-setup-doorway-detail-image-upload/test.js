@@ -32,8 +32,8 @@ describe('Account setup doorway detail image upload', function() {
     assert.equal(onChange.callCount, 1);
     assert.deepEqual(onChange.firstCall.args, [FILE_ONE]);
 
-    // And also confirm that the state has transitioned to `uploaded`
-    assert.equal(component.state('state'), UPLOADED);
+    // And also confirm that the view has transitioned to `uploaded`
+    assert.equal(component.state('view'), UPLOADED);
   });
   it('should clear the upload box when the user cancels a file upload', function() {
     const onChange = sinon.stub();
@@ -51,8 +51,8 @@ describe('Account setup doorway detail image upload', function() {
     assert.equal(onChange.callCount, 1);
     assert.deepEqual(onChange.firstCall.args, [null]);
 
-    // And also confirm that the state has transitioned to `uploaded`
-    assert.equal(component.state('state'), NO_FILES);
+    // And also confirm that the view has transitioned to `no_files`
+    assert.equal(component.state('view'), NO_FILES);
   });
   it('should fail to upload multiple files', function() {
     const onChange = sinon.stub();
@@ -80,7 +80,7 @@ describe('Account setup doorway detail image upload', function() {
     // But, `onMultipleFileUpload` should have been called.
     assert.equal(onMultipleFileUpload.callCount, 1);
 
-    // And also confirm that the state has transitioned to `multiple files`
-    assert.equal(component.state('state'), MULTIPLE_FILES);
+    // And also confirm that the view has transitioned to `multiple files`
+    assert.equal(component.state('view'), MULTIPLE_FILES);
   });
 });
