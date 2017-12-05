@@ -13,6 +13,8 @@ import AccountSetupDoorwayDetailImageUpload from '../account-setup-doorway-detai
 import collectionDoorwaysUpdate from '../../actions/collection/doorways/update';
 import collectionDoorwaysCreate from '../../actions/collection/doorways/create';
 
+import showModal from '../../actions/modal/show';
+
 const CENTIMETERS_PER_INCH = 2.54;
 
 const IMPERIAL = 'IMPERIAL',
@@ -261,7 +263,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
             <Button onClick={() => {
               return this.props.onSave(this.state.doorway).then(() => {
-                // Once complete, redirect back to the main page.
+                // Once complete, open the doorway saved modal.
+                this.props.openDoorwaySavedModal();
+
+                // and redirect back to the main page.
                 window.location.href = '#/account/setup/doorways';
               });
             }}>Save &amp; Close</Button>
@@ -269,6 +274,9 @@ export class AccountSetupDoorwayDetail extends React.Component {
               return this.props.onSave(this.state.doorway).then(() => {
                 // Once complete, reset the state of the form.
                 this.setState({doorway: {}});
+
+                // Once complete, redirect to new doorway page
+                window.location.href = '#/account/setup/doorways/new';
               });
             }}>Save &amp; Add Another Doorway</Button>
           </CardBody>
@@ -327,6 +335,9 @@ export default connect(state => {
       } else {
         return dispatch(collectionDoorwaysCreate(doorway));
       }
+    },
+    openDoorwaySavedModal() {
+      dispatch(showModal('unit-setup-added-doorway'));
     },
   };
 })(function AccountSetupDoorwayDetailWrapper(props) {
