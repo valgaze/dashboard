@@ -1,4 +1,4 @@
-import { core } from '@density-int/client';
+import { core } from '../../client';
 
 import collectionSpacesSet from '../collection/spaces/set';
 import collectionDoorwaysSet from '../collection/doorways/set';

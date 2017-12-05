@@ -1,4 +1,4 @@
-import { core } from '@density-int/client';
+import { core } from '../../client';
 
 import collectionDoorwaysSet from '../collection/doorways/set';
 import collectionTokensError from '../collection/doorways/error';

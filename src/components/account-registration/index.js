@@ -12,7 +12,7 @@ import ErrorBar from '../error-bar/index';
 import AccountSetupHeader from '../account-setup-header/index';
 
 import sessionTokenSet from '../../actions/session-token/set';
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 
 import featureFlagEnabled from '../../helpers/feature-flag-enabled/index';
 

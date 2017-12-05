@@ -1,5 +1,5 @@
 import collectionTokensPush from './push';
-import { accounts } from '@density-int/client';
+import { accounts } from '../../../client';
 import collectionTokensError from './error';
 
 export const COLLECTION_TOKENS_CREATE = 'COLLECTION_TOKENS_CREATE';

@@ -1,5 +1,5 @@
 import collectionWebhooksPush from './push';
-import { core } from '@density-int/client';
+import { core } from '../../../client';
 import collectionWebhooksError from './error';
 
 export const COLLECTION_WEBHOOKS_UPDATE = 'COLLECTION_WEBHOOKS_UPDATE';

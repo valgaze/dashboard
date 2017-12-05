@@ -1,4 +1,4 @@
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 import sessionTokenSet from '../session-token/set';
 
 export const USER_RESET_PASSWORD = 'USER_RESET_PASSWORD';

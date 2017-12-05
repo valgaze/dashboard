@@ -1,6 +1,6 @@
 import collectionDoorwaysPush from './push';
 import collectionDoorwaysError from './error';
-import { core } from '@density-int/client';
+import { core } from '../../../client';
 
 export const COLLECTION_DOORWAYS_UPDATE = 'COLLECTION_DOORWAYS_UPDATE';
 

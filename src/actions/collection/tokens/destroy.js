@@ -1,5 +1,5 @@
 import collectionTokensDelete from './delete';
-import { accounts } from '@density-int/client';
+import { accounts } from '../../../client';
 import collectionTokensError from './error';
 
 export const COLLECTION_TOKENS_DESTROY = 'COLLECTION_TOKENS_DESTROY';

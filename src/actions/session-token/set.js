@@ -1,4 +1,4 @@
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 import userSet from '../user/set';
 import userError from '../user/error';
 

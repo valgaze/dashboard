@@ -1,4 +1,4 @@
-import { core } from '@density-int/client';
+import { core } from '../../client';
 
 export const PILOT_UPDATE = 'PILOT_UPDATE';
 

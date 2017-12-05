@@ -1,4 +1,4 @@
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 
 import pilotUpdate from '../pilot/update';
 import pilotSet from '../pilot/set';

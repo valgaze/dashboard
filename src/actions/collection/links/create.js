@@ -1,6 +1,6 @@
 import collectionLinksPush from './push';
 import collectionLinksError from './error';
-import { core } from '@density-int/client';
+import { core } from '../../../client';
 
 export const COLLECTION_LINKS_CREATE = 'COLLECTION_LINKS_CREATE';
 

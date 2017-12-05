@@ -1,4 +1,4 @@
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 import collectionTokensSet from '../collection/tokens/set';
 
 export const ROUTE_TRANSITION_DEV_TOKEN_LIST = 'ROUTE_TRANSITION_DEV_TOKEN_LIST';

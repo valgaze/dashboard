@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { core } from '@density-int/client';
+import { core } from '../../client';
 
 import collectionSpacesSet from '../collection/spaces/set';
 import collectionSpacesSetEvents from '../collection/spaces/set-events';

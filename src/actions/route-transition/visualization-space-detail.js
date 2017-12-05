@@ -1,4 +1,4 @@
-import { core } from '@density-int/client';
+import { core } from '../../client';
 import collectionSpacesPush from '../collection/spaces/push';
 
 export const ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL = 'ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL';
