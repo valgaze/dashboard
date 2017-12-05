@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@density-int/client": "3.0.0",
+    "@density-int/client": "file:/Users/ryan/w/densityco/dashboard/../client-js-internal",
     "@density/chart-daily-metrics": "^0.2.0",
     "@density/chart-historical-counts": "^1.5.0",
     "@density/chart-linear-progress": "^0.0.1",

@@ -30,18 +30,29 @@ export class AccountSetupDoorwayDetail extends React.Component {
     this.state = {
       doorway: this.props.initialDoorway,
 
-      insideImage: null,
-      outsideImage: null,
-
       measurementUnit: METRIC,
-      inputWidth: '12',
-      inputHeight: '100',
 
-      hasClearance: true,
-
-      powerType: POWER_OVER_ETHERNET,
+      // These are string representations of the width and height. Before they leave the component,
+      // these values are added back into `state.doorway.{width,height}`.
+      inputWidth: '',
+      inputHeight: '',
     };
   }
+
+  // Return the doorway in the representation returned by the core api. This method merges in fields
+  // that were stored seperately (probably because they had to be stored in a different
+  // representation due to data binding reasons.)
+  formattedDoorway = () => {
+    return {
+      ...this.state.doorway,
+      environment: {
+        ...this.state.doorway.environment,
+        width: window.parseFloat(this.state.inputWidth, 10),
+        height: window.parseFloat(this.state.inputHeight, 10),
+      },
+    };
+  }
+
   render() {
     // A doorway is being created if the doorway passed in is truthy and has an id key within it.
     // Otherwise, the doorway is being modified.
@@ -97,32 +108,64 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
             <AccountSetupDoorwayDetailImageUpload
               label="Image taken from inside the space"
-              value={this.state.insideImage}
+              value={this.state.doorway.environment.insideImageUrl}
               onChange={file => {
                 if (file) {
                   const reader = new FileReader();
                   reader.readAsDataURL(file);
                   reader.onload = () => {
-                    this.setState({insideImage: reader.result});
+                    // Update the doorway.environment.insideImageUrl
+                    this.setState({
+                      doorway: {
+                        ...this.state.doorway,
+                        environment: {
+                          ...this.state.doorway.environment,
+                          insideImageUrl: reader.result,
+                        },
+                      },
+                    });
                   };
                 } else {
-                  this.setState({insideImage: null});
+                  // Clear out the image url inside of the envirnment if the user didn't select a
+                  // user.
+                  this.setState({
+                    doorway: {
+                      ...this.state.doorway,
+                      environment: {...this.state.doorway.environment, insideImageUrl: null},
+                    },
+                  });
                 }
               }}
             />
 
             <AccountSetupDoorwayDetailImageUpload
               label="Image taken from outside the space"
-              value={this.state.outsideImage}
+              value={this.state.doorway.environment.outsideImageUrl}
               onChange={file => {
                 if (file) {
                   const reader = new FileReader();
                   reader.readAsDataURL(file);
                   reader.onload = () => {
-                    this.setState({outsideImage: reader.result});
+                    // Update the doorway.environment.outsideImageUrl
+                    this.setState({
+                      doorway: {
+                        ...this.state.doorway,
+                        environment: {
+                          ...this.state.doorway.environment,
+                          outsideImageUrl: reader.result,
+                        },
+                      },
+                    });
                   };
                 } else {
-                  this.setState({outsideImage: null});
+                  // Clear out the image url outside of the envirnment if the user didn't select a
+                  // user.
+                  this.setState({
+                    doorway: {
+                      ...this.state.doorway,
+                      environment: {...this.state.doorway.environment, outsideImageUrl: null},
+                    },
+                  });
                 }
               }}
             />
@@ -227,13 +270,23 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <div className="account-setup-doorway-detail-body-clearance-radio-container">
               <RadioButton
                 text="Yes"
-                checked={this.state.hasClearance}
-                onChange={() => this.setState({hasClearance: true})}
+                checked={this.state.doorway.environment.clearance === true}
+                onChange={() => this.setState({
+                  doorway: {
+                    ...this.state.doorway,
+                    environment: {...this.state.doorway.environment, clearance: true},
+                  },
+                })}
               />
               <RadioButton
                 text="No"
-                checked={!this.state.hasClearance}
-                onChange={() => this.setState({hasClearance: false})}
+                checked={this.state.doorway.environment.clearance === false}
+                onChange={() => this.setState({
+                  doorway: {
+                    ...this.state.doorway,
+                    environment: {...this.state.doorway.environment, clearance: false},
+                  },
+                })}
               />
             </div>
 
@@ -247,14 +300,24 @@ export class AccountSetupDoorwayDetail extends React.Component {
             </p>
             <RadioButton
               text="Power over Ethernet (PoE)"
-              checked={this.state.powerType === POWER_OVER_ETHERNET}
-              onChange={() => this.setState({powerType: POWER_OVER_ETHERNET})}
+              checked={this.state.doorway.environment.powerType === POWER_OVER_ETHERNET}
+              onChange={() => this.setState({
+                doorway: {
+                  ...this.state.doorway,
+                  environment: {...this.state.doorway.environment, powerType: POWER_OVER_ETHERNET},
+                },
+              })}
             />
             <div className="account-setup-doorway-detail-body-power-radio-button-spacer" />
             <RadioButton
               text="Standard 100-240V AC outlet"
-              checked={this.state.powerType === AC_OUTLET}
-              onChange={() => this.setState({powerType: AC_OUTLET})}
+              checked={this.state.doorway.environment.powerType === AC_OUTLET}
+              onChange={() => this.setState({
+                doorway: {
+                  ...this.state.doorway,
+                  environment: {...this.state.doorway.environment, powerType: AC_OUTLET},
+                },
+              })}
             />
             <br/>
             <br/>
@@ -262,7 +325,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <br/>
 
             <Button onClick={() => {
-              return this.props.onSave(this.state.doorway).then(() => {
+              return this.props.onSave(this.formattedDoorway()).then(() => {
                 // Once complete, open the doorway saved modal.
                 this.props.openDoorwaySavedModal();
 
@@ -271,7 +334,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               });
             }}>Save &amp; Close</Button>
             <Button className="account-setup-doorway-detail-save-add-another-button" onClick={() => {
-              return this.props.onSave(this.state.doorway).then(() => {
+              return this.props.onSave(this.formattedDoorway()).then(() => {
                 // Once complete, reset the state of the form.
                 this.setState({doorway: {}});
 

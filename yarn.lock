@@ -2,9 +2,14 @@
 # yarn lockfile v1
 
 
-"@density-int/client@3.0.0":
-  version "3.0.0"
-  resolved "https://npmregistry.density.rodeo:443/@density-int%2fclient/-/client-3.0.0.tgz#ca781aa2db6539275579a7e7dbc6957f1d6c06e4"
+"@density-int/client@^3.1.0":
+  version "3.1.0"
+  resolved "https://npmregistry.density.rodeo:443/@density-int%2fclient/-/client-3.1.0.tgz#aa20db1acbf5d2cc49c7bd65f1c9f9f6229ec782"
+  dependencies:
+    "@density/clientele" "^2.0.3"
+
+"@density-int/client@file:/Users/ryan/w/densityco/dashboard/../client-js-internal":
+  version "3.1.0"
   dependencies:
     "@density/clientele" "^2.0.3"
 
