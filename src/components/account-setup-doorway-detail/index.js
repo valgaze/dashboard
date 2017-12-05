@@ -64,8 +64,6 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
         <Card className="account-setup-doorway-detail-body">
           <CardBody>
-            {/* {JSON.stringify(this.state.doorway, null, 2)} */}
-
             <h2 className="account-setup-doorway-detail-body-header">
               <em>1 &mdash;</em>
               Upload images
@@ -222,38 +220,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               Does this doorway have at least 5in (0.13m) of clearance above the door to mount a unit?
             </p>
 
-            <svg
-              className="account-setup-doorway-detail-clearance-graphic"
-              width="422px"
-              height="217px"
-              viewBox="0 0 422 217"
-              version="1.1"
-            >
-              <g id="Onboarding-Web" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                  <g id="ob-v1-r1-004-1" transform="translate(-429.000000, -2535.000000)">
-                      <g id="content" transform="translate(410.000000, 370.000000)">
-                          <g id="step-3" transform="translate(20.000000, 1519.000000)">
-                              <g id="scene" transform="translate(0.000000, 647.000000)">
-                                  <rect id="door" stroke="#B4B8BF" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round" x="0" y="61.4299828" width="420" height="154.078481"></rect>
-                                  <rect id="door" stroke="#B4B8BF" fill="#FFFFFF" strokeLinecap="round" strokeLinejoin="round" x="21.0501193" y="82.5780097" width="378.902148" height="132.930455"></rect>
-                                  <g id="r60-front" transform="translate(185.441527, 28.197369)" stroke="#B4B8BF">
-                                      <path d="M15.3787213,11.0775379 L37.7477704,11.0775379 L37.7477704,31.2326136 L37.7477704,31.2326136 C37.7477704,32.3371831 36.8523399,33.2326136 35.7477704,33.2326136 L17.3787213,33.2326136 L17.3787213,33.2326136 C16.2741518,33.2326136 15.3787213,32.3371831 15.3787213,31.2326136 L15.3787213,11.0775379 Z" id="mount" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round"></path>
-                                      <path d="M0.162956884,20.7703835 C1.30923909,22.6166398 2.29345712,23.539768 3.11561097,23.539768 C4.34884174,23.539768 48.5271043,23.3910693 49.8183736,23.3910693 C50.6792198,23.3910693 51.7517142,22.5175074 53.0358569,20.7703835 L0.162956884,20.7703835 Z" id="window" fill="#B4B8BF" strokeLinecap="round" strokeLinejoin="round"></path>
-                                      <path d="M0.965858065,2.85340573 C0.54871463,5.70544631 0.266651737,8.56472301 0.119669386,11.4312358 C-0.0398897952,14.5430274 -0.0398897952,17.6560766 0.119669386,20.7703835 L53.0227182,20.7703835 C53.1610828,17.6282524 53.1610828,14.5084501 53.0227182,11.4109765 C52.8952077,8.55648453 52.6493786,5.70281009 52.2852309,2.84995315 L52.2852338,2.84995279 C52.2297872,2.41556544 51.8981613,2.06778413 51.4669003,1.99175359 C43.935141,0.663917864 35.9940108,0 27.6435097,0 C19.2560581,0 10.6433742,0.669806479 1.80545792,2.00941944 L1.80545924,2.00942813 C1.37037955,2.07537561 1.02954271,2.41798907 0.965858065,2.85340573 Z" id="enclosure" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round"></path>
-                                      <path d="M1.39806557,4.15407671 C9.78645899,3.23094855 18.1748524,2.76938447 26.5632458,2.76938447 C34.9516392,2.76938447 43.3400327,3.23094855 51.7284261,4.15407671" id="curve" strokeWidth="0.5" strokeDasharray="2"></path>
-                                  </g>
-                                  <g id="measurements" transform="translate(105.250597, 0.000000)">
-                                      <polyline id="Path-11" stroke="#4198FF" points="56.9945046 61.0564073 46.1018586 61.0564073 46.1018586 0.00272682807 56.9945046 0.00272682807"></polyline>
-                                      <text id="5-in" fontFamily=".AppleSystemUIFont" fontSize="14" fontWeight="normal" fill="#4198FF">
-                                          <tspan x="5.54118889" y="30.4533413">5 in</tspan>
-                                      </text>
-                                  </g>
-                              </g>
-                          </g>
-                      </g>
-                  </g>
-              </g>
-            </svg>
+            <MountingSpaceGraphic />
 
             <div className="account-setup-doorway-detail-body-clearance-radio-container">
               <RadioButton
@@ -311,6 +278,41 @@ export class AccountSetupDoorwayDetail extends React.Component {
   }
 }
 
+function MountingSpaceGraphic() {
+  return <svg
+    className="account-setup-doorway-detail-clearance-graphic"
+    width="422px"
+    height="217px"
+    viewBox="0 0 422 217"
+    version="1.1"
+  >
+    <g id="Onboarding-Web" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+        <g id="ob-v1-r1-004-1" transform="translate(-429.000000, -2535.000000)">
+            <g id="content" transform="translate(410.000000, 370.000000)">
+                <g id="step-3" transform="translate(20.000000, 1519.000000)">
+                    <g id="scene" transform="translate(0.000000, 647.000000)">
+                        <rect id="door" stroke="#B4B8BF" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round" x="0" y="61.4299828" width="420" height="154.078481"></rect>
+                        <rect id="door" stroke="#B4B8BF" fill="#FFFFFF" strokeLinecap="round" strokeLinejoin="round" x="21.0501193" y="82.5780097" width="378.902148" height="132.930455"></rect>
+                        <g id="r60-front" transform="translate(185.441527, 28.197369)" stroke="#B4B8BF">
+                            <path d="M15.3787213,11.0775379 L37.7477704,11.0775379 L37.7477704,31.2326136 L37.7477704,31.2326136 C37.7477704,32.3371831 36.8523399,33.2326136 35.7477704,33.2326136 L17.3787213,33.2326136 L17.3787213,33.2326136 C16.2741518,33.2326136 15.3787213,32.3371831 15.3787213,31.2326136 L15.3787213,11.0775379 Z" id="mount" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round"></path>
+                            <path d="M0.162956884,20.7703835 C1.30923909,22.6166398 2.29345712,23.539768 3.11561097,23.539768 C4.34884174,23.539768 48.5271043,23.3910693 49.8183736,23.3910693 C50.6792198,23.3910693 51.7517142,22.5175074 53.0358569,20.7703835 L0.162956884,20.7703835 Z" id="window" fill="#B4B8BF" strokeLinecap="round" strokeLinejoin="round"></path>
+                            <path d="M0.965858065,2.85340573 C0.54871463,5.70544631 0.266651737,8.56472301 0.119669386,11.4312358 C-0.0398897952,14.5430274 -0.0398897952,17.6560766 0.119669386,20.7703835 L53.0227182,20.7703835 C53.1610828,17.6282524 53.1610828,14.5084501 53.0227182,11.4109765 C52.8952077,8.55648453 52.6493786,5.70281009 52.2852309,2.84995315 L52.2852338,2.84995279 C52.2297872,2.41556544 51.8981613,2.06778413 51.4669003,1.99175359 C43.935141,0.663917864 35.9940108,0 27.6435097,0 C19.2560581,0 10.6433742,0.669806479 1.80545792,2.00941944 L1.80545924,2.00942813 C1.37037955,2.07537561 1.02954271,2.41798907 0.965858065,2.85340573 Z" id="enclosure" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round"></path>
+                            <path d="M1.39806557,4.15407671 C9.78645899,3.23094855 18.1748524,2.76938447 26.5632458,2.76938447 C34.9516392,2.76938447 43.3400327,3.23094855 51.7284261,4.15407671" id="curve" strokeWidth="0.5" strokeDasharray="2"></path>
+                        </g>
+                        <g id="measurements" transform="translate(105.250597, 0.000000)">
+                            <polyline id="Path-11" stroke="#4198FF" points="56.9945046 61.0564073 46.1018586 61.0564073 46.1018586 0.00272682807 56.9945046 0.00272682807"></polyline>
+                            <text id="5-in" fontFamily=".AppleSystemUIFont" fontSize="14" fontWeight="normal" fill="#4198FF">
+                                <tspan x="5.54118889" y="30.4533413">5 in</tspan>
+                            </text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+  </svg>
+}
+
 export default connect(state => {
   return {
     initialDoorway: state.doorways.selected === 'new' ? {} :
@@ -331,6 +333,6 @@ export default connect(state => {
   if (typeof props.initialDoorway !== 'undefined') {
     return <AccountSetupDoorwayDetail {...props} />;
   } else {
-    return <div>Loading...</div>;
+    return <div className="account-setup-doorway-detail-loading">Loading ...</div>;
   }
 });

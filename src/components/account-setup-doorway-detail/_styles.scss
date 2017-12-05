@@ -144,3 +144,11 @@
   margin-top: 20px;
 }
 .account-setup-doorway-detail-save-add-another-button { margin-top: 10px; }
+
+// Some basic styles for a loading indicator that is visible before the doorway detail page data is
+// loaded.
+.account-setup-doorway-detail-loading {
+  text-align: center;
+  margin-top: 100px;
+  font-size: $font-size-3;
+}
