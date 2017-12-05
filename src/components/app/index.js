@@ -72,7 +72,7 @@ function NavbarWrapper({
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
       // so this page does not make sense.
       locked={featureFlagEnabled(settings.visualizationPageLocked)}
-      href="#/visualization/spaces"
+      href="#/insights/spaces"
       onClick={closeSidebar}
     >Insights</NavbarMobileItem>,
 
@@ -143,7 +143,7 @@ function NavbarWrapper({
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
       // so this page does not make sense.
       locked={featureFlagEnabled(settings.visualizationPageLocked)}
-      href="#/visualization/spaces"
+      href="#/insights/spaces"
     >Insights</NavbarItem>
 
     {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}

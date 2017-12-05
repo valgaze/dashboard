@@ -2,17 +2,6 @@
 # yarn lockfile v1
 
 
-"@density-int/client@^3.1.0":
-  version "3.1.0"
-  resolved "https://npmregistry.density.rodeo:443/@density-int%2fclient/-/client-3.1.0.tgz#aa20db1acbf5d2cc49c7bd65f1c9f9f6229ec782"
-  dependencies:
-    "@density/clientele" "^2.0.3"
-
-"@density-int/client@file:/Users/ryan/w/densityco/dashboard/../client-js-internal":
-  version "3.1.0"
-  dependencies:
-    "@density/clientele" "^2.0.3"
-
 "@density/chart-daily-metrics@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@density/chart-daily-metrics/-/chart-daily-metrics-0.2.0.tgz#121506a6583dcfa7939c0597c1009fb7935891a9"
@@ -53,6 +42,12 @@
 "@density/clientele@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@density/clientele/-/clientele-2.0.3.tgz#ded455610978a9269328e5a070e224eede5e9745"
+  dependencies:
+    mustache "^2.3.0"
+    qs "^6.4.0"
+
+"@density/clientele@file:../clientele/languages/javascript":
+  version "2.0.3"
   dependencies:
     mustache "^2.3.0"
     qs "^6.4.0"

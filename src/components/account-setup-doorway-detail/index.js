@@ -15,13 +15,18 @@ import collectionDoorwaysCreate from '../../actions/collection/doorways/create';
 
 import showModal from '../../actions/modal/show';
 
-const CENTIMETERS_PER_INCH = 2.54;
+const CENTIMETERS_PER_INCH = 2.54,
+  CENTIMETERS_PER_METER = 100;
 
 const IMPERIAL = 'IMPERIAL',
   METRIC = 'METRIC';
 
 const AC_OUTLET = 'AC_OUTLET',
-      POWER_OVER_ETHERNET = 'POWER_OVER_ETHERNET';
+  POWER_OVER_ETHERNET = 'POWER_OVER_ETHERNET';
+
+function truncateToThreeDecimalPlaces(number) {
+  return window.parseFloat(number.toFixed(3));
+}
 
 export class AccountSetupDoorwayDetail extends React.Component {
   constructor(props) {
@@ -32,10 +37,12 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
       measurementUnit: METRIC,
 
+      formSubmittted: false,
+
       // These are string representations of the width and height. Before they leave the component,
-      // these values are added back into `state.doorway.{width,height}`.
-      inputWidth: '',
-      inputHeight: '',
+      // these values are converted to centimeters and added back into `state.doorway.{width,height}`.
+      inputWidth: this.props.initialDoorway.environment && this.props.initialDoorway.environment.width ? window.parseFloat(this.props.initialDoorway.environment.width, 10) * CENTIMETERS_PER_METER : '',
+      inputHeight: this.props.initialDoorway.environment && this.props.initialDoorway.environment.height ? window.parseFloat(this.props.initialDoorway.environment.height, 10) * CENTIMETERS_PER_METER : '',
     };
   }
 
@@ -47,10 +54,23 @@ export class AccountSetupDoorwayDetail extends React.Component {
       ...this.state.doorway,
       environment: {
         ...this.state.doorway.environment,
-        width: window.parseFloat(this.state.inputWidth, 10),
-        height: window.parseFloat(this.state.inputHeight, 10),
+        // Convert the width and height used by the inputs into numbers, and also convert them fro
+        // mcentimeters to meters
+        width: truncateToThreeDecimalPlaces(window.parseFloat(this.state.inputWidth, 10) / CENTIMETERS_PER_METER),
+        height: truncateToThreeDecimalPlaces(window.parseFloat(this.state.inputHeight, 10) / CENTIMETERS_PER_METER),
       },
     };
+  }
+
+  isValid = () => {
+    return (
+      // Ensure that the doorway name is valid
+      this.state.doorway.name && this.state.doorway.name.length > 0 &&
+
+      // Ensure that the width and height are valid (ie, not empty and numerical)
+      isNaN(window.parseFloat(this.state.inputWidth, 10)) === false &&
+      isNaN(window.parseFloat(this.state.inputHeight, 10)) === false
+    )
   }
 
   render() {
@@ -108,7 +128,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
             <AccountSetupDoorwayDetailImageUpload
               label="Image taken from inside the space"
-              value={this.state.doorway.environment.insideImageUrl}
+              value={this.state.doorway.environment ? this.state.doorway.environment.insideImageUrl : null}
               onChange={file => {
                 if (file) {
                   const reader = new FileReader();
@@ -140,7 +160,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
             <AccountSetupDoorwayDetailImageUpload
               label="Image taken from outside the space"
-              value={this.state.doorway.environment.outsideImageUrl}
+              value={this.state.doorway.environment ? this.state.doorway.environment.outsideImageUrl : null}
               onChange={file => {
                 if (file) {
                   const reader = new FileReader();
@@ -185,7 +205,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               className="account-setup-doorway-detail-body-input"
               placeholder="Doorway Name"
               onChange={e => this.setState({doorway: {...this.state.doorway, name: e.target.value}})}
-              value={this.state.doorway.name}
+              value={this.state.doorway.name || ''}
             />
 
 
@@ -209,10 +229,12 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 text="Metric"
                 checked={this.state.measurementUnit === METRIC}
                 onChange={() => {
+                  const numericalInputWidth = window.parseFloat(this.state.inputWidth, 10);
+                  const numericalInputHeight = window.parseFloat(this.state.inputHeight, 10);
                   this.setState({
                     measurementUnit: METRIC,
-                    inputWidth: this.state.inputWidth * CENTIMETERS_PER_INCH,
-                    inputHeight: this.state.inputHeight * CENTIMETERS_PER_INCH,
+                    inputWidth: isNaN(numericalInputWidth) === false ? `${this.state.inputWidth * CENTIMETERS_PER_INCH}` : '',
+                    inputHeight: isNaN(numericalInputHeight) === false ? `${this.state.inputHeight * CENTIMETERS_PER_INCH}` : '',
                   });
                 }}
               />
@@ -220,10 +242,12 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 text="Imperial"
                 checked={this.state.measurementUnit === IMPERIAL}
                 onChange={() => {
+                  const numericalInputWidth = window.parseFloat(this.state.inputWidth, 10);
+                  const numericalInputHeight = window.parseFloat(this.state.inputHeight, 10);
                   this.setState({
                     measurementUnit: IMPERIAL,
-                    inputWidth: parseFloat(this.state.inputWidth, 10) / CENTIMETERS_PER_INCH,
-                    inputHeight: parseFloat(this.state.inputHeight, 10) / CENTIMETERS_PER_INCH,
+                    inputWidth: isNaN(numericalInputWidth) === false ? numericalInputWidth / CENTIMETERS_PER_INCH : '',
+                    inputHeight: isNaN(numericalInputHeight) === false ? numericalInputHeight / CENTIMETERS_PER_INCH : '',
                   });
                 }}
               />
@@ -270,7 +294,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <div className="account-setup-doorway-detail-body-clearance-radio-container">
               <RadioButton
                 text="Yes"
-                checked={this.state.doorway.environment.clearance === true}
+                checked={this.state.doorway.environment ? this.state.doorway.environment.clearance === true : false}
                 onChange={() => this.setState({
                   doorway: {
                     ...this.state.doorway,
@@ -280,7 +304,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               />
               <RadioButton
                 text="No"
-                checked={this.state.doorway.environment.clearance === false}
+                checked={this.state.doorway.environment ? this.state.doorway.environment.clearance === false : false}
                 onChange={() => this.setState({
                   doorway: {
                     ...this.state.doorway,
@@ -300,7 +324,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
             </p>
             <RadioButton
               text="Power over Ethernet (PoE)"
-              checked={this.state.doorway.environment.powerType === POWER_OVER_ETHERNET}
+              checked={this.state.doorway.environment ? this.state.doorway.environment.powerType === POWER_OVER_ETHERNET : false}
               onChange={() => this.setState({
                 doorway: {
                   ...this.state.doorway,
@@ -311,7 +335,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <div className="account-setup-doorway-detail-body-power-radio-button-spacer" />
             <RadioButton
               text="Standard 100-240V AC outlet"
-              checked={this.state.doorway.environment.powerType === AC_OUTLET}
+              checked={this.state.doorway.environment ? this.state.doorway.environment.powerType === AC_OUTLET : false}
               onChange={() => this.setState({
                 doorway: {
                   ...this.state.doorway,
@@ -324,24 +348,46 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <br/>
             <br/>
 
-            <Button onClick={() => {
-              return this.props.onSave(this.formattedDoorway()).then(() => {
-                // Once complete, open the doorway saved modal.
-                this.props.openDoorwaySavedModal();
+            <Button
+              onClick={() => {
+                // Set a flag to disable the submit buttons while the form is sending data to the
+                // server.
+                this.setState({formSubmittted: true});
 
-                // and redirect back to the main page.
-                window.location.href = '#/account/setup/doorways';
-              });
-            }}>Save &amp; Close</Button>
-            <Button className="account-setup-doorway-detail-save-add-another-button" onClick={() => {
-              return this.props.onSave(this.formattedDoorway()).then(() => {
-                // Once complete, reset the state of the form.
-                this.setState({doorway: {}});
+                return this.props.onSave(this.formattedDoorway()).then(ok => {
+                  // Once complete, show the doorway success toast using the modal reducer.
+                  if (ok) {
+                    this.props.openDoorwaySavedModal();
+                  }
 
-                // Once complete, redirect to new doorway page
-                window.location.href = '#/account/setup/doorways/new';
-              });
-            }}>Save &amp; Add Another Doorway</Button>
+                  // and redirect back to the main page.
+                  window.location.href = '#/account/setup/doorways';
+                });
+              }}
+              disabled={(!this.isValid()) || this.state.formSubmittted}
+            >Save &amp; Close</Button>
+            <Button
+              className="account-setup-doorway-detail-save-add-another-button"
+              onClick={() => {
+                // Set a flag to disable the submit buttons while the form is sending data to the
+                // server.
+                this.setState({formSubmittted: true});
+
+                return this.props.onSave(this.formattedDoorway()).then(() => {
+                  // Once complete, reset the state of the form.
+                  this.setState({
+                    doorway: {},
+                    formSubmittted: false,
+                    inputWidth: '',
+                    inputHeight: '',
+                  });
+
+                  // Once complete, redirect to new doorway page
+                  window.location.href = '#/account/setup/doorways/new';
+                });
+              }}
+              disabled={(!this.isValid()) || this.state.formSubmittted}
+            >Save &amp; Add Another Doorway</Button>
           </CardBody>
         </Card>
       </div>
