@@ -30,7 +30,6 @@ core.doorways.create = function(data) {
 };
 
 core.doorways.update = function(data) {
-  console.log('UPDATE INPUT', data);
   return fetch(`${core.config().core}/doorways/${data.id}?environment=True`, {
     method: 'PUT',
     headers: {
@@ -40,7 +39,6 @@ core.doorways.update = function(data) {
     },
     body: JSON.stringify(data),
   }).then(response => {
-    console.log('UPDATE OUTPUT', response)
     if (response.ok) {
       return response.json();
     } else {
