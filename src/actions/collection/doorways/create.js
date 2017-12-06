@@ -13,12 +13,12 @@ export default function collectionDoorwaysCreate(item) {
         id: item.id,
         name: item.name,
         description: item.description,
-        environment: {
+        environment: item.environment ? {
           width: item.environment.width,
           height: item.environment.height,
           clearance: item.environment.clearance,
           power_type: item.environment.powerType,
-        },
+        } : {},
       });
       dispatch(collectionDoorwaysPush(response));
       return response;

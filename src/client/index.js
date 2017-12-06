@@ -12,7 +12,7 @@ var accounts = clientele(Object.assign({}, require('./specs/accounts-api'), {err
 var metrics = clientele(Object.assign({}, require('./specs/metrics-api'), {errorFormatter: errorFormatter}));
 
 core.doorways.create = function(data) {
-  return window.fetch(`${core.config().core}/doorways?environment=True`, {
+  return fetch(`${core.config().core}/doorways?environment=True`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -24,13 +24,14 @@ core.doorways.create = function(data) {
     if (response.ok) {
       return response.json();
     } else {
-      return errorFormatter(response);
+      return Promise.reject(errorFormatter(response));
     }
   });
 };
 
 core.doorways.update = function(data) {
-  return window.fetch(`${core.config().core}/doorways/${data.id}?environment=True`, {
+  console.log('UPDATE INPUT', data);
+  return fetch(`${core.config().core}/doorways/${data.id}?environment=True`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -39,10 +40,11 @@ core.doorways.update = function(data) {
     },
     body: JSON.stringify(data),
   }).then(response => {
+    console.log('UPDATE OUTPUT', response)
     if (response.ok) {
       return response.json();
     } else {
-      return errorFormatter(response);
+      return Promise.reject(errorFormatter(response));
     }
   });
 };
