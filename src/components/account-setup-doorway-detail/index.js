@@ -49,7 +49,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
   // Return the doorway in the representation returned by the core api. This method merges in fields
   // that were stored seperately (probably because they had to be stored in a different
   // representation due to data binding reasons.)
-  formattedDoorway = () => {
+  formattedDoorway() {
     return {
       ...this.state.doorway,
       environment: {
@@ -62,7 +62,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
     };
   }
 
-  isValid = () => {
+  isValid() {
     return (
       // Ensure that the doorway name is valid
       this.state.doorway.name && this.state.doorway.name.length > 0 &&
@@ -354,7 +354,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 // server.
                 this.setState({formSubmittted: true});
 
-                return this.props.onSave(this.formattedDoorway()).then(ok => {
+                return this.props.onSave(this.formattedDoorway.bind(this)).then(ok => {
                   // Once complete, show the doorway success toast using the modal reducer.
                   if (ok) {
                     this.props.openDoorwaySavedModal();
@@ -364,7 +364,8 @@ export class AccountSetupDoorwayDetail extends React.Component {
                   window.location.href = '#/account/setup/doorways';
                 });
               }}
-              disabled={(!this.isValid()) || this.state.formSubmittted}
+
+              disabled={!this.isValid.bind(this) || this.state.formSubmittted}
             >Save &amp; Close</Button>
             <Button
               className="account-setup-doorway-detail-save-add-another-button"
@@ -373,7 +374,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 // server.
                 this.setState({formSubmittted: true});
 
-                return this.props.onSave(this.formattedDoorway()).then(() => {
+                return this.props.onSave(this.formattedDoorway.bind(this)).then(() => {
                   // Once complete, reset the state of the form.
                   this.setState({
                     doorway: {},
@@ -386,7 +387,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
                   window.location.href = '#/account/setup/doorways/new';
                 });
               }}
-              disabled={(!this.isValid()) || this.state.formSubmittted}
+              disabled={!this.isValid.bind(this) || this.state.formSubmittted}
             >Save &amp; Add Another Doorway</Button>
           </CardBody>
         </Card>
