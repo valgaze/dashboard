@@ -354,7 +354,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 // server.
                 this.setState({formSubmittted: true});
 
-                return this.props.onSave(this.formattedDoorway.bind(this)).then(ok => {
+                return this.props.onSave(this.formattedDoorway.apply(this)).then(ok => {
                   // Once complete, show the doorway success toast using the modal reducer.
                   if (ok) {
                     this.props.openDoorwaySavedModal();
@@ -365,7 +365,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 });
               }}
 
-              disabled={!this.isValid.bind(this) || this.state.formSubmittted}
+              disabled={!this.isValid.apply(this) || this.state.formSubmittted}
             >Save &amp; Close</Button>
             <Button
               className="account-setup-doorway-detail-save-add-another-button"
@@ -374,7 +374,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 // server.
                 this.setState({formSubmittted: true});
 
-                return this.props.onSave(this.formattedDoorway.bind(this)).then(() => {
+                return this.props.onSave(this.formattedDoorway.apply(this)).then(() => {
                   // Once complete, reset the state of the form.
                   this.setState({
                     doorway: {},
@@ -387,7 +387,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
                   window.location.href = '#/account/setup/doorways/new';
                 });
               }}
-              disabled={!this.isValid.bind(this) || this.state.formSubmittted}
+              disabled={!this.isValid.apply(this) || this.state.formSubmittted}
             >Save &amp; Add Another Doorway</Button>
           </CardBody>
         </Card>
