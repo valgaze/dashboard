@@ -135,7 +135,7 @@
 
 // Once a doorway is saved, show a success toast ifnorming the user that the process worked.
 .account-setup-doorway-list-success-toast {
-  width: 458px; /* Same width as the column below */
+  max-width: 458px; /* Same width as the column below */
   margin: 0px auto;
 }
 
