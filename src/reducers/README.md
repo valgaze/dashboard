@@ -43,3 +43,16 @@ Each collection reducer has a common structure:
 
 This structure not only makes it easy to predict where data will be found but alsp provides a
 structure that is easy to expand upon as new features must be implemented.
+
+## Auto-conversion of data from snake_case to camelCase in reducers 
+Most of our backend services at Density return data in snake case (lowercase and
+underscore-separated). While it's perfectly valid to work with data in the format within the
+frontend code, it doesn't match with the typical javascript conventions of camelcase variable names.
+Therefore, each collection pipes its data through the helper called object-snake-to-camel, which
+does this conversion for us. In other projects, the concept of a mapper, serializer, or marshaller
+exists, which is a concept used to convert data coming into the system into a representation that
+the system can parse, and convert data from the internal representation back into a representation
+that an external system can use. At least in this project, reducer-specific mappers haven't been
+required *yet*, and relying on `object-snake-to-camel` has been good enough. This isn't to say that
+this is how it will always work, but IMO, it's great to keep data in roughly the same representation
+everywhere.

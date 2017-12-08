@@ -125,7 +125,6 @@ trackHashChange();
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
-const initialRoute = '#/insights/spaces';
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
 
@@ -169,7 +168,7 @@ function preRouteAuthentication() {
 
   // If at the root page and logged in, redirect to the initial route.
   if (loggedIn && ['', '#', '#/'].indexOf(window.location.hash) >= 0) {
-    window.location.hash = initialRoute;
+    window.location.hash = '#/account/setup';
 
   // If on the account registration page (the only page that doesn't require the user to be logged in)
   // then don't worry about any of this.
@@ -192,16 +191,7 @@ function preRouteAuthentication() {
       store.dispatch(sessionTokenUnSet());
       router.navigate('login');
     }).then(data => {
-      store.dispatch(userSet({
-        ...data,
-        organization: data ? {
-          ...data.organization,
-          settings: {
-            visualizationPageLocked: 'true',
-            environmentPageVisible: 'false',
-          },
-        } : null,
-      }));
+      store.dispatch(userSet(data));
     });
   }
 }
