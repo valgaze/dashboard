@@ -26,7 +26,8 @@
 
   margin-top: 10px;
   margin-bottom: 10px;
-  height: 200px;
+  min-height: 200px;
+  overflow-y: hidden;
 
   border: 2px dotted $gray-lighter;
   border-radius: 4px;
@@ -66,7 +67,9 @@
 
 // Once the user has uploaded an image, show it in the preview box.
 .account-setup-doorway-detail-image-upload-preview {
-  height: 200px;
+  border-radius: 4px;
+  width: 100%;
+  height: auto;
 }
 
 // Change the opacity of the upload link and upload icon on hover and on active. This is hte same
