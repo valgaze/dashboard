@@ -79,9 +79,21 @@
 .account-setup-doorway-detail-body-guidelines-box ul { padding-left: 20px; }
 
 // Container that has within the "ideal doorway" image.
-.account-setup-doorway-detail-body-ideal-image-box { width: 100%; }
+.account-setup-doorway-detail-body-ideal-image-container {
+  overflow: hidden;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.account-setup-doorway-detail-body-ideal-image {
+  margin: -4px;
+  border-radius: 4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+}
 
-
+ 
 // A container to hold the 'Metric' and 'Imperial' radio buttons for picking the proper unit of
 // measurement when measureing height and width of the doorway.
 .account-setup-doorway-detail-body-measurement-radio-container {
