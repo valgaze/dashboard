@@ -468,23 +468,21 @@ export default connect(state => {
         firstCall = await dispatch(collectionDoorwaysCreate(doorway));
       }
 
-      if (doorway.environment.insideImageUrl.startsWith('data:')) {
+      if (doorway.environment.insideImageUrl && doorway.environment.insideImageUrl.startsWith('data:')) {
         const insideImageBlob = dataURItoBlob(doorway.environment.insideImageUrl);
-        const formData = new FormData();
-        formData.append('file', insideImageBlob);
         const request = new XMLHttpRequest();
-        request.setRequestHeader('Authorization', `Bearer ${localStorage.sessionToken}`);
         request.open('PUT', `https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`);
-        request.send(formData);
+        request.setRequestHeader('Authorization', `Bearer ${JSON.parse(localStorage.sessionToken)}`);
+        request.setRequestHeader('Content-Type', insideImageBlob.type);
+        request.send(insideImageBlob);
       }
-      if (doorway.environment.outsideImageUrl.startsWith('data:')) {
+      if (doorway.environment.outsideImageUrl && doorway.environment.outsideImageUrl.startsWith('data:')) {
         const outsideImageBlob = dataURItoBlob(doorway.environment.outsideImageUrl);
-        const formData = new FormData();
-        formData.append('file', outsideImageBlob);
         const request = new XMLHttpRequest();
-        request.setRequestHeader('Authorization', `Bearer ${localStorage.sessionToken}`);
-        request.open('POST', `https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`);
-        request.send(formData);
+        request.open('POST', `https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`);
+        request.setRequestHeader('Authorization', `Bearer ${JSON.parse(localStorage.sessionToken)}`);
+        request.setRequestHeader('Content-Type', outsideImageBlob.type);
+        request.send(outsideImageBlob);
       }
     },
     openDoorwaySavedModal() {
