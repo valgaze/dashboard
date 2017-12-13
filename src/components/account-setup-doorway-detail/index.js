@@ -439,11 +439,52 @@ export default connect(state => {
   };
 }, dispatch => {
   return {
-    onSave(doorway) {
+    async onSave(doorway) {
+
+      function dataURItoBlob(dataURI) {
+        // convert base64/URLEncoded data component to raw binary data held in a string
+        var byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(dataURI.split(',')[1]);
+        else
+            byteString = unescape(dataURI.split(',')[1]);
+    
+        // separate out the mime component
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    
+        // write the bytes of the string to a typed array
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+    
+        return new Blob([ia], {type:mimeString});
+      }
+
+      let firstCall
       if (doorway.id) {
-        return dispatch(collectionDoorwaysUpdate(doorway));
+        firstCall = await dispatch(collectionDoorwaysUpdate(doorway));
       } else {
-        return dispatch(collectionDoorwaysCreate(doorway));
+        firstCall = await dispatch(collectionDoorwaysCreate(doorway));
+      }
+
+      if (doorway.environment.insideImageUrl.startsWith('data:')) {
+        const insideImageBlob = dataURItoBlob(doorway.environment.insideImageUrl);
+        const formData = new FormData();
+        formData.append('file', insideImageBlob);
+        const request = new XMLHttpRequest();
+        request.setRequestHeader('Authorization', `Bearer ${localStorage.sessionToken}`);
+        request.open('PUT', `https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`);
+        request.send(formData);
+      }
+      if (doorway.environment.outsideImageUrl.startsWith('data:')) {
+        const outsideImageBlob = dataURItoBlob(doorway.environment.outsideImageUrl);
+        const formData = new FormData();
+        formData.append('file', outsideImageBlob);
+        const request = new XMLHttpRequest();
+        request.setRequestHeader('Authorization', `Bearer ${localStorage.sessionToken}`);
+        request.open('POST', `https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`);
+        request.send(formData);
       }
     },
     openDoorwaySavedModal() {
