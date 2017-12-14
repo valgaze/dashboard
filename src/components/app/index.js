@@ -223,17 +223,12 @@ function ActivePage({activePage}) {
     return <AccountRegistration />;
   case "ACCOUNT_FORGOT_PASSWORD":
     return <AccountForgotPassword />;
-<<<<<<< HEAD
   case "ACCOUNT_SETUP_OVERVIEW":
     return <AccountSetupOverview />;
   case "ACCOUNT_SETUP_DOORWAY_LIST":
     return <AccountSetupDoorwayList />;
   case "ACCOUNT_SETUP_DOORWAY_DETAIL":
     return <AccountSetupDoorwayDetail />;
-  case "PILOT":
-    return <Pilot />;
-=======
->>>>>>> origin/staging
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

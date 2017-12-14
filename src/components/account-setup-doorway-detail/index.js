@@ -50,14 +50,17 @@ export class AccountSetupDoorwayDetail extends React.Component {
   // that were stored seperately (probably because they had to be stored in a different
   // representation due to data binding reasons.)
   formattedDoorway() {
+    const isImperial = this.state.measurementUnit === IMPERIAL;
+    const metricWidth = this.state.inputWidth * (isImperial ? CENTIMETERS_PER_INCH : 1);
+    const metricHeight = this.state.inputHeight * (isImperial ? CENTIMETERS_PER_INCH : 1);
     return {
       ...this.state.doorway,
       environment: {
         ...this.state.doorway.environment,
         // Convert the width and height used by the inputs into numbers, and also convert them fro
         // mcentimeters to meters
-        width: truncateToThreeDecimalPlaces(window.parseFloat(this.state.inputWidth, 10) / CENTIMETERS_PER_METER),
-        height: truncateToThreeDecimalPlaces(window.parseFloat(this.state.inputHeight, 10) / CENTIMETERS_PER_METER),
+        width: truncateToThreeDecimalPlaces(window.parseFloat(metricWidth, 10) / CENTIMETERS_PER_METER),
+        height: truncateToThreeDecimalPlaces(window.parseFloat(metricHeight, 10) / CENTIMETERS_PER_METER),
       },
     };
   }
@@ -77,6 +80,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
     // A doorway is being created if the doorway passed in is truthy and has an id key within it.
     // Otherwise, the doorway is being modified.
     const isCreatingNewDoorway = !this.state.doorway || !this.state.doorway.id;
+    const needsPhotos = isCreatingNewDoorway || (
+      !((this.state.doorway || {}).environment || {}).insideImageUrl &&
+      !((this.state.doorway || {}).environment || {}).outsideImageUrl
+    );
 
     return <div className="account-setup-doorway-detail">
       <Subnav visible>
@@ -84,10 +91,16 @@ export class AccountSetupDoorwayDetail extends React.Component {
         <SubnavItem active href="#/account/setup/doorways">Doorways</SubnavItem>
       </Subnav>
 
-      <AccountSetupHeader
-        greeter="Doorways"
-        detail="Provide more information about your doorways to guide installation."
-      />
+      {isCreatingNewDoorway ?
+        <AccountSetupHeader
+          greeter="Doorways"
+          detail="Please provide more information about your doorways."
+        /> :
+        <AccountSetupHeader
+          greeter="Edit doorway"
+          detail="Edit the images, measurements or power option you selected for this doorway."
+        />
+      }
 
       <div className="account-setup-doorway-detail-body-container">
         <h1 className="account-setup-doorway-list-title">
@@ -102,31 +115,33 @@ export class AccountSetupDoorwayDetail extends React.Component {
               Upload images
             </h2>
 
-            <p className="account-setup-doorway-detail-body-section">
-              When taking photos, please follow these guidelines:
-            </p>
+            {needsPhotos ? <div>
+              <p className="account-setup-doorway-detail-body-section">
+                When taking photos, please follow these guidelines:
+              </p>
 
-            <div className="account-setup-doorway-detail-body-guidelines-box">
-              Stand at least 10ft away from the center of the doorway to capture the following:
-              <ul>
-                <li>Full, unobstructed view of the door</li>
-                <li>Mounting space above the door</li>
-                <li>Surrounding walls</li>
-                <li>If there is a door, please prop open when capturing the image if possible</li>
-              </ul>
-            </div>
+              <div className="account-setup-doorway-detail-body-guidelines-box">
+                Stand at least 10ft away from the center of the doorway to capture the following:
+                <ul>
+                  <li>Full, unobstructed view of the door</li>
+                  <li>Mounting space above the door</li>
+                  <li>Surrounding walls</li>
+                  <li>If there is a door, please prop open when capturing the image if possible</li>
+                </ul>
+              </div>
 
-            <p className="account-setup-doorway-detail-body-section">
-              Here's an example of an ideal image:
-            </p>
+              <p className="account-setup-doorway-detail-body-section">
+                Here's an example of an ideal image:
+              </p>
 
-            <div className="account-setup-doorway-detail-body-ideal-image-container">
-              <img
-                className="account-setup-doorway-detail-body-ideal-image"
-                src="https://densityco.github.io/assets/images/r57-doorway-blue-edit2.c7f85388.png"
-                alt="Ideal doorway"
-              />
-            </div>
+              <div className="account-setup-doorway-detail-body-ideal-image-container">
+                <img
+                  className="account-setup-doorway-detail-body-ideal-image"
+                  src="/ideal_doorway.jpg"
+                  alt="Ideal doorway"
+                />
+              </div>
+            </div> : null }
 
             <AccountSetupDoorwayDetailImageUpload
               label="Image taken from inside the space"
@@ -263,6 +278,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               </span>
             </label>
             <InputBox
+              type="tel"
               className="account-setup-doorway-detail-body-input"
               placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
               value={this.state.inputWidth}
@@ -277,6 +293,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               </span>
             </label>
             <InputBox
+              type="tel"
               className="account-setup-doorway-detail-body-input"
               placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
               value={this.state.inputHeight}
@@ -290,8 +307,6 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <p className="account-setup-doorway-detail-body-section-clearance">
               Does this doorway have at least 5in (0.13m) of clearance above the door to mount a unit?
             </p>
-
-            <MountingSpaceGraphic />
 
             <div className="account-setup-doorway-detail-body-clearance-radio-container">
               <RadioButton
@@ -315,6 +330,8 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 })}
               />
             </div>
+
+            <MountingSpaceGraphic />
 
             <h2 className="account-setup-doorway-detail-body-header">
               <em>4 &mdash;</em>
@@ -369,28 +386,30 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
               disabled={!this.isValid.apply(this) || this.state.formSubmittted}
             >Save &amp; Close</Button>
-            <Button
-              className="account-setup-doorway-detail-save-add-another-button"
-              onClick={() => {
-                // Set a flag to disable the submit buttons while the form is sending data to the
-                // server.
-                this.setState({formSubmittted: true});
+            { isCreatingNewDoorway ?
+              <Button
+                className="account-setup-doorway-detail-save-add-another-button"
+                onClick={() => {
+                  // Set a flag to disable the submit buttons while the form is sending data to the
+                  // server.
+                  this.setState({formSubmittted: true});
 
-                return this.props.onSave(this.formattedDoorway.apply(this)).then(() => {
-                  // Once complete, reset the state of the form.
-                  this.setState({
-                    doorway: {},
-                    formSubmittted: false,
-                    inputWidth: '',
-                    inputHeight: '',
+                  return this.props.onSave(this.formattedDoorway.apply(this)).then(() => {
+                    // Once complete, reset the state of the form.
+                    this.setState({
+                      doorway: {},
+                      formSubmittted: false,
+                      inputWidth: '',
+                      inputHeight: '',
+                    });
+
+                    // Once complete, redirect to new doorway page
+                    window.location.href = '#/account/setup/doorways/new';
                   });
-
-                  // Once complete, redirect to new doorway page
-                  window.location.href = '#/account/setup/doorways/new';
-                });
-              }}
-              disabled={!this.isValid.apply(this) || this.state.formSubmittted}
-            >Save &amp; Add Another Doorway</Button>
+                }}
+                disabled={!this.isValid.apply(this) || this.state.formSubmittted}
+              >Save &amp; Add Another Doorway</Button>
+            : null }
           </CardBody>
         </Card>
       </div>
@@ -410,7 +429,7 @@ function MountingSpaceGraphic() {
         <g id="ob-v1-r1-004-1" transform="translate(-429.000000, -2535.000000)">
             <g id="content" transform="translate(410.000000, 370.000000)">
                 <g id="step-3" transform="translate(20.000000, 1519.000000)">
-                    <g id="scene" transform="translate(0.000000, 647.000000)">
+                    <g id="scene" transform="translate(0.000000, 650.000000)">
                         <rect id="door" stroke="#B4B8BF" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round" x="0" y="61.4299828" width="420" height="154.078481"></rect>
                         <rect id="door" stroke="#B4B8BF" fill="#FFFFFF" strokeLinecap="round" strokeLinejoin="round" x="21.0501193" y="82.5780097" width="378.902148" height="132.930455"></rect>
                         <g id="r60-front" transform="translate(185.441527, 28.197369)" stroke="#B4B8BF">
@@ -463,13 +482,15 @@ export default connect(state => {
         return new Blob([ia], {type:mimeString});
       }
 
-      let firstCall
+      // Make first call to POST/PUT doorway
+      let firstCall;
       if (doorway.id) {
         firstCall = await dispatch(collectionDoorwaysUpdate(doorway));
       } else {
         firstCall = await dispatch(collectionDoorwaysCreate(doorway));
       }
 
+      // Then upload any new doorway images
       if (doorway.environment.insideImageUrl && doorway.environment.insideImageUrl.startsWith('data:')) {
         const insideImageBlob = dataURItoBlob(doorway.environment.insideImageUrl);
         const request = new XMLHttpRequest();
@@ -481,12 +502,16 @@ export default connect(state => {
       if (doorway.environment.outsideImageUrl && doorway.environment.outsideImageUrl.startsWith('data:')) {
         const outsideImageBlob = dataURItoBlob(doorway.environment.outsideImageUrl);
         const request = new XMLHttpRequest();
-        request.open('POST', `https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`);
+        request.open('PUT', `https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`);
         request.setRequestHeader('Authorization', `Bearer ${JSON.parse(localStorage.sessionToken)}`);
         request.setRequestHeader('Content-Type', outsideImageBlob.type);
         request.send(outsideImageBlob);
       }
+
+      // Scroll to top of page
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
+
     openDoorwaySavedModal() {
       dispatch(showModal('unit-setup-added-doorway'));
     },

@@ -25,7 +25,7 @@ export function AccountSetupDoorwayList({
 
     <AccountSetupHeader
       greeter="Doorways"
-      detail="Provide more information about your doorways to guide installation."
+      detail="Please provide more information about your doorways."
     />
 
     {activeModal.name === 'unit-setup-added-doorway' ? <div className="account-setup-doorway-list-success-toast">
@@ -66,11 +66,16 @@ export function AccountSetupDoorwayList({
                       className="account-setup-doorway-list-item"
                       href={`#/account/setup/doorways/${doorway.id}`}
                     >
-                      {(doorway.environment || {}).insideImageUrl ? <img
-                        className="account-setup-doorway-list-item-image"
-                        src={doorway.environment.insideImageUrl}
-                        alt="Doorway from inside"
-                      /> : <div className="account-setup-doorway-list-item-image empty" />}
+                      <div className="account-setup-doorway-list-item-image-container">
+                        {(doorway.environment || {}).insideImageUrl ? 
+                          <img
+                            className="account-setup-doorway-list-item-image"
+                            src={doorway.environment.insideImageUrl}
+                            alt="Doorway from inside"
+                          /> :
+                          <div className="account-setup-doorway-list-item-image-empty" />
+                        }
+                      </div>
 
                       <span className="account-setup-doorway-list-item-name">
                         {doorway.name}
