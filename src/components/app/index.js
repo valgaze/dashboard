@@ -12,7 +12,6 @@ import SpaceList from '../visualization-space-list/index';
 import SpaceDetail from '../visualization-space-detail/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
-import Pilot from '../pilot/index';
 import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
@@ -152,12 +151,6 @@ function NavbarWrapper({
       pageName={['ENVIRONMENT_SPACE']}
       href="#/environment/spaces"
     >Environment</NavbarItem> : null}
-    
-    {user.user && user.user.organization && user.user.organization.id === 'org_162164766972838168NOSHOW' ?  <NavbarItem
-      activePage={activePage}
-      pageName={['PILOT']}
-      href="#/pilot"
-    >Pilot</NavbarItem> : null}
 
     <NavbarItem
       activePage={activePage}
@@ -230,6 +223,7 @@ function ActivePage({activePage}) {
     return <AccountRegistration />;
   case "ACCOUNT_FORGOT_PASSWORD":
     return <AccountForgotPassword />;
+<<<<<<< HEAD
   case "ACCOUNT_SETUP_OVERVIEW":
     return <AccountSetupOverview />;
   case "ACCOUNT_SETUP_DOORWAY_LIST":
@@ -238,6 +232,8 @@ function ActivePage({activePage}) {
     return <AccountSetupDoorwayDetail />;
   case "PILOT":
     return <Pilot />;
+=======
+>>>>>>> origin/staging
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

@@ -37,7 +37,6 @@ import routeTransitionAccountForgotPassword from './actions/route-transition/acc
 import routeTransitionAccountSetupOverview from './actions/route-transition/account-setup-overview';
 import routeTransitionAccountSetupDoorwayList from './actions/route-transition/account-setup-doorway-list';
 import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition/account-setup-doorway-detail';
-import routeTransitionPilot from './actions/route-transition/pilot';
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 
@@ -135,8 +134,6 @@ router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());
 
 router.addRoute('dev/tokens', () => routeTransitionDevTokenList());
 router.addRoute('dev/webhooks', () => routeTransitionDevWebhookList());
-
-router.addRoute('pilot', () => routeTransitionPilot());
 
 router.addRoute('account', () => routeTransitionAccount());
 

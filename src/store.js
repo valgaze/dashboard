@@ -9,7 +9,6 @@ import activeModal from './reducers/active-modal/index';
 import activePage from './reducers/active-page/index';
 import doorways from './reducers/doorways/index';
 import links from './reducers/links/index';
-import pilot from './reducers/pilot/index';
 import sessionToken from './reducers/session-token/index';
 import spaces from './reducers/spaces/index';
 import tokens from './reducers/tokens/index';
@@ -22,7 +21,6 @@ const reducer = combineReducers({
   activePage,
   doorways,
   links,
-  pilot,
   sessionToken,
   spaces,
   tokens,
