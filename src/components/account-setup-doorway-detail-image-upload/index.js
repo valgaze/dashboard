@@ -64,7 +64,10 @@ export default class AccountSetupDoorwayDetailImageUpload extends React.Componen
       </div>
       <div
         className="account-setup-doorway-detail-image-upload"
-        style={{borderWidth: this.state.view === UPLOADED ? 0 : 'default' }}
+        style={{
+          borderWidth: this.state.view === UPLOADED ? 0 : 2,
+          height: this.state.view === UPLOADED ? 196 : 192
+        }}
         onClick={() => this.fileinput.click()}
       >
         {/* This input[type=file] is hidden. It's "clicked" when its parent is clicked. */}
