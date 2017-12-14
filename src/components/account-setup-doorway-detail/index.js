@@ -50,14 +50,17 @@ export class AccountSetupDoorwayDetail extends React.Component {
   // that were stored seperately (probably because they had to be stored in a different
   // representation due to data binding reasons.)
   formattedDoorway() {
+    const isImperial = this.state.measurementUnit === IMPERIAL;
+    const metricWidth = this.state.inputWidth * (isImperial ? CENTIMETERS_PER_INCH : 1);
+    const metricHeight = this.state.inputHeight * (isImperial ? CENTIMETERS_PER_INCH : 1);
     return {
       ...this.state.doorway,
       environment: {
         ...this.state.doorway.environment,
         // Convert the width and height used by the inputs into numbers, and also convert them fro
         // mcentimeters to meters
-        width: truncateToThreeDecimalPlaces(window.parseFloat(this.state.inputWidth, 10) / CENTIMETERS_PER_METER),
-        height: truncateToThreeDecimalPlaces(window.parseFloat(this.state.inputHeight, 10) / CENTIMETERS_PER_METER),
+        width: truncateToThreeDecimalPlaces(window.parseFloat(metricWidth, 10) / CENTIMETERS_PER_METER),
+        height: truncateToThreeDecimalPlaces(window.parseFloat(metricHeight, 10) / CENTIMETERS_PER_METER),
       },
     };
   }
@@ -473,13 +476,15 @@ export default connect(state => {
         return new Blob([ia], {type:mimeString});
       }
 
-      let firstCall
+      // Make first call to POST/PUT doorway
+      let firstCall;
       if (doorway.id) {
         firstCall = await dispatch(collectionDoorwaysUpdate(doorway));
       } else {
         firstCall = await dispatch(collectionDoorwaysCreate(doorway));
       }
 
+      // Then upload any new doorway images
       if (doorway.environment.insideImageUrl && doorway.environment.insideImageUrl.startsWith('data:')) {
         const insideImageBlob = dataURItoBlob(doorway.environment.insideImageUrl);
         const request = new XMLHttpRequest();
@@ -497,6 +502,7 @@ export default connect(state => {
         request.send(outsideImageBlob);
       }
     },
+
     openDoorwaySavedModal() {
       dispatch(showModal('unit-setup-added-doorway'));
     },
