@@ -6403,10 +6403,6 @@ react-ga@^2.3.5:
   dependencies:
     object-assign "^4.1.1"
 
-react-html5video@^2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/react-html5video/-/react-html5video-2.5.1.tgz#bbc4314be1d583cb991a11ca3480e70a3c964caf"
-
 react-moment-proptypes@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-moment-proptypes/-/react-moment-proptypes-1.5.0.tgz#4a448cd6479efc5dd509283f361f3753c3abe60e"

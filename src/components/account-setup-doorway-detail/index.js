@@ -102,31 +102,33 @@ export class AccountSetupDoorwayDetail extends React.Component {
               Upload images
             </h2>
 
-            <p className="account-setup-doorway-detail-body-section">
-              When taking photos, please follow these guidelines:
-            </p>
+            {isCreatingNewDoorway ? <div>
+              <p className="account-setup-doorway-detail-body-section">
+                When taking photos, please follow these guidelines:
+              </p>
 
-            <div className="account-setup-doorway-detail-body-guidelines-box">
-              Stand at least 10ft away from the center of the doorway to capture the following:
-              <ul>
-                <li>Full, unobstructed view of the door</li>
-                <li>Mounting space above the door</li>
-                <li>Surrounding walls</li>
-                <li>If there is a door, please prop open when capturing the image if possible</li>
-              </ul>
-            </div>
+              <div className="account-setup-doorway-detail-body-guidelines-box">
+                Stand at least 10ft away from the center of the doorway to capture the following:
+                <ul>
+                  <li>Full, unobstructed view of the door</li>
+                  <li>Mounting space above the door</li>
+                  <li>Surrounding walls</li>
+                  <li>If there is a door, please prop open when capturing the image if possible</li>
+                </ul>
+              </div>
 
-            <p className="account-setup-doorway-detail-body-section">
-              Here's an example of an ideal image:
-            </p>
+              <p className="account-setup-doorway-detail-body-section">
+                Here's an example of an ideal image:
+              </p>
 
-            <div className="account-setup-doorway-detail-body-ideal-image-container">
-              <img
-                className="account-setup-doorway-detail-body-ideal-image"
-                src="https://densityco.github.io/assets/images/r57-doorway-blue-edit2.c7f85388.png"
-                alt="Ideal doorway"
-              />
-            </div>
+              <div className="account-setup-doorway-detail-body-ideal-image-container">
+                <img
+                  className="account-setup-doorway-detail-body-ideal-image"
+                  src="https://densityco.github.io/assets/images/r57-doorway-blue-edit2.c7f85388.png"
+                  alt="Ideal doorway"
+                />
+              </div>
+            </div> : null }
 
             <AccountSetupDoorwayDetailImageUpload
               label="Image taken from inside the space"
@@ -263,6 +265,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               </span>
             </label>
             <InputBox
+              type="tel"
               className="account-setup-doorway-detail-body-input"
               placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
               value={this.state.inputWidth}
@@ -277,6 +280,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               </span>
             </label>
             <InputBox
+              type="tel"
               className="account-setup-doorway-detail-body-input"
               placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
               value={this.state.inputHeight}
@@ -290,8 +294,6 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <p className="account-setup-doorway-detail-body-section-clearance">
               Does this doorway have at least 5in (0.13m) of clearance above the door to mount a unit?
             </p>
-
-            <MountingSpaceGraphic />
 
             <div className="account-setup-doorway-detail-body-clearance-radio-container">
               <RadioButton
@@ -315,6 +317,8 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 })}
               />
             </div>
+
+            <MountingSpaceGraphic />
 
             <h2 className="account-setup-doorway-detail-body-header">
               <em>4 &mdash;</em>
