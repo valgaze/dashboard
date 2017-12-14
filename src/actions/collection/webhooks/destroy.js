@@ -9,9 +9,9 @@ export default function collectionWebhooksDestroy(item) {
     dispatch({ type: COLLECTION_WEBHOOKS_DESTROY, item });
 
     try {
-      const response = await core.webhooks.delete({id: item.id});
+      await core.webhooks.delete({id: item.id});
       dispatch(collectionWebhooksDelete(item));
-      return response;
+      return true;
     } catch (err) {
       dispatch(collectionWebhooksError(err));
       return false;
