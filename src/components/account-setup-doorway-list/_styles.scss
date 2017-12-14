@@ -53,6 +53,8 @@
   width: 48px;
   text-align: center;
   margin-right: 20px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 .account-setup-doorway-list-item-image.empty { background-color: $gray-lighter; }
 .account-setup-doorway-list-item-image.empty:before {

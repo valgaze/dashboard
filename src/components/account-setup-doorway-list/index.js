@@ -66,10 +66,10 @@ export function AccountSetupDoorwayList({
                       className="account-setup-doorway-list-item"
                       href={`#/account/setup/doorways/${doorway.id}`}
                     >
-                      {doorway.insideImageUrl ? <img
+                      {(doorway.environment || {}).insideImageUrl ? <img
                         className="account-setup-doorway-list-item-image"
-                        src={doorway.insideImageUrl}
-                        alt="Front of doorway"
+                        src={doorway.environment.insideImageUrl}
+                        alt="Doorway from inside"
                       /> : <div className="account-setup-doorway-list-item-image empty" />}
 
                       <span className="account-setup-doorway-list-item-name">
