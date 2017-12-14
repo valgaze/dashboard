@@ -3,7 +3,7 @@
 .account-setup-doorway-detail-image-upload-header {
   display: flex;
   flex-direction: row;
-  margin-top: 20px;
+  margin-top: 30px;
   color: $gray-cinder;
 }
 .account-setup-doorway-detail-image-upload-header-label {
@@ -26,7 +26,7 @@
 
   margin-top: 10px;
   margin-bottom: 10px;
-  height: 200px;
+  height: 192px;
 
   border: 2px dotted $gray-lighter;
   border-radius: 4px;
@@ -52,7 +52,7 @@
   color: $gray;
 
   // Add spacing above the first item in the container.
-  padding-top: 75px;
+  padding-top: 70px;
 }
 // When the user has uploaded an image, render the icon in a different color.
 .account-setup-doorway-detail-image-upload-icon.uploaded { color: $gray-cinder; }
@@ -66,7 +66,8 @@
 
 // Once the user has uploaded an image, show it in the preview box.
 .account-setup-doorway-detail-image-upload-preview {
-  height: 200px;
+  width: auto;
+  height: 100%;
 }
 
 // Change the opacity of the upload link and upload icon on hover and on active. This is hte same

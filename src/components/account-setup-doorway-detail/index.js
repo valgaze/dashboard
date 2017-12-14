@@ -120,11 +120,13 @@ export class AccountSetupDoorwayDetail extends React.Component {
               Here's an example of an ideal image:
             </p>
 
-            <img
-              className="account-setup-doorway-detail-body-ideal-image-box"
-              src="https://densityco.github.io/assets/images/r57-doorway-blue-edit2.c7f85388.png"
-              alt="Ideal doorway"
-            />
+            <div className="account-setup-doorway-detail-body-ideal-image-container">
+              <img
+                className="account-setup-doorway-detail-body-ideal-image"
+                src="https://densityco.github.io/assets/images/r57-doorway-blue-edit2.c7f85388.png"
+                alt="Ideal doorway"
+              />
+            </div>
 
             <AccountSetupDoorwayDetailImageUpload
               label="Image taken from inside the space"
@@ -439,11 +441,50 @@ export default connect(state => {
   };
 }, dispatch => {
   return {
-    onSave(doorway) {
+    async onSave(doorway) {
+
+      function dataURItoBlob(dataURI) {
+        // convert base64/URLEncoded data component to raw binary data held in a string
+        var byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(dataURI.split(',')[1]);
+        else
+            byteString = unescape(dataURI.split(',')[1]);
+    
+        // separate out the mime component
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    
+        // write the bytes of the string to a typed array
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+    
+        return new Blob([ia], {type:mimeString});
+      }
+
+      let firstCall
       if (doorway.id) {
-        return dispatch(collectionDoorwaysUpdate(doorway));
+        firstCall = await dispatch(collectionDoorwaysUpdate(doorway));
       } else {
-        return dispatch(collectionDoorwaysCreate(doorway));
+        firstCall = await dispatch(collectionDoorwaysCreate(doorway));
+      }
+
+      if (doorway.environment.insideImageUrl && doorway.environment.insideImageUrl.startsWith('data:')) {
+        const insideImageBlob = dataURItoBlob(doorway.environment.insideImageUrl);
+        const request = new XMLHttpRequest();
+        request.open('PUT', `https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`);
+        request.setRequestHeader('Authorization', `Bearer ${JSON.parse(localStorage.sessionToken)}`);
+        request.setRequestHeader('Content-Type', insideImageBlob.type);
+        request.send(insideImageBlob);
+      }
+      if (doorway.environment.outsideImageUrl && doorway.environment.outsideImageUrl.startsWith('data:')) {
+        const outsideImageBlob = dataURItoBlob(doorway.environment.outsideImageUrl);
+        const request = new XMLHttpRequest();
+        request.open('POST', `https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`);
+        request.setRequestHeader('Authorization', `Bearer ${JSON.parse(localStorage.sessionToken)}`);
+        request.setRequestHeader('Content-Type', outsideImageBlob.type);
+        request.send(outsideImageBlob);
       }
     },
     openDoorwaySavedModal() {
