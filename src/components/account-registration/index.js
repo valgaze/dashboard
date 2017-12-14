@@ -1,13 +1,20 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import Mark from '@density/ui-density-mark';
 import Button from '@density/ui-button';
+import Navbar from '@density/ui-navbar';
+import InputBox from '@density/ui-input-box';
+
+import Card, { CardBody } from '@density/ui-card';
+
 import ErrorBar from '../error-bar/index';
+import AccountSetupHeader from '../account-setup-header/index';
 
 import sessionTokenSet from '../../actions/session-token/set';
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
+
+import featureFlagEnabled from '../../helpers/feature-flag-enabled/index';
 
 export class AccountRegistration extends React.Component {
   constructor(props) {
@@ -43,59 +50,70 @@ export class AccountRegistration extends React.Component {
     return this.state.fullName.split(' ')[0];
   }
   render() {
-    return <div className="account-registration-container">
-      <div className="account-registration">
-        <ErrorBar message={this.state.error} showRefresh />
+    return <div className="account-registration">
+      <Navbar />
 
-        <Mark className="account-registration-density-logo" />
+      <ErrorBar message={this.state.error} showRefresh />
 
-        <p className="account-registration-lead-in">
-          Let's get your account set up, <span className="account-registration-lead-in-email">{this.state.email}</span>!
-        </p>
+      <AccountSetupHeader
+        greeter="Create your account"
+        detail={`Lets get your Density account set up, ${this.state.email}!`}
+      />
 
-        <InputStackGroup className="account-registration-name-form">
-          <InputStackItem
-            type="text"
-            placeholder="Full Name"
-            onChange={e => this.setState({fullName: e.target.value})}
-            value={this.state.fullName}
-          />
-          <InputStackItem
-            type="text"
-            placeholder={this.state.fullName && this.state.fullName.indexOf(' ') >= 0 ? this.generateNickname.apply(this) : 'Nickname'}
-            onChange={e => this.setState({nickname: e.target.value})}
-            value={this.state.nickname}
-          />
-        </InputStackGroup>
-        <InputStackGroup className="account-registration-password-form">
-          <InputStackItem
-            type="password"
-            placeholder="Password"
-            onChange={e => this.setState({password: e.target.value})}
-            value={this.state.password}
-          />
-          <InputStackItem
-            type="password"
-            placeholder="Confirm password"
-            invalid={this.state.passwordConfirmation.length > 0 ? this.state.password !== this.state.passwordConfirmation : false}
-            onChange={e => this.setState({passwordConfirmation: e.target.value})}
-            value={this.state.passwordConfirmation}
-          />
-        </InputStackGroup>
+      <Mark className="account-registration-density-logo" />
 
-        <br/>
-        <Button
-          className="account-registration-submit-button"
-          size="large"
-          onClick={this.onSubmit.bind(this)}
-          disabled={!(
-            this.state.password.length > 0 &&
-            this.state.password === this.state.passwordConfirmation &&
-            this.state.fullName.length > 0 && 
-            (this.state.fullName.indexOf(' ') >= 0 || this.state.nickname.length > 0) &&
-            this.state.email.indexOf('@') >= 0
-          )}
-        >Create Account</Button>
+      <div className="account-registration-card-container">
+        <Card className="account-registration-card">
+          <CardBody>
+            <label htmlFor="account-registration-full-name">Full Name</label>
+            <InputBox
+              type="text"
+              placeholder="Full Name ..."
+              onChange={e => this.setState({fullName: e.target.value})}
+              value={this.state.fullName}
+            />
+
+            <label htmlFor="account-registration-nickname">Nickname</label>
+            <InputBox
+              type="text"
+              placeholder={
+                this.state.fullName && this.state.fullName.indexOf(' ') >= 0 ? this.generateNickname.apply(this) : 'Nickname ...'
+              }
+              onChange={e => this.setState({nickname: e.target.value})}
+              value={this.state.nickname}
+            />
+
+            <label htmlFor="account-registration-confirm-password">Password</label>
+            <InputBox
+              type="password"
+              placeholder="Password"
+              onChange={e => this.setState({password: e.target.value})}
+              value={this.state.password}
+            />
+
+            <label htmlFor="account-registration-confirm-password">Confirm Password</label>
+            <InputBox
+              type="password"
+              placeholder="Confirm password"
+              onChange={e => this.setState({passwordConfirmation: e.target.value})}
+              value={this.state.passwordConfirmation}
+            />
+
+            <br />
+            <Button
+              className="account-registration-submit-button"
+              size="large"
+              onClick={this.onSubmit.bind(this)}
+              disabled={!(
+                this.state.password.length > 0 &&
+                this.state.password === this.state.passwordConfirmation &&
+                this.state.fullName.length > 0 && 
+                (this.state.fullName.indexOf(' ') >= 0 || this.state.nickname.length > 0) &&
+                this.state.email.indexOf('@') >= 0
+              )}
+            >Create Account</Button>
+          </CardBody>
+        </Card>
       </div>
     </div>;
   }
@@ -106,8 +124,18 @@ export default connect(state => {
 }, dispatch => {
   return {
     onUserLoggedIn(token) {
-      dispatch(sessionTokenSet(token));
-      window.location.hash = '#/visualization/spaces';
+      dispatch(sessionTokenSet(token)).then(user => {
+
+        // FIXME: Hardcoded feature flag. Turn this off.
+        user.organization.settings = { visualizationPageLocked: 'true' };
+
+        // If the visualizations page is locked, instead redirect to the onboarding flow.
+        if (featureFlagEnabled(user.organization.settings.visualizationPageLocked)) {
+          window.location.hash = '#/account/setup/overview';
+        } else {
+          window.location.hash = '#/visualization/spaces';
+        }
+      });
     },
   };
 })(AccountRegistration);

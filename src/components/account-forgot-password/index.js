@@ -7,7 +7,7 @@ import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import ErrorBar from '../error-bar/index';
 
 import sessionTokenSet from '../../actions/session-token/set';
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 
 export class AccountRegistration extends React.Component {
   constructor(props) {

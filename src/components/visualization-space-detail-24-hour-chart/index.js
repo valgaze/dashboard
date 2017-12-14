@@ -3,7 +3,7 @@ import * as React from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 
-import { core } from '@density-int/client';
+import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
 import DatePicker, { ANCHOR_RIGHT } from '@density/ui-date-picker';

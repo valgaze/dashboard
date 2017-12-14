@@ -3,7 +3,6 @@
   font-size: $font-size-base;
   background-color: #222A2E;
   line-height: 36px;
-  border-bottom: 1px solid $gray-light;
 
   // Remove the paddings from the width.
   width: calc(100% - 18px - 18px);
@@ -31,6 +30,7 @@
 .subnav-item.active {
   margin-top: 3px;
   border-bottom: 3px solid $brand-primary;
+  font-weight: bold;
 }
 .subnav-item.active a {
   color: #fff;

@@ -1,7 +1,7 @@
 # Websockets event pusher
 
 Listens to a websocket. When events are received, emit them as events. Used to push real-time
-updates to collections from a server.
+updates to collections from a server, using our `sockets.density.io` service.
 
 ```javascript
 websocketsEventPusher.setHost('ws://localhost:8080');

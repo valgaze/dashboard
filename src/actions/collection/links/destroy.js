@@ -1,5 +1,5 @@
 import collectionLinksDelete from './delete';
-import { core } from '@density-int/client';
+import { core } from '../../../client';
 
 export const COLLECTION_LINKS_DESTROY = 'COLLECTION_LINKS_DESTROY';
 

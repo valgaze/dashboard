@@ -1,6 +1,6 @@
 import collectionSpacesPush from './push';
 import collectionSpacesError from './error';
-import { core } from '@density-int/client';
+import { core } from '../../../client';
 
 export const COLLECTION_SPACES_UPDATE = 'COLLECTION_SPACES_UPDATE';
 

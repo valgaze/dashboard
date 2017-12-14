@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 import './built-css/styles.css';
-import { core, accounts } from '@density-int/client';
+import { core, accounts } from './client';
 import ReactGA from 'react-ga';
 
 import userSet from './actions/user/set';
+import userPush from './actions/user/push';
 import userError from './actions/user/error';
 import sessionTokenUnSet from './actions/session-token/unset';
 
@@ -33,6 +34,9 @@ import routeTransitionDevWebhookList from './actions/route-transition/dev-webhoo
 import routeTransitionAccount from './actions/route-transition/account';
 import routeTransitionAccountRegister from './actions/route-transition/account-register';
 import routeTransitionAccountForgotPassword from './actions/route-transition/account-forgot-password';
+import routeTransitionAccountSetupOverview from './actions/route-transition/account-setup-overview';
+import routeTransitionAccountSetupDoorwayList from './actions/route-transition/account-setup-doorway-list';
+import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition/account-setup-doorway-detail';
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 
@@ -120,12 +124,11 @@ trackHashChange();
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
-const initialRoute = '#/visualization/spaces';
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
 
-router.addRoute('visualization/spaces', () => routeTransitionVisualizationSpaceList());
-router.addRoute('visualization/spaces/:id', id => routeTransitionVisualizationSpaceDetail(id));
+router.addRoute('insights/spaces', () => routeTransitionVisualizationSpaceList());
+router.addRoute('insights/spaces/:id', id => routeTransitionVisualizationSpaceDetail(id));
 
 router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());
 
@@ -134,8 +137,27 @@ router.addRoute('dev/webhooks', () => routeTransitionDevWebhookList());
 
 router.addRoute('account', () => routeTransitionAccount());
 
+// User registration and password resetting
 router.addRoute('account/register/:slug', slug => routeTransitionAccountRegister(slug));
 router.addRoute('account/forgot-password/:token', token => routeTransitionAccountForgotPassword(token));
+
+// Onboarding flow
+// Redirect #/account/setup => #/account/setup/overview
+router.addRoute('account/setup', () => {
+  window.location.href = '#/account/setup/overview';
+  // FIXME: Conduit shouldn't dispatch an action if a function returns undefined. That would let the
+  // below line be removed.
+  return {type: 'NOOP'};
+});
+router.addRoute('account/setup/overview', () => {
+  // FIXME: After the user registers, their token is added to the store. But, they never actually
+  // have their user information fetched. This call fetches that user information and puts it into
+  // the `user` section of the store before continuing with the onboarding process.
+  preRouteAuthentication();
+  return routeTransitionAccountSetupOverview();
+});
+router.addRoute('account/setup/doorways', () => routeTransitionAccountSetupDoorwayList());
+router.addRoute('account/setup/doorways/:id', id => routeTransitionAccountSetupDoorwayDetail(id));
 
 // Make sure that the user is logged in prior to going to a page.
 function preRouteAuthentication() {
@@ -143,7 +165,7 @@ function preRouteAuthentication() {
 
   // If at the root page and logged in, redirect to the initial route.
   if (loggedIn && ['', '#', '#/'].indexOf(window.location.hash) >= 0) {
-    window.location.hash = initialRoute;
+    window.location.hash = '#/account/setup';
 
   // If on the account registration page (the only page that doesn't require the user to be logged in)
   // then don't worry about any of this.
@@ -172,6 +194,19 @@ function preRouteAuthentication() {
 }
 preRouteAuthentication();
 
+// Set a feature flag from the console.
+window.setFeatureFlag = function setFeatureFlag(flag, value) {
+  const user = store.getState().user.user;
+  if (!user) {
+    throw new Error('Please wait for the user collection to load before changing feature flags.');
+  }
+
+  const features = { [flag]: value };
+  store.dispatch(userPush({
+    features: {...user.features, ...features},
+  }));
+}
+
 // Handle the route that the user is currently at.
 router.handle();
 
@@ -192,8 +227,6 @@ eventSource.events.on('space', countChangeEvent => {
     countChange: countChangeEvent.direction,
   }));
 });
-window.store = store;
-
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,4 +1,4 @@
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 import { USER_PUSH } from './push';
 
 export const USER_UPDATE = 'USER_UPDATE';

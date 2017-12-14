@@ -6,7 +6,7 @@ import mixpanelUserReducerEnhancer from '../../helpers/mixpanel-user-reducer-enh
 
 const initialState = {
   user: null,
-  loading: false,
+  loading: true,
   error: false,
 };
 

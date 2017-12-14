@@ -8,6 +8,10 @@ import { ROUTE_TRANSITION_DEV_TOKEN_LIST } from '../../actions/route-transition/
 import { ROUTE_TRANSITION_ACCOUNT_REGISTER } from '../../actions/route-transition/account-register';
 import { ROUTE_TRANSITION_ACCOUNT_FORGOT_PASSWORD } from '../../actions/route-transition/account-forgot-password';
 
+import { ROUTE_TRANSITION_ACCOUNT_SETUP_OVERVIEW } from '../../actions/route-transition/account-setup-overview';
+import { ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_LIST } from '../../actions/route-transition/account-setup-doorway-list';
+import { ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL } from '../../actions/route-transition/account-setup-doorway-detail';
+
 const initialState = null;
 
 export default function activePage(state=initialState, action) {
@@ -28,11 +32,19 @@ export default function activePage(state=initialState, action) {
     return "DEV_WEBHOOK_LIST";
 
   case ROUTE_TRANSITION_ACCOUNT:
-    return "ACCOUNT"
+    return "ACCOUNT";
   case ROUTE_TRANSITION_ACCOUNT_REGISTER:
-    return "ACCOUNT_REGISTRATION"
+    return "ACCOUNT_REGISTRATION";
   case ROUTE_TRANSITION_ACCOUNT_FORGOT_PASSWORD:
-    return "ACCOUNT_FORGOT_PASSWORD"
+    return "ACCOUNT_FORGOT_PASSWORD";
+
+  // Onboarding pages
+  case ROUTE_TRANSITION_ACCOUNT_SETUP_OVERVIEW:
+    return "ACCOUNT_SETUP_OVERVIEW";
+  case ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_LIST:
+    return "ACCOUNT_SETUP_DOORWAY_LIST";
+  case ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL:
+    return "ACCOUNT_SETUP_DOORWAY_DETAIL";
   default:
     return state;
   }

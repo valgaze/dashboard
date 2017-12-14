@@ -1,4 +1,4 @@
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 import userSet from '../user/set';
 import userError from '../user/error';
 
@@ -13,6 +13,7 @@ export default function sessionTokenSet(token) {
       dispatch(userError(err));
     }).then(data => {
       dispatch(userSet(data));
+      return data;
     });
   }
 }

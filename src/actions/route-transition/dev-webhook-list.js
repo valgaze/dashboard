@@ -1,4 +1,4 @@
-import { core } from '@density-int/client';
+import { core } from '../../client';
 import collectionWebhooksSet from '../collection/webhooks/set';
 
 export const ROUTE_TRANSITION_DEV_WEBHOOK_LIST = 'ROUTE_TRANSITION_DEV_WEBHOOK_LIST';

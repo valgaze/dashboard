@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import moment from 'moment';
 import 'moment-timezone';
 
-import { core } from '@density-int/client';
+import { core } from '../../client';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';

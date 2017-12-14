@@ -1,6 +1,6 @@
 import collectionSpacesDelete from './delete';
 import collectionSpacesError from './error';
-import { core } from '@density-int/client';
+import { core } from '../../../client';
 
 export const COLLECTION_SPACES_DESTROY = 'COLLECTION_SPACES_DESTROY';
 

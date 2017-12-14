@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { core } from '@density-int/client';
+import { core } from '../../client';
 
 import collectionSpacesSet from '../collection/spaces/set';
 import collectionSpacesSetEvents from '../collection/spaces/set-events';
@@ -16,7 +16,7 @@ export default function routeTransitionSpaceList() {
       // Fetch a list of all spaces.
       core.spaces.list(),
       // Fetch a list of all doorways.
-      core.doorways.list(),
+      core.doorways.list({environment: true}),
       // Fetch a list of all links.
       core.links.list(),
     ]).then(([spaces, doorways, links]) => {

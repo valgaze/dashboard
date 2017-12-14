@@ -1,6 +1,6 @@
 import collectionDoorwaysDelete from './delete';
 import collectionDoorwaysError from './error';
-import { core } from '@density-int/client';
+import { core } from '../../../client';
 
 export const COLLECTION_DOORWAYS_DESTROY = 'COLLECTION_DOORWAYS_DESTROY';
 

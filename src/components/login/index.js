@@ -2,7 +2,7 @@ import * as React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 
-import { accounts } from '@density-int/client';
+import { accounts } from '../../client';
 import sessionTokenSet from '../../actions/session-token/set';
 
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
@@ -177,7 +177,7 @@ export default connect(state => ({}), dispatch => {
   return {
     onUserSuccessfullyLoggedIn(token) {
       dispatch(sessionTokenSet(token));
-      window.location.hash = '#/visualization/spaces';
+      window.location.hash = '#/account/setup';
     },
   };
 })(Login);
