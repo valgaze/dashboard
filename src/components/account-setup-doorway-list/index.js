@@ -25,7 +25,7 @@ export function AccountSetupDoorwayList({
 
     <AccountSetupHeader
       greeter="Doorways"
-      detail="Provide more information about your doorways to guide installation."
+      detail="Please provide more information about your doorways."
     />
 
     {activeModal.name === 'unit-setup-added-doorway' ? <div className="account-setup-doorway-list-success-toast">

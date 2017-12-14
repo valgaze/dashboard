@@ -91,10 +91,16 @@ export class AccountSetupDoorwayDetail extends React.Component {
         <SubnavItem active href="#/account/setup/doorways">Doorways</SubnavItem>
       </Subnav>
 
-      <AccountSetupHeader
-        greeter="Doorways"
-        detail="Provide more information about your doorways to guide installation."
-      />
+      {isCreatingNewDoorway ?
+        <AccountSetupHeader
+          greeter="Doorways"
+          detail="Please provide more information about your doorways."
+        /> :
+        <AccountSetupHeader
+          greeter="Edit doorway"
+          detail="Edit the images, measurements or power option you selected for this doorway."
+        />
+      }
 
       <div className="account-setup-doorway-detail-body-container">
         <h1 className="account-setup-doorway-list-title">
