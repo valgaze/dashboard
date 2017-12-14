@@ -46,18 +46,32 @@
   flex-direction: row;
 
   border: 1px solid $gray-light;
-  border-radius: 6px;
+  border-radius: 4px;
   margin-bottom: 10px;
 }
-.account-setup-doorway-list-item-image {
+.account-setup-doorway-list-item-image-container {
+  position: relative;
   width: 48px;
-  text-align: center;
+  height: 100%;
   margin-right: 20px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  overflow: hidden;
 }
-.account-setup-doorway-list-item-image.empty { background-color: $gray-lighter; }
-.account-setup-doorway-list-item-image.empty:before {
+.account-setup-doorway-list-item-image {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  -webkit-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
+}
+.account-setup-doorway-list-item-image-empty {
+  text-align: center;
+  background-color: $gray-lighter;
+}
+.account-setup-doorway-list-item-image-empty:before {
   font-family: 'Densicons';
   content: '\e91d';
   color: $gray-dark;

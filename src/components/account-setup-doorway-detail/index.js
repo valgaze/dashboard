@@ -77,6 +77,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
     // A doorway is being created if the doorway passed in is truthy and has an id key within it.
     // Otherwise, the doorway is being modified.
     const isCreatingNewDoorway = !this.state.doorway || !this.state.doorway.id;
+    const needsPhotos = isCreatingNewDoorway || (
+      !((this.state.doorway || {}).environment || {}).insideImageUrl &&
+      !((this.state.doorway || {}).environment || {}).outsideImageUrl
+    );
 
     return <div className="account-setup-doorway-detail">
       <Subnav visible>
@@ -102,7 +106,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               Upload images
             </h2>
 
-            {isCreatingNewDoorway ? <div>
+            {needsPhotos ? <div>
               <p className="account-setup-doorway-detail-body-section">
                 When taking photos, please follow these guidelines:
               </p>
@@ -124,7 +128,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               <div className="account-setup-doorway-detail-body-ideal-image-container">
                 <img
                   className="account-setup-doorway-detail-body-ideal-image"
-                  src="https://densityco.github.io/assets/images/r57-doorway-blue-edit2.c7f85388.png"
+                  src="/ideal_doorway.jpg"
                   alt="Ideal doorway"
                 />
               </div>
@@ -373,28 +377,30 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
               disabled={!this.isValid.apply(this) || this.state.formSubmittted}
             >Save &amp; Close</Button>
-            <Button
-              className="account-setup-doorway-detail-save-add-another-button"
-              onClick={() => {
-                // Set a flag to disable the submit buttons while the form is sending data to the
-                // server.
-                this.setState({formSubmittted: true});
+            { isCreatingNewDoorway ?
+              <Button
+                className="account-setup-doorway-detail-save-add-another-button"
+                onClick={() => {
+                  // Set a flag to disable the submit buttons while the form is sending data to the
+                  // server.
+                  this.setState({formSubmittted: true});
 
-                return this.props.onSave(this.formattedDoorway.apply(this)).then(() => {
-                  // Once complete, reset the state of the form.
-                  this.setState({
-                    doorway: {},
-                    formSubmittted: false,
-                    inputWidth: '',
-                    inputHeight: '',
+                  return this.props.onSave(this.formattedDoorway.apply(this)).then(() => {
+                    // Once complete, reset the state of the form.
+                    this.setState({
+                      doorway: {},
+                      formSubmittted: false,
+                      inputWidth: '',
+                      inputHeight: '',
+                    });
+
+                    // Once complete, redirect to new doorway page
+                    window.location.href = '#/account/setup/doorways/new';
                   });
-
-                  // Once complete, redirect to new doorway page
-                  window.location.href = '#/account/setup/doorways/new';
-                });
-              }}
-              disabled={!this.isValid.apply(this) || this.state.formSubmittted}
-            >Save &amp; Add Another Doorway</Button>
+                }}
+                disabled={!this.isValid.apply(this) || this.state.formSubmittted}
+              >Save &amp; Add Another Doorway</Button>
+            : null }
           </CardBody>
         </Card>
       </div>
@@ -414,7 +420,7 @@ function MountingSpaceGraphic() {
         <g id="ob-v1-r1-004-1" transform="translate(-429.000000, -2535.000000)">
             <g id="content" transform="translate(410.000000, 370.000000)">
                 <g id="step-3" transform="translate(20.000000, 1519.000000)">
-                    <g id="scene" transform="translate(0.000000, 647.000000)">
+                    <g id="scene" transform="translate(0.000000, 650.000000)">
                         <rect id="door" stroke="#B4B8BF" fill="#F5F6F7" strokeLinecap="round" strokeLinejoin="round" x="0" y="61.4299828" width="420" height="154.078481"></rect>
                         <rect id="door" stroke="#B4B8BF" fill="#FFFFFF" strokeLinecap="round" strokeLinejoin="round" x="21.0501193" y="82.5780097" width="378.902148" height="132.930455"></rect>
                         <g id="r60-front" transform="translate(185.441527, 28.197369)" stroke="#B4B8BF">
