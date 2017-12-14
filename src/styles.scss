@@ -123,6 +123,18 @@ input[type=input], input[type=password] { &:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
 } }
 
+// Densicons is an icon font with Density icons inside.
+// TODO: back-port this into Density UI once builds are back (GC 2017-12-14)
+@font-face {
+  font-family: 'Densicons';
+  src: url("#{$cdn-path}/fonts/densicons.4e3b11a3.ttf") format("truetype"),
+    url("#{$cdn-path}/fonts/densicons.fdc1ac2e.eot") format("opentype"),
+    url("#{$cdn-path}/fonts/densicons.222eea6d.woff") format("woff"),
+    url("#{$cdn-path}/fonts/densicons.00b7e5bb.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
 //
 // Charts
 //

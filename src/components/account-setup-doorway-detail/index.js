@@ -502,11 +502,14 @@ export default connect(state => {
       if (doorway.environment.outsideImageUrl && doorway.environment.outsideImageUrl.startsWith('data:')) {
         const outsideImageBlob = dataURItoBlob(doorway.environment.outsideImageUrl);
         const request = new XMLHttpRequest();
-        request.open('POST', `https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`);
+        request.open('PUT', `https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`);
         request.setRequestHeader('Authorization', `Bearer ${JSON.parse(localStorage.sessionToken)}`);
         request.setRequestHeader('Content-Type', outsideImageBlob.type);
         request.send(outsideImageBlob);
       }
+
+      // Scroll to top of page
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
 
     openDoorwaySavedModal() {
