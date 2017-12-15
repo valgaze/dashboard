@@ -12,7 +12,8 @@ export default class ImageRetry extends React.Component {
     super(props);
     this.state = {
       mode: DONE,
-      retries: props.retries || 1
+      retries: props.retries || 1,
+      orientation: ''
     };
   }
 
@@ -32,15 +33,24 @@ export default class ImageRetry extends React.Component {
     }
   }
 
+  setProportions(event) {
+    if (event.target.clientWidth >= event.target.clientHeight) {
+      this.setState({ orientation: 'landscape' });
+    } else {
+      this.setState({ orientation: 'portrait' });
+    }
+  }
+
   render() {
     if (this.props.src && this.state.retries > 0 && this.state.mode === DONE) {
       console.log('Done: ', this.props.src);
       return <img
         src={this.props.src}
         alt={this.props.alt}
-        className={this.props.className}
+        className={this.props.className + ' ' + this.state.orientation}
         style={this.props.style}
         onError={this.scheduleRetry.bind(this)}
+        onLoad={this.setProportions.bind(this)}
       />;
     } else if (this.state.mode === LOADING) {
       console.log('Loading: ', this.props.src);

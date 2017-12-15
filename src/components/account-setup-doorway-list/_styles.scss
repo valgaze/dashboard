@@ -62,21 +62,13 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 100%;
   -webkit-transform: translate(-50%,-50%);
       -ms-transform: translate(-50%,-50%);
           transform: translate(-50%,-50%);
 }
-.account-setup-doorway-list-item-image-empty {
-  text-align: center;
-  background-color: $gray-lighter;
-}
-.account-setup-doorway-list-item-image-empty:before {
-  font-family: 'Densicons';
-  content: '\e91d';
-  color: $gray-dark;
-  font-size: $font-size-3;
-}
+.account-setup-doorway-list-item-image.portrait { width: 100%; height: auto; }
+.account-setup-doorway-list-item-image.landscape { width: auto; height: 100%; }
+
 // The name is the second element in each doorway item.
 .account-setup-doorway-list-item-name {
   font-weight: bold;

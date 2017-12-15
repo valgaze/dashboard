@@ -22,14 +22,15 @@
 
 // The main container for the image uploader.
 .account-setup-doorway-detail-image-upload {
-  background-color: $gray-lightest;
-
+  position: relative;
   margin-top: 10px;
   margin-bottom: 10px;
   height: 192px;
 
+  background-color: $gray-lightest;
   border: 2px dotted $gray-lighter;
   border-radius: 4px;
+  overflow: hidden;
 
   cursor: pointer;
   user-select: none;
@@ -66,8 +67,16 @@
 
 // Once the user has uploaded an image, show it in the preview box.
 .account-setup-doorway-detail-image-upload-preview {
+  max-height: 100%;  
+  max-width: 100%; 
   width: auto;
-  height: 100%;
+  height: auto;
+  position: absolute;  
+  top: 0;  
+  bottom: 0;  
+  left: 0;  
+  right: 0;  
+  margin: auto;
 }
 
 // Change the opacity of the upload link and upload icon on hover and on active. This is hte same
