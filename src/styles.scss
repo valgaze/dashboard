@@ -99,6 +99,10 @@ $font-size-x-small: 10px;
   font-family: 'Sailec', 'Helvetica', 'Arial', sans-serif;
 }
 
+input[type="text"], input[type="password"], input[type="email"], input[type="tel"] {
+  -webkit-appearance: none;
+}
+
 html {
   margin: 0px;
   background-color: #F0F0F2;
