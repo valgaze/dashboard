@@ -379,7 +379,8 @@ export class AccountSetupDoorwayDetail extends React.Component {
                     this.props.openDoorwaySavedModal();
                   }
 
-                  // and redirect back to the main page.
+                  // Once complete, scroll to top and redirect back to the main page.
+                  document.body.scrollTop = document.documentElement.scrollTop = 0;
                   window.location.href = '#/account/setup/doorways';
                 });
               }}
@@ -403,7 +404,8 @@ export class AccountSetupDoorwayDetail extends React.Component {
                       inputHeight: '',
                     });
 
-                    // Once complete, redirect to new doorway page
+                    // Once complete, scroll to top and redirect to new doorway page
+                    document.body.scrollTop = document.documentElement.scrollTop = 0;
                     window.location.href = '#/account/setup/doorways/new';
                   });
                 }}
@@ -463,23 +465,33 @@ export default connect(state => {
     async onSave(doorway) {
 
       function dataURItoBlob(dataURI) {
-        // convert base64/URLEncoded data component to raw binary data held in a string
+        // Convert base64/URLEncoded data component to raw binary data held in a string
         var byteString;
         if (dataURI.split(',')[0].indexOf('base64') >= 0)
             byteString = atob(dataURI.split(',')[1]);
         else
             byteString = unescape(dataURI.split(',')[1]);
     
-        // separate out the mime component
+        // Separate out the mime component
         var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
     
-        // write the bytes of the string to a typed array
+        // Write the bytes of the string to a typed array
         var ia = new Uint8Array(byteString.length);
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
     
         return new Blob([ia], {type:mimeString});
+      }
+
+      function uploadImage(url, blob) {
+        // Build authorization and content-type headers
+        const headers = new Headers({
+          'Authorization': `Bearer ${JSON.parse(localStorage.sessionToken)}`,
+          'Content-Type': blob.type,
+        })
+        // PUT image to the URL
+        return fetch(url, { method: 'PUT', headers: headers, body: blob });
       }
 
       // Make first call to POST/PUT doorway
@@ -491,33 +503,22 @@ export default connect(state => {
       }
 
       // Then upload any new doorway images
+      const imageCalls = [];
       if (doorway.environment.insideImageUrl && doorway.environment.insideImageUrl.startsWith('data:')) {
-        const insideImageBlob = dataURItoBlob(doorway.environment.insideImageUrl);
-        const headers = new Headers({
-          'Authorization': `Bearer ${JSON.parse(localStorage.sessionToken)}`,
-          'Content-Type': insideImageBlob.type,
-        })
-        const response = await fetch(`https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`, {
-          method: 'PUT',
-          headers: headers,
-          body: insideImageBlob
-        });
+        imageCalls.push(uploadImage(
+          `https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`,
+          dataURItoBlob(doorway.environment.insideImageUrl)
+        ));
       }
       if (doorway.environment.outsideImageUrl && doorway.environment.outsideImageUrl.startsWith('data:')) {
-        const outsideImageBlob = dataURItoBlob(doorway.environment.outsideImageUrl);
-        const headers = new Headers({
-          'Authorization': `Bearer ${JSON.parse(localStorage.sessionToken)}`,
-          'Content-Type': outsideImageBlob.type,
-        })
-        const response = await fetch(`https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`, {
-          method: 'PUT',
-          headers: headers,
-          body: outsideImageBlob
-        });
+        imageCalls.push(uploadImage(
+          `https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`,
+          dataURItoBlob(doorway.environment.outsideImageUrl)
+        ));
       }
 
-      // Scroll to top of page
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
+      // Return promises
+      return Promise.all(imageCalls);
     },
 
     openDoorwaySavedModal() {
