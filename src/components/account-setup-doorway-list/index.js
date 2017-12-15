@@ -8,6 +8,7 @@ import Card, { CardBody, CardLoading } from '@density/ui-card';
 import Subnav, { SubnavItem } from '../subnav/index';
 import Toast from '@density/ui-toast';
 
+import ImageRetry from '../image-retry';
 import AccountSetupHeader from '../account-setup-header/index';
 
 export function AccountSetupDoorwayList({
@@ -67,14 +68,12 @@ export function AccountSetupDoorwayList({
                       href={`#/account/setup/doorways/${doorway.id}`}
                     >
                       <div className="account-setup-doorway-list-item-image-container">
-                        {(doorway.environment || {}).insideImageUrl ? 
-                          <img
-                            className="account-setup-doorway-list-item-image"
-                            src={doorway.environment.insideImageUrl}
-                            alt="Doorway from inside"
-                          /> :
-                          <div className="account-setup-doorway-list-item-image-empty" />
-                        }
+                        <ImageRetry
+                          src={(doorway.environment || {}).insideImageUrl}
+                          alt="Doorway from inside"
+                          className="account-setup-doorway-list-item-image"
+                          retries={5}
+                        />
                       </div>
 
                       <span className="account-setup-doorway-list-item-name">

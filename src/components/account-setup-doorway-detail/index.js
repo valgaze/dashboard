@@ -493,19 +493,27 @@ export default connect(state => {
       // Then upload any new doorway images
       if (doorway.environment.insideImageUrl && doorway.environment.insideImageUrl.startsWith('data:')) {
         const insideImageBlob = dataURItoBlob(doorway.environment.insideImageUrl);
-        const request = new XMLHttpRequest();
-        request.open('PUT', `https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`);
-        request.setRequestHeader('Authorization', `Bearer ${JSON.parse(localStorage.sessionToken)}`);
-        request.setRequestHeader('Content-Type', insideImageBlob.type);
-        request.send(insideImageBlob);
+        const headers = new Headers({
+          'Authorization': `Bearer ${JSON.parse(localStorage.sessionToken)}`,
+          'Content-Type': insideImageBlob.type,
+        })
+        const response = await fetch(`https://api.density.io/v2/doorways/${firstCall.id}/images/inside/`, {
+          method: 'PUT',
+          headers: headers,
+          body: insideImageBlob
+        });
       }
       if (doorway.environment.outsideImageUrl && doorway.environment.outsideImageUrl.startsWith('data:')) {
         const outsideImageBlob = dataURItoBlob(doorway.environment.outsideImageUrl);
-        const request = new XMLHttpRequest();
-        request.open('PUT', `https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`);
-        request.setRequestHeader('Authorization', `Bearer ${JSON.parse(localStorage.sessionToken)}`);
-        request.setRequestHeader('Content-Type', outsideImageBlob.type);
-        request.send(outsideImageBlob);
+        const headers = new Headers({
+          'Authorization': `Bearer ${JSON.parse(localStorage.sessionToken)}`,
+          'Content-Type': outsideImageBlob.type,
+        })
+        const response = await fetch(`https://api.density.io/v2/doorways/${firstCall.id}/images/outside/`, {
+          method: 'PUT',
+          headers: headers,
+          body: outsideImageBlob
+        });
       }
 
       // Scroll to top of page
