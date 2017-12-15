@@ -26,7 +26,7 @@ export default class ImageRetry extends React.Component {
   scheduleRetry() {
     if (this.state.retries > 0) {
       this.setState({ mode: LOADING });
-      window.setTimeout(this.retry.bind(this), this.props.interval);
+      window.setTimeout(this.retry.bind(this), this.props.interval || 2000);
     } else {
       this.setState({ mode: FALLBACK });
     }
