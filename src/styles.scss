@@ -151,7 +151,8 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 
 // TODO: back-port this into density UI
 .toast {
-  width: 420px; /* Fit into a mobile viewport */
+  width: calc(100% - 10px); /* Fit into a mobile viewport */
+  max-width: 420px;
   margin: 0 auto;
 }
 
