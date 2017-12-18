@@ -149,6 +149,12 @@ input[type=input], input[type=password] { &:-webkit-autofill {
   color: $gray;
 }
 
+// TODO: back-port this into density UI
+.toast {
+  width: 420px; /* Fit into a mobile viewport */
+  margin: 0 auto;
+}
+
 //
 // Charts
 //

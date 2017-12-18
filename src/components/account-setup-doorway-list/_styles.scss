@@ -146,13 +146,6 @@
   &:active { opacity: 1; }
 }
 
-
-// Once a doorway is saved, show a success toast ifnorming the user that the process worked.
-.account-setup-doorway-list-success-toast {
-  max-width: 458px; /* Same width as the column below */
-  margin: 0px auto;
-}
-
 // The success toast is dismissable with a little x in the corner. When that little x is pressed, an
 // action is dispatched to close the modal.
 .account-setup-doorway-list-success-toast-dismiss {

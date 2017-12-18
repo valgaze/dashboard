@@ -59,19 +59,8 @@
 // Show an error when there's an error on the login page.
 .login-toast {
   position: absolute;
-  top: 20px;
+  top: 72px;
   z-index: 2000;
-
-  // On mobile, the error should be full width (with 5px gutters)
-  width: calc(100% - 10px);
-  margin-left: 5px;
-
-  // On Desktop, the error should be 420px wide.
-  @media (min-width: 450px) {
-    width: 420px;
-    left: 50%;
-    margin-left: -(420px / 2);
-  }
 }
 .login-toast-header {
   color: $brand-danger;

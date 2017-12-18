@@ -156,13 +156,14 @@ export class Login extends React.Component {
       <Navbar />
       { this.state.loading ? <div className="login-navbar-loading" /> : null }
 
-      {/* Render any errors with previous login attempts */}
-      {this.state.error ? <Toast className="login-toast" type="danger" icon={<span className="login-toast-icon">&#xe928;</span>}>
-        <h3 className="login-toast-header">Incorrect password</h3>
-        <p>{this.state.error}</p>
-      </Toast> : null}
-
       <div className="login-section">
+
+        {/* Render any errors with previous login attempts */}
+        {this.state.error ? <Toast className="login-toast" type="danger" icon={<span className="login-toast-icon">&#xe928;</span>}>
+          <h3 className="login-toast-header">Incorrect password</h3>
+          <p>{this.state.error}</p>
+        </Toast> : null}
+
         <Mark className="login-density-logo" />
 
         {/* Login inputs */}
