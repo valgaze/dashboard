@@ -125,11 +125,6 @@ export default connect(state => {
   return {
     onUserLoggedIn(token) {
       dispatch(sessionTokenSet(token)).then(user => {
-
-        // FIXME: Hardcoded feature flag. Turn this off.
-        user.organization.settings = { insightsPageLocked: 'true' };
-
-        // Navigate to the appropriate landing page
         unsafeNavigateToLandingPage(user.organization.settings.insightsPageLocked);
       });
     },

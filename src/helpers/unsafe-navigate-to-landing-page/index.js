@@ -1,7 +1,6 @@
 import stringToBoolean from '../string-to-boolean/index';
 
 export default function unsafeNavigateToLandingPage(insightsPageLocked) {
-  
   // If there is a URL hash present, don't redirect to any default page
   if (['', '#', '#/'].indexOf(window.location.hash) < 0) {
     return;

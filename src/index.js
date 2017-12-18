@@ -10,6 +10,7 @@ import userPush from './actions/user/push';
 import userError from './actions/user/error';
 import sessionTokenUnSet from './actions/session-token/unset';
 
+import objectSnakeToCamel from './helpers/object-snake-to-camel/index';
 import eventSource from './helpers/websocket-event-pusher/index';
 import mixpanelTrack from './helpers/mixpanel-track/index';
 
@@ -181,7 +182,7 @@ function preRouteAuthentication() {
       router.navigate('login');
     }).then(data => {
       store.dispatch(userSet(data));
-      unsafeNavigateToLandingPage(data.organization.settings.insightsPageLocked);
+      unsafeNavigateToLandingPage(objectSnakeToCamel(data).organization.settings.insightsPageLocked);
     });
   }
 }

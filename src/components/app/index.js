@@ -186,7 +186,7 @@ function AppComponent({activePage, settings, user, onLogout}) {
     <Preview generator={(type, item, style) => <div style={style} />} />
 
     {/* Insert the currently displayed page into the view */}
-    <ActivePage activePage={activePage} />
+    <ActivePage activePage={activePage} settings={settings} />
   </div>;
 }
 const HTML5toTouch = {
@@ -203,14 +203,14 @@ const HTML5toTouch = {
 };
 const App = DragDropContext(MultiBackend(HTML5toTouch))(AppComponent);
 
-function ActivePage({activePage}) {
+function ActivePage({activePage, settings}) {
   switch (activePage) {
   case "LOGIN":
     return <Login />;
   case "VISUALIZATION_SPACE_LIST":
-    return <SpaceList />;
+    return settings.insightsPageLocked ? null : <SpaceList />;
   case "VISUALIZATION_SPACE_DETAIL":
-    return <SpaceDetail />;
+    return settings.insightsPageLocked ? null : <SpaceDetail />;
   case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":
