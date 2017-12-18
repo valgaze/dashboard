@@ -9,6 +9,7 @@ import ErrorBar from '../error-bar/index';
 import sessionTokenSet from '../../actions/session-token/set';
 import { accounts } from '../../client';
 import unsafeNavigateToLandingPage from '../../helpers/unsafe-navigate-to-landing-page/index';
+import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 export class AccountRegistration extends React.Component {
   constructor(props) {
@@ -72,7 +73,8 @@ export default connect(state => {
 }, dispatch => {
   return {
     onUserLoggedIn(token) {
-      dispatch(sessionTokenSet(token)).then(user => {
+      dispatch(sessionTokenSet(token)).then(data => {
+        const user = objectSnakeToCamel(data);
         unsafeNavigateToLandingPage(user.organization.settings.insightsPageLocked);
       });
     },

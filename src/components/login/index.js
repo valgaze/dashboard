@@ -12,6 +12,7 @@ import Toast from '@density/ui-toast';
 import Navbar from '@density/ui-navbar';
 
 import Mark from '@density/ui-density-mark';
+import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 export const LOGIN = 'LOGIN',
              FORGOT_PASSWORD = 'FORGOT_PASSWORD';
@@ -177,7 +178,8 @@ export class Login extends React.Component {
 export default connect(state => ({}), dispatch => {
   return {
     onUserSuccessfullyLoggedIn(token) {
-      dispatch(sessionTokenSet(token)).then(user => {
+      dispatch(sessionTokenSet(token)).then(data => {
+        const user = objectSnakeToCamel(data);
         unsafeNavigateToLandingPage(user.organization.settings.insightsPageLocked);
       });
     },

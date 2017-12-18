@@ -4,6 +4,6 @@ export default function stringToBoolean(value, defaultValue) {
   } else if (!value) { // Unset flags return default or `false`.
     return defaultValue || false;
   } else {
-    return ['true', 't'].indexOf(value.toLowerCase()) > -1;
+    return ['true', 't'].indexOf(value.toLowerCase()) >= 0;
   }
 }
