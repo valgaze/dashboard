@@ -135,6 +135,9 @@
 
 // Each input box within the main card (ie, text boxes and select boxes) has a label above it that
 // describes its function.
+.account-setup-doorway-detail-body-input-required {
+  color: #ff5454;
+}
 .account-setup-doorway-detail-body-input-label {
   display: block;
   margin-bottom: 5px;

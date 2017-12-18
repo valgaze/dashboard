@@ -40,7 +40,7 @@ export function AccountSetupDoorwayList({
 }) {
   return <div className="account-setup-doorway-list">
     <Subnav visible>
-      <SubnavItem href="#/account/setup/overview">Overview</SubnavItem>
+      <SubnavItem href="#/onboarding/overview">Overview</SubnavItem>
       <SubnavItem active >Doorways</SubnavItem>
     </Subnav>
 
@@ -87,7 +87,7 @@ export function AccountSetupDoorwayList({
                   return <li key={doorway.id}>
                     <a
                       className="account-setup-doorway-list-item"
-                      href={`#/account/setup/doorways/${doorway.id}`}
+                      href={`#/onboarding/doorways/${doorway.id}`}
                     >
                       <div className="account-setup-doorway-list-item-image-container">
                         <ImageRetry
@@ -138,7 +138,7 @@ export default connect(state => {
 }, dispatch => {
   return {
     onCreateDoorway() {
-      window.location.href = '#/account/setup/doorways/new';
+      window.location.href = '#/onboarding/doorways/new';
     },
     onHideSuccessToast() {
       dispatch(hideModal());

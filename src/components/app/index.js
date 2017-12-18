@@ -44,21 +44,21 @@ function NavbarWrapper({
         'ACCOUNT_SETUP_DOORWAY_LIST',
         'ACCOUNT_SETUP_DOORWAY_DETAIL',
       ]}
-      href="#/account/setup/overview"
+      href="#/onboarding/overview"
       onClick={closeSidebar}
-    >Unit Setup</NavbarMobileItem>,
+    >Onboarding</NavbarMobileItem>,
 
     <NavbarMobileItem
       activePage={activePage}
       pageName={['ACCOUNT_SETUP_OVERVIEW']}
-      href="#/account/setup/overview"
+      href="#/onboarding/overview"
       indent={2}
       onClick={closeSidebar}
     >Overview</NavbarMobileItem>,
     <NavbarMobileItem
       activePage={activePage}
       pageName={['ACCOUNT_SETUP_DOORWAY_LIST']}
-      href="#/account/setup/doorways"
+      href="#/onboarding/doorways"
       indent={2}
       onClick={closeSidebar}
     >Doorways</NavbarMobileItem>,
@@ -131,8 +131,8 @@ function NavbarWrapper({
         'ACCOUNT_SETUP_DOORWAY_LIST',
         'ACCOUNT_SETUP_DOORWAY_DETAIL',
       ]}
-      href="#/account/setup/overview"
-    >Unit Setup</NavbarItem>
+      href="#/onboarding/overview"
+    >Onboarding</NavbarItem>
 
     <NavbarItem
       activePage={activePage}

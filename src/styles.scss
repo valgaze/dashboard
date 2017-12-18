@@ -144,6 +144,11 @@ input[type=input], input[type=password] { &:-webkit-autofill {
   font-style: normal;
 }
 
+// TODO: back-port this into density UI
+.input-box::placeholder {
+  color: $gray;
+}
+
 //
 // Charts
 //

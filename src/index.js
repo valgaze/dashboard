@@ -144,16 +144,16 @@ router.addRoute('account/register/:slug', slug => routeTransitionAccountRegister
 router.addRoute('account/forgot-password/:token', token => routeTransitionAccountForgotPassword(token));
 
 // Onboarding flow
-// Redirect #/account/setup => #/account/setup/overview
-router.addRoute('account/setup', () => {
-  window.location.href = '#/account/setup/overview';
+// Redirect #/onboarding => #/onboarding/overview
+router.addRoute('onboarding', () => {
+  window.location.href = '#/onboarding/overview';
   // FIXME: Conduit shouldn't dispatch an action if a function returns undefined. That would let the
   // below line be removed.
   return {type: 'NOOP'};
 });
-router.addRoute('account/setup/overview', () => routeTransitionAccountSetupOverview());
-router.addRoute('account/setup/doorways', () => routeTransitionAccountSetupDoorwayList());
-router.addRoute('account/setup/doorways/:id', id => routeTransitionAccountSetupDoorwayDetail(id));
+router.addRoute('onboarding/overview', () => routeTransitionAccountSetupOverview());
+router.addRoute('onboarding/doorways', () => routeTransitionAccountSetupDoorwayList());
+router.addRoute('onboarding/doorways/:id', id => routeTransitionAccountSetupDoorwayDetail(id));
 
 // Make sure that the user is logged in prior to going to a page.
 function preRouteAuthentication() {

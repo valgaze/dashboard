@@ -11,8 +11,8 @@ export function AccountSetupOverview({user, onGetStarted}) {
   if (user.user) {
     return <div className="account-setup-overview-container">
       <Subnav visible>
-        <SubnavItem active href="#/account/setup/overview">Overview</SubnavItem>
-        <SubnavItem href="#/account/setup/doorways">Doorways</SubnavItem>
+        <SubnavItem active href="#/onboarding/overview">Overview</SubnavItem>
+        <SubnavItem href="#/onboarding/doorways">Doorways</SubnavItem>
       </Subnav>
 
       <AccountSetupHeader
@@ -30,18 +30,8 @@ export function AccountSetupOverview({user, onGetStarted}) {
 
             <ul className="account-setup-overview-body-list">
               <li>Confirming your doorway(s)</li>
-              <li>
-                Installing the unit
-                <span className="account-setup-overview-body-emphesis">
-                  (after doorway assessment)
-                </span>
-              </li>
-              <li>
-                Configuring the unit
-                <span className="account-setup-overview-body-emphesis">
-                  (after unit installation)
-                </span>
-              </li>
+              <li>Installing the unit</li>
+              <li>Configuring the unit</li>
             </ul>
 
             Once onboarding is complete, Insights will be made available in the Dashboard.
@@ -74,7 +64,7 @@ export default connect(state => {
   return {
     // Move to the doorway list page in the setup flow.
     onGetStarted() {
-      window.location.href = '#/account/setup/doorways';
+      window.location.href = '#/onboarding/doorways';
     },
   };
 })(AccountSetupOverview);

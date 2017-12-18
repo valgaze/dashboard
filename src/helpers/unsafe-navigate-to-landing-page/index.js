@@ -6,7 +6,7 @@ export default function unsafeNavigateToLandingPage(insightsPageLocked) {
     return;
   // If the insights page is locked, redirect to the onboarding flow.
   } else if (stringToBoolean(insightsPageLocked)) {
-    window.location.hash = '#/account/setup/overview';
+    window.location.hash = '#/onboarding/overview';
   // Otherwise land on the insights page
   } else {
     window.location.hash = '#/insights/spaces';

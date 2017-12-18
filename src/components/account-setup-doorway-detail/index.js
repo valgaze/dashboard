@@ -87,8 +87,8 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
     return <div className="account-setup-doorway-detail">
       <Subnav visible>
-        <SubnavItem href="#/account/setup/overview">Overview</SubnavItem>
-        <SubnavItem active href="#/account/setup/doorways">Doorways</SubnavItem>
+        <SubnavItem href="#/onboarding/overview">Overview</SubnavItem>
+        <SubnavItem active href="#/onboarding/doorways">Doorways</SubnavItem>
       </Subnav>
 
       {isCreatingNewDoorway ?
@@ -273,7 +273,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <br/>
 
             <label className="account-setup-doorway-detail-body-input-label">
-              Doorway Width
+              Doorway Width <span className="account-setup-doorway-detail-body-input-required">*</span>
               <span className="account-setup-doorway-detail-body-input-label-highlight">
                 {this.state.measurementUnit === METRIC ? '(Centimeters)' : '(Inches)'}
               </span>
@@ -288,7 +288,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
             <br/>
             <label className="account-setup-doorway-detail-body-input-label">
-              Doorway Height
+              Doorway Height <span className="account-setup-doorway-detail-body-input-required">*</span>
               <span className="account-setup-doorway-detail-body-input-label-highlight">
                 {this.state.measurementUnit === METRIC ? '(Centimeters)' : '(Inches)'}
               </span>
@@ -306,7 +306,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               className="account-setup-doorway-detail-body-input-label mounting-space"
             >Mounting space</label>
             <p className="account-setup-doorway-detail-body-section-clearance">
-              Does this doorway have at least 5in (0.13m) of clearance above the door to mount a unit?
+              (Optional) Does this doorway have at least 5in (0.13m) of clearance above the door to mount a unit?
             </p>
 
             <div className="account-setup-doorway-detail-body-clearance-radio-container">
@@ -340,7 +340,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
             </h2>
 
             <p className="account-setup-doorway-detail-body-section-clearance">
-              How will you power the unit?
+              (Optional) How will you power the unit?
             </p>
             <RadioButton
               text="Power over Ethernet (PoE)"
@@ -382,7 +382,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
                   // Once complete, scroll to top and redirect back to the main page.
                   document.body.scrollTop = document.documentElement.scrollTop = 0;
-                  window.location.href = '#/account/setup/doorways';
+                  window.location.href = '#/onboarding/doorways';
                 });
               }}
 
@@ -407,7 +407,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
                     // Once complete, scroll to top and redirect to new doorway page
                     document.body.scrollTop = document.documentElement.scrollTop = 0;
-                    window.location.href = '#/account/setup/doorways/new';
+                    window.location.href = '#/onboarding/doorways/new';
                   });
                 }}
                 disabled={!this.isValid.apply(this) || this.state.formSubmittted}
