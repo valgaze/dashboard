@@ -137,7 +137,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               <div className="account-setup-doorway-detail-body-ideal-image-container">
                 <img
                   className="account-setup-doorway-detail-body-ideal-image"
-                  src="/ideal_doorway.jpg"
+                  src="https://densityco.github.io/assets/images/ideal-doorway.a87e5b28.jpg"
                   alt="Ideal doorway"
                 />
               </div>
