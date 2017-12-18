@@ -51,6 +51,7 @@ export default class WebhookCreateModal extends React.Component {
               htmlFor="webhook-create-endpoint"
               label="Webhook URL"
               input={<InputBox
+                type="text"
                 id="webhook-create-endpoint"
                 value={this.state.endpoint}
                 onChange={e => this.setState({endpoint: e.target.value})}

@@ -23,6 +23,7 @@ export function SpaceList({
       <div className="space-list-header">
         <h2 className="space-list-header-text">Spaces</h2>
         <InputBox
+          type="text"
           className="space-list-search-box"
           placeholder="Filter Spaces ..."
           value={spaces.filters.search}

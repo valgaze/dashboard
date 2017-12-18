@@ -17,6 +17,7 @@ export default function TokenCard({token, onClickEdit}) {
     </CardHeader>
     <CardBody className="token-card-body">
       <InputBox
+        type="text"
         className="token-card-token-content"
         value={token.key}
         readOnly={true}

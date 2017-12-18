@@ -20,6 +20,7 @@ export default function WebhookCard({
     <CardBody className="webhook-card-body">
       <span className="webhook-card-endpoint-label">Payload URL</span>
       <InputBox
+        type="text"
         className="webhook-card-endpoint"
         value={webhook.endpoint}
         readOnly={true}

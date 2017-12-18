@@ -99,7 +99,12 @@ $font-size-x-small: 10px;
   font-family: 'Sailec', 'Helvetica', 'Arial', sans-serif;
 }
 
-input[type="text"], input[type="password"], input[type="email"], input[type="tel"] {
+input[type="text"],
+input[type="textarea"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="select"] {
   -webkit-appearance: none;
 }
 
