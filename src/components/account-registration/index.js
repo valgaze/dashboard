@@ -14,7 +14,7 @@ import AccountSetupHeader from '../account-setup-header/index';
 import sessionTokenSet from '../../actions/session-token/set';
 import { accounts } from '../../client';
 
-import featureFlagEnabled from '../../helpers/feature-flag-enabled/index';
+import unsafeNavigateToLandingPage from '../../helpers/unsafe-navigate-to-landing-page/index';
 
 export class AccountRegistration extends React.Component {
   constructor(props) {
@@ -127,14 +127,10 @@ export default connect(state => {
       dispatch(sessionTokenSet(token)).then(user => {
 
         // FIXME: Hardcoded feature flag. Turn this off.
-        user.organization.settings = { visualizationPageLocked: 'true' };
+        user.organization.settings = { insightsPageLocked: 'true' };
 
-        // If the visualizations page is locked, instead redirect to the onboarding flow.
-        if (featureFlagEnabled(user.organization.settings.visualizationPageLocked)) {
-          window.location.hash = '#/account/setup/overview';
-        } else {
-          window.location.hash = '#/visualization/spaces';
-        }
+        // Navigate to the appropriate landing page
+        unsafeNavigateToLandingPage(user.organization.settings.insightsPageLocked);
       });
     },
   };

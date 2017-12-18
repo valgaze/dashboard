@@ -42,6 +42,7 @@ import collectionSpacesCountChange from './actions/collection/spaces/count-chang
 
 // All the reducer and store code is in a seperate file.
 import storeFactory from './store';
+import unsafeNavigateToLandingPage from './helpers/unsafe-navigate-to-landing-page/index';
 const store = storeFactory();
 
 // ----------------------------------------------------------------------------
@@ -149,13 +150,7 @@ router.addRoute('account/setup', () => {
   // below line be removed.
   return {type: 'NOOP'};
 });
-router.addRoute('account/setup/overview', () => {
-  // FIXME: After the user registers, their token is added to the store. But, they never actually
-  // have their user information fetched. This call fetches that user information and puts it into
-  // the `user` section of the store before continuing with the onboarding process.
-  preRouteAuthentication();
-  return routeTransitionAccountSetupOverview();
-});
+router.addRoute('account/setup/overview', () => routeTransitionAccountSetupOverview());
 router.addRoute('account/setup/doorways', () => routeTransitionAccountSetupDoorwayList());
 router.addRoute('account/setup/doorways/:id', id => routeTransitionAccountSetupDoorwayDetail(id));
 
@@ -163,13 +158,9 @@ router.addRoute('account/setup/doorways/:id', id => routeTransitionAccountSetupD
 function preRouteAuthentication() {
   const loggedIn = store.getState().sessionToken !== null;
 
-  // If at the root page and logged in, redirect to the initial route.
-  if (loggedIn && ['', '#', '#/'].indexOf(window.location.hash) >= 0) {
-    window.location.hash = '#/account/setup';
-
   // If on the account registration page (the only page that doesn't require the user to be logged in)
   // then don't worry about any of this.
-  } else if (
+  if (
     window.location.hash.startsWith("#/account/register") ||
     window.location.hash.startsWith("#/account/forgot-password")
   ) {
@@ -181,6 +172,7 @@ function preRouteAuthentication() {
 
   // Otherwise, fetch the logged in user's info since there's a session token available.
   } else {
+    // Look up the user info before we can redirect to the landing page.
     return accounts.users.me().then(data => data).catch(err => {
       // Login failed! Redirect the user to the login page and remove the bad session token from
       // the reducer.
@@ -189,6 +181,7 @@ function preRouteAuthentication() {
       router.navigate('login');
     }).then(data => {
       store.dispatch(userSet(data));
+      unsafeNavigateToLandingPage(data.organization.settings.insightsPageLocked);
     });
   }
 }

@@ -36,7 +36,7 @@ export function SpaceList({
             <SpaceCard
               space={space}
               events={spaces.events[space.id]}
-              onClick={() => window.location.href = `#/visualization/spaces/${space.id}`}
+              onClick={() => window.location.href = `#/insights/spaces/${space.id}`}
             />
           </div>;
         })}

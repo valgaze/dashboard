@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { accounts } from '../../client';
 import sessionTokenSet from '../../actions/session-token/set';
+import unsafeNavigateToLandingPage from '../../helpers/unsafe-navigate-to-landing-page/index';
 
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import Button from '@density/ui-button';
@@ -176,8 +177,9 @@ export class Login extends React.Component {
 export default connect(state => ({}), dispatch => {
   return {
     onUserSuccessfullyLoggedIn(token) {
-      dispatch(sessionTokenSet(token));
-      window.location.hash = '#/account/setup';
+      dispatch(sessionTokenSet(token)).then(user => {
+        unsafeNavigateToLandingPage(user.organization.settings.insightsPageLocked);
+      });
     },
   };
 })(Login);

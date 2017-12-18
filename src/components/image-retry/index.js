@@ -43,7 +43,6 @@ export default class ImageRetry extends React.Component {
 
   render() {
     if (this.props.src && this.state.retries > 0 && this.state.mode === DONE) {
-      console.log('Done: ', this.props.src);
       return <img
         src={this.props.src}
         alt={this.props.alt}
@@ -53,10 +52,8 @@ export default class ImageRetry extends React.Component {
         onLoad={this.setProportions.bind(this)}
       />;
     } else if (this.state.mode === LOADING) {
-      console.log('Loading: ', this.props.src);
       return this.props.loadingContent || <div className="image-retry-loading"></div>;
     } else {
-      console.log('Fallback: ', this.props.src);
       return this.props.fallbackContent || <div className="image-retry-fallback"></div>;
     }
   }

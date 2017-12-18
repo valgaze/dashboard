@@ -16,7 +16,7 @@ export function SpaceDetail({space, spacesLoading, activeModal, onOpenModal, onC
         {/* Page header */}
         <div className="visualization-space-detail-header">
           <h1 className="visualization-space-detail-header-container">
-            <a href="#/visualization/spaces" className="visualization-space-detail-header-back-section">Spaces</a>
+            <a href="#/insights/spaces" className="visualization-space-detail-header-back-section">Spaces</a>
             <span className="visualization-space-detail-header-title">{space.name}</span>
           </h1>
           <div className="visualization-space-detail-header-tag">Historical</div>

@@ -5,7 +5,7 @@ import sessionTokenUnset from '../../actions/session-token/unset';
 
 import { connect } from 'react-redux';
 
-import featureFlagEnabled from '../../helpers/feature-flag-enabled/index';
+import stringToBoolean from '../../helpers/string-to-boolean/index';
 
 import TokenList from '../dev-token-list/index';
 import SpaceList from '../visualization-space-list/index';
@@ -67,16 +67,16 @@ function NavbarWrapper({
       activePage={activePage}
       pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
 
-      // Feature flag: Do not allow the user to visit the visualizations page until it has been
+      // Feature flag: Do not allow the user to visit the insights page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
       // so this page does not make sense.
-      locked={featureFlagEnabled(settings.visualizationPageLocked)}
+      locked={stringToBoolean(settings.insightsPageLocked)}
       href="#/insights/spaces"
       onClick={closeSidebar}
     >Insights</NavbarMobileItem>,
 
     /* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */
-    featureFlagEnabled(settings.environmentPageVisible) ? <NavbarMobileItem
+    stringToBoolean(settings.environmentPageVisible) ? <NavbarMobileItem
       activePage={activePage}
       pageName={['ENVIRONMENT_SPACE']}
       href="#/environment/spaces"
@@ -141,12 +141,12 @@ function NavbarWrapper({
       // Feature flag: Do not allow the user to visit the visualizations page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
       // so this page does not make sense.
-      locked={featureFlagEnabled(settings.visualizationPageLocked)}
+      locked={stringToBoolean(settings.insightsPageLocked)}
       href="#/insights/spaces"
     >Insights</NavbarItem>
 
     {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
-    {featureFlagEnabled(settings.environmentPageVisible) ? <NavbarItem
+    {stringToBoolean(settings.environmentPageVisible) ? <NavbarItem
       activePage={activePage}
       pageName={['ENVIRONMENT_SPACE']}
       href="#/environment/spaces"
