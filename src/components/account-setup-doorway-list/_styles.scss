@@ -77,16 +77,18 @@
   position: relative;
   top: 2px;
 }
-// The arrow is the last element, it just renders a blue arrow for the user to click on to move to
-// the details for that doorway.
-.account-setup-doorway-list-item-arrow {
-  font-family: 'Densicons';
-  font-size: $font-size-3;
-
-  color: $brand-primary;
-
+// The doorway status renders a small colored label (formerly this was a blue arrow)
+.account-setup-doorway-list-item-status {
+  font-size: $font-size-6;
+  font-weight: 500;
   margin-left: auto;
   margin-right: 20px;
+  height: 48px;
+  line-height: 48px;
+
+  /* Hack: adjust vertical centering of text within cell. */
+  position: relative;
+  top: 2px;
 }
 
 

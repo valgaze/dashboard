@@ -219,6 +219,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               htmlFor="account-setup-doorway-detail-body-doorway-name"
             >Doorway Name</label>
             <InputBox
+              type="text"
               className="account-setup-doorway-detail-body-input"
               placeholder="Doorway Name"
               onChange={e => this.setState({doorway: {...this.state.doorway, name: e.target.value}})}

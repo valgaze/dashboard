@@ -11,6 +11,26 @@ import Toast from '@density/ui-toast';
 import ImageRetry from '../image-retry';
 import AccountSetupHeader from '../account-setup-header/index';
 
+// Text and colors for doorway status labels
+function doorwayStatusText(status) {
+  return {
+    'legacy': 'In Production',
+    'production': 'In Production',
+    'pending': 'In Review',
+    'approved': 'Approved',
+    'declined': 'Declined'
+  }[status];
+}
+function doorwayStatusColor(status) {
+  return {
+    'legacy': '#666666',
+    'production': '#666666',
+    'pending': '#4198FF',
+    'approved': '#80CD80',
+    'declined': '#FF5454'
+  }[status];
+}
+
 export function AccountSetupDoorwayList({
   doorways,
   activeModal,
@@ -62,6 +82,8 @@ export function AccountSetupDoorwayList({
             return <CardBody>
               <ul className="account-detail-doorway-list">
                 {doorways.data.map(doorway => {
+                  const environment = doorway.environment || {};
+
                   return <li key={doorway.id}>
                     <a
                       className="account-setup-doorway-list-item"
@@ -69,7 +91,7 @@ export function AccountSetupDoorwayList({
                     >
                       <div className="account-setup-doorway-list-item-image-container">
                         <ImageRetry
-                          src={(doorway.environment || {}).insideImageUrl}
+                          src={environment.insideImageUrl}
                           alt="Doorway from inside"
                           className="account-setup-doorway-list-item-image"
                           retries={5}
@@ -80,7 +102,10 @@ export function AccountSetupDoorwayList({
                         {doorway.name}
                       </span>
 
-                      <span className="account-setup-doorway-list-item-arrow">&#59651;</span>
+                      <span
+                        className="account-setup-doorway-list-item-status"
+                        style={{ color: doorwayStatusColor(environment.status) }}
+                      >{doorwayStatusText(environment.status)}</span>
                     </a>
                   </li>;
                 })}
