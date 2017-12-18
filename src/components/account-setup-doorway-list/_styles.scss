@@ -72,6 +72,10 @@
 // The name is the second element in each doorway item.
 .account-setup-doorway-list-item-name {
   font-weight: bold;
+  width: calc(100% - 160px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   /* Hack: adjust vertical centering of text within cell. */
   position: relative;
