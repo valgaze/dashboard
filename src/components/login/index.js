@@ -9,7 +9,6 @@ import unsafeNavigateToLandingPage from '../../helpers/unsafe-navigate-to-landin
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import Button from '@density/ui-button';
 import Toast from '@density/ui-toast';
-import Navbar from '@density/ui-navbar';
 
 import Mark from '@density/ui-density-mark';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
@@ -153,7 +152,7 @@ export class Login extends React.Component {
 
   render() {
     return <div className="login">
-      <Navbar />
+
       { this.state.loading ? <div className="login-navbar-loading" /> : null }
 
       <div className="login-section">

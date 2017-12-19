@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import Mark from '@density/ui-density-mark';
 import Button from '@density/ui-button';
-import Navbar from '@density/ui-navbar';
 import InputBox from '@density/ui-input-box';
 
 import Card, { CardBody } from '@density/ui-card';
@@ -52,7 +51,6 @@ export class AccountRegistration extends React.Component {
   }
   render() {
     return <div className="account-registration">
-      <Navbar />
 
       <ErrorBar message={this.state.error} showRefresh />
 

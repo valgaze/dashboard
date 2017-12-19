@@ -11,7 +11,7 @@ import { accounts } from '../../client';
 import unsafeNavigateToLandingPage from '../../helpers/unsafe-navigate-to-landing-page/index';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
-export class AccountRegistration extends React.Component {
+export class AccountForgotPassword extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,4 +79,4 @@ export default connect(state => {
       });
     },
   };
-})(AccountRegistration);
+})(AccountForgotPassword);
