@@ -51,11 +51,6 @@
   color: $brand-primary;
 }
 
-// NOTE: The below isn't great. Seems the widths won't work out here?
-.login-form, .login-password-reset-form {
-  width: calc(100% - 22px);
-}
-
 // Show an error when there's an error on the login page.
 .login-toast {
   position: absolute;

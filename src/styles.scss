@@ -99,6 +99,7 @@ $font-size-x-small: 10px;
   font-family: 'Sailec', 'Helvetica', 'Arial', sans-serif;
 }
 
+// TODO: Should these be ported into Density UI?
 input[type="text"],
 input[type="textarea"],
 input[type="password"],
@@ -106,6 +107,7 @@ input[type="email"],
 input[type="tel"],
 input[type="select"] {
   -webkit-appearance: none;
+  box-shadow: none;
 }
 
 html {
@@ -127,7 +129,9 @@ p {
 pre {
   line-height: $line-height-base;
 }
+
 // Change autofill color in chrome to be white.
+// TODO: still necessary after adding the box-shadow rule above?
 input[type=input], input[type=password] { &:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
 } }
@@ -219,3 +223,4 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/image-retry/styles";
 @import "./components/nav-logged-in/styles";
 @import "./components/nav-logged-out/styles";
+@import "./components/input-stack/styles";

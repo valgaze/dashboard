@@ -6,7 +6,7 @@ import { accounts } from '../../client';
 import sessionTokenSet from '../../actions/session-token/set';
 import unsafeNavigateToLandingPage from '../../helpers/unsafe-navigate-to-landing-page/index';
 
-import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
+import { InputStackItem, InputStackGroup } from '../input-stack/index';
 import Button from '@density/ui-button';
 import Toast from '@density/ui-toast';
 
