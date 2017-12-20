@@ -75,7 +75,8 @@ export class AccountSetupDoorwayDetail extends React.Component {
       isNaN(window.parseFloat(this.state.inputHeight, 10)) === false &&
 
       // Ensure that doorway clearance prompt is answered
-      (this.state.doorway.environment || {}).clearance !== undefined
+      (this.state.doorway.environment || {}).clearance !== undefined &&
+      (this.state.doorway.environment || {}).clearance !== null
     )
   }
 
