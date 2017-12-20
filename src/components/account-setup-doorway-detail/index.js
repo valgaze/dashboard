@@ -72,7 +72,10 @@ export class AccountSetupDoorwayDetail extends React.Component {
 
       // Ensure that the width and height are valid (ie, not empty and numerical)
       isNaN(window.parseFloat(this.state.inputWidth, 10)) === false &&
-      isNaN(window.parseFloat(this.state.inputHeight, 10)) === false
+      isNaN(window.parseFloat(this.state.inputHeight, 10)) === false &&
+
+      // Ensure that doorway clearance prompt is answered
+      (this.state.doorway.environment || {}).clearance !== undefined
     )
   }
 
@@ -217,7 +220,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <label
               className="account-setup-doorway-detail-body-input-label"
               htmlFor="account-setup-doorway-detail-body-doorway-name"
-            >Doorway Name</label>
+            >Doorway Name <span className="account-setup-doorway-detail-body-input-required">*</span></label>
             <InputBox
               type="text"
               className="account-setup-doorway-detail-body-input"
@@ -304,9 +307,9 @@ export class AccountSetupDoorwayDetail extends React.Component {
             <br/>
             <label
               className="account-setup-doorway-detail-body-input-label mounting-space"
-            >Mounting space</label>
+            >Mounting Space <span className="account-setup-doorway-detail-body-input-required">*</span></label>
             <p className="account-setup-doorway-detail-body-section-clearance">
-              (Optional) Does this doorway have at least 5in (0.13m) of clearance above the door to mount a unit?
+              Does this doorway have at least 5in (0.13m) of clearance above the door to mount a unit?
             </p>
 
             <div className="account-setup-doorway-detail-body-clearance-radio-container">
