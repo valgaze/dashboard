@@ -174,7 +174,7 @@ function preRouteAuthentication() {
   // Otherwise, fetch the logged in user's info since there's a session token available.
   } else {
     // Look up the user info before we can redirect to the landing page.
-    return accounts.users.me().then(data => data).catch(err => {
+    return accounts.users.me().catch(err => {
       // Login failed! Redirect the user to the login page and remove the bad session token from
       // the reducer.
       store.dispatch(userError(`User not logged in. Redirecting to login page. ${err}`));
@@ -182,7 +182,12 @@ function preRouteAuthentication() {
       router.navigate('login');
     }).then(data => {
       store.dispatch(userSet(data));
-      unsafeNavigateToLandingPage(objectSnakeToCamel(data).organization.settings.insightsPageLocked);
+
+      // Navigate to the landing page if valid data was returned.
+      if (data) {
+        const camelCaseData = objectSnakeToCamel(data);
+        unsafeNavigateToLandingPage(camelCaseData.organization.settings.insightsPageLocked);
+      }
     });
   }
 }
