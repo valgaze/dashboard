@@ -64,36 +64,53 @@ export class AccountRegistration extends React.Component {
       <div className="account-registration-card-container">
         <Card className="account-registration-card">
           <CardBody>
-            <label htmlFor="account-registration-full-name">Full Name</label>
+            <label className="account-registration-header" htmlFor="account-registration-full-name">
+              Full Name
+              <span className="account-registration-header-required">*</span>
+            </label>
             <InputBox
               type="text"
               placeholder="Full Name ..."
+              className="account-registration-input"
+              id="account-registration-full-name"
               onChange={e => this.setState({fullName: e.target.value})}
               value={this.state.fullName}
             />
 
-            <label htmlFor="account-registration-nickname">Nickname</label>
+            <label className="account-registration-header" htmlFor="account-registration-nickname">Nickname</label>
             <InputBox
               type="text"
               placeholder={
                 this.state.fullName && this.state.fullName.indexOf(' ') >= 0 ? this.generateNickname.apply(this) : 'Nickname ...'
               }
+              className="account-registration-input"
+              id="account-registration-nickname"
               onChange={e => this.setState({nickname: e.target.value})}
               value={this.state.nickname}
             />
 
-            <label htmlFor="account-registration-confirm-password">Password</label>
+            <label className="account-registration-header" htmlFor="account-registration-password">
+              Password
+              <span className="account-registration-header-required">*</span>
+            </label>
             <InputBox
               type="password"
               placeholder="Password"
+              className="account-registration-input"
+              id="account-registration-password"
               onChange={e => this.setState({password: e.target.value})}
               value={this.state.password}
             />
 
-            <label htmlFor="account-registration-confirm-password">Confirm Password</label>
+            <label className="account-registration-header" htmlFor="account-registration-confirm-password">
+              Confirm Password
+              <span className="account-registration-header-required">*</span>
+            </label>
             <InputBox
               type="password"
               placeholder="Confirm password"
+              className="account-registration-input"
+              id="account-registration-confirm-password"
               onChange={e => this.setState({passwordConfirmation: e.target.value})}
               value={this.state.passwordConfirmation}
             />
