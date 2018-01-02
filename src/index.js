@@ -196,7 +196,8 @@ function preRouteAuthentication() {
 }
 preRouteAuthentication();
 
-// Set a feature flag from the console.
+// Set a feature flag from the console. THis is a debugging function and allows a developer to
+// change a feature flag at runtime.
 window.setFeatureFlag = function setFeatureFlag(flag, value) {
   const user = store.getState().user.user;
   if (!user) {

@@ -47,5 +47,6 @@
 
 // Make each input full width within the card.
 .account-registration-input {
-  width: calc(100% - 14px - 1px - 1px); /* 14px of left margin - 2px in horizontal borders */
+  width: 100%;
+  box-sizing: border-box;
 }
