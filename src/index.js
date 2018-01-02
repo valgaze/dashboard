@@ -6,13 +6,13 @@ import { core, accounts } from './client';
 import ReactGA from 'react-ga';
 
 import userSet from './actions/user/set';
-import userPush from './actions/user/push';
 import userError from './actions/user/error';
 import sessionTokenUnSet from './actions/session-token/unset';
 
 import objectSnakeToCamel from './helpers/object-snake-to-camel/index';
 import eventSource from './helpers/websocket-event-pusher/index';
 import mixpanelTrack from './helpers/mixpanel-track/index';
+import unsafeSetSettingsFlagConstructor from './helpers/unsafe-set-settings-flag/index';
 
 // The main app component that renders everything.
 import App from './components/app/index';
@@ -193,18 +193,8 @@ function preRouteAuthentication() {
 }
 preRouteAuthentication();
 
-// Set a feature flag from the console.
-window.setFeatureFlag = function setFeatureFlag(flag, value) {
-  const user = store.getState().user.user;
-  if (!user) {
-    throw new Error('Please wait for the user collection to load before changing feature flags.');
-  }
-
-  const features = { [flag]: value };
-  store.dispatch(userPush({
-    features: {...user.features, ...features},
-  }));
-}
+// Add a helper into the global namespace to allow changing of settings flags on the fly.
+window.setSettingsFlag = unsafeSetSettingsFlagConstructor(store);
 
 // Handle the route that the user is currently at.
 router.handle();
