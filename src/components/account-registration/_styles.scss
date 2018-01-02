@@ -17,14 +17,6 @@
   display: block;
 }
 
-// The second part of the form. Provide some spacing between it and the first part.
-.account-registration-password-form { margin-top: 20px; }
-
-// NOTE: The below isn't great. Seems the widths won't work out here?
-.account-registration .input-stack-group {
-  width: calc(100% - 22px);
-}
-
 .account-registration-group {
   margin-bottom: 10px;
   label {
@@ -34,4 +26,23 @@
   input {
     display: inline-block;
   }
+}
+
+// The header that is above each input box
+.account-registration-header {
+  display: block;
+  font-size: $font-size-5;
+  color: $gray-cinder;
+
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+.account-registration-header-required {
+  color: $brand-primary;
+  margin-left: 3px;
+}
+
+// Make each input full width within the card.
+.account-registration-input {
+  width: calc(100% - 14px - 1px - 1px); /* 14px of left margin - 2px in horizontal borders */
 }

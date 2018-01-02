@@ -180,9 +180,12 @@ function preRouteAuthentication() {
       store.dispatch(userError(`User not logged in. Redirecting to login page. ${err}`));
       store.dispatch(sessionTokenUnSet());
       router.navigate('login');
-    }).then(data => {
-      store.dispatch(userSet(data));
-      unsafeNavigateToLandingPage(objectSnakeToCamel(data).organization.settings.insightsPageLocked);
+    }).then(user => {
+      store.dispatch(userSet(user));
+
+      if (user) {
+        unsafeNavigateToLandingPage(objectSnakeToCamel(user).organization.settings.insightsPageLocked);
+      }
     });
   }
 }
