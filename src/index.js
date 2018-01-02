@@ -181,10 +181,15 @@ function preRouteAuthentication() {
       store.dispatch(sessionTokenUnSet());
       router.navigate('login');
     }).then(user => {
-      store.dispatch(userSet(user));
-
       if (user) {
+        // A valid user object was returned, so add it to the store.
+        store.dispatch(userSet(user));
+
+        // Then, navigate the user to the landing page.
         unsafeNavigateToLandingPage(objectSnakeToCamel(user).organization.settings.insightsPageLocked);
+      } else {
+        // User token expired (and no user object was returned) so redirect to login page.
+        router.navigate('login');
       }
     });
   }
