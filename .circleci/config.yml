@@ -65,7 +65,7 @@ jobs:
               echo "* BRANCH = $BRANCH"
 
               echo "* Adding homepage to package.json for create-react-app deploy..."
-              jq ".homepage = \"https://densityco.github.io/dashboard/$BRANCH\"" package.json > /tmp/pkg
+              jq ".homepage = \"https://dashboard.density.rodeo/branches/$BRANCH\"" package.json > /tmp/pkg
               mv /tmp/pkg package.json
 
               echo "* Building dashboard..."
