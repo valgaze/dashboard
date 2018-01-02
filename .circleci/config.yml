@@ -71,21 +71,14 @@ jobs:
               echo "* Building dashboard..."
               npm run build
 
-              echo "* Pulling seperate copy to check out gh-pages..."
-              git clone git@github.com:densityco/dashboard.git deploy_dashboard/
-              cd deploy_dashboard/
-              git checkout gh-pages
+              echo "* Copying to dashboard..."
+              sudo apt-get update
+              sudo apt-get install -y awscli
+              aws s3 sync build/ s3://dashboard.density.rodeo/branches/$BRANCH --region us-east-1
 
-              echo "* Copying build to github pages directory..."
-              rm -rf $BRANCH
-              mv ../build $BRANCH/
-              git add $BRANCH/
-
-              echo "* Pushing..."
-              git config user.email "engineering@density.io"
-              git config user.name "CI"
-              git commit --allow-empty -m "Deploy branch $BRANCH to Github Pages [ci skip]"
-              git push origin gh-pages --force
+              echo "***************************"
+              echo "* Preview URL: https://dashboard.density.rodeo/branches/$BRANCH"
+              echo "***************************"
 
               # Post a link to the branch as a comment in the PR
               echo "* Pull requests this commit is part of: $CI_PULL_REQUESTS"
@@ -99,7 +92,7 @@ jobs:
                   | grep density-machine-user)" ]; then
 
                   curl -X POST \
-                  -d "{\"body\": \"Here is a link to the built dashboard: https://densityco.github.io/dashboard/$BRANCH\"}" \
+                  -d "{\"body\": \"Here is a link to the built dashboard: https://dashboard.density.rodeo/branches/$BRANCH\"}" \
                   -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
                   https://api.github.com/repos/densityco/dashboard/issues/$num/comments
 
