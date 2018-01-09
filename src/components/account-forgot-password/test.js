@@ -72,6 +72,9 @@ describe('forgot-password', function() {
     assert.equal(onUserLoggedIn.callCount, 1);
 
     // Verify that the request to accounts api had the correct payload
-    // assert.deepEqual(global.fetch.firstCall.args, [{}]);
+    assert.equal(
+      global.fetch.firstCall.args[1].body, 
+      '{"password_reset_token":"rpd_XXX","new_password":"p@ssw0rd","confirm_password":"p@ssw0rd"}'
+    );
   });
 });
