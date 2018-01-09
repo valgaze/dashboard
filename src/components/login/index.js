@@ -169,7 +169,7 @@ export class Login extends React.Component {
       <div className="login-section">
         {/* Render a toast if the password reset process was successful */}
         {this.state.referredFromForgotPassword ? <Toast
-          className="login-toast"
+          className="login-toast login-toast-forgot-password"
           type="success"
           icon={<span className="login-toast-icon">&#xe908;</span>}
         >

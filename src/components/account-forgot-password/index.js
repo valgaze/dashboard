@@ -62,6 +62,7 @@ export class AccountForgotPassword extends React.Component {
         onClick={this.onSubmit.bind(this)}
         disabled={this.state.loading || !(this.state.password.length > 0 && this.state.password === this.state.passwordConfirmation)}
         size="large"
+        className="account-forgot-password-submit-button"
       >Update Password</Button>
     </div>;
   }
