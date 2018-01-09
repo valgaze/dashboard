@@ -173,7 +173,7 @@ export class Login extends React.Component {
           type="success"
           icon={<span className="login-toast-icon">&#xe908;</span>}
         >
-          <p>Password reset successful. Login with your new credentials to use the Density Dashboard.</p>
+          <p>Password reset successful, log in using your new credentials.</p>
         </Toast> : null}
 
         {/* Render any errors with previous login attempts */}
