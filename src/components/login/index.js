@@ -25,7 +25,18 @@ export class Login extends React.Component {
       password: '',
       loading: false,
       error: null,
+
+      // If we were just at the forgot password page, then show a popup to the user telling them
+      // that their password reset was successful.
+      referredFromForgotPassword: window.localStorage && window.localStorage.referredFromForgotPassword === 'true',
     };
+
+    // Also, unset that forgot password referer flag now that it has been noted into the state of
+    // the login page component (on future page loads, the forgot password page is no longer the
+    // referrer)
+    if (window.localStorage && window.localStorage.referredFromForgotPassword) {
+      delete window.localStorage.referredFromForgotPassword;
+    }
   }
 
   isLoginFormValid() {
@@ -156,6 +167,14 @@ export class Login extends React.Component {
       { this.state.loading ? <div className="login-navbar-loading" /> : null }
 
       <div className="login-section">
+        {/* Render a toast if the password reset process was successful */}
+        {this.state.referredFromForgotPassword ? <Toast
+          className="login-toast"
+          type="success"
+          icon={<span className="login-toast-icon">&#xe908;</span>}
+        >
+          <p>Password reset successful. Login with your new credentials to use the Density Dashboard.</p>
+        </Toast> : null}
 
         {/* Render any errors with previous login attempts */}
         {this.state.error ? <Toast className="login-toast" type="danger" icon={<span className="login-toast-icon">&#xe928;</span>}>

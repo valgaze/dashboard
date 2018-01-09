@@ -6,22 +6,21 @@ import Mark from '@density/ui-density-mark';
 import { InputStackItem, InputStackGroup } from '@density/ui-input-stack';
 import ErrorBar from '../error-bar/index';
 
-import sessionTokenSet from '../../actions/session-token/set';
 import { accounts } from '../../client';
-import unsafeNavigateToLandingPage from '../../helpers/unsafe-navigate-to-landing-page/index';
-import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 export class AccountForgotPassword extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       error: null,
+      loading: false,
 
       password: '',
       passwordConfirmation: '',
     };
   }
   onSubmit() {
+    this.setState({loading: true});
     return accounts.users.password_reset({
       password_reset_token: this.props.forgotPasswordToken,
       new_password: this.state.password,
@@ -29,7 +28,7 @@ export class AccountForgotPassword extends React.Component {
     }).then(response => {
       return this.props.onUserLoggedIn(response.session_token);
     }).catch(err => {
-      this.setState({error: err.toString()});
+      this.setState({error: err.toString(), loading: false});
     });
   }
 
@@ -61,7 +60,7 @@ export class AccountForgotPassword extends React.Component {
 
       <Button
         onClick={this.onSubmit.bind(this)}
-        disabled={!(this.state.password.length > 0 && this.state.password === this.state.passwordConfirmation)}
+        disabled={this.state.loading || !(this.state.password.length > 0 && this.state.password === this.state.passwordConfirmation)}
         size="large"
       >Update Password</Button>
     </div>;
@@ -72,11 +71,13 @@ export default connect(state => {
   return {forgotPasswordToken: state.accountForgotPassword};
 }, dispatch => {
   return {
-    onUserLoggedIn(token) {
-      dispatch(sessionTokenSet(token)).then(data => {
-        const user = objectSnakeToCamel(data);
-        unsafeNavigateToLandingPage(user.organization.settings.insightsPageLocked);
-      });
+    onUserLoggedIn() {
+      // Set a value in localstorage to indicate that the user just reset their password. This
+      // allows us to display a sucess popup on the login page after redirecting.
+      window.localStorage.referredFromForgotPassword = 'true';
+
+      // Reload the page, and navigate to the login page.
+      window.location.href = '#/login';
     },
   };
 })(AccountForgotPassword);
