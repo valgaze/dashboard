@@ -180,13 +180,16 @@ function preRouteAuthentication() {
       store.dispatch(userError(`User not logged in. Redirecting to login page. ${err}`));
       store.dispatch(sessionTokenUnSet());
       router.navigate('login');
-    }).then(data => {
-      store.dispatch(userSet(data));
+    }).then(user => {
+      if (user) {
+        // A valid user object was returned, so add it to the store.
+        store.dispatch(userSet(user));
 
-      // Navigate to the landing page if valid data was returned.
-      if (data) {
-        const camelCaseData = objectSnakeToCamel(data);
-        unsafeNavigateToLandingPage(camelCaseData.organization.settings.insightsPageLocked);
+        // Then, navigate the user to the landing page.
+        unsafeNavigateToLandingPage(objectSnakeToCamel(user).organization.settings.insightsPageLocked);
+      } else {
+        // User token expired (and no user object was returned) so redirect to login page.
+        router.navigate('login');
       }
     });
   }
