@@ -99,9 +99,9 @@ export default connect(state => {
     activePage: state.activePage,
     settings: (
       state.user &&
-      state.user.user &&
-      state.user.user.organization &&
-      state.user.user.organization.settings
+      state.user.data &&
+      state.user.data.organization &&
+      state.user.data.organization.settings
     ) || {},
     user: state.user
   };

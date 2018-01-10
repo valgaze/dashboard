@@ -3,7 +3,7 @@ import userPush from '../../actions/user/push';
 export default store => {
 
   return function setSettingsFlag(flag, value) {
-    const user = store.getState().user.user;
+    const user = store.getState().user.data;
     if (!user) {
       throw new Error('Please wait for the user collection to load before changing settings flags.');
     }

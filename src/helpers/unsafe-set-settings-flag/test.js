@@ -7,7 +7,7 @@ describe('set-settings-flag', function() {
     const store = {
       getState: sinon.stub().returns({
         user: {
-          user: {
+          data: {
             id: `usr_123`,
             full_name: `John Smith`,
             email: `foo@example.com`,
@@ -48,7 +48,7 @@ describe('set-settings-flag', function() {
     const store = {
       getState: sinon.stub().returns({
         user: {
-          user: null, /* no user data loaded yet */
+          data: null, /* no user data loaded yet */
         },
       }),
       dispatch: sinon.spy(),
