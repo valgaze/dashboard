@@ -13,9 +13,9 @@ const initialState = {
 export function user(state=initialState, action) {
   switch (action.type) {
   case USER_SET:
-    return {...state, user: objectSnakeToCamel(action.data)};
+    return {...state, data: objectSnakeToCamel(action.data)};
   case USER_PUSH:
-    return {...state, user: {...state.user, ...objectSnakeToCamel(action.item)}};
+    return {...state, data: {...state.user, ...objectSnakeToCamel(action.item)}};
   default:
     return state;
   }

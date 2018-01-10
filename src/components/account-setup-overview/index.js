@@ -8,7 +8,7 @@ import Subnav, { SubnavItem } from '../subnav/index';
 import AccountSetupHeader from '../account-setup-header/index';
 
 export function AccountSetupOverview({user, onGetStarted}) {
-  if (user.user) {
+  if (user.data) {
     return <div className="account-setup-overview-container">
       <Subnav visible>
         <SubnavItem active href="#/onboarding/overview">Overview</SubnavItem>
@@ -16,7 +16,7 @@ export function AccountSetupOverview({user, onGetStarted}) {
       </Subnav>
 
       <AccountSetupHeader
-        greeter={`Welcome, ${user.user.nickname || user.user.fullName}`}
+        greeter={`Welcome, ${user.data.nickname || user.data.fullName}`}
         detail="Let's prep your space for installation."
       />
 
