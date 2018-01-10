@@ -157,4 +157,15 @@ describe('Login page', function() {
     // Make sure an error toast is visible.
     assert.equal(component.find('.login-toast.toast-danger').length, 1);
   });
+
+  it('shows a toast when referred to from the forgot password page', function() {
+    // Set a global flag in localstorage. This would be set in the previous page by the
+    // `ForgotPassword` component prior to redirecting to the login page.
+    window.localStorage = {referredFromForgotPassword: 'true'};
+
+    const component = mount(<Login />);
+
+    // Make sure a forgot password success toast is visible.
+    assert.equal(component.find('.login-toast-forgot-password').length, 1);
+  });
 });
