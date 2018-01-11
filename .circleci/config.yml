@@ -6,6 +6,8 @@ jobs:
       - image: circleci/node:8.9
     steps:
       - checkout
+      - restore_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
       - run:
           name: "Print out versions"
           command: |
@@ -22,11 +24,19 @@ jobs:
       - run:
           name: "Run tests"
           command: yarn test
+      - save_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
+          paths:
+            - "./node_modules"
+
 
   branch-preview:
     docker:
       - image: circleci/node:8.9
     steps:
+      - checkout
+      - restore_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
       - run:
           name: "Set branch-preview url in package.json"
           command: |
@@ -58,6 +68,9 @@ jobs:
     docker:
       - image: circleci/node:8.9
     steps:
+      - checkout
+      - restore_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
       - run:
           name: "Build staging dashboard"
           command: | 
@@ -84,6 +97,9 @@ jobs:
     docker:
       - image: circleci/node:8.9
     steps:
+      - checkout
+      - restore_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
       - run:
           name: "Build production dashboard"
           command: | 
@@ -120,16 +136,15 @@ workflows:
 
       # Wait for someone to approve the change to move it into production
       - hold-production:
-        type: approval
-        requires:
-          - build
-          - staging
+          type: approval
+          requires:
+            - staging
 
       - production:
-        requires:
-          - build
-          - staging
-          - hold-production
-        filters:
-          branches:
-            only: trunk
+          requires:
+            - build
+            - staging
+            - hold-production
+          filters:
+            branches:
+              only: trunk
