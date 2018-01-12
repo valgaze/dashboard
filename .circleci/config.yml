@@ -3,9 +3,17 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:6.11
+      - image: circleci/node:8.9
     steps:
       - checkout
+      - restore_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
+      - run:
+          name: "Print out versions"
+          command: |
+            echo "node -v = $(node -v)"
+            echo "npm -v = $(npm -v)"
+            echo "yarn --version = $(yarn --version)"
       - run:
           name: "Add private token to npmrc"
           command: echo "//npmregistry.density.rodeo/:_authToken=${PRIVATE_NPM_TOKEN}" >> ~/.npmrc
@@ -15,87 +23,134 @@ jobs:
       - run:
           name: "Run tests"
           command: yarn test
+      - save_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
+          paths:
+            - "./node_modules"
+
+  preview:
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - checkout
+      - restore_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
       - run:
-          name: "Build dashboard"
+          name: "Set preview url in package.json"
           command: |
-            echo "node -v = $(node -v)"
-            echo "npm -v = $(npm -v)"
-            echo "yarn --version = $(yarn --version)"
+            jq ".homepage = \"https://dashboard.density.rodeo/preview/${CIRCLE_SHA1}\"" package.json > /tmp/pkg
+            mv /tmp/pkg package.json
+      - run:
+          name: "Build preview dashboard"
+          command: | 
+            REACT_APP_ENVIRONMENT="staging" \
+            NODE_ENV=production \
+            yarn build
+      - run:
+          name: "Push preview dashboard"
+          command: |
+            echo "* Installing amazon's cli..."
+            sudo apt-get update
+            sudo apt-get install -y awscli
 
-            if [ "$CIRCLE_BRANCH" == "master" ]; then
-              # Build dashboard in production
-              echo "* Building production dashboard..."
+            echo "* Pushing to S3..."
+            aws s3 sync build/ s3://dashboard.density.rodeo/preview/${CIRCLE_SHA1} --region us-east-1
+      - run:
+          name: "Post status to Github commit with link to preview dashboard."
+          command: |
+            curl -X POST \
+            -d "{\"state\":\"success\", \"context\": \"ci/preview\", \"description\": \"Preview build generated!\", \"target_url\": \"https://dashboard.density.rodeo/preview/${CIRCLE_SHA1}\"}" \
+            -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
+            https://api.github.com/repos/densityco/dashboard/statuses/${CIRCLE_SHA1}
 
-              # NOTE: These are not secrets, they're public identifiers that are built into the
-              # final webapp.
-              REACT_APP_MIXPANEL_TOKEN="eb87b138bbb5d556fcf53bebac24b935" \
-              REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
-              REACT_APP_ENVIRONMENT="production" \
-              NODE_ENV=production \
-              yarn build
+  staging:
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - checkout
+      - restore_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
+      - run:
+          name: "Build staging dashboard"
+          command: | 
+            # NOTE: These are not secrets, they're public identifiers that are built into the
+            # final webapp.
+            REACT_APP_MIXPANEL_TOKEN="eb87b138bbb5d556fcf53bebac24b935" \
+            REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
+            REACT_APP_ENVIRONMENT="staging" \
+            NODE_ENV=production \
+            yarn build
+      - run:
+          name: "Push staging dashboard"
+          command: | 
+            echo "* Installing amazon's cli..."
+            sudo apt-get update
+            sudo apt-get install -y awscli
 
-              echo "* Installing amazon's cli..."
-              sudo apt-get update
-              sudo apt-get install -y awscli
+            echo "* Copying to S3..."
+            aws s3 sync build/ s3://dashboard.density.rodeo/ --region us-east-1
 
-              echo "* Copying to S3..."
-              aws s3 sync build/ s3://dashboard.density.io/ --region us-east-1
-            elif [ "$CIRCLE_BRANCH" == "staging" ]; then
-              # Build dashboard in staging
-              echo "* Building staging dashboard..."
+  production:
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - checkout
+      - restore_cache:
+          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
+      - run:
+          name: "Build production dashboard"
+          command: | 
+            # NOTE: These are not secrets, they're public identifiers that are built into the
+            # final webapp.
+            REACT_APP_MIXPANEL_TOKEN="eb87b138bbb5d556fcf53bebac24b935" \
+            REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
+            REACT_APP_ENVIRONMENT="production" \
+            NODE_ENV=production \
+            yarn build
+      - run:
+          name: "Push production dashboard"
+          command: | 
+            echo "* Installing amazon's cli..."
+            sudo apt-get update
+            sudo apt-get install -y awscli
 
-              # NOTE: These are not secrets, they're public identifiers that are built into the
-              # final webapp.
-              REACT_APP_MIXPANEL_TOKEN="eb87b138bbb5d556fcf53bebac24b935" \
-              REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
-              REACT_APP_ENVIRONMENT="staging" \
-              NODE_ENV=production \
-              yarn build
+            echo "* Copying to S3..."
+            aws s3 sync build/ s3://dashboard.density.io/ --region us-east-1
 
-              echo "* Installing amazon's cli..."
-              sudo apt-get update
-              sudo apt-get install -y awscli
 
-              echo "* Copying to S3..."
-              aws s3 sync build/ s3://dashboard.density.rodeo/ --region us-east-1
-            else
-              # Build dashboard for an arbitrary branch
-              echo "* Finding / generating branch folder with uuid."
-              BRANCH="$(echo $CIRCLE_BRANCH | tr '/' '-')"
-              echo "* BRANCH = $BRANCH"
 
-              echo "* Adding homepage to package.json for create-react-app deploy..."
-              jq ".homepage = \"https://dashboard.density.rodeo/branches/$BRANCH\"" package.json > /tmp/pkg
-              mv /tmp/pkg package.json
+workflows:
+  version: 2
+  build-test-and-approval-deploy:
+    jobs:
+      - build
 
-              echo "* Building dashboard..."
-              npm run build
+      # For all non-trunk branches, build/deploy to `https://dashboard.density.rodeo/branches/BRANCH`
+      - preview:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: trunk
+      # Trunk is built and deployed to `https://dashboard.density.rodeo`
+      - staging:
+          requires:
+            - build
+          filters:
+            branches:
+              only: trunk
 
-              echo "* Copying to dashboard..."
-              sudo apt-get update
-              sudo apt-get install -y awscli
-              aws s3 sync build/ s3://dashboard.density.rodeo/branches/$BRANCH --region us-east-1
+      # Wait for someone to approve the change to move it into production
+      - hold-production:
+          type: approval
+          requires:
+            - staging
 
-              echo "***************************"
-              echo "* Preview URL: https://dashboard.density.rodeo/branches/$BRANCH"
-              echo "***************************"
-
-              # Post a link to the branch as a comment in the PR
-              echo "* Pull requests this commit is part of: $CI_PULL_REQUESTS"
-              export IFS=","
-              for pr in $CI_PULL_REQUESTS; do
-                num="$(echo $pr | awk -F'/' '{ print $NF }')"
-                if [ -z \
-                  "$(curl -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
-                  https://api.github.com/repos/densityco/internal-dashboard/issues/$num/comments \
-                  | jq .[].user.login \
-                  | grep density-machine-user)" ]; then
-
-                  curl -X POST \
-                  -d "{\"body\": \"Here is a link to the built dashboard: https://dashboard.density.rodeo/branches/$BRANCH\"}" \
-                  -H "Authorization: Bearer $GITHUB_MACHINE_USER_TOKEN" \
-                  https://api.github.com/repos/densityco/dashboard/issues/$num/comments
-
-                fi
-              done
-            fi
+      - production:
+          requires:
+            - build
+            - staging
+            - hold-production
+          filters:
+            branches:
+              only: trunk
