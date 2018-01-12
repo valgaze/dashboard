@@ -6,13 +6,13 @@ import { core, accounts } from './client';
 import ReactGA from 'react-ga';
 
 import userSet from './actions/user/set';
-import userPush from './actions/user/push';
 import userError from './actions/user/error';
 import sessionTokenUnSet from './actions/session-token/unset';
 
 import objectSnakeToCamel from './helpers/object-snake-to-camel/index';
 import eventSource from './helpers/websocket-event-pusher/index';
 import mixpanelTrack from './helpers/mixpanel-track/index';
+import unsafeSetSettingsFlagConstructor from './helpers/unsafe-set-settings-flag/index';
 
 // The main app component that renders everything.
 import App from './components/app/index';
@@ -174,32 +174,30 @@ function preRouteAuthentication() {
   // Otherwise, fetch the logged in user's info since there's a session token available.
   } else {
     // Look up the user info before we can redirect to the landing page.
-    return accounts.users.me().then(data => data).catch(err => {
+    return accounts.users.me().catch(err => {
       // Login failed! Redirect the user to the login page and remove the bad session token from
       // the reducer.
       store.dispatch(userError(`User not logged in. Redirecting to login page. ${err}`));
       store.dispatch(sessionTokenUnSet());
       router.navigate('login');
-    }).then(data => {
-      store.dispatch(userSet(data));
-      unsafeNavigateToLandingPage(objectSnakeToCamel(data).organization.settings.insightsPageLocked);
+    }).then(user => {
+      if (user) {
+        // A valid user object was returned, so add it to the store.
+        store.dispatch(userSet(user));
+
+        // Then, navigate the user to the landing page.
+        unsafeNavigateToLandingPage(objectSnakeToCamel(user).organization.settings.insightsPageLocked);
+      } else {
+        // User token expired (and no user object was returned) so redirect to login page.
+        router.navigate('login');
+      }
     });
   }
 }
 preRouteAuthentication();
 
-// Set a feature flag from the console.
-window.setFeatureFlag = function setFeatureFlag(flag, value) {
-  const user = store.getState().user.user;
-  if (!user) {
-    throw new Error('Please wait for the user collection to load before changing feature flags.');
-  }
-
-  const features = { [flag]: value };
-  store.dispatch(userPush({
-    features: {...user.features, ...features},
-  }));
-}
+// Add a helper into the global namespace to allow changing of settings flags on the fly.
+window.setSettingsFlag = unsafeSetSettingsFlagConstructor(store);
 
 // Handle the route that the user is currently at.
 router.handle();
