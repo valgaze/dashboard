@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import stringToBoolean from '../../helpers/string-to-boolean/index';
 import sessionTokenUnset from '../../actions/session-token/unset';
 
 import { connect } from 'react-redux';
@@ -67,9 +68,9 @@ function ActivePage({activePage, settings}) {
   case "LOGIN":
     return <Login />;
   case "VISUALIZATION_SPACE_LIST":
-    return settings.insightsPageLocked ? null : <SpaceList />;
+    return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceList />;
   case "VISUALIZATION_SPACE_DETAIL":
-    return settings.insightsPageLocked ? null : <SpaceDetail />;
+    return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceDetail />;
   case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":

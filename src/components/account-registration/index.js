@@ -142,6 +142,7 @@ export default connect(state => {
     onUserLoggedIn(token) {
       dispatch(sessionTokenSet(token)).then(data => {
         const user = objectSnakeToCamel(data);
+        window.location.hash = '';
         unsafeNavigateToLandingPage(user.organization.settings.insightsPageLocked);
       });
     },
