@@ -89,7 +89,7 @@ jobs:
 
             echo "* Copying to S3..."
             aws s3 sync build/ s3://dashboard.density.rodeo/ --region us-east-1
-            aws s3 cp build/index.html s3://dashboard.density.rodeo/index.html --region us-east-1 --metadata '{"cache-control":"no-cache"}'
+            aws s3 cp build/index.html s3://dashboard.density.rodeo/index.html --region us-east-1 --cache-control "no-cache"
 
   production:
     docker:
@@ -117,7 +117,7 @@ jobs:
 
             echo "* Copying to S3..."
             aws s3 sync build/ s3://dashboard.density.io/ --region us-east-1
-            aws s3 cp build/index.html s3://dashboard.density.io/index.html --region us-east-1 --metadata '{"cache-control":"no-cache"}'
+            aws s3 cp build/index.html s3://dashboard.density.io/index.html --region us-east-1 --cache-control "no-cache"
 
 
 
