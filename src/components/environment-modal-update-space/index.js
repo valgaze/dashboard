@@ -9,7 +9,7 @@ import Popover from '@density/ui-popover';
 
 import ModalHeaderActionButton from '../modal-header-action-button/index';
 import FormLabel from '../form-label/index';
-import generateLocalResetTimeChoices from '../../helpers/generate-local-reset-time-choices/index';
+import generateResetTimeChoices from '../../helpers/generate-reset-time-choices/index';
 
 export default class EnvironmentModalUpdateSpace extends React.Component {
   constructor(props) {
@@ -76,8 +76,8 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
                 value={this.state.dailyReset}
                 onChange={e => this.setState({dailyReset: e.target.value})}
               >
-                {generateLocalResetTimeChoices(this.state.timeZone).map(({localTime, utc}) =>
-                  <option key={utc} value={utc}>{localTime}</option>)}
+                {generateResetTimeChoices()
+                  .map(({value, display}) => <option key={value} value={value}>{display}</option>)}
               </InputBox>}
             />
 
@@ -129,10 +129,10 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
         <FormLabel
           htmlFor="update-space-daily-reset"
           label="Daily Reset"
-          input={<span>{(function(timeZone, dailyReset) {
-            const resetTime = generateLocalResetTimeChoices(timeZone).find(i => i.utc === dailyReset)
-            return resetTime ? resetTime.localTime : `${dailyReset} UTC`;
-          })(this.state.timeZone, this.state.dailyReset)}</span>}
+          input={<span>{(function(dailyReset) {
+            const resetTime = generateResetTimeChoices().find(i => i.value === dailyReset)
+            return resetTime ? resetTime.display : dailyReset;
+          })(this.state.dailyReset)}</span>}
           editable={false}
         />
 

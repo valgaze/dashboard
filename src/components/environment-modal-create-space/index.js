@@ -6,7 +6,7 @@ import Card, { CardHeader, CardLoading, CardBody } from '@density/ui-card';
 import { decode } from 'ent';
 
 import FormLabel from '../form-label/index';
-import generateLocalResetTimeChoices from '../../helpers/generate-local-reset-time-choices/index';
+import generateResetTimeChoices from '../../helpers/generate-reset-time-choices/index';
 
 export default class EnvironmentModalCreateSpace extends React.Component {
   constructor(props) {
@@ -63,10 +63,8 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 disabled={this.state.timeZone.length === 0}
                 onChange={e => this.setState({dailyReset: e.target.value})}
               >
-                {this.state.timeZone ?
-                  generateLocalResetTimeChoices(this.state.timeZone)
-                    .map(({localTime, utc}) => <option key={utc} value={utc}>{localTime}</option>)
-                : null}
+                {generateResetTimeChoices()
+                  .map(({value, display}) => <option key={value} value={value}>{display}</option>)}
               </InputBox>}
             />
 
