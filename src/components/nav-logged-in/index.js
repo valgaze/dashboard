@@ -118,6 +118,8 @@ export default function NavLoggedIn({
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
       // so this page does not make sense.
       locked={stringToBoolean(settings.insightsPageLocked)}
+      lockedReason="Insights will be unlocked once your units are configured."
+
       href="#/insights/spaces"
     >Insights</NavbarItem>
 
