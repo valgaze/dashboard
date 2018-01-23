@@ -54,7 +54,8 @@ jobs:
             sudo apt-get install -y awscli
 
             echo "* Pushing to S3..."
-            aws s3 sync build/ s3://dashboard.density.rodeo/preview/${CIRCLE_SHA1} --region us-east-1
+            aws s3 sync build/ s3://dashboard.density.rodeo/preview/${CIRCLE_SHA1}/ --region us-east-1
+            aws s3 cp build/index.html s3://dashboard.density.rodeo/preview/${CIRCLE_SHA1}/index.html --region us-east-1 --cache-control "no-cache"
       - run:
           name: "Post status to Github commit with link to preview dashboard."
           command: |
@@ -127,7 +128,7 @@ workflows:
     jobs:
       - build
 
-      # For all non-trunk branches, build/deploy to `https://dashboard.density.rodeo/branches/BRANCH`
+      # For all non-trunk pushes, build/deploy to `https://dashboard.density.rodeo/preview/SHA`
       - preview:
           requires:
             - build
