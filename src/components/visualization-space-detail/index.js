@@ -6,7 +6,15 @@ import TwentyFourHourCard from '../visualization-space-detail-24-hour-chart/inde
 import DailyMetricsCard from '../visualization-space-detail-daily-metrics-card/index';
 import RawEventsCard from '../visualization-space-detail-raw-events-card/index';
 
-export function SpaceDetail({space, spacesLoading, activeModal, onOpenModal, onCloseModal}) {
+export function SpaceDetail({
+  space,
+  spacesLoading,
+  spacesError,
+
+  activeModal,
+  onOpenModal,
+  onCloseModal,
+}) {
   if (space) {
     return <div className="visualization-space-detail">
       {/* Real time bar */}
@@ -42,8 +50,10 @@ export function SpaceDetail({space, spacesLoading, activeModal, onOpenModal, onC
     </div>;
   } else if (spacesLoading) {
     return <div className="visualization-space-detail-loading">Loading Space...</div>;
+  } else if (!space && !spacesLoading) {
+    return <div className="visualization-space-detail-loading">This space doesn't exist.</div>;
   } else {
-    return <span>This space doesn't exist.</span>;
+    return <div className="visualization-space-detail-loading">{spacesError}</div>;
   }
 }
 
@@ -51,6 +61,7 @@ export default connect(state => {
   return {
     space: state.spaces.data.find(space => space.id === state.spaces.selected),
     spacesLoading: state.spaces.loading,
+    spacesError: state.spaces.error,
   };
 }, dispatch => {
   return {};

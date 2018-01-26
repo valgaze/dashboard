@@ -12,6 +12,7 @@ import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
 
 import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
+import { ROUTE_TRANSITION_VISUALIZATION_SPACE_LIST } from '../../actions/route-transition/visualization-space-list';
 import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
@@ -101,6 +102,8 @@ export default function spaces(state=initialState, action) {
   // When the user changes the active space, update it in the store.
   case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
     return {...state, error: null, selected: action.id};
+  case ROUTE_TRANSITION_VISUALIZATION_SPACE_LIST:
+    return {...state, error: null};
 
   // Also, when a modal is shown or hidden, clear the error from the state.
   case SHOW_MODAL:
