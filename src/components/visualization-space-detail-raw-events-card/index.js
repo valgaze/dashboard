@@ -56,7 +56,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
 
     // Add timezone offset to both start and end times prior to querying for the count.
     const startTime = moment.utc(this.state.startDate).tz(space.timeZone).startOf('day');
-    const endTime = moment.utc(this.state.endDate).tz(space.timeZone).startOf('day');
+    const endTime = moment.utc(this.state.endDate).tz(space.timeZone).endOf('day');
 
     return core.spaces.events({
       id: space.id,
@@ -213,7 +213,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           <div className="visualization-space-detail-raw-events-card-date-picker">
             <DateRangePicker
               startDate={moment.utc(this.state.startDate).tz(space.timeZone).startOf('day')}
-              endDate={moment.utc(this.state.endDate).tz(space.timeZone).startOf('day')}
+              endDate={moment.utc(this.state.endDate).tz(space.timeZone).endOf('day')}
               onChange={({startDate, endDate}) => {
                 // Update the start and end date with the values selected.
                 this.setState({
