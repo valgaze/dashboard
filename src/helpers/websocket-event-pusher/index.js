@@ -1,6 +1,8 @@
 import { EventEmitter } from 'events';
 import objectSnakeToCamel from '../object-snake-to-camel/index';
 
+import { core } from '../../client';
+
 // If disconnected, try to connect at minimum this often.
 const MINIMUM_CONNECTION_INTERVAL = 5000;
 
@@ -9,14 +11,16 @@ let ws;
 const events = new EventEmitter();
 export function connect(WebSocket) {
   if (WebSocket && host && token) {
-    ws = new WebSocket(`${host}?token=${token}`);
-    ws.onopen = () => events.emit('connected');
+    return core.sockets.create().then(({url}) => {
+      ws = new WebSocket(url);
+      ws.onopen = () => events.emit('connected');
 
-    // Currently, the only events are space updates.
-    ws.onmessage = e => events.emit('space', objectSnakeToCamel(JSON.parse(e.data)));
+      // Currently, the only events are space updates.
+      ws.onmessage = e => events.emit('space', objectSnakeToCamel(JSON.parse(e.data)));
 
-    // When connection disconnects, reconnect after a delay.
-    ws.onclose = () => setTimeout(() => connect(WebSocket), MINIMUM_CONNECTION_INTERVAL);
+      // When connection disconnects, reconnect after a delay.
+      ws.onclose = () => setTimeout(() => connect(WebSocket), MINIMUM_CONNECTION_INTERVAL);
+    });
   } else {
     return false;
   }
