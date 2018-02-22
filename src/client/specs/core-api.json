@@ -315,7 +315,7 @@
     "sockets": {
       "create": {
         "method": "POST",
-        "url": "{{{core}}}/sockets/",
+        "url": "{{{core}}}/sockets",
         "desc": "Create a new socket connection.",
         "headers": {
           "Content-Type": "application/json",
