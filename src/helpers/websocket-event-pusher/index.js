@@ -25,8 +25,6 @@ export default class WebsocketEventPusher extends EventEmitter {
         // backoff is reset.
         iteration = 0;
         this.emit('connected');
-
-        setTimeout(() => ws.close(), 5 * 1000);
       };
 
       // Currently, the only events are space updates.

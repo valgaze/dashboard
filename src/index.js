@@ -199,6 +199,8 @@ router.handle();
 // ----------------------------------------------------------------------------
 const eventSource = new WebsocketEventPusher();
 
+// When the event source disconnects, fetch the state of each space from the core api to ensure that
+// the dashboard hasn't missed any events.
 eventSource.on('disconnect', () => {
   const spaces = store.getState().spaces.data;
   return Promise.all(spaces.map(space => {
