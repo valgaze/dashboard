@@ -3,7 +3,6 @@ import { SESSION_TOKEN_SET } from '../../actions/session-token/set';
 import { SESSION_TOKEN_UNSET } from '../../actions/session-token/unset';
 
 import { core, accounts, metrics } from '../../client';
-import eventSource from '../../helpers/websocket-event-pusher/index';
 
 const localStorage = window.localStorage || global.localStorage || {};
 
@@ -37,7 +36,6 @@ function updateTokensOnApiClients(token) {
   core.config({token}); // Core api service
   accounts.config({token}); // Accounts api service
   metrics.config({token});
-  eventSource.setToken(token); // Update websockets client
 }
 updateTokensOnApiClients(initialState);
 

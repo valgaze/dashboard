@@ -6,56 +6,42 @@ import { core } from '../../client';
 // If disconnected, try to connect at minimum this often.
 const MINIMUM_CONNECTION_INTERVAL = 1000;
 
-// Conenct the the websocket.
-let ws;
-const events = new EventEmitter();
-export function connect(WebSocket, iteration=0) {
-  if (WebSocket && host && token) {
+export default class WebsocketEventPusher extends EventEmitter {
+  constructor(WebSocket=window.WebSocket) {
+    super();
+    this.WebSocket = WebSocket;
+    this.connect()
+  }
+
+  connect(iteration=0) {
+    if (!this.WebSocket) {
+      return false;
+    }
+
     return core.sockets.create().then(({url}) => {
-      ws = new WebSocket(url);
+      const ws = new this.WebSocket(url);
       ws.onopen = () => {
-        // When a successful connection occurs, reset the iteration count back to zero.
+        // When a successful connection occurs, reset the iteration count back to zero so that the
+        // backoff is reset.
         iteration = 0;
-        events.emit('connected');
+        this.emit('connected');
+
+        setTimeout(() => ws.close(), 5 * 1000);
       };
 
       // Currently, the only events are space updates.
-      ws.onmessage = e => events.emit('space', objectSnakeToCamel(JSON.parse(e.data)));
+      ws.onmessage = e => this.emit('space', objectSnakeToCamel(JSON.parse(e.data)));
 
-      // When connection disconnects, reconnect after a delay.
+      // When the connection disconnects, reconnect after a delay.
       ws.onclose = () => {
-        events.emit('disconnect');
+        this.emit('disconnect');
 
         // Calculate the timeout before the next reconnect attempt. Use an exponential backoff.
         const backoffTimeout = MINIMUM_CONNECTION_INTERVAL + (Math.pow(iteration, 2) * 1000);
 
         // Queue up the next attempt to reconnect to the socket server.
-        setTimeout(() => connect(WebSocket, iteration+1), backoffTimeout);
+        setTimeout(() => this.connect(iteration+1), backoffTimeout);
       };
     });
-  } else {
-    return false;
   }
 }
-
-let host;
-export function setHost(h) {
-  if (h !== host) {
-    host = h;
-    ws ? ws.close() : connect(window.WebSocket);
-  }
-}
-
-let token;
-export function setToken(t) {
-  if (t !== token) {
-    token = t;
-    ws ? ws.close() : connect(window.WebSocket);
-  }
-}
-
-export default {
-  setToken,
-  setHost,
-  events,
-};
