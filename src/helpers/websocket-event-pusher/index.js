@@ -28,7 +28,7 @@ export default class WebsocketEventPusher extends EventEmitter {
       };
 
       // Currently, the only events are space updates.
-      ws.onmessage = e => this.emit('space', objectSnakeToCamel(JSON.parse(e.data)));
+      ws.onmessage = e => this.emit('space', objectSnakeToCamel(JSON.parse(e.data)).payload);
 
       // When the connection disconnects, reconnect after a delay.
       ws.onclose = () => {
@@ -40,6 +40,8 @@ export default class WebsocketEventPusher extends EventEmitter {
         // Queue up the next attempt to reconnect to the socket server.
         setTimeout(() => this.connect(iteration+1), backoffTimeout);
       };
+
+      this.emit('fetchedUrl');
     });
   }
 }
