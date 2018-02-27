@@ -4,6 +4,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.9
+    resource_class: medium
     steps:
       - checkout
       - restore_cache:
@@ -31,6 +32,7 @@ jobs:
   preview:
     docker:
       - image: circleci/node:8.9
+    resource_class: small
     steps:
       - checkout
       - restore_cache:
@@ -42,7 +44,7 @@ jobs:
             mv /tmp/pkg package.json
       - run:
           name: "Build preview dashboard"
-          command: | 
+          command: |
             REACT_APP_ENVIRONMENT="staging" \
             NODE_ENV=production \
             yarn build
@@ -67,13 +69,14 @@ jobs:
   staging:
     docker:
       - image: circleci/node:8.9
+    resource_class: small
     steps:
       - checkout
       - restore_cache:
           key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
       - run:
           name: "Build staging dashboard"
-          command: | 
+          command: |
             # NOTE: These are not secrets, they're public identifiers that are built into the
             # final webapp.
             REACT_APP_MIXPANEL_TOKEN="eb87b138bbb5d556fcf53bebac24b935" \
@@ -83,7 +86,7 @@ jobs:
             yarn build
       - run:
           name: "Push staging dashboard"
-          command: | 
+          command: |
             echo "* Installing amazon's cli..."
             sudo apt-get update
             sudo apt-get install -y awscli
@@ -95,13 +98,14 @@ jobs:
   production:
     docker:
       - image: circleci/node:8.9
+    resource_class: small
     steps:
       - checkout
       - restore_cache:
           key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
       - run:
           name: "Build production dashboard"
-          command: | 
+          command: |
             # NOTE: These are not secrets, they're public identifiers that are built into the
             # final webapp.
             REACT_APP_MIXPANEL_TOKEN="eb87b138bbb5d556fcf53bebac24b935" \
@@ -111,7 +115,7 @@ jobs:
             yarn build
       - run:
           name: "Push production dashboard"
-          command: | 
+          command: |
             echo "* Installing amazon's cli..."
             sudo apt-get update
             sudo apt-get install -y awscli
