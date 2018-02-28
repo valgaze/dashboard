@@ -4,7 +4,7 @@ export default function mixpanelUserReducerEnhancer(reducer) {
   return (state, props) => {
     const result = reducer(state, props);
 
-    if (result.user && process.env.REACT_APP_MIXPANEL_TOKEN) {
+    if (result.data && process.env.REACT_APP_MIXPANEL_TOKEN) {
       // Initialize mixpanel
       mixpanelInitialize();
 
@@ -13,11 +13,11 @@ export default function mixpanelUserReducerEnhancer(reducer) {
       // Database field names should always be underscores and lowercase
       window.mixpanel.identify(result.user.id);
       window.mixpanel.people.set({
-         $name: result.user.fullName,
-         $email: result.user.email,
-         Organization: result.user.organization.name,
-         organization_id: result.user.organization.id,
-         is_admin: result.user.is_admin,
+         $name: result.data.fullName,
+         $email: result.data.email,
+         Organization: result.data.organization.name,
+         organization_id: result.data.organization.id,
+         is_admin: result.data.is_admin,
       });
     }
 
