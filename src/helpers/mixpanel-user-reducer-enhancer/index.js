@@ -11,7 +11,7 @@ export default function mixpanelUserReducerEnhancer(reducer) {
       // Update the user on mixpanel if the user info changed.
       // "Organization" is capitalized for consistency across multiple products
       // Database field names should always be underscores and lowercase
-      window.mixpanel.identify(result.user.id);
+      window.mixpanel.identify(result.data.id);
       window.mixpanel.people.set({
          $name: result.data.fullName,
          $email: result.data.email,
