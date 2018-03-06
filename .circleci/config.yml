@@ -102,7 +102,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: node_modules-{{checksum "./package.json"}}-{{ checksum "./yarn.lock" }}
+          key: node_modules-{{checksum "./package.json"}}
       - run:
           name: "Build production dashboard"
           command: |
