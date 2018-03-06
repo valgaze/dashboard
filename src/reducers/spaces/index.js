@@ -134,7 +134,7 @@ export default function spaces(state=initialState, action) {
         // Update existing items
         ...state.data.map(item => {
           if (action.id === item.id) {
-            return {...item, currentCount: item.currentCount + action.countChange};
+            return {...item, currentCount: Math.max(item.currentCount + action.countChange, 0)};
           } else {
             return item;
           }
