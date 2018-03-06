@@ -311,6 +311,17 @@
         "url": "{{{core}}}/{{organisation}}/webhooks/{{id}}/",
         "desc": "Delete a webhook."
       }
+    },
+    "sockets": {
+      "create": {
+        "method": "POST",
+        "url": "{{{core}}}/sockets",
+        "desc": "Create a new socket connection.",
+        "headers": {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        }
+      }
     }
   }
 }

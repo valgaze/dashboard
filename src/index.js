@@ -4,13 +4,14 @@ import registerServiceWorker from './registerServiceWorker';
 import './built-css/styles.css';
 import { core, accounts } from './client';
 import ReactGA from 'react-ga';
+import moment from 'moment';
 
 import userSet from './actions/user/set';
 import userError from './actions/user/error';
 import sessionTokenUnSet from './actions/session-token/unset';
 
 import objectSnakeToCamel from './helpers/object-snake-to-camel/index';
-import eventSource from './helpers/websocket-event-pusher/index';
+import WebsocketEventPusher from './helpers/websocket-event-pusher/index';
 import mixpanelTrack from './helpers/mixpanel-track/index';
 import unsafeSetSettingsFlagConstructor from './helpers/unsafe-set-settings-flag/index';
 
@@ -40,6 +41,7 @@ import routeTransitionAccountSetupDoorwayList from './actions/route-transition/a
 import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition/account-setup-doorway-detail';
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
+import collectionSpacesSetEvents from './actions/collection/spaces/set-events';
 
 // All the reducer and store code is in a seperate file.
 import storeFactory from './store';
@@ -86,25 +88,10 @@ const fields = [
     },
     default: process.env.REACT_APP_ENVIRONMENT || 'production',
   },
-  {
-    name: 'Event source (websockets server)',
-    slug: 'eventsource',
-    defaults: {
-      'none': 'false',
-      'production': 'wss://socket.density.io',
-      'staging': 'wss://socket.density.rodeo',
-      'local': 'ws://localhost:8080',
-      'env (REACT_APP_EVENTSOURCE_API_URL)': process.env.REACT_APP_EVENTSOURCE_API_URL,
-    },
-    default: process.env.REACT_APP_ENVIRONMENT || 'production',
-  },
 ];
 function setServiceLocations(data) {
   core.config({core: data.core});
   accounts.config({host: data.accounts});
-  if (data.eventsource !== 'false') {
-    eventSource.setHost(data.eventsource);
-  }
 }
 setServiceLocations(getActiveEnvironments(fields)); /* step 1 above */
 
@@ -210,8 +197,30 @@ router.handle();
 // Listen in real time for pushed events via websockets. When we receive
 // events, dispatch them as actions into the system.
 // ----------------------------------------------------------------------------
-eventSource.setToken(store.getState().sessionToken);
-eventSource.events.on('space', countChangeEvent => {
+const eventSource = new WebsocketEventPusher();
+
+// When the event source disconnects, fetch the state of each space from the core api to ensure that
+// the dashboard hasn't missed any events.
+eventSource.on('disconnect', () => {
+  const spaces = store.getState().spaces.data;
+  return Promise.all(spaces.map(space => {
+    return core.spaces.events({
+      id: space.id,
+      start_time: moment().subtract(1, 'minute').format(),
+      end_time: moment().utc().format(),
+    });
+  })).then(spaceEventSets => {
+    spaceEventSets.forEach((spaceEventSet, ct) => {
+      const action = collectionSpacesSetEvents(
+        spaces[ct],
+        spaceEventSet.results.map(i => ({ countChange: i.direction, timestamp: i.timestamp }))
+      );
+      store.dispatch(action);
+    });
+  });
+});
+
+eventSource.on('space', countChangeEvent => {
   store.dispatch(collectionSpacesCountChange({
     id: countChangeEvent.spaceId,
     timestamp: countChangeEvent.timestamp,
