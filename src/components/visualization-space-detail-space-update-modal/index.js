@@ -27,7 +27,7 @@ export default class VisualizationSpaceDetailSpaceUpdateModal extends React.Comp
           <CardBody>
             <div className="visualization-space-detail-space-update-modal-count-picker">
               <button
-                onClick={() => this.setState({count: this.state.count - 1})}
+                onClick={() => this.setState({count: Math.max(this.state.count - 1, 0)})}
                 disabled={this.state.count <= 0}
                 className="visualization-space-detail-space-update-modal-count-button subtract"
               >&mdash;</button>
