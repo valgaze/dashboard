@@ -44,23 +44,7 @@ describe('Visualization space daily metrics chart', function() {
       const lastDayOfRange = rangeStart.clone().add(13, 'days');
       assert.equal(isOutsideRange(rangeStart.format(), datePickerSelection, lastDayOfRange), false);
 
-
-      // And days outside of that range should not be able to be selected.
-      // Day before the range start
-      const dayBeforeFirstDayOfRange = rangeStart.clone().subtract(1, 'day');
-      assert.equal(isOutsideRange(rangeStart.format(), datePickerSelection, dayBeforeFirstDayOfRange), true);
-
-      // Day after the range end
-      const dayAfterLastDayOfRange = rangeStart.clone().add(14, 'days') 
-      assert.equal(isOutsideRange(rangeStart.format(), datePickerSelection, dayAfterLastDayOfRange), true);
-
-      // Many days before the range starts
-      const manyDaysBeforeFirstDayOfRange = rangeStart.clone().subtract(1, 'month') 
-      assert.equal(isOutsideRange(rangeStart.format(), datePickerSelection, manyDaysBeforeFirstDayOfRange), true);
-
-      // Many days after the range ends.
-      const manyDaysAfterLastDayOfRange = rangeStart.clone().add(1, 'month') 
-      assert.equal(isOutsideRange(rangeStart.format(), datePickerSelection, manyDaysAfterLastDayOfRange), true);
+      // Days outside of that range can still be selected, a different chart will just be shown.
     });
     it('should block out two weeks that has the current date within the range', function() {
       // Start a date selection. 
@@ -253,7 +237,7 @@ describe('Visualization space daily metrics chart', function() {
       assert.equal(component.find('#DateInput__screen-reader-message-endDate + div').text(), '01/01/2017');
 
       // Also, verify that the correct data was passed to the chart given what the ajax return data.
-      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body').children().nodes[0].props;
+      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body > div').children().nodes[0].props;
       assert.deepEqual(chartProps.data, [
         {label: '01/07', value: 10},
         {label: '01/06', value: 0},
@@ -391,7 +375,7 @@ describe('Visualization space daily metrics chart', function() {
       assert.equal(component.find('#DateInput__screen-reader-message-endDate + div').text(), '09/14/2017');
 
       // Also, verify that the correct data was passed to the chart given what the ajax return data.
-      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body').children().nodes[0].props;
+      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body > div').children().nodes[0].props;
       assert.deepEqual(chartProps.data, [
         {label: '09/20', value: 0},
         {label: '09/19', value: 0},
@@ -529,7 +513,7 @@ describe('Visualization space daily metrics chart', function() {
       assert.equal(component.find('#DateInput__screen-reader-message-endDate + div').text(), '09/13/2017');
 
       // Also, verify that the correct data was passed to the chart given what the ajax return data.
-      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body').children().nodes[0].props;
+      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body > div').children().nodes[0].props;
       assert.deepEqual(chartProps.data, [
         {label: '09/13', value: 0},
         {label: '09/12', value: 0},
@@ -854,7 +838,7 @@ describe('Visualization space daily metrics chart', function() {
     assert.equal(component.find('#DateInput__screen-reader-message-endDate + div').text(), '11/06/2017');
 
     // Also, verify that the correct data was passed to the chart given what the ajax return data.
-    const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body').children().nodes[0].props;
+    const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body > div').children().nodes[0].props;
     assert.deepEqual(chartProps.data, [
       { label: '11/06', value: 0 },
       { label: '11/05', value: 0 },
@@ -865,5 +849,433 @@ describe('Visualization space daily metrics chart', function() {
       { label: '11/01', value: 0 },
       { label: '10/31', value: 3 },
     ]);
+  });
+
+  it('should correctly use the daily metrics chart when data range is <= 14 days', async function() {
+    const space = {
+      id: 'spc_123',
+      name: 'foo',
+      currentCount: 5,
+      timeZone: `America/New_York`
+    };
+
+    // Mock the data fetching call, and the current date so that we can assert properly.
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 200,
+      clone() { return this; },
+      json: () => Promise.resolve({
+        "total": 8,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "timestamp": "2017-11-07T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-11-07T04:00:00.000Z",
+              "end": "2017-11-08T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-06T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-11-06T04:00:00.000Z",
+              "end": "2017-11-07T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-05T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-11-05T04:00:00.000Z",
+              "end": "2017-11-06T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-04T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-11-04T04:00:00.000Z",
+              "end": "2017-11-05T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-03T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-11-03T04:00:00.000Z",
+              "end": "2017-11-04T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-02T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-11-02T04:00:00.000Z",
+              "end": "2017-11-03T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-01T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-11-01T04:00:00.000Z",
+              "end": "2017-11-02T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-31T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-10-31T04:00:00.000Z",
+              "end": "2017-11-01T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 3,
+                "events": 5,
+                "entrances": 3,
+                "exits": 2
+              }
+            }
+          },
+        ]
+      }),
+    });
+    mockdate.set(moment('2017-01-01T00:00:00-05:00'));
+
+    // Render the component
+    const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
+
+    // Wait for data to be fetched.
+    await timeout(250);
+    assert.equal(global.fetch.callCount, 1);
+
+    // Verify that the Daily metrics chart was shown
+    assert.equal(component.find('.short-timespan-chart').length, 1);
+  });
+
+  it('should correctly use the secondary chart when data range is > 14 days', async function() {
+    const space = {
+      id: 'spc_123',
+      name: 'foo',
+      currentCount: 5,
+      timeZone: `America/New_York`
+    };
+
+    // Mock the data fetching call, and the current date so that we can assert properly.
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 200,
+      clone() { return this; },
+      json: () => Promise.resolve({
+        "total": 16,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "timestamp": "2017-11-07T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-11-07T04:00:00.000Z",
+              "end": "2017-11-08T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-06T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-11-06T04:00:00.000Z",
+              "end": "2017-11-07T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-05T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-11-05T04:00:00.000Z",
+              "end": "2017-11-06T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-04T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-11-04T04:00:00.000Z",
+              "end": "2017-11-05T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-03T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-11-03T04:00:00.000Z",
+              "end": "2017-11-04T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-02T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-11-02T04:00:00.000Z",
+              "end": "2017-11-03T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-11-01T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-11-01T04:00:00.000Z",
+              "end": "2017-11-02T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-31T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-10-31T04:00:00.000Z",
+              "end": "2017-11-01T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 3,
+                "events": 5,
+                "entrances": 3,
+                "exits": 2
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-30T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-10-30T04:00:00.000Z",
+              "end": "2017-10-31T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-29T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-10-29T04:00:00.000Z",
+              "end": "2017-10-30T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-28T04:00:00.000Z",
+            "count": 1,
+            "interval": {
+              "start": "2017-10-28T04:00:00.000Z",
+              "end": "2017-10-29T03:59:59.999Z",
+              "analytics": {
+                "min": 1,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-27T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-10-27T04:00:00.000Z",
+              "end": "2017-10-28T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 1,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-26T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-10-26T04:00:00.000Z",
+              "end": "2017-10-27T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-25T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-10-25T04:00:00.000Z",
+              "end": "2017-10-26T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-24T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-10-24T04:00:00.000Z",
+              "end": "2017-10-25T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 0,
+                "events": 0,
+                "entrances": 0,
+                "exits": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2017-10-23T04:00:00.000Z",
+            "count": 0,
+            "interval": {
+              "start": "2017-10-23T04:00:00.000Z",
+              "end": "2017-10-24T03:59:59.999Z",
+              "analytics": {
+                "min": 0,
+                "max": 3,
+                "events": 5,
+                "entrances": 3,
+                "exits": 2
+              }
+            }
+          },
+        ]
+      }),
+    });
+    mockdate.set(moment('2017-01-01T00:00:00-05:00'));
+
+    // Render the component
+    const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
+
+    // Wait for data to be fetched.
+    await timeout(250);
+    assert.equal(global.fetch.callCount, 1);
+
+    // Verify that the larger chart was shown instead of the Daily Metrics Chart
+    assert.equal(component.find('.large-timespan-chart').length, 1);
   });
 });

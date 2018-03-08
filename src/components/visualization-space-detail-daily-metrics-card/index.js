@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classnames from 'classnames';
 
 import moment from 'moment';
 import 'moment-timezone';
@@ -210,31 +211,35 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
           {this.state.state === VISIBLE ? (() => {
             if (this.state.data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
               // For more than two weeks of data, show the graph chart.
-              return <HistoricalCountsComponent
-                data={this.state.data.map(i => {
-                  return {
-                    timestamp: i.timestamp,
-                    count: i.value,
-                  };
-                })}
-                width={950}
-                height={350}
-                timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
-                xAxisResolution="week"
-              />;
+              return <div className="large-timespan-chart">
+                <HistoricalCountsComponent
+                  data={this.state.data.map(i => {
+                    return {
+                      timestamp: i.timestamp,
+                      count: i.value,
+                    };
+                  })}
+                  width={950}
+                  height={350}
+                  timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
+                  xAxisResolution="week"
+                />
+              </div>;
             } else {
               // Less than two weeks should stil use the daily metrics chart.
-              return <DailyMetricsComponent
-                data={this.state.data.map(i => {
-                  return {
-                    // Remove the offset that was added when the data was fetched.
-                    label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
-                    value: i.value,
-                  };
-                })}
-                width={975}
-                height={350}
-              />;
+              return <div className="short-timespan-chart">
+                <DailyMetricsComponent
+                  data={this.state.data.map(i => {
+                    return {
+                      // Remove the offset that was added when the data was fetched.
+                      label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
+                      value: i.value,
+                    };
+                  })}
+                  width={975}
+                  height={350}
+                />
+              </div>;
             }
           })() : null}
 
