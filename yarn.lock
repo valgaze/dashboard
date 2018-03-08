@@ -9,9 +9,9 @@
     d3 "^4.10.2"
     moment "^2.18.1"
 
-"@density/chart-historical-counts@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@density/chart-historical-counts/-/chart-historical-counts-1.5.0.tgz#a4383f00e484111fe6ba75e34086a200e48b6ab0"
+"@density/chart-historical-counts@^1.6.3":
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/@density/chart-historical-counts/-/chart-historical-counts-1.6.3.tgz#2d84ca541d0980a58af12f124355a8f7dc23d6f9"
   dependencies:
     d3 "^4.7.4"
 
@@ -2678,10 +2678,6 @@ enzyme@^2.9.1:
     object.values "^1.0.4"
     prop-types "^15.5.10"
     uuid "^3.0.1"
-
-err-code@^1.0.0:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/err-code/-/err-code-1.1.2.tgz#06e0116d3028f6aef4806849eb0ea6a748ae6960"
 
 errno@^0.1.3, errno@^0.1.4:
   version "0.1.4"
@@ -6133,13 +6129,6 @@ progress@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.0.tgz#8a1be366bf8fc23db2bd23f10c6fe920b4389d1f"
 
-promise-retry@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/promise-retry/-/promise-retry-1.1.1.tgz#6739e968e3051da20ce6497fb2b50f6911df3d6d"
-  dependencies:
-    err-code "^1.0.0"
-    retry "^0.10.0"
-
 promise@7.1.1, promise@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.1.1.tgz#489654c692616b8aa55b0724fa809bb7db49c5bf"
@@ -6856,10 +6845,6 @@ restore-cursor@^2.0.0:
   dependencies:
     onetime "^2.0.0"
     signal-exit "^3.0.2"
-
-retry@^0.10.0:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
 
 right-align@^0.1.1:
   version "0.1.3"
