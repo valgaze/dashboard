@@ -12,8 +12,11 @@ import InputBox from '@density/ui-input-box';
 import gridVariables from '@density/ui/variables/grid.json'
 
 import dailyMetrics from '@density/chart-daily-metrics';
+import historicalCounts from '@density/chart-historical-counts';
+
 import { chartAsReactComponent } from '@density/charts';
 const DailyMetricsComponent = chartAsReactComponent(dailyMetrics);
+const HistoricalCountsComponent = chartAsReactComponent(historicalCounts);
 
 const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
@@ -21,7 +24,12 @@ const LOADING = 'LOADING',
       ERROR = 'ERROR';
 
 // The maximum number of days that can be selected by the date range picker
-const MAXIMUM_DAY_LENGTH = 14;
+const MAXIMUM_DAY_LENGTH = 365;
+
+// Below this number of days or equal to this number of days, show the normal daily metrics chart.
+// Above this number of days, show the expanded line chart.
+const GRAPH_TYPE_TRANSITION_POINT_IN_DAYS = 14;
+
 // When the user selects a start date, select a range that's this long. THe user can stil ladjust
 // the range up to a maximum length of `MAXIMUM_DAY_LENGTH` though.
 const INITIAL_RANGE_SELECTION = MAXIMUM_DAY_LENGTH / 2;
@@ -199,17 +207,36 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
         </CardHeader>
 
         <CardBody className="visualization-space-detail-daily-metrics-card-body">
-          {this.state.state === VISIBLE ? <DailyMetricsComponent
-            data={this.state.data.map(i => {
-              return {
-                // Remove the offset that was added when the data was fetched.
-                label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
-                value: i.value,
-              };
-            })}
-            width={975}
-            height={350}
-          /> : null}
+          {this.state.state === VISIBLE ? (() => {
+            if (this.state.data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
+              // For more than two weeks of data, show the graph chart.
+              return <HistoricalCountsComponent
+                data={this.state.data.map(i => {
+                  return {
+                    timestamp: i.timestamp,
+                    count: i.value,
+                  };
+                })}
+                width={950}
+                height={350}
+                timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
+                xAxisResolution="week"
+              />;
+            } else {
+              // Less than two weeks should stil use the daily metrics chart.
+              return <DailyMetricsComponent
+                data={this.state.data.map(i => {
+                  return {
+                    // Remove the offset that was added when the data was fetched.
+                    label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
+                    value: i.value,
+                  };
+                })}
+                width={975}
+                height={350}
+              />;
+            }
+          })() : null}
 
           {this.state.state === ERROR ? <div className="visualization-space-detail-daily-metrics-card-body-error">
             <span>
