@@ -1,5 +1,4 @@
 import * as React from 'react';
-import classnames from 'classnames';
 
 import moment from 'moment';
 import 'moment-timezone';
