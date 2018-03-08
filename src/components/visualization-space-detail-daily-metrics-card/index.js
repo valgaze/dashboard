@@ -24,7 +24,7 @@ const LOADING = 'LOADING',
       ERROR = 'ERROR';
 
 // The maximum number of days that can be selected by the date range picker
-const MAXIMUM_DAY_LENGTH = 365;
+const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
 
 // Below this number of days or equal to this number of days, show the normal daily metrics chart.
 // Above this number of days, show the expanded line chart.
