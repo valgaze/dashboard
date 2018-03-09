@@ -41,7 +41,14 @@ export default function NavLoggedIn({
 
     <NavbarMobileItem
       activePage={activePage}
-      pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
+      pageName={['LIVE_SPACE_LIST']}
+      href="#/spaces/live"
+      onClick={closeSidebar}
+    >Live</NavbarMobileItem>,
+
+    <NavbarMobileItem
+      activePage={activePage}
+      pageName={['INSIGHTS_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
 
       // Feature flag: Do not allow the user to visit the insights page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
@@ -112,7 +119,13 @@ export default function NavLoggedIn({
 
     <NavbarItem
       activePage={activePage}
-      pageName={['VISUALIZATION_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
+      pageName={['LIVE_SPACE_LIST']}
+      href="#/spaces/live"
+    >Live</NavbarItem>
+
+    <NavbarItem
+      activePage={activePage}
+      pageName={['INSIGHTS_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
 
       // Feature flag: Do not allow the user to visit the visualizations page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways

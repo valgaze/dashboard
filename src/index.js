@@ -29,8 +29,9 @@ import createRouter from '@density/conduit';
 // Import all actions required to navigate from one page to another.
 import routeTransitionEnvironmentSpace from './actions/route-transition/environment-space';
 import routeTransitionLogin from './actions/route-transition/login';
+import routeTransitionInsightsSpaceList from './actions/route-transition/insights-space-list';
 import routeTransitionVisualizationSpaceDetail from './actions/route-transition/visualization-space-detail';
-import routeTransitionVisualizationSpaceList from './actions/route-transition/visualization-space-list';
+import routeTransitionLiveSpaceList from './actions/route-transition/live-space-list';
 import routeTransitionLiveSpaceDetail from './actions/route-transition/live-space-detail';
 import routeTransitionDevTokenList from './actions/route-transition/dev-token-list';
 import routeTransitionDevWebhookList from './actions/route-transition/dev-webhook-list';
@@ -133,9 +134,10 @@ router.addRoute('login', () => routeTransitionLogin());
 router.addRoute('insights/spaces', redirect('spaces/insights')); // DEPRECATED
 // ^ I AM DEPRECATED
 
-router.addRoute('spaces/insights', () => routeTransitionVisualizationSpaceList());
+router.addRoute('spaces/insights', () => routeTransitionInsightsSpaceList());
 router.addRoute('spaces/insights/:id', id => routeTransitionVisualizationSpaceDetail(id));
 
+router.addRoute('spaces/live', () => routeTransitionLiveSpaceList());
 router.addRoute('spaces/live/:id', id => routeTransitionLiveSpaceDetail(id));
 
 router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());

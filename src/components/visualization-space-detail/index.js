@@ -24,7 +24,7 @@ export function SpaceDetail({
         {/* Page header */}
         <div className="visualization-space-detail-header">
           <h1 className="visualization-space-detail-header-container">
-            <a href="#/spaces/insights" className="visualization-space-detail-header-back-section">Spaces</a>
+            <a href="#/spaces/insights" className="visualization-space-detail-header-back-section">Insights</a>
             <span className="visualization-space-detail-header-title">{space.name}</span>
           </h1>
           <div className="visualization-space-detail-header-tag">Historical</div>

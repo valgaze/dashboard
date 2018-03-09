@@ -187,7 +187,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/unknown-page/styles";
 @import "./components/dev-token-card/styles";
 @import "./components/login/styles";
-@import "./components/visualization-space-list/styles";
+@import "./components/live-space-list/styles";
 @import "./components/environment/styles";
 @import "./components/environment-space-item/styles";
 @import "./components/environment-doorway-item/styles";
@@ -206,7 +206,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/visualization-space-detail/styles";
 @import "./components/account-registration/styles";
 @import "./components/dev-token-update-modal/styles";
-@import "./components/visualization-space-card/styles";
+@import "./components/live-space-card/styles";
 @import "./components/dev-token-update-modal/styles";
 @import "./components/dev-webhook-update-modal/styles";
 @import "./components/subnav/styles";
@@ -235,3 +235,4 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/nav-logged-out/styles";
 @import "./components/input-stack/styles";
 @import "./components/live-space-detail/styles";
+@import "./components/insights-space-list/styles";

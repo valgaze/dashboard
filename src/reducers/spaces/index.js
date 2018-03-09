@@ -12,7 +12,7 @@ import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
 
 import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
-import { ROUTE_TRANSITION_VISUALIZATION_SPACE_LIST } from '../../actions/route-transition/visualization-space-list';
+import { ROUTE_TRANSITION_LIVE_SPACE_LIST } from '../../actions/route-transition/live-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_DETAIL } from '../../actions/route-transition/live-space-detail';
 import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
@@ -104,7 +104,7 @@ export default function spaces(state=initialState, action) {
   case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
   case ROUTE_TRANSITION_LIVE_SPACE_DETAIL:
     return {...state, error: null, selected: action.id};
-  case ROUTE_TRANSITION_VISUALIZATION_SPACE_LIST:
+  case ROUTE_TRANSITION_LIVE_SPACE_LIST:
     return {...state, error: null};
 
   // Also, when a modal is shown or hidden, clear the error from the state.
