@@ -16,6 +16,7 @@ import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
 import AccountForgotPassword from '../account-forgot-password/index';
+import LiveSpaceDetail from '../live-space-detail/index';
 
 import AccountSetupOverview from '../account-setup-overview/index';
 import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
@@ -31,16 +32,28 @@ import MultiBackend, { TouchTransition, Preview } from 'react-dnd-multi-backend'
 function AppComponent({activePage, settings, user, onLogout}) {
   return <div className="app">
     {/* Render the navbar */}
-    {(
-      activePage !== 'LOGIN' &&
-      activePage !== 'ACCOUNT_REGISTRATION' &&
-      activePage !== 'ACCOUNT_FORGOT_PASSWORD'
-    ) ? <NavLoggedIn
-      activePage={activePage}
-      settings={settings}
-      onLogout={onLogout}
-      user={user}
-    /> : <NavLoggedOut />}
+    {(function(activePage) {
+      switch (activePage) {
+        // On these special pages, render the logged-out navbar.
+        case 'LOGIN':
+        case 'ACCOUNT_REGISTRATION':
+        case 'ACCOUNT_FORGOT_PASSWORD':
+          return <NavLoggedOut />;
+
+        // Don't render a nav bar on this special page.
+        case 'LIVE_SPACE_DETAIL':
+          return null;
+
+        // Render the logged-in navbar by default
+        default:
+          return <NavLoggedIn
+            activePage={activePage}
+            settings={settings}
+            onLogout={onLogout}
+            user={user}
+          />;
+      }
+    })(activePage)}
 
     {/* Render dragging preview when an item is being dragged */}
     <Preview generator={(type, item, style) => <div style={style} />} />
@@ -71,6 +84,8 @@ function ActivePage({activePage, settings}) {
     return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceList />;
   case "VISUALIZATION_SPACE_DETAIL":
     return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceDetail />;
+  case "LIVE_SPACE_DETAIL":
+    return <LiveSpaceDetail />;
   case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":

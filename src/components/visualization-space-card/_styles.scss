@@ -56,3 +56,24 @@
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 }
+
+.space-card-chart { position: relative; }
+
+// Add a button to redirect the user to the live, full-screen detail view for the space.
+.space-card-chart-full-screen {
+  position: absolute;
+  top: 13px;
+  left: 14px;
+
+  color: $gray-darkest;
+  z-index: 1000;
+  cursor: pointer;
+
+  font-family: "Densicons";
+
+  transition: all 100ms ease-in-out;
+  transform: rotate(45deg);
+  &:hover {
+    color: $gray-darker;
+  }
+}

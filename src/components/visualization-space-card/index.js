@@ -28,7 +28,13 @@ function CountLabel({count}) {
   }
 }
 
-export default function SpaceCard({space, events, onClick}) {
+export default function SpaceCard({
+  space,
+  events,
+
+  onClick,
+  onClickRealtimeChartFullScreen,
+}) {
   if (space) {
     const capacityPercent = space.capacity ? (space.currentCount / space.capacity) * 100 : null;
     return <Card className="space-card">
@@ -59,6 +65,10 @@ export default function SpaceCard({space, events, onClick}) {
       </div>
 
       <div className="space-card-chart">
+        <div
+          className="space-card-chart-full-screen"
+          onClick={onClickRealtimeChartFullScreen}
+        >&#xe919;</div>
         <RealTimeCountChart events={events || []} />
       </div>
     </Card>;

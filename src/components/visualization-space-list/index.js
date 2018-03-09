@@ -37,7 +37,8 @@ export function SpaceList({
             <SpaceCard
               space={space}
               events={spaces.events[space.id]}
-              onClick={() => window.location.href = `#/insights/spaces/${space.id}`}
+              onClick={() => window.location.href = `#/spaces/insights/${space.id}`}
+              onClickRealtimeChartFullScreen={() => window.location.href = `#/spaces/live/${space.id}` }
             />
           </div>;
         })}

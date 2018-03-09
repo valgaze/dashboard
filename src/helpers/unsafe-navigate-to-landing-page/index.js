@@ -9,6 +9,6 @@ export default function unsafeNavigateToLandingPage(insightsPageLocked) {
     window.location.hash = '#/onboarding/overview';
   // Otherwise land on the insights page
   } else {
-    window.location.hash = '#/insights/spaces';
+    window.location.hash = '#/spaces/insights';
   }
 }
