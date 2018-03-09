@@ -31,6 +31,7 @@ import routeTransitionEnvironmentSpace from './actions/route-transition/environm
 import routeTransitionLogin from './actions/route-transition/login';
 import routeTransitionVisualizationSpaceDetail from './actions/route-transition/visualization-space-detail';
 import routeTransitionVisualizationSpaceList from './actions/route-transition/visualization-space-list';
+import routeTransitionLiveSpaceDetail from './actions/route-transition/live-space-detail';
 import routeTransitionDevTokenList from './actions/route-transition/dev-token-list';
 import routeTransitionDevWebhookList from './actions/route-transition/dev-webhook-list';
 import routeTransitionAccount from './actions/route-transition/account';
@@ -118,8 +119,10 @@ trackHashChange();
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
 
-router.addRoute('insights/spaces', () => routeTransitionVisualizationSpaceList());
-router.addRoute('insights/spaces/:id', id => routeTransitionVisualizationSpaceDetail(id));
+router.addRoute('spaces/insights', () => routeTransitionVisualizationSpaceList());
+router.addRoute('spaces/insights/:id', id => routeTransitionVisualizationSpaceDetail(id));
+
+router.addRoute('spaces/live/:id', id => routeTransitionLiveSpaceDetail(id));
 
 router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());
 

@@ -1,0 +1,34 @@
+import moment from 'moment';
+import { core } from '../../client';
+
+import collectionSpacesPush from '../collection/spaces/push';
+import collectionSpacesError from '../collection/spaces/error';
+import collectionSpacesSetEvents from '../collection/spaces/set-events';
+
+export const ROUTE_TRANSITION_LIVE_SPACE_DETAIL = 'ROUTE_TRANSITION_LIVE_SPACE_DETAIL';
+
+export default function routeTransitionLiveSpaceDetail(id) {
+  return async dispatch => {
+    dispatch({ type: ROUTE_TRANSITION_LIVE_SPACE_DETAIL, id });
+
+    try {
+      const space = await core.spaces.get({id})
+      dispatch(collectionSpacesPush(space));
+
+      // Fetch all initial events for the space that was loaded.
+      // This is used to populate this space's events collection with all the events from the last
+      // minute so that the real time event charts all display as "full" when the page reloads.
+      const spaceEventSet = await core.spaces.events({
+        id: space.id,
+        start_time: moment().subtract(1, 'minute').format(),
+        end_time: moment().utc().format(),
+      });
+      dispatch(collectionSpacesSetEvents(space, spaceEventSet.results.map(i => ({
+        countChange: i.direction,
+        timestamp: i.timestamp,
+      }))));
+    } catch (err) {
+      dispatch(collectionSpacesError(`Error loading space live detail page: ${err}`));
+    }
+  };
+}
