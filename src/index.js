@@ -113,11 +113,25 @@ function trackHashChange() {
 window.addEventListener('hashchange', trackHashChange);
 trackHashChange();
 
+// Routing helper to redirect to a different url when a user visits a url.
+function redirect(url) {
+  return () => {
+    window.location.href = `#/${url}`;
+    // FIXME: Conduit shouldn't dispatch an action if a function returns undefined. That would let the
+    // below line be removed.
+    return {type: 'NOOP'};
+  }
+}
+
 
 // Create a router to listen to the store and dispatch actions when the hash changes.
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
+
+// v I AM DEPRECATED
+router.addRoute('insights/spaces', redirect('spaces/insights')); // DEPRECATED
+// ^ I AM DEPRECATED
 
 router.addRoute('spaces/insights', () => routeTransitionVisualizationSpaceList());
 router.addRoute('spaces/insights/:id', id => routeTransitionVisualizationSpaceDetail(id));
@@ -137,12 +151,7 @@ router.addRoute('account/forgot-password/:token', token => routeTransitionAccoun
 
 // Onboarding flow
 // Redirect #/onboarding => #/onboarding/overview
-router.addRoute('onboarding', () => {
-  window.location.href = '#/onboarding/overview';
-  // FIXME: Conduit shouldn't dispatch an action if a function returns undefined. That would let the
-  // below line be removed.
-  return {type: 'NOOP'};
-});
+router.addRoute('onboarding', redirect('onboarding/overview'));
 router.addRoute('onboarding/overview', () => routeTransitionAccountSetupOverview());
 router.addRoute('onboarding/doorways', () => routeTransitionAccountSetupDoorwayList());
 router.addRoute('onboarding/doorways/:id', id => routeTransitionAccountSetupDoorwayDetail(id));
