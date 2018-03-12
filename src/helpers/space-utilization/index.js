@@ -1,10 +1,22 @@
 import moment from 'moment';
+import 'moment-timezone'; 
 
-export function groupCountsByDay(counts) {
+export const TIME_SEGMENTS = {
+  WHOLE_DAY: {start: 0, end: 23, name: 'Whole day'},
+  WORKING_HOURS: {start: 8, end: 17, name: 'Working hours (8am-5pm)'},
+
+  BEFORE_OPEN: {start: 4, end: 7, name: 'Before open'},
+  BREAKFAST: {start: 7, end: 10, name: 'Breakfast'},
+  BETWEEN_MEALS: {start: 10, end: 11, name: 'Between meals'},
+  LUNCH: {start: 11, end: 14, name: 'Lunch'},
+  AFTER_CLOSE: {start: 14, end: 23, name: 'After Close'},
+};
+
+export function groupCountsByDay(counts, timezone) {
   // Group counts into buckets, grouping by day.
   // ie, dayCountGroups = {'2018-05-01': [a, b, ...], '2018-05-02': [x, y, z, ...]}
   const dayCountGroups = counts.reduce((groups, i) => {
-    const day = moment.utc(i.timestamp).format('YYYY-MM-DD');
+    const day = moment.utc(i.timestamp).tz(timezone).format('YYYY-MM-DD');
     return {
       ...groups,
       [day]: [...(groups[day] || []), i],
@@ -29,13 +41,13 @@ export function groupCountFilter(groups, predicate) {
   });
 }
 
-export function isWithinBusinessHours(timestamp, timezone, opens=9, closes=12+5) {
+export function isWithinTimeSegment(timestamp, timezone, segment) {
   const t = moment.utc(timestamp).tz(timezone);
   const weekday = t.isoWeekday();
   const hour = t.get('hour');
   const result = (
     weekday <= 5 && // Monday - Friday
-    hour > 8 && hour < 17 // 9am <= hour <= 5pm
+    hour > segment.start && hour < segment.end // 9am <= hour <= 5pm
   );
   return result;
 }
