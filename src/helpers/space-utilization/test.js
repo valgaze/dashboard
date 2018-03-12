@@ -76,7 +76,7 @@ describe('space-utilization', function() {
   it('should not be able to calculate a utilization without a capacity', () => {
     assert.throws(() => {
       const groups = groupCountsByDay(events);
-      const datapoints = spaceUtilizationPerGroup({name: 'My capacity-less space', /* no capacity */}, groups);
+      const datapoints = spaceUtilizationPerGroup({name: 'My capacity-less space', capacity: null}, groups);
     }, 'Utilization cannot be calculated without a capacity.');
   });
 });
