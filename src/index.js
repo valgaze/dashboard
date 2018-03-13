@@ -211,6 +211,16 @@ router.handle();
 // ----------------------------------------------------------------------------
 const eventSource = new WebsocketEventPusher();
 
+// Reconnect to the socket when the token changes.
+let currentToken = null;
+store.subscribe(() => {
+  const newToken = store.getState().sessionToken;
+  if (newToken !== currentToken) {
+    currentToken = newToken;
+    eventSource.connect();
+  }
+});
+
 // When the event source disconnects, fetch the state of each space from the core api to ensure that
 // the dashboard hasn't missed any events.
 eventSource.on('disconnect', () => {
