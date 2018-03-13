@@ -8,7 +8,7 @@ import { core } from '../../client';
 // If disconnected, try to connect at minimum this often.
 const MINIMUM_CONNECTION_INTERVAL = 1000;
 
-const CONNECTION_STATES = {
+export const CONNECTION_STATES = {
   CLOSED: 'CLOSED',
   WAITING_FOR_SOCKET_URL: 'WAITING_FOR_SOCKET_URL',
   CONNECTING: 'CONNECTING',
