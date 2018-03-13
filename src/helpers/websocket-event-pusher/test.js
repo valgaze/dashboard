@@ -1,10 +1,15 @@
 import assert from 'assert';
 import sinon from 'sinon';
-import WebsocketEventPusher from './index';
+import WebsocketEventPusher, { CONNECTION_STATES } from './index';
+
+import { core } from '../../client';
 
 describe('websocket-event-pusher', function() {
   it('should connect to the websocket by getting a url from the core api and emit events', function(done) {
     const promise = new Promise((resolve, reject) => {
+      // Define a token
+      core.config({token: 'ses_XXX'});
+
       // Mock the impending request that is going to be made to the core api to get a sockets url
       global.fetch = sinon.stub().resolves({
         ok: true,
@@ -23,7 +28,13 @@ describe('websocket-event-pusher', function() {
       // Create a new websocket event pusher with the mock websockets object
       const eventSource = new WebsocketEventPusher(wsMock);
 
+      // Verify that the socket is starting to connect
+      assert.equal(eventSource.connectionState, CONNECTION_STATES.WAITING_FOR_SOCKET_URL);
+
       eventSource.on('connected', () => {
+        // Verify that the socket is fully connected.
+        assert.equal(eventSource.connectionState, CONNECTION_STATES.CONNECTED);
+
         // Ensure that the request to get the websocket url was made correctly
         assert.deepEqual(global.fetch.firstCall.args, ['https://api.density.io/v1/sockets', {
           method: 'POST',
@@ -32,7 +43,7 @@ describe('websocket-event-pusher', function() {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': 'Bearer ',
+            'Authorization': 'Bearer ses_XXX',
           },
           body: undefined,
         }]);
@@ -73,6 +84,10 @@ describe('websocket-event-pusher', function() {
 
       // Ensure that after fetching the websocket url that the websocket is connected to.
       eventSource.on('fetchedUrl', () => {
+        // Verify that the socket is connecting
+        assert.equal(eventSource.connectionState, CONNECTION_STATES.CONNECTING);
+
+        // Open the mock websocket
         wsResponse.onopen();
       });
     });
