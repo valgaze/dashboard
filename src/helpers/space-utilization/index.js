@@ -3,13 +3,12 @@ import 'moment-timezone';
 
 export const TIME_SEGMENTS = {
   WHOLE_DAY: {start: 0, end: 23, name: 'Whole day'},
-  WORKING_HOURS: {start: 8, end: 17, name: 'Working hours (8am-5pm)'},
+  WORKING_HOURS: {start: 8, end: 18, name: 'Working hours (8am-6pm)'},
 
-  BEFORE_OPEN: {start: 4, end: 7, name: 'Before open'},
-  BREAKFAST: {start: 7, end: 10, name: 'Breakfast'},
-  BETWEEN_MEALS: {start: 10, end: 11, name: 'Between meals'},
+  MORNING: {start: 8, end: 12, name: 'Morning'},
+  BREAKFAST: {start: 8, end: 10, name: 'Breakfast'},
   LUNCH: {start: 11, end: 14, name: 'Lunch'},
-  AFTER_CLOSE: {start: 14, end: 23, name: 'After Close'},
+  AFTERNOON: {start: 12, end: 18, name: 'Afternoon'},
 };
 
 export function groupCountsByDay(counts, timezone) {
