@@ -17,12 +17,19 @@ export default function autoRefresh({interval, shouldComponentUpdate}) {
       }
       componentDidMount() {
         this.raf = window.requestAnimationFrame(this.tick);
+        this.listener = window.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            window.cancelAnimationFrame(this.raf);
+          } else {
+            this.raf = window.requestAnimationFrame(this.tick);
+          }
+        });
       }
       componentWillUnmount() {
+        window.removeEventListener(this.listener);
         window.cancelAnimationFrame(this.raf);
       }
       tick() {
-        if (document.hidden) { return; }
         var now = Date.now();
         if (now - this.state.lastFrame > interval) { this.setState({ lastFrame: now }); }
         this.raf = window.requestAnimationFrame(this.tick);
