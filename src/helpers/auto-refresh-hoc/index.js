@@ -22,6 +22,7 @@ export default function autoRefresh({interval, shouldComponentUpdate}) {
         window.cancelAnimationFrame(this.raf);
       }
       tick() {
+        if (document.hidden) { return; }
         var now = Date.now();
         if (now - this.state.lastFrame > interval) { this.setState({ lastFrame: now }); }
         this.raf = window.requestAnimationFrame(this.tick);
