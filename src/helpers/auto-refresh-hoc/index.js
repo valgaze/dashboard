@@ -26,7 +26,7 @@ export default function autoRefresh({interval, shouldComponentUpdate}) {
         });
       }
       componentWillUnmount() {
-        window.removeEventListener(this.listener);
+        window.removeEventListener('visibilitychange', this.listener);
         window.cancelAnimationFrame(this.raf);
       }
       tick() {
