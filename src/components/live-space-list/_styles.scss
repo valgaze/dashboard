@@ -1,11 +1,11 @@
 // Header for the space list view. Contians a label and a search box.
-.space-list-header {
+.live-space-list-header {
   padding-top: 40px;
   @media (min-width: $screen-xs-max) {
     display: flex;
   }
 }
-.space-list-header-text {
+.live-space-list-header-text {
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 10px;
@@ -17,7 +17,7 @@
   font-weight: $font-weight-2;
 }
 
-.space-list-search-box {
+.live-space-list-search-box {
   margin-bottom: 20px;
   margin-right: 10px;
   /* margin-left: auto; is below in the @media rule */
@@ -42,9 +42,39 @@
   }
 }
 
-.space-list-container {
+.live-space-list-live-indicator-row {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+@keyframes live-space-list-live-indicator-breathe {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.live-space-list-live-indicator {
+  margin-left: 6px;
+  width: 14px;
+  height: 14px;
+  background-color: $brand-danger;
+  border-radius: 50%;
+
+  animation-name: live-space-list-live-indicator-breathe;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.live-space-list-container {
   @include grid-container;
   margin-top: 2px;
 }
-.space-list-row { @include grid-row; }
-.space-list-item { @include grid-width(24, 12, 12, 12); }
+.live-space-list-row { @include grid-row; }
+.live-space-list-item { @include grid-width(24, 12, 12, 12); }

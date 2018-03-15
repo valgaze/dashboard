@@ -15,25 +15,30 @@ export function SpaceList({
 
   onSpaceSearch,
 }) {
-  return <div className="space-list">
+  return <div className="live-space-list">
     {/* Show errors in the spaces collection. */}
     <ErrorBar message={spaces.error} showRefresh />
 
-    <div className="space-list-container">
-      <div className="space-list-header">
-        <h2 className="space-list-header-text">Spaces</h2>
+    <div className="live-space-list-container">
+      <div className="live-space-list-header">
+        <h2 className="live-space-list-header-text">Spaces</h2>
         <InputBox
           type="text"
-          className="space-list-search-box"
+          className="live-space-list-search-box"
           placeholder="Filter Spaces ..."
           value={spaces.filters.search}
           onChange={e => onSpaceSearch(e.target.value)}
         />
       </div>
 
-      <div className="space-list-row">
+      <div className="live-space-list-live-indicator-row">
+        Live
+        <div className="live-space-list-live-indicator" />
+      </div>
+
+      <div className="live-space-list-row">
         {spaceFilter(spaces.data, spaces.filters.search).map(space => {
-          return <div className="space-list-item" key={space.id}>
+          return <div className="live-space-list-item" key={space.id}>
             <SpaceCard
               space={space}
               events={spaces.events[space.id]}
