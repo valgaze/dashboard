@@ -28,15 +28,13 @@ export class InsightsSpaceList extends React.Component {
       spaceCounts: {},
       spaceUtilizations: {},
 
-      timeSegments: {},
+      timeSegment: 'WORKING_HOURS',
     };
 
     this.fetchData();
   }
 
-  async fetchData() {
-    const { spaces } = this.props;
-
+  async fetchData(spaces=this.props.spaces) {
     if (!(spaces && Array.isArray(spaces.data))) {
       return
     }
@@ -46,6 +44,11 @@ export class InsightsSpaceList extends React.Component {
       .filter(i => i.capacity != null)
       // Remove all spaces that have already had their counts fetched.
       .filter(space => typeof this.state.spaceCounts[space.id] === 'undefined')
+
+    // Bail early if there is no work to do.
+    if (spacesToFetch.length === 0) {
+      return
+    }
 
     // Fetch counts for each space.
     const requests = spacesToFetch.map(space => {
@@ -82,29 +85,31 @@ export class InsightsSpaceList extends React.Component {
 
     this.setState({
       spaceCounts,
-      spaceUtilizations: Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
-        const space = spaces.data.find(i => i.id === spaceId);
-        const counts = spaceCounts[spaceId];
-
-        const groups = groupCountsByDay(counts, space.timeZone);
-        const filteredGroups = groupCountFilter(groups, count =>
-          isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS.LUNCH));
-        const result = spaceUtilizationPerGroup(space, filteredGroups);
-        return {
-          ...acc,
-          [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length * 100,
-        };
-      }, {}),
       loading: false,
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({loading: true}, () => this.fetchData());
+    this.fetchData(nextProps.spaces);
   }
 
   render() {
     const { spaces, onSpaceSearch } = this.props;
+
+    const spaceUtilizations = Object.keys(this.state.spaceCounts).reduce((acc, spaceId, ct) => {
+      const space = spaces.data.find(i => i.id === spaceId);
+      const counts = this.state.spaceCounts[spaceId];
+
+      const groups = groupCountsByDay(counts, space.timeZone);
+      const filteredGroups = groupCountFilter(groups, count =>
+        isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS[this.state.timeSegment]));
+      const result = spaceUtilizationPerGroup(space, filteredGroups);
+      return {
+        ...acc,
+        [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length * 100,
+      };
+    }, {});
+
     return <div className="insights-space-list">
       {/* Show errors in the spaces collection. */}
       <ErrorBar message={spaces.error} showRefresh />
@@ -112,6 +117,20 @@ export class InsightsSpaceList extends React.Component {
       <div className="insights-space-list-container">
         <div className="insights-space-list-header">
           <h2 className="insights-space-list-header-text">Insights</h2>
+          <InputBox
+            type="select"
+            className="insights-space-list-time-segment-selector"
+            value={this.state.timeSegment}
+            onChange={e => {
+              this.setState({timeSegment: e.target.value}, () => this.fetchData());
+            }}
+          >
+            {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
+              return <option value={key} key={key}>
+                {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
+              </option>;
+            })}
+          </InputBox>
           <InputBox
             type="text"
             className="insights-space-list-search-box"
@@ -125,7 +144,7 @@ export class InsightsSpaceList extends React.Component {
           {spaceFilter(spaces.data, spaces.filters.search).map(space => {
             return <div className="insights-space-list-item" key={space.id}>
               <a href={`#/spaces/insights/${space.id}`}>{space.name}</a>
-              {this.state.spaceUtilizations[space.id]}% used on average throughout the day
+              {spaceUtilizations[space.id]}% used on average throughout the day
             </div>;
           })}
         </div>
