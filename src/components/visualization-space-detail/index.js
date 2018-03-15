@@ -38,11 +38,11 @@ export function SpaceDetail({
           })[space.timeZone] || space.timeZone}</div>
         </div>
 
-        {/* 24 hour chart card */}
-        <TwentyFourHourCard space={space} />
-
         {/* Daily Metrics chart card */}
         <DailyMetricsCard space={space} />
+
+        {/* 24 hour chart card */}
+        <TwentyFourHourCard space={space} />
 
         {/* Raw Events chart card */}
         <RawEventsCard space={space} />
