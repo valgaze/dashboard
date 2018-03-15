@@ -44,6 +44,7 @@ import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 import collectionSpacesSetEvents from './actions/collection/spaces/set-events';
+import collectionSpacesSet from './actions/collection/spaces/set';
 
 // All the reducer and store code is in a seperate file.
 import storeFactory from './store';
@@ -213,24 +214,36 @@ router.handle();
 // ----------------------------------------------------------------------------
 const eventSource = new WebsocketEventPusher();
 
+// Reconnect to the socket when the token changes.
+let currentToken = null;
+store.subscribe(() => {
+  const newToken = store.getState().sessionToken;
+  if (newToken !== currentToken) {
+    currentToken = newToken;
+    eventSource.connect();
+  }
+});
+
 // When the event source disconnects, fetch the state of each space from the core api to ensure that
 // the dashboard hasn't missed any events.
-eventSource.on('disconnect', () => {
-  const spaces = store.getState().spaces.data;
-  return Promise.all(spaces.map(space => {
+eventSource.on('connected', async () => {
+  const spaces = await core.spaces.list();
+  store.dispatch(collectionSpacesSet(spaces.results));
+
+  const spaceEventSets = await Promise.all(spaces.results.map(space => {
     return core.spaces.events({
       id: space.id,
       start_time: moment().subtract(1, 'minute').format(),
       end_time: moment().utc().format(),
     });
-  })).then(spaceEventSets => {
-    spaceEventSets.forEach((spaceEventSet, ct) => {
-      const action = collectionSpacesSetEvents(
-        spaces[ct],
-        spaceEventSet.results.map(i => ({ countChange: i.direction, timestamp: i.timestamp }))
-      );
-      store.dispatch(action);
-    });
+  }));
+
+  spaceEventSets.forEach((spaceEventSet, ct) => {
+    const action = collectionSpacesSetEvents(
+      spaces.results[ct],
+      spaceEventSet.results.map(i => ({ countChange: i.direction, timestamp: i.timestamp }))
+    );
+    store.dispatch(action);
   });
 });
 
