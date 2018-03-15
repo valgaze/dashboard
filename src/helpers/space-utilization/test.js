@@ -56,7 +56,7 @@ describe('space-utilization', function() {
    * Average Utilization should be (100% + 0%) / 2 = 50%
    */
   it('should calculate utilization for a relatively simple case', () => {
-    const groups = groupCountsByDay(events);
+    const groups = groupCountsByDay(events, 'UTC');
     const datapoints = spaceUtilizationPerGroup(space, groups);
 
     // There should only be one group, given that all datapoints were within a single day.
