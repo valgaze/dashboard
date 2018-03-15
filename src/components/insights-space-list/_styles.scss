@@ -37,6 +37,20 @@
   margin-left: 10px;
   margin-top: 20px;
   @media (min-width: $screen-xs-max) {
+    margin-top: 0px;
+  }
+}
+
+.insights-space-list-time-segment-selector {
+  margin-bottom: 20px;
+  width: 200px;
+
+  color: $gray-darker;
+
+  // When the space list is on mobile, the time segment selector is on a new line.
+  margin-left: 10px;
+  margin-top: 20px;
+  @media (min-width: $screen-xs-max) {
     margin-left: auto;
     margin-top: 0px;
   }
