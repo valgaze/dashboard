@@ -71,11 +71,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       startDate: moment.utc().subtract(7, 'days').format(),
       endDate: moment.utc().subtract(1, 'day').format(),
       timeSegment: 'WORKING_HOURS',
-
-      // The interval to pass to the count data fetching that occurs in `.fetchData`. The smaller
-      // this number is, the more accurate the data will be, but the longer it wil ltake to fetch
-      // and process that data.
-      utilizationDataResolution: '10m',
     };
   }
 
@@ -105,7 +100,16 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         start_time: this.state.startDate,
         end_time: this.state.endDate,
 
-        interval: this.state.utilizationDataResolution,
+        interval: function(timeSegment) {
+          const numberOfHoursVisible = TIME_SEGMENTS[timeSegment].end - TIME_SEGMENTS[timeSegment].start;
+          if (numberOfHoursVisible > 4) {
+            // For large graphs, fetch data at a coarser resolution.
+            return '10m';
+          } else {
+            // For small graphs, fetch data at a finer resolution.
+            return '2m';
+          }
+        }(this.state.timeSegment),
 
         // Fetch with a large page size to try to minimize the number of requests that will be
         // required.
@@ -148,21 +152,20 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       this.fetchData.call(this);
     }
 
-    // console.log(this.state.groups && formatPercentage(this.calculateAverageUtilization(spaceUtilizationPerGroup(space, this.state.groups.filter(i => {
-    //   const dayOfWeek = moment.utc(i.date, 'YYYY-MM-DD').tz(space.timeZone).day();
-    //   return dayOfWeek === 0;
-    // })))))
-
     let utilizationsByDay,
       peakUtilizationPercentage, peakUtilizationTimestamp,
       averageUtilizationDatapointsWithTimestamp;
 
     if (this.state.state === VISIBLE) {
+      //
+
+      // Calculate the average utilization for each day within the specified time segment.
       utilizationsByDay = this.state.data.reduce((acc, i) => {
         const dayOfWeek = moment.utc(i.date, 'YYYY-MM-DD').tz(space.timeZone).day();
         acc[dayOfWeek].push(i);
         return acc;
       }, [[], [], [], [], [], [], []]);
+
 
       // Calculate the peak utilization of the space by getting the peak count within the raw count
       // data that was fetched and dividing it by the capacity.
@@ -173,10 +176,15 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       peakUtilizationPercentage = peak.count / space.capacity;
       peakUtilizationTimestamp = peak.timestamp;
       
-      // Calculate an average day's utilization graph.
 
-      // Create an array to store utilization data within
+
+      // Calculate an average day's utilization graph.
       let averageUtilizationDatapoints = this.state.data[0].utilization.map(_ => 0);
+
+      // The average calculation is split into two parts: the sum and the division.
+      // - The sum part of the average (step 1) occurs below.
+      // - `dataPointCount` contains the number of samples that have been summed together and is the
+      // number that will be divided by later to complete the average.
       let dataPointCount = 0;
       this.state.data.forEach(group => {
         if (Array.isArray(group.utilization)) {
@@ -185,13 +193,18 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         }
       });
 
-      const stamp = moment.utc(this.state.counts[0].timestamp);
-      console.log('STAMP', stamp.format())
+      // 
+      const dataDuration = TIME_SEGMENTS[this.state.timeSegment].end - TIME_SEGMENTS[this.state.timeSegment].start;
+
+      const stamp = moment.utc(this.state.counts[0].timestamp)
+        .startOf('day')
+        .add(TIME_SEGMENTS[this.state.timeSegment].start, 'hours');
 
       averageUtilizationDatapointsWithTimestamp = averageUtilizationDatapoints
         .map(i => i / dataPointCount) /* second part of calculating average */
+        .map(i => Math.round(i * 1000) / 1000) /* round each number to a single decimal place */
         .map((i, ct) => ({
-          timestamp: stamp.add(24 / averageUtilizationDatapoints.length, 'hours').format(),
+          timestamp: stamp.add(dataDuration / averageUtilizationDatapoints.length, 'hours').format(),
           count: i * 100,
         }))
 
