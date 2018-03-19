@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment-timezone'; 
 
 export const TIME_SEGMENTS = {
-  WHOLE_DAY: {start: 0, end: 23, name: 'Whole day'},
+  WHOLE_DAY: {start: 0, end: 24, name: 'Whole day'},
   WORKING_HOURS: {start: 8, end: 18, name: 'Working hours'},
 
   MORNING: {start: 8, end: 12, name: 'Morning'},

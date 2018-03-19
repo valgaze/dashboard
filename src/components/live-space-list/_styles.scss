@@ -42,35 +42,40 @@
   }
 }
 
-.live-space-list-live-indicator-row {
-  margin-left: 10px;
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 20px;
-}
-@keyframes live-space-list-live-indicator-breathe {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-.live-space-list-live-indicator {
-  margin-left: 6px;
-  width: 14px;
-  height: 14px;
-  background-color: $brand-danger;
-  border-radius: 50%;
+// "Live" indicator tag after the page title. This shows the fact that new data will flow in and
+// the status of the socket via the colored bubble.
+.live-space-list-live-indicator-tag {
+  position: relative;
+  top: -2px;
+  left: 20px;
 
-  animation-name: live-space-list-live-indicator-breathe;
-  animation-duration: 1s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  font-size: $font-size-x-small;
+  font-weight: 500;
+  color: #fff;
+  background-color: $gray-cinder;
+  user-select: none;
+
+  border: 1px solid $gray-cinder;
+  border-radius: $border-radius-base;
 }
+
+.live-space-list-live-indicator-tag i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: $gray;
+  border-radius: 50%;
+  margin-left: 6px;
+}
+
+.live-space-list-live-indicator-tag i.status-connected { background-color: $brand-success; }
+.live-space-list-live-indicator-tag i.status-connecting { background-color: $brand-warning; }
+.live-space-list-live-indicator-tag i.status-error { background-color: $brand-danger; }
 
 .live-space-list-container {
   @include grid-container;

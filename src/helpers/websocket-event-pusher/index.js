@@ -25,6 +25,7 @@ export default class WebsocketEventPusher extends EventEmitter {
 
     this.gracefulDisconnect = false;
     this.connectionState = CONNECTION_STATES.CLOSED;
+    this.emit('connectionStateChange', this.connectionState);
 
     this.socket = null;
     this.connect()
@@ -57,17 +58,20 @@ export default class WebsocketEventPusher extends EventEmitter {
     // Start the socket url connection process
     this.connectionState = CONNECTION_STATES.WAITING_FOR_SOCKET_URL;
     this.log('   ... CONNECTION STATE UPDATE %o', this.connectionState);
+    this.emit('connectionStateChange', this.connectionState);
 
     try {
       const response = await core.sockets.create();
 
       this.connectionState = CONNECTION_STATES.CONNECTING;
       this.log('   ... CONNECTION STATE UPDATE: %o', this.connectionState);
+      this.emit('connectionStateChange', this.connectionState);
 
       this.socket = new this.WebSocket(response.url);
       this.socket.onopen = () => {
         this.connectionState = CONNECTION_STATES.CONNECTED;
         this.log('   ... CONNECTION STATE UPDATE: %o', this.connectionState);
+        this.emit('connectionStateChange', this.connectionState);
 
         // When a successful connection occurs, reset the iteration count back to zero so that the
         // backoff is reset.
@@ -109,6 +113,7 @@ export default class WebsocketEventPusher extends EventEmitter {
       // An error occured while connection. so log it and try to reconnect.
       this.connectionState = CONNECTION_STATES.ERROR;
       this.log('SOCKET ERROR: %o', err);
+      this.emit('connectionStateChange', this.connectionState);
 
       // Attempt to reconnect after an error.
 
@@ -128,5 +133,6 @@ export default class WebsocketEventPusher extends EventEmitter {
     }
 
     this.connectionState = CONNECTION_STATES.CLOSED;
+    this.emit('connectionStateChange', this.connectionState);
   }
 }

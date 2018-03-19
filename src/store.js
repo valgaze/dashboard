@@ -14,6 +14,7 @@ import spaces from './reducers/spaces/index';
 import tokens from './reducers/tokens/index';
 import user from './reducers/user/index';
 import webhooks from './reducers/webhooks/index';
+import eventPusherStatus from './reducers/event-pusher-status/index';
 const reducer = combineReducers({
   accountForgotPassword,
   accountRegistration,
@@ -26,6 +27,7 @@ const reducer = combineReducers({
   tokens,
   user,
   webhooks,
+  eventPusherStatus,
 });
 
 // Create our redux store for storing the application state.

@@ -20,11 +20,11 @@ core.doorways.create = function(data) {
       'Authorization': `Bearer ${core.config().token}`,
     },
     body: JSON.stringify(data),
-  }).then(response => {
+  }).then(async response => {
     if (response.ok) {
       return response.json();
     } else {
-      return Promise.reject(errorFormatter(response));
+      return Promise.reject(await errorFormatter(response));
     }
   });
 };
@@ -38,18 +38,19 @@ core.doorways.update = function(data) {
       'Authorization': `Bearer ${core.config().token}`,
     },
     body: JSON.stringify(data),
-  }).then(response => {
+  }).then(async response => {
     if (response.ok) {
       return response.json();
     } else {
-      return Promise.reject(errorFormatter(response));
+      return Promise.reject(await errorFormatter(response));
     }
   });
 };
 
-module.exports = {
-  default: core,
-  core: core,
-  accounts: accounts,
-  metrics: metrics,
+export {
+  core,
+  accounts,
+  metrics,
 };
+
+export default core;

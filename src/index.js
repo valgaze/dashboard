@@ -46,6 +46,8 @@ import collectionSpacesCountChange from './actions/collection/spaces/count-chang
 import collectionSpacesSetEvents from './actions/collection/spaces/set-events';
 import collectionSpacesSet from './actions/collection/spaces/set';
 
+import eventPusherStatusChange from './actions/event-pusher/status-change';
+
 // All the reducer and store code is in a seperate file.
 import storeFactory from './store';
 import unsafeNavigateToLandingPage from './helpers/unsafe-navigate-to-landing-page/index';
@@ -222,6 +224,11 @@ store.subscribe(() => {
     currentToken = newToken;
     eventSource.connect();
   }
+});
+
+// When the state of the connection changes, sync that change into redux.
+eventSource.on('connectionStateChange', newConnectionState => {
+  store.dispatch(eventPusherStatusChange(newConnectionState));
 });
 
 // When the event source disconnects, fetch the state of each space from the core api to ensure that

@@ -7,11 +7,14 @@ import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 import InputBox from '@density/ui-input-box';
 import SpaceCard from '../live-space-card/index';
 
+import { CONNECTION_STATES } from '../../helpers/websocket-event-pusher/index';
+
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
 
-export function SpaceList({
+export function LiveSpaceList({
   spaces,
+  eventPusherStatus,
 
   onSpaceSearch,
 }) {
@@ -21,7 +24,25 @@ export function SpaceList({
 
     <div className="live-space-list-container">
       <div className="live-space-list-header">
-        <h2 className="live-space-list-header-text">Spaces</h2>
+        <h2 className="live-space-list-header-text">
+          Spaces
+          <span className="live-space-list-live-indicator-tag">
+            {(function(status) {
+              switch (status) {
+                case CONNECTION_STATES.ERROR:
+                  return 'ERROR';
+                case CONNECTION_STATES.WAITING_FOR_SOCKET_URL:
+                case CONNECTION_STATES.CONNECTING:
+                  return 'CONNECTING';
+                case CONNECTION_STATES.CONNECTED:
+                  return 'LIVE';
+                default:
+                  return 'OFFLINE';
+              }
+            })(eventPusherStatus.status)}
+            <i className={`status-${eventPusherStatus.status.toLowerCase()}`} />
+          </span>
+        </h2>
         <InputBox
           type="text"
           className="live-space-list-search-box"
@@ -29,11 +50,6 @@ export function SpaceList({
           value={spaces.filters.search}
           onChange={e => onSpaceSearch(e.target.value)}
         />
-      </div>
-
-      <div className="live-space-list-live-indicator-row">
-        Live
-        <div className="live-space-list-live-indicator" />
       </div>
 
       <div className="live-space-list-row">
@@ -55,6 +71,7 @@ export function SpaceList({
 export default connect(state => {
   return {
     spaces: state.spaces,
+    eventPusherStatus: state.eventPusherStatus,
   };
 }, dispatch => {
   return {
@@ -62,4 +79,4 @@ export default connect(state => {
       dispatch(collectionSpacesFilter('search', searchQuery));
     },
   };
-})(SpaceList);
+})(LiveSpaceList);
