@@ -47,6 +47,7 @@ function isOutsideRange(startISOTime, datePickerInput, day) {
 const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
       VISIBLE = 'VISIBLE',
+      REQUIRES_CAPACITY = 'REQUIRES_CAPACITY',
       ERROR = 'ERROR';
 
 // The maximum number of days that can be selected by the date range picker
@@ -80,6 +81,19 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
   async fetchData() {
     const { space } = this.props;
+
+    if (!space.capacity) {
+      setTimeout(() => {
+        this.setState({
+          state: REQUIRES_CAPACITY,
+
+          // Along with the utilization data, store the space id that the data has been calculated for.
+          // In this way, if the space id changes, then we know to refetch utilization data.
+          dataSpaceId: space.id,
+        });
+      }, 0);
+      return;
+    }
 
     // Step 1: Fetch all counts--which means all pages--of data from the start date to the end data
     // selected on the DateRangePicker. Uses the `fetchAllPages` helper, which encapsulates the
@@ -277,12 +291,14 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               data={averageUtilizationDatapointsWithTimestamp}
               width={950}
               height={350}
-              timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
               capacity={100}
             />
           </div> : null}
           {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
             <span>Generating Data...</span>
+          </div> : null}
+          {this.state.state === REQUIRES_CAPACITY ? <div className="insights-space-detail-utilization-card-body-info">
+            <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
           </div> : null}
           {this.state.state === EMPTY ? <div className="insights-space-detail-utilization-card-body-info">
             <span>No data found in date range.</span>
