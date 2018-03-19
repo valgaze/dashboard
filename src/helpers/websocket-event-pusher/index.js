@@ -106,10 +106,17 @@ export default class WebsocketEventPusher extends EventEmitter {
 
       this.emit('fetchedUrl');
     } catch (err) {
-      // Unlock the connection.
+      // An error occured while connection. so log it and try to reconnect.
       this.connectionState = CONNECTION_STATES.ERROR;
-      console.log(err)
-      this.log('SOCKET ERROR', err);
+      this.log('SOCKET ERROR: %o', err);
+
+      // Attempt to reconnect after an error.
+
+      // Calculate the timeout before the next reconnect attempt. Use an exponential backoff.
+      const backoffTimeout = MINIMUM_CONNECTION_INTERVAL + (Math.pow(iteration, 2) * 1000);
+
+      // Queue up the next attempt to reconnect to the socket server.
+      setTimeout(() => this.connect(iteration+1), backoffTimeout);
     }
   }
 

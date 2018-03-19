@@ -189,6 +189,8 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                   }
                 });
               }}
+              // Within the component, store if the user has selected the start of end date picker
+              // input
               focusedInput={this.state.datePickerInput}
               onFocusChange={focused => this.setState({datePickerInput: focused})}
 

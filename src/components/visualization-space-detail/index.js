@@ -5,6 +5,7 @@ import RealTimeBar from '../visualization-space-detail-real-time-bar/index';
 import TwentyFourHourCard from '../visualization-space-detail-24-hour-chart/index';
 import DailyMetricsCard from '../visualization-space-detail-daily-metrics-card/index';
 import RawEventsCard from '../visualization-space-detail-raw-events-card/index';
+import UtilizationCard from '../insights-space-detail-utilization-card/index';
 
 export function SpaceDetail({
   space,
@@ -37,6 +38,8 @@ export function SpaceDetail({
             'America/Los_Angeles': 'Pacific',
           })[space.timeZone] || space.timeZone}</div>
         </div>
+
+        <UtilizationCard space={space} />
 
         {/* Daily Metrics chart card */}
         <DailyMetricsCard space={space} />

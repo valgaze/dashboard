@@ -1,0 +1,67 @@
+.insights-space-detail-utilization-card { margin-top: 40px; }
+.insights-space-detail-utilization-card-header {
+  display: block;
+  @media (min-width: $screen-xs-max) {
+    display: flex;
+  }
+}
+.insights-space-detail-utilization-card-header-label { line-height: 43px; }
+
+
+// The time segment picker, which allows the user to choose which time segment per day to filter
+// their data within.
+.insights-space-detail-utilization-card-time-segment-picker {
+  .input-box {
+    color: $gray-cinder;
+    margin-left: 0px; /* On mobile, the select box should be at the left edge. */
+  }
+
+  @media (min-width: $screen-xs-max) {
+    margin-left: auto; /* On a computer, the select box should be pushed right */
+  }
+}
+
+// The date range picker lets the user choose the range of time that this chart should search
+// through.
+.insights-space-detail-utilization-card-date-picker {
+  margin-top: 10px;
+  margin-left: 0px;
+
+  @media (min-width: $screen-xs-max) {
+    margin-top: 0px;
+    margin-left: 20px;
+  }
+}
+
+// Refresh icon to refetch data
+.insights-space-detail-utilization-card-header-refresh:before {
+  content: '\e92d';
+  font-family: "Densicons";
+  margin-left: 10px;
+  font-size: $font-size-base;
+  color: $brand-primary;
+  cursor: pointer;
+}
+.insights-space-detail-utilization-card-header-refresh:hover { opacity: 0.8; }
+.insights-space-detail-utilization-card-header-refresh:active { opacity: 1; }
+
+
+// Horizontally and vertically center errors and info messages in the 24 hour card.
+.insights-space-detail-utilization-card-body-info,
+.insights-space-detail-utilization-card-body-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  height: 405px;
+
+  font-size: $font-size-base;
+  color: $gray-cinder;
+}
+// Errors should be prefixed by the error icon
+.insights-space-detail-utilization-card-body-error-icon {
+  color: $brand-danger;
+  font-family: "Densicons";
+  margin-right: 10px;
+  position: relative;
+}
