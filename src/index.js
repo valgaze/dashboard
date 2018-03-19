@@ -265,6 +265,18 @@ eventSource.on('space', countChangeEvent => {
   }));
 });
 
+// If the user is logged in, sync the count of all spaces with the server every 5 minutes.
+// This is to ensure that the count on the dashboard and the actual count can't drift really far
+// apart throughout the day if you don't refresh the dashboard.
+setInterval(async () => {
+  const loggedIn = store.getState().sessionToken !== null;
+
+  if (loggedIn) {
+    const spaces = await core.spaces.list();
+    store.dispatch(collectionSpacesSet(spaces.results));
+  }
+},  5 * 60 * 1000);
+
 ReactDOM.render(
   <Provider store={store}>
     <div>
