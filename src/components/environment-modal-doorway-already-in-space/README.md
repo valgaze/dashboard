@@ -1,6 +1,6 @@
 # EnvironmentModalDoorwayAlreadyInSpace
 
-This component is a modal that is visible when the user trys to drag a space into a doorway that
+A modal that is visible when the user trys to drag a space into a doorway that
 already contains the dragged doorway. It's purely presentational, as its just a dismissable modal.
 
 ## Component Props

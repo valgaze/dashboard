@@ -1,6 +1,6 @@
 # EnvironmentSpaceDismissableToast
 
-This component is used to make a dismissable toast for the top of the spaces and doorway columns.
+A dismissable, informational toast for the top of the spaces and doorway columns.
 This toast is hidden when a localStorage key is set.
 
 ## Component Props

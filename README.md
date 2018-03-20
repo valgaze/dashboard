@@ -5,9 +5,9 @@
 Status](https://david-dm.org/densityco/nicss.svg)](https://david-dm.org/densityco/web-dashboard)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-The Density Dashboard is an interface for visualizing real time and historical count data of spaces. 
+Density is a modern infrastructure for counting people. The Dashboard is a tool on top of the software platform, exposing insights through live and trend data, and allowing you to manage your account and installs.
 
-Density's main product is our API. While it already has [excellent documentation](http://docs.density.io), we're open sourcing our Dashboard to help document how we're using the API and provide usage patterns that we're confident in around Density data. We hope that this project will help guide developers into integrating Density into their own systems.
+Density's core product is our API. While it is [thoroughly documented](http://docs.density.io), we're open sourcing our Dashboard as a guide to integrating our API and data into a tangible product; providing usage patterns that we're confident in.
 
 The Dashboard depends on a couple of other in-house built dependencies:
 - [`@density/charts`](https://github.com/densityco/charts) - an open-source library of visualizations and diagrams used by the Dashboard as well as other internal Density systems. [Here's a preview.](https://densityco.github.io/charts/master/)
@@ -47,3 +47,10 @@ Since this dashboard does a number of tasks other than just displaying spaces, i
 internal services that aren't mentioned in our [API documentation](http://docs.density.io). While
 you can use the undocumented endpoints, we only support our documented endpoints and make no
 guarantees on the long term stability or existance of our undocumented software.
+
+## Learning
+Documentation is sprinkled throughout the project's modules, focused on usage and design patterns.
+
+We'll be continuing to build out this documentation to aid developers interested in integrating Density into their product.
+
+If there are any questions about implementation or design pattern, don't hesitate to reach out with an issue!
