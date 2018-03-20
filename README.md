@@ -53,7 +53,7 @@ guarantees on the long term stability or existance of our undocumented software.
 - [**Reducers**](src/reducers/): [Redux reducers](https://redux.js.org/basics/reducers) - functions that update the state based on provided actions.
 - [**Components**](src/components/): The hierarchy of modules that build the UI.
 - [**Helpers**](src/helpers/): Pure, reusable functions.
-- [**Utilities**](src/utilities/): Template-based code + directory structure generators for core concepts.
+- [**Utilities**](utilities/): Template-based code + directory structure generators for core concepts.
 
 ## Learning
 Documentation is sprinkled throughout the project's modules, focused on usage and design patterns.
