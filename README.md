@@ -42,6 +42,111 @@ None of these variables are required. They enable optional features that are use
 - `REACT_APP_MIXPANEL_TOKEN`: Optional mixpanel token for tracking user interactions.
 - `REACT_APP_ENVIRONMENT`: Optional parameter to set which set of APIs to use (production vs staging). Used by CircleCi and in `src/index.js`.
 
+## How would I add `<insert feature here>`?
+
+### Adding a new page
+In order to add a new page, create one of each of these:
+
+- Create the new page with the `yarn make-component`
+  [utility](https://github.com/DensityCo/dashboard/tree/trunk/utilities):
+```sh
+dashboard/ $ yarn make-component
+yarn make-component v0.27.5
+$ ./utilities/make-component
+Let's make a new component.
+Enter the name of your component, in dash-case: hello-world
+* Copying template to components/hello-world...
+* Replacing placeholders with variations of hello-world...
+* Adding styles to central stylesheet...
+You have a new component in src/components/hello-world:
+* src/components/hello-world/index.js contains your component code.
+* src/components/hello-world/_styles.scss contains your component styles.
+* Press enter to open the documentation in your $EDITOR...
+* Done.
+dashboard/ $
+```
+
+- A new [route transition
+  action](https://github.com/DensityCo/dashboard/tree/trunk/src/actions#route-transition-actions)
+  which will be dispatched when the user navigates to the route. This conventionally should be a
+  file in the `src/actions/route-transition` directory that looks something like this:
+```javascript
+export const ROUTE_TRANSITION_HELLO_WORLD = 'ROUTE_TRANSITION_HELLO_WORLD';
+
+export default function routeTransitionHelloWorld(param) {
+  return async dispatch => {
+    // To start with, dispatch the route transition action.
+    dispatch({ type: ROUTE_TRANSITION_HELLO_WORLD });
+
+    // Then, perform any other asynchronous data fetching, calculation, or anything else you need in
+    order to properly render the page. Once complete, dispatch this data in actions to cause a
+    reducer to update (which will then cause your component to re-render.)
+  }
+}
+```
+
+- A new entry in the [active-page
+  reducer](https://github.com/DensityCo/dashboard/blob/trunk/src/reducers/active-page/index.js).
+  This reducer should react to the `ROUTE_TRANSITION_*` action and update its state to reflect the
+  currently active page.
+```
+import { ROUTE_TRANSITION_HELLO_WORLD } from '../../actions/route-transitions/hello-world';
+
+/* ... */
+
+export default function activePage(state=initialState, action) {
+  switch (action.type) {
+  /* ... */
+  case ROUTE_TRANSITION_HELLO_WORLD: /* track when the user navigates to the hello world page */
+    return 'HELLO_WORLD';
+  /* ... */
+  }
+}
+```
+
+- Add a new entry to the `ActivePage` component in
+  [src/components/app/index.js](https://github.com/DensityCo/dashboard/blob/trunk/src/components/app/index.js)
+  that maps the value set in the previous step (`"HELLO_WORLD"`) to the component to render for that
+  page.
+```javascript
+import HelloWorld from '../hello-world/index';
+/* ... */
+
+function ActivePage({activePage, settings}) {
+  switch (activePage) {
+  /* ... */
+  case "HELLO_WORLD":
+    return <HelloWorld />;
+  /* ... */
+  }
+}
+
+/* ... */
+```
+
+- A new entry for the route on the router in `src/index.js`. The callback used as the second
+  argument returns an action to dispatch (conventionally, this would be the [route transition
+  action](https://github.com/DensityCo/dashboard/tree/trunk/src/actions#route-transition-actions)
+  you created in the previous step) :
+```javascript
+import routeTransitionHelloWorld from '../../actions/route-transitions/hello-world';
+
+/* ... */
+
+router.addRoute('hello/world/:param', param => {
+  return helloWorldRouteTransition(param);
+});
+```
+
+To sum it up, here's what happens step-by-step when the user navigates to `#/hello/world/foo`:
+- The callback in `router.addRoute` is fired, which returns a route transition action that is
+  dispatched.
+- The route transition dispatches the `ROUTE_TRANSITION_HELLO_WORLD` action, which causes the
+  `activePage` reducer to be updated so that it now contains the value `"HELLO_WORLD"`
+- The `ActivePage` component is rerendered, which uses the `"HELLO_WORLD"` value to know to render
+  the `HelloWorld` component.
+- The `HelloWorld` component is rendered.
+
 ## Note on undocumented APIs
 Since this dashboard does a number of tasks other than just displaying spaces, it uses a number of
 internal services that aren't mentioned in our [API documentation](http://docs.density.io). While
