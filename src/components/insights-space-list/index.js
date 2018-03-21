@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
+import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
 
 import { core } from '../../client';
 import moment from 'moment';
@@ -20,6 +21,13 @@ import spaceUtilizationPerGroup, {
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
 
+// Used to store which colum is the active column.
+const COLUMN_SPACE_NAME = 'COLUMN_SPACE_NAME',
+      COLUMN_UTILIZATION = 'COLUMN_UTILIZATION';
+
+// By default, sort in decending order.
+const DEFAULT_SORT_DIRECTION = SORT_DESC;
+
 export class InsightsSpaceList extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +35,10 @@ export class InsightsSpaceList extends React.Component {
     this.state = {
       loading: true,
       spaceCounts: {},
+
+      // Start by sorting the space name column in an acending order.
+      activeColumn: COLUMN_SPACE_NAME,
+      columnSortOrder: DEFAULT_SORT_DIRECTION,
 
       timeSegment: 'WORKING_HOURS',
     };
@@ -164,6 +176,22 @@ export class InsightsSpaceList extends React.Component {
             <space className="insights-space-list-summary-header-highlight">50%</space>
           </CardHeader>
           <CardBody>
+            <SortableGridHeader>
+              <SortableGridHeaderItem
+                width={1}
+                active={this.state.activeColumn === COLUMN_SPACE_NAME}
+                sort={this.state.columnSortOrder}
+                onActivate={() => this.setState({activeColumn: COLUMN_SPACE_NAME, columnSortOrder: DEFAULT_SORT_DIRECTION})}
+                onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
+              >Space</SortableGridHeaderItem>
+              <SortableGridHeaderItem
+                width={3}
+                active={this.state.activeColumn === COLUMN_UTILIZATION}
+                sort={this.state.columnSortOrder}
+                onActivate={() => this.setState({activeColumn: COLUMN_UTILIZATION, columnSortOrder: DEFAULT_SORT_DIRECTION})}
+                onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
+              >Utilization</SortableGridHeaderItem>
+            </SortableGridHeader>
             {spaceFilter(spaces.data, spaces.filters.search).map(space => {
               return <div className="insights-space-list-item" key={space.id}>
                 <a href={`#/spaces/insights/${space.id}`}>{space.name}</a>
