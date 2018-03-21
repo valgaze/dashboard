@@ -165,4 +165,6 @@ Documentation is sprinkled throughout the project's modules, focused on usage an
 
 We'll be continuing to build out this documentation to aid developers interested in integrating Density into their product.
 
-If there are any questions about implementation or design pattern, don't hesitate to reach out with an issue!
+If there are any questions about implementation, design patterns, or clarification is desired on any
+part of the dashboard codebase, don't hesitate to reach out by [creating an
+issue](https://github.com/DensityCo/dashboard/issues/new) or [sending an email to our developers].
