@@ -8,6 +8,7 @@ import moment from 'moment';
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
 import InputBox from '@density/ui-input-box';
+import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
@@ -26,7 +27,6 @@ export class InsightsSpaceList extends React.Component {
     this.state = {
       loading: true,
       spaceCounts: {},
-      spaceUtilizations: {},
 
       timeSegment: 'WORKING_HOURS',
     };
@@ -96,19 +96,22 @@ export class InsightsSpaceList extends React.Component {
   render() {
     const { spaces, onSpaceSearch } = this.props;
 
-    const spaceUtilizations = Object.keys(this.state.spaceCounts).reduce((acc, spaceId, ct) => {
-      const space = spaces.data.find(i => i.id === spaceId);
-      const counts = this.state.spaceCounts[spaceId];
+    let spaceUtilizations = {};
+    if (!this.state.loading) {
+      spaceUtilizations = Object.keys(this.state.spaceCounts).reduce((acc, spaceId, ct) => {
+        const space = spaces.data.find(i => i.id === spaceId);
+        const counts = this.state.spaceCounts[spaceId];
 
-      const groups = groupCountsByDay(counts, space.timeZone);
-      const filteredGroups = groupCountFilter(groups, count =>
-        isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS[this.state.timeSegment]));
-      const result = spaceUtilizationPerGroup(space, filteredGroups);
-      return {
-        ...acc,
-        [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length * 100,
-      };
-    }, {});
+        const groups = groupCountsByDay(counts, space.timeZone);
+        const filteredGroups = groupCountFilter(groups, count =>
+          isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS[this.state.timeSegment]));
+        const result = spaceUtilizationPerGroup(space, filteredGroups);
+        return {
+          ...acc,
+          [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length * 100,
+        };
+      }, {});
+    }
 
     return <div className="insights-space-list">
       {/* Show errors in the spaces collection. */}
@@ -117,6 +120,18 @@ export class InsightsSpaceList extends React.Component {
       <div className="insights-space-list-container">
         <div className="insights-space-list-header">
           <h2 className="insights-space-list-header-text">Insights</h2>
+        </div>
+        <div className="insights-space-list-filter-row">
+          {/* Left-aligned filter box */}
+          <InputBox
+            type="text"
+            className="insights-space-list-search-box"
+            placeholder="Filter Spaces ..."
+            value={spaces.filters.search}
+            onChange={e => onSpaceSearch(e.target.value)}
+          />
+
+          <div className="insights-space-list-text-label">Utilization for</div>
           <InputBox
             type="select"
             className="insights-space-list-time-segment-selector"
@@ -131,23 +146,32 @@ export class InsightsSpaceList extends React.Component {
               </option>;
             })}
           </InputBox>
+          <div className="insights-space-list-text-label">over past</div>
           <InputBox
-            type="text"
-            className="insights-space-list-search-box"
-            placeholder="Filter Spaces ..."
-            value={spaces.filters.search}
-            onChange={e => onSpaceSearch(e.target.value)}
-          />
+            type="select"
+            className="insights-space-list-duration-selector"
+            defaultValue={"week"}
+          >
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+          </InputBox>
         </div>
 
-        <div className="insights-space-list-row">
-          {spaceFilter(spaces.data, spaces.filters.search).map(space => {
-            return <div className="insights-space-list-item" key={space.id}>
-              <a href={`#/spaces/insights/${space.id}`}>{space.name}</a>
-              {spaceUtilizations[space.id]}% used on average throughout the day
-            </div>;
-          })}
-        </div>
+        <Card className="insights-space-list-row">
+          {this.state.loading ? <CardLoading indeterminate /> : null}
+          <CardHeader className="insights-space-list-summary-header">
+            Some fancy shmancy collective space metric goes here
+            <space className="insights-space-list-summary-header-highlight">50%</space>
+          </CardHeader>
+          <CardBody>
+            {spaceFilter(spaces.data, spaces.filters.search).map(space => {
+              return <div className="insights-space-list-item" key={space.id}>
+                <a href={`#/spaces/insights/${space.id}`}>{space.name}</a>
+                {spaceUtilizations[space.id]}% used on average throughout the day
+              </div>;
+            })}
+          </CardBody>
+        </Card>
       </div>
     </div>;
   }

@@ -17,11 +17,17 @@
   font-weight: $font-weight-2;
 }
 
+
+
+.insights-space-list-filter-row {
+  @include grid-row;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
 .insights-space-list-search-box {
-  margin-bottom: 20px;
-  margin-right: 10px;
-  /* margin-left: auto; is below in the @media rule */
   width: 200px;
+  margin-right: auto;
 
   color: $gray-darker;
   &::placeholder,
@@ -32,33 +38,50 @@
     color: $gray;
     opacity: 1; // Placeholders in firefox have opacity be default. Undo that.
   }
-
-  // When the space list is on mobile, the search box is on a new line.
-  margin-left: 10px;
-  margin-top: 20px;
-  @media (min-width: $screen-xs-max) {
-    margin-top: 0px;
-  }
 }
 
+.insights-space-list-text-label {
+  font-size: $font-size-base;
+  color: $gray-cinder;
+
+  line-height: 43px;
+  margin-left: 15px;
+  margin-right: 15px;
+
+  user-select: none;
+}
+
+// The "Working hours" / "Whole day" / "Breakfast" / etc selector.
 .insights-space-list-time-segment-selector {
-  margin-bottom: 20px;
+  color: $gray-cinder;
   width: 200px;
-
-  color: $gray-darker;
-
-  // When the space list is on mobile, the time segment selector is on a new line.
-  margin-left: 10px;
-  margin-top: 20px;
-  @media (min-width: $screen-xs-max) {
-    margin-left: auto;
-    margin-top: 0px;
-  }
 }
+
+// The "week" / "month" selector
+.insights-space-list-duration-selector { color: $gray-cinder; }
+
+// The header of the card that displays the collective space metric (either utilization or total
+// events, I forgot).
+.card .insights-space-list-summary-header {
+  background-color: $gray-lightest;
+  color: $gray-cinder;
+
+  padding-top: 80px;
+  padding-bottom: 80px;
+  text-align: center;
+}
+.insights-space-list-summary-header-highlight {
+  color: $brand-primary;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+
 
 .insights-space-list-container {
   @include grid-container;
   margin-top: 2px;
 }
-.insights-space-list-row { @include grid-row; }
-.insights-space-list-item { @include grid-width(24, 12, 12, 12); }
+.insights-space-list-row {
+  width: 100%;
+}
