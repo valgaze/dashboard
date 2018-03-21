@@ -47,3 +47,19 @@ Since this dashboard does a number of tasks other than just displaying spaces, i
 internal services that aren't mentioned in our [API documentation](http://docs.density.io). While
 you can use the undocumented endpoints, we only support our documented endpoints and make no
 guarantees on the long term stability or existance of our undocumented software.
+
+## Core Concepts
+- [**Actions**](src/actions/): [Redux actions](https://redux.js.org/basics/actions) and action creators - data payloads and functions (vanilla and thunks) that create actions.
+- [**Reducers**](src/reducers/): [Redux reducers](https://redux.js.org/basics/reducers) - functions that update the state based on provided actions.
+- [**Components**](src/components/): The hierarchy of modules that build the UI.
+- [**Helpers**](src/helpers/): Pure, reusable functions.
+- [**Utilities**](utilities/): Template-based code + directory structure generators for core concepts.
+
+## Learning
+Documentation is sprinkled throughout the project's modules, focused on usage and design patterns.
+
+We'll be continuing to build out this documentation to aid developers interested in integrating Density into their product.
+
+If there are any questions about implementation, design patterns, or clarification is desired on any
+part of the dashboard codebase, don't hesitate to reach out by [creating an
+issue](https://github.com/DensityCo/dashboard/issues/new) or [sending an email to our developers].
