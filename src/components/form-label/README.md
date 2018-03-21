@@ -1,6 +1,6 @@
 # FormLabel
 
-Stateless component that wraps a input box to provide a label for an input.
+A stateless component that wraps a input box to provide a label for an input.
 
 ## Component Props
 - `label: string` - Label for the input
