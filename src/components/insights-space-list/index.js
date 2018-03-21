@@ -169,13 +169,13 @@ export class InsightsSpaceList extends React.Component {
           </InputBox>
         </div>
 
-        <Card className="insights-space-list-row">
+        <Card>
           {this.state.loading ? <CardLoading indeterminate /> : null}
           <CardHeader className="insights-space-list-summary-header">
             Some fancy shmancy collective space metric goes here
             <space className="insights-space-list-summary-header-highlight">50%</space>
           </CardHeader>
-          <CardBody>
+          <CardBody className="insights-space-list-card-body">
             <SortableGridHeader>
               <SortableGridHeaderItem
                 width={1}
@@ -192,12 +192,39 @@ export class InsightsSpaceList extends React.Component {
                 onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
               >Utilization</SortableGridHeaderItem>
             </SortableGridHeader>
-            {spaceFilter(spaces.data, spaces.filters.search).map(space => {
-              return <div className="insights-space-list-item" key={space.id}>
-                <a href={`#/spaces/insights/${space.id}`}>{space.name}</a>
-                {spaceUtilizations[space.id]}% used on average throughout the day
-              </div>;
-            })}
+
+            <div className="insights-space-list-items">
+              {spaceFilter(spaces.data, spaces.filters.search).sort((a, b) => {
+                if (this.state.activeColumn === COLUMN_SPACE_NAME) {
+                  const value = this.state.columnSortOrder === SORT_ASC ? a.name < b.name : a.name > b.name;
+                  return value ? 1 : -1;
+                } else if (this.state.activeColumn === COLUMN_UTILIZATION) {
+                  if (this.state.columnSortOrder === SORT_ASC) {
+                    // If a doesn't have a utilization but b does, then sort a above b (and vice-versa)
+                    if (!spaceUtilizations[a.id]) { return -1; }
+                    if (!spaceUtilizations[b.id]) { return 1; }
+
+                    return spaceUtilizations[a.id] > spaceUtilizations[b.id];
+                  } else {
+                    // If a doesn't have a utilization but b does, then sort a below b (and vice-versa)
+                    if (!spaceUtilizations[a.id]) { return 1; }
+                    if (!spaceUtilizations[b.id]) { return -1; }
+
+                    return spaceUtilizations[a.id] < spaceUtilizations[b.id];
+                  }
+                } else {
+                  // This should never happen.
+                  return 0;
+                }
+              }).map(space => {
+                return <div className="insights-space-list-item" key={space.id}>
+                  <span className="insights-space-list-item-name">{space.name}</span>
+                  <span className="insights-space-list-item-utilization">
+                    {spaceUtilizations[space.id]}% used on average throughout the day
+                  </span>
+                </div>;
+              })}
+            </div>
           </CardBody>
         </Card>
       </div>

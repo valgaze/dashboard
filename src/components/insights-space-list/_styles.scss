@@ -1,3 +1,8 @@
+.insights-space-list-container {
+  @include grid-container;
+  margin-top: 2px;
+}
+
 // Header for the space list view. Contians a label and a search box.
 .insights-space-list-header {
   padding-top: 40px;
@@ -78,10 +83,16 @@
 
 
 
-.insights-space-list-container {
-  @include grid-container;
-  margin-top: 2px;
-}
-.insights-space-list-row {
+// Adjust the spacing around the `SortableGridHeader`.
+.insights-space-list-card-body { margin-top: 5px; }
+.insights-space-list-items { margin-top: 20px; }
+
+// Style each row to include the space name and utilization percentage.
+.insights-space-list-item {
   width: 100%;
+  display: flex;
+  line-height: 43px;
+  font-size: $font-size-base;
 }
+.insights-space-list-item-name { flex: 1; }
+.insights-space-list-item-utilization { flex: 3; }
