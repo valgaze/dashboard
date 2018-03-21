@@ -44,11 +44,11 @@ function isOutsideRange(startISOTime, datePickerInput, day) {
   return false;
 }
 
-const LOADING = 'LOADING',
-      EMPTY = 'EMPTY',
-      VISIBLE = 'VISIBLE',
-      REQUIRES_CAPACITY = 'REQUIRES_CAPACITY',
-      ERROR = 'ERROR';
+export const LOADING = 'LOADING',
+             EMPTY = 'EMPTY',
+             VISIBLE = 'VISIBLE',
+             REQUIRES_CAPACITY = 'REQUIRES_CAPACITY',
+             ERROR = 'ERROR';
 
 // The maximum number of days that can be selected by the date range picker
 const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data

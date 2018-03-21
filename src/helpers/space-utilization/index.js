@@ -58,7 +58,7 @@ export default function spaceUtilizationPerGroup(space, groups) {
 
   return groups.map(i => {
     if (i.counts.length === 0) {
-      return {date: i.date, utilization: 0, averageUtilization: 0};
+      return {date: i.date, utilization: [], averageUtilization: 0};
     }
 
     // For each count within the group, calculate the count over the capacity, also referred to as
