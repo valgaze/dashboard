@@ -1,6 +1,6 @@
 # Collection actions
 
-Collections are a central data storage concept in this project. Essentially, they are a way of
+Collections are a central data storage concept. Essentially, they are a way of
 storing an array of objects in a consistent fashion, and include baked in ways of doing common
 things, such as a loding interval, filters, paging, etc.
 

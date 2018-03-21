@@ -14,19 +14,21 @@ export default function autoRefresh({interval, shouldComponentUpdate}) {
         this.state = { lastFrame: Date.now() };
         this.shouldComponentUpdate = shouldComponentUpdate || this.shouldComponentUpdate;
         this.tick = this.tick.bind(this);
-      }
-      componentDidMount() {
-        this.raf = window.requestAnimationFrame(this.tick);
-        this.listener = window.addEventListener('visibilitychange', () => {
+
+        this.visiblilityChangeListener = () => {
           if (document.hidden) {
             window.cancelAnimationFrame(this.raf);
           } else {
             this.raf = window.requestAnimationFrame(this.tick);
           }
-        });
+        }
+      }
+      componentDidMount() {
+        this.raf = window.requestAnimationFrame(this.tick);
+        window.addEventListener('visibilitychange', this.visiblilityChangeListener);
       }
       componentWillUnmount() {
-        window.removeEventListener('visibilitychange', this.listener);
+        window.removeEventListener('visibilitychange', this.visiblilityChangeListener);
         window.cancelAnimationFrame(this.raf);
       }
       tick() {
