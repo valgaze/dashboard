@@ -1,5 +1,4 @@
 import * as React from 'react';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
 import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
@@ -19,7 +18,6 @@ import spaceUtilizationPerGroup, {
   TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
-import formatPercentage from '../../helpers/format-percentage/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
