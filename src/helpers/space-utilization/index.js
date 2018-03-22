@@ -25,7 +25,9 @@ export function groupCountsByDay(counts, timezone) {
   return Object.keys(dayCountGroups).map(group => {
     return {
       date: group,
-      totalVisits: dayCountGroups[group].reduce((acc, i) => acc + i.interval.analytics.entrances, 0),
+      totalVisits: dayCountGroups[group].reduce((acc, i) => {
+        return acc + i.interval.analytics.entrances;
+      }, 0),
       counts: dayCountGroups[group],
     };
   });

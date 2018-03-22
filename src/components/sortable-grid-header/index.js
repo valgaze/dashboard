@@ -1,8 +1,8 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
-export default function SortableGridHeader({children}) {
-  return <div className="sortable-grid-header">{children}</div>;
+export default function SortableGridHeader({className, children}) {
+  return <div className={`sortable-grid-header ${className}`}>{children}</div>;
 }
 
 export const SORT_ASC = 'SORT_ASC',

@@ -63,7 +63,15 @@
 }
 
 // The "week" / "month" selector
-.insights-space-list-duration-selector { color: $gray-cinder; }
+.insights-space-list-duration-selector {
+  color: $gray-cinder;
+  width: 100px;
+}
+
+
+
+
+
 
 // The header of the card that displays the collective space metric (either utilization or total
 // events, I forgot).
@@ -83,16 +91,80 @@
 
 
 
+
 // Adjust the spacing around the `SortableGridHeader`.
-.insights-space-list-card-body { margin-top: 5px; }
+.card .insights-space-list-card-body {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
 .insights-space-list-items { margin-top: 20px; }
 
 // Style each row to include the space name and utilization percentage.
+$insights-space-list-item-height: 43px;
 .insights-space-list-item {
-  width: 100%;
   display: flex;
-  line-height: 43px;
+  cursor: pointer;
+
+  width: calc(100% - 20px - 20px);
+  padding-left: 20px;
+  padding-right: 20px;
+
+  line-height: $insights-space-list-item-height;
   font-size: $font-size-base;
+  &:hover { background-color: $gray-lightest; }
 }
-.insights-space-list-item-name { flex: 1; }
-.insights-space-list-item-utilization { flex: 3; }
+.insights-space-list-item-name { flex: 2; }
+.insights-space-list-item-capacity {
+  margin-left: 30px;
+  flex: 1;
+}
+.insights-space-list-item-utilization {
+  margin-left: 20px;
+  flex: 3;
+}
+
+.insights-space-list-item-utilization {
+  display: flex;
+  flex-direction: row;
+}
+
+// The utilization bar that visually represents space utilization in a horizontal fashion
+$insights-space-list-item-utilization-bar-height: 4px;
+.insights-space-list-item-utilization-bar {
+  display: inline-block;
+  background-color: $gray-light;
+
+  width: 100%;
+  height: $insights-space-list-item-utilization-bar-height;
+  flex: 1;
+
+  margin-top: ($insights-space-list-item-height - $insights-space-list-item-utilization-bar-height) / 2;
+}
+.insights-space-list-item-utilization-bar-inner {
+  /* a width is set as an inline style in the component, which overrides the style set below */
+  width: 0%;
+
+  background-color: $brand-primary;
+  height: $insights-space-list-item-utilization-bar-height;
+  transition: all 100ms ease-in-out;
+}
+.insights-space-list-item-utilization-label {
+  display: inline-block;
+  color: $brand-primary;
+  margin-right: 30px;
+  width: 3rem; /* 3 character width is the maximum (non-100%) width: 99% is 3 chars */
+  text-align: right;
+}
+.insights-space-list-item-utilization-label.disabled {
+  color: $gray;
+  font-size: $font-size-large;
+}
+
+// Finally, the small arrow at the right end of the space item row. This idicated that the item can
+// be clicked.
+.insights-space-list-item-arrow {
+  font-family: "Densicons";
+  font-size: $font-size-x-small;
+}
