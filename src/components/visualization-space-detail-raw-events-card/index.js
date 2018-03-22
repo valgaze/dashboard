@@ -64,7 +64,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       end_time: endTime.format(),
       page: this.state.page,
       page_size: this.state.pageSize,
-      order: 'asc',
+      order: 'desc',
     }).then(preData => {
       // No results returned? Transition to EMPTY state.
       if (preData.results.length === 0) {
@@ -82,7 +82,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       // Convert all keys in the response to camelcase. Also, reverse data so it is ordered from
       const data = preData.results
         .map(i => objectSnakeToCamel(i))
-        .sort((a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf());
+        .sort((a, b) => moment.utc(b.timestamp).valueOf() - moment.utc(a.timestamp).valueOf());
 
       // Calculate a unique array of all doorways that are referenced by each event that was
       // returned.
