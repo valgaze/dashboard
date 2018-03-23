@@ -9,7 +9,7 @@ function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
 
-describe('raw events pager', function() {
+describe('live space list', function() {
   it('should render list space list (smoke test)', async function() {
     // Render the component
     const component = shallow(<LiveSpaceList 

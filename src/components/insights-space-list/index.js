@@ -104,14 +104,15 @@ export class InsightsSpaceList extends React.Component {
 
     this.setState({
       spaceCounts,
-      spaceUtilizations: Object.keys(this.state.spaceCounts).reduce((acc, spaceId, ct) => {
+      spaceUtilizations: Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
         const space = spaces.data.find(i => i.id === spaceId);
-        const counts = this.state.spaceCounts[spaceId];
+        const counts = spaceCounts[spaceId];
 
         const groups = groupCountsByDay(counts, space.timeZone);
         const filteredGroups = groupCountFilter(groups, count =>
           isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS[this.state.timeSegment]));
         const result = spaceUtilizationPerGroup(space, filteredGroups);
+
         return {
           ...acc,
           [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length,
@@ -188,7 +189,7 @@ export class InsightsSpaceList extends React.Component {
             </span>}
           </CardHeader>
 
-          <CardBody className="insights-space-list-card-body">
+          {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
             <SortableGridHeader className="insights-space-list-grid-header">
               <SortableGridHeaderItem
                 width={2}
@@ -214,23 +215,23 @@ export class InsightsSpaceList extends React.Component {
             </SortableGridHeader>
 
             <div className="insights-space-list-items">
-              {filteredSpaces.sort((a, b) => {
+              {filteredSpaces.slice().sort((a, b) => {
                 if (this.state.activeColumn === COLUMN_SPACE_NAME) {
                   const value = this.state.columnSortOrder === SORT_ASC ? a.name < b.name : a.name > b.name;
                   return value ? 1 : -1;
                 } else if (this.state.activeColumn === COLUMN_UTILIZATION) {
                   if (this.state.columnSortOrder === SORT_ASC) {
                     // If a doesn't have a utilization but b does, then sort a above b (and vice-versa)
-                    if (!spaceUtilizations[a.id]) { return -1; }
-                    if (!spaceUtilizations[b.id]) { return 1; }
+                    if (typeof spaceUtilizations[a.id] === 'undefined') { return -1; }
+                    if (typeof spaceUtilizations[b.id] === 'undefined') { return 1; }
 
-                    return spaceUtilizations[a.id] > spaceUtilizations[b.id];
+                    return spaceUtilizations[a.id] - spaceUtilizations[b.id];
                   } else {
                     // If a doesn't have a utilization but b does, then sort a below b (and vice-versa)
-                    if (!spaceUtilizations[a.id]) { return 1; }
-                    if (!spaceUtilizations[b.id]) { return -1; }
+                    if (typeof spaceUtilizations[a.id] === 'undefined') { return 1; }
+                    if (typeof spaceUtilizations[b.id] === 'undefined') { return -1; }
 
-                    return spaceUtilizations[a.id] < spaceUtilizations[b.id];
+                    return spaceUtilizations[b.id] - spaceUtilizations[a.id];
                   }
                 } else if (this.state.activeColumn === COLUMN_CAPACITY) {
                   if (this.state.columnSortOrder === SORT_ASC) {
@@ -279,7 +280,7 @@ export class InsightsSpaceList extends React.Component {
                 </div>;
               })}
             </div>
-          </CardBody>
+          </CardBody> : null}
         </Card>
       </div>
     </div>;
@@ -289,7 +290,6 @@ export class InsightsSpaceList extends React.Component {
 export default connect(state => {
   return {
     spaces: state.spaces,
-    foo: false,
   };
 }, dispatch => {
   return {
