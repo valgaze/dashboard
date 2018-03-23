@@ -108,11 +108,11 @@ describe('Visualization space daily metrics chart', function() {
           "previous": null,
           "results": [
             {
-              "timestamp": "2017-01-07T05:00:00.000Z",
+              "timestamp": "2017-01-07T05:00:00Z",
               "count": 9,
               "interval": {
-                "start": "2017-01-07T05:00:00.000Z",
-                "end": "2017-01-08T04:59:59.999Z",
+                "start": "2017-01-07T05:00:00Z",
+                "end": "2017-01-08T04:59:59Z",
                 "analytics": {
                   "min": 9,
                   "max": 9,
@@ -123,11 +123,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-01-06T05:00:00.000Z",
+              "timestamp": "2017-01-06T05:00:00Z",
               "count": 9,
               "interval": {
-                "start": "2017-01-06T05:00:00.000Z",
-                "end": "2017-01-07T04:59:59.999Z",
+                "start": "2017-01-06T05:00:00Z",
+                "end": "2017-01-07T04:59:59Z",
                 "analytics": {
                   "min": 9,
                   "max": 9,
@@ -138,11 +138,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-01-05T05:00:00.000Z",
+              "timestamp": "2017-01-05T05:00:00Z",
               "count": 9,
               "interval": {
-                "start": "2017-01-05T05:00:00.000Z",
-                "end": "2017-01-06T04:59:59.999Z",
+                "start": "2017-01-05T05:00:00Z",
+                "end": "2017-01-06T04:59:59Z",
                 "analytics": {
                   "min": 9,
                   "max": 9,
@@ -153,11 +153,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-01-04T05:00:00.000Z",
+              "timestamp": "2017-01-04T05:00:00Z",
               "count": 9,
               "interval": {
-                "start": "2017-01-04T05:00:00.000Z",
-                "end": "2017-01-05T04:59:59.999Z",
+                "start": "2017-01-04T05:00:00Z",
+                "end": "2017-01-05T04:59:59Z",
                 "analytics": {
                   "min": 9,
                   "max": 9,
@@ -168,11 +168,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-01-03T05:00:00.000Z",
+              "timestamp": "2017-01-03T05:00:00Z",
               "count": 9,
               "interval": {
-                "start": "2017-01-03T05:00:00.000Z",
-                "end": "2017-01-04T04:59:59.999Z",
+                "start": "2017-01-03T05:00:00Z",
+                "end": "2017-01-04T04:59:59Z",
                 "analytics": {
                   "min": 9,
                   "max": 9,
@@ -183,11 +183,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-01-02T05:00:00.000Z",
+              "timestamp": "2017-01-02T05:00:00Z",
               "count": 9,
               "interval": {
-                "start": "2017-01-02T05:00:00.000Z",
-                "end": "2017-01-03T04:59:59.999Z",
+                "start": "2017-01-02T05:00:00Z",
+                "end": "2017-01-03T04:59:59Z",
                 "analytics": {
                   "min": 9,
                   "max": 9,
@@ -198,11 +198,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-01-01T05:00:00.000Z",
+              "timestamp": "2017-01-01T05:00:00Z",
               "count": 9,
               "interval": {
-                "start": "2017-01-01T05:00:00.000Z",
-                "end": "2017-01-02T04:59:59.999Z",
+                "start": "2017-01-01T05:00:00Z",
+                "end": "2017-01-02T04:59:59Z",
                 "analytics": {
                   "min": 9,
                   "max": 9,
@@ -267,11 +267,11 @@ describe('Visualization space daily metrics chart', function() {
           "previous": null,
           "results": [
             {
-              "timestamp": "2017-09-20T04:00:00.000Z",
+              "timestamp": "2017-09-20T04:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2017-09-20T04:00:00.000Z",
-                "end": "2017-09-21T03:59:59.999Z",
+                "start": "2017-09-20T04:00:00Z",
+                "end": "2017-09-21T03:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -279,11 +279,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-09-19T04:00:00.000Z",
+              "timestamp": "2017-09-19T04:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2017-09-19T04:00:00.000Z",
-                "end": "2017-09-20T03:59:59.999Z",
+                "start": "2017-09-19T04:00:00Z",
+                "end": "2017-09-20T03:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -291,11 +291,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-09-18T04:00:00.000Z",
+              "timestamp": "2017-09-18T04:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2017-09-18T04:00:00.000Z",
-                "end": "2017-09-19T03:59:59.999Z",
+                "start": "2017-09-18T04:00:00Z",
+                "end": "2017-09-19T03:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -303,11 +303,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-09-17T04:00:00.000Z",
+              "timestamp": "2017-09-17T04:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2017-09-17T04:00:00.000Z",
-                "end": "2017-09-18T03:59:59.999Z",
+                "start": "2017-09-17T04:00:00Z",
+                "end": "2017-09-18T03:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -315,11 +315,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-09-16T04:00:00.000Z",
+              "timestamp": "2017-09-16T04:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2017-09-16T04:00:00.000Z",
-                "end": "2017-09-17T03:59:59.999Z",
+                "start": "2017-09-16T04:00:00Z",
+                "end": "2017-09-17T03:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -327,11 +327,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-09-15T04:00:00.000Z",
+              "timestamp": "2017-09-15T04:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2017-09-15T04:00:00.000Z",
-                "end": "2017-09-16T03:59:59.999Z",
+                "start": "2017-09-15T04:00:00Z",
+                "end": "2017-09-16T03:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -339,11 +339,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2017-09-14T04:00:00.000Z",
+              "timestamp": "2017-09-14T04:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2017-09-14T04:00:00.000Z",
-                "end": "2017-09-15T03:59:59.999Z",
+                "start": "2017-09-14T04:00:00Z",
+                "end": "2017-09-15T03:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -405,11 +405,11 @@ describe('Visualization space daily metrics chart', function() {
           "previous": null,
           "results": [
             {
-              "timestamp": "2016-09-13T07:00:00.000Z",
+              "timestamp": "2016-09-13T07:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2016-09-13T07:00:00.000Z",
-                "end": "2016-09-14T06:59:59.999Z",
+                "start": "2016-09-13T07:00:00Z",
+                "end": "2016-09-14T06:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -417,11 +417,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2016-09-12T07:00:00.000Z",
+              "timestamp": "2016-09-12T07:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2016-09-12T07:00:00.000Z",
-                "end": "2016-09-13T06:59:59.999Z",
+                "start": "2016-09-12T07:00:00Z",
+                "end": "2016-09-13T06:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -429,11 +429,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2016-09-11T07:00:00.000Z",
+              "timestamp": "2016-09-11T07:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2016-09-11T07:00:00.000Z",
-                "end": "2016-09-12T06:59:59.999Z",
+                "start": "2016-09-11T07:00:00Z",
+                "end": "2016-09-12T06:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -441,11 +441,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2016-09-10T07:00:00.000Z",
+              "timestamp": "2016-09-10T07:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2016-09-10T07:00:00.000Z",
-                "end": "2016-09-11T06:59:59.999Z",
+                "start": "2016-09-10T07:00:00Z",
+                "end": "2016-09-11T06:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -453,11 +453,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2016-09-09T07:00:00.000Z",
+              "timestamp": "2016-09-09T07:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2016-09-09T07:00:00.000Z",
-                "end": "2016-09-10T06:59:59.999Z",
+                "start": "2016-09-09T07:00:00Z",
+                "end": "2016-09-10T06:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -465,11 +465,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2016-09-08T07:00:00.000Z",
+              "timestamp": "2016-09-08T07:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2016-09-08T07:00:00.000Z",
-                "end": "2016-09-09T06:59:59.999Z",
+                "start": "2016-09-08T07:00:00Z",
+                "end": "2016-09-09T06:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -477,11 +477,11 @@ describe('Visualization space daily metrics chart', function() {
               }
             },
             {
-              "timestamp": "2016-09-07T07:00:00.000Z",
+              "timestamp": "2016-09-07T07:00:00Z",
               "count": 0,
               "interval": {
-                "start": "2016-09-07T07:00:00.000Z",
-                "end": "2016-09-08T06:59:59.999Z",
+                "start": "2016-09-07T07:00:00Z",
+                "end": "2016-09-08T06:59:59Z",
                 "analytics": {
                   "min": 0,
                   "max": 0
@@ -550,11 +550,11 @@ describe('Visualization space daily metrics chart', function() {
         "previous": null,
         "results": [
           {
-            "timestamp": "2017-11-07T04:00:00.000Z",
+            "timestamp": "2017-11-07T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-07T04:00:00.000Z",
-              "end": "2017-11-08T03:59:59.999Z",
+              "start": "2017-11-07T04:00:00Z",
+              "end": "2017-11-08T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -565,11 +565,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-06T04:00:00.000Z",
+            "timestamp": "2017-11-06T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-06T04:00:00.000Z",
-              "end": "2017-11-07T03:59:59.999Z",
+              "start": "2017-11-06T04:00:00Z",
+              "end": "2017-11-07T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -580,11 +580,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-05T04:00:00.000Z",
+            "timestamp": "2017-11-05T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-05T04:00:00.000Z",
-              "end": "2017-11-06T03:59:59.999Z",
+              "start": "2017-11-05T04:00:00Z",
+              "end": "2017-11-06T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -595,11 +595,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-04T04:00:00.000Z",
+            "timestamp": "2017-11-04T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-04T04:00:00.000Z",
-              "end": "2017-11-05T03:59:59.999Z",
+              "start": "2017-11-04T04:00:00Z",
+              "end": "2017-11-05T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 1,
@@ -610,11 +610,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-03T04:00:00.000Z",
+            "timestamp": "2017-11-03T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-03T04:00:00.000Z",
-              "end": "2017-11-04T03:59:59.999Z",
+              "start": "2017-11-03T04:00:00Z",
+              "end": "2017-11-04T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -625,11 +625,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-02T04:00:00.000Z",
+            "timestamp": "2017-11-02T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-02T04:00:00.000Z",
-              "end": "2017-11-03T03:59:59.999Z",
+              "start": "2017-11-02T04:00:00Z",
+              "end": "2017-11-03T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -640,11 +640,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-01T04:00:00.000Z",
+            "timestamp": "2017-11-01T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-01T04:00:00.000Z",
-              "end": "2017-11-02T03:59:59.999Z",
+              "start": "2017-11-01T04:00:00Z",
+              "end": "2017-11-02T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -655,11 +655,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-31T04:00:00.000Z",
+            "timestamp": "2017-10-31T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-31T04:00:00.000Z",
-              "end": "2017-11-01T03:59:59.999Z",
+              "start": "2017-10-31T04:00:00Z",
+              "end": "2017-11-01T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 3,
@@ -698,11 +698,11 @@ describe('Visualization space daily metrics chart', function() {
         "previous": null,
         "results": [
           {
-            "timestamp": "2017-11-07T04:00:00.000Z",
+            "timestamp": "2017-11-07T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-07T04:00:00.000Z",
-              "end": "2017-11-08T03:59:59.999Z",
+              "start": "2017-11-07T04:00:00Z",
+              "end": "2017-11-08T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -713,11 +713,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-06T04:00:00.000Z",
+            "timestamp": "2017-11-06T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-06T04:00:00.000Z",
-              "end": "2017-11-07T03:59:59.999Z",
+              "start": "2017-11-06T04:00:00Z",
+              "end": "2017-11-07T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -728,11 +728,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-05T04:00:00.000Z",
+            "timestamp": "2017-11-05T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-05T04:00:00.000Z",
-              "end": "2017-11-06T03:59:59.999Z",
+              "start": "2017-11-05T04:00:00Z",
+              "end": "2017-11-06T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -743,11 +743,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-04T04:00:00.000Z",
+            "timestamp": "2017-11-04T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-04T04:00:00.000Z",
-              "end": "2017-11-05T03:59:59.999Z",
+              "start": "2017-11-04T04:00:00Z",
+              "end": "2017-11-05T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 1,
@@ -758,11 +758,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-03T04:00:00.000Z",
+            "timestamp": "2017-11-03T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-03T04:00:00.000Z",
-              "end": "2017-11-04T03:59:59.999Z",
+              "start": "2017-11-03T04:00:00Z",
+              "end": "2017-11-04T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -773,11 +773,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-02T04:00:00.000Z",
+            "timestamp": "2017-11-02T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-02T04:00:00.000Z",
-              "end": "2017-11-03T03:59:59.999Z",
+              "start": "2017-11-02T04:00:00Z",
+              "end": "2017-11-03T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -788,11 +788,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-01T04:00:00.000Z",
+            "timestamp": "2017-11-01T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-01T04:00:00.000Z",
-              "end": "2017-11-02T03:59:59.999Z",
+              "start": "2017-11-01T04:00:00Z",
+              "end": "2017-11-02T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -803,11 +803,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-31T04:00:00.000Z",
+            "timestamp": "2017-10-31T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-31T04:00:00.000Z",
-              "end": "2017-11-01T03:59:59.999Z",
+              "start": "2017-10-31T04:00:00Z",
+              "end": "2017-11-01T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 3,
@@ -870,11 +870,11 @@ describe('Visualization space daily metrics chart', function() {
         "previous": null,
         "results": [
           {
-            "timestamp": "2017-11-07T04:00:00.000Z",
+            "timestamp": "2017-11-07T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-07T04:00:00.000Z",
-              "end": "2017-11-08T03:59:59.999Z",
+              "start": "2017-11-07T04:00:00Z",
+              "end": "2017-11-08T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -885,11 +885,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-06T04:00:00.000Z",
+            "timestamp": "2017-11-06T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-06T04:00:00.000Z",
-              "end": "2017-11-07T03:59:59.999Z",
+              "start": "2017-11-06T04:00:00Z",
+              "end": "2017-11-07T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -900,11 +900,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-05T04:00:00.000Z",
+            "timestamp": "2017-11-05T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-05T04:00:00.000Z",
-              "end": "2017-11-06T03:59:59.999Z",
+              "start": "2017-11-05T04:00:00Z",
+              "end": "2017-11-06T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -915,11 +915,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-04T04:00:00.000Z",
+            "timestamp": "2017-11-04T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-04T04:00:00.000Z",
-              "end": "2017-11-05T03:59:59.999Z",
+              "start": "2017-11-04T04:00:00Z",
+              "end": "2017-11-05T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 1,
@@ -930,11 +930,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-03T04:00:00.000Z",
+            "timestamp": "2017-11-03T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-03T04:00:00.000Z",
-              "end": "2017-11-04T03:59:59.999Z",
+              "start": "2017-11-03T04:00:00Z",
+              "end": "2017-11-04T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -945,11 +945,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-02T04:00:00.000Z",
+            "timestamp": "2017-11-02T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-02T04:00:00.000Z",
-              "end": "2017-11-03T03:59:59.999Z",
+              "start": "2017-11-02T04:00:00Z",
+              "end": "2017-11-03T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -960,11 +960,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-01T04:00:00.000Z",
+            "timestamp": "2017-11-01T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-01T04:00:00.000Z",
-              "end": "2017-11-02T03:59:59.999Z",
+              "start": "2017-11-01T04:00:00Z",
+              "end": "2017-11-02T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -975,11 +975,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-31T04:00:00.000Z",
+            "timestamp": "2017-10-31T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-31T04:00:00.000Z",
-              "end": "2017-11-01T03:59:59.999Z",
+              "start": "2017-10-31T04:00:00Z",
+              "end": "2017-11-01T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 3,
@@ -1024,11 +1024,11 @@ describe('Visualization space daily metrics chart', function() {
         "previous": null,
         "results": [
           {
-            "timestamp": "2017-11-07T04:00:00.000Z",
+            "timestamp": "2017-11-07T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-07T04:00:00.000Z",
-              "end": "2017-11-08T03:59:59.999Z",
+              "start": "2017-11-07T04:00:00Z",
+              "end": "2017-11-08T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -1039,11 +1039,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-06T04:00:00.000Z",
+            "timestamp": "2017-11-06T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-06T04:00:00.000Z",
-              "end": "2017-11-07T03:59:59.999Z",
+              "start": "2017-11-06T04:00:00Z",
+              "end": "2017-11-07T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -1054,11 +1054,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-05T04:00:00.000Z",
+            "timestamp": "2017-11-05T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-11-05T04:00:00.000Z",
-              "end": "2017-11-06T03:59:59.999Z",
+              "start": "2017-11-05T04:00:00Z",
+              "end": "2017-11-06T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -1069,11 +1069,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-04T04:00:00.000Z",
+            "timestamp": "2017-11-04T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-04T04:00:00.000Z",
-              "end": "2017-11-05T03:59:59.999Z",
+              "start": "2017-11-04T04:00:00Z",
+              "end": "2017-11-05T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 1,
@@ -1084,11 +1084,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-03T04:00:00.000Z",
+            "timestamp": "2017-11-03T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-03T04:00:00.000Z",
-              "end": "2017-11-04T03:59:59.999Z",
+              "start": "2017-11-03T04:00:00Z",
+              "end": "2017-11-04T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -1099,11 +1099,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-02T04:00:00.000Z",
+            "timestamp": "2017-11-02T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-02T04:00:00.000Z",
-              "end": "2017-11-03T03:59:59.999Z",
+              "start": "2017-11-02T04:00:00Z",
+              "end": "2017-11-03T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -1114,11 +1114,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-11-01T04:00:00.000Z",
+            "timestamp": "2017-11-01T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-01T04:00:00.000Z",
-              "end": "2017-11-02T03:59:59.999Z",
+              "start": "2017-11-01T04:00:00Z",
+              "end": "2017-11-02T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -1129,11 +1129,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-31T04:00:00.000Z",
+            "timestamp": "2017-10-31T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-31T04:00:00.000Z",
-              "end": "2017-11-01T03:59:59.999Z",
+              "start": "2017-10-31T04:00:00Z",
+              "end": "2017-11-01T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 3,
@@ -1144,11 +1144,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-30T04:00:00.000Z",
+            "timestamp": "2017-10-30T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-10-30T04:00:00.000Z",
-              "end": "2017-10-31T03:59:59.999Z",
+              "start": "2017-10-30T04:00:00Z",
+              "end": "2017-10-31T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -1159,11 +1159,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-29T04:00:00.000Z",
+            "timestamp": "2017-10-29T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-10-29T04:00:00.000Z",
-              "end": "2017-10-30T03:59:59.999Z",
+              "start": "2017-10-29T04:00:00Z",
+              "end": "2017-10-30T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -1174,11 +1174,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-28T04:00:00.000Z",
+            "timestamp": "2017-10-28T04:00:00Z",
             "count": 1,
             "interval": {
-              "start": "2017-10-28T04:00:00.000Z",
-              "end": "2017-10-29T03:59:59.999Z",
+              "start": "2017-10-28T04:00:00Z",
+              "end": "2017-10-29T03:59:59Z",
               "analytics": {
                 "min": 1,
                 "max": 1,
@@ -1189,11 +1189,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-27T04:00:00.000Z",
+            "timestamp": "2017-10-27T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-27T04:00:00.000Z",
-              "end": "2017-10-28T03:59:59.999Z",
+              "start": "2017-10-27T04:00:00Z",
+              "end": "2017-10-28T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 1,
@@ -1204,11 +1204,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-26T04:00:00.000Z",
+            "timestamp": "2017-10-26T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-26T04:00:00.000Z",
-              "end": "2017-10-27T03:59:59.999Z",
+              "start": "2017-10-26T04:00:00Z",
+              "end": "2017-10-27T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -1219,11 +1219,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-25T04:00:00.000Z",
+            "timestamp": "2017-10-25T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-25T04:00:00.000Z",
-              "end": "2017-10-26T03:59:59.999Z",
+              "start": "2017-10-25T04:00:00Z",
+              "end": "2017-10-26T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -1234,11 +1234,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-24T04:00:00.000Z",
+            "timestamp": "2017-10-24T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-24T04:00:00.000Z",
-              "end": "2017-10-25T03:59:59.999Z",
+              "start": "2017-10-24T04:00:00Z",
+              "end": "2017-10-25T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 0,
@@ -1249,11 +1249,11 @@ describe('Visualization space daily metrics chart', function() {
             }
           },
           {
-            "timestamp": "2017-10-23T04:00:00.000Z",
+            "timestamp": "2017-10-23T04:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-23T04:00:00.000Z",
-              "end": "2017-10-24T03:59:59.999Z",
+              "start": "2017-10-23T04:00:00Z",
+              "end": "2017-10-24T03:59:59Z",
               "analytics": {
                 "min": 0,
                 "max": 3,
