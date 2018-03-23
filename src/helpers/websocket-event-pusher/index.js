@@ -8,6 +8,9 @@ import { core } from '../../client';
 // If disconnected, try to connect at minimum this often.
 const MINIMUM_CONNECTION_INTERVAL = 1000;
 
+// Every 60 seconds, send a ping on the websocket connection. This is to ensure that it stays open.
+const WEBSOCKET_PING_MESSAGE_INTERVAL_IN_SECONDS = 60 * 1000;
+
 export const CONNECTION_STATES = {
   CLOSED: 'CLOSED',
   WAITING_FOR_SOCKET_URL: 'WAITING_FOR_SOCKET_URL',
@@ -77,6 +80,13 @@ export default class WebsocketEventPusher extends EventEmitter {
         // backoff is reset.
         iteration = 0;
         this.emit('connected');
+
+        // Every one and a while, send a message to the server to keep the websocket message alive.
+        this.log('   ... INITIATING PERIODIC PING INTERVAL OF %o', WEBSOCKET_PING_MESSAGE_INTERVAL_IN_SECONDS);
+        this.pingIntervalId = window.setInterval(() => {
+          this.log('   ... PINGING SOCKETS SERVER TO KEEP WEBSOCKET OPEN');
+          this.socket.send('"ping"');
+        }, WEBSOCKET_PING_MESSAGE_INTERVAL_IN_SECONDS);
       };
 
       // Currently, the only events are space updates.
@@ -89,6 +99,11 @@ export default class WebsocketEventPusher extends EventEmitter {
       this.socket.onclose = () => {
         this.log('SOCKET CLOSE');
         this.emit('disconnect');
+
+        // Clear the interval that sends a ping to the sockets server if it is open.
+        if (this.pingIntervalId) {
+          window.clearTimeout(this.pingIntervalId);
+        }
 
         if (this.gracefulDisconnect) {
           this.log('   ... GRACEFULLY DISCONNECTING');
