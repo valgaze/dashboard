@@ -127,9 +127,23 @@ export class InsightsSpaceList extends React.Component {
     this.fetchData(nextProps.spaces);
   }
 
+  calculateTotalNumberOfEventsForSpaces(spaces=this.state.spaces) {
+    const spaceIds = spaces.map(i => i.id);
+
+    let eventCount = 0;
+    for (let id in this.state.spaceCounts) {
+      if (spaceIds.indexOf(id) === -1) { continue }
+      const counts = this.state.spaceCounts[id];
+      eventCount += counts.length;
+    }
+
+    return eventCount;
+  }
+
   render() {
     const { spaces, onSpaceSearch } = this.props;
     const filteredSpaces = spaceFilter(spaces.data, spaces.filters.search);
+
     const spaceUtilizations = this.state.spaceUtilizations;
 
     return <div className="insights-space-list">
@@ -183,10 +197,22 @@ export class InsightsSpaceList extends React.Component {
           {this.state.loading ? <CardLoading indeterminate /> : null}
 
           <CardHeader className="insights-space-list-summary-header">
-            {filteredSpaces.length === 0 ? <span>No spaces matched your filter.</span> : <span>
-              Some fancy shmancy collective space metric goes here
-              <space className="insights-space-list-summary-header-highlight">50%</space>
-            </span>}
+            {(() => {
+              if (filteredSpaces.length === 0) {
+                return <span>No spaces matched your filter</span>
+              } else if (!this.state.loading) {
+                return <span>
+                  Your {filteredSpaces.length}
+                  {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '} seen
+                  <span className="insights-space-list-summary-header-highlight">
+                    {this.calculateTotalNumberOfEventsForSpaces(filteredSpaces)}
+                  </span>
+                  visitors this past week
+                </span>;
+              } else {
+                return <span>&mdash;</span>;
+              }
+            })()}
           </CardHeader>
 
           {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
