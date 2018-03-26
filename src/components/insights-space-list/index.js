@@ -207,7 +207,7 @@ export class InsightsSpaceList extends React.Component {
                   <span className="insights-space-list-summary-header-highlight">
                     {this.calculateTotalNumberOfEventsForSpaces(filteredSpaces)}
                   </span>
-                  visitors this past week
+                  visitors this past {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
                 </span>;
               } else {
                 return <span>&mdash;</span>;
