@@ -49,16 +49,23 @@ export default function SpaceCard({
         <CardBody>
           <div className="space-card-capacity-container">
             <div className="space-card-capacity-information">
-              <div className="space-card-capacity-number">
-                {/* The below prints `1 person` or `n people`. If `space.capacity` is null, leaves the element empty.*/}
-                <CountLabel count={space.capacity} />
+              <div className="space-card-utilization-percentage">
+                {
+                  space.capacity ?
+                  <span className="space-card-utilization-percentage-label">
+                    Utilization: 
+                    <span> {formatCapacityPercentage(space.currentCount, space.capacity)}%</span>
+                  </span> :
+                  'Max capacity not yet specified'
+                }
               </div>
-              <div className="space-card-capacity-percent">
-                {space.capacity ? formatCapacityPercentage(space.currentCount, space.capacity) : null}
-              </div>
+              <div className="space-card-edit-count-link">Edit count</div>
             </div>
             <div className="space-card-capacity-linear-progress">
-              <LinearProgress percentFull={capacityPercent || 0} transitionDuration={timings.timingBase} />
+              <LinearProgress
+                percentFull={capacityPercent || 0}
+                transitionDuration={timings.timingBase}
+              />
             </div>
           </div>
         </CardBody>

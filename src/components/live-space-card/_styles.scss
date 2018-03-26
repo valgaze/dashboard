@@ -1,12 +1,13 @@
 .space-card {
   margin-bottom: 20px;
 }
-.space-card-header {
-  color: $text-color;
+.card .space-card-header {
+  color: $gray-cinder;
   font-size: $font-size-3;
-  font-weight: $font-weight-3;
+  font-weight: normal;
   display: flex;
 }
+
 .space-card-header-count {
   margin-left: auto;
 }
@@ -24,16 +25,17 @@
 }
 
 // Add a capacity unit after the capacity number indicator above the progress bar.
-.space-card-capacity-number { color: $gray; }
-.space-card-capacity-number:before { content: 'Capacity: '; }
-.space-card-capacity-number:empty:before { content: 'Max capacity not specified'; }
+.space-card-utilization-percentage { color: $gray; }
+.space-card-utilization-percentage-label { color: $gray-cinder; }
+.space-card-utilization-percentage-label > span { color: $brand-primary; }
 
 // Add a capacity percent unit after the percentage indicator directly above and right from the
 // progress bar.
-.space-card-capacity-percent { margin-left: auto; }
-.space-card-capacity-percent:after { content: '% Full'; }
-.space-card-capacity-percent { color: $brand-primary; }
-.space-card-capacity-percent:empty { color: $gray; }
+.space-card-edit-count-link {
+  margin-left: auto;
+  color: $gray;
+  text-decoration: underline;
+}
 
 // Render a progress bar.
 .space-card-capacity-linear-progress {
