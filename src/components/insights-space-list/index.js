@@ -7,9 +7,14 @@ import { core } from '../../client';
 import moment from 'moment';
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
+import collectionSpacesUpdate from '../../actions/collection/spaces/update';
 
 import InputBox from '@density/ui-input-box';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
+import SetCapacityModal from '../insights-set-capacity-modal/index';
+
+import showModal from '../../actions/modal/show';
+import hideModal from '../../actions/modal/hide';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
@@ -22,7 +27,7 @@ import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
 
-// Used to store which colum is the active column.
+// Used to store which colum is the active column in the table.
 const COLUMN_SPACE_NAME = 'COLUMN_SPACE_NAME',
       COLUMN_UTILIZATION = 'COLUMN_UTILIZATION',
       COLUMN_CAPACITY = 'COLUMN_CAPACITY';
@@ -141,7 +146,7 @@ export class InsightsSpaceList extends React.Component {
   }
 
   render() {
-    const { spaces, onSpaceSearch } = this.props;
+    const { spaces, activeModal, onSpaceSearch, onOpenModal, onCloseModal, onSetCapacity} = this.props;
     const filteredSpaces = spaceFilter(spaces.data, spaces.filters.search);
 
     const spaceUtilizations = this.state.spaceUtilizations;
@@ -149,6 +154,17 @@ export class InsightsSpaceList extends React.Component {
     return <div className="insights-space-list">
       {/* Show errors in the spaces collection. */}
       <ErrorBar message={spaces.error} showRefresh />
+
+
+      {/* Modal that is used to let the user set the capacity of a space. Shown when the user clicks
+      on a 'set capacity' link within a space row if the space capacity isn't set. If the capacity
+      is already set, the capacity can be adjusted from within the detail page. */}
+      {activeModal.name === 'set-capacity' ? <SetCapacityModal
+        space={activeModal.data.space}
+        onSubmit={capacity => onSetCapacity(activeModal.data.space, capacity)}
+        onDismiss={onCloseModal}
+      /> : null}
+
 
       <div className="insights-space-list-container">
         <div className="insights-space-list-header">
@@ -164,6 +180,7 @@ export class InsightsSpaceList extends React.Component {
             onChange={e => onSpaceSearch(e.target.value)}
           />
 
+          {/* Right-aligned utiliation time segment and data duration filters */}
           <div className="insights-space-list-text-label">Utilization for</div>
           <InputBox
             type="select"
@@ -281,11 +298,22 @@ export class InsightsSpaceList extends React.Component {
                 return <div
                   className="insights-space-list-item"
                   key={space.id}
+
+                  // When the row is clicked, move to the detail page.
                   onClick={() => window.location.href = `#/spaces/insights/${space.id}`}
                 >
                   <span className="insights-space-list-item-name">{space.name}</span>
                   <span className="insights-space-list-item-capacity">
-                    {space.capacity !== null ? <span>{space.capacity}</span> : <a href="">Set capacity</a>}
+                    {
+                      space.capacity !== null ?
+                        <span>{space.capacity}</span> :
+                        <a onClick={e => {
+                          // Keep the row click handler from firing when 'set capacity' is clicked
+                          e.stopPropagation();
+
+                          return onOpenModal('set-capacity', {space});
+                        }}>Set capacity</a>
+                    }
                   </span>
                   <div className="insights-space-list-item-utilization">
                     <div className="insights-space-list-item-utilization-bar">
@@ -316,11 +344,25 @@ export class InsightsSpaceList extends React.Component {
 export default connect(state => {
   return {
     spaces: state.spaces,
+    activeModal: state.activeModal,
   };
 }, dispatch => {
   return {
     onSpaceSearch(searchQuery) {
       dispatch(collectionSpacesFilter('search', searchQuery));
+    },
+
+    onSetCapacity(space, capacity) {
+      dispatch(collectionSpacesUpdate({...space, capacity})).then(() => {
+        dispatch(hideModal());
+      });
+    },
+
+    onOpenModal(name, data) {
+      dispatch(showModal(name, data));
+    },
+    onCloseModal() {
+      dispatch(hideModal());
     },
   };
 })(InsightsSpaceList);

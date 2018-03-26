@@ -44,7 +44,8 @@
           "name": "{{{name}}}",
           "description": "{{{description}}}",
           "time_zone": "{{{time_zone}}}",
-          "daily_reset": "{{{daily_reset}}}"
+          "daily_reset": "{{{daily_reset}}}",
+          "capacity": "{{{capacity}}}"
         }
       },
       "delete": {

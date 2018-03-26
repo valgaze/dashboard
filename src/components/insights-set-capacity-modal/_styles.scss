@@ -1,0 +1,10 @@
+.insights-set-capacity-modal .card-header { font-weight: normal; }
+
+// Center the input field within the modal
+.insights-set-capacity-modal-capacity-input {
+  margin-bottom: 40px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

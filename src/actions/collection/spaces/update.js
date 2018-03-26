@@ -15,6 +15,7 @@ export default function collectionSpacesUpdate(item) {
         description: item.description,
         daily_reset: item.dailyReset,
         time_zone: item.timeZone,
+        capacity: item.capacity,
       });
       dispatch(collectionSpacesPush(response));
       return response;
