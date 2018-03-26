@@ -72,6 +72,7 @@ describe('insights space list', function() {
         ],
         events: {},
       }}
+      activeModal={{name: null, data: null}}
     />);
 
     // Ensure that a single space was rendered
@@ -121,6 +122,7 @@ describe('insights space list', function() {
         ],
         events: {},
       }}
+      activeModal={{name: null, data: null}}
     />);
 
     // Ensure that a single space was rendered
@@ -164,6 +166,7 @@ describe('insights space list', function() {
           ],
           events: {},
         }}
+        activeModal={{name: null, data: null}}
       />);
 
       // Ensure that two spaces were rendered
@@ -205,6 +208,7 @@ describe('insights space list', function() {
           ],
           events: {},
         }}
+        activeModal={{name: null, data: null}}
       />);
 
       // Ensure that three spaces were rendered
@@ -258,6 +262,7 @@ describe('insights space list', function() {
           ],
           events: {},
         }}
+        activeModal={{name: null, data: null}}
       />);
 
       // Ensure that three spaces were rendered
@@ -327,6 +332,7 @@ describe('insights space list', function() {
           ],
           events: {},
         }}
+        activeModal={{name: null, data: null}}
       />);
 
       // Set capacities to known values. This is important to make sure the sorting order tests work
@@ -368,6 +374,48 @@ describe('insights space list', function() {
       assert.equal(spacesInverse.at(1).find('.insights-space-list-item-name').text(), 'My Space 2');
       assert.equal(spacesInverse.at(2).find('.insights-space-list-item-name').text(), 'My Space 3');
       assert.equal(spacesInverse.at(3).find('.insights-space-list-item-name').text(), 'My Space 1');
+    });
+  });
+
+  describe('setting capacity', function() {
+    it(`should be able to click the 'set capacity' link to set capacity on space without a capacity`, async function() {
+      const onOpenModal = sinon.stub();
+
+      const SPACE = {
+        id: 'spc_1',
+        name: 'My Space',
+        currentCount: 2,
+        capacity: null, /* no capacity */
+        timeZone: 'America/New_York',
+      };
+
+      // Render the component
+      const component = shallow(<InsightsSpaceList
+        spaces={{
+          filters: {search: ''},
+          data: [SPACE],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+        onOpenModal={onOpenModal}
+      />);
+
+      // Ensure that a single space was rendered
+      assert.equal(component.find('.insights-space-list-item').length, 1);
+
+      // Click on the 'set capacity' link
+      const stopPropagation = sinon.spy();
+      component
+        .find('.insights-space-list-item-capacity a')
+        .first()
+        .simulate('click', {stopPropagation});
+
+      // Verify that this should open the set capacity modal, passing the space as an argument
+      assert.equal(onOpenModal.callCount, 1);
+      assert.deepEqual(
+        onOpenModal.firstCall.args,
+        ['set-capacity', {space: SPACE}]
+      );
     });
   });
 });
