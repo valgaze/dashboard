@@ -39,7 +39,13 @@ export default function SpaceCard({
     const capacityPercent = space.capacity ? (space.currentCount / space.capacity) * 100 : null;
     return <Card className="space-card">
       <CardHeader className="space-card-header">
-        <span className="space-card-header-name">{space.name}</span>
+        <span className="space-card-header-name">
+          {space.name}
+          <span
+            className="space-card-header-name-link"
+            onClick={() => { window.location.href = `#/spaces/insights/${space.id}`; }}
+          >&#xe903;</span>
+        </span>
         <span className="space-card-header-count">
           {/* The below prints `1 person` or `n people` */}
           <CountLabel count={space.currentCount} />
