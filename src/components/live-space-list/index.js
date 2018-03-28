@@ -3,9 +3,13 @@ import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
+import spaceResetCount from '../../actions/collection/spaces/reset-count';
+import showModal from '../../actions/modal/show';
+import hideModal from '../../actions/modal/hide';
 
 import InputBox from '@density/ui-input-box';
 import SpaceCard from '../live-space-card/index';
+import SpaceUpdateModal from '../insights-edit-count-modal/index';
 
 import { CONNECTION_STATES } from '../../helpers/websocket-event-pusher/index';
 
@@ -15,12 +19,23 @@ const spaceFilter = filterCollection({fields: ['name']});
 export function LiveSpaceList({
   spaces,
   eventPusherStatus,
+  activeModal,
 
   onSpaceSearch,
+  onResetSpace,
+  onOpenModal,
+  onCloseModal,
 }) {
   return <div className="live-space-list">
     {/* Show errors in the spaces collection. */}
     <ErrorBar message={spaces.error} showRefresh />
+
+    {/* Show space count update modal when the flag is set */}
+    {activeModal.name === 'update-space-count' ? <SpaceUpdateModal
+      space={activeModal.data.space}
+      onDismiss={onCloseModal}
+      onSubmit={newCount => onResetSpace(activeModal.data.space, newCount)}
+    /> : null}
 
     <div className="live-space-list-container">
       <div className="live-space-list-header">
@@ -58,7 +73,7 @@ export function LiveSpaceList({
             <SpaceCard
               space={space}
               events={spaces.events[space.id]}
-              onClick={() => window.location.href = `#/spaces/insights/${space.id}`}
+              onClickEditCount={() => onOpenModal('update-space-count', {space})}
               onClickRealtimeChartFullScreen={() => window.location.href = `#/spaces/live/${space.id}` }
             />
           </div>;
@@ -72,11 +87,24 @@ export default connect(state => {
   return {
     spaces: state.spaces,
     eventPusherStatus: state.eventPusherStatus,
+    activeModal: state.activeModal,
   };
 }, dispatch => {
   return {
     onSpaceSearch(searchQuery) {
       dispatch(collectionSpacesFilter('search', searchQuery));
+    },
+    onResetSpace(space, newCount) {
+      dispatch(spaceResetCount(space, newCount)).then(ok => {
+        ok && dispatch(hideModal());
+      });
+    },
+
+    onOpenModal(name, data) {
+      dispatch(showModal(name, data));
+    },
+    onCloseModal() {
+      dispatch(hideModal());
     },
   };
 })(LiveSpaceList);

@@ -32,44 +32,42 @@ export default function SpaceCard({
   space,
   events,
 
-  onClick,
   onClickRealtimeChartFullScreen,
+  onClickEditCount,
 }) {
   if (space) {
     const capacityPercent = space.capacity ? (space.currentCount / space.capacity) * 100 : null;
     return <Card className="space-card">
-      <div className="space-card-click-region" onClick={onClick}>
-        <CardHeader className="space-card-header">
-          <span className="space-card-header-name">{space.name}</span>
-          <span className="space-card-header-count">
-            {/* The below prints `1 person` or `n people` */}
-            <CountLabel count={space.currentCount} />
-          </span>
-        </CardHeader>
-        <CardBody>
-          <div className="space-card-capacity-container">
-            <div className="space-card-capacity-information">
-              <div className="space-card-utilization-percentage">
-                {
-                  space.capacity ?
-                  <span className="space-card-utilization-percentage-label">
-                    Utilization: 
-                    <span> {formatCapacityPercentage(space.currentCount, space.capacity)}%</span>
-                  </span> :
-                  'Max capacity not yet specified'
-                }
-              </div>
-              <div className="space-card-edit-count-link">Edit count</div>
+      <CardHeader className="space-card-header">
+        <span className="space-card-header-name">{space.name}</span>
+        <span className="space-card-header-count">
+          {/* The below prints `1 person` or `n people` */}
+          <CountLabel count={space.currentCount} />
+        </span>
+      </CardHeader>
+      <CardBody>
+        <div className="space-card-capacity-container">
+          <div className="space-card-capacity-information">
+            <div className="space-card-utilization-percentage">
+              {
+                space.capacity ?
+                <span className="space-card-utilization-percentage-label">
+                  Utilization: 
+                  <span> {formatCapacityPercentage(space.currentCount, space.capacity)}%</span>
+                </span> :
+                'Max capacity not yet specified'
+              }
             </div>
-            <div className="space-card-capacity-linear-progress">
-              <LinearProgress
-                percentFull={capacityPercent || 0}
-                transitionDuration={timings.timingBase}
-              />
-            </div>
+            <div className="space-card-edit-count-link" onClick={onClickEditCount}>Edit count</div>
           </div>
-        </CardBody>
-      </div>
+          <div className="space-card-capacity-linear-progress">
+            <LinearProgress
+              percentFull={capacityPercent || 0}
+              transitionDuration={timings.timingBase}
+            />
+          </div>
+        </div>
+      </CardBody>
 
       <div className="space-card-chart">
         <div
