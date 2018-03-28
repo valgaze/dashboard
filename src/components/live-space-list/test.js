@@ -19,6 +19,7 @@ describe('live space list', function() {
         events: {}
       }}
       eventPusherStatus={{status: 'CLOSED'}}
+      activeModal={{name: null, data: null}}
     />);
 
     // Ensure that no spaces were rendered
@@ -33,6 +34,7 @@ describe('live space list', function() {
         events: {}
       }}
       eventPusherStatus={{status: 'CLOSED'}}
+      activeModal={{name: null, data: null}}
     />);
 
     // Ensure that no spaces were rendered
@@ -56,6 +58,7 @@ describe('live space list', function() {
         events: {}
       }}
       eventPusherStatus={{status: 'CONNECTING'}}
+      activeModal={{name: null, data: null}}
     />);
 
     // Ensure that no spaces were rendered
@@ -79,6 +82,7 @@ describe('live space list', function() {
         events: {}
       }}
       eventPusherStatus={{status: 'CONNECTED'}}
+      activeModal={{name: null, data: null}}
     />);
 
     // Ensure that that the "tag" next to the page title reads "LIVE"
