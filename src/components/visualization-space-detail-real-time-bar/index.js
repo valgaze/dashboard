@@ -6,7 +6,7 @@ import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 
 import formatCapacityPercentage from '../../helpers/format-capacity-percentage/index';
-import SpaceUpdateModal from '../visualization-space-detail-space-update-modal/index';
+import SpaceUpdateModal from '../insights-edit-count-modal/index';
 
 import spaceResetCount from '../../actions/collection/spaces/reset-count';
 
