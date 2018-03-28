@@ -161,8 +161,12 @@ describe('insights space list', function() {
     await timeout(50);
 
     // Ensure that the error bar shows an error
-    console.log(component.find('.error-bar').debug())
     assert.equal(component.find('.error-bar-message').text(), 'Fail!');
+
+    // Ensure that all the filters are disabled
+    assert.equal(component.find('.insights-space-list-search-box').props().disabled, true);
+    assert.equal(component.find('.insights-space-list-time-segment-selector').props().disabled, true);
+    assert.equal(component.find('.insights-space-list-duration-selector').props().disabled, true);
   });
 
   describe('sorting of spaces', function() {

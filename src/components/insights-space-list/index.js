@@ -195,6 +195,7 @@ export class InsightsSpaceList extends React.Component {
             type="text"
             className="insights-space-list-search-box"
             placeholder="Filter Spaces ..."
+            disabled={this.state.view === ERROR}
             value={spaces.filters.search}
             onChange={e => onSpaceSearch(e.target.value)}
           />
@@ -205,6 +206,7 @@ export class InsightsSpaceList extends React.Component {
             type="select"
             className="insights-space-list-time-segment-selector"
             value={this.state.timeSegment}
+            disabled={this.state.view === ERROR}
             onChange={e => {
               this.setState({timeSegment: e.target.value}, () => this.fetchData());
             }}
@@ -220,6 +222,7 @@ export class InsightsSpaceList extends React.Component {
             type="select"
             className="insights-space-list-duration-selector"
             value={this.state.dataDuration}
+            disabled={this.state.view === ERROR}
             onChange={e => {
               this.setState({dataDuration: e.target.value, spaceCounts: {}, view: LOADING}, () => this.fetchData());
             }}
