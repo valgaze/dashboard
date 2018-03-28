@@ -23,6 +23,7 @@ import spaceUtilizationPerGroup, {
   TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
+import commaFormatNumber from '../../helpers/comma-format-number/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
@@ -39,12 +40,16 @@ const DEFAULT_SORT_DIRECTION = SORT_DESC;
 const DATA_DURATION_WEEK = 'DATA_DURATION_WEEK',
       DATA_DURATION_MONTH = 'DATA_DURATION_MONTH';
 
+const LOADING = 'LOADING',
+      VISIBLE = 'VISIBLE',
+      ERROR = 'ERROR';
+
 export class InsightsSpaceList extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      loading: true,
+      view: LOADING,
       spaceCounts: {},
       spaceUtilizations: {},
 
@@ -65,8 +70,6 @@ export class InsightsSpaceList extends React.Component {
     }
 
     const spacesToFetch = spaces.data
-      // Remove all spaces that don't have a capacity
-      .filter(i => i.capacity != null)
       // Remove all spaces that have already had their counts fetched.
       .filter(space => typeof this.state.spaceCounts[space.id] === 'undefined')
 
@@ -74,6 +77,9 @@ export class InsightsSpaceList extends React.Component {
     if (spacesToFetch.length === 0) {
       return
     }
+
+    // Store if each space has a capacity and therefore can be used to calculate utilization.
+    const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
 
     // Fetch counts for each space.
     const requests = spacesToFetch.map(space => {
@@ -108,8 +114,12 @@ export class InsightsSpaceList extends React.Component {
     };
 
     this.setState({
+      view: VISIBLE,
       spaceCounts,
       spaceUtilizations: Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
+        // If a space doesn't have a capacity, don't use it for calculating utilization.
+        if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
+
         const space = spaces.data.find(i => i.id === spaceId);
         const counts = spaceCounts[spaceId];
 
@@ -123,8 +133,6 @@ export class InsightsSpaceList extends React.Component {
           [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length,
         };
       }, {}),
-
-      loading: false,
     });
   }
 
@@ -202,7 +210,7 @@ export class InsightsSpaceList extends React.Component {
             className="insights-space-list-duration-selector"
             value={this.state.dataDuration}
             onChange={e => {
-              this.setState({dataDuration: e.target.value, spaceCounts: {}, loading: true}, () => this.fetchData());
+              this.setState({dataDuration: e.target.value, spaceCounts: {}, view: LOADING}, () => this.fetchData());
             }}
           >
             <option value={DATA_DURATION_WEEK}>Week</option>
@@ -211,18 +219,18 @@ export class InsightsSpaceList extends React.Component {
         </div>
 
         <Card>
-          {this.state.loading ? <CardLoading indeterminate /> : null}
+          {this.state.view === LOADING ? <CardLoading indeterminate /> : null}
 
           <CardHeader className="insights-space-list-summary-header">
             {(() => {
-              if (filteredSpaces.length === 0) {
+              if (this.state.view === VISIBLE && filteredSpaces.length === 0) {
                 return <span>No spaces matched your filter</span>
-              } else if (!this.state.loading) {
+              } else if (this.state.view === VISIBLE) {
                 return <span>
                   Your {filteredSpaces.length}
                   {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '} seen
                   <span className="insights-space-list-summary-header-highlight">
-                    {this.calculateTotalNumberOfEventsForSpaces(filteredSpaces)}
+                    {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}
                   </span>
                   visitors this past {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
                 </span>;
