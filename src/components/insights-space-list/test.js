@@ -134,6 +134,36 @@ describe('insights space list', function() {
       'Set capacity'
     );
   });
+  it(`should show an error in the error bar when something bad happens in fetchData`, async function() {
+    // Ensure that the request to the server fails.
+    global.fetch.restore();
+    sinon.stub(global, 'fetch').rejects(new Error('Fail!'));
+
+    // Render the component
+    const component = mount(<InsightsSpaceList
+      spaces={{
+        filters: {search: ''},
+        data: [
+          {
+            id: 'spc_1',
+            name: 'My Space',
+            currentCount: 2,
+            capacity: null, /* no capacity */
+            timeZone: 'America/New_York',
+          },
+        ],
+        events: {},
+      }}
+      activeModal={{name: null, data: null}}
+    />);
+
+    // Wait for the promise to reject.
+    await timeout(50);
+
+    // Ensure that the error bar shows an error
+    console.log(component.find('.error-bar').debug())
+    assert.equal(component.find('.error-bar-message').text(), 'Fail!');
+  });
 
   describe('sorting of spaces', function() {
     it(`should by default sort spaces in order of name decending`, async function() {

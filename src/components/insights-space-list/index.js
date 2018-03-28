@@ -50,6 +50,8 @@ export class InsightsSpaceList extends React.Component {
 
     this.state = {
       view: LOADING,
+      error: null,
+
       spaceCounts: {},
       spaceUtilizations: {},
 
@@ -69,71 +71,77 @@ export class InsightsSpaceList extends React.Component {
       return
     }
 
-    const spacesToFetch = spaces.data
-      // Remove all spaces that have already had their counts fetched.
-      .filter(space => typeof this.state.spaceCounts[space.id] === 'undefined')
+    try {
+      const spacesToFetch = spaces.data
+        // Remove all spaces that have already had their counts fetched.
+        .filter(space => typeof this.state.spaceCounts[space.id] === 'undefined')
 
-    // Bail early if there is no work to do.
-    if (spacesToFetch.length === 0) {
-      return
-    }
-
-    // Store if each space has a capacity and therefore can be used to calculate utilization.
-    const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
-
-    // Fetch counts for each space.
-    const requests = spacesToFetch.map(space => {
-      // Get the last full week of data.
-      let startTime,
-          endTime = moment.utc().tz(space.timeZone).subtract(1, 'week').endOf('week').subtract(1, 'day').format();
-      if (this.state.dataDuration === DATA_DURATION_WEEK) {
-        startTime = moment.utc().tz(space.timeZone).startOf('week').subtract(1, 'week').add(1, 'day').format();
-      } else {
-        startTime = moment.utc().tz(space.timeZone).subtract(1, 'month').format();
+      // Bail early if there is no work to do.
+      if (spacesToFetch.length === 0) {
+        return
       }
 
-      // Get all counts within that last full week. Request as many pages as required.
-      return fetchAllPages(page => {
-        return core.spaces.counts({
-          id: space.id,
-          start_time: startTime,
-          end_time: endTime,
-          interval: '10m',
+      // Store if each space has a capacity and therefore can be used to calculate utilization.
+      const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
 
-          page,
-          page_size: 1000,
+      // Fetch counts for each space.
+      const requests = spacesToFetch.map(space => {
+        // Get the last full week of data.
+        let startTime,
+            endTime = moment.utc().tz(space.timeZone).subtract(1, 'week').endOf('week').subtract(1, 'day').format();
+        if (this.state.dataDuration === DATA_DURATION_WEEK) {
+          startTime = moment.utc().tz(space.timeZone).startOf('week').subtract(1, 'week').add(1, 'day').format();
+        } else {
+          startTime = moment.utc().tz(space.timeZone).subtract(1, 'month').format();
+        }
+
+        // Get all counts within that last full week. Request as many pages as required.
+        return fetchAllPages(page => {
+          return core.spaces.counts({
+            id: space.id,
+            start_time: startTime,
+            end_time: endTime,
+            interval: '10m',
+
+            page,
+            page_size: 1000,
+          });
         });
       });
-    });
 
-    const spaceCountsArray = await Promise.all(requests);
+      const spaceCountsArray = await Promise.all(requests);
 
-    const spaceCounts = {
-      ...this.state.spaceCounts,
-      ...spaceCountsArray.reduce((acc, i, ct) => ({...acc, [spacesToFetch[ct].id]: i}), {}),
-    };
+      const spaceCounts = {
+        ...this.state.spaceCounts,
+        ...spaceCountsArray.reduce((acc, i, ct) => ({...acc, [spacesToFetch[ct].id]: i}), {}),
+      };
 
-    this.setState({
-      view: VISIBLE,
-      spaceCounts,
-      spaceUtilizations: Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
-        // If a space doesn't have a capacity, don't use it for calculating utilization.
-        if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
+      this.setState({
+        view: VISIBLE,
+        spaceCounts,
+        spaceUtilizations: Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
+          // If a space doesn't have a capacity, don't use it for calculating utilization.
+          if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
 
-        const space = spaces.data.find(i => i.id === spaceId);
-        const counts = spaceCounts[spaceId];
+          const space = spaces.data.find(i => i.id === spaceId);
+          const counts = spaceCounts[spaceId];
 
-        const groups = groupCountsByDay(counts, space.timeZone);
-        const filteredGroups = groupCountFilter(groups, count =>
-          isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS[this.state.timeSegment]));
-        const result = spaceUtilizationPerGroup(space, filteredGroups);
+          const groups = groupCountsByDay(counts, space.timeZone);
+          const filteredGroups = groupCountFilter(groups, count =>
+            isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS[this.state.timeSegment]));
+          const result = spaceUtilizationPerGroup(space, filteredGroups);
 
-        return {
-          ...acc,
-          [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length,
-        };
-      }, {}),
-    });
+          return {
+            ...acc,
+            [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length,
+          };
+        }, {}),
+      });
+    } catch (error) {
+      // Something went wrong. Update the state of the component such that it shows the error in the
+      // error bar.
+      this.setState({view: ERROR, error});
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -161,7 +169,10 @@ export class InsightsSpaceList extends React.Component {
 
     return <div className="insights-space-list">
       {/* Show errors in the spaces collection. */}
-      <ErrorBar message={spaces.error} showRefresh />
+      <ErrorBar
+        message={spaces.error || this.state.error}
+        modalOpen={activeModal.name !== null}
+      />
 
 
       {/* Modal that is used to let the user set the capacity of a space. Shown when the user clicks
