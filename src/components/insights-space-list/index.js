@@ -63,6 +63,8 @@ export class InsightsSpaceList extends React.Component {
       dataDuration: DATA_DURATION_WEEK,
     };
 
+    this.fetchDataLock = false;
+
     this.fetchData();
   }
 
@@ -71,6 +73,13 @@ export class InsightsSpaceList extends React.Component {
       return
     }
 
+    if (this.fetchDataLock) {
+      return;
+    }
+
+    // Only allow one data fetching attempt to happen at once.
+    this.fetchDataLock = true;
+
     try {
       const spacesToFetch = spaces.data
         // Remove all spaces that have already had their counts fetched.
@@ -78,6 +87,7 @@ export class InsightsSpaceList extends React.Component {
 
       // Bail early if there is no work to do.
       if (spacesToFetch.length === 0) {
+        this.fetchDataLock = false;
         return
       }
 
@@ -140,8 +150,10 @@ export class InsightsSpaceList extends React.Component {
     } catch (error) {
       // Something went wrong. Update the state of the component such that it shows the error in the
       // error bar.
-      this.setState({view: ERROR, error});
+      this.setState({view: ERROR, error: `Could not fetch space counts: ${error.message}`});
     }
+
+    this.fetchDataLock = false;
   }
 
   componentWillReceiveProps(nextProps) {

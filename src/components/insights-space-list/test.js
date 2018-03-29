@@ -161,12 +161,52 @@ describe('insights space list', function() {
     await timeout(50);
 
     // Ensure that the error bar shows an error
-    assert.equal(component.find('.error-bar-message').text(), 'Fail!');
+    assert.equal(component.find('.error-bar-message').text(), 'Could not fetch space counts: Fail!');
 
     // Ensure that all the filters are disabled
     assert.equal(component.find('.insights-space-list-search-box').props().disabled, true);
     assert.equal(component.find('.insights-space-list-time-segment-selector').props().disabled, true);
     assert.equal(component.find('.insights-space-list-duration-selector').props().disabled, true);
+  });
+  it('should only ever have one data fetching operation going at once', async function() {
+    // Render the component
+    const component = shallow(<InsightsSpaceList
+      spaces={{
+        filters: {search: ''},
+        data: [
+          {
+            id: 'spc_1',
+            name: 'My Space',
+            currentCount: 2,
+            capacity: null, /* no capacity */
+            timeZone: 'America/New_York',
+          },
+        ],
+        events: {},
+      }}
+      activeModal={{name: null, data: null}}
+    />);
+
+    const instance = component.instance();
+
+    // Start the data fetching
+    instance.fetchData();
+
+    // Verify that the data fetching lock is on
+    assert.equal(instance.fetchDataLock, true);
+
+    // Also verify that fetch has been called.
+    assert.equal(global.fetch.callCount, 1);
+
+    // Fetch data again.
+    instance.fetchData();
+
+    // Verify that the data fetching lock is still on
+    assert.equal(instance.fetchDataLock, true);
+
+    // And that fetch hasn't been called again (in other words, the second `fetchData` call was a
+    // noop)
+    assert.equal(global.fetch.callCount, 1);
   });
 
   describe('sorting of spaces', function() {
