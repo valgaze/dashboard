@@ -76,14 +76,18 @@
 
 .space-card-header-name-link {
   font-family: Densicons;
-  font-size: 12px;
+  font-size: 11px;
   margin-left: 10px;
 
   color: $brand-primary;
   cursor: pointer;
+
   opacity: 0;
   transition: all 200ms ease-in-out;
 }
-.space-card:hover .space-card-header-name-link {
-  opacity: 1;
+.space-card:hover .space-card-header-name-link { opacity: 1; }
+.space-card-header-name-link-label {
+  font-family: $font-base;
+  font-size: $font-size-base;
+  margin-right: 5px;
 }

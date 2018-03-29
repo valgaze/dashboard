@@ -44,7 +44,10 @@ export default function SpaceCard({
           <span
             className="space-card-header-name-link"
             onClick={() => { window.location.href = `#/spaces/insights/${space.id}`; }}
-          >&#xe903;</span>
+          >
+            <span className="space-card-header-name-link-label">Insights</span>
+            &#xe903;
+          </span>
         </span>
         <span className="space-card-header-count">
           {/* The below prints `1 person` or `n people` */}
