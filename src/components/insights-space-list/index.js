@@ -240,7 +240,7 @@ export class InsightsSpaceList extends React.Component {
             }}
           >
             <option value={DATA_DURATION_WEEK}>Week</option>
-            <option value={DATA_DURATION_MONTH}>Month</option>
+            <option disabled value={DATA_DURATION_MONTH}>Month (coming soon)</option>
           </InputBox>
         </div>
 
