@@ -353,7 +353,7 @@ export class InsightsSpaceList extends React.Component {
                     <div className="insights-space-list-item-utilization-bar">
                       <div
                         className="insights-space-list-item-utilization-bar-inner"
-                        style={{width: `${spaceUtilizations[space.id] * 100}%`}}
+                        style={{width: `${spaceUtilizations[space.id] > 1 ? 100 : spaceUtilizations[space.id] * 100}%`}}
                       />
                     </div>
 

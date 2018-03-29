@@ -208,6 +208,46 @@ describe('insights space list', function() {
     // noop)
     assert.equal(global.fetch.callCount, 1);
   });
+  it('should ensure that a utilization bar that is over 100% only ever renders at 100% (and never overflows)', async function() {
+    // Render the component
+    const component = shallow(<InsightsSpaceList
+      spaces={{
+        filters: {search: ''},
+        data: [
+          {
+            id: 'spc_1',
+            name: 'My Space',
+            currentCount: 2,
+            capacity: 5,
+            timeZone: 'America/New_York',
+          },
+        ],
+        events: {},
+      }}
+      activeModal={{name: null, data: null}}
+    />);
+
+    // Set capacities to known values. This is important to make sure the sorting order tests work
+    // (and to make it easy to validate if they work)
+    component.setState({
+      spaceUtilizations: {
+        spc_1: 1.5, /* 150% utilized, which is > 100% */
+      },
+    });
+
+    // Ensure that a single space was rendered
+    assert.equal(component.find('.insights-space-list-item').length, 1);
+
+    // Fetch the first space rendered. Ensure that it's found.
+    const firstSpace = component.find('.insights-space-list-item').first();
+    assert(firstSpace);
+
+    // Ensure that the utilization percentage was not overflowing the bounds of the container.
+    assert.equal(
+      firstSpace.find('.insights-space-list-item-utilization-bar-inner').props().style.width,
+      '100%'
+    );
+  });
 
   describe('sorting of spaces', function() {
     it(`should by default sort spaces in order of name decending`, async function() {
