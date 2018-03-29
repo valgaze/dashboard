@@ -162,12 +162,15 @@ export class InsightsSpaceList extends React.Component {
 
   calculateTotalNumberOfEventsForSpaces(spaces=this.state.spaces) {
     const spaceIds = spaces.map(i => i.id);
+    const spaceTimeZones = spaces.reduce((acc, i) => ({...acc, [i.id]: i.timeZone}), {});
 
     let eventCount = 0;
     for (let id in this.state.spaceCounts) {
       if (spaceIds.indexOf(id) === -1) { continue }
       const counts = this.state.spaceCounts[id];
-      eventCount += counts.length;
+      eventCount += counts.filter(i => {
+        return isWithinTimeSegment(i.timestamp, spaceTimeZones[id], TIME_SEGMENTS[this.state.timeSegment]);
+      }).length;
     }
 
     return eventCount;
@@ -258,7 +261,9 @@ export class InsightsSpaceList extends React.Component {
                   <span className="insights-space-list-summary-header-highlight">
                     {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}
                   </span>
-                  visitors this past {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
+                  visitors during
+                  {` ${TIME_SEGMENTS[this.state.timeSegment].phrasal} `}
+                  this past {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
                 </span>;
               } else {
                 return <span>&mdash;</span>;
@@ -288,7 +293,7 @@ export class InsightsSpaceList extends React.Component {
                 sort={this.state.columnSortOrder}
                 onActivate={() => this.setState({activeColumn: COLUMN_UTILIZATION, columnSortOrder: DEFAULT_SORT_DIRECTION})}
                 onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
-              >Utilization</SortableGridHeaderItem>
+              >Past Week's Utilization</SortableGridHeaderItem>
             </SortableGridHeader>
 
             <div className="insights-space-list-items">
