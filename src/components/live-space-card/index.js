@@ -49,10 +49,7 @@ export default function SpaceCard({
             &#xe903;
           </span>
         </span>
-        <span className="space-card-header-count">
-          {/* The below prints `1 person` or `n people` */}
-          <CountLabel count={space.currentCount} />
-        </span>
+        <span className="space-card-header-count">{space.currentCount}</span>
       </CardHeader>
       <CardBody>
         <div className="space-card-capacity-container">
