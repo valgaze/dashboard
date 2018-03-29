@@ -18,16 +18,6 @@ const RealTimeCountChart = autoRefreshHoc({
   }
 })(chartAsReactComponent(RealTimeCountFn));
 
-function CountLabel({count}) {
-  if (typeof count !== 'number') {
-    return null;
-  } else if (count === 1) {
-    return <span>1 person</span>;
-  } else {
-    return <span>{count} people</span>;
-  }
-}
-
 export default function SpaceCard({
   space,
   events,
