@@ -9,7 +9,7 @@ import gridVariables from '@density/ui/variables/grid.json';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 
-import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
+import SortableGridHeader, { SortableGridHeaderItem, /* SORT_ASC, */ SORT_DESC } from '../sortable-grid-header/index';
 
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
