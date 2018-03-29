@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import RealTimeBar from '../visualization-space-detail-real-time-bar/index';
 import TwentyFourHourCard from '../visualization-space-detail-24-hour-chart/index';
 import DailyMetricsCard from '../visualization-space-detail-daily-metrics-card/index';
 import RawEventsCard from '../visualization-space-detail-raw-events-card/index';
@@ -18,9 +17,6 @@ export function SpaceDetail({
 }) {
   if (space) {
     return <div className="visualization-space-detail">
-      {/* Real time bar */}
-      <RealTimeBar space={space} />
-
       <div className="visualization-space-detail-container">
         {/* Page header */}
         <div className="visualization-space-detail-header">
