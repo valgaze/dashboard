@@ -4,8 +4,13 @@
   @media (min-width: $screen-xs-max) {
     display: flex;
   }
+
+  margin-bottom: 20px;
 }
-.insights-space-detail-utilization-card-header-label { line-height: 43px; }
+.insights-space-detail-utilization-card-header-label {
+  line-height: 43px;
+  font-weight: normal;
+}
 
 
 // The time segment picker, which allows the user to choose which time segment per day to filter
@@ -44,6 +49,40 @@
 }
 .insights-space-detail-utilization-card-header-refresh:hover { opacity: 0.8; }
 .insights-space-detail-utilization-card-header-refresh:active { opacity: 1; }
+
+// The `(Monday - Friday)` label in the header
+.insights-space-detail-utilization-card-header-timespan {
+  color: $gray-dark;
+  font-size: $font-size-base;
+  margin-left: 20px;
+}
+
+
+// The wells that are within the card that contain the "broader statements" that try to provide
+// insight into your space.
+.card .insights-space-detail-utilization-card-well {
+  background-color: $gray-lightest;
+  width: 100%;
+  height: 182px; /* from mockup */
+
+  font-size: $font-size-3;
+  color: $gray-cinder;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.insights-space-detail-utilization-card-well-highlight {
+  margin-left: 6px;
+  margin-right: 6px;
+  color: $brand-primary;
+}
+
+
+.insights-space-detail-utilization-card-grid-header {
+  margin-left: 0px !important;
+}
 
 
 // Horizontally and vertically center errors and info messages in the 24 hour card.

@@ -9,6 +9,8 @@ import gridVariables from '@density/ui/variables/grid.json';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 
+import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
+
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 
@@ -225,6 +227,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 data: null,
               }, () => this.fetchData.call(this))}
             />
+            <span className="insights-space-detail-utilization-card-header-timespan">
+              (Monday &mdash; Friday)
+            </span>
           </span>
 
           <div className="insights-space-detail-utilization-card-time-segment-picker">
@@ -289,40 +294,68 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           </div>
         </CardHeader>
 
-        <CardBody>
-          {this.state.state === VISIBLE ? <div>
-            <span>
-              Average utilization: {formatPercentage(this.calculateAverageUtilization())} %
-              Average monday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[0]))} %
-              Average tuesday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[1]))} %
-              Average wednesday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[2]))} %
-              Average thursday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[3]))} %
-              Average friday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[4]))} %
-              Peak Utilization: {formatPercentage(peakUtilizationPercentage)} % at {peakUtilizationTimestamp}
+        {this.state.state === VISIBLE ? <div>
+          <CardBody className="insights-space-detail-utilization-card-well">
+            Average utilization of
+            <span className="insights-space-detail-utilization-card-well-highlight">
+              {formatPercentage(this.calculateAverageUtilization())}%
             </span>
-            <HistoricalCountsComponent
-              data={averageUtilizationDatapointsWithTimestamp}
-              width={950}
-              height={350}
-              capacity={100}
-            />
-          </div> : null}
-          {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
-            <span>Generating Data...</span>
-          </div> : null}
-          {this.state.state === REQUIRES_CAPACITY ? <div className="insights-space-detail-utilization-card-body-info">
-            <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
-          </div> : null}
-          {this.state.state === EMPTY ? <div className="insights-space-detail-utilization-card-body-info">
-            <span>No data found in date range.</span>
-          </div> : null}
-          {this.state.state === ERROR ? <div className="insights-space-detail-utilization-card-body-info">
-            <span>
-              <span className="insights-space-detail-utilization-card-body-error-icon">&#xe91a;</span>
-              {this.state.error}
+            during
+            <span className="insights-space-detail-utilization-card-well-highlight">
+              {TIME_SEGMENTS[this.state.timeSegment].name}
             </span>
-          </div> : null}
-        </CardBody>
+          </CardBody>
+          <CardHeader>
+            <span className="insights-space-detail-utilization-card-header-label">
+              Average Weekly Breakdown
+            </span>
+          </CardHeader>
+          <CardBody>
+            <SortableGridHeader className="insights-space-detail-utilization-card-grid-header">
+              <SortableGridHeaderItem
+                width={2}
+                active={true}
+                sort={SORT_DESC}
+              >Space</SortableGridHeaderItem>
+              <SortableGridHeaderItem
+                width={2}
+                active={false}
+                sort={SORT_DESC}
+                // onActivate={() => this.setState({activeColumn: COLUMN_CAPACITY, columnSortOrder: DEFAULT_SORT_DIRECTION})}
+                // onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
+              >Capacity</SortableGridHeaderItem>
+            </SortableGridHeader>
+          </CardBody>
+          <span>
+            Average monday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[0]))} %
+            Average tuesday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[1]))} %
+            Average wednesday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[2]))} %
+            Average thursday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[3]))} %
+            Average friday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[4]))} %
+            Peak Utilization: {formatPercentage(peakUtilizationPercentage)} % at {peakUtilizationTimestamp}
+          </span>
+          <HistoricalCountsComponent
+            data={averageUtilizationDatapointsWithTimestamp}
+            width={950}
+            height={350}
+            capacity={100}
+          />
+        </div> : null}
+        {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
+          <span>Generating Data...</span>
+        </div> : null}
+        {this.state.state === REQUIRES_CAPACITY ? <div className="insights-space-detail-utilization-card-body-info">
+          <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
+        </div> : null}
+        {this.state.state === EMPTY ? <div className="insights-space-detail-utilization-card-body-info">
+          <span>No data found in date range.</span>
+        </div> : null}
+        {this.state.state === ERROR ? <div className="insights-space-detail-utilization-card-body-info">
+          <span>
+            <span className="insights-space-detail-utilization-card-body-error-icon">&#xe91a;</span>
+            {this.state.error}
+          </span>
+        </div> : null}
       </Card>;
     } else {
       return <span>This space doesn't exist.</span>;

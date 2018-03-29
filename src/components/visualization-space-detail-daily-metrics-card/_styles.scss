@@ -22,7 +22,10 @@
     display: flex;
   }
 }
-.visualization-space-detail-daily-metrics-card-header-label { line-height: 43px; }
+.visualization-space-detail-daily-metrics-card-header-label {
+  line-height: 43px;
+  font-weight: normal;
+}
 .visualization-space-detail-daily-metrics-card-metric-picker {
   margin-left: 0px;
   .input-box { color: $gray-cinder; }

@@ -1,5 +1,8 @@
 .visualization-space-detail-24-hour-card-header { display: flex; }
-.visualization-space-detail-24-hour-card-header-label { line-height: 43px; }
+.visualization-space-detail-24-hour-card-header-label {
+  line-height: 43px;
+  font-weight: normal;
+}
 .visualization-space-detail-24-hour-card-date-picker { margin-left: auto; }
 
 // The 24 hour chart is a fixed width and is scrolalble within the card.
