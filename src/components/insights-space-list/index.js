@@ -119,7 +119,19 @@ export class InsightsSpaceList extends React.Component {
         });
       });
 
-      const spaceCountsArray = await Promise.all(requests);
+      // Wait for reuquest promises to resolve
+      const spaceCountsArray = (await Promise.all(requests))
+      // Add a `timestampAsMoment` property which converts the timestamp into a moment. This is so
+      // that this expensive step doesn't have to be performed on each component render in the
+      // `.calculateTotalNumberOfEventsForSpaces` method.
+      .map((counts, ct) => {
+        return counts.map(count => {
+          return {
+            ...count,
+            timestampAsMoment: moment.utc(count.timestamp, 'YYYY-MM-DDTHH:mm:ssZ').tz(spacesToFetch[ct].timeZone),
+          };
+        });
+      });
 
       const spaceCounts = {
         ...this.state.spaceCounts,
@@ -169,7 +181,7 @@ export class InsightsSpaceList extends React.Component {
       if (spaceIds.indexOf(id) === -1) { continue }
       const counts = this.state.spaceCounts[id];
       eventCount += counts.filter(i => {
-        return isWithinTimeSegment(i.timestamp, spaceTimeZones[id], TIME_SEGMENTS[this.state.timeSegment]);
+        return isWithinTimeSegment(i.timestampAsMoment, spaceTimeZones[id], TIME_SEGMENTS[this.state.timeSegment]);
       }).length;
     }
 

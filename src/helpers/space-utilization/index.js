@@ -43,7 +43,7 @@ export function groupCountFilter(groups, predicate) {
 }
 
 export function isWithinTimeSegment(timestamp, timezone, segment) {
-  const t = moment.utc(timestamp).tz(timezone);
+  const t = timestamp instanceof moment ? timestamp : moment.utc(timestamp).tz(timezone);
   const weekday = t.isoWeekday();
   const hour = t.get('hour');
   const result = (
