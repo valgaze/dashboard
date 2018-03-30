@@ -11,6 +11,10 @@
   line-height: 43px;
   font-weight: normal;
 }
+.insights-space-detail-utilization-card-header-label-highlight {
+  color: $brand-primary;
+  margin-left: 6px;
+}
 
 
 // The time segment picker, which allows the user to choose which time segment per day to filter
@@ -81,7 +85,22 @@
 
 
 .insights-space-detail-utilization-card-grid-header {
-  margin-left: 0px !important;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 32px;
+}
+.insights-space-detail-utilization-card-grid-row {
+  list-style-type: none;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+}
+.insights-space-detail-utilization-card-grid-item {
+  font-size: $font-size-4;
+  color: $gray-cinder;
+  &:first-child { flex: 1; }
+  &:last-child { flex: 3; }
 }
 
 

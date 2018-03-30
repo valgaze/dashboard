@@ -70,8 +70,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       data: null,
       dataSpaceId: null,
 
-      startDate: moment.utc().subtract(7, 'days').format(),
-      endDate: moment.utc().subtract(1, 'day').format(),
+      startDate: moment.utc().tz(this.props.space.timeZone).subtract(7, 'days').startOf('day').format(),
+      endDate: moment.utc().tz(this.props.space.timeZone).subtract(1, 'day').endOf('day').format(),
       timeSegment: 'WORKING_HOURS',
     };
   }
@@ -123,9 +123,23 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     // Group into counts into buckets, one bucket for each day.
     const groups = groupCountsByDay(counts, space.timeZone);
 
-    // Remove all data in each bucket that is outside each time segment.
-    const filteredGroups = groupCountFilter(groups, count =>
-      isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS[this.state.timeSegment]));
+    const filteredGroups = groups.filter(group => {
+      // Filter out any days that aren't within monday-friday
+      const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
+      return dayOfWeek !== 5 && dayOfWeek !== 6 // Remove saturday and sunday
+    }).map(group => {
+      // Remove all counts in each bucket that is outside each time segment.
+      return {
+        ...group,
+        counts: group.counts.filter(count => {
+          return isWithinTimeSegment(
+            count.timestamp,
+            space.timeZone,
+            TIME_SEGMENTS[this.state.timeSegment]
+          );
+        }),
+      };
+    });
 
     // Calculate space utilization using this dat with un-important time segments removed.
     const utilizations = spaceUtilizationPerGroup(space, filteredGroups);
@@ -169,17 +183,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       }, [[], [], [], [], [], [], []]);
 
 
-      // Calculate the peak utilization of the space by getting the peak count within the raw count
-      // data that was fetched and dividing it by the capacity.
-      const peak = this.state.counts.reduce(
-        (peak, i) => i.count > peak.count ? i : peak, /* find the maximum value of i.count */
-        {count: -1, timestamp: null}
-      );
-      peakUtilizationPercentage = peak.count / space.capacity;
-      peakUtilizationTimestamp = peak.timestamp;
-      
-
-
       // Calculate an average day's utilization graph.
       let averageUtilizationDatapoints = this.state.data[0].utilization.map(_ => 0);
 
@@ -210,7 +213,16 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           count: i * 100,
         }))
 
-      // console.log(averageUtilizationDatapointsWithTimestamp)
+      // Calculate the peak utilization of the space by getting the peak count within the raw count
+      // data that was fetched and dividing it by the capacity.
+      peakUtilizationPercentage = 0;
+      averageUtilizationDatapointsWithTimestamp.forEach(c => {
+        if (c.count > peakUtilizationPercentage) {
+          peakUtilizationPercentage = c.count;
+          peakUtilizationTimestamp = c.timestamp;
+        }
+      });
+      peakUtilizationPercentage /= 100;
     }
 
 
@@ -298,42 +310,92 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           <CardBody className="insights-space-detail-utilization-card-well">
             Average utilization of
             <span className="insights-space-detail-utilization-card-well-highlight">
-              {formatPercentage(this.calculateAverageUtilization())}%
+              {formatPercentage(this.calculateAverageUtilization(), 0)}%
             </span>
             during
             <span className="insights-space-detail-utilization-card-well-highlight">
-              {TIME_SEGMENTS[this.state.timeSegment].name}
+              {TIME_SEGMENTS[this.state.timeSegment].phrasal}
             </span>
           </CardBody>
           <CardHeader>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Weekly Breakdown
+              <span className="insights-space-detail-utilization-card-header-timespan">
+                {moment.utc(this.state.startDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
+                &nbsp;&mdash;&nbsp;
+                {moment.utc(this.state.endDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
+                &nbsp;
+                <span className="insights-space-detail-utilization-card-header-label-highlight">
+                  ({TIME_SEGMENTS[this.state.timeSegment].name})
+                </span>
+              </span>
             </span>
           </CardHeader>
           <CardBody>
-            <SortableGridHeader className="insights-space-detail-utilization-card-grid-header">
-              <SortableGridHeaderItem
-                width={2}
-                active={true}
-                sort={SORT_DESC}
-              >Space</SortableGridHeaderItem>
-              <SortableGridHeaderItem
-                width={2}
-                active={false}
-                sort={SORT_DESC}
-                // onActivate={() => this.setState({activeColumn: COLUMN_CAPACITY, columnSortOrder: DEFAULT_SORT_DIRECTION})}
-                // onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
-              >Capacity</SortableGridHeaderItem>
-            </SortableGridHeader>
+            <div className="insights-space-detail-utilization-card-grid-header">
+              <div className="insights-space-detail-utilization-card-grid-item">Space</div>
+              <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
+            </div>
+
+            <div className="insights-space-detail-utilization-card-grid-row">
+              <div className="insights-space-detail-utilization-card-grid-item">Monday</div>
+              <div className="insights-space-detail-utilization-card-grid-item">
+                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[0]))}%
+              </div>
+            </div>
+            <div className="insights-space-detail-utilization-card-grid-row">
+              <div className="insights-space-detail-utilization-card-grid-item">Tuesday</div>
+              <div className="insights-space-detail-utilization-card-grid-item">
+                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[1]))}%
+              </div>
+            </div>
+            <div className="insights-space-detail-utilization-card-grid-row">
+              <div className="insights-space-detail-utilization-card-grid-item">Wednesday</div>
+              <div className="insights-space-detail-utilization-card-grid-item">
+                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[2]))}%
+              </div>
+            </div>
+            <div className="insights-space-detail-utilization-card-grid-row">
+              <div className="insights-space-detail-utilization-card-grid-item">Thursday</div>
+              <div className="insights-space-detail-utilization-card-grid-item">
+                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[3]))}%
+              </div>
+            </div>
+            <div className="insights-space-detail-utilization-card-grid-row">
+              <div className="insights-space-detail-utilization-card-grid-item">Friday</div>
+              <div className="insights-space-detail-utilization-card-grid-item">
+                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[4]))}%
+              </div>
+            </div>
+
           </CardBody>
-          <span>
-            Average monday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[0]))} %
-            Average tuesday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[1]))} %
-            Average wednesday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[2]))} %
-            Average thursday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[3]))} %
-            Average friday utilization: {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[4]))} %
-            Peak Utilization: {formatPercentage(peakUtilizationPercentage)} % at {peakUtilizationTimestamp}
-          </span>
+          <CardBody className="insights-space-detail-utilization-card-well">
+            On average, peak utilization of 
+            <span className="insights-space-detail-utilization-card-well-highlight">
+              {formatPercentage(peakUtilizationPercentage, 1)}%
+            </span>
+            happens around
+            <span className="insights-space-detail-utilization-card-well-highlight">
+              {(timestamp => {
+                const stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ');
+                let minute = '00';
+
+                if (stamp.minute() >= 45) {
+                  minute = '45';
+                } else if (stamp.minute() >= 30) {
+                  minute = '30';
+                } else if (stamp.minute() >= 15) {
+                  minute = '15';
+                }
+                
+                return stamp.format(`h:[${minute}]a`).slice(0, -1)
+              })(peakUtilizationTimestamp)}
+            </span>
+            during
+            <span className="insights-space-detail-utilization-card-well-highlight">
+              {TIME_SEGMENTS[this.state.timeSegment].phrasal}
+            </span>
+          </CardBody>
           <HistoricalCountsComponent
             data={averageUtilizationDatapointsWithTimestamp}
             width={950}
