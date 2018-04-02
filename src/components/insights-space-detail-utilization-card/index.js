@@ -167,7 +167,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
   componentWillReceiveProps({space}) {
     if (space && (space.id !== this.state.dataSpaceId || space.capacity !== this.state.dataSpaceCapacity)) {
-      this.setState({state: LOADING}, () => this.fetchData.call(this))
+      this.setState({state: LOADING}, () => this.fetchData.call(this));
     }
   }
 
@@ -230,7 +230,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       });
       peakUtilizationPercentage /= 100;
     }
-
 
     if (space) {
       return <Card className="insights-space-detail-utilization-card">
