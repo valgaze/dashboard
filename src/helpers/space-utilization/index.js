@@ -9,9 +9,9 @@ export const TIME_SEGMENTS = {
   WORKING_HOURS: {start: 8, end: 18, name: 'Open Hours', phrasal: 'open hours'},
 
   MORNING: {start: 8, end: 12, name: 'Morning', phrasal: 'the morning'},
+  AFTERNOON: {start: 12, end: 18, name: 'Afternoon', phrasal: 'the afternoon'},
   BREAKFAST: {start: 8, end: 10, name: 'Breakfast', phrasal: 'breakfast'},
   LUNCH: {start: 11, end: 14, name: 'Lunch', phrasal: 'lunch'},
-  AFTERNOON: {start: 12, end: 18, name: 'Afternoon', phrasal: 'the afternoon'},
 };
 
 export function groupCountsByDay(counts, timezone) {
