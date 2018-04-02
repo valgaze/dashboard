@@ -22,61 +22,53 @@
   }
 }
 
-// "Spaces /" prefix on the page header label.
+// "<-" arrow on the page header label
 .visualization-space-detail-header-back-section {
-  color: $gray-dark;
+  color: $brand-primary;
   text-decoration: none;
-  font-size: $font-size-3;
   font-weight: normal;
 
-  // On a computer, make the ehader bigger.
+  font-family: Densicons;
+  font-size: 16px;
+  margin-right: 8px;
+  padding: 8px;
+
+  transition: all ease-in-out 200ms;
+  border-radius: 50%;
+
+  position: relative;
+
+  // On a computer, move the arrow to the top of the header text.
   @media (min-width: $screen-xs-max) {
-    font-size: $font-size-2;
+    top: -8px;
+  }
+
+  &:hover, &:active {
+    background-color: $gray;
   }
 }
-.visualization-space-detail-header-back-section:after {
-  content: '/';
-  margin-left: 10px;
-  margin-right: 10px;
-}
 
-// Actual space name (after the prefix on the page header label)
+// Actual space name (after the arrow on the page header label)
 .visualization-space-detail-header-title {
   color: $gray-cinder;
   font-size: $font-size-2;
   font-size: $font-size-3;
-  font-weight: $font-weight-3;
+  font-weight: normal;
 
-  // On a computer, make the ehader bigger.
+  // On a computer, make the header bigger.
   @media (min-width: $screen-xs-max) {
     font-size: $font-size-2;
-    font-weight: $font-weight-2;
   }
 }
 
-// "Historical" tag after the page title.
-.visualization-space-detail-header-tag {
-  display: none;
+.visualization-space-detail-capacity {
+  color: $gray-cinder;
+  font-size: $font-size-4;
+  font-weight: normal;
 
-  margin-left: 20px;
-  margin-top: 29px;
-
-  padding-top: 6px;
-  padding-bottom: 3px;
-  padding-left: 10px;
-  padding-right: 10px;
-
-  font-size: $font-size-small;
-  font-weight: 500;
-  color: $brand-primary;
-
-  border: 1px solid $brand-primary;
-  border-radius: $border-radius-base;
-
-  // On a computer, make the thing visible.
-  @media (min-width: $screen-xs-max) {
-    display: inline-table;
-  }
+  // Add some spacing to the left so that the capacity indicator will be underneath the space name.
+  margin-left: 42px;
+  margin-top: 5px;
 }
 
 // Time zone label in the right hand corner.
@@ -84,7 +76,7 @@
   margin-top: 30px;
 
   color: $gray-cinder;
-  font-size: $font-size-3;
+  font-size: $font-size-4;
   font-weight: normal;
 
   // On a computer, add a margin left of auto to push the time zone over to the right.
@@ -92,12 +84,9 @@
   @media (min-width: $screen-xs-max) {
     margin-left: auto;
 
-    font-size: $font-size-2;
+    font-size: $font-size-4;
     font-weight: normal;
   }
-}
-.visualization-space-detail-header-time-zone:before {
-  content: 'Timezone: ';
 }
 
 // Loading state for whole page

@@ -21,18 +21,22 @@ export function SpaceDetail({
         {/* Page header */}
         <div className="visualization-space-detail-header">
           <h1 className="visualization-space-detail-header-container">
-            <a href="#/spaces/insights" className="visualization-space-detail-header-back-section">Insights</a>
+            <a href="#/spaces/insights" className="visualization-space-detail-header-back-section">
+              &#xe902;
+            </a>
             <span className="visualization-space-detail-header-title">{space.name}</span>
+            <div className="visualization-space-detail-capacity">Capacity: 10</div>
           </h1>
-          <div className="visualization-space-detail-header-tag">Historical</div>
 
           {/* Attempt to display a nicer representation of the time zone, but fall back on the time zone name */}
-          <div className="visualization-space-detail-header-time-zone">{({
-            'America/New_York': 'Eastern',
-            'America/Chicago': 'Central',
-            'America/Denver': 'Mountain',
-            'America/Los_Angeles': 'Pacific',
-          })[space.timeZone] || space.timeZone}</div>
+          <div className="visualization-space-detail-header-time-zone">
+            Time Zone: {({
+              'America/New_York': 'Eastern',
+              'America/Chicago': 'Central',
+              'America/Denver': 'Mountain',
+              'America/Los_Angeles': 'Pacific',
+            })[space.timeZone] || space.timeZone}
+        </div>
         </div>
 
         <UtilizationCard space={space} />
