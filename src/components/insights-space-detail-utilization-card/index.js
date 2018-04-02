@@ -9,7 +9,6 @@ import gridVariables from '@density/ui/variables/grid.json';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 
-import SortableGridHeader, { SortableGridHeaderItem, /* SORT_ASC, */ SORT_DESC } from '../sortable-grid-header/index';
 import PercentageBar from '../percentage-bar/index';
 
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
@@ -20,7 +19,6 @@ import formatPercentage from '../../helpers/format-percentage/index';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
-  groupCountFilter,
   isWithinTimeSegment,
   TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
