@@ -10,6 +10,7 @@ import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 
 import SortableGridHeader, { SortableGridHeaderItem, /* SORT_ASC, */ SORT_DESC } from '../sortable-grid-header/index';
+import PercentageBar from '../percentage-bar/index';
 
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
@@ -340,31 +341,46 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             <div className="insights-space-detail-utilization-card-grid-row">
               <div className="insights-space-detail-utilization-card-grid-item">Monday</div>
               <div className="insights-space-detail-utilization-card-grid-item">
-                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[0]))}%
+                <PercentageBar
+                  percentage={this.calculateAverageUtilization(utilizationsByDay[0])}
+                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                />
               </div>
             </div>
             <div className="insights-space-detail-utilization-card-grid-row">
               <div className="insights-space-detail-utilization-card-grid-item">Tuesday</div>
               <div className="insights-space-detail-utilization-card-grid-item">
-                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[1]))}%
+                <PercentageBar
+                  percentage={this.calculateAverageUtilization(utilizationsByDay[1])}
+                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                />
               </div>
             </div>
             <div className="insights-space-detail-utilization-card-grid-row">
               <div className="insights-space-detail-utilization-card-grid-item">Wednesday</div>
               <div className="insights-space-detail-utilization-card-grid-item">
-                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[2]))}%
+                <PercentageBar
+                  percentage={this.calculateAverageUtilization(utilizationsByDay[2])}
+                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                />
               </div>
             </div>
             <div className="insights-space-detail-utilization-card-grid-row">
               <div className="insights-space-detail-utilization-card-grid-item">Thursday</div>
               <div className="insights-space-detail-utilization-card-grid-item">
-                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[3]))}%
+                <PercentageBar
+                  percentage={this.calculateAverageUtilization(utilizationsByDay[3])}
+                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                />
               </div>
             </div>
             <div className="insights-space-detail-utilization-card-grid-row">
               <div className="insights-space-detail-utilization-card-grid-item">Friday</div>
               <div className="insights-space-detail-utilization-card-grid-item">
-                {formatPercentage(this.calculateAverageUtilization(utilizationsByDay[4]))}%
+                <PercentageBar
+                  percentage={this.calculateAverageUtilization(utilizationsByDay[4])}
+                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                />
               </div>
             </div>
 
@@ -396,6 +412,20 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               {TIME_SEGMENTS[this.state.timeSegment].phrasal}
             </span>
           </CardBody>
+          <CardHeader>
+            <span className="insights-space-detail-utilization-card-header-label">
+              Average Daily Breakdown
+              <span className="insights-space-detail-utilization-card-header-timespan">
+                {moment.utc(this.state.startDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
+                &nbsp;&mdash;&nbsp;
+                {moment.utc(this.state.endDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
+                &nbsp;
+                <span className="insights-space-detail-utilization-card-header-label-highlight">
+                  ({TIME_SEGMENTS[this.state.timeSegment].name})
+                </span>
+              </span>
+            </span>
+          </CardHeader>
           <HistoricalCountsComponent
             data={averageUtilizationDatapointsWithTimestamp}
             width={950}

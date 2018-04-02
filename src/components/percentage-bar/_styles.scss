@@ -1,0 +1,37 @@
+$percentage-bar-container-height: 43px; /* The "row height" of the container */
+$percentage-bar-height: 4px; /* THe height of the shaded bar itself within the container */
+$percentage-bar-percentage-text-spacing: 8px; /* Spacing to the left of the formatted percentage*/
+
+.percentage-bar-container {
+  display: flex;
+  flex-direction: row;
+
+  color: $brand-primary;
+  line-height: $percentage-bar-container-height;
+}
+
+// The utilization bar that visually represents space utilization in a horizontal fashion
+.percentage-bar {
+  display: inline-block;
+  background-color: $gray-light;
+
+  width: 100%;
+  height: $percentage-bar-height;
+  flex: 1;
+
+  margin-top: ($percentage-bar-container-height - $percentage-bar-height) / 2;
+}
+.percentage-bar-colored-section {
+  /* a width is set as an inline style in the component, which overrides the style set below */
+  width: 0%;
+
+  background-color: $brand-primary;
+  height: $percentage-bar-height;
+  transition: all 100ms ease-in-out;
+}
+
+.percentage-bar-text {
+  width: 3em;
+  text-align: right;
+  margin-right: $percentage-bar-percentage-text-spacing;
+}
