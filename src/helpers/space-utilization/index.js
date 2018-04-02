@@ -1,8 +1,11 @@
 import moment from 'moment';
 import 'moment-timezone'; 
 
+// Currently, time segments are hard-coded below. Each time segment contains a start and end hour in
+// local time, a name, and a "phrasal" representation that can be used in natural language.
+// Currently, this is being used in clauses like "Your spaces have seen N visitors during PHRASAL."
 export const TIME_SEGMENTS = {
-  WHOLE_DAY: {start: 0, end: 24, name: 'Whole Day', phrasal: 'whole day'},
+  WHOLE_DAY: {start: 0, end: 24, name: 'Whole Day', phrasal: 'the whole day'},
   WORKING_HOURS: {start: 8, end: 18, name: 'Open Hours', phrasal: 'open hours'},
 
   MORNING: {start: 8, end: 12, name: 'Morning', phrasal: 'the morning'},
