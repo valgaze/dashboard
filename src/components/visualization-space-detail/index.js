@@ -25,7 +25,9 @@ export function SpaceDetail({
               &#xe902;
             </a>
             <span className="visualization-space-detail-header-title">{space.name}</span>
-            <div className="visualization-space-detail-capacity">Capacity: 10</div>
+            <div className="visualization-space-detail-capacity">
+              Capacity: 10 <a href>Update</a>
+            </div>
           </h1>
 
           {/* Attempt to display a nicer representation of the time zone, but fall back on the time zone name */}
