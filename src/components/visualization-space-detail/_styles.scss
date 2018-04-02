@@ -69,6 +69,11 @@
   // Add some spacing to the left so that the capacity indicator will be underneath the space name.
   margin-left: 42px;
   margin-top: 5px;
+
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
 
 // Time zone label in the right hand corner.

@@ -73,6 +73,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       endDate: moment.utc().tz(this.props.space.timeZone).subtract(1, 'day').endOf('day').format(),
       timeSegment: 'WORKING_HOURS',
     };
+
+    // Fetch initial data
+    this.fetchData.call(this);
   }
 
   async fetchData() {
@@ -153,6 +156,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       // Along with the utilization data, store the space id that the data has been calculated for.
       // In this way, if the space id changes, then we know to refetch utilization data.
       dataSpaceId: space.id,
+      dataSpaceCapacity: space.capacity,
     });
   }
 
@@ -161,11 +165,14 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     return utilizationSum / data.length;
   }
 
+  componentWillReceiveProps({space}) {
+    if (space && (space.id !== this.state.dataSpaceId || space.capacity !== this.state.dataSpaceCapacity)) {
+      this.setState({state: LOADING}, () => this.fetchData.call(this))
+    }
+  }
+
   render() {
     const {space} = this.props;
-    if (space && space.id !== this.state.dataSpaceId) {
-      this.fetchData.call(this);
-    }
 
     let utilizationsByDay,
       peakUtilizationPercentage, peakUtilizationTimestamp,
