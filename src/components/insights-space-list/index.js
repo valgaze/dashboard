@@ -409,8 +409,8 @@ export default connect(state => {
     },
 
     onSetCapacity(space, capacity) {
-      dispatch(collectionSpacesUpdate({...space, capacity})).then(() => {
-        dispatch(hideModal());
+      dispatch(collectionSpacesUpdate({...space, capacity})).then(ok => {
+        ok && dispatch(hideModal());
       });
     },
 
