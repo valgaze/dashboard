@@ -274,8 +274,13 @@ export class InsightsSpaceList extends React.Component {
                     {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}
                   </span>
                   visitors during
-                  {` ${TIME_SEGMENTS[this.state.timeSegment].phrasal} `}
-                  this past {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
+                  <span className="insights-space-list-summary-header-highlight">
+                    {` ${TIME_SEGMENTS[this.state.timeSegment].phrasal} `}
+                  </span>
+                  this past
+                  <span className="insights-space-list-summary-header-highlight">
+                    {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
+                  </span>
                 </span>;
               } else {
                 return <span>&mdash;</span>;
