@@ -274,7 +274,7 @@ export class InsightsSpaceList extends React.Component {
                     {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}
                   </span>
                   visitors during
-                  <span className="insights-space-list-summary-header-highlight">
+                  <span className="insights-space-list-summary-header-highlight" style={{margin:0}}>
                     {` ${TIME_SEGMENTS[this.state.timeSegment].phrasal} `}
                   </span>
                   this past

@@ -15,7 +15,6 @@ import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-da
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
-import formatPercentage from '../../helpers/format-percentage/index';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
@@ -222,6 +221,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       // Calculate the peak utilization of the space by getting the peak count within the raw count
       // data that was fetched and dividing it by the capacity.
       peakUtilizationPercentage = 0;
+      peakUtilizationTimestamp = null; /* No peak utilization */
       averageUtilizationDatapointsWithTimestamp.forEach(c => {
         if (c.count > peakUtilizationPercentage) {
           peakUtilizationPercentage = c.count;
@@ -315,7 +315,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           <CardBody className="insights-space-detail-utilization-card-well">
             Average utilization of
             <span className="insights-space-detail-utilization-card-well-highlight">
-              {formatPercentage(this.calculateAverageUtilization(), 0)}%
+              {Math.round(this.calculateAverageUtilization())}%
             </span>
             during
             <span className="insights-space-detail-utilization-card-well-highlight">
@@ -390,31 +390,38 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
           </CardBody>
           <CardBody className="insights-space-detail-utilization-card-well">
-            On average, peak utilization of 
-            <span className="insights-space-detail-utilization-card-well-highlight">
-              {formatPercentage(peakUtilizationPercentage, 1)}%
-            </span>
-            happens around
-            <span className="insights-space-detail-utilization-card-well-highlight">
-              {(timestamp => {
-                const stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ');
-                let minute = '00';
+            {peakUtilizationTimestamp === null ? <span>
+              No peak utilization during
+              <span className="insights-space-detail-utilization-card-well-highlight">
+                {TIME_SEGMENTS[this.state.timeSegment].phrasal}
+              </span>
+            </span> : <span>
+              On average, peak utilization of 
+              <span className="insights-space-detail-utilization-card-well-highlight">
+                {Math.round(peakUtilizationPercentage)}%
+              </span>
+              happens around
+              <span className="insights-space-detail-utilization-card-well-highlight">
+                {(timestamp => {
+                  const stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ');
+                  let minute = '00';
 
-                if (stamp.minute() >= 45) {
-                  minute = '45';
-                } else if (stamp.minute() >= 30) {
-                  minute = '30';
-                } else if (stamp.minute() >= 15) {
-                  minute = '15';
-                }
-                
-                return stamp.format(`h:[${minute}]a`).slice(0, -1)
-              })(peakUtilizationTimestamp)}
-            </span>
-            during
-            <span className="insights-space-detail-utilization-card-well-highlight">
-              {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-            </span>
+                  if (stamp.minute() >= 45) {
+                    minute = '45';
+                  } else if (stamp.minute() >= 30) {
+                    minute = '30';
+                  } else if (stamp.minute() >= 15) {
+                    minute = '15';
+                  }
+                  
+                  return stamp.format(`h:[${minute}]a`).slice(0, -1)
+                })(peakUtilizationTimestamp)}
+              </span>
+              during
+              <span className="insights-space-detail-utilization-card-well-highlight">
+                {TIME_SEGMENTS[this.state.timeSegment].phrasal}
+              </span>
+            </span>}
           </CardBody>
           <CardHeader>
             <span className="insights-space-detail-utilization-card-header-label">

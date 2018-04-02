@@ -41,13 +41,6 @@ export default function NavLoggedIn({
 
     <NavbarMobileItem
       activePage={activePage}
-      pageName={['LIVE_SPACE_LIST']}
-      href="#/spaces/live"
-      onClick={closeSidebar}
-    >Live</NavbarMobileItem>,
-
-    <NavbarMobileItem
-      activePage={activePage}
       pageName={['INSIGHTS_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
 
       // Feature flag: Do not allow the user to visit the insights page until it has been
@@ -57,6 +50,13 @@ export default function NavLoggedIn({
       href="#/spaces/insights"
       onClick={closeSidebar}
     >Insights</NavbarMobileItem>,
+
+    <NavbarMobileItem
+      activePage={activePage}
+      pageName={['LIVE_SPACE_LIST']}
+      href="#/spaces/live"
+      onClick={closeSidebar}
+    >Live</NavbarMobileItem>,
 
     /* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */
     stringToBoolean(settings.environmentPageVisible) ? <NavbarMobileItem
@@ -119,12 +119,6 @@ export default function NavLoggedIn({
 
     <NavbarItem
       activePage={activePage}
-      pageName={['LIVE_SPACE_LIST']}
-      href="#/spaces/live"
-    >Live</NavbarItem>
-
-    <NavbarItem
-      activePage={activePage}
       pageName={['INSIGHTS_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
 
       // Feature flag: Do not allow the user to visit the visualizations page until it has been
@@ -135,6 +129,12 @@ export default function NavLoggedIn({
 
       href="#/spaces/insights"
     >Insights</NavbarItem>
+
+    <NavbarItem
+      activePage={activePage}
+      pageName={['LIVE_SPACE_LIST']}
+      href="#/spaces/live"
+    >Live</NavbarItem>
 
     {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
     {stringToBoolean(settings.environmentPageVisible) ? <NavbarItem
