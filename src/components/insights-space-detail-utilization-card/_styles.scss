@@ -104,6 +104,10 @@
   &:last-child { flex: 3; }
 }
 
+.insights-space-detail-utilization-card .historical-counts .historical-counts-capacity-region {
+  fill: transparent;
+}
+
 
 // Horizontally and vertically center errors and info messages in the 24 hour card.
 .insights-space-detail-utilization-card-body-info,

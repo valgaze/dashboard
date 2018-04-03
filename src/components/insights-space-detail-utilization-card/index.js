@@ -16,6 +16,8 @@ import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-ran
 
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 
+import getTimeZoneGeneralizedShortName from '../../helpers/get-time-zone-generalized-short-name/index';
+
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
   isWithinTimeSegment,
@@ -442,6 +444,19 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             width={950}
             height={350}
             capacity={100}
+
+            yAxisLabelFormatter={n => {
+              if (n === 0) {
+                return '0%';
+              } else {
+                return '100%';
+              }
+            }}
+            bottomOverlayLabelFormatter={n => {
+              const timeZoneLabel = getTimeZoneGeneralizedShortName(space.timeZone);
+              return `Avg. Weekday at ${n.split(' ').slice(0, 2).join(' ')} (${timeZoneLabel})`;
+            }}
+            topOverlayLabelFormatter={n => `${n}%`}
           />
         </div> : null}
         {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
