@@ -268,7 +268,14 @@ export class InsightsSpaceList extends React.Component {
                 return <span>No spaces matched your filter</span>
               } else if (this.state.view === VISIBLE) {
                 return <span>
-                  Your {filteredSpaces.length}
+                  {(function(search) {
+                    if (filteredSpaces.length === 1) {
+                      return search !== '' ? 'This ' : 'Your ';
+                    } else {
+                      return search !== '' ? 'These ' : 'Your ';
+                    }
+                  })(spaces.filters.search)}
+                  {filteredSpaces.length}
                   {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '} seen
                   <span className="insights-space-list-summary-header-highlight">
                     {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}

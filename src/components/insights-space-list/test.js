@@ -532,4 +532,141 @@ describe('insights space list', function() {
       );
     });
   });
+
+  describe('rendering phrases correctly', function() {
+    it(`should render phrase properly when a number of unfiltered spaces are shown`, async function() {
+      // Render the component
+      const component = mount(<InsightsSpaceList
+        spaces={{
+          filters: {search: ''},
+          data: [
+            {
+              id: 'spc_1',
+              name: 'My Space',
+              currentCount: 2,
+              capacity: 5,
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_2',
+              name: 'My Space 2',
+              currentCount: 2,
+              capacity: 5,
+              timeZone: 'America/New_York',
+            },
+          ],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+      />);
+
+      // For this test, whether the utilization data has been loaded or not is not important. So, to
+      // make the test faster, skip it.
+      component.setState({view: 'VISIBLE'});
+
+      // Ensure that the header uses the right language to describe the 2-space unfiltered
+      // scenario.
+      assert.equal(
+        component.find('.insights-space-list-summary-header').text(),
+        'Your 2 spaces have  seen0visitors during open hours this pastweek'
+      );
+    });
+    it(`should render phrase properly when a simgle unfiltered space is shown`, async function() {
+      // Render the component
+      const component = mount(<InsightsSpaceList
+        spaces={{
+          filters: {search: ''},
+          data: [
+            {
+              id: 'spc_1',
+              name: 'My Space',
+              currentCount: 2,
+              capacity: 5,
+              timeZone: 'America/New_York',
+            },
+          ],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+      />);
+
+      // For this test, whether the utilization data has been loaded or not is not important. So, to
+      // make the test faster, skip it.
+      component.setState({view: 'VISIBLE'});
+
+      // Ensure that the header uses the right language to describe the 1-space unfiltered
+      // scenario.
+      assert.equal(
+        component.find('.insights-space-list-summary-header').text(),
+        'Your 1 space has  seen0visitors during open hours this pastweek'
+      );
+    });
+    it(`should render phrase properly when two filtered spaces are shown`, async function() {
+      // Render the component
+      const component = mount(<InsightsSpaceList
+        spaces={{
+          filters: {search: 'My'},
+          data: [
+            {
+              id: 'spc_1',
+              name: 'My Space',
+              currentCount: 2,
+              capacity: 5,
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_2',
+              name: 'My Space 2',
+              currentCount: 2,
+              capacity: 5,
+              timeZone: 'America/New_York',
+            },
+          ],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+      />);
+
+      // For this test, whether the utilization data has been loaded or not is not important. So, to
+      // make the test faster, skip it.
+      component.setState({view: 'VISIBLE'});
+
+      // Ensure that the header uses the right language to describe the 2-space filtered
+      // scenario.
+      assert.equal(
+        component.find('.insights-space-list-summary-header').text(),
+        'These 2 spaces have  seen0visitors during open hours this pastweek'
+      );
+    });
+    it(`should render phrase properly when a single filtered space is shown`, async function() {
+      // Render the component
+      const component = mount(<InsightsSpaceList
+        spaces={{
+          filters: {search: 'My'},
+          data: [
+            {
+              id: 'spc_1',
+              name: 'My Space',
+              currentCount: 2,
+              capacity: 5,
+              timeZone: 'America/New_York',
+            },
+          ],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+      />);
+
+      // For this test, whether the utilization data has been loaded or not is not important. So, to
+      // make the test faster, skip it.
+      component.setState({view: 'VISIBLE'});
+
+      // Ensure that the header uses the right language to describe the 1-space filtered
+      // scenario.
+      assert.equal(
+        component.find('.insights-space-list-summary-header').text(),
+        'This 1 space has  seen0visitors during open hours this pastweek'
+      );
+    });
+  });
 });

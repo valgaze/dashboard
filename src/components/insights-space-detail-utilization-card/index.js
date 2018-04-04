@@ -317,7 +317,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           <CardBody className="insights-space-detail-utilization-card-well">
             Average utilization of
             <span className="insights-space-detail-utilization-card-well-highlight">
-              {Math.round(this.calculateAverageUtilization())}%
+              {Math.round(this.calculateAverageUtilization() * 100)}%
             </span>
             during
             <span className="insights-space-detail-utilization-card-well-highlight">
@@ -400,7 +400,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             </span> : <span>
               On average, peak utilization of 
               <span className="insights-space-detail-utilization-card-well-highlight">
-                {Math.round(peakUtilizationPercentage)}%
+                {Math.round(peakUtilizationPercentage * 100)}%
               </span>
               happens around
               <span className="insights-space-detail-utilization-card-well-highlight">
