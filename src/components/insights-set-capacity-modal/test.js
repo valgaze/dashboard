@@ -27,7 +27,6 @@ describe('insights set capacity modal', function() {
     const input = component.find('.insights-set-capacity-modal-capacity-input input')
     input.simulate('focus');
     input.simulate('change', {target: {value: '123'}});
-    input.simulate('blur');
 
     // Verify that the submit button is not disabled
     assert.equal(component.find('.insights-set-capacity-modal-submit').props().disabled, false)
@@ -60,7 +59,6 @@ describe('insights set capacity modal', function() {
     const input = component.find('.insights-set-capacity-modal-capacity-input input')
     input.simulate('focus');
     input.simulate('change', {target: {value: 'abc'}});
-    input.simulate('blur');
 
     // Verify that the submit button is disabled
     assert.equal(component.find('.insights-set-capacity-modal-submit').props().disabled, true);
@@ -86,7 +84,31 @@ describe('insights set capacity modal', function() {
     const input = component.find('.insights-set-capacity-modal-capacity-input input')
     input.simulate('focus');
     input.simulate('change', {target: {value: '-5'}});
-    input.simulate('blur');
+
+    // Verify that the submit button is disabled
+    assert.equal(component.find('.insights-set-capacity-modal-submit').props().disabled, true);
+  });
+  it('should let a user enter a capacity, but not accept it if the box is empty', async function() {
+    const onSubmit = sinon.spy();
+    const onDismiss = sinon.spy();
+
+    // Render the component
+    const component = mount(<InsightsSetCapacityModal
+      space={{
+        id: 'spc_1',
+        name: 'My Space',
+        currentCount: 2,
+        capacity: 5,
+        timeZone: 'America/New_York',
+      }}
+      onSubmit={onSubmit}
+      onDismiss={onDismiss}
+    />);
+
+    // Type in a capacity into the box
+    const input = component.find('.insights-set-capacity-modal-capacity-input input')
+    input.simulate('focus');
+    input.simulate('change', {target: {value: ''}});
 
     // Verify that the submit button is disabled
     assert.equal(component.find('.insights-set-capacity-modal-submit').props().disabled, true);

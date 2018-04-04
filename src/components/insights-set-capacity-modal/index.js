@@ -23,16 +23,20 @@ export default class InsightsSetCapacityModal extends React.Component {
               <InputBox
                 type="number"
                 value={this.state.capacityText !== null ? this.state.capacityText : (this.state.capacity || '')}
-                onChange={e => this.setState({capacityText: e.target.value})}
-                onBlur={() => {
-                  let parsed = parseInt(this.state.capacityText, 10);
+                onChange={e => {
+                  if (e.target.value === '') {
+                    this.setState({capacity: null, capacityText: ''});
+                    return
+                  }
+
+                  let parsed = parseInt(e.target.value, 10);
                   if (parsed < 0) {
                     parsed = null;
                   }
 
                   this.setState({
                     capacity: isNaN(parsed) ? this.state.capacity : parsed,
-                    capacityText: null,
+                    capacityText: e.target.value,
                   });
                 }}
                 placeholder="Capacity"
