@@ -445,40 +445,42 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               </span>
             </span>
           </CardHeader>
-          <HistoricalCountsComponent
-            data={averageUtilizationDatapointsWithTimestamp}
-            width={950}
-            height={350}
-            capacity={100}
+          <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
+            <HistoricalCountsComponent
+              data={averageUtilizationDatapointsWithTimestamp}
+              width={950}
+              height={350}
+              capacity={100}
 
-            yAxisLabelFormat={n => {
-              if (n === 0 || n === 100) {
-                return `${formatPercentage(n / 100, 0)}%`;
-              } else {
-                return '';
-              }
-            }}
-            bottomOverlayLabelFormat={n => {
-              const stamp = moment.utc(n);
-              const timeZoneLabel = getTimeZoneGeneralizedShortName(space.timeZone);
-              return `Avg. Weekday at ${stamp.format('h:mm a')} (${timeZoneLabel})`;
-            }}
-            topOverlayLabelFormat={n => `${formatPercentage(n / 100, 0)}% Utilization`}
-            timeZoneFormat={getTimeZoneGeneralizedShortName}
-            renderPersonIcon={false}
-          />
+              yAxisLabelFormat={n => {
+                if (n === 0 || n === 100) {
+                  return `${formatPercentage(n / 100, 0)}%`;
+                } else {
+                  return '';
+                }
+              }}
+              bottomOverlayLabelFormat={n => {
+                const stamp = moment.utc(n);
+                const timeZoneLabel = getTimeZoneGeneralizedShortName(space.timeZone);
+                return `Avg. Weekday at ${stamp.format('h:mm a')} (${timeZoneLabel})`;
+              }}
+              topOverlayLabelFormat={n => `${formatPercentage(n / 100, 0)}% Utilization`}
+              timeZoneFormat={getTimeZoneGeneralizedShortName}
+              renderPersonIcon={false}
+            />
+          </div>
         </div> : null}
         {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
           <span>
-            Generating Data...{(() => {
+            {(() => {
               if (
                 moment.duration(
-                  moment.utc(this.state.startDate).diff(moment.utc(this.state.endDate))
+                  moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
                 ).weeks() > 2
               ) {
-                return ' (this may take a while ... )'
+                return 'Geneating Data (this may take a while ... )'
               } else {
-                return '';
+                return 'Generating Data...';
               }
             })()}
           </span>

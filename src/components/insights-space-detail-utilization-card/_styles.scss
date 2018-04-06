@@ -67,21 +67,23 @@
 .card .insights-space-detail-utilization-card-well {
   background-color: $gray-lightest;
   width: 100%;
-  height: 182px; /* from mockup */
+  padding-left: 0px;
+  padding-right: 0px;
+
+  padding-top: 80px;
+  padding-bottom: 80px;
 
   font-size: $font-size-3;
   font-weight: $font-weight-3;
+  text-align: center;
+  line-height: 28px;
   color: $gray-cinder;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
 }
 .insights-space-detail-utilization-card-well-highlight {
   margin-left: 6px;
   margin-right: 6px;
   color: $brand-primary;
+  white-space: nowrap;
 }
 
 
@@ -103,7 +105,12 @@
   color: $gray-cinder;
   line-height: 43px;
   &:first-child { flex: 1; }
-  &:last-child { flex: 3; }
+  &:last-child { flex: 2; }
+}
+
+// Ensure that the chart is horizontally scrollable on mobile
+.insights-space-detail-utilization-card-daily-breakdown-chart {
+  overflow-x: auto;
 }
 
 .insights-space-detail-utilization-card .historical-counts .historical-counts-capacity-region {
