@@ -1,6 +1,4 @@
 .sortable-grid-header-item {
-  flex: 1; /* Default value, overriden in the component with the `width` prop */
-
   font-weight: bold;
   color: $gray-cinder;
   user-select: none;

@@ -232,35 +232,39 @@ export class InsightsSpaceList extends React.Component {
           />
 
           {/* Right-aligned utiliation time segment and data duration filters */}
-          <div className="insights-space-list-text-label">Utilization for</div>
-          <InputBox
-            type="select"
-            className="insights-space-list-time-segment-selector"
-            value={this.state.timeSegment}
-            disabled={this.state.view === ERROR}
-            onChange={e => {
-              this.setState({timeSegment: e.target.value}, () => this.fetchData());
-            }}
-          >
-            {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-              return <option value={key} key={key}>
-                {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
-              </option>;
-            })}
-          </InputBox>
-          <div className="insights-space-list-text-label">over past</div>
-          <InputBox
-            type="select"
-            className="insights-space-list-duration-selector"
-            value={this.state.dataDuration}
-            disabled={this.state.view === ERROR}
-            onChange={e => {
-              this.setState({dataDuration: e.target.value, spaceCounts: {}, view: LOADING}, () => this.fetchData());
-            }}
-          >
-            <option value={DATA_DURATION_WEEK}>Week</option>
-            <option disabled value={DATA_DURATION_MONTH}>Month (coming soon)</option>
-          </InputBox>
+          <span className="insights-space-list-filter-item">
+            <div className="insights-space-list-text-label">Utilization for</div>
+            <InputBox
+              type="select"
+              className="insights-space-list-time-segment-selector"
+              value={this.state.timeSegment}
+              disabled={this.state.view === ERROR}
+              onChange={e => {
+                this.setState({timeSegment: e.target.value}, () => this.fetchData());
+              }}
+            >
+              {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
+                return <option value={key} key={key}>
+                  {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
+                </option>;
+              })}
+            </InputBox>
+          </span>
+          <span className="insights-space-list-filter-item">
+            <div className="insights-space-list-text-label">over past</div>
+            <InputBox
+              type="select"
+              className="insights-space-list-duration-selector"
+              value={this.state.dataDuration}
+              disabled={this.state.view === ERROR}
+              onChange={e => {
+                this.setState({dataDuration: e.target.value, spaceCounts: {}, view: LOADING}, () => this.fetchData());
+              }}
+            >
+              <option value={DATA_DURATION_WEEK}>Week</option>
+              <option disabled value={DATA_DURATION_MONTH}>Month (coming soon)</option>
+            </InputBox>
+          </span>
         </div>
 
         <Card>

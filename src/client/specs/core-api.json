@@ -69,6 +69,19 @@
           "order": "{{order}}"
         }
       },
+      "allCounts": {
+        "method": "GET",
+        "url": "{{{core}}}/{{organisation}}/spaces/counts/",
+        "desc": "Query counts over time for all spaces in the organization, at specified intervals. Includes analytics specifying the minimum and maximum count that was recorded in each interval.",
+        "qs": {
+          "start_time": "{{start_time}}",
+          "end_time": "{{end_time}}",
+          "interval": "{{interval}}",
+          "page_size": "{{page_size}}",
+          "page": "{{page}}",
+          "order": "{{order}}"
+        }
+      },
       "events": {
         "method": "GET",
         "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/events/",

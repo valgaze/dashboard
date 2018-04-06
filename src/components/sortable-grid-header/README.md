@@ -14,10 +14,6 @@ will be less complex but won't be as flexible.
   `SortableGridHeader`.
 
 ## `SortableGridHeaderItem` Component Props
-- `width: Number` - an integer that is added to the `flex` property on the header, which means that a
-  larger number will produce a larger cell. For example, `[{width: 1, ...}, {width: 2}]` would
-  produce a row with two headers, where the first takes up 1/3 of the space and the second takes
-  up 2/3 of the space.
 - `children: ReactElement` - the label for the column.
 - `active: Boolean` - indicates whether the given column is active (ie, is the primary
   member used for sorting)

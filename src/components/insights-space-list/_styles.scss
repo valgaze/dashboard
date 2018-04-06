@@ -27,11 +27,46 @@
   @include grid-row;
   margin-top: 20px;
   margin-bottom: 40px;
+
+  flex-direction: column;
+  @media (min-width: $screen-xs-max) {
+    flex-direction: row;
+  }
 }
 
+.insights-space-list-filter-item {
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 10px; /* on mobile, add vertical spacing between filter items */
+  @media (min-width: $screen-xs-max) {
+    margin-top: 0px; /* on desktop, filter items are side-by-side. No vertical spacing needed. */
+  }
+}
+
+.insights-space-list-text-label {
+  font-size: $font-size-base;
+  color: $gray-cinder;
+
+  user-select: none;
+
+  line-height: 43px;
+  margin-right: auto; /* on mobile, render the label for the box on left, and the input on right */
+  @media (min-width: $screen-xs-max) {
+    margin-right: 15px; /* on desktop, render text labels side-by-side with their inputs */
+    margin-left: 15px;
+  }
+}
+
+// The "Filter spaces ..." box.
 .insights-space-list-search-box {
-  width: 200px;
   margin-right: auto;
+  margin-bottom: 10px; /* increase vertical spacing between search box and the filter items below */
+  width: calc(100% - 15px);
+  @media (min-width: $screen-xs-max) {
+    width: 200px;
+    margin-bottom: 0px; /* on desktop, the search box is inline with the filter items (no vertical adjustment needed) */
+  }
 
   color: $gray-darker;
   &::placeholder,
@@ -40,19 +75,8 @@
   &:-ms-input-placeholder,
   &:-moz-placeholder {
     color: $gray;
-    opacity: 1; // Placeholders in firefox have opacity be default. Undo that.
+    opacity: 1; // Placeholders in firefox have opacity by default. Undo that.
   }
-}
-
-.insights-space-list-text-label {
-  font-size: $font-size-base;
-  color: $gray-cinder;
-
-  line-height: 43px;
-  margin-left: 15px;
-  margin-right: 15px;
-
-  user-select: none;
 }
 
 // The "Working hours" / "Whole day" / "Breakfast" / etc selector.
@@ -64,7 +88,10 @@
 // The "week" / "month" selector
 .insights-space-list-duration-selector {
   color: $gray-cinder;
-  width: 100px;
+  width: 200px;
+  @media (min-width: $screen-xs-max) {
+    width: 100px;
+  }
 }
 
 
@@ -88,6 +115,7 @@
   color: $brand-primary;
   margin-left: 5px;
   margin-right: 5px;
+  white-space: nowrap;
 }
 
 
@@ -117,17 +145,15 @@ $insights-space-list-item-height: 43px;
   font-size: $font-size-base;
   &:hover { background-color: $gray-lightest; }
 }
-.insights-space-list-item.header {
-  &:hover { background-color: transparent; }
-}
+.insights-space-list-item.header:hover { background-color: transparent; }
 
 .insights-space-list-item-name {
   padding-left: 20px;
   border: 0;
 
-  width: 40%;
+  width: 40%; /* width of cell on mobile */
   @media (min-width: $screen-xs-max) {
-    width: 40%;
+    width: 30%; /* width of cell on desktop */
   }
 
   // When the width of the flex child gets too small, shorten the space name with an ellipsis.
@@ -142,9 +168,9 @@ $insights-space-list-item-height: 43px;
   white-space: nowrap;
   & > a { text-decoration: underline; } /* 'set capacity' links should have an underline */
 
-  width: 25%;
+  width: 25%; /* width of cell on mobile */
   @media (min-width: $screen-xs-max) {
-    width: 20%;
+    width: 20%; /* width of cell on desktop */
   }
 }
 .insights-space-list-item-utilization {
