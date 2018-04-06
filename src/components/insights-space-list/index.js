@@ -153,8 +153,24 @@ export class InsightsSpaceList extends React.Component {
           const counts = spaceCounts[spaceId];
 
           const groups = groupCountsByDay(counts, space.timeZone);
-          const filteredGroups = groupCountFilter(groups, count =>
-            isWithinTimeSegment(count.timestamp, space.timeZone, TIME_SEGMENTS[this.state.timeSegment]));
+          const filteredGroups = groups.filter(group => {
+            // Filter out any days that aren't within monday-friday
+            const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
+            return dayOfWeek !== 5 && dayOfWeek !== 6 // Remove saturday and sunday
+          }).map(group => {
+            // Remove all counts in each bucket that is outside each time segment.
+            return {
+              ...group,
+              counts: group.counts.filter(count => {
+                return isWithinTimeSegment(
+                  count.timestamp,
+                  space.timeZone,
+                  TIME_SEGMENTS[this.state.timeSegment]
+                );
+              }),
+            };
+          });
+
           const result = spaceUtilizationPerGroup(space, filteredGroups);
 
           return {
@@ -240,7 +256,12 @@ export class InsightsSpaceList extends React.Component {
               value={this.state.timeSegment}
               disabled={this.state.view === ERROR}
               onChange={e => {
-                this.setState({timeSegment: e.target.value}, () => this.fetchData());
+                this.setState({
+                  view: LOADING,
+                  timeSegment: e.target.value,
+                  spaceCounts: {},
+                  spaceUtilizations: {},
+                }, () => this.fetchData());
               }}
             >
               {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
@@ -394,7 +415,15 @@ export class InsightsSpaceList extends React.Component {
                     <td className="insights-space-list-item-utilization">
                       <PercentageBar
                         percentage={spaceUtilizations[space.id]}
-                        percentageFormatter={percentage => space.capacity ? `${formatPercentage(percentage, 0)}%` : null}
+                        percentageFormatter={percentage => {
+                          // Format the capacity and display as percent as long as these two
+                          // conditions are true:
+                          // 1. The component is no longer loading.
+                          // 2. The space being rendered has a capacity.
+                          return (
+                            this.state.view === VISIBLE && space.capacity !== null
+                          ) ? `${formatPercentage(percentage, 0)}%` : null;
+                        }}
                       />
 
                       <span className="insights-space-list-item-arrow">&#xe90f;</span>
