@@ -454,8 +454,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               }
             }}
             bottomOverlayLabelFormat={n => {
-              console.log('N', n)
-              const stamp = moment.utc(n).tz(space.timeZone);
+              const stamp = moment.utc(n);
               const timeZoneLabel = getTimeZoneGeneralizedShortName(space.timeZone);
               return `Avg. Weekday at ${stamp.format('h:mm a')} (${timeZoneLabel})`;
             }}
