@@ -36,12 +36,13 @@ $percentage-bar-percentage-text-spacing: 8px; /* Spacing to the left of the form
 }
 
 .percentage-bar-text {
-  width: 3rem;
+  width: 32px;
   margin-right: $percentage-bar-percentage-text-spacing;
   font-weight: bold;
 
   @media (min-width: $screen-xs-max) {
     text-align: right;
+    width: 3rem;
   }
 }
 

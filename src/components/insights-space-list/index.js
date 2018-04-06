@@ -2,6 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
 import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
+import PercentageBar from '../percentage-bar/index';
+
+import gridVariables from '@density/ui/variables/grid.json';
 
 import { core } from '../../client';
 import moment from 'moment';
@@ -24,6 +27,7 @@ import spaceUtilizationPerGroup, {
 } from '../../helpers/space-utilization/index';
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import commaFormatNumber from '../../helpers/comma-format-number/index';
+import formatPercentage from '../../helpers/format-percentage/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
@@ -296,107 +300,105 @@ export class InsightsSpaceList extends React.Component {
           </CardHeader>
 
           {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
-            <SortableGridHeader className="insights-space-list-grid-header">
-              <SortableGridHeaderItem
-                width={2}
-                active={this.state.activeColumn === COLUMN_SPACE_NAME}
-                sort={this.state.columnSortOrder}
-                onActivate={() => this.setState({activeColumn: COLUMN_SPACE_NAME, columnSortOrder: DEFAULT_SORT_DIRECTION})}
-                onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
-              >Space</SortableGridHeaderItem>
-              <SortableGridHeaderItem
-                width={1}
-                active={this.state.activeColumn === COLUMN_CAPACITY}
-                sort={this.state.columnSortOrder}
-                onActivate={() => this.setState({activeColumn: COLUMN_CAPACITY, columnSortOrder: DEFAULT_SORT_DIRECTION})}
-                onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
-              >Capacity</SortableGridHeaderItem>
-              <SortableGridHeaderItem
-                width={3}
-                active={this.state.activeColumn === COLUMN_UTILIZATION}
-                sort={this.state.columnSortOrder}
-                onActivate={() => this.setState({activeColumn: COLUMN_UTILIZATION, columnSortOrder: DEFAULT_SORT_DIRECTION})}
-                onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
-              >Past Week's Utilization</SortableGridHeaderItem>
-            </SortableGridHeader>
+            <table className="insights-space-list">
+              <tbody>
+                <SortableGridHeader className="insights-space-list-item header">
+                  <SortableGridHeaderItem
+                    className="insights-space-list-item-name"
+                    active={this.state.activeColumn === COLUMN_SPACE_NAME}
+                    sort={this.state.columnSortOrder}
+                    onActivate={() => this.setState({activeColumn: COLUMN_SPACE_NAME, columnSortOrder: DEFAULT_SORT_DIRECTION})}
+                    onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
+                  >Space</SortableGridHeaderItem>
+                  <SortableGridHeaderItem
+                    className="insights-space-list-item-capacity"
+                    active={this.state.activeColumn === COLUMN_CAPACITY}
+                    sort={this.state.columnSortOrder}
+                    onActivate={() => this.setState({activeColumn: COLUMN_CAPACITY, columnSortOrder: DEFAULT_SORT_DIRECTION})}
+                    onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
+                  >
+                    {document.body && document.body.clientWidth > gridVariables.screenSmMin ? 'Capacity' : 'Cap.'}
+                  </SortableGridHeaderItem>
+                  <SortableGridHeaderItem
+                    className="insights-space-list-item-utilization"
+                    active={this.state.activeColumn === COLUMN_UTILIZATION}
+                    sort={this.state.columnSortOrder}
+                    onActivate={() => this.setState({activeColumn: COLUMN_UTILIZATION, columnSortOrder: DEFAULT_SORT_DIRECTION})}
+                    onFlipSortOrder={columnSortOrder => this.setState({columnSortOrder})}
+                  >
+                    {document.body && document.body.clientWidth > gridVariables.screenSmMin ? `Past Week's Utilization` : 'Utilization'}
+                  </SortableGridHeaderItem>
+                </SortableGridHeader>
 
-            <div className="insights-space-list-items">
-              {filteredSpaces.slice().sort((a, b) => {
-                if (this.state.activeColumn === COLUMN_SPACE_NAME) {
-                  const value = this.state.columnSortOrder === SORT_ASC ? a.name < b.name : a.name > b.name;
-                  return value ? 1 : -1;
-                } else if (this.state.activeColumn === COLUMN_UTILIZATION) {
-                  if (this.state.columnSortOrder === SORT_ASC) {
-                    // If a doesn't have a utilization but b does, then sort a above b (and vice-versa)
-                    if (typeof spaceUtilizations[a.id] === 'undefined') { return -1; }
-                    if (typeof spaceUtilizations[b.id] === 'undefined') { return 1; }
+                {filteredSpaces.slice().sort((a, b) => {
+                  if (this.state.activeColumn === COLUMN_SPACE_NAME) {
+                    const value = this.state.columnSortOrder === SORT_ASC ? a.name < b.name : a.name > b.name;
+                    return value ? 1 : -1;
+                  } else if (this.state.activeColumn === COLUMN_UTILIZATION) {
+                    if (this.state.columnSortOrder === SORT_ASC) {
+                      // If a doesn't have a utilization but b does, then sort a above b (and vice-versa)
+                      if (typeof spaceUtilizations[a.id] === 'undefined') { return -1; }
+                      if (typeof spaceUtilizations[b.id] === 'undefined') { return 1; }
 
-                    return spaceUtilizations[a.id] - spaceUtilizations[b.id];
-                  } else {
-                    // If a doesn't have a utilization but b does, then sort a below b (and vice-versa)
-                    if (typeof spaceUtilizations[a.id] === 'undefined') { return 1; }
-                    if (typeof spaceUtilizations[b.id] === 'undefined') { return -1; }
+                      return spaceUtilizations[a.id] - spaceUtilizations[b.id];
+                    } else {
+                      // If a doesn't have a utilization but b does, then sort a below b (and vice-versa)
+                      if (typeof spaceUtilizations[a.id] === 'undefined') { return 1; }
+                      if (typeof spaceUtilizations[b.id] === 'undefined') { return -1; }
 
-                    return spaceUtilizations[b.id] - spaceUtilizations[a.id];
-                  }
-                } else if (this.state.activeColumn === COLUMN_CAPACITY) {
-                  if (this.state.columnSortOrder === SORT_ASC) {
-                    // If a doesn't have a capacity but b does, then sort a above b (and vice-versa)
-                    if (!a.capacity) { return -1; }
-                    if (!b.capacity) { return 1; }
-
-                    return a.capacity > b.capacity;
-                  } else {
-                    // If a doesn't have a capacity but b does, then sort a above b (and vice-versa)
-                    if (!a.capacity) { return 1; }
-                    if (!b.capacity) { return -1; }
-
-                    return a.capacity < b.capacity;
-                  }
-                } else {
-                  // This should never happen.
-                  return 0;
-                }
-              }).map(space => {
-                return <div
-                  className="insights-space-list-item"
-                  key={space.id}
-
-                  // When the row is clicked, move to the detail page.
-                  onClick={() => window.location.href = `#/spaces/insights/${space.id}`}
-                >
-                  <span className="insights-space-list-item-name">{space.name}</span>
-                  <span className="insights-space-list-item-capacity">
-                    {
-                      space.capacity !== null ?
-                        <span>{space.capacity}</span> :
-                        <a onClick={e => {
-                          // Keep the row click handler from firing when 'set capacity' is clicked
-                          e.stopPropagation();
-
-                          return onOpenModal('set-capacity', {space});
-                        }}>Set capacity</a>
+                      return spaceUtilizations[b.id] - spaceUtilizations[a.id];
                     }
-                  </span>
-                  <div className="insights-space-list-item-utilization">
-                    <div className="insights-space-list-item-utilization-bar">
-                      <div
-                        className="insights-space-list-item-utilization-bar-inner"
-                        style={{width: `${spaceUtilizations[space.id] > 1 ? 100 : spaceUtilizations[space.id] * 100}%`}}
+                  } else if (this.state.activeColumn === COLUMN_CAPACITY) {
+                    if (this.state.columnSortOrder === SORT_ASC) {
+                      // If a doesn't have a capacity but b does, then sort a above b (and vice-versa)
+                      if (!a.capacity) { return -1; }
+                      if (!b.capacity) { return 1; }
+
+                      return a.capacity > b.capacity;
+                    } else {
+                      // If a doesn't have a capacity but b does, then sort a above b (and vice-versa)
+                      if (!a.capacity) { return 1; }
+                      if (!b.capacity) { return -1; }
+
+                      return a.capacity < b.capacity;
+                    }
+                  } else {
+                    // This should never happen.
+                    return 0;
+                  }
+                }).map(space => {
+                  return <tr
+                    className="insights-space-list-item"
+                    key={space.id}
+
+                    // When the row is clicked, move to the detail page.
+                    onClick={() => window.location.href = `#/spaces/insights/${space.id}`}
+                  >
+                    <td className="insights-space-list-item-name">{space.name}</td>
+                    <td className="insights-space-list-item-capacity">
+                      {
+                        space.capacity !== null ?
+                          <span>{space.capacity}</span> :
+                          <a onClick={e => {
+                            // Keep the row click handler from firing when 'set capacity' is clicked
+                            e.stopPropagation();
+
+                            return onOpenModal('set-capacity', {space});
+                          }}>{document.body && document.body.clientWidth > gridVariables.screenSmMin ? 'Set capacity' : 'Set'}</a>
+                      }
+                    </td>
+                    <td className="insights-space-list-item-utilization">
+                      <PercentageBar
+                        percentage={spaceUtilizations[space.id]}
+                        percentageFormatter={percentage => space.capacity ? `${formatPercentage(percentage, 0)}%` : null}
                       />
-                    </div>
 
-                    {
-                      typeof spaceUtilizations[space.id] === 'undefined' ? 
-                      <div className="insights-space-list-item-utilization-label disabled">&mdash;</div> :
-                      <div className="insights-space-list-item-utilization-label">{Math.round(spaceUtilizations[space.id] * 100)}%</div>
-                    }
-
-                    <span className="insights-space-list-item-arrow">&#xe90f;</span>
-                  </div>
-                </div>;
-              })}
-            </div>
+                      <span className="insights-space-list-item-arrow">&#xe90f;</span>
+                    </td>
+                  </tr>;
+                })}
+              </tbody>
+            </table>
           </CardBody> : null}
         </Card>
       </div>

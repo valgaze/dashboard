@@ -127,8 +127,9 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
             width={930}
             data={this.state.data.results}
             capacity={space.capacity}
-            timeZoneLabel={getTimeZoneGeneralizedShortName(space.timeZone)}
-            timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
+
+            timeZone={space.timeZone}
+            timeZoneFormat={getTimeZoneGeneralizedShortName}
 
             start={startTime}
             end={endTime}

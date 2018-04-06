@@ -465,7 +465,19 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           />
         </div> : null}
         {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
-          <span>Generating Data...</span>
+          <span>
+            Generating Data... {(() => {
+              if (
+                moment.duration(
+                  moment.utc(this.state.startDate).diff(moment.utc(this.state.endDate))
+                ).weeks() > 2
+              ) {
+                return '(this may take a while ... )'
+              } else {
+                return '';
+              }
+            })()}
+          </span>
         </div> : null}
         {this.state.state === REQUIRES_CAPACITY ? <div className="insights-space-detail-utilization-card-body-info">
           <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>

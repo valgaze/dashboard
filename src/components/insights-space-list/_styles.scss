@@ -13,7 +13,6 @@
 .insights-space-list-header-text {
   padding-top: 0px;
   padding-bottom: 0px;
-  padding-left: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
 
@@ -82,7 +81,8 @@
   padding-top: 80px;
   padding-bottom: 80px;
   text-align: center;
-  font-weight: normal;
+  font-weight: bold;
+  line-height: 28px;
 }
 .insights-space-list-summary-header-highlight {
   color: $brand-primary;
@@ -100,69 +100,58 @@
   padding-left: 0px;
   padding-right: 0px;
 }
-.insights-space-list-items { margin-top: 20px; }
+
+.insights-space-list {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+}
 
 // Style each row to include the space name and utilization percentage.
 $insights-space-list-item-height: 43px;
 .insights-space-list-item {
-  display: flex;
   cursor: pointer;
   color: $gray-cinder;
-
-  width: calc(100% - 20px - 20px);
-  padding-left: 20px;
-  padding-right: 20px;
 
   line-height: $insights-space-list-item-height;
   font-size: $font-size-base;
   &:hover { background-color: $gray-lightest; }
 }
-.insights-space-list-item-name { flex: 2; }
-.insights-space-list-item-capacity {
-  margin-left: 30px;
-  flex: 1;
-  & > a { text-decoration: underline; } /* 'set capacity' links should have an underline */
-}
-.insights-space-list-item-utilization {
-  margin-left: 20px;
-  flex: 3;
+.insights-space-list-item.header {
+  &:hover { background-color: transparent; }
 }
 
+.insights-space-list-item-name {
+  padding-left: 20px;
+  border: 0;
+
+  width: 40%;
+  @media (min-width: $screen-xs-max) {
+    width: 40%;
+  }
+
+  // When the width of the flex child gets too small, shorten the space name with an ellipsis.
+  white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.insights-space-list-item-capacity {
+  padding-left: 20px;
+
+  white-space: nowrap;
+  & > a { text-decoration: underline; } /* 'set capacity' links should have an underline */
+
+  width: 25%;
+  @media (min-width: $screen-xs-max) {
+    width: 20%;
+  }
+}
 .insights-space-list-item-utilization {
+  padding-right: 20px;
+
   display: flex;
   flex-direction: row;
-}
-
-// The utilization bar that visually represents space utilization in a horizontal fashion
-$insights-space-list-item-utilization-bar-height: 4px;
-.insights-space-list-item-utilization-bar {
-  display: inline-block;
-  background-color: $gray-light;
-
-  width: 100%;
-  height: $insights-space-list-item-utilization-bar-height;
-  flex: 1;
-
-  margin-top: ($insights-space-list-item-height - $insights-space-list-item-utilization-bar-height) / 2;
-}
-.insights-space-list-item-utilization-bar-inner {
-  /* a width is set as an inline style in the component, which overrides the style set below */
-  width: 0%;
-
-  background-color: $brand-primary;
-  height: $insights-space-list-item-utilization-bar-height;
-  transition: all 100ms ease-in-out;
-}
-.insights-space-list-item-utilization-label {
-  display: inline-block;
-  color: $brand-primary;
-  margin-right: 30px;
-  width: 3rem; /* 3 character width is the maximum (non-100%) width: 99% is 3 chars */
-  text-align: right;
-}
-.insights-space-list-item-utilization-label.disabled {
-  color: $gray;
-  font-size: $font-size-large;
 }
 
 // Finally, the small arrow at the right end of the space item row. This idicated that the item can
@@ -170,4 +159,6 @@ $insights-space-list-item-utilization-bar-height: 4px;
 .insights-space-list-item-arrow {
   font-family: "Densicons";
   font-size: $font-size-x-small;
+  color: $brand-primary;
+  margin-left: 20px;
 }
