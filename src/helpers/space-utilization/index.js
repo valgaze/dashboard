@@ -36,15 +36,6 @@ export function groupCountsByDay(counts, timezone) {
   });
 }
 
-export function groupCountFilter(groups, predicate) {
-  return groups.map(group => {
-    return {
-      ...group,
-      counts: group.counts.filter(predicate),
-    };
-  });
-}
-
 export function isWithinTimeSegment(timestamp, timezone, segment) {
   const t = timestamp instanceof moment ? timestamp : moment.utc(timestamp).tz(timezone);
   const weekday = t.isoWeekday();

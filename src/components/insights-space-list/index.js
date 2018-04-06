@@ -21,7 +21,6 @@ import hideModal from '../../actions/modal/hide';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
-  groupCountFilter,
   isWithinTimeSegment,
   TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
