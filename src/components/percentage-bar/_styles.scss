@@ -5,6 +5,7 @@ $percentage-bar-percentage-text-spacing: 8px; /* Spacing to the left of the form
 .percentage-bar-container {
   display: flex;
   flex-direction: row;
+  width: 100%;
 
   color: $brand-primary;
   line-height: $percentage-bar-container-height;
@@ -12,7 +13,7 @@ $percentage-bar-percentage-text-spacing: 8px; /* Spacing to the left of the form
 
 // The utilization bar that visually represents space utilization in a horizontal fashion
 .percentage-bar {
-  display: inline-block;
+  display: none; /* overridden in media query below */
   background-color: $gray-light;
 
   width: 100%;
@@ -20,6 +21,10 @@ $percentage-bar-percentage-text-spacing: 8px; /* Spacing to the left of the form
   flex: 1;
 
   margin-top: ($percentage-bar-container-height - $percentage-bar-height) / 2;
+
+  @media (min-width: $screen-xs-max) {
+    display: inline-block;
+  }
 }
 .percentage-bar-colored-section {
   /* a width is set as an inline style in the component, which overrides the style set below */
@@ -27,11 +32,20 @@ $percentage-bar-percentage-text-spacing: 8px; /* Spacing to the left of the form
 
   background-color: $brand-primary;
   height: $percentage-bar-height;
-  transition: all 100ms ease-in-out;
+  transition: all 250ms ease-in-out;
 }
 
 .percentage-bar-text {
-  width: 3em;
-  text-align: right;
+  width: 3rem;
   margin-right: $percentage-bar-percentage-text-spacing;
+  font-weight: bold;
+
+  @media (min-width: $screen-xs-max) {
+    text-align: right;
+  }
+}
+
+.percentage-bar-text.disabled {
+  color: $gray;
+  font-size: $font-size-large;
 }

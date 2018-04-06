@@ -9,7 +9,6 @@
 }
 .insights-space-detail-utilization-card-header-label {
   line-height: 43px;
-  font-weight: normal;
 }
 .insights-space-detail-utilization-card-header-label-highlight {
   color: $brand-primary;
@@ -58,6 +57,7 @@
 .insights-space-detail-utilization-card-header-timespan {
   color: $gray-dark;
   font-size: $font-size-base;
+  font-weight: normal;
   margin-left: 20px;
 }
 
@@ -70,6 +70,7 @@
   height: 182px; /* from mockup */
 
   font-size: $font-size-3;
+  font-weight: $font-weight-3;
   color: $gray-cinder;
 
   display: flex;
@@ -89,6 +90,7 @@
   display: flex;
   flex-direction: row;
   margin-bottom: 8px;
+  font-weight: bold;
 }
 .insights-space-detail-utilization-card-grid-row {
   list-style-type: none;

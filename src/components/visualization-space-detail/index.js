@@ -45,14 +45,13 @@ export function SpaceDetail({
             <div className="visualization-space-detail-capacity">
               {space.capacity ? <span>
                 Capacity: {space.capacity} <a
-                  className="visualization-space-detail-capacity-link"
+                  className="visualization-space-detail-capacity-update-link"
                   onClick={() => {
                     return onOpenModal('set-capacity', {space});
                   }}
                 >Update</a>
               </span> : <span>
                 <a
-                  className="visualization-space-detail-capacity-link"
                   onClick={() => {
                     return onOpenModal('set-capacity', {space});
                   }}
@@ -63,12 +62,14 @@ export function SpaceDetail({
 
           {/* Attempt to display a nicer representation of the time zone, but fall back on the time zone name */}
           <div className="visualization-space-detail-header-time-zone">
-            Time Zone: {({
-              'America/New_York': 'Eastern',
-              'America/Chicago': 'Central',
-              'America/Denver': 'Mountain',
-              'America/Los_Angeles': 'Pacific',
-            })[space.timeZone] || space.timeZone}
+            Time Zone: <span className="visualization-space-detail-header-time-zone-label">
+              {({
+                'America/New_York': 'Eastern',
+                'America/Chicago': 'Central',
+                'America/Denver': 'Mountain',
+                'America/Los_Angeles': 'Pacific',
+              })[space.timeZone] || space.timeZone}
+            </span>
         </div>
         </div>
 

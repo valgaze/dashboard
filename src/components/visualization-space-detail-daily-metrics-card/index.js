@@ -222,7 +222,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                   })}
                   width={950}
                   height={350}
-                  timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
+                  timeZone={space.timeZone}
                   xAxisResolution="week"
                 />
               </div>;

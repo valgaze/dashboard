@@ -2,7 +2,7 @@ import * as React from 'react';
 import classnames from 'classnames';
 
 export default function SortableGridHeader({className, children}) {
-  return <div className={`sortable-grid-header ${className}`}>{children}</div>;
+  return <tr className={`sortable-grid-header ${className}`}>{children}</tr>;
 }
 
 export const SORT_ASC = 'SORT_ASC',
@@ -10,10 +10,9 @@ export const SORT_ASC = 'SORT_ASC',
 
 const CARET_POINTING_UP = String.fromCharCode(59659);
 
-export function SortableGridHeaderItem({width, children, active, sort, onActivate, onFlipSortOrder}) {
-  return <div
-    className={classnames('sortable-grid-header-item', {active})}
-    style={{flex: width}}
+export function SortableGridHeaderItem({className, children, active, sort, onActivate, onFlipSortOrder}) {
+  return <td
+    className={classnames('sortable-grid-header-item', {active}, className)}
     onClick={() => {
       if (active) {
         // If already active, flip the sort order.
@@ -31,5 +30,5 @@ export function SortableGridHeaderItem({width, children, active, sort, onActivat
         'sortable-grid-header-item-icon-desc': sort === SORT_DESC,
       })}
     >{CARET_POINTING_UP}</span> : null}
-  </div>;
+  </td>;
 }

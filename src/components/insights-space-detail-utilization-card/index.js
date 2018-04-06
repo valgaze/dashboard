@@ -15,6 +15,7 @@ import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-da
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
+import formatPercentage from '../../helpers/format-percentage/index';
 
 import getTimeZoneGeneralizedShortName from '../../helpers/get-time-zone-generalized-short-name/index';
 
@@ -349,7 +350,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[0])}
-                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
                 />
               </div>
             </div>
@@ -358,7 +359,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[1])}
-                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
                 />
               </div>
             </div>
@@ -367,7 +368,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[2])}
-                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
                 />
               </div>
             </div>
@@ -376,7 +377,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[3])}
-                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
                 />
               </div>
             </div>
@@ -385,7 +386,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[4])}
-                  percentageFormatter={percentage => `${Math.round(percentage * 100)}%`}
+                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
                 />
               </div>
             </div>
@@ -445,18 +446,22 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             height={350}
             capacity={100}
 
-            yAxisLabelFormatter={n => {
-              if (n === 0) {
-                return '0%';
+            yAxisLabelFormat={n => {
+              if (n === 0 || n === 100) {
+                return `${formatPercentage(n / 100, 0)}%`;
               } else {
-                return '100%';
+                return '';
               }
             }}
-            bottomOverlayLabelFormatter={n => {
+            bottomOverlayLabelFormat={n => {
+              console.log('N', n)
+              const stamp = moment.utc(n).tz(space.timeZone);
               const timeZoneLabel = getTimeZoneGeneralizedShortName(space.timeZone);
-              return `Avg. Weekday at ${n.split(' ').slice(0, 2).join(' ')} (${timeZoneLabel})`;
+              return `Avg. Weekday at ${stamp.format('h:mm a')} (${timeZoneLabel})`;
             }}
-            topOverlayLabelFormatter={n => `${n}%`}
+            topOverlayLabelFormat={n => `${formatPercentage(n / 100, 0)}% Utilization`}
+            timeZoneFormat={getTimeZoneGeneralizedShortName}
+            renderPersonIcon={false}
           />
         </div> : null}
         {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
