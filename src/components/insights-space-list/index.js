@@ -392,7 +392,7 @@ export class InsightsSpaceList extends React.Component {
                   }
                 }).map(space => {
                   return <tr
-                    className="insights-space-list-item"
+                    className="insights-space-list-item body-row"
                     key={space.id}
 
                     // When the row is clicked, move to the detail page.

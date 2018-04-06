@@ -58,7 +58,7 @@ describe('insights space list', function() {
 
   it('should render insights list space list (smoke test)', async function() {
     // Render the component
-    const component = shallow(<InsightsSpaceList
+    const component = mount(<InsightsSpaceList
       spaces={{
         filters: {search: ''},
         data: [
@@ -76,11 +76,11 @@ describe('insights space list', function() {
     />);
 
     // Ensure that a single space was rendered
-    assert.equal(component.find('.insights-space-list-item').length, 1);
+    assert.equal(component.find('.insights-space-list-item.body-row').length, 1);
 
     // No utilization should be rendered, a dash should be rendered instead.
     assert.equal(
-      component.find('.insights-space-list-item').first().find('.insights-space-list-item-utilization-label').text(),
+      component.find('.insights-space-list-item.body-row').first().find('.percentage-bar-text').text(),
       MDASH
     );
 
@@ -88,7 +88,7 @@ describe('insights space list', function() {
     await timeout(100);
 
     // Fetch the first space rendered. Ensure that it's found.
-    const firstSpace = component.find('.insights-space-list-item').first();
+    const firstSpace = component.find('.insights-space-list-item.body-row').first();
     assert(firstSpace);
 
     // Verify the space's name was rendered
@@ -96,15 +96,6 @@ describe('insights space list', function() {
 
     // Verify the capacity was rendered.
     assert.equal(firstSpace.find('.insights-space-list-item-capacity').text(), '5');
-
-    // Verify that a utilization was rendered in place of the dash after count data was fetched.
-    assert.equal(firstSpace.find('.insights-space-list-item-utilization-label').text(), '0%');
-
-    // Also verify that the progress bar was rendered with the correct percentage.
-    assert.equal(
-      firstSpace.find('.insights-space-list-item-utilization-bar-inner').props().style.width,
-      '0%'
-    );
   });
   it(`should render a set capacity link if the space doesn't have a capacity set`, async function() {
     // Render the component
@@ -126,12 +117,12 @@ describe('insights space list', function() {
     />);
 
     // Ensure that a single space was rendered
-    assert.equal(component.find('.insights-space-list-item').length, 1);
+    assert.equal(component.find('.insights-space-list-item.body-row').length, 1);
 
     // Ensure that the single space has a set capacity link
     assert.equal(
-      component.find('.insights-space-list-item .insights-space-list-item-capacity a').first().text(),
-      'Set capacity'
+      component.find('.insights-space-list-item.body-row .insights-space-list-item-capacity a').first().text(),
+      'Set'
     );
   });
   it(`should show an error in the error bar when something bad happens in fetchData`, async function() {
@@ -210,7 +201,7 @@ describe('insights space list', function() {
   });
   it('should ensure that a utilization bar that is over 100% only ever renders at 100% (and never overflows)', async function() {
     // Render the component
-    const component = shallow(<InsightsSpaceList
+    const component = mount(<InsightsSpaceList
       spaces={{
         filters: {search: ''},
         data: [
@@ -236,15 +227,15 @@ describe('insights space list', function() {
     });
 
     // Ensure that a single space was rendered
-    assert.equal(component.find('.insights-space-list-item').length, 1);
+    assert.equal(component.find('.insights-space-list-item.body-row').length, 1);
 
     // Fetch the first space rendered. Ensure that it's found.
-    const firstSpace = component.find('.insights-space-list-item').first();
+    const firstSpace = component.find('.insights-space-list-item.body-row').first();
     assert(firstSpace);
 
     // Ensure that the utilization percentage was not overflowing the bounds of the container.
     assert.equal(
-      firstSpace.find('.insights-space-list-item-utilization-bar-inner').props().style.width,
+      firstSpace.find('.percentage-bar-colored-section').props().style.width,
       '100%'
     );
   });
@@ -284,10 +275,10 @@ describe('insights space list', function() {
       />);
 
       // Ensure that two spaces were rendered
-      assert.equal(component.find('.insights-space-list-item').length, 3);
+      assert.equal(component.find('.insights-space-list-item.body-row').length, 3);
 
       // By default, the spaces should be sorted decending - starting with `aa` and ending with `zz`
-      const spaces = component.find('.insights-space-list-item');
+      const spaces = component.find('.insights-space-list-item.body-row');
       assert.equal(spaces.at(0).find('.insights-space-list-item-name').text(), 'aa My Space');
       assert.equal(spaces.at(1).find('.insights-space-list-item-name').text(), 'mm My Space');
       assert.equal(spaces.at(2).find('.insights-space-list-item-name').text(), 'zz My Space');
@@ -326,7 +317,7 @@ describe('insights space list', function() {
       />);
 
       // Ensure that three spaces were rendered
-      assert.equal(component.find('.insights-space-list-item').length, 3);
+      assert.equal(component.find('.insights-space-list-item.body-row').length, 3);
 
       // Click the header for the space column
       component
@@ -334,7 +325,7 @@ describe('insights space list', function() {
         .find('.sortable-grid-header-item-label').simulate('click');
 
       // Now, the sort order should be reversed, starting at `zz` at top and going to `aa` at bottom
-      const spaces = component.find('.insights-space-list-item');
+      const spaces = component.find('.insights-space-list-item.body-row');
       assert.equal(spaces.at(0).find('.insights-space-list-item-name').text(), 'zz My Space');
       assert.equal(spaces.at(1).find('.insights-space-list-item-name').text(), 'mm My Space');
       assert.equal(spaces.at(2).find('.insights-space-list-item-name').text(), 'aa My Space');
@@ -380,7 +371,7 @@ describe('insights space list', function() {
       />);
 
       // Ensure that three spaces were rendered
-      assert.equal(component.find('.insights-space-list-item').length, 4);
+      assert.equal(component.find('.insights-space-list-item.body-row').length, 4);
 
       // Click the header for the space column
       component
@@ -390,7 +381,7 @@ describe('insights space list', function() {
       // The spaces should be sorted such that the one that has the largest capacity is first (mm)
       // and then the smaller capacities (aa then zz). Finally, rr should be at the end since it
       // doesn't have a capacity.
-      const spaces = component.find('.insights-space-list-item');
+      const spaces = component.find('.insights-space-list-item.body-row');
       assert.equal(spaces.at(0).find('.insights-space-list-item-name').text(), 'mm My Space');
       assert.equal(spaces.at(1).find('.insights-space-list-item-name').text(), 'aa My Space');
       assert.equal(spaces.at(2).find('.insights-space-list-item-name').text(), 'zz My Space');
@@ -403,7 +394,7 @@ describe('insights space list', function() {
 
       // The spaces should be sorted such that the one without a capacity is first, then the one
       // that has the smallest capacity (zz), and then the larger capacities (aa then mm).
-      const spacesInverse = component.find('.insights-space-list-item');
+      const spacesInverse = component.find('.insights-space-list-item.body-row');
       assert.equal(spacesInverse.at(0).find('.insights-space-list-item-name').text(), 'rr My Space');
       assert.equal(spacesInverse.at(1).find('.insights-space-list-item-name').text(), 'zz My Space');
       assert.equal(spacesInverse.at(2).find('.insights-space-list-item-name').text(), 'aa My Space');
@@ -461,7 +452,7 @@ describe('insights space list', function() {
       });
 
       // Ensure that three spaces were rendered
-      assert.equal(component.find('.insights-space-list-item').length, 4);
+      assert.equal(component.find('.insights-space-list-item.body-row').length, 4);
 
       // Click the header for the space column
       component
@@ -470,7 +461,7 @@ describe('insights space list', function() {
 
       // The spaces should be sorted such that the one that has the largest utilization is first, 
       // the smallest utilization is in the middle, and any spaces without a capacity are last.
-      const spaces = component.find('.insights-space-list-item');
+      const spaces = component.find('.insights-space-list-item.body-row');
       assert.equal(spaces.at(0).find('.insights-space-list-item-name').text(), 'My Space 1')
       assert.equal(spaces.at(1).find('.insights-space-list-item-name').text(), 'My Space 3');
       assert.equal(spaces.at(2).find('.insights-space-list-item-name').text(), 'My Space 2');
@@ -483,7 +474,7 @@ describe('insights space list', function() {
 
       // The spaces should be sorted such that the one that has the  utilization is first, 
       // the smallest utilization is in the middle, and any spaces without a capacity are last.
-      const spacesInverse = component.find('.insights-space-list-item');
+      const spacesInverse = component.find('.insights-space-list-item.body-row');
       assert.equal(spacesInverse.at(0).find('.insights-space-list-item-name').text(), 'My Space 4');
       assert.equal(spacesInverse.at(1).find('.insights-space-list-item-name').text(), 'My Space 2');
       assert.equal(spacesInverse.at(2).find('.insights-space-list-item-name').text(), 'My Space 3');
@@ -515,7 +506,7 @@ describe('insights space list', function() {
       />);
 
       // Ensure that a single space was rendered
-      assert.equal(component.find('.insights-space-list-item').length, 1);
+      assert.equal(component.find('.insights-space-list-item.body-row').length, 1);
 
       // Click on the 'set capacity' link
       const stopPropagation = sinon.spy();

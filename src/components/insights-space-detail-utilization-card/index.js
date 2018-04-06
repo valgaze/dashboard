@@ -470,13 +470,13 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         </div> : null}
         {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
           <span>
-            Generating Data... {(() => {
+            Generating Data...{(() => {
               if (
                 moment.duration(
                   moment.utc(this.state.startDate).diff(moment.utc(this.state.endDate))
                 ).weeks() > 2
               ) {
-                return '(this may take a while ... )'
+                return ' (this may take a while ... )'
               } else {
                 return '';
               }
