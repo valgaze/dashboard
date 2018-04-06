@@ -56,7 +56,10 @@ export default function NavLoggedIn({
       pageName={['LIVE_SPACE_LIST']}
       href="#/spaces/live"
       onClick={closeSidebar}
-    >Live</NavbarMobileItem>,
+    >
+      Live
+      <span className="nav-logged-in-beta">(Beta)</span>
+    </NavbarMobileItem>,
 
     /* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */
     stringToBoolean(settings.environmentPageVisible) ? <NavbarMobileItem
@@ -134,7 +137,10 @@ export default function NavLoggedIn({
       activePage={activePage}
       pageName={['LIVE_SPACE_LIST']}
       href="#/spaces/live"
-    >Live</NavbarItem>
+    >
+      Live
+      <span className="nav-logged-in-beta">(Beta)</span>
+    </NavbarItem>
 
     {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
     {stringToBoolean(settings.environmentPageVisible) ? <NavbarItem
