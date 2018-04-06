@@ -1,16 +1,19 @@
+$insights-space-list-item-height: 43px;
+
 .insights-space-list-container {
   @include grid-container;
   margin-top: 2px;
 }
 
-// Header for the space list view. Contians a label and a search box.
+// Header for the space list view that contains the search box and filters that are applied to the
+// items in the card below.
 .insights-space-list-header {
   padding-top: 40px;
   @media (min-width: $screen-xs-max) {
     display: flex;
   }
 }
-.insights-space-list-header-text {
+.insights-space-list-header-text { /* Large "Insights" header */
   padding-top: 0px;
   padding-bottom: 0px;
   margin-top: 10px;
@@ -19,43 +22,6 @@
   color: $gray-darkest;
   font-size: $font-size-2;
   font-weight: $font-weight-2;
-}
-
-
-
-.insights-space-list-filter-row {
-  @include grid-row;
-  margin-top: 20px;
-  margin-bottom: 40px;
-
-  flex-direction: column;
-  @media (min-width: $screen-xs-max) {
-    flex-direction: row;
-  }
-}
-
-.insights-space-list-filter-item {
-  display: flex;
-  flex-direction: row;
-
-  margin-top: 10px; /* on mobile, add vertical spacing between filter items */
-  @media (min-width: $screen-xs-max) {
-    margin-top: 0px; /* on desktop, filter items are side-by-side. No vertical spacing needed. */
-  }
-}
-
-.insights-space-list-text-label {
-  font-size: $font-size-base;
-  color: $gray-cinder;
-
-  user-select: none;
-
-  line-height: 43px;
-  margin-right: auto; /* on mobile, render the label for the box on left, and the input on right */
-  @media (min-width: $screen-xs-max) {
-    margin-right: 15px; /* on desktop, render text labels side-by-side with their inputs */
-    margin-left: 15px;
-  }
 }
 
 // The "Filter spaces ..." box.
@@ -79,6 +45,43 @@
   }
 }
 
+.insights-space-list-filter-row {
+  @include grid-row;
+  margin-top: 20px;
+  margin-bottom: 40px;
+
+  // on mobile, render all filters vertically (each filter item is given vertical spacing to
+  // accommodate this) 
+  flex-direction: column;
+  @media (min-width: $screen-xs-max) {
+    flex-direction: row; /* on desktop, render filters horizontally (and no vertical padding on each filter item) */
+  }
+}
+
+.insights-space-list-filter-item {
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 10px; /* on mobile, add vertical spacing between filter items */
+  @media (min-width: $screen-xs-max) {
+    margin-top: 0px; /* on desktop, filter items are side-by-side. No vertical spacing needed. */
+  }
+}
+
+.insights-space-list-filter-text-label {
+  font-size: $font-size-base;
+  color: $gray-cinder;
+  line-height: $insights-space-list-item-height;
+
+  user-select: none;
+
+  margin-right: auto; /* on mobile, render the label for the box on left, and the input on right */
+  @media (min-width: $screen-xs-max) {
+    margin-right: 15px; /* on desktop, render text labels side-by-side with their inputs */
+    margin-left: 15px;
+  }
+}
+
 // The "Working hours" / "Whole day" / "Breakfast" / etc selector.
 .insights-space-list-time-segment-selector {
   color: $gray-cinder;
@@ -97,10 +100,7 @@
 
 
 
-
-
-// The header of the card that displays the collective space metric (either utilization or total
-// events, I forgot).
+// The header of the card that displays the collective space metric (right now it's total events)
 .card .insights-space-list-summary-header {
   background-color: $gray-lightest;
   color: $gray-cinder;
@@ -122,6 +122,8 @@
 
 
 // Adjust the spacing around the `SortableGridHeader`.
+// This inverts the styles that are defaultly placed on a card body (padding all around the card
+// body) so that the hover background on each list item can extend to the edge of the card.
 .card .insights-space-list-card-body {
   margin-top: 5px;
   margin-bottom: 10px;
@@ -136,7 +138,6 @@
 }
 
 // Style each row to include the space name and utilization percentage.
-$insights-space-list-item-height: 43px;
 .insights-space-list-item {
   cursor: pointer;
   color: $gray-cinder;

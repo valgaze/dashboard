@@ -249,7 +249,7 @@ export class InsightsSpaceList extends React.Component {
 
           {/* Right-aligned utiliation time segment and data duration filters */}
           <span className="insights-space-list-filter-item">
-            <div className="insights-space-list-text-label">Utilization for</div>
+            <div className="insights-space-list-filter-text-label">Utilization for</div>
             <InputBox
               type="select"
               className="insights-space-list-time-segment-selector"
@@ -272,7 +272,7 @@ export class InsightsSpaceList extends React.Component {
             </InputBox>
           </span>
           <span className="insights-space-list-filter-item">
-            <div className="insights-space-list-text-label">over past</div>
+            <div className="insights-space-list-filter-text-label">over past</div>
             <InputBox
               type="select"
               className="insights-space-list-duration-selector"
