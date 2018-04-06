@@ -9,10 +9,6 @@ export default function PercentageBar({
 }) {
   percentageFormatter = percentageFormatter || (n => `${n.toFixed(2)}%`);
 
-  if (typeof percentage !== 'number') {
-    percentage = 0;
-  }
-
   // Ensure that percentage never overflows the bar.
   if (percentage > 1) {
     percentage = 1;

@@ -163,6 +163,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
   }
 
   calculateAverageUtilization(data=this.state.data) {
+    // No data exists, so render a '-' instead of actual data.
+    if (data.length === 0) {
+      return null;
+    }
+
     const utilizationSum = data.reduce((acc, i) => acc + i.averageUtilization, 0);
     return utilizationSum / data.length;
   }
@@ -350,7 +355,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[0])}
-                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
+                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
                 />
               </div>
             </div>
@@ -359,7 +364,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[1])}
-                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
+                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
                 />
               </div>
             </div>
@@ -368,7 +373,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[2])}
-                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
+                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
                 />
               </div>
             </div>
@@ -377,7 +382,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[3])}
-                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
+                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
                 />
               </div>
             </div>
