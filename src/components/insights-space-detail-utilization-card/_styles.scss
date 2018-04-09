@@ -142,6 +142,11 @@
   margin-left: 10px;
 }
 
+// Hide the max line on the chart - it's not in the right location.
+.insights-space-detail-utilization-card-daily-breakdown-chart .axis-y-maximum-line { display: none; }
+// Instead, show the capacity line.
+.insights-space-detail-utilization-card-daily-breakdown-chart .axis-y-capacity-line { display: block; }
+
 .insights-space-detail-utilization-card .historical-counts .historical-counts-capacity-region {
   fill: transparent;
 }

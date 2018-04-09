@@ -9,9 +9,9 @@
     d3 "^4.10.2"
     moment "^2.18.1"
 
-"@density/chart-historical-counts@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@density/chart-historical-counts/-/chart-historical-counts-2.0.2.tgz#d8367c855e2c0868ee5bff8e0208513455f0d823"
+"@density/chart-historical-counts@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@density/chart-historical-counts/-/chart-historical-counts-2.0.3.tgz#25141fec02da102ad212f75bab379bf7a6ef737c"
   dependencies:
     d3 "^4.13.0"
     moment-timezone "^0.5.14"
