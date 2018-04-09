@@ -321,15 +321,13 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
         {this.state.state === VISIBLE ? <div>
           <CardBody className="insights-space-detail-utilization-card-well">
-            Average utilization of
-            <span className="insights-space-detail-utilization-card-well-highlight">
+            Average utilization of <span className="insights-space-detail-utilization-card-well-highlight">
               {Math.round(this.calculateAverageUtilization() * 100)}%
-            </span>
-            during
-            <span className="insights-space-detail-utilization-card-well-highlight">
+            </span> during <span className="insights-space-detail-utilization-card-well-highlight">
               {TIME_SEGMENTS[this.state.timeSegment].phrasal}
             </span>
           </CardBody>
+
           <CardHeader>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Weekly Breakdown
@@ -344,7 +342,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               </span>
             </span>
           </CardHeader>
-          <CardBody>
+          <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
             <div className="insights-space-detail-utilization-card-grid-header">
               <div className="insights-space-detail-utilization-card-grid-item">Space</div>
               <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
@@ -395,8 +393,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 />
               </div>
             </div>
-
           </CardBody>
+
           <CardBody className="insights-space-detail-utilization-card-well">
             {peakUtilizationTimestamp === null ? <span>
               No peak utilization during
@@ -404,12 +402,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
               </span>
             </span> : <span>
-              On average, peak utilization of 
-              <span className="insights-space-detail-utilization-card-well-highlight">
+              On average, peak utilization of <span className="insights-space-detail-utilization-card-well-highlight">
                 {Math.round(peakUtilizationPercentage * 100)}%
-              </span>
-              happens around
-              <span className="insights-space-detail-utilization-card-well-highlight">
+              </span> happens around <span className="insights-space-detail-utilization-card-well-highlight">
                 {(timestamp => {
                   const stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ');
                   let minute = '00';
@@ -424,13 +419,12 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   
                   return stamp.format(`h:[${minute}]a`).slice(0, -1)
                 })(peakUtilizationTimestamp)}
-              </span>
-              during
-              <span className="insights-space-detail-utilization-card-well-highlight">
+              </span> during <span className="insights-space-detail-utilization-card-well-highlight">
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
               </span>
             </span>}
           </CardBody>
+
           <CardHeader>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Daily Breakdown

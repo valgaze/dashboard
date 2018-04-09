@@ -8,7 +8,14 @@
   margin-bottom: 20px;
 }
 .insights-space-detail-utilization-card-header-label {
-  line-height: 43px;
+  display: block;
+
+  line-height: 32px;
+  margin-bottom: 10px;
+  @media (min-width: $screen-xs-max) {
+    line-height: 43px;
+    margin-bottom: 0px;
+  }
 }
 .insights-space-detail-utilization-card-header-label-highlight {
   color: $brand-primary;
@@ -22,6 +29,7 @@
   .input-box {
     color: $gray-cinder;
     margin-left: 0px; /* On mobile, the select box should be at the left edge. */
+    width: 230px;
   }
 
   @media (min-width: $screen-xs-max) {
@@ -58,7 +66,13 @@
   color: $gray-dark;
   font-size: $font-size-base;
   font-weight: normal;
-  margin-left: 20px;
+
+  display: block;
+  margin-left: 0px;
+  @media (min-width: $screen-xs-max) {
+    display: inline-block;
+    margin-left: 20px;
+  }
 }
 
 
@@ -66,8 +80,6 @@
 // insight into your space.
 .card .insights-space-detail-utilization-card-well {
   background-color: $gray-lightest;
-  width: 100%;
-  padding-left: 0px;
   padding-right: 0px;
 
   padding-top: 80px;
@@ -75,15 +87,26 @@
 
   font-size: $font-size-3;
   font-weight: $font-weight-3;
-  text-align: center;
   line-height: 28px;
   color: $gray-cinder;
+
+  text-align: left;
+  padding-left: 20px;
+  @media (min-width: $screen-xs-max) {
+    text-align: center;
+    padding-left: 0px;
+  }
 }
 .insights-space-detail-utilization-card-well-highlight {
-  margin-left: 6px;
-  margin-right: 6px;
   color: $brand-primary;
   white-space: nowrap;
+}
+
+.insights-space-detail-utilization-card-average-weekly-breakdown {
+  padding-top: 0px;
+  @media (min-width: $screen-xs-max) {
+    padding-top: 20px;
+  }
 }
 
 
@@ -104,8 +127,13 @@
   font-size: $font-size-4;
   color: $gray-cinder;
   line-height: 43px;
+
   &:first-child { flex: 1; }
-  &:last-child { flex: 2; }
+  &:last-child { flex: 1; }
+  @media (min-width: $screen-xs-max) {
+    &:first-child { flex: 1; }
+    &:last-child { flex: 2; }
+  }
 }
 
 // Ensure that the chart is horizontally scrollable on mobile
