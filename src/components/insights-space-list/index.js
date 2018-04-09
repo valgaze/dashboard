@@ -141,44 +141,54 @@ export class InsightsSpaceList extends React.Component {
         ...spaceCountsArray.reduce((acc, i, ct) => ({...acc, [spacesToFetch[ct].id]: i}), {}),
       };
 
+      const spaceUtilizations = Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
+        // If a space doesn't have a capacity, don't use it for calculating utilization.
+        if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
+
+        const space = spaces.data.find(i => i.id === spaceId);
+        const counts = spaceCounts[spaceId];
+
+        const groups = groupCountsByDay(counts, space.timeZone);
+        const filteredGroups = groups.filter(group => {
+          // Filter out any days that aren't within monday-friday
+          const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
+          return dayOfWeek !== 5 && dayOfWeek !== 6 // Remove saturday and sunday
+        }).map(group => {
+          // Remove all counts in each bucket that is outside each time segment.
+          return {
+            ...group,
+            counts: group.counts.filter(count => {
+              return isWithinTimeSegment(
+                count.timestamp,
+                space.timeZone,
+                TIME_SEGMENTS[this.state.timeSegment]
+              );
+            }),
+          };
+        });
+
+        const result = spaceUtilizationPerGroup(space, filteredGroups);
+
+        return {
+          ...acc,
+          [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length,
+        };
+      }, {});
+
+      // NOTE: This is kinda an antipattern, but cancelling fetch calls looks to be a bit involved, so
+      // taking the easy solution for now.
+      if (!this.mounted) { return; }
+
       this.setState({
         view: VISIBLE,
         spaceCounts,
-        spaceUtilizations: Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
-          // If a space doesn't have a capacity, don't use it for calculating utilization.
-          if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
-
-          const space = spaces.data.find(i => i.id === spaceId);
-          const counts = spaceCounts[spaceId];
-
-          const groups = groupCountsByDay(counts, space.timeZone);
-          const filteredGroups = groups.filter(group => {
-            // Filter out any days that aren't within monday-friday
-            const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
-            return dayOfWeek !== 5 && dayOfWeek !== 6 // Remove saturday and sunday
-          }).map(group => {
-            // Remove all counts in each bucket that is outside each time segment.
-            return {
-              ...group,
-              counts: group.counts.filter(count => {
-                return isWithinTimeSegment(
-                  count.timestamp,
-                  space.timeZone,
-                  TIME_SEGMENTS[this.state.timeSegment]
-                );
-              }),
-            };
-          });
-
-          const result = spaceUtilizationPerGroup(space, filteredGroups);
-
-          return {
-            ...acc,
-            [space.id]: result.reduce((acc, i) => acc + i.averageUtilization, 0) / result.length,
-          };
-        }, {}),
+        spaceUtilizations,
       });
     } catch (error) {
+      // NOTE: This is kinda an antipattern, but cancelling fetch calls looks to be a bit involved, so
+      // taking the easy solution for now.
+      if (!this.mounted) { return; }
+
       // Something went wrong. Update the state of the component such that it shows the error in the
       // error bar.
       this.setState({view: ERROR, error: `Could not fetch space counts: ${error.message}`});
@@ -186,6 +196,9 @@ export class InsightsSpaceList extends React.Component {
 
     this.fetchDataLock = false;
   }
+
+  componentDidMount() { this.mounted = true; }
+  componentWillUnmount() { this.mounted = false; }
 
   componentWillReceiveProps(nextProps) {
     this.fetchData(nextProps.spaces);
