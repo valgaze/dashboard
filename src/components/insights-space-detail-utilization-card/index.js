@@ -29,6 +29,8 @@ import historicalCounts from '@density/chart-historical-counts';
 import { chartAsReactComponent } from '@density/charts';
 const HistoricalCountsComponent = chartAsReactComponent(historicalCounts);
 
+const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
+
 // Given a day on the calendar and the current day, determine if the square on the calendar should
 // be grayed out or not.
 function isOutsideRange(startISOTime, datePickerInput, day) {
@@ -344,7 +346,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           </CardHeader>
           <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
             <div className="insights-space-detail-utilization-card-grid-header">
-              <div className="insights-space-detail-utilization-card-grid-item">Space</div>
+              <div className="insights-space-detail-utilization-card-grid-item">Weekday</div>
               <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
             </div>
 
@@ -354,6 +356,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[0])}
                   percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
+                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
                 />
               </div>
             </div>
@@ -363,6 +366,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[1])}
                   percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
+                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
                 />
               </div>
             </div>
@@ -372,6 +376,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[2])}
                   percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
+                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
                 />
               </div>
             </div>
@@ -381,6 +386,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[3])}
                   percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
+                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
                 />
               </div>
             </div>
@@ -389,7 +395,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">
                 <PercentageBar
                   percentage={this.calculateAverageUtilization(utilizationsByDay[4])}
-                  percentageFormatter={percentage => `${formatPercentage(percentage, 0)}%`}
+                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
+                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
                 />
               </div>
             </div>

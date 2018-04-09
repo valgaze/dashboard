@@ -128,17 +128,18 @@
   color: $gray-cinder;
   line-height: 43px;
 
-  &:first-child { flex: 1; }
-  &:last-child { flex: 1; }
+  &:first-child { flex: 7; }
+  &:last-child { flex: 11; }
   @media (min-width: $screen-xs-max) {
     &:first-child { flex: 1; }
-    &:last-child { flex: 2; }
+    &:last-child { flex: 3; }
   }
 }
 
 // Ensure that the chart is horizontally scrollable on mobile
 .insights-space-detail-utilization-card-daily-breakdown-chart {
   overflow-x: auto;
+  margin-left: 10px;
 }
 
 .insights-space-detail-utilization-card .historical-counts .historical-counts-capacity-region {
