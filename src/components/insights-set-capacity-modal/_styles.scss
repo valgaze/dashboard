@@ -6,3 +6,8 @@
   flex-direction: row;
   justify-content: center;
 }
+
+
+// On mobile, don't make this modal full-height.
+.insights-set-capacity-modal > .modal { height: 50vh; }
+.insights-set-capacity-modal-card { height: auto !important; }

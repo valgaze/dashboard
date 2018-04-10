@@ -16,7 +16,7 @@ export default class InsightsSetCapacityModal extends React.Component {
   render() {
     return <div className="insights-set-capacity-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
-        <Card type="modal">
+        <Card className="insights-set-capacity-modal-card" type="modal">
           <CardHeader className="insights-set-capacity-modal-header">Set Capacity</CardHeader>
           <CardBody>
             <div className="insights-set-capacity-modal-capacity-input">
