@@ -441,7 +441,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               ) {
                 return 'Geneating Data (this may take a while ... )'
               } else {
-                return 'Generating Data...';
+                return 'Generating Data . . .';
               }
             })()}
           </span>

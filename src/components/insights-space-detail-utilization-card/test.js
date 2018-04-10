@@ -284,7 +284,7 @@ describe('space utilization card', function() {
     />);
 
     // Ensure that the component starts out in a loading state
-    assert.equal(component.find('.insights-space-detail-utilization-card-body-info span').text(), 'Generating Data...');
+    assert.equal(component.find('.insights-space-detail-utilization-card-body-info span').text(), 'Generating Data . . .');
 
     await timeout(500);
 
@@ -563,7 +563,7 @@ describe('space utilization card', function() {
     />);
 
     // Ensure that the component starts out in a loading state
-    assert.equal(component.find('.insights-space-detail-utilization-card-body-info span').text(), 'Generating Data...');
+    assert.equal(component.find('.insights-space-detail-utilization-card-body-info span').text(), 'Generating Data . . .');
 
     await timeout(500);
 
@@ -573,8 +573,6 @@ describe('space utilization card', function() {
     // And that the utilization metrics should be visible an are actually rendered.
     assert.equal(component.state().state, VISIBLE);
     assert.equal(component.find('.insights-space-detail-utilization-card').length, 1);
-
-    // Select the "whole day" time segment
   });
   it('should render insights space utilization with a space without a capacity', async function() {
     // Mock the data fetching call, and the current date so that we can assert properly.
@@ -844,7 +842,7 @@ describe('space utilization card', function() {
     />);
 
     // Ensure that the component starts out in a loading state
-    assert.equal(component.find('.insights-space-detail-utilization-card-body-info span').text(), 'Generating Data...');
+    assert.equal(component.find('.insights-space-detail-utilization-card-body-info span').text(), 'Generating Data . . .');
 
     await timeout(100);
 
@@ -1120,7 +1118,7 @@ describe('space utilization card', function() {
     const component = shallow(<InsightsSpaceDetailUtilizationCard space={SPACE} />);
 
     // Ensure that the component starts out in a loading state
-    assert.equal(component.find('.insights-space-detail-utilization-card-body-info span').text(), 'Generating Data...');
+    assert.equal(component.find('.insights-space-detail-utilization-card-body-info span').text(), 'Generating Data . . .');
 
     await timeout(100);
 

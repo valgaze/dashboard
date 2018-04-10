@@ -256,7 +256,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
           </div> : null }
 
           {this.state.state === LOADING ? <div className="visualization-space-detail-daily-metrics-card-body-info">
-            Generating data...
+            Generating Data&nbsp;.&nbsp;.&nbsp;.
           </div> : null }
         </CardBody>
       </Card>;

@@ -136,7 +136,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
           /> : null}
 
         {this.state.state === LOADING ? <div className="visualization-space-detail-24-hour-card-body-info">
-          <span>Generating Data...</span>
+          <span>Generating Data&nbsp;.&nbsp;.&nbsp;.</span>
         </div> : null}
         {this.state.state === EMPTY ? <div className="visualization-space-detail-24-hour-card-body-info">
           <span>No data found in date range.</span>
