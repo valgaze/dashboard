@@ -49,7 +49,7 @@ export function SpaceDetail({
                   onClick={() => {
                     return onOpenModal('set-capacity', {space});
                   }}
-                >Update</a>
+                >Edit</a>
               </span> : <span>
                 <a
                   className="visualization-space-detail-capacity-set-link"
