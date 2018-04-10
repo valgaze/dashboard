@@ -1,5 +1,6 @@
 .visualization-space-detail-container {
   @include grid-container;
+  margin-top: 40px;
 }
 
 .visualization-space-detail-card {
@@ -11,6 +12,9 @@
 .visualization-space-detail-header-container {
   margin-top: 20px;
   margin-bottom: 0px;
+  @media (min-width: $screen-xs-max) {
+    margin-top: 0px;
+  }
 }
 .visualization-space-detail-header {
   display: flex;
@@ -28,35 +32,45 @@
   text-decoration: none;
   font-weight: normal;
 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   font-family: Densicons;
-  font-size: 16px;
-  margin-right: 15px;
+  font-size: 30px;
   padding: 8px;
 
-  transition: all ease-in-out 200ms;
+  transition: all ease-in-out 100ms;
   border-radius: 50%;
 
   position: relative;
+  left: -6px;
+  top: 1px;
 
   // On a computer, move the arrow to the top of the header text.
-  @media (min-width: $screen-xs-max) {
-    top: -3px;
-  }
+  // @media (min-width: $screen-xs-max) {
+  //   top: -3px;
+  // }
 
-  &:hover, &:active {
-    background-color: $gray;
+  &:hover {
+    opacity: 0.8;
+  }
+  &:active {
+    opacity: 1;
   }
 }
 
 // Actual space name (after the arrow on the page header label)
 .visualization-space-detail-header-title {
   color: $gray-cinder;
-  font-size: $font-size-3;
-  font-weight: $font-weight-3;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   // On a computer, make the header bigger.
   @media (min-width: $screen-xs-max) {
-    font-size: $font-size-2;
   }
 }
 
@@ -65,9 +79,7 @@
   font-size: $font-size-4;
   font-weight: normal;
 
-  // Add some spacing to the left so that the capacity indicator will be underneath the space name.
-  margin-left: 48px;
-  margin-top: 10px;
+  margin-top: 20px;
 
   a {
     text-decoration: underline;
@@ -80,7 +92,7 @@
 
 // Time zone label in the right hand corner.
 .visualization-space-detail-header-time-zone {
-  margin-top: 30px;
+  margin-top: 10px;
 
   color: $gray-cinder;
   font-size: $font-size-4;
@@ -89,14 +101,12 @@
   // On a computer, add a margin left of auto to push the time zone over to the right.
   // Also, make the text size larger.
   @media (min-width: $screen-xs-max) {
+    margin-top: 20px;
     margin-left: auto;
 
     font-size: $font-size-4;
     font-weight: normal;
   }
-}
-.visualization-space-detail-header-time-zone-label {
-  color: $brand-primary;
 }
 
 // Loading state for whole page

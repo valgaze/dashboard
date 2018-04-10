@@ -39,7 +39,7 @@ export function SpaceDetail({
         <div className="visualization-space-detail-header">
           <h1 className="visualization-space-detail-header-container">
             <a href="#/spaces/insights" className="visualization-space-detail-header-back-section">
-              &#xe902;
+              &#xe90e;
             </a>
             <span className="visualization-space-detail-header-title">{space.name}</span>
             <div className="visualization-space-detail-capacity">
