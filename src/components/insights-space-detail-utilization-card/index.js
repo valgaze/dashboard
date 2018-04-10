@@ -349,63 +349,23 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">Weekday</div>
               <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
             </div>
-
-            <div className="insights-space-detail-utilization-card-grid-row">
-              <div className="insights-space-detail-utilization-card-grid-item">Monday</div>
-              <div className="insights-space-detail-utilization-card-grid-item">
-                <PercentageBar
-                  percentage={this.calculateAverageUtilization(utilizationsByDay[0])}
-                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
-                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
-                />
-              </div>
-            </div>
-            <div className="insights-space-detail-utilization-card-grid-row">
-              <div className="insights-space-detail-utilization-card-grid-item">Tuesday</div>
-              <div className="insights-space-detail-utilization-card-grid-item">
-                <PercentageBar
-                  percentage={this.calculateAverageUtilization(utilizationsByDay[1])}
-                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
-                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
-                />
-              </div>
-            </div>
-            <div className="insights-space-detail-utilization-card-grid-row">
-              <div className="insights-space-detail-utilization-card-grid-item">Wednesday</div>
-              <div className="insights-space-detail-utilization-card-grid-item">
-                <PercentageBar
-                  percentage={this.calculateAverageUtilization(utilizationsByDay[2])}
-                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
-                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
-                />
-              </div>
-            </div>
-            <div className="insights-space-detail-utilization-card-grid-row">
-              <div className="insights-space-detail-utilization-card-grid-item">Thursday</div>
-              <div className="insights-space-detail-utilization-card-grid-item">
-                <PercentageBar
-                  percentage={this.calculateAverageUtilization(utilizationsByDay[3])}
-                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
-                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
-                />
-              </div>
-            </div>
-            <div className="insights-space-detail-utilization-card-grid-row">
-              <div className="insights-space-detail-utilization-card-grid-item">Friday</div>
-              <div className="insights-space-detail-utilization-card-grid-item">
-                <PercentageBar
-                  percentage={this.calculateAverageUtilization(utilizationsByDay[4])}
-                  percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
-                  breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
-                />
-              </div>
-            </div>
+            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map((day, index) => {
+              return <div className="insights-space-detail-utilization-card-grid-row" key={day}>
+                <div className="insights-space-detail-utilization-card-grid-item">{day}</div>
+                <div className="insights-space-detail-utilization-card-grid-item">
+                  <PercentageBar
+                    percentage={this.calculateAverageUtilization(utilizationsByDay[index])}
+                    percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
+                    breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
+                  />
+                </div>
+              </div>;
+            })}
           </CardBody>
 
           <CardBody className="insights-space-detail-utilization-card-well">
             {peakUtilizationTimestamp === null ? <span>
-              No peak utilization during
-              <span className="insights-space-detail-utilization-card-well-highlight">
+              No peak utilization during <span className="insights-space-detail-utilization-card-well-highlight">
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
               </span>
             </span> : <span>
