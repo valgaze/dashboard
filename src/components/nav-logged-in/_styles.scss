@@ -3,3 +3,23 @@
   margin-left: 5px;
   font-weight: normal;
 }
+
+// The logout icon in the navbar.
+.nav-logged-in-logout {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @include make-navbar-item;
+  float: right;
+  user-select: none;
+  margin-right: 10px;
+
+  // The link within the item.
+  & > a {
+    font-family: "Densicons";
+    cursor: pointer;
+    font-size: $font-size-base;
+    &:hover { opacity: 0.8; }
+    &:active { opacity: 1; }
+  }
+}

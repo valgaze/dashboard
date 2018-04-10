@@ -159,7 +159,7 @@ export default function NavLoggedIn({
       pageName={['ACCOUNT']}
       href="#/account"
     >Account</NavbarItem>
-    <span aria-label="Logout" title="Logout" className="navbar-item-logout">
+    <span aria-label="Logout" title="Logout" className="nav-logged-in-logout">
       <a onClick={onLogout}>&#xe923;</a>
     </span>
   </Navbar>;
