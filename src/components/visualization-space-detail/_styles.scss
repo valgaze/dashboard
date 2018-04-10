@@ -18,8 +18,14 @@
   }
 }
 .visualization-space-detail-header-text-container {
+  color: $gray-cinder;
   margin-top: 20px;
   margin-bottom: 0px;
+
+  // Ellipsize space name if over the page width
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   @media (min-width: $screen-xs-max) {
     /* on mobile, get rid of the extra space above the header. Above the fold space is at a premium!*/
@@ -47,7 +53,7 @@ $visualization-space-detail-header-back-height: 30px;
 
   // Position properly to center the arrow.
   position: relative;
-  left: -6px;
+  margin-left: -6px;
   top: 1px;
 
   // Hover effect, same as in other parts of the application.
@@ -61,11 +67,6 @@ $visualization-space-detail-header-back-height: 30px;
   font-size: $visualization-space-detail-header-back-height;
   font-weight: bold;
   margin-top: 12px;
-
-  // Ellipsize space name if over the page width
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 // Capacity is shown under the space name.
