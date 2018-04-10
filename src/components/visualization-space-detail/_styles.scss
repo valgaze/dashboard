@@ -2,20 +2,12 @@
   @include grid-container;
   margin-top: 40px;
 }
-
 .visualization-space-detail-card {
   margin-top: 40px;
 }
 
-
-// The header for the page
-.visualization-space-detail-header-container {
-  margin-top: 20px;
-  margin-bottom: 0px;
-  @media (min-width: $screen-xs-max) {
-    margin-top: 0px;
-  }
-}
+// The header for the page - this contains the space name, a back button, a method to set or update
+// the capacity, and a time zone.
 .visualization-space-detail-header {
   display: flex;
   flex-direction: column;
@@ -25,70 +17,72 @@
     flex-direction: row;
   }
 }
+.visualization-space-detail-header-text-container {
+  margin-top: 20px;
+  margin-bottom: 0px;
 
-// "<-" arrow on the page header label
+  @media (min-width: $screen-xs-max) {
+    /* on mobile, get rid of the extra space above the header. Above the fold space is at a premium!*/
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+}
+
+// "(<)" arrow on the page header label
+$visualization-space-detail-header-back-height: 30px;
 .visualization-space-detail-header-back-section {
   color: $brand-primary;
+
+  font-family: Densicons;
+  font-size: $visualization-space-detail-header-back-height;
+  padding: 8px;
   text-decoration: none;
   font-weight: normal;
 
+  // Required for ison font to display correctly
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  font-family: Densicons;
-  font-size: 30px;
-  padding: 8px;
-
   transition: all ease-in-out 100ms;
-  border-radius: 50%;
 
+  // Position properly to center the arrow.
   position: relative;
   left: -6px;
   top: 1px;
 
-  // On a computer, move the arrow to the top of the header text.
-  // @media (min-width: $screen-xs-max) {
-  //   top: -3px;
-  // }
-
-  &:hover {
-    opacity: 0.8;
-  }
-  &:active {
-    opacity: 1;
-  }
+  // Hover effect, same as in other parts of the application.
+  &:hover { opacity: 0.8; }
+  &:active { opacity: 1; }
 }
 
-// Actual space name (after the arrow on the page header label)
+// Space name, shown to the right of the arrow.
 .visualization-space-detail-header-title {
   color: $gray-cinder;
-  font-size: 30px;
+  font-size: $visualization-space-detail-header-back-height;
   font-weight: bold;
   margin-top: 12px;
+
+  // Ellipsize space name if over the page width
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  // On a computer, make the header bigger.
-  @media (min-width: $screen-xs-max) {
-  }
 }
 
+// Capacity is shown under the space name.
 .visualization-space-detail-capacity {
   color: $gray-cinder;
   font-size: $font-size-4;
   font-weight: normal;
 
   margin-top: 20px;
-
-  a {
-    text-decoration: underline;
-    cursor: pointer;
-  }
 }
-.visualization-space-detail-capacity-update-link {
-  margin-left: 5px;
+.visualization-space-detail-capacity-set-link, .visualization-space-detail-capacity-update-link {
+  text-decoration: underline;
+  cursor: pointer;
 }
+// Add some spacing between the 'update' link and its 'Capacity: n' label before it. The set link
+// doesn't need this since there's nothing before it.
+.visualization-space-detail-capacity-update-link { margin-left: 5px; }
 
 // Time zone label in the right hand corner.
 .visualization-space-detail-header-time-zone {
@@ -99,13 +93,9 @@
   font-weight: normal;
 
   // On a computer, add a margin left of auto to push the time zone over to the right.
-  // Also, make the text size larger.
   @media (min-width: $screen-xs-max) {
     margin-top: 20px;
     margin-left: auto;
-
-    font-size: $font-size-4;
-    font-weight: normal;
   }
 }
 

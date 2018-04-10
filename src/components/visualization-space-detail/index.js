@@ -37,7 +37,7 @@ export function SpaceDetail({
       <div className="visualization-space-detail-container">
         {/* Page header */}
         <div className="visualization-space-detail-header">
-          <h1 className="visualization-space-detail-header-container">
+          <h1 className="visualization-space-detail-header-text-container">
             <a href="#/spaces/insights" className="visualization-space-detail-header-back-section">
               &#xe90e;
             </a>
@@ -52,6 +52,7 @@ export function SpaceDetail({
                 >Update</a>
               </span> : <span>
                 <a
+                  className="visualization-space-detail-capacity-set-link"
                   onClick={() => {
                     return onOpenModal('set-capacity', {space});
                   }}
