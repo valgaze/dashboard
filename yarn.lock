@@ -80,9 +80,9 @@
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/@density/ui-button/-/ui-button-0.1.4.tgz#fed74d988772ec156970920b8ae0a70dd12b5180"
 
-"@density/ui-card@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@density/ui-card/-/ui-card-0.4.2.tgz#ef40354e9d5c9024ecedfde72cb6286d4ee40f83"
+"@density/ui-card@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@density/ui-card/-/ui-card-0.4.3.tgz#df7fa1a37fcd4e2dc4e30283eb0a504637769dcc"
 
 "@density/ui-context-menu@^0.2.0":
   version "0.2.0"
