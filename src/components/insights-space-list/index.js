@@ -420,16 +420,19 @@ export class InsightsSpaceList extends React.Component {
                     onClick={() => window.location.href = `#/spaces/insights/${space.id}`}
                   >
                     <td className="insights-space-list-item-name">{space.name}</td>
-                    <td className="insights-space-list-item-capacity">
+                    <td
+                      className="insights-space-list-item-capacity"
+                      onClick={e => {
+                        // Keep the row click handler from firing when 'set capacity' is clicked
+                        e.stopPropagation();
+
+                        return onOpenModal('set-capacity', {space});
+                      }}
+                    >
                       {
                         space.capacity !== null ?
                           <span>{space.capacity}</span> :
-                          <a onClick={e => {
-                            // Keep the row click handler from firing when 'set capacity' is clicked
-                            e.stopPropagation();
-
-                            return onOpenModal('set-capacity', {space});
-                          }}>{document.body && document.body.clientWidth > gridVariables.screenSmMin ? 'Set capacity' : 'Set'}</a>
+                          <a>{document.body && document.body.clientWidth > gridVariables.screenSmMin ? 'Set capacity' : 'Set'}</a>
                       }
                     </td>
                     <td className="insights-space-list-item-utilization">
