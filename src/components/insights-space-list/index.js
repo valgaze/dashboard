@@ -104,16 +104,15 @@ export class InsightsSpaceList extends React.Component {
       // rather than in a fixed timezone between all spaces (since the list of spaces can be in
       // multiple timezones)
       let startTime,
-          endTime = moment.utc().subtract(1, 'week').endOf('week').subtract(1, 'day').format();
+          endTime = moment.utc().subtract(1, 'week').endOf('week').subtract(1, 'day').format('YYYY-MM-DDTHH:mm:ss');
       if (this.state.dataDuration === DATA_DURATION_WEEK) {
-        startTime = moment.utc().startOf('week').subtract(1, 'week').add(1, 'day').format('YYYY-MM-DDThh:mm:ss');
+        startTime = moment.utc().subtract(1, 'week').startOf('week').add(1, 'day').startOf('day').format('YYYY-MM-DDTHH:mm:ss');
       } else {
-        startTime = moment.utc().subtract(1, 'month').format('YYYY-MM-DDThh:mm:ss');
+        startTime = moment.utc().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss');
       }
 
       // Get all counts within that last full week. Request as many pages as required.
       const data = await fetchAllPages(page => {
-        console.log('PAGE', page);
         return core.spaces.allCounts({
           start_time: startTime,
           end_time: endTime,
@@ -123,26 +122,24 @@ export class InsightsSpaceList extends React.Component {
         });
       });
 
-      // For each space that data was requested from, extract the counts from the object returned
-      // from the `core.space.allCounts` call and put these values in an array such that the index
-      // of the item in `spaceCountsArray` contains the counts at that same index in
-      // `spacesToFetch`.
-      const spaceCountsArray = spacesToFetch.map(space => {
-        return data[space.id].map(count => {
-          return {
-            ...count,
+      // Add a `timestampAsMoment` property which converts the timestamp into a moment. This is so
+      // that this expensive step doesn't have to be performed on each component render in the
+      // `.calculateTotalNumberOfEventsForSpaces` method or have to be performed again below in the
+      // utilization calculation.
+      for (const spaceId in data) {
+        const space = spaces.data.find(i => i.id === spaceId);
 
-            // Add a `timestampAsMoment` property which converts the timestamp into a moment. This is so
-            // that this expensive step doesn't have to be performed on each component render in the
-            // `.calculateTotalNumberOfEventsForSpaces` method.
-            timestampAsMoment: moment.utc(count.timestamp, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone),
-          };
-        });
-      });
+        for (let ct = 0; ct < data[spaceId].length; ct++) {
+          data[spaceId][ct].timestampAsMoment = moment.utc(
+            data[spaceId][ct].timestamp,
+            'YYYY-MM-DDTHH:mm:ssZ'
+          ).tz(space.timeZone);
+        }
+      }
 
       const spaceCounts = {
         ...this.state.spaceCounts,
-        ...spaceCountsArray.reduce((acc, i, ct) => ({...acc, [spacesToFetch[ct].id]: i}), {}),
+        ...data,
       };
 
       const spaceUtilizations = Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
@@ -163,7 +160,7 @@ export class InsightsSpaceList extends React.Component {
             ...group,
             counts: group.counts.filter(count => {
               return isWithinTimeSegment(
-                count.timestamp,
+                count.timestampAsMoment,
                 space.timeZone,
                 TIME_SEGMENTS[this.state.timeSegment]
               );
