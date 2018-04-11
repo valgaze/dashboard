@@ -423,10 +423,12 @@ export class InsightsSpaceList extends React.Component {
                     <td
                       className="insights-space-list-item-capacity"
                       onClick={e => {
-                        // Keep the row click handler from firing when 'set capacity' is clicked
-                        e.stopPropagation();
+                        if (space.capacity === null) {
+                          // Keep the row click handler from firing when 'set capacity' is clicked
+                          e.stopPropagation();
 
-                        return onOpenModal('set-capacity', {space});
+                          return onOpenModal('set-capacity', {space});
+                        }
                       }}
                     >
                       {
