@@ -97,41 +97,45 @@ export class InsightsSpaceList extends React.Component {
       // Store if each space has a capacity and therefore can be used to calculate utilization.
       const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
 
-      // Fetch counts for each space.
-      const requests = spacesToFetch.map(space => {
-        // Get the last full week of data.
-        let startTime,
-            endTime = moment.utc().tz(space.timeZone).subtract(1, 'week').endOf('week').subtract(1, 'day').format();
-        if (this.state.dataDuration === DATA_DURATION_WEEK) {
-          startTime = moment.utc().tz(space.timeZone).startOf('week').subtract(1, 'week').add(1, 'day').format();
-        } else {
-          startTime = moment.utc().tz(space.timeZone).subtract(1, 'month').format();
-        }
+      // Get the last full week of data.
+      // NOTE: The below times don't have timezones. This is purposeful - the
+      // `core.spaces.allCounts` call below can accept timezoneless timestamps, which in this case,
+      // is desired so that we can get from `startTime` to `endTime` in the timezone of each space,
+      // rather than in a fixed timezone between all spaces (since the list of spaces can be in
+      // multiple timezones)
+      let startTime,
+          endTime = moment.utc().subtract(1, 'week').endOf('week').subtract(1, 'day').format();
+      if (this.state.dataDuration === DATA_DURATION_WEEK) {
+        startTime = moment.utc().startOf('week').subtract(1, 'week').add(1, 'day').format('YYYY-MM-DDThh:mm:ss');
+      } else {
+        startTime = moment.utc().subtract(1, 'month').format('YYYY-MM-DDThh:mm:ss');
+      }
 
-        // Get all counts within that last full week. Request as many pages as required.
-        return fetchAllPages(page => {
-          return core.spaces.counts({
-            id: space.id,
-            start_time: startTime,
-            end_time: endTime,
-            interval: '10m',
-
-            page,
-            page_size: 1000,
-          });
+      // Get all counts within that last full week. Request as many pages as required.
+      const data = await fetchAllPages(page => {
+        console.log('PAGE', page);
+        return core.spaces.allCounts({
+          start_time: startTime,
+          end_time: endTime,
+          interval: '10m',
+          page,
+          page_size: 1000,
         });
       });
 
-      // Wait for reuquest promises to resolve
-      const spaceCountsArray = (await Promise.all(requests))
-      // Add a `timestampAsMoment` property which converts the timestamp into a moment. This is so
-      // that this expensive step doesn't have to be performed on each component render in the
-      // `.calculateTotalNumberOfEventsForSpaces` method.
-      .map((counts, ct) => {
-        return counts.map(count => {
+      // For each space that data was requested from, extract the counts from the object returned
+      // from the `core.space.allCounts` call and put these values in an array such that the index
+      // of the item in `spaceCountsArray` contains the counts at that same index in
+      // `spacesToFetch`.
+      const spaceCountsArray = spacesToFetch.map(space => {
+        return data[space.id].map(count => {
           return {
             ...count,
-            timestampAsMoment: moment.utc(count.timestamp, 'YYYY-MM-DDTHH:mm:ssZ').tz(spacesToFetch[ct].timeZone),
+
+            // Add a `timestampAsMoment` property which converts the timestamp into a moment. This is so
+            // that this expensive step doesn't have to be performed on each component render in the
+            // `.calculateTotalNumberOfEventsForSpaces` method.
+            timestampAsMoment: moment.utc(count.timestamp, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone),
           };
         });
       });
