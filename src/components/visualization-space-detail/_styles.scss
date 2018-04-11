@@ -95,7 +95,6 @@ $visualization-space-detail-header-back-height: 30px;
 
   // On a computer, add a margin left of auto to push the time zone over to the right.
   @media (min-width: $screen-xs-max) {
-    margin-top: 20px;
     margin-left: auto;
   }
 }
