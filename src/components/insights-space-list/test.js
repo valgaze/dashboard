@@ -483,8 +483,9 @@ describe('insights space list', function() {
   });
 
   describe('setting capacity', function() {
-    it(`should be able to click the 'set capacity' link to set capacity on space without a capacity`, async function() {
+    it(`should be able to click the 'set capacity' link to set capacity on space, which causes a data refetch`, async function() {
       const onOpenModal = sinon.stub();
+      const onSetCapacity = sinon.stub();
 
       const SPACE = {
         id: 'spc_1',
@@ -495,7 +496,7 @@ describe('insights space list', function() {
       };
 
       // Render the component
-      const component = shallow(<InsightsSpaceList
+      const component = mount(<InsightsSpaceList
         spaces={{
           filters: {search: ''},
           data: [SPACE],
@@ -503,6 +504,7 @@ describe('insights space list', function() {
         }}
         activeModal={{name: null, data: null}}
         onOpenModal={onOpenModal}
+        onSetCapacity={onSetCapacity}
       />);
 
       // Ensure that a single space was rendered
@@ -521,6 +523,14 @@ describe('insights space list', function() {
         onOpenModal.firstCall.args,
         ['set-capacity', {space: SPACE}]
       );
+
+      // Submit the modal
+      component.setProps({activeModal: {name: 'set-capacity', data: {space: SPACE}}});
+      component.find('InsightsSetCapacityModal').props().onSubmit();
+
+      // Verify that the component goes back into a loading state, to refetch data now that the
+      // capacity has been set (changing the capacity probably means a change in utilization)
+      assert.equal(component.state().view, 'LOADING');
     });
   });
 

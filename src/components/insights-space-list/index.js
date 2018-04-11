@@ -136,12 +136,10 @@ export class InsightsSpaceList extends React.Component {
           ).tz(space.timeZone);
         }
       }
+      const spaceCounts = { ...this.state.spaceCounts, ...data };
 
-      const spaceCounts = {
-        ...this.state.spaceCounts,
-        ...data,
-      };
-
+      // Utilization calculation.
+      // For each space, group counts into buckets, each a single day long.
       const spaceUtilizations = Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
         // If a space doesn't have a capacity, don't use it for calculating utilization.
         if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
@@ -240,7 +238,16 @@ export class InsightsSpaceList extends React.Component {
       is already set, the capacity can be adjusted from within the detail page. */}
       {activeModal.name === 'set-capacity' ? <SetCapacityModal
         space={activeModal.data.space}
-        onSubmit={capacity => onSetCapacity(activeModal.data.space, capacity)}
+        onSubmit={async capacity => {
+          await onSetCapacity(activeModal.data.space, capacity);
+
+          // After loading capacities, refetch and recalculate data.
+          this.setState({
+            view: LOADING,
+            spaceCounts: {},
+            spaceUtilizations: {},
+          }, () => this.fetchData());
+        }}
         onDismiss={onCloseModal}
       /> : null}
 
@@ -464,7 +471,7 @@ export default connect(state => {
     },
 
     onSetCapacity(space, capacity) {
-      dispatch(collectionSpacesUpdate({...space, capacity})).then(ok => {
+      return dispatch(collectionSpacesUpdate({...space, capacity})).then(ok => {
         ok && dispatch(hideModal());
       });
     },
