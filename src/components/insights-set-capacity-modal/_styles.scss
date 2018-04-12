@@ -7,6 +7,11 @@
   justify-content: center;
 }
 
+.insights-set-capacity-modal-header {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
 
 // On mobile, don't make this modal full-height.
 .insights-set-capacity-modal > .modal { height: 50vh; }
