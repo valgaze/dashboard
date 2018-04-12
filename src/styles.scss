@@ -164,12 +164,6 @@ input[type=input], input[type=password] { &:-webkit-autofill {
   margin: 0 auto;
 }
 
-// TODO: back-port this into density UI
-.navbar-item-active {
-  border-bottom: 3px solid #4198FF;
-  height: 53px;
-}
-
 //
 // Charts
 //
