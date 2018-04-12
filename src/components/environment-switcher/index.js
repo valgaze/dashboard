@@ -50,57 +50,65 @@ export default class EnvironmentSwitcher extends React.Component {
     this.props.onChange(getActiveEnvironments(this.props.fields));
   }
   render() {
-    if (!this.state.open) {
-      return null;
-    }
-
     const {fields} = this.props;
-    return <Modal
-      onClose={() => this.setState({open: false})}
-      onClickBackdrop={() => this.setState({open: false})}
-    >
-      <Card type="modal" className="environment-switcher">
-        <CardHeader>Choose Environment</CardHeader>
-        <CardBody className="environment-switcher-desc">
-          <p>
-            This is the Density Environment Switcher. Use it to point this dashboard instance to
-            arbitrary microservices for development. If you opened this by mistake, close this
-            popup to return to the Density Dashboard.
-          </p>
-        </CardBody>
-        <CardBody>
-          <ul className="environment-switcher-items">
-            {fields.map(field => {
-              return <FormLabel
-                className="environment-switcher-item"
-                label={field.name}
-                htmlFor={`environment-switcher-${field.slug}`}
-                key={field.slug}
-                input={<InputBox
-                  type="select"
-                  value={this.state.values[field.slug] || field.defaults[field.default]}
-                  onChange={e => this.setState({values: {...this.state.values, [field.slug]: e.target.value}})}
-                  className="environment-switcher-input"
-                >
-                  {
-                    Object.keys(field.defaults).map(f => <option key={f} value={field.defaults[f]}>
-                      {`${f} (${field.defaults[f]})`}
-                    </option>)
-                  }
-                </InputBox>}
-              />
-            })}
-          </ul>
+    return <div>
 
-          <div className="environment-switcher-footer">
-            <Button className="environment-switcher-button" onClick={() => {
-              this.setState({open: false});
-              window.localStorage.environmentSwitcher = JSON.stringify(this.state.values);
-              this.props.onChange(this.state.values)
-            }}>OK</Button>
-          </div>
-        </CardBody>
-      </Card>
-    </Modal>;
+      {/* if the url of what the user is looking at is staging, show a banner saying that */}
+      {(
+        Object.keys(this.state.values)
+          .map(i => this.state.values[i])
+          .filter(i => i.indexOf('staging') >= 0).length > 0
+      ) ? <div className="environment-switcher-non-production-release">
+        Staging
+      </div> : null}
+
+    {this.state.open ? <Modal
+        onClose={() => this.setState({open: false})}
+        onClickBackdrop={() => this.setState({open: false})}
+      >
+        <Card type="modal" className="environment-switcher">
+          <CardHeader>Choose Environment</CardHeader>
+          <CardBody className="environment-switcher-desc">
+            <p>
+              This is the Density Environment Switcher. Use it to point this dashboard instance to
+              arbitrary microservices for development. If you opened this by mistake, close this
+              popup to return to the Density Dashboard.
+            </p>
+          </CardBody>
+          <CardBody>
+            <ul className="environment-switcher-items">
+              {fields.map(field => {
+                return <FormLabel
+                  className="environment-switcher-item"
+                  label={field.name}
+                  htmlFor={`environment-switcher-${field.slug}`}
+                  key={field.slug}
+                  input={<InputBox
+                    type="select"
+                    value={this.state.values[field.slug] || field.defaults[field.default]}
+                    onChange={e => this.setState({values: {...this.state.values, [field.slug]: e.target.value}})}
+                    className="environment-switcher-input"
+                  >
+                    {
+                      Object.keys(field.defaults).map(f => <option key={f} value={field.defaults[f]}>
+                        {`${f} (${field.defaults[f]})`}
+                      </option>)
+                    }
+                  </InputBox>}
+                />
+              })}
+            </ul>
+
+            <div className="environment-switcher-footer">
+              <Button className="environment-switcher-button" onClick={() => {
+                this.setState({open: false});
+                window.localStorage.environmentSwitcher = JSON.stringify(this.state.values);
+                this.props.onChange(this.state.values)
+              }}>OK</Button>
+            </div>
+          </CardBody>
+        </Card>
+      </Modal> : null}
+    </div>;
   }
 }

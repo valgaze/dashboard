@@ -8,3 +8,27 @@
 .card-modal .environment-switcher-desc {
   padding-bottom: 0px;
 }
+
+.environment-switcher-non-production-release {
+  position: absolute;
+  top: 0px;
+  left: calc(50% - 50px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+
+  background-color: $brand-danger;
+  color: #fff;
+  padding: 10px;
+  font-size: 16px;
+
+  z-index: 1000;
+  width: 100px;
+  height: 30px;
+
+  @media (min-width: $screen-sm-min) {
+    left: 0px;
+  }
+}
