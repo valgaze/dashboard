@@ -14,16 +14,15 @@ jobs:
           command: |
             echo "node -v = $(node -v)"
             echo "npm -v = $(npm -v)"
-            echo "yarn --version = $(yarn --version)"
       - run:
           name: "Add private token to npmrc"
           command: echo "//npmregistry.density.rodeo/:_authToken=${PRIVATE_NPM_TOKEN}" >> ~/.npmrc
       - run:
           name: "Install dependencies"
-          command: yarn
+          command: npm ci
       - run:
           name: "Run tests"
-          command: yarn test
+          command: npm test
       - save_cache:
           key: node_modules-{{checksum "./package.json"}}
           paths:
@@ -47,7 +46,7 @@ jobs:
           command: |
             REACT_APP_ENVIRONMENT="staging" \
             NODE_ENV=production \
-            yarn build
+            npm run build
       - run:
           name: "Push preview dashboard"
           command: |
@@ -84,7 +83,7 @@ jobs:
             REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
             REACT_APP_ENVIRONMENT="staging" \
             NODE_ENV=production \
-            yarn build
+            npm run build
       - run:
           name: "Push staging dashboard"
           command: |
@@ -115,7 +114,7 @@ jobs:
             REACT_APP_GA_TRACKING_CODE="UA-77313135-1" \
             REACT_APP_ENVIRONMENT="production" \
             NODE_ENV=production \
-            yarn build
+            npm run build
       - run:
           name: "Push production dashboard"
           command: |
