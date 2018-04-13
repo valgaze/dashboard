@@ -291,7 +291,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 // Update the start and end date with the values selected.
                 this.setState({
                   startDate: startDate ? startDate.format() : undefined,
-                  endDate: endDate ? endDate.format() : undefined,
+                  endDate: endDate ? endDate.endOf('day').format() : undefined,
                 }, () => {
                   // If the start date and end date were both set, then load data.
                   if (this.state.startDate && this.state.endDate) {
@@ -334,9 +334,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             <span className="insights-space-detail-utilization-card-header-label">
               Average Weekly Breakdown
               <span className="insights-space-detail-utilization-card-header-timespan">
-                {moment.utc(this.state.startDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
+                {moment.utc(this.state.startDate, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone).format('MMMM D')}
                 &nbsp;&mdash;&nbsp;
-                {moment.utc(this.state.endDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
+                {moment.utc(this.state.endDate, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone).format('MMMM D')}
                 &nbsp;
                 <span className="insights-space-detail-utilization-card-header-label-highlight">
                   ({TIME_SEGMENTS[this.state.timeSegment].name})
