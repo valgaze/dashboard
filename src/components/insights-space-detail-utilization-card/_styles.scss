@@ -6,6 +6,7 @@
   }
 
   margin-bottom: 20px;
+  overflow: visible !important; /* ensure that date picker can escape header bounds */
 }
 .insights-space-detail-utilization-card-header-label {
   display: block;

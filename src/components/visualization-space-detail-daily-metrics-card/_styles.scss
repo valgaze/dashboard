@@ -21,6 +21,7 @@
   @media (min-width: $screen-xs-max) {
     display: flex;
   }
+  overflow: visible !important; /* ensure that date picker can escape header bounds */
 }
 .visualization-space-detail-daily-metrics-card-header-label {
   line-height: 43px;

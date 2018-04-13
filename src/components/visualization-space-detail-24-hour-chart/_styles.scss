@@ -1,4 +1,7 @@
-.visualization-space-detail-24-hour-card-header { display: flex; }
+.visualization-space-detail-24-hour-card-header {
+  display: flex;
+  overflow: visible !important; /* ensure that date picker can escape header bounds */
+}
 .visualization-space-detail-24-hour-card-header-label {
   line-height: 43px;
 }
