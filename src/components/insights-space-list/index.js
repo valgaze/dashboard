@@ -13,7 +13,7 @@ import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 import collectionSpacesUpdate from '../../actions/collection/spaces/update';
 
 import InputBox from '@density/ui-input-box';
-import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
+import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
 import SetCapacityModal from '../insights-set-capacity-modal/index';
 
 import showModal from '../../actions/modal/show';
@@ -311,7 +311,7 @@ export class InsightsSpaceList extends React.Component {
         <Card>
           {this.state.view === LOADING ? <CardLoading indeterminate /> : null}
 
-          <CardHeader className="insights-space-list-summary-header">
+          <CardWell>
             {(() => {
               if (this.state.view === VISIBLE && filteredSpaces.length === 0) {
                 return <span>No spaces matched your filter</span>
@@ -325,24 +325,20 @@ export class InsightsSpaceList extends React.Component {
                     }
                   })(spaces.filters.search)}
                   {filteredSpaces.length}
-                  {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '} seen
-                  <span className="insights-space-list-summary-header-highlight">
+                  {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '}
+                  seen <CardWellHighlight>
                     {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}
-                  </span>
-                  visitors during
-                  <span className="insights-space-list-summary-header-highlight" style={{margin:0}}>
+                  </CardWellHighlight> visitors during <CardWellHighlight>
                     {` ${TIME_SEGMENTS[this.state.timeSegment].phrasal} `}
-                  </span>
-                  this past
-                  <span className="insights-space-list-summary-header-highlight">
+                  </CardWellHighlight> this past <CardWellHighlight>
                     {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
-                  </span>
+                  </CardWellHighlight>
                 </span>;
               } else {
                 return <span>&mdash;</span>;
               }
             })()}
-          </CardHeader>
+          </CardWell>
 
           {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
             <table className="insights-space-list">

@@ -6,7 +6,7 @@ import 'moment-timezone';
 import { core } from '../../client';
 
 import gridVariables from '@density/ui/variables/grid.json';
-import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
+import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 
 import PercentageBar from '@density/ui-percentage-bar';
@@ -322,13 +322,13 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         </CardHeader>
 
         {this.state.state === VISIBLE ? <div>
-          <CardBody className="insights-space-detail-utilization-card-well">
-            Average utilization of <span className="insights-space-detail-utilization-card-well-highlight">
+          <CardWell>
+            Average utilization of <CardWellHighlight>
               {Math.round(this.calculateAverageUtilization() * 100)}%
-            </span> during <span className="insights-space-detail-utilization-card-well-highlight">
+            </CardWellHighlight> during <CardWellHighlight>
               {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-            </span>
-          </CardBody>
+            </CardWellHighlight>
+          </CardWell>
 
           <CardHeader>
             <span className="insights-space-detail-utilization-card-header-label">
@@ -363,15 +363,15 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             })}
           </CardBody>
 
-          <CardBody className="insights-space-detail-utilization-card-well">
+          <CardWell>
             {peakUtilizationTimestamp === null ? <span>
-              No peak utilization during <span className="insights-space-detail-utilization-card-well-highlight">
+              No peak utilization during <CardWellHighlight>
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-              </span>
+              </CardWellHighlight>
             </span> : <span>
-              On average, peak utilization of <span className="insights-space-detail-utilization-card-well-highlight">
+              On average, peak utilization of <CardWellHighlight>
                 {Math.round(peakUtilizationPercentage * 100)}%
-              </span> happens around <span className="insights-space-detail-utilization-card-well-highlight">
+              </CardWellHighlight> happens around <CardWellHighlight>
                 {(timestamp => {
                   const stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ');
                   let minute = '00';
@@ -386,11 +386,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   
                   return stamp.format(`h:[${minute}]a`).slice(0, -1)
                 })(peakUtilizationTimestamp)}
-              </span> during <span className="insights-space-detail-utilization-card-well-highlight">
+              </CardWellHighlight> during <CardWellHighlight>
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-              </span>
+              </CardWellHighlight>
             </span>}
-          </CardBody>
+          </CardWell>
 
           <CardHeader>
             <span className="insights-space-detail-utilization-card-header-label">

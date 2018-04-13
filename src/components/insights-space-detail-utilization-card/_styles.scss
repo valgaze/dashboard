@@ -77,32 +77,6 @@
 }
 
 
-// The wells that are within the card that contain the "broader statements" that try to provide
-// insight into your space.
-.card .insights-space-detail-utilization-card-well {
-  background-color: $gray-lightest;
-  padding-right: 0px;
-
-  padding-top: 80px;
-  padding-bottom: 80px;
-
-  font-size: $font-size-3;
-  font-weight: $font-weight-3;
-  line-height: 28px;
-  color: $gray-cinder;
-
-  text-align: left;
-  padding-left: 20px;
-  @media (min-width: $screen-xs-max) {
-    text-align: center;
-    padding-left: 0px;
-  }
-}
-.insights-space-detail-utilization-card-well-highlight {
-  color: $brand-primary;
-  white-space: nowrap;
-}
-
 .insights-space-detail-utilization-card-average-weekly-breakdown {
   padding-top: 0px;
   @media (min-width: $screen-xs-max) {

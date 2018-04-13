@@ -98,29 +98,6 @@ $insights-space-list-item-height: 43px;
 }
 
 
-
-
-// The header of the card that displays the collective space metric (right now it's total events)
-.card .insights-space-list-summary-header {
-  background-color: $gray-lightest;
-  color: $gray-cinder;
-
-  padding-top: 80px;
-  padding-bottom: 80px;
-  text-align: center;
-  font-weight: bold;
-  line-height: 28px;
-}
-.insights-space-list-summary-header-highlight {
-  color: $brand-primary;
-  margin-left: 5px;
-  margin-right: 5px;
-  white-space: nowrap;
-}
-
-
-
-
 // Adjust the spacing around the `SortableGridHeader`.
 // This inverts the styles that are defaultly placed on a card body (padding all around the card
 // body) so that the hover background on each list item can extend to the edge of the card.
