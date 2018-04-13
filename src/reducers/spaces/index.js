@@ -18,6 +18,9 @@ import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
 
+// Store at maximum 500 events per space
+const EVENT_QUEUE_LENGTH = 500;
+
 const initialState = {
   data: [],
   loading: true,
@@ -149,7 +152,7 @@ export default function spaces(state=initialState, action) {
         [action.id]: [...(state.events[action.id] || []), {
           timestamp: action.timestamp,
           countChange: action.countChange,
-        }],
+        }].slice(-1 * EVENT_QUEUE_LENGTH),
       },
     };
 
