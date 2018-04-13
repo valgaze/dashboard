@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
 import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
-import PercentageBar from '../percentage-bar/index';
+import PercentageBar from '@density/ui-percentage-bar';
 
 import gridVariables from '@density/ui/variables/grid.json';
 

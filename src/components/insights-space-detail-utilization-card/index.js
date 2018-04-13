@@ -9,7 +9,7 @@ import gridVariables from '@density/ui/variables/grid.json';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
 
-import PercentageBar from '../percentage-bar/index';
+import PercentageBar from '@density/ui-percentage-bar';
 
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';

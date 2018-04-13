@@ -96,6 +96,10 @@
 @import "../node_modules/@density/ui-density-mark/variables.json";
 @import "../node_modules/@density/ui-density-mark/dist/sass";
 
+// Percentage Bar
+@import "../node_modules/@density/ui-percentage-bar/variables.json";
+@import "../node_modules/@density/ui-percentage-bar/dist/sass";
+
 $font-size-x-small: 10px;
 
 
@@ -232,4 +236,3 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/insights-space-detail-utilization-card/styles";
 @import "./components/sortable-grid-header/styles";
 @import "./components/insights-set-capacity-modal/styles";
-@import "./components/percentage-bar/styles";
