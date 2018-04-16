@@ -13,7 +13,7 @@ import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 import collectionSpacesUpdate from '../../actions/collection/spaces/update';
 
 import InputBox from '@density/ui-input-box';
-import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
+import Card, { CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
 import SetCapacityModal from '../insights-set-capacity-modal/index';
 
 import showModal from '../../actions/modal/show';
