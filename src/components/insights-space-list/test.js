@@ -569,7 +569,7 @@ describe('insights space list', function() {
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'Your 2 spaces have  seen0visitors during open hours this pastweek'
+        'Your 2 spaces have seen 0 visitors during open hours this past week'
       );
     });
     it(`should render phrase properly when a simgle unfiltered space is shown`, async function() {
@@ -599,7 +599,7 @@ describe('insights space list', function() {
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'Your 1 space has  seen0visitors during open hours this pastweek'
+        'Your 1 space has seen 0 visitors during open hours this past week'
       );
     });
     it(`should render phrase properly when two filtered spaces are shown`, async function() {
@@ -636,7 +636,7 @@ describe('insights space list', function() {
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'These 2 spaces have  seen0visitors during open hours this pastweek'
+        'These 2 spaces have seen 0 visitors during open hours this past week'
       );
     });
     it(`should render phrase properly when a single filtered space is shown`, async function() {
@@ -666,7 +666,7 @@ describe('insights space list', function() {
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'This 1 space has  seen0visitors during open hours this pastweek'
+        'This 1 space has seen 0 visitors during open hours this past week'
       );
     });
   });

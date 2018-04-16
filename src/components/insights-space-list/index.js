@@ -311,7 +311,7 @@ export class InsightsSpaceList extends React.Component {
         <Card>
           {this.state.view === LOADING ? <CardLoading indeterminate /> : null}
 
-          <CardWell>
+          <CardWell className="insights-space-list-summary-header">
             {(() => {
               if (this.state.view === VISIBLE && filteredSpaces.length === 0) {
                 return <span>No spaces matched your filter</span>
@@ -329,7 +329,7 @@ export class InsightsSpaceList extends React.Component {
                   seen <CardWellHighlight>
                     {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}
                   </CardWellHighlight> visitors during <CardWellHighlight>
-                    {` ${TIME_SEGMENTS[this.state.timeSegment].phrasal} `}
+                    {TIME_SEGMENTS[this.state.timeSegment].phrasal}
                   </CardWellHighlight> this past <CardWellHighlight>
                     {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
                   </CardWellHighlight>
