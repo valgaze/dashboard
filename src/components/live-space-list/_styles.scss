@@ -1,0 +1,85 @@
+// Header for the space list view. Contians a label and a search box.
+.live-space-list-header {
+  padding-top: 40px;
+  @media (min-width: $screen-xs-max) {
+    display: flex;
+  }
+}
+.live-space-list-header-text {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  color: $gray-darkest;
+  font-size: $font-size-2;
+  font-weight: normal;
+}
+
+.live-space-list-search-box {
+  margin-bottom: 20px;
+  margin-right: 10px;
+  /* margin-left: auto; is below in the @media rule */
+  width: 200px;
+
+  color: $gray-darker;
+  &::placeholder,
+  &::-webkit-input-placeholder,
+  &::-moz-placeholder,
+  &:-ms-input-placeholder,
+  &:-moz-placeholder {
+    color: $gray;
+    opacity: 1; // Placeholders in firefox have opacity be default. Undo that.
+  }
+
+  // When the space list is on mobile, the search box is on a new line.
+  margin-left: 10px;
+  margin-top: 20px;
+  @media (min-width: $screen-xs-max) {
+    margin-left: auto;
+    margin-top: 0px;
+  }
+}
+
+// "Live" indicator tag after the page title. This shows the fact that new data will flow in and
+// the status of the socket via the colored bubble.
+.live-space-list-live-indicator-tag {
+  position: relative;
+  top: -2px;
+  left: 20px;
+
+  padding-top: 8px;
+  padding-bottom: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  font-size: $font-size-x-small;
+  font-weight: 500;
+  color: #fff;
+  background-color: $gray-cinder;
+  user-select: none;
+
+  border: 1px solid $gray-cinder;
+  border-radius: $border-radius-base;
+}
+
+.live-space-list-live-indicator-tag i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: $gray;
+  border-radius: 50%;
+  margin-left: 6px;
+}
+
+.live-space-list-live-indicator-tag i.status-connected { background-color: $brand-success; }
+.live-space-list-live-indicator-tag i.status-connecting { background-color: $brand-warning; }
+.live-space-list-live-indicator-tag i.status-error { background-color: $brand-danger; }
+
+.live-space-list-container {
+  @include grid-container;
+  margin-top: 2px;
+}
+.live-space-list-row { @include grid-row; }
+.live-space-list-item { @include grid-width(24, 12, 12, 12); }

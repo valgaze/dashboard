@@ -29,8 +29,9 @@ import createRouter from '@density/conduit';
 // Import all actions required to navigate from one page to another.
 import routeTransitionEnvironmentSpace from './actions/route-transition/environment-space';
 import routeTransitionLogin from './actions/route-transition/login';
+import routeTransitionInsightsSpaceList from './actions/route-transition/insights-space-list';
 import routeTransitionVisualizationSpaceDetail from './actions/route-transition/visualization-space-detail';
-import routeTransitionVisualizationSpaceList from './actions/route-transition/visualization-space-list';
+import routeTransitionLiveSpaceList from './actions/route-transition/live-space-list';
 import routeTransitionLiveSpaceDetail from './actions/route-transition/live-space-detail';
 import routeTransitionDevTokenList from './actions/route-transition/dev-token-list';
 import routeTransitionDevWebhookList from './actions/route-transition/dev-webhook-list';
@@ -44,6 +45,8 @@ import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 import collectionSpacesSetEvents from './actions/collection/spaces/set-events';
 import collectionSpacesSet from './actions/collection/spaces/set';
+
+import eventPusherStatusChange from './actions/event-pusher/status-change';
 
 // All the reducer and store code is in a seperate file.
 import storeFactory from './store';
@@ -134,9 +137,10 @@ router.addRoute('login', () => routeTransitionLogin());
 router.addRoute('insights/spaces', redirect('spaces/insights')); // DEPRECATED
 // ^ I AM DEPRECATED
 
-router.addRoute('spaces/insights', () => routeTransitionVisualizationSpaceList());
+router.addRoute('spaces/insights', () => routeTransitionInsightsSpaceList());
 router.addRoute('spaces/insights/:id', id => routeTransitionVisualizationSpaceDetail(id));
 
+router.addRoute('spaces/live', () => routeTransitionLiveSpaceList());
 router.addRoute('spaces/live/:id', id => routeTransitionLiveSpaceDetail(id));
 
 router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());
@@ -222,6 +226,11 @@ store.subscribe(() => {
   }
 });
 
+// When the state of the connection changes, sync that change into redux.
+eventSource.on('connectionStateChange', newConnectionState => {
+  store.dispatch(eventPusherStatusChange(newConnectionState));
+});
+
 // When the event source disconnects, fetch the state of each space from the core api to ensure that
 // the dashboard hasn't missed any events.
 eventSource.on('connected', async () => {
@@ -255,6 +264,18 @@ eventSource.on('space', countChangeEvent => {
     countChange: countChangeEvent.direction,
   }));
 });
+
+// If the user is logged in, sync the count of all spaces with the server every 5 minutes.
+// This is to ensure that the count on the dashboard and the actual count can't drift really far
+// apart throughout the day if you don't refresh the dashboard.
+setInterval(async () => {
+  const loggedIn = store.getState().sessionToken !== null;
+
+  if (loggedIn) {
+    const spaces = await core.spaces.list();
+    store.dispatch(collectionSpacesSet(spaces.results));
+  }
+},  5 * 60 * 1000);
 
 ReactDOM.render(
   <Provider store={store}>

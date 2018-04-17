@@ -44,7 +44,8 @@
           "name": "{{{name}}}",
           "description": "{{{description}}}",
           "time_zone": "{{{time_zone}}}",
-          "daily_reset": "{{{daily_reset}}}"
+          "daily_reset": "{{{daily_reset}}}",
+          "capacity": "{{{capacity}}}"
         }
       },
       "delete": {
@@ -59,6 +60,19 @@
         "method": "GET",
         "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/counts/",
         "desc": "Query counts over time for a space, at specified intervals. Includes analytics specifying the minimum and maximum count that was recorded in each interval.",
+        "qs": {
+          "start_time": "{{start_time}}",
+          "end_time": "{{end_time}}",
+          "interval": "{{interval}}",
+          "page_size": "{{page_size}}",
+          "page": "{{page}}",
+          "order": "{{order}}"
+        }
+      },
+      "allCounts": {
+        "method": "GET",
+        "url": "{{{core}}}/{{organisation}}/spaces/counts/",
+        "desc": "Query counts over time for all spaces in the organization, at specified intervals. Includes analytics specifying the minimum and maximum count that was recorded in each interval.",
         "qs": {
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}",

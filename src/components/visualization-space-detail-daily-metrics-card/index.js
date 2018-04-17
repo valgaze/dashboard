@@ -189,6 +189,8 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                   }
                 });
               }}
+              // Within the component, store if the user has selected the start of end date picker
+              // input
               focusedInput={this.state.datePickerInput}
               onFocusChange={focused => this.setState({datePickerInput: focused})}
 
@@ -220,7 +222,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                   })}
                   width={950}
                   height={350}
-                  timeZoneOffset={-1 * (moment.tz.zone(space.timeZone).offset(moment.utc(this.state.date)) / 60)}
+                  timeZone={space.timeZone}
                   xAxisResolution="week"
                 />
               </div>;
@@ -254,7 +256,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
           </div> : null }
 
           {this.state.state === LOADING ? <div className="visualization-space-detail-daily-metrics-card-body-info">
-            Generating data...
+            Generating Data&nbsp;.&nbsp;.&nbsp;.
           </div> : null }
         </CardBody>
       </Card>;

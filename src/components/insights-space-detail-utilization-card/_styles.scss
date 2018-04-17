@@ -1,0 +1,150 @@
+.insights-space-detail-utilization-card { margin-top: 40px; }
+.insights-space-detail-utilization-card-header {
+  display: block;
+  @media (min-width: $screen-xs-max) {
+    display: flex;
+  }
+
+  margin-bottom: 20px;
+  overflow: visible !important; /* ensure that date picker can escape header bounds */
+}
+.insights-space-detail-utilization-card-header-label {
+  display: block;
+
+  line-height: 32px;
+  margin-bottom: 10px;
+  @media (min-width: $screen-xs-max) {
+    line-height: 43px;
+    margin-bottom: 0px;
+  }
+}
+.insights-space-detail-utilization-card-header-label-highlight {
+  color: $brand-primary;
+  margin-left: 6px;
+}
+
+
+// The time segment picker, which allows the user to choose which time segment per day to filter
+// their data within.
+.insights-space-detail-utilization-card-time-segment-picker {
+  .input-box {
+    color: $gray-cinder;
+    margin-left: 0px; /* On mobile, the select box should be at the left edge. */
+    width: 230px;
+  }
+
+  @media (min-width: $screen-xs-max) {
+    margin-left: auto; /* On a computer, the select box should be pushed right */
+  }
+}
+
+// The date range picker lets the user choose the range of time that this chart should search
+// through.
+.insights-space-detail-utilization-card-date-picker {
+  margin-top: 10px;
+  margin-left: 0px;
+
+  @media (min-width: $screen-xs-max) {
+    margin-top: 0px;
+    margin-left: 20px;
+  }
+}
+
+// Refresh icon to refetch data
+.insights-space-detail-utilization-card-header-refresh:before {
+  content: '\e92d';
+  font-family: "Densicons";
+  margin-left: 10px;
+  font-size: $font-size-base;
+  color: $brand-primary;
+  cursor: pointer;
+}
+.insights-space-detail-utilization-card-header-refresh:hover { opacity: 0.8; }
+.insights-space-detail-utilization-card-header-refresh:active { opacity: 1; }
+
+// The `(Monday - Friday)` label in the header
+.insights-space-detail-utilization-card-header-timespan {
+  color: $gray-dark;
+  font-size: $font-size-base;
+  font-weight: normal;
+
+  display: block;
+  margin-left: 0px;
+  @media (min-width: $screen-xs-max) {
+    display: inline-block;
+    margin-left: 20px;
+  }
+}
+
+
+.insights-space-detail-utilization-card-average-weekly-breakdown {
+  padding-top: 0px;
+  @media (min-width: $screen-xs-max) {
+    padding-top: 20px;
+  }
+}
+
+
+.insights-space-detail-utilization-card-grid-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+.insights-space-detail-utilization-card-grid-row {
+  list-style-type: none;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+}
+.insights-space-detail-utilization-card-grid-item {
+  font-size: $font-size-4;
+  color: $gray-cinder;
+  line-height: 43px;
+
+  &:first-child { flex: 7; }
+  &:last-child { flex: 11; }
+  @media (min-width: $screen-xs-max) {
+    &:first-child { flex: 1; }
+    &:last-child { flex: 3; }
+  }
+}
+
+// Ensure that the chart is horizontally scrollable on mobile
+.insights-space-detail-utilization-card-daily-breakdown-chart {
+  overflow-x: auto;
+  margin-left: 10px;
+}
+
+// Hide the max line on the chart - it's not in the right location.
+.insights-space-detail-utilization-card-daily-breakdown-chart .axis-y-maximum-line { display: none; }
+// Instead, show the capacity line.
+.insights-space-detail-utilization-card-daily-breakdown-chart .axis-y-capacity-line { display: block; }
+
+.insights-space-detail-utilization-card .historical-counts .historical-counts-capacity-region {
+  fill: transparent;
+}
+
+
+// Horizontally and vertically center errors and info messages in the 24 hour card.
+.insights-space-detail-utilization-card-body-info,
+.insights-space-detail-utilization-card-body-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  height: 405px;
+  margin-left: 20px;
+  margin-right: 10px;
+
+  font-size: $font-size-base;
+  color: $gray-cinder;
+}
+// Errors should be prefixed by the error icon
+.insights-space-detail-utilization-card-body-error-icon {
+  color: $brand-danger;
+  font-family: "Densicons";
+  margin-right: 10px;
+  position: relative;
+}

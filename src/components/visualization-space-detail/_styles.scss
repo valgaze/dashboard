@@ -1,17 +1,13 @@
 .visualization-space-detail-container {
   @include grid-container;
+  margin-top: 40px;
 }
-
 .visualization-space-detail-card {
   margin-top: 40px;
 }
 
-
-// The header for the page
-.visualization-space-detail-header-container {
-  margin-top: 20px;
-  margin-bottom: 0px;
-}
+// The header for the page - this contains the space name, a back button, a method to set or update
+// the capacity, and a time zone.
 .visualization-space-detail-header {
   display: flex;
   flex-direction: column;
@@ -21,83 +17,86 @@
     flex-direction: row;
   }
 }
-
-// "Spaces /" prefix on the page header label.
-.visualization-space-detail-header-back-section {
-  color: $gray-dark;
-  text-decoration: none;
-  font-size: $font-size-3;
-  font-weight: normal;
-
-  // On a computer, make the ehader bigger.
-  @media (min-width: $screen-xs-max) {
-    font-size: $font-size-2;
-  }
-}
-.visualization-space-detail-header-back-section:after {
-  content: '/';
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-// Actual space name (after the prefix on the page header label)
-.visualization-space-detail-header-title {
+.visualization-space-detail-header-text-container {
   color: $gray-cinder;
-  font-size: $font-size-2;
-  font-size: $font-size-3;
-  font-weight: $font-weight-3;
+  margin-top: 20px;
+  margin-bottom: 0px;
 
-  // On a computer, make the ehader bigger.
+  // Ellipsize space name if over the page width
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   @media (min-width: $screen-xs-max) {
-    font-size: $font-size-2;
-    font-weight: $font-weight-2;
+    /* on mobile, get rid of the extra space above the header. Above the fold space is at a premium!*/
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 }
 
-// "Historical" tag after the page title.
-.visualization-space-detail-header-tag {
-  display: none;
-
-  margin-left: 20px;
-  margin-top: 29px;
-
-  padding-top: 6px;
-  padding-bottom: 3px;
-  padding-left: 10px;
-  padding-right: 10px;
-
-  font-size: $font-size-small;
-  font-weight: 500;
+// "(<)" arrow on the page header label
+$visualization-space-detail-header-back-height: 30px;
+.visualization-space-detail-header-back-section {
   color: $brand-primary;
 
-  border: 1px solid $brand-primary;
-  border-radius: $border-radius-base;
+  font-family: Densicons;
+  font-size: $visualization-space-detail-header-back-height;
+  padding: 8px;
+  text-decoration: none;
+  font-weight: normal;
 
-  // On a computer, make the thing visible.
-  @media (min-width: $screen-xs-max) {
-    display: inline-table;
-  }
+  // Required for ison font to display correctly
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  transition: all ease-in-out 100ms;
+
+  // Position properly to center the arrow.
+  position: relative;
+  margin-left: -6px;
+  top: 1px;
+
+  // Hover effect, same as in other parts of the application.
+  &:hover { opacity: 0.8; }
+  &:active { opacity: 1; }
 }
+
+// Space name, shown to the right of the arrow.
+.visualization-space-detail-header-title {
+  color: $gray-cinder;
+  font-size: $visualization-space-detail-header-back-height;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+// Capacity is shown under the space name.
+.visualization-space-detail-capacity {
+  color: $gray-cinder;
+  font-size: $font-size-4;
+  font-weight: normal;
+
+  margin-top: 20px;
+}
+.visualization-space-detail-capacity-set-link, .visualization-space-detail-capacity-update-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+// Add some spacing between the 'update' link and its 'Capacity: n' label before it. The set link
+// doesn't need this since there's nothing before it.
+.visualization-space-detail-capacity-update-link { margin-left: 5px; }
 
 // Time zone label in the right hand corner.
 .visualization-space-detail-header-time-zone {
-  margin-top: 30px;
+  margin-top: 10px;
 
   color: $gray-cinder;
-  font-size: $font-size-3;
+  font-size: $font-size-4;
   font-weight: normal;
 
   // On a computer, add a margin left of auto to push the time zone over to the right.
-  // Also, make the text size larger.
   @media (min-width: $screen-xs-max) {
     margin-left: auto;
-
-    font-size: $font-size-2;
-    font-weight: normal;
   }
-}
-.visualization-space-detail-header-time-zone:before {
-  content: 'Timezone: ';
 }
 
 // Loading state for whole page

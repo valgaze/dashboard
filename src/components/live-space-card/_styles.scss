@@ -1,22 +1,17 @@
 .space-card {
   margin-bottom: 20px;
 }
-.space-card-header {
-  color: $text-color;
+.card .space-card-header {
+  color: $gray-cinder;
   font-size: $font-size-3;
-  font-weight: $font-weight-3;
+  font-weight: normal;
   display: flex;
 }
+
 .space-card-header-count {
   margin-left: auto;
+  color: $brand-primary;
 }
-
-// The white, top section of thec ard should be clickable.
-.space-card-click-region { cursor: pointer; }
-
-// When the user hovers over the entire card white section, underline the card title sicne the card
-// is clickable.
-.space-card-click-region:hover .space-card-header-name { text-decoration: underline; }
 
 .space-card-capacity-information {
   display: flex;
@@ -24,16 +19,18 @@
 }
 
 // Add a capacity unit after the capacity number indicator above the progress bar.
-.space-card-capacity-number { color: $gray; }
-.space-card-capacity-number:before { content: 'Capacity: '; }
-.space-card-capacity-number:empty:before { content: 'Max capacity not specified'; }
+.space-card-utilization-percentage { color: $gray; }
+.space-card-utilization-percentage-label { color: $gray-cinder; }
+.space-card-utilization-percentage-label > span { color: $brand-primary; }
 
 // Add a capacity percent unit after the percentage indicator directly above and right from the
 // progress bar.
-.space-card-capacity-percent { margin-left: auto; }
-.space-card-capacity-percent:after { content: '% Full'; }
-.space-card-capacity-percent { color: $brand-primary; }
-.space-card-capacity-percent:empty { color: $gray; }
+.space-card-edit-count-link {
+  margin-left: auto;
+  color: $gray;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 // Render a progress bar.
 .space-card-capacity-linear-progress {
@@ -66,7 +63,7 @@
   left: 14px;
 
   color: $gray-darkest;
-  z-index: 1000;
+  z-index: 100;
   cursor: pointer;
 
   font-family: "Densicons";
@@ -76,4 +73,24 @@
   &:hover {
     color: $gray-darker;
   }
+}
+
+// When the user hovers over the card, show an "Insights ->" hint that they can use to move to the
+// insights page.
+.space-card-header-name-link {
+  font-family: Densicons;
+  font-size: 11px;
+  margin-left: 10px;
+
+  color: $brand-primary;
+  cursor: pointer;
+
+  opacity: 0;
+  transition: all 200ms ease-in-out;
+}
+.space-card:hover .space-card-header-name-link { opacity: 1; }
+.space-card-header-name-link-label {
+  font-family: $font-base;
+  font-size: $font-size-base;
+  margin-right: 5px;
 }

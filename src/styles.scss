@@ -96,6 +96,10 @@
 @import "../node_modules/@density/ui-density-mark/variables.json";
 @import "../node_modules/@density/ui-density-mark/dist/sass";
 
+// Percentage Bar
+@import "../node_modules/@density/ui-percentage-bar/variables.json";
+@import "../node_modules/@density/ui-percentage-bar/dist/sass";
+
 $font-size-x-small: 10px;
 
 
@@ -164,12 +168,6 @@ input[type=input], input[type=password] { &:-webkit-autofill {
   margin: 0 auto;
 }
 
-// TODO: back-port this into density UI
-.navbar-item-active {
-  border-bottom: 3px solid #4198FF;
-  height: 53px;
-}
-
 //
 // Charts
 //
@@ -187,7 +185,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/unknown-page/styles";
 @import "./components/dev-token-card/styles";
 @import "./components/login/styles";
-@import "./components/visualization-space-list/styles";
+@import "./components/live-space-list/styles";
 @import "./components/environment/styles";
 @import "./components/environment-space-item/styles";
 @import "./components/environment-doorway-item/styles";
@@ -206,7 +204,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/visualization-space-detail/styles";
 @import "./components/account-registration/styles";
 @import "./components/dev-token-update-modal/styles";
-@import "./components/visualization-space-card/styles";
+@import "./components/live-space-card/styles";
 @import "./components/dev-token-update-modal/styles";
 @import "./components/dev-webhook-update-modal/styles";
 @import "./components/subnav/styles";
@@ -222,8 +220,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/visualization-space-detail-24-hour-chart/styles";
 @import "./components/visualization-space-detail-daily-metrics-card/styles";
 @import "./components/visualization-space-detail-raw-events-card/styles";
-@import "./components/visualization-space-detail-real-time-bar/styles";
-@import "./components/visualization-space-detail-space-update-modal/styles";
+@import "./components/insights-edit-count-modal/styles";
 @import "./components/visualization-space-detail-raw-events-pager/styles";
 @import "./components/account-setup-overview/styles";
 @import "./components/account-setup-header/styles";
@@ -235,3 +232,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/nav-logged-out/styles";
 @import "./components/input-stack/styles";
 @import "./components/live-space-detail/styles";
+@import "./components/insights-space-list/styles";
+@import "./components/insights-space-detail-utilization-card/styles";
+@import "./components/sortable-grid-header/styles";
+@import "./components/insights-set-capacity-modal/styles";

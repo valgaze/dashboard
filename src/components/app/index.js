@@ -2,13 +2,16 @@ import * as React from 'react';
 
 import stringToBoolean from '../../helpers/string-to-boolean/index';
 import sessionTokenUnset from '../../actions/session-token/unset';
+import collectionSpacesSet from '../../actions/collection/spaces/set';
+import collectionDoorwaysSet from '../../actions/collection/doorways/set';
+import collectionLinksSet from '../../actions/collection/links/set';
 
 import { connect } from 'react-redux';
 
 import NavLoggedIn from '../nav-logged-in/index';
 import NavLoggedOut from '../nav-logged-out/index';
 import TokenList from '../dev-token-list/index';
-import SpaceList from '../visualization-space-list/index';
+import InsightsSpaceList from '../insights-space-list/index';
 import SpaceDetail from '../visualization-space-detail/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
@@ -16,6 +19,7 @@ import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
 import AccountForgotPassword from '../account-forgot-password/index';
+import LiveSpaceList from '../live-space-list/index';
 import LiveSpaceDetail from '../live-space-detail/index';
 
 import AccountSetupOverview from '../account-setup-overview/index';
@@ -80,12 +84,14 @@ function ActivePage({activePage, settings}) {
   switch (activePage) {
   case "LOGIN":
     return <Login />;
-  case "VISUALIZATION_SPACE_LIST":
-    return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceList />;
-  case "VISUALIZATION_SPACE_DETAIL":
-    return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceDetail />;
+  case "LIVE_SPACE_LIST":
+    return stringToBoolean(settings.insightsPageLocked) ? null : <LiveSpaceList />;
   case "LIVE_SPACE_DETAIL":
     return <LiveSpaceDetail />;
+  case "INSIGHTS_SPACE_LIST":
+    return <InsightsSpaceList />;
+  case "VISUALIZATION_SPACE_DETAIL":
+    return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceDetail />;
   case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":
@@ -125,6 +131,9 @@ export default connect(state => {
   return {
     onLogout() {
       dispatch(sessionTokenUnset());
+      dispatch(collectionSpacesSet([]));
+      dispatch(collectionDoorwaysSet([]));
+      dispatch(collectionLinksSet([]));
       window.location.hash = '#/login';
     },
   }

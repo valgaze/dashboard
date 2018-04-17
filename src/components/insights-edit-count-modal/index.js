@@ -3,8 +3,9 @@ import * as React from 'react';
 import Modal from '@density/ui-modal';
 import Card, { CardHeader, CardLoading, CardBody } from '@density/ui-card';
 import Button from '@density/ui-button';
+import InputBox from '@density/ui-input-box';
 
-export default class VisualizationSpaceDetailSpaceUpdateModal extends React.Component {
+export default class InsightsEditCountModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,27 +14,27 @@ export default class VisualizationSpaceDetailSpaceUpdateModal extends React.Comp
     };
   }
   render() {
-    return <div className="visualization-space-detail-space-update-modal">
+    return <div className="insights-edit-count-modal">
       <Modal onClose={this.props.onDismiss} onClickBackdrop={this.props.onDismiss}>
         <Card type="modal">
           {this.props.loading ? <CardLoading indeterminate /> : null}
           <CardHeader>
             Update Count
             <span
-              className="visualization-space-detail-space-update-modal-reset-count"
+              className="insights-edit-count-modal-reset-count"
               onClick={() => this.setState({count: 0})}
             >Reset to zero</span>
           </CardHeader>
           <CardBody>
-            <div className="visualization-space-detail-space-update-modal-count-picker">
+            <div className="insights-edit-count-modal-count-picker">
               <button
                 onClick={() => this.setState({count: Math.max(this.state.count - 1, 0)})}
                 disabled={this.state.count <= 0}
-                className="visualization-space-detail-space-update-modal-count-button subtract"
+                className="insights-edit-count-modal-count-button subtract"
               >&mdash;</button>
 
-              <div className="visualization-space-detail-space-update-modal-count-picker-label">
-                <input
+              <div className="insights-edit-count-modal-count-picker-label">
+                <InputBox
                   type="number"
                   value={this.state.countText !== null ? this.state.countText : this.state.count}
                   onChange={e => this.setState({countText: e.target.value})}
@@ -53,14 +54,14 @@ export default class VisualizationSpaceDetailSpaceUpdateModal extends React.Comp
 
               <button
                 onClick={() => this.setState({count: this.state.count + 1})}
-                className="visualization-space-detail-space-update-modal-count-button add"
+                className="insights-edit-count-modal-count-button add"
               >+</button>
             </div>
 
             <Button
-              className="visualization-space-detail-space-update-modal-submit"
+              className="insights-edit-count-modal-submit"
               onClick={() => this.props.onSubmit(this.state.count)}
-            >Save changes</Button>
+            >Save Changes</Button>
           </CardBody>
         </Card>
       </Modal>

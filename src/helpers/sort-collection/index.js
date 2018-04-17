@@ -1,4 +1,5 @@
-export const SORT_A_Z = 'SORT_A_Z', SORT_NEWEST = 'SORT_NEWEST';
+export const SORT_A_Z = 'SORT_A_Z',
+             SORT_NEWEST = 'SORT_NEWEST';
 
 export default function sortCollection(items, method) {
   // Don't sort a set of items when no sort method is defined.
@@ -12,6 +13,8 @@ export default function sortCollection(items, method) {
       return a.name > b.name ? 1 : -1;
     } else if (method === SORT_NEWEST) {
       return (new Date(b.createdAt).getTime()) - (new Date(a.createdAt).getTime());
+    } else if (typeof method === 'function') {
+      return method(a, b);
     } else {
       return 0;
     }
