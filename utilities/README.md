@@ -11,8 +11,8 @@ structure, which is something we'd like to avoid.
 
 ## Implementation
 ```sh
-dashboard/ $ yarn make-component
-yarn make-component v0.27.5
+dashboard/ $ npm make-component
+npm make-component v0.27.5
 $ ./utilities/make-component
 Let's make a new component.
 Enter the name of your component, in dash-case: hello-world
@@ -28,7 +28,7 @@ dashboard/ $
 ```
 
 1. Each utility is added to the `package.json` within the `.scripts` sub-object. This means that
-   when `yarn make-component` (for example) is run, the script defined in the package.json (in this
+   when `npm make-component` (for example) is run, the script defined in the package.json (in this
    case, './utilities/make-component') is executed.
 2. At least in every utility created thus-far, some information needs to be prompted from the user
    before creating the new resource, such as a name, description, etc. 

@@ -18,22 +18,20 @@ The Dashboard depends on a couple of other in-house built dependencies:
 We also have forked a couple open source npm packages and added density-specific changes - a few are `node-sass-json-importer` and `react-dates`.
 
 ## Getting Started
-This project uses `create-react-app` to build the frontend code, and `yarn` to manage dependencies.
-Make sure you've installed yarn with `npm i -g yarn` prior to trying out this project in
-development.
+This project uses `create-react-app` to build the frontend code, and `npm` to manage dependencies.
 ```sh
 # Download code
 git clone git@github.com:densityco/dashboard.git
 cd dashboard/
 
 # Install dependencies
-yarn
+npm i
 
 # Start it up!
-yarn start
+npm start
 
 # Run the tests
-yarn test
+npm test
 ```
 
 ### Environment variables
@@ -47,11 +45,11 @@ None of these variables are required. They enable optional features that are use
 ### Adding a new page
 In order to add a new page, create one of each of these:
 
-- Create the new page with the `yarn make-component`
+- Create the new page with the `npm make-component`
   [utility](https://github.com/DensityCo/dashboard/tree/trunk/utilities):
 ```sh
-dashboard/ $ yarn make-component
-yarn make-component v0.27.5
+dashboard/ $ npm make-component
+npm make-component v0.27.5
 $ ./utilities/make-component
 Let's make a new component.
 Enter the name of your component, in dash-case: hello-world
