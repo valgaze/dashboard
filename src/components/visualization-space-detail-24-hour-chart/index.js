@@ -7,7 +7,6 @@ import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
 import DatePicker, { ANCHOR_RIGHT } from '@density/ui-date-picker';
-import getTimeZoneGeneralizedShortName from '../../helpers/get-time-zone-generalized-short-name/index';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
@@ -83,6 +82,8 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
     const endTime = startTime.clone().add(1, 'day');
 
     if (space) {
+      const largestCount = this.state.state === 'VISIBLE' ? this.state.data.results.reduce((acc, i) => i.count > acc.count ? i : acc, {count: -1}) : null;
+
       return <Card className="visualization-space-detail-card">
         { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="visualization-space-detail-24-hour-card-header">
@@ -134,7 +135,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
           {this.state.state === VISIBLE ? <LineChartComponent
             timeZone={space.timeZone}
             svgWidth={975}
-            svgHeight={300}
+            svgHeight={350}
 
             xAxisStart={startTime}
             xAxisEnd={endTime}
@@ -151,9 +152,12 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
             yAxis={yAxisMinMax({
               leftOffset: 20,
               points: [
-                ...(space.capacity === null ? [{value: space.capacity, hasShadow: true}] : []),
+                ...(space.capacity !== null ? [{value: space.capacity, hasShadow: true}] : []),
+                {value: largestCount.count, hasRule: false, hasShadow: false},
               ],
+              showMaximumPoint: false,
             })}
+            yAxisEnd={space.capacity !== null ?  Math.max(space.capacity, largestCount.count) : undefined}
 
             overlays={[
               overlayTwoPopups({

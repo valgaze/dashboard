@@ -16,7 +16,6 @@ import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
 import {
   overlayTwoPopups,
-  overlayTwoPopupsPersonIconTextFormatter,
   overlayTwoPopupsPlainTextFormatter,
 } from '@density/chart-line-chart/dist/overlays';
 
