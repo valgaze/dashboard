@@ -3,9 +3,8 @@
 .card .visualization-space-detail-daily-metrics-card-body {
   padding-left: 0px;
   padding-right: 0px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  height: 355px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 
   border-top: 1px solid $gray-light;
   margin-top: 20px;
@@ -13,6 +12,9 @@
   // Make the chart horizontally scrolalble below widths of 978px.
   overflow-x: auto;
   & > div { width: 978px; }
+}
+.visualization-space-detail-daily-metrics-card-body .short-timespan-chart {
+  padding-bottom: 20px;
 }
 
 // On mobile, break the pickers to a second row. On a computer, put them all in one row.

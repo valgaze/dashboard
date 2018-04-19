@@ -12,11 +12,21 @@ import InputBox from '@density/ui-input-box';
 import gridVariables from '@density/ui/variables/grid.json'
 
 import dailyMetrics from '@density/chart-daily-metrics';
-import historicalCounts from '@density/chart-historical-counts';
+import lineChart, { dataWaterline } from '@density/chart-line-chart';
+import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
+import {
+  overlayTwoPopups,
+  overlayTwoPopupsPersonIconTextFormatter,
+  overlayTwoPopupsPlainTextFormatter,
+} from '@density/chart-line-chart/dist/overlays';
 
 import { chartAsReactComponent } from '@density/charts';
 const DailyMetricsComponent = chartAsReactComponent(dailyMetrics);
-const HistoricalCountsComponent = chartAsReactComponent(historicalCounts);
+const LineChartComponent = chartAsReactComponent(lineChart);
+
+const ONE_MINUTE_IN_MS = 60 * 1000,
+      ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60,
+      ONE_DAY_IN_MS = ONE_HOUR_IN_MS * 60;
 
 const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
@@ -213,17 +223,60 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             if (this.state.data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
               // For more than two weeks of data, show the graph chart.
               return <div className="large-timespan-chart">
-                <HistoricalCountsComponent
-                  data={this.state.data.map(i => {
-                    return {
-                      timestamp: i.timestamp,
-                      count: i.value,
-                    };
-                  })}
-                  width={950}
-                  height={350}
+                <LineChartComponent
                   timeZone={space.timeZone}
-                  xAxisResolution="week"
+                  svgWidth={975}
+                  svgHeight={300}
+
+                  xAxis={xAxisDailyTick({
+                    tickResolutionInMs: 1 * ONE_DAY_IN_MS,
+                    formatter: n => moment.utc(n).tz(space.timeZone).format(`MM/DD`),
+                  })}
+
+                  yAxis={yAxisMinMax({})}
+                  yAxisStart={0}
+
+                  overlays={[
+                    overlayTwoPopups({
+                      topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => {
+                        const unit = (function(metric) {
+                          switch (metric) {
+                            case 'entrances': return 'Entrances';
+                            case 'exits': return 'Exits';
+                            case 'total-events': return 'Total Events';
+                            case 'peak-occupancy': return 'Peak Occupancy';
+                            default: return 'People';
+                          }
+                        })(this.state.metricToDisplay);
+                        return `${Math.round(item.value)} ${unit}`;
+                      }, 'top'),
+                      bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
+                        (item, {mouseX, xScale}) => {
+                          const timestamp = moment.utc(xScale.invert(mouseX)).tz('America/New_York');
+                          return timestamp.format(`ddd MMM DD YYYY`);
+                        }
+                      ),
+
+                      bottomOverlayTopMargin: 40,
+                      topOverlayBottomMargin: 20,
+
+                      topOverlayWidth: this.state.metricToDisplay === 'peak-occupancy' ? 180 : 150,
+                      topOverlayHeight: 42,
+                      bottomOverlayWidth: 150,
+                      bottomOverlayHeight: 42,
+                    }),
+                  ]}
+
+                  data={[
+                    {
+                      name: 'default',
+                      type: dataWaterline,
+                      verticalBaselineOffset: 10,
+                      data: this.state.data.sort(
+                        (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                      ),
+                    },
+                  ]}
                 />
               </div>;
             } else {
