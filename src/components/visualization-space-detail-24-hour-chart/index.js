@@ -9,9 +9,17 @@ import { isInclusivelyBeforeDay } from '@density/react-dates';
 import DatePicker, { ANCHOR_RIGHT } from '@density/ui-date-picker';
 import getTimeZoneGeneralizedShortName from '../../helpers/get-time-zone-generalized-short-name/index';
 
-import historicalCounts from '@density/chart-historical-counts';
+import lineChart, { dataWaterline } from '@density/chart-line-chart';
+import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
+import {
+  overlayTwoPopups,
+  overlayTwoPopupsPersonIconTextFormatter,
+  overlayTwoPopupsPlainTextFormatter,
+} from '@density/chart-line-chart/dist/overlays';
 import { chartAsReactComponent } from '@density/charts';
-const HistoricalCountsComponent = chartAsReactComponent(historicalCounts);
+const LineChartComponent = chartAsReactComponent(lineChart);
+
+const ONE_MINUTE_IN_MS = 60 * 1000, ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60;
 
 const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
@@ -123,31 +131,80 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
         </div>
 
         <CardBody className="visualization-space-detail-24-hour-card-body">
-          {this.state.state === VISIBLE ? <HistoricalCountsComponent
-            width={930}
-            data={this.state.data.results}
-            capacity={space.capacity}
-
+          {this.state.state === VISIBLE ? <LineChartComponent
             timeZone={space.timeZone}
-            timeZoneFormat={getTimeZoneGeneralizedShortName}
+            svgWidth={975}
+            svgHeight={300}
 
-            start={startTime}
-            end={endTime}
+            xAxisStart={startTime}
+            xAxisEnd={endTime}
+            xAxis={xAxisDailyTick({
+              timeBetweenTicksInMs: 1 * ONE_HOUR_IN_MS,
+              bottomOffset: 20,
+              formatter: (n) => {
+                // "5a" or "8p"
+                const timeFormat = moment.utc(n).tz(space.timeZone).format('hA');
+                return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
+              },
+            })}
+
+            yAxis={yAxisMinMax({
+              leftOffset: 20,
+              points: [
+                ...(space.capacity === null ? [{value: space.capacity, hasShadow: true}] : []),
+              ],
+            })}
+
+            overlays={[
+              overlayTwoPopups({
+                topPopupFormatter: overlayTwoPopupsPersonIconTextFormatter(item => `${item.value}`),
+                bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
+                  (item, {mouseX, xScale}) => {
+                    const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
+                    const time = timestamp.format(`h:mma`).slice(0, -1);
+                    const date = timestamp.format(`ddd MMM Do`);
+                    return `${time} ${date}`;
+                  }
+                ),
+
+                bottomOverlayTopMargin: 40,
+                topOverlayBottomMargin: 20,
+
+                topOverlayWidth: 80,
+                topOverlayHeight: 42,
+                bottomOverlayWidth: 200,
+                bottomOverlayHeight: 42,
+              }),
+            ]}
+
+            data={[
+              {
+                name: 'default',
+                type: dataWaterline,
+                verticalBaselineOffset: 10,
+                data: this.state.data.results.map(i => ({
+                    timestamp: i.timestamp,
+                    value: i.count,
+                  })).sort((a, b) =>
+                    moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                  ),
+              },
+            ]}
           /> : null}
 
-        {this.state.state === LOADING ? <div className="visualization-space-detail-24-hour-card-body-info">
-          <span>Generating Data&nbsp;.&nbsp;.&nbsp;.</span>
-        </div> : null}
-        {this.state.state === EMPTY ? <div className="visualization-space-detail-24-hour-card-body-info">
-          <span>No data found in date range.</span>
-        </div> : null}
-        {this.state.state === ERROR ? <div className="visualization-space-detail-24-hour-card-body-info">
-          <span>
-            <span className="visualization-space-detail-24-hour-card-body-error-icon">&#xe91a;</span>
-            {this.state.error}
-          </span>
-        </div> : null}
-        </CardBody>
+          {this.state.state === LOADING ? <div className="visualization-space-detail-24-hour-card-body-info">
+            <span>Generating Data&nbsp;.&nbsp;.&nbsp;.</span>
+          </div> : null}
+          {this.state.state === EMPTY ? <div className="visualization-space-detail-24-hour-card-body-info">
+            <span>No data found in date range.</span>
+          </div> : null}
+          {this.state.state === ERROR ? <div className="visualization-space-detail-24-hour-card-body-info">
+            <span>
+              <span className="visualization-space-detail-24-hour-card-body-error-icon">&#xe91a;</span>
+              {this.state.error}
+            </span>
+          </div> : null}
+          </CardBody>
       </Card>;
     } else {
       return <span>This space doesn't exist.</span>;
