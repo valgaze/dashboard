@@ -228,7 +228,20 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                   svgHeight={300}
 
                   xAxis={xAxisDailyTick({
-                    tickResolutionInMs: 1 * ONE_DAY_IN_MS,
+                    // Calculate a tick resolutino that makes sense given the selected time range.
+                    tickResolutionInMs: (() => {
+                      const duration = moment.duration(
+                        moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
+                      );
+                      const durationDays = duration.asDays();
+                      if (durationDays > 30) {
+                        return 3 * ONE_DAY_IN_MS;
+                      } else if (durationDays > 14) {
+                        return 1 * ONE_DAY_IN_MS;
+                      } else {
+                        return 0.5 * ONE_DAY_IN_MS;
+                      }
+                    })(),
                     formatter: n => moment.utc(n).tz(space.timeZone).format(`MM/DD`),
                   })}
 
