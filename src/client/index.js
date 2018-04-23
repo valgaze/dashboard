@@ -1,4 +1,4 @@
-var clientele = require('@density/clientele');
+const clientele = require('@density/clientele');
 
 // Given a response obejct from a fetch call, return the error message that should be returned.
 function errorFormatter(response) {
@@ -7,9 +7,10 @@ function errorFormatter(response) {
   });
 }
 
-var core = clientele(Object.assign({}, require('./specs/core-api'), {errorFormatter: errorFormatter}));
-var accounts = clientele(Object.assign({}, require('./specs/accounts-api'), {errorFormatter: errorFormatter}));
-var metrics = clientele(Object.assign({}, require('./specs/metrics-api'), {errorFormatter: errorFormatter}));
+const core = clientele(Object.assign({}, require('./specs/core-api'), {errorFormatter: errorFormatter}));
+const accounts = clientele(Object.assign({}, require('./specs/accounts-api'), {errorFormatter: errorFormatter}));
+const metrics = clientele(Object.assign({}, require('./specs/metrics-api'), {errorFormatter: errorFormatter}));
+const telemetry = clientele(Object.assign({}, require('./specs/telemetry-api'), {errorFormatter: errorFormatter}));
 
 core.doorways.create = function(data) {
   return fetch(`${core.config().core}/doorways?environment=True`, {
@@ -51,6 +52,7 @@ export {
   core,
   accounts,
   metrics,
+  telemetry,
 };
 
 export default core;

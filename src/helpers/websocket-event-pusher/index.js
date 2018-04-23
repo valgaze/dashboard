@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import objectSnakeToCamel from '../object-snake-to-camel/index';
 
-import debug from 'debug';
+import logger from '../logger/index';
 
 import { core } from '../../client';
 
@@ -24,7 +24,7 @@ export default class WebsocketEventPusher extends EventEmitter {
     super();
     this.WebSocket = WebSocket;
 
-    this.log = debug('density:websocket-event-pusher');
+    this.log = logger('density:websocket-event-pusher');
 
     this.gracefulDisconnect = false;
     this.connectionState = CONNECTION_STATES.CLOSED;

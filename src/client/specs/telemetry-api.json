@@ -1,0 +1,18 @@
+{
+  "variables": {
+    "host": "https://telemetry-staging.density.io/v1"
+  },
+  "resources": {
+    "logs": {
+      "batchCreate": {
+        "method": "POST",
+        "url": "{{{host}}}/logs",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": "{{{body}}}"
+      }
+    }
+  }
+}

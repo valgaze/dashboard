@@ -2,7 +2,7 @@ import localStorageReducerEnhancer from '../../helpers/localstorage-reducer-enha
 import { SESSION_TOKEN_SET } from '../../actions/session-token/set';
 import { SESSION_TOKEN_UNSET } from '../../actions/session-token/unset';
 
-import { core, accounts, metrics } from '../../client';
+import { core, accounts, telemetry } from '../../client';
 
 const localStorage = window.localStorage || global.localStorage || {};
 
@@ -35,7 +35,7 @@ function updateTokenReducerEnhancer(reducer) {
 function updateTokensOnApiClients(token) {
   core.config({token}); // Core api service
   accounts.config({token}); // Accounts api service
-  metrics.config({token});
+  telemetry.config({token});
 }
 updateTokensOnApiClients(initialState);
 
