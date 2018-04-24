@@ -27,54 +27,50 @@ export default class WebsocketEventPusher extends EventEmitter {
     this.log = logger('density:websocket-event-pusher');
 
     this.gracefulDisconnect = false;
-    this.connectionState = CONNECTION_STATES.CLOSED;
-    this.emit('connectionStateChange', this.connectionState);
+    this._connectionState = CONNECTION_STATES.CLOSED;
+    this.emit('connectionStateChange', this._connectionState);
 
     this.socket = null;
     this.connect()
   }
 
   async connect(iteration=0) {
-    this.log('CONNECT TO SOCKET');
+    this.log({type: 'CONNECTING_TO_SOCKET', iteration});
     if (!this.WebSocket) {
       return false;
     }
 
     // If connected already, close the connection before connecting again.
     if (this.connectionState === CONNECTION_STATES.CONNECTED) {
-      this.log('   ... SOCKET IS ALREADY CONNECTED, DISCONNECTING...');
+      this.log({type: 'SOCKET_ALREADY_DISCONNECTED', iteration});
       this.disconnect();
       this.gracefulDisconnect = false;
     }
 
     // Ensure that only one connection can occur at a time.
     if (this.connectionState === CONNECTION_STATES.WAITING_FOR_SOCKET_URL || this.connectionState === CONNECTION_STATES.CONNECTING) {
-      this.log('   ... SOCKET CONNECTION ALREADY IN PROGRESS');
+      this.log({type: 'SOCKET_CONNECTION_ALREADY_IN_PROGRESS'});
       return false;
     }
 
     if (!core.config().token) {
-      this.log(' ... NO TOKEN SET, NOT CONNECTING TO SOCKET.');
+      this.log({type: 'NO_TOKEN_SET_IN_CORE_API'});
       return false;
     }
 
     // Start the socket url connection process
     this.connectionState = CONNECTION_STATES.WAITING_FOR_SOCKET_URL;
-    this.log('   ... CONNECTION STATE UPDATE %o', this.connectionState);
-    this.emit('connectionStateChange', this.connectionState);
 
     try {
       const response = await core.sockets.create();
 
       this.connectionState = CONNECTION_STATES.CONNECTING;
-      this.log('   ... CONNECTION STATE UPDATE: %o', this.connectionState);
-      this.emit('connectionStateChange', this.connectionState);
 
       this.socket = new this.WebSocket(response.url);
       this.socket.onopen = () => {
         this.connectionState = CONNECTION_STATES.CONNECTED;
-        this.log('   ... CONNECTION STATE UPDATE: %o', this.connectionState);
-        this.emit('connectionStateChange', this.connectionState);
+
+        this.log({type: 'CONNECTED_TO_SOCKET', tries: iteration});
 
         // When a successful connection occurs, reset the iteration count back to zero so that the
         // backoff is reset.
@@ -82,22 +78,21 @@ export default class WebsocketEventPusher extends EventEmitter {
         this.emit('connected');
 
         // Every one and a while, send a message to the server to keep the websocket message alive.
-        this.log('   ... INITIATING PERIODIC PING INTERVAL OF %o', WEBSOCKET_PING_MESSAGE_INTERVAL_IN_SECONDS);
         this.pingIntervalId = window.setInterval(() => {
-          this.log('   ... PINGING SOCKETS SERVER TO KEEP WEBSOCKET OPEN');
+          this.log({type: 'SOCKET_PERIODIC_PING'});
           this.socket.send('"ping"');
         }, WEBSOCKET_PING_MESSAGE_INTERVAL_IN_SECONDS);
       };
 
       // Currently, the only events are space updates.
       this.socket.onmessage = e => {
-        this.log('SOCKET MESSAGE RECEIVED: %o', e.data);
+        this.log({type: 'SOCKET_MESSAGE_RECEIVED', data: e.data});
         this.emit('space', objectSnakeToCamel(JSON.parse(e.data)).payload);
       }
 
       // When the connection disconnects, reconnect after a delay.
       this.socket.onclose = () => {
-        this.log('SOCKET CLOSE');
+        this.log({type: 'SOCKET_CLOSE'});
         this.emit('disconnect');
 
         // Clear the interval that sends a ping to the sockets server if it is open.
@@ -106,7 +101,7 @@ export default class WebsocketEventPusher extends EventEmitter {
         }
 
         if (this.gracefulDisconnect) {
-          this.log('   ... GRACEFULLY DISCONNECTING');
+          this.log({type: 'SOCKET_GRACEFUL_DISCONNECT'});
           return;
         }
 
@@ -124,11 +119,10 @@ export default class WebsocketEventPusher extends EventEmitter {
       };
 
       this.emit('fetchedUrl');
-    } catch (err) {
+    } catch (error) {
       // An error occured while connection. so log it and try to reconnect.
       this.connectionState = CONNECTION_STATES.ERROR;
-      this.log('SOCKET ERROR: %o', err);
-      this.emit('connectionStateChange', this.connectionState);
+      this.log({type: 'SOCKET_ERROR', error});
 
       // Attempt to reconnect after an error.
 
@@ -140,14 +134,23 @@ export default class WebsocketEventPusher extends EventEmitter {
     }
   }
 
+  // When the connection state is set, log and emit an event.
+  get connectionState() {
+    return this._connectionState;
+  }
+  set connectionState(value) {
+    this._connectionState = value;
+    this.log({type: 'CONNECTION_STATE_UPDATE', value});
+    this.emit('connectionStateChange', this.connectionState);
+  }
+
   disconnect() {
-    this.log('INITIATING GRACEFUL DISCONNECT');
+    this.log({type: 'INITIATING_GRACEFUL_DISCONNECT'})
     this.gracefulDisconnect = true;
     if (this.socket) {
       this.socket.close();
     }
 
     this.connectionState = CONNECTION_STATES.CLOSED;
-    this.emit('connectionStateChange', this.connectionState);
   }
 }
