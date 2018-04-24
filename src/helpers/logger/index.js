@@ -24,8 +24,7 @@ export default function logger(scope) {
     // Send logs to telemetry
     TELEMETRY_STAGED_LOGS.push({
       time: moment.utc().format(),
-      // msg: { ...data, scope: scope.replace(':', '/') },
-      ...(typeof data === 'string' ? {msg: data} : data)
+      ...(typeof data === 'string' ? {msg: data} : data),
       scope,
       source: 'customer-dashboard',
     });

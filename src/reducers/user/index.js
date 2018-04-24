@@ -5,7 +5,7 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import mixpanelUserReducerEnhancer from '../../helpers/mixpanel-user-reducer-enhancer/index';
 
 const initialState = {
-  user: null,
+  data: null,
   loading: true,
   error: false,
 };

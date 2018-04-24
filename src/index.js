@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 import './built-css/styles.css';
-import { core, accounts } from './client';
+import { core, accounts, telemetry } from './client';
 import ReactGA from 'react-ga';
 import moment from 'moment';
 
@@ -14,6 +14,7 @@ import objectSnakeToCamel from './helpers/object-snake-to-camel/index';
 import WebsocketEventPusher from './helpers/websocket-event-pusher/index';
 import mixpanelTrack from './helpers/mixpanel-track/index';
 import unsafeSetSettingsFlagConstructor from './helpers/unsafe-set-settings-flag/index';
+import { setStore as loggerSetStore } from './helpers/logger/index';
 
 // The main app component that renders everything.
 import App from './components/app/index';
@@ -52,6 +53,7 @@ import eventPusherStatusChange from './actions/event-pusher/status-change';
 import storeFactory from './store';
 import unsafeNavigateToLandingPage from './helpers/unsafe-navigate-to-landing-page/index';
 const store = storeFactory();
+loggerSetStore(store);
 
 // ----------------------------------------------------------------------------
 // Set the location of all microservices.
@@ -93,10 +95,23 @@ const fields = [
     },
     default: process.env.REACT_APP_ENVIRONMENT || 'production',
   },
+  {
+    name: 'Telemetry API',
+    slug: 'telemetry',
+    defaults: {
+      'production': 'https://telemetry.density.io/v1',
+      'staging': 'https://telemetry-staging.density.io/v1',
+      'lab': 'https://accounts-lab.density.io/v1',
+      'local': 'http://localhost:8002/v1',
+      'env (REACT_APP_TELEMETRY_API_URL)': process.env.REACT_APP_ACCOUNTS_API_URL,
+    },
+    default: process.env.REACT_APP_ENVIRONMENT || 'production',
+  },
 ];
 function setServiceLocations(data) {
   core.config({core: data.core});
   accounts.config({host: data.accounts});
+  telemetry.config({host: data.telemetry});
 }
 setServiceLocations(getActiveEnvironments(fields)); /* step 1 above */
 
