@@ -1,6 +1,6 @@
 {
   "variables": {
-    "host": "https://telemetry-staging.density.io/v1"
+    "host": "https://telemetry.density.io/v1"
   },
   "resources": {
     "logs": {

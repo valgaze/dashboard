@@ -34,12 +34,12 @@ export default function logger(scope) {
 // Peridically run a job to send logs from the dashboard to telemetry
 const ONE_MINUTE_IN_MILLSECONDS = 60 * 1000;
 window.setInterval(() => {
+  const user = store.getState().user.data;
+
   // Pull off all logs to send from TELEMETRY_STAGED_LOGS. By doing this in this way, even if a log
   // were to be created between when TELEMETRY_STAGED_LOGS.length and TELEMETRY_STAGED_LOGS.splice
   // are evaluated, it'd still remain in TELEMETRY_STAGED_LOGS for the next push.
   const logsToSend = TELEMETRY_STAGED_LOGS.splice(0, TELEMETRY_STAGED_LOGS.length);
-
-  const user = store.getState().user.data;
 
   telemetry.logs.batchCreate({
     body: JSON.stringify(logsToSend.map(log => {
