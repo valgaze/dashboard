@@ -5,16 +5,28 @@ import { telemetry } from '../../client';
 
 const TELEMETRY_STAGED_LOGS = [];
 
+let store = false;
+export function setStore(newStore) {
+  store = newStore;
+}
+
 export default function logger(scope) {
   const debug = Debug(scope);
   return data => {
+    if (!store) {
+      console.warn(`Didn't send log to telemetry server, store was not set!`);
+      return;
+    }
+
     // Call `debug` with everything passed to the logger
     debug(JSON.stringify(data));
 
     // Send logs to telemetry
     TELEMETRY_STAGED_LOGS.push({
       time: moment.utc().format(),
-      msg: data,
+      // msg: { ...data, scope: scope.replace(':', '/') },
+      ...(typeof data === 'string' ? {msg: data} : data)
+      scope,
       source: 'customer-dashboard',
     });
   }
@@ -28,7 +40,19 @@ window.setInterval(() => {
   // are evaluated, it'd still remain in TELEMETRY_STAGED_LOGS for the next push.
   const logsToSend = TELEMETRY_STAGED_LOGS.splice(0, TELEMETRY_STAGED_LOGS.length);
 
-  telemetry.logs.batchCreate({body: JSON.stringify(logsToSend)}).catch(err => {
+  const user = store.getState().user.data;
+
+  telemetry.logs.batchCreate({
+    body: JSON.stringify(logsToSend.map(log => {
+      return {
+        ...log,
+
+        // Include the current user and organization ids
+        user_id: user ? user.id : 'no-user-id',
+        organization_id: user ? user.organization.id : 'no-organization-id',
+      }
+    })),
+  }).catch(err => {
     console.warn(`Couldn't send logs to telemetry server: ${err}`);
   });
 }, ONE_MINUTE_IN_MILLSECONDS);
