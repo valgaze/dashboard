@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import { telemetry } from '../../client';
 
-const TELEMETRY_STAGED_LOGS = [];
+export const TELEMETRY_STAGED_LOGS = [];
 
 let store = false;
 export function setStore(newStore) {
@@ -13,7 +13,7 @@ export function setStore(newStore) {
 export default function logger(scope) {
   const debug = Debug(scope);
   return data => {
-    if (!store) {
+    if (!store && process.env.NODE_ENV !== 'test') {
       console.warn(`Didn't send log to telemetry server, store was not set!`);
       return;
     }
@@ -33,27 +33,31 @@ export default function logger(scope) {
 
 // Peridically run a job to send logs from the dashboard to telemetry
 const ONE_MINUTE_IN_MILLSECONDS = 60 * 1000;
-window.setInterval(() => {
-  const user = store.getState().user.data;
+export function startTelemetryLogSendingWorker(telemetry) {
+  window.setInterval(() => {
+    // Don't perodically log if the token is missing.
+    if (!telemetry.config().token) { return; }
 
-  // Pull off all logs to send from TELEMETRY_STAGED_LOGS. By doing this in this way, even if a log
-  // were to be created between when TELEMETRY_STAGED_LOGS.length and TELEMETRY_STAGED_LOGS.splice
-  // are evaluated, it'd still remain in TELEMETRY_STAGED_LOGS for the next push.
-  const logsToSend = TELEMETRY_STAGED_LOGS.splice(0, TELEMETRY_STAGED_LOGS.length);
+    const user = store.getState().user.data;
 
-  telemetry.logs.batchCreate({
-    body: JSON.stringify(logsToSend.map(log => {
-      return {
-        ...log,
+    // Pull off all logs to send from TELEMETRY_STAGED_LOGS. By doing this in this way, even if a log
+    // were to be created between when TELEMETRY_STAGED_LOGS.length and TELEMETRY_STAGED_LOGS.splice
+    // are evaluated, it'd still remain in TELEMETRY_STAGED_LOGS for the next push.
+    const logsToSend = TELEMETRY_STAGED_LOGS.splice(0, TELEMETRY_STAGED_LOGS.length);
 
-        // Include the current user and organization ids
-        user_id: user ? user.id : 'no-user-id',
-        organization_id: user ? user.organization.id : 'no-organization-id',
-      }
-    })),
-  }).catch(err => {
-    console.warn(`Couldn't send logs to telemetry server: ${err}`);
-  });
-}, ONE_MINUTE_IN_MILLSECONDS);
+    telemetry.logs.batchCreate({
+      body: JSON.stringify(logsToSend.map(log => {
+        return {
+          ...log,
 
-window.logger = logger;
+          // Include the current user and organization ids
+          user_id: user ? user.id : 'no-user-id',
+          organization_id: user ? user.organization.id : 'no-organization-id',
+        };
+      })),
+    }).catch(err => {
+      console.warn(`Couldn't send logs to telemetry server: ${err}`);
+    });
+  }, ONE_MINUTE_IN_MILLSECONDS);
+}
+startTelemetryLogSendingWorker(telemetry);

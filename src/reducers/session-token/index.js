@@ -4,7 +4,11 @@ import { SESSION_TOKEN_UNSET } from '../../actions/session-token/unset';
 
 import { core, accounts, telemetry } from '../../client';
 
+import logger from '../../helpers/logger/index';
+
 const localStorage = window.localStorage || global.localStorage || {};
+
+const setServiceLocationLogger = logger('density:set-service-locations');
 
 // The initial state of the reducer is either the contents of the localStorage key `sessionToken` or
 // null if no user is logged in.
@@ -30,12 +34,31 @@ function updateTokenReducerEnhancer(reducer) {
   };
 }
 
+function sliceOffEndOfToken(token) {
+  if (typeof token === 'undefined' || !token) {
+    return null;
+  } else {
+    return token.slice(-8);
+  }
+}
+
 // This function serves as a way of updating every service or concept in the application that
 // requires access to a token. This includes all the api clients and the websockets event source.
 function updateTokensOnApiClients(token) {
-  core.config({token}); // Core api service
-  accounts.config({token}); // Accounts api service
+  const last8CharsOfOldToken = sliceOffEndOfToken(core.config().token);
+  const last8CharsOfNewToken = sliceOffEndOfToken(token);
+
+  core.config({token});
+  accounts.config({token});
   telemetry.config({token});
+
+  // Don't log unless the token has changed.
+  if (last8CharsOfOldToken === last8CharsOfNewToken) { return; }
+  setServiceLocationLogger({
+    type: 'SESSION_TOKEN_CHANGED',
+    new_token_last_8: last8CharsOfNewToken,
+    old_token_last_8: last8CharsOfOldToken,
+  });
 }
 updateTokensOnApiClients(initialState);
 
