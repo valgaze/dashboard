@@ -75,6 +75,9 @@ describe('logger', function() {
 
     // Verify that the logs were sent to the mock telemetry
     assert.equal(telemetry.logs.batchCreate.callCount, 1);
+
+    // And that the log queue is empty
+    assert.equal(TELEMETRY_STAGED_LOGS.length, 0);
   });
 });
 
