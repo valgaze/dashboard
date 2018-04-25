@@ -57,6 +57,10 @@ describe('logger', function() {
     };
     startTelemetryLogSendingWorker(telemetry);
 
+    // Ensure that the log queue is empty
+    // This is being done with splice as to allow `TELEMETRY_STAGED_LOGS` to stay a const variable.
+    TELEMETRY_STAGED_LOGS.splice(0, TELEMETRY_STAGED_LOGS.length);
+
     // Add a log to the log queue
     const LOG = {
       time: moment.utc().format(),
