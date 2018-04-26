@@ -16,6 +16,7 @@ import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-ran
 
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import formatPercentage from '../../helpers/format-percentage/index';
+import commonRanges from '../../helpers/common-ranges';
 
 import getTimeZoneGeneralizedShortName from '../../helpers/get-time-zone-generalized-short-name/index';
 
@@ -174,6 +175,21 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     return utilizationSum / data.length;
   }
 
+  // updates the state's `startDate` and `endDate` and triggers a `fetchData`
+  setDatesAndFetchData(startDate, endDate) {
+    this.setState({
+      startDate: startDate ? startDate.format() : undefined,
+      endDate: endDate ? endDate.endOf('day').format() : undefined,
+    }, () => {
+      // If the start date and end date were both set, then load data.
+      if (this.state.startDate && this.state.endDate) {
+        this.setState({ state: LOADING, data: null }, () => {
+          this.fetchData();
+        });
+      }
+    });
+  }
+
   componentWillReceiveProps({space}) {
     if (space && (space.id !== this.state.dataSpaceId || space.capacity !== this.state.dataSpaceCapacity)) {
       this.setState({state: LOADING}, () => this.fetchData.call(this));
@@ -213,7 +229,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         }
       });
 
-      // 
+      //
       const dataDuration = TIME_SEGMENTS[this.state.timeSegment].end - TIME_SEGMENTS[this.state.timeSegment].start;
 
       const stamp = moment.utc(this.state.counts[0].timestamp)
@@ -289,17 +305,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 }
 
                 // Update the start and end date with the values selected.
-                this.setState({
-                  startDate: startDate ? startDate.format() : undefined,
-                  endDate: endDate ? endDate.endOf('day').format() : undefined,
-                }, () => {
-                  // If the start date and end date were both set, then load data.
-                  if (this.state.startDate && this.state.endDate) {
-                    this.setState({ state: LOADING, data: null}, () => {
-                      this.fetchData();
-                    });
-                  }
-                });
+                this.setDatesAndFetchData(startDate, endDate);
               }}
 
               // Within the component, store if the user has selected the start of end date picker
@@ -317,6 +323,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 this.state.datePickerInput,
                 day
               )}
+
+              // common ranges functionality
+              commonRanges={commonRanges}
+              onSelectCommonRange={(r) => this.setDatesAndFetchData(r.startDate, r.endDate) }
+              showCommonRangeSubtitles={true}
             />
           </div>
         </CardHeader>
@@ -383,7 +394,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   } else if (stamp.minute() >= 15) {
                     minute = '15';
                   }
-                  
+
                   return stamp.format(`h:[${minute}]a`).slice(0, -1)
                 })(peakUtilizationTimestamp)}
               </CardWellHighlight> during <CardWellHighlight>
