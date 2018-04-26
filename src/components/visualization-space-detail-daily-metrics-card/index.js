@@ -9,6 +9,8 @@ import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-da
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 import InputBox from '@density/ui-input-box';
 
+import commonRanges from '../../helpers/common-ranges';
+
 import gridVariables from '@density/ui/variables/grid.json'
 
 import dailyMetrics from '@density/chart-daily-metrics';
@@ -68,6 +70,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
       endDate: moment.utc().format(),
     };
   }
+
   fetchData() {
     const {space} = this.props;
     const metric = this.state.metricToDisplay;
@@ -127,6 +130,23 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
       });
     });
   }
+
+  // updates the state's `startDate` and `endDate` and triggers a `fetchData`
+  setDatesAndFetchData(startDate, endDate) {
+    // Update the start and end date with the values selected.
+    this.setState({
+      startDate: startDate ? startDate.format() : undefined,
+      endDate: endDate ? endDate.format() : undefined,
+    }, () => {
+      // If the start date and end date were both set, then load data.
+      if (this.state.startDate && this.state.endDate) {
+        this.setState({ state: LOADING, data: null }, () => {
+          this.fetchData();
+        });
+      }
+    });
+  }
+
   render() {
     const {space} = this.props;
     if (space && space.id !== this.state.dataSpaceId) {
@@ -176,18 +196,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                   endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
                 }
 
-                // Update the start and end date with the values selected.
-                this.setState({
-                  startDate: startDate ? startDate.format() : undefined,
-                  endDate: endDate ? endDate.format() : undefined,
-                }, () => {
-                  // If the start date and end date were both set, then load data.
-                  if (this.state.startDate && this.state.endDate) {
-                    this.setState({ state: LOADING, data: null}, () => {
-                      this.fetchData();
-                    });
-                  }
-                });
+                this.setDatesAndFetchData(startDate, endDate);
               }}
               // Within the component, store if the user has selected the start of end date picker
               // input
@@ -204,6 +213,11 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                 this.state.datePickerInput,
                 day
               )}
+
+              // common ranges functionality
+              commonRanges={commonRanges}
+              onSelectCommonRange={(r) => this.setDatesAndFetchData(r.startDate, r.endDate)}
+              showCommonRangeSubtitles={true}
             />
           </div>
         </CardHeader>
