@@ -17,17 +17,21 @@ import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-ran
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import formatPercentage from '../../helpers/format-percentage/index';
 
-import getTimeZoneGeneralizedShortName from '../../helpers/get-time-zone-generalized-short-name/index';
-
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
   isWithinTimeSegment,
   TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
 
-import historicalCounts from '@density/chart-historical-counts';
+import lineChart, { dataWaterline } from '@density/chart-line-chart';
+import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
+import {
+  overlayTwoPopups,
+  overlayTwoPopupsPlainTextFormatter,
+} from '@density/chart-line-chart/dist/overlays';
+
 import { chartAsReactComponent } from '@density/charts';
-const HistoricalCountsComponent = chartAsReactComponent(historicalCounts);
+const LineChartComponent = chartAsReactComponent(lineChart);
 
 const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 
@@ -225,7 +229,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         .map(i => Math.round(i * 1000) / 1000) /* round each number to a single decimal place */
         .map((i, ct) => ({
           timestamp: stamp.add(dataDuration / averageUtilizationDatapoints.length, 'hours').format(),
-          count: i * 100,
+          value: i * 100,
         }))
 
       // Calculate the peak utilization of the space by getting the peak count within the raw count
@@ -233,8 +237,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       peakUtilizationPercentage = 0;
       peakUtilizationTimestamp = null; /* No peak utilization */
       averageUtilizationDatapointsWithTimestamp.forEach(c => {
-        if (c.count > peakUtilizationPercentage) {
-          peakUtilizationPercentage = c.count;
+        if (c.value > peakUtilizationPercentage) {
+          peakUtilizationPercentage = c.value;
           peakUtilizationTimestamp = c.timestamp;
         }
       });
@@ -407,27 +411,61 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             </span>
           </CardHeader>
           <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
-            <HistoricalCountsComponent
-              data={averageUtilizationDatapointsWithTimestamp}
-              width={950}
-              height={350}
-              capacity={100}
+            <LineChartComponent
+              timeZone={space.timeZone}
+              svgWidth={970}
+              svgHeight={350}
 
-              yAxisLabelFormat={n => {
-                if (n === 0 || n === 100) {
-                  return `${formatPercentage(n / 100, 0)}%`;
-                } else {
-                  return '';
-                }
-              }}
-              bottomOverlayLabelFormat={n => {
-                const stamp = moment.utc(n);
-                const timeZoneLabel = getTimeZoneGeneralizedShortName(space.timeZone);
-                return `Avg. Weekday at ${stamp.format('h:mm a')} (${timeZoneLabel})`;
-              }}
-              topOverlayLabelFormat={n => `${formatPercentage(n / 100, 0)}% Utilization`}
-              timeZoneFormat={getTimeZoneGeneralizedShortName}
-              renderPersonIcon={false}
+              xAxis={xAxisDailyTick({
+                formatter: (n) => {
+                  // "5a" or "8p"
+                  const timeFormat = moment.utc(n).format('hA');
+                  return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
+                },
+              })}
+
+              yAxis={yAxisMinMax({
+                leftOffset: 10,
+                points: [
+                  {value: 100, hasRule: true},
+                ],
+                showMaximumPoint: false,
+                formatter: ({value}) => value === 100 ? '100%' : `${value}`,
+              })}
+              yAxisStart={0}
+              yAxisEnd={100}
+
+              overlays={[
+                overlayTwoPopups({
+                  topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => `Utilization: ${Math.round(item.value)}%`, 'top'),
+                  bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
+                    (item, {mouseX, xScale}) => {
+                      const timestamp = moment.utc(xScale.invert(mouseX)).tz('America/New_York');
+                      const time = timestamp.format(`h:mma`).slice(0, -1);
+                      return `Avg. Weekday at ${time}`;
+                    }
+                  ),
+
+                  bottomOverlayTopMargin: 40,
+                  topOverlayBottomMargin: 10,
+
+                  topOverlayWidth: 150,
+                  topOverlayHeight: 42,
+                  bottomOverlayWidth: 200,
+                  bottomOverlayHeight: 42,
+                }),
+              ]}
+
+              data={[
+                {
+                  name: 'default',
+                  type: dataWaterline,
+                  verticalBaselineOffset: 10,
+                  data: averageUtilizationDatapointsWithTimestamp.sort(
+                    (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                  ),
+                },
+              ]}
             />
           </div>
         </div> : null}
