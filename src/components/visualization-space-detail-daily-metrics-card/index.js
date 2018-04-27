@@ -226,7 +226,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
               // common ranges functionality
               commonRanges={commonRanges}
               onSelectCommonRange={(r) => this.setDatesAndFetchData(r.startDate, r.endDate)}
-              showCommonRangeSubtitles={true}
+              // showCommonRangeSubtitles={true}
             />
           </div>
         </CardHeader>

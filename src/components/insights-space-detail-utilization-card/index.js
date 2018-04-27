@@ -331,7 +331,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               // common ranges functionality
               commonRanges={commonRanges}
               onSelectCommonRange={(r) => this.setDatesAndFetchData(r.startDate, r.endDate) }
-              showCommonRangeSubtitles={true}
+              // showCommonRangeSubtitles={true}
             />
           </div>
         </CardHeader>
@@ -488,7 +488,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
                 ).weeks() > 2
               ) {
-                return 'Geneating Data (this may take a while ... )'
+                return 'Generating Data (this may take a while ... )'
               } else {
                 return 'Generating Data . . .';
               }
