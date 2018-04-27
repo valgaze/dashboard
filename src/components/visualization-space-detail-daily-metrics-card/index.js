@@ -164,7 +164,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
 
     if (space) {
       return <Card className="visualization-space-detail-card">
-        { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
+        {this.state.state === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="visualization-space-detail-daily-metrics-card-header">
           <span className="visualization-space-detail-daily-metrics-card-header-label">
             Daily Metrics

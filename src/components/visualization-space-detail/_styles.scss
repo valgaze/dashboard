@@ -2,10 +2,9 @@
   @include grid-container;
   margin-top: 40px;
 }
+
 .visualization-space-detail-card {
   margin-top: 40px;
-  // don't crop the common range picker
-  overflow: visible;
 }
 
 // The header for the page - this contains the space name, a back button, a method to set or update
