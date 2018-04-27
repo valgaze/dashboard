@@ -228,7 +228,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       let dataPointCount = 0;
       this.state.data.forEach(group => {
         if (Array.isArray(group.utilization)) {
-          averageUtilizationDatapoints = averageUtilizationDatapoints.map((i, ct) => i + group.utilization[ct])
+          averageUtilizationDatapoints = averageUtilizationDatapoints.map(
+            (i, ct) => i + (group.utilization[ct] || 0) /* ensure that a utilization bucket has data */
+          )
           dataPointCount += 1;
         }
       });
