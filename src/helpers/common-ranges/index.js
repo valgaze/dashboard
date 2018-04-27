@@ -11,7 +11,6 @@ export const WEEK_TO_DATE = 'WEEK_TO_DATE',
              LAST_30_DAYS = 'LAST_30_DAYS',
              LAST_90_DAYS = 'LAST_90_DAYS';
 
-
 // definition of common ranges
 // used by the DateRangePicker
 // name, startDate, and endDate used by the DateRangePicker

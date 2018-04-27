@@ -330,7 +330,18 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
               // common ranges functionality
               commonRanges={commonRanges}
-              onSelectCommonRange={(r) => this.setDatesAndFetchData(r.startDate, r.endDate) }
+              onSelectCommonRange={(r) => {
+                // utilization needs a full day's counts to work
+                // if the endDate of the common range is today, subtract 1 day.
+                // this logic makes sense here, as it specifically pertains to utilization
+                // BR: I couldn't get `isSame()` to work
+                const endDate =
+                  (r.endDate.format('YYYY-MM-DD') === moment.utc().format('YYYY-MM-DD')) ?
+                  r.endDate.clone().subtract(1, 'day') :
+                  r.endDate
+
+                this.setDatesAndFetchData(r.startDate, endDate)
+              }}
               // showCommonRangeSubtitles={true}
             />
           </div>
