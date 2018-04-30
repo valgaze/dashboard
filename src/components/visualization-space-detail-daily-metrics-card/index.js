@@ -264,7 +264,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                       }, 'top'),
                       bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
                         (item, {mouseX, xScale}) => {
-                          const timestamp = moment.utc(xScale.invert(mouseX)).tz('America/New_York');
+                          const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
                           return timestamp.format(`ddd MMM DD YYYY`);
                         }
                       ),
