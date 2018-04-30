@@ -220,17 +220,26 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       // 
       const dataDuration = TIME_SEGMENTS[this.state.timeSegment].end - TIME_SEGMENTS[this.state.timeSegment].start;
 
-      const stamp = moment.utc(this.state.counts[0].timestamp)
+      const initialTimestamp = moment.utc(this.state.counts[0].timestamp)
+        .tz(space.timeZone)
         .startOf('day')
         .add(TIME_SEGMENTS[this.state.timeSegment].start, 'hours');
 
       averageUtilizationDatapointsWithTimestamp = averageUtilizationDatapoints
         .map(i => i / dataPointCount) /* second part of calculating average */
         .map(i => Math.round(i * 1000) / 1000) /* round each number to a single decimal place */
-        .map((i, ct) => ({
-          timestamp: stamp.add(dataDuration / averageUtilizationDatapoints.length, 'hours').format(),
-          value: i * 100,
-        }))
+        .reduce(({timestamp, data}, i, ct) => {
+          // Increment timestamp to get to the next sample's timestamp.
+          timestamp = timestamp.add(dataDuration / averageUtilizationDatapoints.length, 'hours')
+
+          return {
+            timestamp,
+            data: [
+              ...data,
+              { timestamp: timestamp.format(), value: i * 100 },
+            ],
+          };
+        }, {timestamp: initialTimestamp, data: []}).data;
 
       // Calculate the peak utilization of the space by getting the peak count within the raw count
       // data that was fetched and dividing it by the capacity.
@@ -419,7 +428,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               xAxis={xAxisDailyTick({
                 formatter: (n) => {
                   // "5a" or "8p"
-                  const timeFormat = moment.utc(n).format('hA');
+                  const timeFormat = moment.utc(n).tz(space.timeZone).format('hA');
                   return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
                 },
               })}
@@ -440,7 +449,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => `Utilization: ${Math.round(item.value)}%`, 'top'),
                   bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
                     (item, {mouseX, xScale}) => {
-                      const timestamp = moment.utc(xScale.invert(mouseX)).tz('America/New_York');
+                      const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
                       const time = timestamp.format(`h:mma`).slice(0, -1);
                       return `Avg. Weekday at ${time}`;
                     }
