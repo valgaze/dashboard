@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import assert from 'assert';
+import sinon from 'sinon';
 
 import { Provider } from 'react-redux';
 import storeFactory from '../../store';
@@ -118,6 +119,39 @@ describe('Accounts page', function() {
     // Nickname changes depending on full name
     component.setState({fullName: 'Foo Bar'});
     assert.equal(component.find('.account-nickname-container input').prop('placeholder'), 'Foo');
+  });
+  it('handles errors when changing password request fails', function() {
+    const component = mount(<Account
+      user={user}
+      activeModal={{name: null}}
+    />);
+
+    // Click "edit" link
+    component.find('.account-edit-button').simulate('click');
+
+    // Ensure fullname and nickname inputs are visible
+    assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
+    assert.equal(component.find('.account-nickname-container input').prop('disabled'), false);
+
+    // Change contents of nickname
+    component.find('.account-nickname-container input').simulate('change', {
+      target: {value: 'something else'},
+    });
+
+    // Mock out fetch to ensure that an error is returned when the ajax call is made.
+    // For example, simulate a permission denied error.
+    global.fetch = sinon.stub().resolves({
+      ok: true,
+      status: 403,
+      clone() { return this; },
+      json: () => Promise.resolve({error: 'something went wrong'}),
+    });
+
+    // Click submit
+    component.find('.account-edit-button').simulate('click');
+
+    // Ensure that the error was reported
+    assert.equal(component.find('.error-bar').length, 1);
   });
 
 
