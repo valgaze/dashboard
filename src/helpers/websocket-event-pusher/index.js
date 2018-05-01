@@ -43,8 +43,8 @@ export default class WebsocketEventPusher extends EventEmitter {
     // If connected already, close the connection before connecting again.
     if (this.connectionState === CONNECTION_STATES.CONNECTED) {
       this.log('   ... SOCKET IS ALREADY CONNECTED, DISCONNECTING...');
+      this.gracefulDisconnect = true;
       this.disconnect();
-      this.gracefulDisconnect = false;
     }
 
     // Ensure that only one connection can occur at a time.
@@ -97,7 +97,7 @@ export default class WebsocketEventPusher extends EventEmitter {
 
       // When the connection disconnects, reconnect after a delay.
       this.socket.onclose = () => {
-        this.log('SOCKET CLOSE');
+        this.log('SOCKET CLOSE', this.gracefulDisconnect);
         this.emit('disconnect');
 
         // Clear the interval that sends a ping to the sockets server if it is open.

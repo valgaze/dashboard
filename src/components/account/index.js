@@ -1,16 +1,19 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import InputBox from '@density/ui-input-box';
-import Card, { CardHeader, CardBody } from '@density/ui-card';
+import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import FormLabel from '../form-label/index';
 import Button from '@density/ui-button';
+import Toast from '@density/ui-toast';
 
 import ModalHeaderActionButton from '../modal-header-action-button/index';
-import LoadingSpinner from '../loading-spinner/index';
 import ErrorBar from '../error-bar/index';
 
 import userResetPassword from '../../actions/user/reset-password';
 import userUpdate from '../../actions/user/update';
+
+import showModal from '../../actions/modal/show';
+import hideModal from '../../actions/modal/hide';
 
 export const NORMAL = 0;
 export const EDIT = 1;
@@ -28,34 +31,69 @@ export class Account extends React.Component {
       passwordConfirmation: '',
 
       // Initialize with a prop passing the initial value from the store
-      fullName: this.props.initialUser.fullName || '',
-      nickname: this.props.initialUser.nickname || '',
-      email: this.props.initialUser.email || '',
+      fullName: this.props.user ? this.props.user.fullName : '',
+      nickname: this.props.user ? this.props.user.nickname : '',
+      email: this.props.user ? this.props.user.email : '',
     };
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      fullName: nextProps.user.fullName || '',
+      nickname: nextProps.user.nickname || '',
+      email: nextProps.user.email || '',
+    });
+  }
+
   // Generate the default nickname if one isn't specified.
   generateNickname() {
     return this.state.fullName.indexOf(' ') >= 0 ? this.state.fullName.split(' ')[0] : undefined;
   }
   render() {
     const {
-      initialUser,
+      user,
       onSubmitPassword,
       onSubmitUserUpdate,
     } = this.props;
 
     return <div className="account">
-
       {/* Render any errors from the server */}
       <ErrorBar message={this.state.error} />
 
+      {this.props.activeModal.name === 'account-password-reset' ? <div className="account-password-reset-toast">
+        <Toast
+          type="success"
+          icon={<span className="account-password-reset-icon">&#xe908;</span>}
+          onDismiss={this.props.onHideSuccessToast}
+        >
+          <div className="account-setup-doorway-list-success-toast-header" role="heading">Password updated!</div>
+          Your password has been successfully updated.
+        </Toast>
+      </div> : null}
+
       <Card className="account-card" type="modal">
+        {this.props.loading ? <CardLoading indeterminate /> : null}
         <CardHeader>
           {this.state.mode === EDIT ? 'Edit Account' : 'Account'}
 
           {/* Edit / Cancel button */}
           <ModalHeaderActionButton
-            onClick={() => this.setState({mode: this.state.mode === EDIT ? NORMAL : EDIT})}
+            onClick={() => {
+              // If currently in edit mode, then reset all edits before transitioning back to normal
+              // mode.
+              if (this.state.mode === EDIT) {
+                this.setState({
+                  mode: NORMAL,
+
+                  // Reset back to the values in the user prop (what's in redux)
+                  fullName: this.props.user.fullName || '',
+                  nickname: this.props.user.nickname || '',
+                  email: this.props.user.email || '',
+                });
+              } else {
+                this.setState({mode: EDIT});
+              }
+            }}
             className="account-edit-button"
           >{this.state.mode === EDIT ? 'Cancel' : 'Edit'}</ModalHeaderActionButton>
         </CardHeader>
@@ -111,7 +149,7 @@ export class Account extends React.Component {
             label="Organization"
             input={<InputBox
               type="text"
-              value={initialUser.organization ? initialUser.organization.name : '(unknown organization)'}
+              value={user && user.organization ? user.organization.name : '(unknown organization)'}
               onChange={e => this.setState({email: e.target.value})}
               disabled={true}
               id="account-organization"
@@ -139,7 +177,7 @@ export class Account extends React.Component {
             />
             <InputBox
               type="password"
-              placeholder="Type new password"
+              placeholder="Type new password (minimum of 8 characters)"
               value={this.state.password}
               onChange={e => this.setState({password: e.target.value})}
             />
@@ -151,13 +189,20 @@ export class Account extends React.Component {
             />
             <Button
               onClick={() => {
-                if (this.state.currentPassword === this.state.passwordConfirmation) {
+                if (this.state.password === this.state.passwordConfirmation) {
                   this.setState({error: null});
                   return onSubmitPassword(this.state.currentPassword, this.state.password)
+                    .then(() => {
+                      this.setState({mode: NORMAL});
+                    })
+                    .catch(error => {
+                      this.setState({ error });
+                    });
                 } else {
                   this.setState({error: `Passwords don't match.`});
                 }
               }}
+              disabled={this.state.password.length < 8}
             >Change Password</Button>
           </div> : null}
 
@@ -181,21 +226,22 @@ export class Account extends React.Component {
 
 export default connect(state => {
   return {
-    initialUser: state.user.data,
+    user: state.user.data,
+    activeModal: state.activeModal,
+    loading: state.user.loading,
   };
 }, dispatch => {
   return {
     onSubmitPassword(currentPassword, password) {
-      dispatch(userResetPassword(currentPassword, password));
+      return dispatch(userResetPassword(currentPassword, password)).then(() => {
+        dispatch(showModal('account-password-reset'));
+      });
     },
     onSubmitUserUpdate(fullName, nickname, email) {
       return dispatch(userUpdate(fullName, nickname, email));
     },
+    onHideSuccessToast() {
+      dispatch(hideModal());
+    },
   };
-})(function AccountWrapper(props) {
-  if (props.initialUser) {
-    return <Account {...props} />;
-  } else {
-    return <LoadingSpinner />;
-  }
-});
+})(Account);

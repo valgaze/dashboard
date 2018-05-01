@@ -71,3 +71,25 @@
   flex: 1;
   margin-bottom: 40px;
 }
+
+
+.account-password-reset-icon {
+  font-family: Densicons;
+  font-size: 18px;
+}
+
+.account-password-reset-toast {
+  margin-top: 70px;
+}
+@media (min-width: $screen-xs-max) {
+  .account-password-reset-toast {
+    margin-top: 0px;
+
+    position: absolute;
+    z-index: 1000;
+    top: 120px;
+
+    max-width: 420px;
+    left: calc(50% - 210px);
+  }
+}
