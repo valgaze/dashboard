@@ -64,9 +64,9 @@ export class Account extends React.Component {
         <Toast
           type="success"
           icon={<span className="account-password-reset-icon">&#xe908;</span>}
+          title="Password updated!"
           onDismiss={this.props.onHideSuccessToast}
         >
-          <div className="account-setup-doorway-list-success-toast-header" role="heading">Password updated!</div>
           Your password has been successfully updated.
         </Toast>
       </div> : null}
