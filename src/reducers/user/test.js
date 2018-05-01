@@ -13,4 +13,9 @@ describe('user', function() {
     const output = user({user: {foo: 'bar'}}, userPush({email: 'test@density.io'}));
     assert.deepEqual(output.data, {foo: 'bar', email: 'test@density.io'});
   });
+
+  it('should fully update the user inside and reset loading state', function() {
+    const output = user({loading: true}, userSet({email: 'test@density.io'}));
+    assert.deepEqual(output.loading, false);
+  });
 });
