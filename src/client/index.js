@@ -9,7 +9,6 @@ function errorFormatter(response) {
 
 const core = clientele(Object.assign({}, require('./specs/core-api'), {errorFormatter: errorFormatter}));
 const accounts = clientele(Object.assign({}, require('./specs/accounts-api'), {errorFormatter: errorFormatter}));
-const metrics = clientele(Object.assign({}, require('./specs/metrics-api'), {errorFormatter: errorFormatter}));
 const telemetry = clientele(Object.assign({}, require('./specs/telemetry-api'), {errorFormatter: errorFormatter}));
 
 core.doorways.create = function(data) {
@@ -51,7 +50,6 @@ core.doorways.update = function(data) {
 export {
   core,
   accounts,
-  metrics,
   telemetry,
 };
 
