@@ -10,7 +10,7 @@ describe('user', function() {
     assert.deepEqual(output.data, {email: 'test@density.io'});
   });
   it('should apply a single field update to a user', function() {
-    const output = user({user: {foo: 'bar'}}, userPush({email: 'test@density.io'}));
+    const output = user({data: {foo: 'bar'}}, userPush({email: 'test@density.io'}));
     assert.deepEqual(output.data, {foo: 'bar', email: 'test@density.io'});
   });
 
