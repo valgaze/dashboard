@@ -457,7 +457,14 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 formatter: ({value}) => value === 100 ? '100%' : `${value}`,
               })}
               yAxisStart={0}
-              yAxisEnd={100}
+
+              // The largest point on the y axis should either be:
+              // 1. The largest point on the graph, if larger than 100. (+ 10% in spacing)
+              // 2. 100.
+              yAxisEnd={Math.max(
+                Math.max.apply(Math, averageUtilizationDatapointsWithTimestamp.map(i => i.value))+10, /* 1 */
+                100 /* 2 */
+              )}
 
               overlays={[
                 overlayTwoPopups({
