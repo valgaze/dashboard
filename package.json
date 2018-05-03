@@ -30,7 +30,7 @@
     "@density/ui-percentage-bar": "0.0.1",
     "@density/ui-popover": "^0.2.3",
     "@density/ui-radio-button": "^0.0.1",
-    "@density/ui-toast": "^0.1.1",
+    "@density/ui-toast": "^1.0.1",
     "classnames": "^2.2.5",
     "debug": "^3.1.0",
     "ent": "^2.2.0",
