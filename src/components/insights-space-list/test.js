@@ -2,6 +2,7 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
+import moment from 'moment';
 
 import { InsightsSpaceList } from './index';
 
@@ -669,5 +670,55 @@ describe('insights space list', function() {
         'This 1 space has seen 0 visitors during open hours this past week'
       );
     });
+  });
+
+  it('should calculate the total number of ingresses for a space', function() {
+    // Render the component
+    const component = mount(<InsightsSpaceList
+      spaces={{
+        filters: {search: ''},
+        data: [
+          {
+            id: 'spc_1',
+            name: 'My Space',
+            currentCount: 2,
+            capacity: 5,
+            timeZone: 'America/New_York',
+          },
+        ],
+        events: {},
+      }}
+      activeModal={{name: null, data: null}}
+    />);
+
+    // Add a couple empty count buckets
+    component.setState({
+      timeSegment: 'WHOLE_DAY',
+      spaceCounts: {
+        spc_1: [
+          {timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), interval: {analytics: {entrances: 0, exits: 0}}},
+          {timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), interval: {analytics: {entrances: 0, exits: 0}}},
+          {timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), interval: {analytics: {entrances: 0, exits: 0}}},
+        ],
+      },
+    });
+
+    // And verify that the total number of ingresses is zero
+    assert.equal(component.instance().calculateTotalNumberOfIngressesForSpaces(), 0);
+
+    // Add a few ingresses into the data
+    component.setState({
+      timeSegment: 'WHOLE_DAY',
+      spaceCounts: {
+        spc_1: [
+          {timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), interval: {analytics: {entrances: 6, exits: 0}}},
+          {timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), interval: {analytics: {entrances: 0, exits: 0}}},
+          {timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), interval: {analytics: {entrances: 1, exits: 0}}},
+        ],
+      },
+    });
+
+    // And verify that the number of ingresses reflected the change in data
+    assert.equal(component.instance().calculateTotalNumberOfIngressesForSpaces(), 7);
   });
 });

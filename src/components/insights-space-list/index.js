@@ -203,7 +203,7 @@ export class InsightsSpaceList extends React.Component {
     this.fetchData(nextProps.spaces);
   }
 
-  calculateTotalNumberOfIngressesForSpaces(spaces=this.state.spaces) {
+  calculateTotalNumberOfIngressesForSpaces(spaces=this.props.spaces.data) {
     const spaceIds = spaces.map(i => i.id);
     const spaceTimeZones = spaces.reduce((acc, i) => ({...acc, [i.id]: i.timeZone}), {});
 
