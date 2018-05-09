@@ -203,7 +203,7 @@ export class InsightsSpaceList extends React.Component {
     this.fetchData(nextProps.spaces);
   }
 
-  calculateTotalNumberOfEventsForSpaces(spaces=this.state.spaces) {
+  calculateTotalNumberOfIngressesForSpaces(spaces=this.state.spaces) {
     const spaceIds = spaces.map(i => i.id);
     const spaceTimeZones = spaces.reduce((acc, i) => ({...acc, [i.id]: i.timeZone}), {});
 
@@ -211,9 +211,19 @@ export class InsightsSpaceList extends React.Component {
     for (let id in this.state.spaceCounts) {
       if (spaceIds.indexOf(id) === -1) { continue }
       const counts = this.state.spaceCounts[id];
-      eventCount += counts.filter(i => {
-        return isWithinTimeSegment(i.timestampAsMoment, spaceTimeZones[id], TIME_SEGMENTS[this.state.timeSegment]);
-      }).length;
+      // Remove all counts outside of the time range
+      const countsWithinTimeSegment = counts.filter(i => {
+        return isWithinTimeSegment(
+          i.timestampAsMoment,
+          spaceTimeZones[id],
+          TIME_SEGMENTS[this.state.timeSegment]
+        );
+      });
+      // Total up all ingresses within each count bucket in that time range
+      eventCount += countsWithinTimeSegment.reduce(
+        (acc, i) => acc + i.interval.analytics.entrances,
+        0
+      );
     }
 
     return eventCount;
@@ -327,7 +337,7 @@ export class InsightsSpaceList extends React.Component {
                   {filteredSpaces.length}
                   {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '}
                   seen <CardWellHighlight>
-                    {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}
+                    {commaFormatNumber(this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces))}
                   </CardWellHighlight> visitors during <CardWellHighlight>
                     {TIME_SEGMENTS[this.state.timeSegment].phrasal}
                   </CardWellHighlight> this past <CardWellHighlight>
