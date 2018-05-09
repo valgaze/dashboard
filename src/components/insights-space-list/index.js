@@ -211,6 +211,7 @@ export class InsightsSpaceList extends React.Component {
     for (let id in this.state.spaceCounts) {
       if (spaceIds.indexOf(id) === -1) { continue }
       const counts = this.state.spaceCounts[id];
+
       // Remove all counts outside of the time range
       const countsWithinTimeSegment = counts.filter(i => {
         return isWithinTimeSegment(
@@ -219,6 +220,7 @@ export class InsightsSpaceList extends React.Component {
           TIME_SEGMENTS[this.state.timeSegment]
         );
       });
+
       // Total up all ingresses within each count bucket in that time range
       eventCount += countsWithinTimeSegment.reduce(
         (acc, i) => acc + i.interval.analytics.entrances,

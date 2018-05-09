@@ -696,9 +696,21 @@ describe('insights space list', function() {
       timeSegment: 'WHOLE_DAY',
       spaceCounts: {
         spc_1: [
-          {timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), interval: {analytics: {entrances: 0, exits: 0}}},
-          {timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), interval: {analytics: {entrances: 0, exits: 0}}},
-          {timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), interval: {analytics: {entrances: 0, exits: 0}}},
+          {
+            timestamp: '2018-05-08T19:36:48.562Z',
+            timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
+            interval: {analytics: {entrances: 0, exits: 0}},
+          },
+          {
+            timestamp: '2018-05-08T19:36:48.562Z',
+            timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
+            interval: {analytics: {entrances: 0, exits: 0}},
+          },
+          {
+            timestamp: '2018-05-09T19:36:48.562Z',
+            timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), /* optimization */
+            interval: {analytics: {entrances: 0, exits: 0}},
+          },
         ],
       },
     });
@@ -711,14 +723,48 @@ describe('insights space list', function() {
       timeSegment: 'WHOLE_DAY',
       spaceCounts: {
         spc_1: [
-          {timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), interval: {analytics: {entrances: 6, exits: 0}}},
-          {timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), interval: {analytics: {entrances: 0, exits: 0}}},
-          {timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), interval: {analytics: {entrances: 1, exits: 0}}},
+          {
+            timestamp: '2018-05-07T19:36:48.562Z',
+            timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
+            interval: {analytics: {entrances: 6, exits: 0}},
+          },
+          {
+            timestamp: '2018-05-08T19:36:48.562Z',
+            timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
+            interval: {analytics: {entrances: 0, exits: 0}},
+          },
+          {
+            timestamp: '2018-05-09T19:36:48.562Z',
+            timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), /* optimization */
+            interval: {analytics: {entrances: 1, exits: 0}},
+          },
         ],
       },
     });
 
     // And verify that the number of ingresses reflected the change in data
     assert.equal(component.instance().calculateTotalNumberOfIngressesForSpaces(), 7);
+
+    // Add a few ingresses into the data
+    component.setState({
+      timeSegment: 'WORKING_HOURS',
+      spaceCounts: {
+        spc_1: [
+          {
+            timestamp: '2018-05-08T00:36:48.562Z', /* NOT DURING WORKING HOURS */
+            timestampAsMoment: moment.utc('2018-05-08T00:36:48.562Z'), /* optimization */
+            interval: {analytics: {entrances: 6, exits: 0}},
+          },
+          {
+            timestamp: '2018-05-08T12:36:48.562Z', /* DURING WORKING HOURS */
+            timestampAsMoment: moment.utc('2018-05-08T12:36:48.562Z'), /* optimization */
+            interval: {analytics: {entrances: 3, exits: 0}},
+          },
+        ],
+      },
+    });
+
+    // And verify that the number of ingresses reflected the change in data
+    assert.equal(component.instance().calculateTotalNumberOfIngressesForSpaces(), 3);
   });
 });
