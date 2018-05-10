@@ -102,7 +102,7 @@ export default class WebsocketEventPusher extends EventEmitter {
 
         // Clear the interval that sends a ping to the sockets server if it is open.
         if (this.pingIntervalId) {
-          window.clearTimeout(this.pingIntervalId);
+          window.clearInterval(this.pingIntervalId);
         }
 
         if (this.gracefulDisconnect) {
@@ -111,7 +111,7 @@ export default class WebsocketEventPusher extends EventEmitter {
           return;
         }
 
-        // We're not gracefulyl disconnecting, so try to reconnect.
+        // We're not gracefully disconnecting, so try to reconnect.
 
         // Calculate the timeout before the next reconnect attempt. Use an exponential backoff.
         const backoffTimeout = MINIMUM_CONNECTION_INTERVAL + (Math.pow(iteration, 2) * 1000);
