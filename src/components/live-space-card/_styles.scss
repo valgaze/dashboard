@@ -8,6 +8,13 @@
   display: flex;
 }
 
+.space-card-header-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+
 .space-card-header-count {
   margin-left: auto;
   color: $brand-primary;
