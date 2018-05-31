@@ -8,6 +8,13 @@
   display: flex;
 }
 
+.space-card-header-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+
 .space-card-header-count {
   margin-left: auto;
   color: $brand-primary;
@@ -75,20 +82,6 @@
   }
 }
 
-// When the user hovers over the card, show an "Insights ->" hint that they can use to move to the
-// insights page.
-.space-card-header-name-link {
-  font-family: Densicons;
-  font-size: 11px;
-  margin-left: 10px;
-
-  color: $brand-primary;
-  cursor: pointer;
-
-  opacity: 0;
-  transition: all 200ms ease-in-out;
-}
-.space-card:hover .space-card-header-name-link { opacity: 1; }
 .space-card-header-name-link-label {
   font-family: $font-base;
   font-size: $font-size-base;
