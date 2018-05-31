@@ -421,7 +421,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                     minute = '15';
                   }
 
-                  return stamp.format(`h:[${minute}]a`).slice(0, -1)
+                  return stamp.tz(space.timeZone).format(`h:[${minute}]a`).slice(0, -1);
                 })(peakUtilizationTimestamp)}
               </CardWellHighlight> during <CardWellHighlight>
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
