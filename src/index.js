@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import registerServiceWorker from './registerServiceWorker';
 import './built-css/styles.css';
 import { core, accounts } from './client';
 import ReactGA from 'react-ga';
@@ -290,3 +291,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+registerServiceWorker();
