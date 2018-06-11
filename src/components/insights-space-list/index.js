@@ -268,7 +268,7 @@ export class InsightsSpaceList extends React.Component {
         <div className="insights-space-list-header">
           <h2 className="insights-space-list-header-text">Insights</h2>
         </div>
-        <div className="insights-space-list-filter-row">
+        <div className="insights-space-list-filter-spaces-row">
           {/* Left-aligned filter box */}
           <InputBox
             type="text"
@@ -278,52 +278,12 @@ export class InsightsSpaceList extends React.Component {
             value={spaces.filters.search}
             onChange={e => onSpaceSearch(e.target.value)}
           />
-
-          {/* Right-aligned utiliation time segment and data duration filters */}
-          <span className="insights-space-list-filter-item">
-            <div className="insights-space-list-filter-text-label">Utilization for</div>
-            <InputBox
-              type="select"
-              className="insights-space-list-time-segment-selector"
-              value={this.state.timeSegment}
-              disabled={this.state.view === ERROR}
-              onChange={e => {
-                this.setState({
-                  view: LOADING,
-                  timeSegment: e.target.value,
-                  spaceCounts: {},
-                  spaceUtilizations: {},
-                }, () => this.fetchData());
-              }}
-            >
-              {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                return <option value={key} key={key}>
-                  {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
-                </option>;
-              })}
-            </InputBox>
-          </span>
-          <span className="insights-space-list-filter-item">
-            <div className="insights-space-list-filter-text-label">over past</div>
-            <InputBox
-              type="select"
-              className="insights-space-list-duration-selector"
-              value={this.state.dataDuration}
-              disabled={this.state.view === ERROR}
-              onChange={e => {
-                this.setState({dataDuration: e.target.value, spaceCounts: {}, view: LOADING}, () => this.fetchData());
-              }}
-            >
-              <option value={DATA_DURATION_WEEK}>Week</option>
-              <option disabled value={DATA_DURATION_MONTH}>Month (coming soon)</option>
-            </InputBox>
-          </span>
         </div>
 
         <Card>
           {this.state.view === LOADING ? <CardLoading indeterminate /> : null}
 
-          <CardWell className="insights-space-list-summary-header">
+          <CardWell type="dark" className="insights-space-list-summary-header">
             {(() => {
               if (this.state.view === VISIBLE && filteredSpaces.length === 0) {
                 return <span>No spaces matched your filter</span>
@@ -340,17 +300,63 @@ export class InsightsSpaceList extends React.Component {
                   {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '}
                   seen <CardWellHighlight>
                     {commaFormatNumber(this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces))}
-                  </CardWellHighlight> visitors during <CardWellHighlight>
+                  </CardWellHighlight> visitors during <span>
                     {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-                  </CardWellHighlight> this past <CardWellHighlight>
+                  </span> this past <span>
                     {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
-                  </CardWellHighlight>
+                  </span>
                 </span>;
               } else {
                 return <span>&mdash;</span>;
               }
             })()}
           </CardWell>
+
+          <CardBody className="insights-space-list-filters">
+            <span className="insights-space-list-filter-item">
+              <InputBox type="select" className="insights-space-list-space-hierarchy-selector">
+                <option value="a">pick a floor, building, or campus</option>
+              </InputBox>
+            </span>
+
+            {/* Utiliation time segment and data duration filters */}
+            <div className="insights-space-list-filter-item">
+              <InputBox
+                type="select"
+                className="insights-space-list-time-segment-selector"
+                value={this.state.timeSegment}
+                disabled={this.state.view !== VISIBLE}
+                onChange={e => {
+                  this.setState({
+                    view: LOADING,
+                    timeSegment: e.target.value,
+                    spaceCounts: {},
+                    spaceUtilizations: {},
+                  }, () => this.fetchData());
+                }}
+              >
+                {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
+                  return <option value={key} key={key}>
+                    {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
+                  </option>;
+                })}
+              </InputBox>
+            </div>
+            <div className="insights-space-list-filter-item">
+              <InputBox
+                type="select"
+                className="insights-space-list-duration-selector"
+                value={this.state.dataDuration}
+                disabled={this.state.view !== VISIBLE}
+                onChange={e => {
+                  this.setState({dataDuration: e.target.value, spaceCounts: {}, view: LOADING}, () => this.fetchData());
+                }}
+              >
+                <option value={DATA_DURATION_WEEK}>Week</option>
+                <option disabled value={DATA_DURATION_MONTH}>Month (coming soon)</option>
+              </InputBox>
+            </div>
+          </CardBody>
 
           {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
             <table className="insights-space-list">
