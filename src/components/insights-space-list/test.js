@@ -240,6 +240,33 @@ describe('insights space list', function() {
       '100%'
     );
   });
+  it('should disable filters when the space insights card is loading', async function() {
+    // Render the component
+    const component = mount(<InsightsSpaceList
+      spaces={{
+        filters: {search: ''},
+        data: [
+          {
+            id: 'spc_1',
+            name: 'My Space',
+            currentCount: 2,
+            capacity: 5,
+            timeZone: 'America/New_York',
+          },
+        ],
+        events: {},
+      }}
+      activeModal={{name: null, data: null}}
+    />);
+
+    // Put the component into a loading state
+    component.setState({ view: 'LOADING' });
+
+    // Make sure filter selectors are disabled - we don't want people changing the filters while
+    // loading!
+    assert.equal(component.find('.insights-space-list-time-segment-selector').props().disabled, true);
+    assert.equal(component.find('.insights-space-list-duration-selector').props().disabled, true);
+  });
 
   describe('sorting of spaces', function() {
     it(`should by default sort spaces in order of name decending`, async function() {
