@@ -6,6 +6,8 @@ import PercentageBar from '@density/ui-percentage-bar';
 
 import gridVariables from '@density/ui/variables/grid.json';
 
+import SpaceHierarchySelectBox from '../space-hierarchy-select-box/index';
+
 import { core } from '../../client';
 import moment from 'moment';
 
@@ -27,6 +29,8 @@ import spaceUtilizationPerGroup, {
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import commaFormatNumber from '../../helpers/comma-format-number/index';
 import formatPercentage from '../../helpers/format-percentage/index';
+
+import filterHierarchy from '../../helpers/filter-hierarchy/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
@@ -232,8 +236,28 @@ export class InsightsSpaceList extends React.Component {
   }
 
   render() {
-    const { spaces, activeModal, onSpaceSearch, onOpenModal, onCloseModal, onSetCapacity} = this.props;
-    const filteredSpaces = spaceFilter(spaces.data, spaces.filters.search);
+    const {
+      spaces,
+      activeModal,
+
+      onSpaceSearch,
+      onSpaceChangeParent,
+      onOpenModal,
+      onCloseModal,
+      onSetCapacity,
+    } = this.props;
+
+    // Filter space list
+    // 1. Using the fuzzy search
+    // 2. Using the space hierarchy `parent value`
+    let filteredSpaces = spaceFilter(spaces.data, spaces.filters.search);
+    if (spaces.filters.parent) {
+      filteredSpaces = filterHierarchy(filteredSpaces, spaces.filters.parent);
+    }
+
+    const parentSpace = spaces.filters.parent ?
+      spaces.data.find(i => i.id === spaces.filters.parent) :
+      null;
 
     const spaceUtilizations = this.state.spaceUtilizations;
 
@@ -314,9 +338,11 @@ export class InsightsSpaceList extends React.Component {
 
           <CardBody className="insights-space-list-filters">
             <span className="insights-space-list-filter-item">
-              <InputBox type="select" className="insights-space-list-space-hierarchy-selector">
-                <option value="a">pick a floor, building, or campus</option>
-              </InputBox>
+              <SpaceHierarchySelectBox
+                className="insights-space-list-space-hierarchy-selector"
+                value={parentSpace}
+                onChange={parent => onSpaceChangeParent(parent.id)}
+              />
             </span>
 
             {/* Utiliation time segment and data duration filters */}
@@ -487,6 +513,9 @@ export default connect(state => {
   return {
     onSpaceSearch(searchQuery) {
       dispatch(collectionSpacesFilter('search', searchQuery));
+    },
+    onSpaceChangeParent(parentId) {
+      dispatch(collectionSpacesFilter('parent', parentId));
     },
 
     onSetCapacity(space, capacity) {
