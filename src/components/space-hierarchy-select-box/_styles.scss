@@ -86,6 +86,10 @@
     color: $brand-primary;
     outline: none;
   }
+
+  &.disabled {
+    color: $gray-dark;
+  }
 }
 
 .space-hierarchy-select-box-item-highlight {

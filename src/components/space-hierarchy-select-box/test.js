@@ -16,9 +16,9 @@ describe('Space hierarchy select box', function() {
 
     const component = mount(<SpaceHierarchySelectBox
       choices={[
-        {id: 0, spaceType: 'floor', name: 'foo'},
-        {id: 1, spaceType: 'floor', name: 'bar'},
-        {id: 2, spaceType: 'floor', name: 'baz'},
+        {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
+        {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
+        {id: 2, parentId: null, spaceType: 'floor', name: 'baz'},
       ]}
       onChange={onChange}
     />);
@@ -41,16 +41,16 @@ describe('Space hierarchy select box', function() {
 
     // Verify that the item was emitted via the `onChange` callback
     assert.equal(onChange.callCount, 1);
-    assert.deepEqual(onChange.firstCall.args, [{id: 2, spaceType: 'floor', name: 'baz'}]);
+    assert.deepEqual(onChange.firstCall.args, [{id: 2, parentId: null, spaceType: 'floor', name: 'baz'}]);
   });
   it('should open when focused, and close when blurred', function() {
     const onChange = sinon.spy();
 
     const component = mount(<SpaceHierarchySelectBox
       choices={[
-        {id: 0, spaceType: 'floor', name: 'foo'},
-        {id: 1, spaceType: 'floor', name: 'bar'},
-        {id: 2, spaceType: 'floor', name: 'baz'},
+        {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
+        {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
+        {id: 2, parentId: null, spaceType: 'floor', name: 'baz'},
       ]}
       onChange={onChange}
     />);
@@ -79,9 +79,9 @@ describe('Space hierarchy select box', function() {
 
     const component = mount(<SpaceHierarchySelectBox
       choices={[
-        {id: 0, spaceType: 'floor', name: 'foo'},
-        {id: 1, spaceType: 'floor', name: 'bar'},
-        {id: 2, spaceType: 'floor', name: 'baz'},
+        {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
+        {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
+        {id: 2, parentId: null, spaceType: 'floor', name: 'baz'},
       ]}
       onChange={onChange}
     />);
@@ -124,7 +124,7 @@ describe('Space hierarchy select box', function() {
 
     // onChange should be called with the first item in the select box
     assert.equal(onChange.callCount, 1);
-    assert.deepEqual(onChange.firstCall.args, [{id: 0, spaceType: 'floor', name: 'foo'}]);
+    assert.deepEqual(onChange.firstCall.args, [{id: 0, parentId: null, spaceType: 'floor', name: 'foo'}]);
 
     // And after selection, the select box should not be open.
     assert.equal(component.state().opened, false);
@@ -135,9 +135,9 @@ describe('Space hierarchy select box', function() {
 
     const component = mount(<SpaceHierarchySelectBox
       choices={[
-        {id: 0, spaceType: 'floor', name: 'foo'},
-        {id: 1, spaceType: 'floor', name: 'bar'},
-        {id: 2, spaceType: 'floor', name: 'baz'},
+        {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
+        {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
+        {id: 2, parentId: null, spaceType: 'floor', name: 'baz'},
       ]}
       onChange={onChange}
     />);
@@ -161,5 +161,60 @@ describe('Space hierarchy select box', function() {
     // And after, the select box should not be open.
     assert.equal(component.state().opened, false);
     assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 0);
+  });
+});
+
+
+function calculateItemRenderOrder(choices) {
+  // Find everything with a `parentId` of `null` - they should go at the top of the list.
+  const topLevelItems = choices.filter(i => i.parentId === null);
+
+  function insertLowerItems(topLevelItems, depth=0) {
+    return topLevelItems.reduce((acc, topLevelItem) => {
+      // Find all items that should be rendered under the given `topLevelItem`
+      const itemsUnderThisTopLevelItem = choices.filter(i => i.parentId === topLevelItem.id);
+
+      return [
+        ...acc,
+
+        // The item to add to the list
+        {depth, item: topLevelItem},
+
+        // Add all children under this item (nd their children, etc) below this item.
+        ...insertLowerItems(itemsUnderThisTopLevelItem, depth+1),
+      ];
+    }, []);
+  }
+  return insertLowerItems(topLevelItems);
+}
+
+describe('render order', function() {
+  it('should work', function() {
+    const choices = [
+      {name: 'Food', id: 0, parentId: null, spaceType: 'building'},
+      {name: 'Pickled things', id: 1, parentId: 0, spaceType: 'floor'},
+      {name: 'Pickles', id: 2, parentId: 1, spaceType: 'space'},
+      {name: 'Sour crout', id: 3, parentId: 1, spaceType: 'space'},
+      {name: 'Relish', id: 4, parentId: 1, spaceType: 'space'},
+      {name: 'Fruits', id: 5, parentId: 0, spaceType: 'floor'},
+      {name: 'Apples', id: 6, parentId: 5, spaceType: 'space'},
+      {name: 'Macintosh', id: 7, parentId: 6, spaceType: 'space'},
+      {name: 'Granny Smith', id: 8, parentId: 6, spaceType: 'space'},
+      {name: 'Gala', id: 9, parentId: 6, spaceType: 'space'},
+      {name: 'Banannas', id: 10, parentId: 5, spaceType: 'space'},
+      {name: 'Peaches', id: 11, parentId: 5, spaceType: 'space'},
+      {name: 'Calamari', id: 12, parentId: 0, spaceType: 'floor'},
+    ];
+
+
+    process.stdout.write('\n');
+    const results = calculateItemRenderOrder(choices);
+    results.forEach(i => {
+      let spacing = '';
+      for (let j = 0; j < i.depth; j++) {
+        spacing += '  ';
+      }
+      process.stdout.write(spacing+i.item.name+'\n');
+    });
   });
 });

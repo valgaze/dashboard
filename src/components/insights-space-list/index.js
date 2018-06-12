@@ -341,7 +341,24 @@ export class InsightsSpaceList extends React.Component {
               <SpaceHierarchySelectBox
                 className="insights-space-list-space-hierarchy-selector"
                 value={parentSpace}
-                choices={spaces.data.filter(i => i.spaceType !== 'space')}
+                // choices={spaces.data.filter(i => i.spaceType !== 'space')}
+                choices={[
+                  {name: 'Foodstuffs', id: 100, parentId: null, spaceType: 'campus'},
+                    {name: 'Food', id: 0, parentId: 100, spaceType: 'building'},
+                      {name: 'Pickled things', id: 1, parentId: 0, spaceType: 'floor'},
+                        {name: 'Pickles', id: 2, parentId: 1, spaceType: 'space'},
+                        {name: 'Sour crout', id: 3, parentId: 1, spaceType: 'space'},
+                        {name: 'Relish', id: 4, parentId: 1, spaceType: 'space'},
+                      {name: 'Fruits', id: 5, parentId: 0, spaceType: 'floor'},
+                        {name: 'Apples', id: 6, parentId: 5, spaceType: 'space'},
+                          {name: 'Macintosh', id: 7, parentId: 6, spaceType: 'space'},
+                          {name: 'Granny Smith', id: 8, parentId: 6, spaceType: 'space'},
+                          {name: 'Gala', id: 9, parentId: 6, spaceType: 'space'},
+                        {name: 'Banannas', id: 10, parentId: 5, spaceType: 'space'},
+                        {name: 'Peaches', id: 11, parentId: 5, spaceType: 'space'},
+                      {name: 'Calamari', id: 12, parentId: 0, spaceType: 'floor'},
+                  {name: 'Stuffs', id: 101, parentId: 100, spaceType: 'space'},
+                ]}
                 onChange={parent => onSpaceChangeParent(parent ? parent.id : null)}
               />
             </span>

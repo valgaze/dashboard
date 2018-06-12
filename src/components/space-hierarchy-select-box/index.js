@@ -67,8 +67,81 @@ export default class SpaceHierarchySelectBox extends React.Component {
     }
   }
 
+  calculateItemRenderOrder() {
+    const { choices } = this.props;
+    const spaceTypeSortOrder = [
+      'campus',
+      'building',
+      'floor',
+      'space',
+    ];
+
+    // Find everything with a `parentId` of `null` - they should go at the top of the list.
+    const topLevelItems = choices.filter(i => i.parentId === null);
+
+    function insertLowerItems(topLevelItems, depth=0, zeroItem) {
+      console.log('START!', topLevelItems)
+      return topLevelItems.sort((a, b) => {
+        return spaceTypeSortOrder.indexOf(a.spaceType) - spaceTypeSortOrder.indexOf(b.spaceType);
+      }).reduce((acc, topLevelItem) => {
+        // Find all items that should be rendered under the given `topLevelItem`
+        const itemsUnderThisTopLevelItem = choices.filter(i => i.parentId === topLevelItem.id);
+
+        const renderZeroItem = {
+          building: false,
+          floor: false,
+          space: false,
+        };
+
+        switch (topLevelItem.spaceType) {
+        case 'campus':
+          renderZeroItem.building = !itemsUnderThisTopLevelItem.find(i => i.spaceType === 'building');
+        case 'building':
+          renderZeroItem.floor = !itemsUnderThisTopLevelItem.find(i => i.spaceType === 'floor');
+        case 'floor':
+          renderZeroItem.space = !itemsUnderThisTopLevelItem.find(i => i.spaceType === 'space');
+        default:
+          break;
+        }
+
+        return [
+          ...acc,
+
+          // The item to add to the list
+          {depth, choice: topLevelItem},
+
+          ...(renderZeroItem.space ? [{depth: depth+1, choice: {
+            id: `${topLevelItem.id}-zerospace`,
+            disabled: true,
+            name: 'Spaces',
+            spaceType: '(0)',
+          }}] : []),
+
+          ...(renderZeroItem.floor ? [{depth: depth+1, choice: {
+            id: `${topLevelItem.id}-zerofloors`,
+            disabled: true,
+            name: 'Floors',
+            spaceType: '(0)',
+          }}] : []),
+
+          ...(renderZeroItem.building ? [{depth: depth+1, choice: {
+            id: `${topLevelItem.id}-zerobuildings`,
+            disabled: true,
+            name: 'Buildings',
+            spaceType: '(0)',
+          }}] : []),
+
+          // Add all children under this item (and their children, etc) below this item.
+          ...insertLowerItems(itemsUnderThisTopLevelItem, depth+1, renderZeroItem),
+        ];
+      }, []);
+    }
+
+    return insertLowerItems(topLevelItems);
+  }
+
   render() {
-    const { value, choices } = this.props;
+    const { value } = this.props;
     const { opened } = this.state;
 
     return <div className="space-hierarchy-select-box">
@@ -108,12 +181,24 @@ export default class SpaceHierarchySelectBox extends React.Component {
       >
         <ul>
           {[
-            {id: 'default', name: 'All spaces', spaceType: 'default'},
-            ...choices,
-          ].map(choice => {
+            {
+              depth: 0,
+              choice: {
+                id: 'default',
+                name: 'All spaces',
+                spaceType: 'default',
+              },
+            },
+            ...this.calculateItemRenderOrder(),
+          ].map(({depth, choice}) => {
             return <li
               key={choice.id}
               ref={r => { this.choiceNodes[choice.id] = r; }}
+
+              className={classnames('space-hierarchy-select-box-menu-item', {
+                disabled: choice.disabled,
+              })}
+              style={{marginLeft: depth * 10}}
 
               id={`space-hierarchy-${choice.id.toString().replace(' ', '-')}`}
               role="option"
