@@ -1,3 +1,95 @@
 .space-hierarchy-select-box {
-  color: red;
+  position: relative;
+  width: 100%;
+
+  min-width: 0px;
+  @media (min-width: $screen-xs-max) {
+    min-width: 300px;
+  }
+}
+
+// Extract common styles into a placeholder selector for selectbox menu list and value
+%space-hierarchy-common {
+  width: calc(100% - 15px - 15px);
+
+  background-color: #fff;
+  border: 1px solid $gray-light;
+  border-radius: 4px;
+
+  padding-left: 15px;
+  padding-right: 15px;
+
+  user-select: none;
+}
+
+// Select box value - this is the always visible region that shows the currently selected item.
+.space-hierarchy-select-box-value {
+  @extend %space-hierarchy-common;
+  height: 43px;
+
+  font-size: $font-size-base;
+  color: $gray-cinder;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  cursor: pointer;
+
+  & > span {
+    margin-right: auto;
+
+    &:active {
+      opacity: 0.9;
+    }
+  }
+
+  &:focus {
+    border-color: $brand-primary;
+    outline: none;
+  }
+}
+
+// Select box menu - this is the menu that is hidden and shown when the user clicks on the select
+// box value.
+.space-hierarchy-select-box-menu {
+  @extend %space-hierarchy-common;
+
+  position: absolute;
+  top: 50px;
+
+  z-index: 100;
+
+  color: $gray-cinder;
+
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+  transition: all 100ms ease-in-out;
+
+  opacity: 0;
+  pointer-events: none;
+  &.opened {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.space-hierarchy-select-box-menu ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+.space-hierarchy-select-box-menu li {
+  line-height: 36px;
+
+  &:focus {
+    color: $brand-primary;
+    outline: none;
+  }
+}
+
+.space-hierarchy-select-box-item-highlight {
+  margin-left: 10px;
+  color: $gray-dark;
+  font-style: italic;
 }

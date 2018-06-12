@@ -341,7 +341,8 @@ export class InsightsSpaceList extends React.Component {
               <SpaceHierarchySelectBox
                 className="insights-space-list-space-hierarchy-selector"
                 value={parentSpace}
-                onChange={parent => onSpaceChangeParent(parent.id)}
+                choices={spaces.data.filter(i => i.spaceType !== 'space')}
+                onChange={parent => onSpaceChangeParent(parent ? parent.id : null)}
               />
             </span>
 
