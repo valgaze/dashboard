@@ -48,6 +48,12 @@
     border-color: $brand-primary;
     outline: none;
   }
+
+  // When disabled, a selectbox is grayed out and can't be clicked.
+  &.disabled {
+    background-color: $gray-lighter;
+    pointer-events: none;
+  }
 }
 
 // Select box menu - this is the menu that is hidden and shown when the user clicks on the select
@@ -57,14 +63,14 @@
 
   position: absolute;
   top: 50px;
-
-  z-index: 100;
-
-  color: $gray-cinder;
-
+  padding-top: 10px;
+  padding-bottom: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 
+  z-index: 100;
+  color: $gray-cinder;
   transition: all 100ms ease-in-out;
+  user-select: none;
 
   opacity: 0;
   pointer-events: none;
@@ -77,10 +83,12 @@
 .space-hierarchy-select-box-menu ul {
   list-style-type: none;
   padding-left: 0px;
+  margin: 0px;
 }
 
 .space-hierarchy-select-box-menu li {
   line-height: 36px;
+  cursor: pointer;
 
   &:focus {
     color: $brand-primary;

@@ -341,24 +341,7 @@ export class InsightsSpaceList extends React.Component {
               <SpaceHierarchySelectBox
                 className="insights-space-list-space-hierarchy-selector"
                 value={parentSpace}
-                // choices={spaces.data.filter(i => i.spaceType !== 'space')}
-                choices={[
-                  {name: 'Foodstuffs', id: 100, parentId: null, spaceType: 'campus'},
-                    {name: 'Food', id: 0, parentId: 100, spaceType: 'building'},
-                      {name: 'Pickled things', id: 1, parentId: 0, spaceType: 'floor'},
-                        {name: 'Pickles', id: 2, parentId: 1, spaceType: 'space'},
-                        {name: 'Sour crout', id: 3, parentId: 1, spaceType: 'space'},
-                        {name: 'Relish', id: 4, parentId: 1, spaceType: 'space'},
-                      {name: 'Fruits', id: 5, parentId: 0, spaceType: 'floor'},
-                        {name: 'Apples', id: 6, parentId: 5, spaceType: 'space'},
-                          {name: 'Macintosh', id: 7, parentId: 6, spaceType: 'space'},
-                          {name: 'Granny Smith', id: 8, parentId: 6, spaceType: 'space'},
-                          {name: 'Gala', id: 9, parentId: 6, spaceType: 'space'},
-                        {name: 'Banannas', id: 10, parentId: 5, spaceType: 'space'},
-                        {name: 'Peaches', id: 11, parentId: 5, spaceType: 'space'},
-                      {name: 'Calamari', id: 12, parentId: 0, spaceType: 'floor'},
-                  {name: 'Stuffs', id: 101, parentId: 100, spaceType: 'space'},
-                ]}
+                choices={spaces.data.filter(i => i.spaceType !== 'space')}
                 onChange={parent => onSpaceChangeParent(parent ? parent.id : null)}
               />
             </span>
@@ -373,18 +356,18 @@ export class InsightsSpaceList extends React.Component {
                 onChange={e => {
                   this.setState({
                     view: LOADING,
-                    timeSegment: e.target.value,
+                    timeSegment: e.id,
                     spaceCounts: {},
                     spaceUtilizations: {},
                   }, () => this.fetchData());
                 }}
-              >
-                {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                  return <option value={key} key={key}>
-                    {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
-                  </option>;
+                choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
+                  return {
+                    id: key,
+                    label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
+                  };
                 })}
-              </InputBox>
+              />
             </div>
             <div className="insights-space-list-filter-item">
               <InputBox
@@ -393,12 +376,17 @@ export class InsightsSpaceList extends React.Component {
                 value={this.state.dataDuration}
                 disabled={this.state.view !== VISIBLE}
                 onChange={e => {
-                  this.setState({dataDuration: e.target.value, spaceCounts: {}, view: LOADING}, () => this.fetchData());
+                  this.setState({
+                    view: LOADING,
+                    dataDuration: e.id,
+                    spaceCounts: {},
+                  }, () => this.fetchData());
                 }}
-              >
-                <option value={DATA_DURATION_WEEK}>Week</option>
-                <option disabled value={DATA_DURATION_MONTH}>Month (coming soon)</option>
-              </InputBox>
+                choices={[
+                  {id: DATA_DURATION_WEEK, label: 'Week'},
+                  {id: DATA_DURATION_MONTH, label: <span>Month <small>(coming soon)</small></span>, disabled: true},
+                ]}
+              />
             </div>
           </CardBody>
 
