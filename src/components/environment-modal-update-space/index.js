@@ -56,14 +56,16 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               input={<InputBox
                 type="select"
                 id="update-space-timezone"
+                className="update-space-time-zone-select"
                 value={this.state.timeZone}
-                onChange={e => this.setState({timeZone: e.target.value})}
-              >
-                <option value="America/New_York">America &mdash; NY</option>
-                <option value="America/Chicago">America &mdash; CHI</option>
-                <option value="America/Denver">America &mdash; DEN</option>
-                <option value="America/Los_Angeles">America &mdash; LA</option>
-              </InputBox>}
+                onChange={e => this.setState({timeZone: e.id})}
+                choices={[
+                  {id: 'America/New_York', label: <span>America &mdash; NY</span>},
+                  {id: 'America/Chicago', label: <span>America &mdash; CHI</span>},
+                  {id: 'America/Denver', label: <span>America &mdash; DEN</span>},
+                  {id: 'America/Los_Angeles', label: <span>America &mdash; LA</span>},
+                ]}
+              />}
             />
             <FormLabel
               className="update-space-daily-reset-container"
@@ -73,12 +75,15 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               input={<InputBox
                 type="select"
                 id="update-space-daily-reset"
+                className="update-space-daily-reset-select"
                 value={this.state.dailyReset}
-                onChange={e => this.setState({dailyReset: e.target.value})}
-              >
-                {generateResetTimeChoices()
-                  .map(({value, display}) => <option key={value} value={value}>{display}</option>)}
-              </InputBox>}
+                disabled={this.state.timeZone.length === 0}
+                onChange={e => this.setState({dailyReset: e.id})}
+                choices={generateResetTimeChoices().map(({value, display}) => ({
+                  id: value,
+                  label: display,
+                }))}
+              />}
             />
 
             <div className="environment-modal-update-space-submit">

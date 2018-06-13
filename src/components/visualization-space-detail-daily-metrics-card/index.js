@@ -180,20 +180,21 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             <InputBox
               type="select"
               value={this.state.metricToDisplay}
-              disabled={this.state.state === EMPTY || this.state.state === ERROR}
+              disabled={this.state.state !== VISIBLE}
               onChange={e => {
                 this.setState({
                   state: LOADING,
                   data: null,
-                  metricToDisplay: e.target.value,
+                  metricToDisplay: e.id,
                 }, () => this.fetchData());
               }}
-            >
-              <option value="entrances">Entrances</option>
-              <option value="exits">Exits</option>
-              <option value="total-events">Total Events</option>
-              <option value="peak-occupancy">Peak Occupancy</option>
-            </InputBox>
+              choices={[
+                {id: "entrances", label: "Entrances"},
+                {id: "exits", label: "Exits"},
+                {id: "total-events", label: "Total Events"},
+                {id: "peak-occupancy", label: "Peak Occupancy"},
+              ]}
+            />
           </div>
           <div className="visualization-space-detail-daily-metrics-card-date-picker">
             <DateRangePicker

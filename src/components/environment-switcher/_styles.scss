@@ -1,3 +1,7 @@
+.environment-switcher {
+  overflow: visible !important; /* without this style, the last selectbox is chopped off */
+}
+
 .environment-switcher-items {
   list-style-type: none;
   padding-left: 0px;

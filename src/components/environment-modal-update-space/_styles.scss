@@ -47,3 +47,12 @@
 .environment-modal-update-space-doorway-pill:first-child {
   margin-left: 0px;
 }
+
+
+.environment-modal-update-space .card {
+  overflow: visible !important;
+}
+
+.update-space-daily-reset-select, .update-space-time-zone-select {
+  width: 100%;
+}

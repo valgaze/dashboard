@@ -294,20 +294,21 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             <InputBox
               type="select"
               className="insights-space-list-time-segment-selector"
+              disabled={this.state.state !== VISIBLE}
               value={this.state.timeSegment}
               onChange={e => {
                 this.setState({
                   state: LOADING,
-                  timeSegment: e.target.value,
+                  timeSegment: e.id,
                 }, () => this.fetchData());
               }}
-            >
-              {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                return <option value={key} key={key}>
-                  {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
-                </option>;
+              choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
+                return {
+                  id: key,
+                  label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
+                };
               })}
-            </InputBox>
+            />
           </div>
           <div className="insights-space-detail-utilization-card-date-picker">
             <DateRangePicker
@@ -359,12 +360,12 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         </CardHeader>
 
         {this.state.state === VISIBLE ? <div>
-          <CardWell>
+          <CardWell type="dark">
             Average utilization of <CardWellHighlight>
               {Math.round(this.calculateAverageUtilization() * 100)}%
-            </CardWellHighlight> during <CardWellHighlight>
+            </CardWellHighlight> during <span>
               {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-            </CardWellHighlight>
+            </span>
           </CardWell>
 
           <CardHeader>
@@ -400,11 +401,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             })}
           </CardBody>
 
-          <CardWell>
+          <CardWell type="dark">
             {peakUtilizationTimestamp === null ? <span>
-              No peak utilization during <CardWellHighlight>
+              No peak utilization during <span>
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-              </CardWellHighlight>
+              </span>
             </span> : <span>
               On average, peak utilization of <CardWellHighlight>
                 {Math.round(peakUtilizationPercentage * 100)}%

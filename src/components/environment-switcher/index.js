@@ -86,15 +86,14 @@ export default class EnvironmentSwitcher extends React.Component {
                   input={<InputBox
                     type="select"
                     value={this.state.values[field.slug] || field.defaults[field.default]}
-                    onChange={e => this.setState({values: {...this.state.values, [field.slug]: e.target.value}})}
+                    onChange={e => this.setState({values: {...this.state.values, [field.slug]: e.id}})}
                     className="environment-switcher-input"
-                  >
-                    {
-                      Object.keys(field.defaults).map(f => <option key={f} value={field.defaults[f]}>
-                        {`${f} (${field.defaults[f]})`}
-                      </option>)
-                    }
-                  </InputBox>}
+                    choices={Object.keys(field.defaults).map(f => ({
+                      id: field.defaults[f] || '(undefined)',
+                      disabled: typeof field.defaults[f] === 'undefined',
+                      label: `${f} (${field.defaults[f]})`,
+                    }))}
+                  />}
                 />
               })}
             </ul>

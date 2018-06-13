@@ -190,12 +190,13 @@ export function Environment({
                 className="environment-space-order-box"
                 type="select"
                 value={spaces.filters.sort}
-                onChange={e => onSpaceSort(e.target.value)}
+                onChange={e => onSpaceSort(e.id)}
                 disabled={spaces.data.length === 0}
-              >
-                <option value={SORT_A_Z}>A - Z</option>
-                <option value={SORT_NEWEST}>Newest</option>
-              </InputBox>
+                choices={[
+                  {id: SORT_A_Z, label: 'A - Z'},
+                  {id: SORT_NEWEST, label: 'Newest'},
+                ]}
+              />
             </div>
             <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>
               <DismissableToast
@@ -276,12 +277,13 @@ export function Environment({
                 className="environment-doorway-order-box"
                 type="select"
                 value={doorways.filters.sort}
-                onChange={e => onDoorwaySort(e.target.value)}
+                onChange={e => onDoorwaySort(e.id)}
                 disabled={doorways.data.length === 0}
-              >
-                <option value={SORT_A_Z}>A - Z</option>
-                <option value={SORT_NEWEST}>Newest</option>
-              </InputBox>
+                choices={[
+                  {id: SORT_A_Z, label: 'A - Z'},
+                  {id: SORT_NEWEST, label: 'Newest'},
+                ]}
+              />
             </div>
 
             <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>

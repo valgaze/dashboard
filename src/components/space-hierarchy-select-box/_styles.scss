@@ -25,7 +25,7 @@
 // Select box value - this is the always visible region that shows the currently selected item.
 .space-hierarchy-select-box-value {
   @extend %space-hierarchy-common;
-  height: 43px;
+  height: (43px - 1px - 1px); /* (for borders) */
 
   font-size: $font-size-base;
   color: $gray-cinder;
