@@ -320,8 +320,17 @@ export class InsightsSpaceList extends React.Component {
                       return search !== '' ? 'These ' : 'Your ';
                     }
                   })(spaces.filters.search)}
+
+                  {/* 5 spaces */}
                   {filteredSpaces.length}
-                  {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '}
+                  {filteredSpaces.length === 1 ? ' space ' : ' spaces '}
+
+                  {/* Rendering hierarchical section of sentence - `in building` / `on floor` */}
+                  {parentSpace && parentSpace.spaceType === 'campus' ? `in ${parentSpace.name} ` : ''}
+                  {parentSpace && parentSpace.spaceType === 'building' ? `in ${parentSpace.name} ` : ''}
+                  {parentSpace && parentSpace.spaceType === 'floor' ? `on ${parentSpace.name} ` : ''}
+
+                  {filteredSpaces.length === 1 ? 'has ' : 'have '}
                   seen <CardWellHighlight>
                     {commaFormatNumber(this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces))}
                   </CardWellHighlight> visitors during <span>
