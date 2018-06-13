@@ -327,13 +327,13 @@ export class InsightsSpaceList extends React.Component {
                   {/* 5 spaces */}
                   <CardWellHighlight>
                     {filteredSpaces.length}
-                    {filteredSpaces.length === 1 ? ' space ' : ' spaces '}
+                    {filteredSpaces.length === 1 ? ' space' : ' spaces'}
                   </CardWellHighlight>
 
                   {/* Rendering hierarchical section of sentence - `in building` / `on floor` */}
-                  {parentSpace && parentSpace.spaceType === 'campus' ? 'in ' : ''}
-                  {parentSpace && parentSpace.spaceType === 'building' ? 'in ' : ''}
-                  {parentSpace && parentSpace.spaceType === 'floor' ? 'on ' : ''}
+                  {parentSpace && parentSpace.spaceType === 'campus' ? ' in ' : ''}
+                  {parentSpace && parentSpace.spaceType === 'building' ? ' in ' : ''}
+                  {parentSpace && parentSpace.spaceType === 'floor' ? ' on ' : ''}
                   {parentSpace ? <CardWellHighlight>{parentSpace.name}</CardWellHighlight> : ''}
 
                   {filteredSpaces.length === 1 ? ' has ' : ' have '}
