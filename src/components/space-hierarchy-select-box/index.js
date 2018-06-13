@@ -122,19 +122,7 @@ export default class SpaceHierarchySelectBox extends React.Component {
     let lowerItems = insertLowerItems(topLevelItems);
 
     // Insert the "zero items" - the items that indicate that there is zero of a particular class of
-    // items such as spaces, floors, buildings, or campuses.
-    if (choices.filter(i => i.spaceType === 'space').length === 0) {
-      lowerItems = addZeroItemBeforeFirstSpaceOfType(lowerItems, {
-        depth: 0,
-        choice: {
-          id: 'zerospaces',
-          disabled: true,
-          name: 'Space',
-          spaceType: '(0)',
-        },
-      }, '');
-    }
-
+    // items such as floors, buildings, or campuses.
     if (choices.filter(i => i.spaceType === 'floor').length === 0) {
       lowerItems = addZeroItemBeforeFirstSpaceOfType(lowerItems, {
         depth: 0,

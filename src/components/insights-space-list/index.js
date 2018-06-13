@@ -248,11 +248,14 @@ export class InsightsSpaceList extends React.Component {
     } = this.props;
 
     // Filter space list
-    // 1. Using the fuzzy search
-    // 2. Using the space hierarchy `parent value`
-    let filteredSpaces = spaceFilter(spaces.data, spaces.filters.search);
+    // 1. Using the space hierarchy `parent value`
+    // 2. Using the fuzzy search
+    let filteredSpaces = spaces.data;
     if (spaces.filters.parent) {
       filteredSpaces = filterHierarchy(filteredSpaces, spaces.filters.parent);
+    }
+    if (spaces.filters.search) {
+      filteredSpaces = spaceFilter(filteredSpaces, spaces.filters.search);
     }
 
     const parentSpace = spaces.filters.parent ?
