@@ -15,7 +15,14 @@ describe('live space list', function() {
     const component = shallow(<LiveSpaceList 
       spaces={{
         filters: {search: ''},
-        data: [{id: 'spc_1', name: 'My Space', currentCount: 2, capacity: 5, timeZone: 'America/New_York'}],
+        data: [{
+          id: 'spc_1',
+          name: 'My Space',
+          spaceType: 'space',
+          currentCount: 2,
+          capacity: 5,
+          timeZone: 'America/New_York',
+        }],
         events: {}
       }}
       eventPusherStatus={{status: 'CLOSED'}}

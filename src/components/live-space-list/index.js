@@ -90,7 +90,7 @@ export function LiveSpaceList({
       </div>
 
       <div className="live-space-list-row">
-        {filteredSpaces.map(space => {
+        {filteredSpaces.filter(i => i.spaceType === 'space').map(space => {
           return <div className="live-space-list-item" key={space.id}>
             <SpaceCard
               space={space}
