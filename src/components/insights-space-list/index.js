@@ -250,6 +250,7 @@ export class InsightsSpaceList extends React.Component {
     // Filter space list
     // 1. Using the space hierarchy `parent value`
     // 2. Using the fuzzy search
+    // 3. Only show 'space' type spaces
     let filteredSpaces = spaces.data;
     if (spaces.filters.parent) {
       filteredSpaces = filterHierarchy(filteredSpaces, spaces.filters.parent);
@@ -257,6 +258,7 @@ export class InsightsSpaceList extends React.Component {
     if (spaces.filters.search) {
       filteredSpaces = spaceFilter(filteredSpaces, spaces.filters.search);
     }
+    filteredSpaces = filteredSpaces.filter(space => space.spaceType === 'space')
 
     const parentSpace = spaces.filters.parent ?
       spaces.data.find(i => i.id === spaces.filters.parent) :
