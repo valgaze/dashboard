@@ -363,9 +363,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           <CardWell type="dark">
             Average utilization of <CardWellHighlight>
               {Math.round(this.calculateAverageUtilization() * 100)}%
-            </CardWellHighlight> during <span>
+            </CardWellHighlight> during <CardWellHighlight>
               {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-            </span>
+            </CardWellHighlight>
           </CardWell>
 
           <CardHeader>
@@ -403,9 +403,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
           <CardWell type="dark">
             {peakUtilizationTimestamp === null ? <span>
-              No peak utilization during <span>
+              <CardWellHighlight>
+                No peak utilization
+              </CardWellHighlight> during <CardWellHighlight>
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-              </span>
+              </CardWellHighlight>
             </span> : <span>
               On average, peak utilization of <CardWellHighlight>
                 {Math.round(peakUtilizationPercentage * 100)}%

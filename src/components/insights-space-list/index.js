@@ -325,22 +325,27 @@ export class InsightsSpaceList extends React.Component {
                   })(spaces.filters.search)}
 
                   {/* 5 spaces */}
-                  {filteredSpaces.length}
-                  {filteredSpaces.length === 1 ? ' space ' : ' spaces '}
+                  <CardWellHighlight>
+                    {filteredSpaces.length}
+                    {filteredSpaces.length === 1 ? ' space ' : ' spaces '}
+                  </CardWellHighlight>
 
                   {/* Rendering hierarchical section of sentence - `in building` / `on floor` */}
-                  {parentSpace && parentSpace.spaceType === 'campus' ? `in ${parentSpace.name} ` : ''}
-                  {parentSpace && parentSpace.spaceType === 'building' ? `in ${parentSpace.name} ` : ''}
-                  {parentSpace && parentSpace.spaceType === 'floor' ? `on ${parentSpace.name} ` : ''}
+                  {parentSpace && parentSpace.spaceType === 'campus' ? 'in ' : ''}
+                  {parentSpace && parentSpace.spaceType === 'building' ? 'in ' : ''}
+                  {parentSpace && parentSpace.spaceType === 'floor' ? 'on ' : ''}
+                  {parentSpace ? <CardWellHighlight>{parentSpace.name}</CardWellHighlight> : ''}
 
                   {filteredSpaces.length === 1 ? 'has ' : 'have '}
                   seen <CardWellHighlight>
-                    {commaFormatNumber(this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces))}
-                  </CardWellHighlight> visitors during <span>
+                    {commaFormatNumber(
+                      this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces)
+                    )} visitors
+                  </CardWellHighlight> during <CardWellHighlight>
                     {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-                  </span> this past <span>
+                  </CardWellHighlight> this past <CardWellHighlight>
                     {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
-                  </span>
+                  </CardWellHighlight>
                 </span>;
               } else {
                 return <span>&mdash;</span>;
