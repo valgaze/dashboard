@@ -157,8 +157,8 @@ describe('insights space list', function() {
 
     // Ensure that all the filters are disabled
     assert.equal(component.find('.insights-space-list-search-box').props().disabled, true);
-    assert.equal(component.find('.insights-space-list-time-segment-selector').props().disabled, true);
-    assert.equal(component.find('.insights-space-list-duration-selector').props().disabled, true);
+    assert.equal(component.find('.insights-space-list-time-segment-selector > .disabled').length, 1);
+    assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
   });
   it('should only ever have one data fetching operation going at once', async function() {
     // Render the component
@@ -264,8 +264,8 @@ describe('insights space list', function() {
 
     // Make sure filter selectors are disabled - we don't want people changing the filters while
     // loading!
-    assert.equal(component.find('.insights-space-list-time-segment-selector').props().disabled, true);
-    assert.equal(component.find('.insights-space-list-duration-selector').props().disabled, true);
+    assert.equal(component.find('.insights-space-list-time-segment-selector > .disabled').length, 1);
+    assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
   });
 
   describe('sorting of spaces', function() {
