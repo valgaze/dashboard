@@ -313,7 +313,7 @@ export class InsightsSpaceList extends React.Component {
           <CardWell type="dark" className="insights-space-list-summary-header">
             {(() => {
               if (this.state.view === VISIBLE && filteredSpaces.length === 0) {
-                return <span>No spaces matched your filter</span>
+                return <span>No spaces matched your filters</span>
               } else if (this.state.view === VISIBLE) {
                 return <span>
                   {(function(search) {
@@ -336,7 +336,7 @@ export class InsightsSpaceList extends React.Component {
                   {parentSpace && parentSpace.spaceType === 'floor' ? 'on ' : ''}
                   {parentSpace ? <CardWellHighlight>{parentSpace.name}</CardWellHighlight> : ''}
 
-                  {filteredSpaces.length === 1 ? 'has ' : 'have '}
+                  {filteredSpaces.length === 1 ? ' has ' : ' have '}
                   seen <CardWellHighlight>
                     {commaFormatNumber(
                       this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces)
