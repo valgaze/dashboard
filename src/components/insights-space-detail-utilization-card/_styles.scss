@@ -10,7 +10,7 @@ $insights-space-detail-card-header-breakpoint: 930px;
   overflow: visible !important; /* ensure that date picker can escape header bounds */
 }
 .insights-space-detail-utilization-card-header-label {
-  display: block;
+  display: flex;
 
   line-height: 32px;
   margin-bottom: 10px;
@@ -74,6 +74,18 @@ $insights-space-detail-card-header-breakpoint: 930px;
   @media (min-width: $screen-xs-max) {
     display: inline-block;
     margin-left: 20px;
+  }
+}
+
+.insights-space-detail-utilization-card-header-weekends {
+  margin-left: auto;
+  font-size: $font-size-base;
+  font-weight: normal;
+
+  & > .switch {
+    display: inline-block;
+    transform: translate(0px, 4px);
+    margin-left: 10px;
   }
 }
 
