@@ -15,7 +15,7 @@
     "@density/react-dates": "^12.6.0",
     "@density/ui": "5.0.1",
     "@density/ui-button": "^0.1.4",
-    "@density/ui-card": "^0.7.5",
+    "@density/ui-card": "^0.7.6",
     "@density/ui-context-menu": "^0.2.0",
     "@density/ui-date-picker": "^1.0.1",
     "@density/ui-date-range-picker": "^1.0.2",
