@@ -450,7 +450,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
             <LineChartComponent
               timeZone={space.timeZone}
-              svgWidth={970}
+              svgWidth={965}
               svgHeight={350}
 
               xAxis={xAxisDailyTick({
