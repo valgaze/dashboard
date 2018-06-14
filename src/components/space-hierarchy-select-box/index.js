@@ -221,7 +221,7 @@ export default class SpaceHierarchySelectBox extends React.Component {
                 disabled: choice.disabled,
                 enabled: !choice.disabled,
               })}
-              style={{marginLeft: depth * 10}}
+              style={{paddingLeft: 15 + depth * 10}}
 
               id={`space-hierarchy-${choice.id.toString().replace(' ', '-')}`}
               role="option"

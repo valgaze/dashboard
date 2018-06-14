@@ -65,6 +65,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: 5,
@@ -106,6 +107,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: null, /* no capacity */
@@ -138,6 +140,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: null, /* no capacity */
@@ -168,6 +171,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: null, /* no capacity */
@@ -208,6 +212,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: 5,
@@ -248,6 +253,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: 5,
@@ -277,6 +283,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'aa My Space',
               currentCount: 4,
               capacity: 5,
@@ -284,6 +291,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'mm My Space',
               currentCount: 0,
               capacity: 20,
@@ -291,6 +299,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_3',
+              spaceType: 'space',
               name: 'zz My Space',
               currentCount: 2,
               capacity: 2,
@@ -319,6 +328,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'aa My Space',
               currentCount: 4,
               capacity: 5,
@@ -326,6 +336,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'mm My Space',
               currentCount: 0,
               capacity: 20,
@@ -333,6 +344,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_3',
+              spaceType: 'space',
               name: 'zz My Space',
               currentCount: 2,
               capacity: 2,
@@ -366,6 +378,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'aa My Space',
               currentCount: 4,
               capacity: 5,
@@ -373,6 +386,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'mm My Space',
               currentCount: 0,
               capacity: 20,
@@ -380,6 +394,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_3',
+              spaceType: 'space',
               name: 'zz My Space',
               currentCount: 2,
               capacity: 2,
@@ -387,6 +402,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_4',
+              spaceType: 'space',
               name: 'rr My Space',
               currentCount: 1,
               capacity: null, /* no capacity */
@@ -436,6 +452,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space 1',
               currentCount: 4,
               capacity: 5,
@@ -443,6 +460,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'My Space 2',
               currentCount: 0,
               capacity: 20,
@@ -450,6 +468,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_3',
+              spaceType: 'space',
               name: 'My Space 3',
               currentCount: 2,
               capacity: 2,
@@ -457,6 +476,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_4',
+              spaceType: 'space',
               name: 'My Space 4',
               currentCount: 1,
               capacity: null, /* no capacity */
@@ -517,6 +537,7 @@ describe('insights space list', function() {
 
       const SPACE = {
         id: 'spc_1',
+        spaceType: 'space',
         name: 'My Space',
         currentCount: 2,
         capacity: null, /* no capacity */
@@ -571,6 +592,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space',
               currentCount: 2,
               capacity: 5,
@@ -578,6 +600,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'My Space 2',
               currentCount: 2,
               capacity: 5,
@@ -608,6 +631,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space',
               currentCount: 2,
               capacity: 5,
@@ -638,6 +662,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space',
               currentCount: 2,
               capacity: 5,
@@ -645,6 +670,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'My Space 2',
               currentCount: 2,
               capacity: 5,
@@ -675,6 +701,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space',
               currentCount: 2,
               capacity: 5,
@@ -907,6 +934,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: 5,
