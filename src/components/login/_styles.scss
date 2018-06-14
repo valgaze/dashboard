@@ -40,7 +40,7 @@
 
 // Steal the card loading indicator here for the navbar for this one page. 
 .login-navbar-loading {
-  @include make-card-loading($indeterminant: true);
+  @include make-card-loading($indeterminate: true);
 }
 
 .login-forgot-password-link {

@@ -4,6 +4,10 @@
   font-size: $font-size-base;
 }
 
+.visualization-space-detail-raw-events-pager-total {
+  line-height: 38px;
+}
+
 // The middle section, used to provide a freeform imput to move to a new page.
 .visualization-space-detail-raw-events-pager-picker {
   margin-left: auto;
@@ -12,7 +16,7 @@
 .visualization-space-detail-raw-events-pager-picker * { display: inline-block; }
 .visualization-space-detail-raw-events-pager-picker-box {
   padding-left: 0px;
-  height: 23px;
+  height: 29px;
   width: 4em;
 
   margin-left: 10px;

@@ -115,6 +115,7 @@ $insights-space-detail-card-header-breakpoint: 930px;
 // Ensure that the chart is horizontally scrollable on mobile
 .insights-space-detail-utilization-card-daily-breakdown-chart {
   overflow-x: auto;
+  overflow-y: hidden;
   margin-left: 10px;
 }
 
