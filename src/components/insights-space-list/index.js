@@ -104,12 +104,21 @@ export class InsightsSpaceList extends React.Component {
       // Store if each space has a capacity and therefore can be used to calculate utilization.
       const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
 
-      // Get the last full week of data.
       // NOTE: The below times don't have timezones. This is purposeful - the
       // `core.spaces.allCounts` call below can accept timezoneless timestamps, which in this case,
       // is desired so that we can get from `startTime` to `endTime` in the timezone of each space,
       // rather than in a fixed timezone between all spaces (since the list of spaces can be in
       // multiple timezones)
+
+      // Get the last full week of data.
+      //
+      // "Some random month"
+      //
+      //              1  2
+      //  3  4  5  6  7  8
+      //  9  10
+      //
+      // ie, if the current date is the 10th, then the last full week goes from the 3rd to the 8th.
       let startTime,
           endTime = moment.utc().subtract(1, 'week').endOf('week').subtract(1, 'day').format('YYYY-MM-DDTHH:mm:ss');
       if (this.state.dataDuration === DATA_DURATION_WEEK) {
@@ -160,7 +169,7 @@ export class InsightsSpaceList extends React.Component {
             return true; // Include all days
           } else {
             // Filter out any days that aren't within monday-friday
-            const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
+            const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').isoWeekday();
             return dayOfWeek !== 5 && dayOfWeek !== 6; // Remove saturday and sunday
           }
         }).map(group => {
