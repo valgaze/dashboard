@@ -433,7 +433,7 @@ export class InsightsSpaceList extends React.Component {
               <span className="insights-space-list-card-body-header-weekends">
                 <span>Include Weekends</span>
                 <Switch
-                  enabled={this.state.includeWeekends}
+                  value={this.state.includeWeekends}
                   disabled={this.state.view !== VISIBLE}
                   onChange={() => {
                     this.setState({

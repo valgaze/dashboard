@@ -392,7 +392,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <span className="insights-space-detail-utilization-card-header-weekends">
                 <span>Include Weekends</span>
                 <Switch
-                  enabled={this.state.includeWeekends}
+                  value={this.state.includeWeekends}
                   disabled={this.state.includeWeekendsProcessing}
                   onChange={() => {
                     this.setState({
