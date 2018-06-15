@@ -24,7 +24,18 @@ export default function fetchAllPages(fetchSinglePage) {
     }
 
     if (data.next) {
-      return [...data.results, ...await getPage(page+1)];
+      if (Array.isArray(data.results)) {
+        // When an array, add items to the array.
+        return [...data.results, ...await getPage(page+1)];
+      } else {
+        // When an object, collect each item in each subarray into a centreal object.
+        const all = {};
+        const rest = await getPage(page+1);
+        for (const key in data.results) {
+          all[key] = [...data.results[key], ...rest[key]];
+        }
+        return all;
+      }
     } else {
       return data.results;
     }
