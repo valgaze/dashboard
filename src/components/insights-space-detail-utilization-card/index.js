@@ -219,7 +219,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
 
       // Calculate an average day's utilization graph.
-      let averageUtilizationDatapoints = this.state.data[0].utilization.map(_ => 0);
+      let averageUtilizationDatapoints = (this.state.data[0] ? this.state.data[0].utilization : []).map(_ => 0);
 
       // The average calculation is split into two parts: the sum and the division.
       // - The sum part of the average (step 1) occurs below.
