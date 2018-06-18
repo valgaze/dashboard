@@ -49,7 +49,7 @@
     outline: none;
 
     // When focused, flip the caret.
-    .icon { transform: rotate(180deg); }
+    svg { transform: rotate(180deg); }
   }
 
   // When disabled, a selectbox is grayed out and can't be clicked.
