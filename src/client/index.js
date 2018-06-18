@@ -6,8 +6,7 @@ import userError from '../actions/user/error';
 let store;
 function setStore(s) { store = s; }
 
-// Given a response obejct from a fetch call, return the error message that should be returned.
-function errorFormatter(response) {
+async function errorHandler(response) {
   // If the user received a 403 in response to any request, send them to the login page.
   // Redirect the user to the login page and remove the bad session token from
   // the reducer.
@@ -17,14 +16,14 @@ function errorFormatter(response) {
     window.location.href = '#/login';
   }
 
-  return response.json().then(function(data) {
-    return data.detail || data.error || JSON.stringify(data);
-  });
+  // If the response wasn't a 403, then return the best representation of the error.
+  const data = await response.json();
+  return data.detail || data.error || JSON.stringify(data);
 }
 
-const core = clientele({...require('./specs/core-api'), errorFormatter});
-const accounts = clientele({...require('./specs/accounts-api'), errorFormatter});
-const metrics = clientele({...require('./specs/metrics-api'), errorFormatter});
+const core = clientele({...require('./specs/core-api'), errorFormatter: errorHandler});
+const accounts = clientele({...require('./specs/accounts-api'), errorFormatter: errorHandler});
+const metrics = clientele({...require('./specs/metrics-api'), errorFormatter: errorHandler});
 
 core.doorways.create = function(data) {
   return fetch(`${core.config().core}/doorways?environment=True`, {
@@ -39,7 +38,7 @@ core.doorways.create = function(data) {
     if (response.ok) {
       return response.json();
     } else {
-      return Promise.reject(await errorFormatter(response));
+      return Promise.reject(await errorHandler(response));
     }
   });
 };
@@ -57,7 +56,7 @@ core.doorways.update = function(data) {
     if (response.ok) {
       return response.json();
     } else {
-      return Promise.reject(await errorFormatter(response));
+      return Promise.reject(await errorHandler(response));
     }
   });
 };
