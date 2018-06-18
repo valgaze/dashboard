@@ -55,6 +55,14 @@ describe('filter-hierarchy', function() {
         [0],
       );
     });
+    it('should not infinitely loop if given cyclical data', function() {
+      assert.throws(() => {
+        getParentsOfSpace([
+          {id: 0, parentId: 1}, /* 0 => 1 => 0 => 1 => ... */
+          {id: 1, parentId: 0},
+        ], {id: 0, parentId: 1});
+      }, /Cyclical space hierarchy detected! This isn't allowed./);
+    });
   });
   describe('filterHierarchy', function() {
     const hierarchy = [

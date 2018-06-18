@@ -104,7 +104,7 @@ export default class SpaceHierarchySelectBox extends React.Component {
       lowerItems = addZeroItemBeforeFirstSpaceOfType(lowerItems, {
         depth: 0,
         choice: {
-          id: 'zerobuildins',
+          id: 'zerobuildings',
           disabled: true,
           name: 'Building',
           spaceType: 'building',
