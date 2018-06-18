@@ -98,3 +98,13 @@
 }
 .live-space-list-row { @include grid-row; }
 .live-space-list-item { @include grid-width(24, 12, 12, 12); }
+
+// Shown when the space live list is empty
+.live-space-list-empty {
+  color: $gray-dark;
+  font-size: $font-size-3;
+  margin-top: 100px;
+
+  width: 100%;
+  text-align: center;
+}

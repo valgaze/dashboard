@@ -41,6 +41,10 @@ export function LiveSpaceList({
     filteredSpaces = spaceFilter(filteredSpaces, spaces.filters.search);
   }
 
+  // Remove campuses, buildings, and floors before rendering.
+  filteredSpaces = filteredSpaces.filter(i => i.spaceType === 'space');
+
+
   return <div className="live-space-list">
     {/* Show errors in the spaces collection. */}
     <ErrorBar message={spaces.error} showRefresh />
@@ -90,7 +94,7 @@ export function LiveSpaceList({
       </div>
 
       <div className="live-space-list-row">
-        {filteredSpaces.filter(i => i.spaceType === 'space').map(space => {
+        {filteredSpaces.map(space => {
           return <div className="live-space-list-item" key={space.id}>
             <SpaceCard
               space={space}
@@ -100,6 +104,10 @@ export function LiveSpaceList({
             />
           </div>;
         })}
+        
+        {!spaces.loading && filteredSpaces.length === 0 ? <div className="live-space-list-empty">
+          <span>No spaces found.</span>
+        </div> : null}
       </div>
     </div>
   </div>;
