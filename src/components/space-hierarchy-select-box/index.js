@@ -37,18 +37,9 @@ export default class SpaceHierarchySelectBox extends React.Component {
       opened: false,
     };
 
-    this.focusedChoice = null;
-
-    // Holds a reference to each dom node in the choice list so that they can be programatically
-    // blurred when the box is closed.
-    this.choiceNodes = {
-      /* 'spc_xxx': <domnode>, */
-    };
-
     // Called when the user focuses either the value or an item in the menu part of the box.
-    this.onMenuFocus = choice => {
+    this.onMenuFocus = () => {
       this.setState({opened: true});
-      this.focusedChoice = choice;
     };
 
     // Called when the user blurs either the value or an item in the menu part of the box.
@@ -59,14 +50,9 @@ export default class SpaceHierarchySelectBox extends React.Component {
     // Called when the user selects an item within the menu of the select box.
     this.onMenuItemSelected = choice => {
       this.setState({opened: false}, () => {
-
-        // Defocus selected item. If this is not done, then clicking on the "value" part of the box
-        // again will cause this item to blur, which causes the menu part of the box to hide and
-        // unhide in quick succession.
-        this.choiceNodes[choice.id].blur();
-
         if (this.props.onChange) {
-          this.props.onChange(choice.id === 'default' ? null : choice);
+          const isDefault = String(choice.id).toLowerCase() === 'default';
+          this.props.onChange(isDefault ? null : choice);
         }
       });
     }
@@ -142,32 +128,34 @@ export default class SpaceHierarchySelectBox extends React.Component {
   }
 
   render() {
-    const { value, disabled } = this.props;
+    const { value, disabled, id } = this.props;
     const { opened } = this.state;
 
     return <div className="space-hierarchy-select-box">
       <div
+        id={id}
+        ref={r => { this.selectBoxValueRef = r; }}
         className={classnames(`space-hierarchy-select-box-value`, {disabled, opened})}
-        aria-label="Space Hierarchy"
+        tabIndex={disabled ? -1 : 0}
+        aria-expanded={opened}
+        aria-autocomplete="list"
 
-        onFocus={() => this.onMenuFocus(null)}
+        onFocus={this.onMenuFocus}
         onBlur={this.onMenuBlur}
         onKeyDown={e => {
           if (e.keyCode === 27 /* escape */) {
-             this.selectBoxValueRef.blur();
+            /* Blur the select value box, which closes the dropdown */
+            e.target.blur();
           }
         }}
         onMouseDown={e => {
           if (this.state.opened) {
-             e.preventDefault();
-             this.selectBoxValueRef.blur();
+            /* Prevent the default "focus" handler from re-opening the dropdown */
+            e.preventDefault();
+            /* Blur the select value box, which closes the dropdown */
+            this.selectBoxValueRef.blur();
           }
         }}
-
-        aria-expanded={opened}
-        aria-autocomplete="list"
-        tabIndex="0"
-        ref={r => { this.selectBoxValueRef = r; }}
       >
         {value ? <span>
           {value.name}
@@ -201,30 +189,35 @@ export default class SpaceHierarchySelectBox extends React.Component {
           ].map(({depth, choice}) => {
             return <li
               key={choice.id}
-              ref={r => { this.choiceNodes[choice.id] = r; }}
-
+              id={`input-box-select-${String(choice.id).replace(' ', '-')}`}
+              role="option"
+              style={{paddingLeft: 15 + depth * 10}}
               className={classnames('space-hierarchy-select-box-menu-item', {
                 disabled: choice.disabled,
-                enabled: !choice.disabled,
+                enabled: !choice.disabled
               })}
-              style={{paddingLeft: 15 + depth * 10}}
-
-              id={`space-hierarchy-${choice.id.toString().replace(' ', '-')}`}
-              role="option"
-              aria-selected={value && value.id === choice.id}
               tabIndex={!choice.disabled && opened ? 0 : -1}
+              aria-selected={value && value.id === choice.id}
 
-              onFocus={() => this.onMenuFocus(choice)}
+              onFocus={this.onMenuFocus}
               onBlur={this.onMenuBlur}
               onKeyDown={e => {
                 if (e.keyCode === 13 /* enter */) {
+                  /* Select this item in the menu */
                   this.onMenuItemSelected(choice);
                 } else if (e.keyCode === 27 /* escape */) {
-                  this.selectBoxValueRef.blur();
+                  /* Blur this item, which closes the dropdown */
+                  e.target.blur();
                 }
               }}
-              onMouseDown={e => choice.disabled && e.preventDefault()}
-              onClick={() => choice.disabled || this.onMenuItemSelected(choice)}
+              onMouseDown={e => {
+                /* Prevent click from focusing disabled elements */
+                if (choice.disabled) { e.preventDefault(); }
+              }}
+              onClick={() => {
+                /* Allow click to select elements that aren't disabled */
+                if (!choice.disabled) { this.onMenuItemSelected(choice); }
+              }}
             >
               {choice.name}
               <span className="space-hierarchy-select-box-item-highlight">
