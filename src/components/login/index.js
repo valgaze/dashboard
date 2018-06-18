@@ -176,7 +176,7 @@ export class Login extends React.Component {
           <p>Password reset successful, log in using your new credentials.</p>
         </Toast> : null}
 
-        {this.props.user.error ? <Toast
+        {this.props.user && this.props.user.error ? <Toast
           className="login-toast login-toast-forgot-password"
           type="danger"
           icon={<span className="login-toast-icon">&#xe928;</span>}
