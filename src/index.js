@@ -2,13 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { unregister as unregisterServiceWorker } from './registerServiceWorker';
 import './built-css/styles.css';
-import { core, accounts } from './client';
+import { core, accounts, setStore as giveApiClientReferenceToStore } from './client';
 import ReactGA from 'react-ga';
 import moment from 'moment';
 
 import userSet from './actions/user/set';
-import userError from './actions/user/error';
-import sessionTokenUnSet from './actions/session-token/unset';
 
 import objectSnakeToCamel from './helpers/object-snake-to-camel/index';
 import WebsocketEventPusher from './helpers/websocket-event-pusher/index';
@@ -180,13 +178,7 @@ function preRouteAuthentication() {
   // Otherwise, fetch the logged in user's info since there's a session token available.
   } else {
     // Look up the user info before we can redirect to the landing page.
-    return accounts.users.me().catch(err => {
-      // Login failed! Redirect the user to the login page and remove the bad session token from
-      // the reducer.
-      store.dispatch(userError(`User not logged in. Redirecting to login page. ${err}`));
-      store.dispatch(sessionTokenUnSet());
-      router.navigate('login');
-    }).then(user => {
+    return accounts.users.me().then(user => {
       if (user) {
         // A valid user object was returned, so add it to the store.
         store.dispatch(userSet(user));
@@ -200,6 +192,7 @@ function preRouteAuthentication() {
     });
   }
 }
+giveApiClientReferenceToStore(store);
 preRouteAuthentication();
 
 // Add a helper into the global namespace to allow changing of settings flags on the fly.
