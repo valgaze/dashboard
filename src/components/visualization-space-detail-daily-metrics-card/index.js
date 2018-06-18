@@ -240,7 +240,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                 <LineChartComponent
                   timeZone={space.timeZone}
                   svgWidth={975}
-                  svgHeight={300}
+                  svgHeight={370}
 
                   xAxis={xAxisDailyTick({
                     // Calculate a tick resolutino that makes sense given the selected time range.
