@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { unregister as unregisterServiceWorker } from './registerServiceWorker';
 import './built-css/styles.css';
-import { core, accounts, setStore as giveApiClientReferenceToStore } from './client';
+import { core, accounts, setStore as setStoreInApiClientModule } from './client';
 import ReactGA from 'react-ga';
 import moment from 'moment';
 
@@ -192,7 +192,7 @@ function preRouteAuthentication() {
     });
   }
 }
-giveApiClientReferenceToStore(store);
+setStoreInApiClientModule(store);
 preRouteAuthentication();
 
 // Add a helper into the global namespace to allow changing of settings flags on the fly.
