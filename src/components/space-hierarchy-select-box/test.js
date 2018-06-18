@@ -2,14 +2,10 @@ import React from 'react';
 import { mount } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
-import lolex from 'lolex';
 
 import SpaceHierarchySelectBox from './index';
 
 describe('Space hierarchy select box', function() {
-  let clock;
-  beforeEach(() => { clock = lolex.install(); });
-  afterEach(() => clock.uninstall());
 
   it('should open when focused, and close when an item is clicked', function() {
     const onChange = sinon.spy();
@@ -37,7 +33,7 @@ describe('Space hierarchy select box', function() {
     const lastItem = component.find('.space-hierarchy-select-box-menu ul li.enabled').at(3);
     selectBoxValue.simulate('blur');
     lastItem.simulate('focus');
-    lastItem.simulate('mouseup');
+    lastItem.simulate('click');
 
     // Verify that the item was emitted via the `onChange` callback
     assert.equal(onChange.callCount, 1);
@@ -67,9 +63,6 @@ describe('Space hierarchy select box', function() {
 
     // User clicks outside the select box, causing the select box value to blur.
     selectBoxValue.simulate('blur');
-
-    // Wait 100 milliseconds, so that the selectbox can update itself.
-    clock.tick(100);
 
     // Select box is no longer visible
     assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 0);
@@ -117,10 +110,11 @@ describe('Space hierarchy select box', function() {
     // User presses tab, which focuses the next element with a `tabindex` of zero
     pressTab(); /* first item */
     pressTab(); /* second item */
-    const selected = pressShiftTab(); /* back to first item */
+    pressTab(); /* third item */
+    const selected = pressShiftTab(); /* back to second item */
 
     // User presses enter to accept selection
-    selected.simulate('keyup', {keyCode: 13});
+    selected.simulate('keydown', {keyCode: 13});
 
     // onChange should be called with the first item in the select box
     assert.equal(onChange.callCount, 1);
@@ -153,10 +147,11 @@ describe('Space hierarchy select box', function() {
     assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 1);
 
     // User presses escape to close select box
-    selectBoxValue.simulate('keyup', {keyCode: 27});
-
-    // Wait 100 milliseconds, so that the selectbox can update itself.
-    clock.tick(100);
+    // Since this functionality calls e.target.blur(), we need to mock its behavior
+    selectBoxValue.simulate('keydown', {
+      keyCode: 27,
+      target: { blur: () => component.instance().onMenuBlur() }
+    });
 
     // And after, the select box should not be open.
     assert.equal(component.state().opened, false);
