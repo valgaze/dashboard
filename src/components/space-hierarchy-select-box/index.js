@@ -145,7 +145,8 @@ export default class SpaceHierarchySelectBox extends React.Component {
         onKeyDown={e => {
           if (e.keyCode === 27 /* escape */) {
             /* Blur the select value box, which closes the dropdown */
-            e.target.blur();
+            this.selectBoxValueRef.blur();
+            this.onMenuBlur();
           }
         }}
         onMouseDown={e => {
@@ -154,6 +155,7 @@ export default class SpaceHierarchySelectBox extends React.Component {
             e.preventDefault();
             /* Blur the select value box, which closes the dropdown */
             this.selectBoxValueRef.blur();
+            this.onMenuBlur();
           }
         }}
       >
