@@ -102,6 +102,8 @@
   padding-left: 15px;
   padding-right: 15px;
 
+  display: flex;
+
   &:hover {
     background-color: $gray-lightest;
   }
@@ -114,6 +116,13 @@
   &.disabled {
     color: $gray-dark;
   }
+}
+
+// When select box items are too wide, cause an ellipsis to form on the right side of each.
+.space-hierarchy-select-box-item-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .space-hierarchy-select-box-item-highlight {

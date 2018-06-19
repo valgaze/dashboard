@@ -219,7 +219,7 @@ export default class SpaceHierarchySelectBox extends React.Component {
                 if (!choice.disabled) { this.onMenuItemSelected(choice); }
               }}
             >
-              {choice.name}
+              <span className="space-hierarchy-select-box-item-name">{choice.name}</span>
               <span className="space-hierarchy-select-box-item-highlight">
                 {(() => {
                   if (choice.disabled) {
