@@ -113,6 +113,27 @@ describe('spaces', function() {
     // Initial state should then have error: null
     assert.deepEqual(state, {...initialState, error: null, loading: true});
   });
+  it('should clear the parent space filter on set if the parent space was deleted', function() {
+    const initialState = spaces(undefined, {});
+
+    // Set two spaces
+    const resulta = spaces(initialState, collectionSpacesSet([
+      {id: 0, name: 'foo', current_count: 5},
+      {id: 1, name: 'bar', current_count: 8},
+    ]));
+
+    // Set the selected parent space equal to one of those spaces
+    initialState.filters.parent = 1;
+
+    // Set one space
+    const resultb = spaces(resulta, collectionSpacesSet([
+      {id: 0, name: 'foo', current_count: 5},
+    ]));
+
+    // Ensure that the parent filter has been cleared, since the space that was in there no longer
+    // exists.
+    assert.equal(resultb.filters.parent, null);
+  });
 
   describe('clearing errors on different actions', function() {
     it(`should clear an error when modals open`, function() {

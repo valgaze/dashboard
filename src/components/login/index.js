@@ -176,6 +176,14 @@ export class Login extends React.Component {
           <p>Password reset successful, log in using your new credentials.</p>
         </Toast> : null}
 
+        {this.props.user && this.props.user.error ? <Toast
+          className="login-toast login-toast-forgot-password"
+          type="danger"
+          icon={<span className="login-toast-icon">&#xe928;</span>}
+        >
+          {this.props.user.error}
+        </Toast> : null}
+
         {/* Render any errors with previous login attempts */}
         {this.state.error ? <Toast className="login-toast" type="danger" icon={<span className="login-toast-icon">&#xe928;</span>}>
           <h3 className="login-toast-header">Incorrect password</h3>
@@ -194,7 +202,9 @@ export class Login extends React.Component {
 }
 
 
-export default connect(state => ({}), dispatch => {
+export default connect(state => ({
+  user: state.user,
+}), dispatch => {
   return {
     onUserSuccessfullyLoggedIn(token) {
       dispatch(sessionTokenSet(token)).then(data => {

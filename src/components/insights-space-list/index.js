@@ -6,6 +6,8 @@ import PercentageBar from '@density/ui-percentage-bar';
 
 import gridVariables from '@density/ui/variables/grid.json';
 
+import SpaceHierarchySelectBox from '../space-hierarchy-select-box/index';
+
 import { core } from '../../client';
 import moment from 'moment';
 
@@ -27,6 +29,8 @@ import spaceUtilizationPerGroup, {
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import commaFormatNumber from '../../helpers/comma-format-number/index';
 import formatPercentage from '../../helpers/format-percentage/index';
+
+import filterHierarchy from '../../helpers/filter-hierarchy/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
@@ -203,7 +207,7 @@ export class InsightsSpaceList extends React.Component {
     this.fetchData(nextProps.spaces);
   }
 
-  calculateTotalNumberOfEventsForSpaces(spaces=this.state.spaces) {
+  calculateTotalNumberOfIngressesForSpaces(spaces=this.props.spaces.data) {
     const spaceIds = spaces.map(i => i.id);
     const spaceTimeZones = spaces.reduce((acc, i) => ({...acc, [i.id]: i.timeZone}), {});
 
@@ -211,17 +215,54 @@ export class InsightsSpaceList extends React.Component {
     for (let id in this.state.spaceCounts) {
       if (spaceIds.indexOf(id) === -1) { continue }
       const counts = this.state.spaceCounts[id];
-      eventCount += counts.filter(i => {
-        return isWithinTimeSegment(i.timestampAsMoment, spaceTimeZones[id], TIME_SEGMENTS[this.state.timeSegment]);
-      }).length;
+
+      // Remove all counts outside of the time range
+      const countsWithinTimeSegment = counts.filter(i => {
+        return isWithinTimeSegment(
+          i.timestampAsMoment,
+          spaceTimeZones[id],
+          TIME_SEGMENTS[this.state.timeSegment]
+        );
+      });
+
+      // Total up all ingresses within each count bucket in that time range
+      eventCount += countsWithinTimeSegment.reduce(
+        (acc, i) => acc + i.interval.analytics.entrances,
+        0
+      );
     }
 
     return eventCount;
   }
 
   render() {
-    const { spaces, activeModal, onSpaceSearch, onOpenModal, onCloseModal, onSetCapacity} = this.props;
-    const filteredSpaces = spaceFilter(spaces.data, spaces.filters.search);
+    const {
+      spaces,
+      activeModal,
+
+      onSpaceSearch,
+      onSpaceChangeParent,
+      onOpenModal,
+      onCloseModal,
+      onSetCapacity,
+    } = this.props;
+
+    // Filter space list
+    // 1. Using the space hierarchy `parent value`
+    // 2. Using the fuzzy search
+    // 3. Only show 'space' type spaces
+    let filteredSpaces = spaces.data;
+    if (spaces.filters.parent) {
+      filteredSpaces = filterHierarchy(filteredSpaces, spaces.filters.parent);
+    }
+    if (spaces.filters.search) {
+      filteredSpaces = spaceFilter(filteredSpaces, spaces.filters.search);
+    }
+    filteredSpaces = filteredSpaces.filter(space => space.spaceType === 'space')
+
+    const parentSpace = spaces.filters.parent ?
+      spaces.data.find(i => i.id === spaces.filters.parent) :
+      null;
 
     const spaceUtilizations = this.state.spaceUtilizations;
 
@@ -256,7 +297,7 @@ export class InsightsSpaceList extends React.Component {
         <div className="insights-space-list-header">
           <h2 className="insights-space-list-header-text">Insights</h2>
         </div>
-        <div className="insights-space-list-filter-row">
+        <div className="insights-space-list-filter-spaces-row">
           {/* Left-aligned filter box */}
           <InputBox
             type="text"
@@ -266,55 +307,15 @@ export class InsightsSpaceList extends React.Component {
             value={spaces.filters.search}
             onChange={e => onSpaceSearch(e.target.value)}
           />
-
-          {/* Right-aligned utiliation time segment and data duration filters */}
-          <span className="insights-space-list-filter-item">
-            <div className="insights-space-list-filter-text-label">Utilization for</div>
-            <InputBox
-              type="select"
-              className="insights-space-list-time-segment-selector"
-              value={this.state.timeSegment}
-              disabled={this.state.view === ERROR}
-              onChange={e => {
-                this.setState({
-                  view: LOADING,
-                  timeSegment: e.target.value,
-                  spaceCounts: {},
-                  spaceUtilizations: {},
-                }, () => this.fetchData());
-              }}
-            >
-              {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                return <option value={key} key={key}>
-                  {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
-                </option>;
-              })}
-            </InputBox>
-          </span>
-          <span className="insights-space-list-filter-item">
-            <div className="insights-space-list-filter-text-label">over past</div>
-            <InputBox
-              type="select"
-              className="insights-space-list-duration-selector"
-              value={this.state.dataDuration}
-              disabled={this.state.view === ERROR}
-              onChange={e => {
-                this.setState({dataDuration: e.target.value, spaceCounts: {}, view: LOADING}, () => this.fetchData());
-              }}
-            >
-              <option value={DATA_DURATION_WEEK}>Week</option>
-              <option disabled value={DATA_DURATION_MONTH}>Month (coming soon)</option>
-            </InputBox>
-          </span>
         </div>
 
         <Card>
           {this.state.view === LOADING ? <CardLoading indeterminate /> : null}
 
-          <CardWell className="insights-space-list-summary-header">
+          <CardWell type="dark" className="insights-space-list-summary-header">
             {(() => {
               if (this.state.view === VISIBLE && filteredSpaces.length === 0) {
-                return <span>No spaces matched your filter</span>
+                return <span>No spaces matched your filters</span>
               } else if (this.state.view === VISIBLE) {
                 return <span>
                   {(function(search) {
@@ -324,11 +325,25 @@ export class InsightsSpaceList extends React.Component {
                       return search !== '' ? 'These ' : 'Your ';
                     }
                   })(spaces.filters.search)}
-                  {filteredSpaces.length}
-                  {filteredSpaces.length === 1 ? ' space has ' : ' spaces have '}
+
+                  {/* 5 spaces */}
+                  <CardWellHighlight>
+                    {filteredSpaces.length}
+                    {filteredSpaces.length === 1 ? ' space' : ' spaces'}
+                  </CardWellHighlight>
+
+                  {/* Rendering hierarchical section of sentence - `in building` / `on floor` */}
+                  {parentSpace && parentSpace.spaceType === 'campus' ? ' in ' : ''}
+                  {parentSpace && parentSpace.spaceType === 'building' ? ' in ' : ''}
+                  {parentSpace && parentSpace.spaceType === 'floor' ? ' on ' : ''}
+                  {parentSpace ? <CardWellHighlight>{parentSpace.name}</CardWellHighlight> : ''}
+
+                  {filteredSpaces.length === 1 ? ' has ' : ' have '}
                   seen <CardWellHighlight>
-                    {commaFormatNumber(this.calculateTotalNumberOfEventsForSpaces(filteredSpaces))}
-                  </CardWellHighlight> visitors during <CardWellHighlight>
+                    {commaFormatNumber(
+                      this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces)
+                    )} visitors
+                  </CardWellHighlight> during <CardWellHighlight>
                     {TIME_SEGMENTS[this.state.timeSegment].phrasal}
                   </CardWellHighlight> this past <CardWellHighlight>
                     {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
@@ -339,6 +354,60 @@ export class InsightsSpaceList extends React.Component {
               }
             })()}
           </CardWell>
+
+          <CardBody className="insights-space-list-filters">
+            <span className="insights-space-list-filter-item">
+              <SpaceHierarchySelectBox
+                className="insights-space-list-space-hierarchy-selector"
+                value={parentSpace}
+                choices={spaces.data.filter(i => i.spaceType !== 'space')}
+                onChange={parent => onSpaceChangeParent(parent ? parent.id : null)}
+              />
+            </span>
+
+            {/* Utiliation time segment and data duration filters */}
+            <div className="insights-space-list-filter-item">
+              <InputBox
+                type="select"
+                className="insights-space-list-time-segment-selector"
+                value={this.state.timeSegment}
+                disabled={this.state.view !== VISIBLE}
+                onChange={e => {
+                  this.setState({
+                    view: LOADING,
+                    timeSegment: e.id,
+                    spaceCounts: {},
+                    spaceUtilizations: {},
+                  }, () => this.fetchData());
+                }}
+                choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
+                  return {
+                    id: key,
+                    label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
+                  };
+                })}
+              />
+            </div>
+            <div className="insights-space-list-filter-item">
+              <InputBox
+                type="select"
+                className="insights-space-list-duration-selector"
+                value={this.state.dataDuration}
+                disabled={this.state.view !== VISIBLE}
+                onChange={e => {
+                  this.setState({
+                    view: LOADING,
+                    dataDuration: e.id,
+                    spaceCounts: {},
+                  }, () => this.fetchData());
+                }}
+                choices={[
+                  {id: DATA_DURATION_WEEK, label: 'Week'},
+                  {id: DATA_DURATION_MONTH, label: <span>Month <small>(coming soon)</small></span>, disabled: true},
+                ]}
+              />
+            </div>
+          </CardBody>
 
           {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
             <table className="insights-space-list">
@@ -469,6 +538,9 @@ export default connect(state => {
   return {
     onSpaceSearch(searchQuery) {
       dispatch(collectionSpacesFilter('search', searchQuery));
+    },
+    onSpaceChangeParent(parentId) {
+      dispatch(collectionSpacesFilter('parent', parentId));
     },
 
     onSetCapacity(space, capacity) {

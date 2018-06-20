@@ -1,15 +1,29 @@
-const clientele = require('@density/clientele');
+import clientele from '@density/clientele';
 
-// Given a response obejct from a fetch call, return the error message that should be returned.
-function errorFormatter(response) {
-  return response.json().then(function(data) {
-    return data.detail || data.error || JSON.stringify(data);
-  });
+import sessionTokenUnSet from '../actions/session-token/unset';
+import userError from '../actions/user/error';
+
+let store;
+function setStore(s) { store = s; }
+
+async function errorHandler(response) {
+  // If the user received a 403 in response to any request, send them to the login page.
+  // Redirect the user to the login page and remove the bad session token from
+  // the reducer.
+  if (response.status === 403) {
+    store.dispatch(userError(`Login session has expired or is invalid. Please login again.`));
+    store.dispatch(sessionTokenUnSet());
+    window.location.href = '#/login';
+  }
+
+  // If the response wasn't a 403, then return the best representation of the error.
+  const data = await response.json();
+  return data.detail || data.error || JSON.stringify(data);
 }
 
-const core = clientele(Object.assign({}, require('./specs/core-api'), {errorFormatter: errorFormatter}));
-const accounts = clientele(Object.assign({}, require('./specs/accounts-api'), {errorFormatter: errorFormatter}));
-const telemetry = clientele(Object.assign({}, require('./specs/telemetry-api'), {errorFormatter: errorFormatter}));
+const core = clientele({...require('./specs/core-api'), errorFormatter: errorHandler});
+const accounts = clientele({...require('./specs/accounts-api'), errorFormatter: errorHandler});
+const telemetry = clientele({...require('./specs/telemetry-api'), errorFormatter: errorHandler});
 
 core.doorways.create = function(data) {
   return fetch(`${core.config().core}/doorways?environment=True`, {
@@ -24,7 +38,7 @@ core.doorways.create = function(data) {
     if (response.ok) {
       return response.json();
     } else {
-      return Promise.reject(await errorFormatter(response));
+      return Promise.reject(await errorHandler(response));
     }
   });
 };
@@ -42,7 +56,7 @@ core.doorways.update = function(data) {
     if (response.ok) {
       return response.json();
     } else {
-      return Promise.reject(await errorFormatter(response));
+      return Promise.reject(await errorHandler(response));
     }
   });
 };
@@ -51,6 +65,8 @@ export {
   core,
   accounts,
   telemetry,
+
+  setStore,
 };
 
 export default core;

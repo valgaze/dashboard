@@ -1,19 +1,24 @@
 import assert from 'assert';
 import sinon from 'sinon';
+import lolex from 'lolex';
 
 import WebsocketEventPusher, { CONNECTION_STATES } from './index';
 
 import { core } from '../../client';
 
+const realSetTimeout = window.setTimeout;
 function timeout(delay) {
-  return new Promise(r => setTimeout(r, delay));
+  return new Promise(r => realSetTimeout(r, delay));
 }
 
 describe('websocket-event-pusher', function() {
   describe('with a connected socket', () => {
     // Before each test, connect to a mock socket.
-    let eventSource, wsResponse, wsMock;
+    let clock, eventSource, wsResponse, wsMock;
     beforeEach(() => new Promise((resolve, reject) => {
+      // Set up mocked timers
+      clock = lolex.install();
+
       // Define a token
       core.config({token: 'ses_XXX'});
 
@@ -72,6 +77,7 @@ describe('websocket-event-pusher', function() {
         wsResponse.onopen();
       });
     }));
+    afterEach(() => clock.uninstall());
 
     it('should properly receive an event', () => {
       // Listen for space count change events
@@ -112,10 +118,36 @@ describe('websocket-event-pusher', function() {
       eventSource.connect();
 
       // Delay to ensure that the socket has time to connect if it were to connect again.
-      await timeout(250);
+      clock.tick(250);
 
       // Verify that the socket is still connected.
       assert.equal(eventSource.connectionState, CONNECTION_STATES.CONNECTED);
+    });
+
+    it(`should only let one socket connection happen at a time`, async () => {
+      // Reset the histry of the fetch mock
+      global.fetch.resetHistory();
+
+      // Update the socket's `connectionState` to emulate being in the middle of connecting.
+      eventSource.connectionState = CONNECTION_STATES.CONNECTING;
+
+      // Connect
+      eventSource.connect();
+
+      // The socket was alrady in the middle of connecting, so the connection state should stay the
+      // same even after trying to connect again.
+      assert.equal(eventSource.connectionState, CONNECTION_STATES.CONNECTING);
+    });
+
+    it(`should not connect if there's no core api token`, async () => {
+      // No token is defined for the core api
+      core.config({token: undefined});
+
+      // Create a new websocket event pusher with the mock websockets object
+      eventSource = new WebsocketEventPusher(wsMock);
+
+      // The connection should still be closed, since there's no core api token.
+      assert.equal(eventSource.connectionState, CONNECTION_STATES.CLOSED);
     });
 
     it('should close the socket and the socket should reconnect', async () => {
@@ -123,10 +155,21 @@ describe('websocket-event-pusher', function() {
       global.fetch.resetHistory();
 
       // Forcefully close the socket.
+      assert.equal(eventSource.gracefulDisconnect, false);
       wsResponse.close();
 
+      // Verify that it is closed
+      assert.equal(eventSource.connectionState, CONNECTION_STATES.CLOSED);
+
       // Advance the timer by > 1s. The mimimum reconnection period is 1 second, so after this line
-      // the socket should have reconnected.
+      // the socket should have started reconnecting.
+      clock.tick(1500);
+
+      // Verify that the socket has started reconnecting.
+      assert.equal(eventSource.connectionState, CONNECTION_STATES.WAITING_FOR_SOCKET_URL);
+
+      // Wait 250ms longer (unfortuntely, we need to wait for a promise to resolve, and `lolex`l:w
+      // can't handle that since it's mocking out `setTimeout` to be synchronous)
       await timeout(250);
 
       // Verify that the socket is fully connected.
@@ -140,21 +183,7 @@ describe('websocket-event-pusher', function() {
       eventSource.disconnect();
 
       // Delay to ensure that the socket has time to connect if it were to connect again.
-      await timeout(250);
-
-      // Verify that the socket is closed.
-      assert.equal(eventSource.connectionState, CONNECTION_STATES.CLOSED);
-    });
-
-    it(`should close the socket gracefully, which shouldn't cause it to reconnect`, async () => {
-      // Reset the histry of the fetch mock
-      global.fetch.resetHistory();
-
-      // Gracefully close the socket.
-      eventSource.disconnect();
-
-      // Delay to ensure that the socket has time to connect if it were to connect again.
-      await timeout(250);
+      clock.tick(250);
 
       // Verify that the socket is closed.
       assert.equal(eventSource.connectionState, CONNECTION_STATES.CLOSED);

@@ -1,3 +1,11 @@
 .create-space-reset-time-container {
   margin-bottom: 10px;
 }
+
+.environment-modal-create-space .card {
+  overflow: visible !important;
+}
+
+.create-space-daily-reset-select, .create-space-time-zone-select {
+  width: 100%;
+}

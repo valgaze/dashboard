@@ -1,28 +1,45 @@
 // Header for the space list view. Contians a label and a search box.
 .live-space-list-header {
+  color: $gray-darkest;
+  font-size: $font-size-base;
+  font-weight: normal;
+
+  margin-left: 10px;
+  margin-right: 10px;
+
   padding-top: 40px;
+  padding-bottom: 20px;
+
+  width: calc(100% - 20px);
+
   @media (min-width: $screen-xs-max) {
     display: flex;
+    flex-direction: row;
   }
 }
-.live-space-list-header-text {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  padding-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
 
-  color: $gray-darkest;
-  font-size: $font-size-2;
-  font-weight: normal;
+// Left side of header that contains space hierarchy filter box
+.live-space-list-header-hierarchy {
+  display: flex;
+  flex-direction: row;
+
+  margin-right: 20px;
+}
+
+// Right side of header that contains fizzy searching box
+.live-space-list-header-filter {
+  display: flex;
+  flex-direction: row;
+
+  // When the space list is on mobile, the search box is on a new line.
+  margin-top: 20px;
+  @media (min-width: $screen-xs-max) {
+    margin-top: 0px;
+    margin-left: auto;
+  }
 }
 
 .live-space-list-search-box {
-  margin-bottom: 20px;
-  margin-right: 10px;
-  /* margin-left: auto; is below in the @media rule */
-  width: 200px;
-
   color: $gray-darker;
   &::placeholder,
   &::-webkit-input-placeholder,
@@ -33,26 +50,24 @@
     opacity: 1; // Placeholders in firefox have opacity be default. Undo that.
   }
 
-  // When the space list is on mobile, the search box is on a new line.
-  margin-left: 10px;
-  margin-top: 20px;
+  width: 100%;
   @media (min-width: $screen-xs-max) {
-    margin-left: auto;
-    margin-top: 0px;
+    width: 200px;
   }
 }
 
 // "Live" indicator tag after the page title. This shows the fact that new data will flow in and
 // the status of the socket via the colored bubble.
 .live-space-list-live-indicator-tag {
-  position: relative;
-  top: -2px;
-  left: 20px;
+  height: 11px;
+  white-space: nowrap;
 
   padding-top: 8px;
   padding-bottom: 6px;
   padding-left: 10px;
   padding-right: 10px;
+
+  transform: translate(20px, 8px);
 
   font-size: $font-size-x-small;
   font-weight: 500;
@@ -83,3 +98,13 @@
 }
 .live-space-list-row { @include grid-row; }
 .live-space-list-item { @include grid-width(24, 12, 12, 12); }
+
+// Shown when the space live list is empty
+.live-space-list-empty {
+  color: $gray-dark;
+  font-size: $font-size-3;
+  margin-top: 100px;
+
+  width: 100%;
+  text-align: center;
+}

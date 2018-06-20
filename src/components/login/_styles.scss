@@ -1,4 +1,4 @@
-
+$login-section-width: 420px;
 .login-section {
   margin: 0px auto;
 
@@ -6,7 +6,7 @@
   padding-left: 5px;
   padding-right: 5px;
   @media (min-width: 450px) {
-    width: 420px;
+    width: $login-section-width;
     padding-left: 30px;
     padding-right: 30px;
   }
@@ -40,7 +40,7 @@
 
 // Steal the card loading indicator here for the navbar for this one page. 
 .login-navbar-loading {
-  @include make-card-loading($indeterminant: true);
+  @include make-card-loading($indeterminate: true);
 }
 
 .login-forgot-password-link {
@@ -56,6 +56,7 @@
   position: absolute;
   top: 61px;
   z-index: 2000;
+  width: $login-section-width;
 }
 .login-toast-header {
   color: $brand-danger;

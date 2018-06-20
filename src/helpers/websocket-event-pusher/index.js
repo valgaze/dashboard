@@ -6,7 +6,7 @@ import logger from '../logger/index';
 import { core } from '../../client';
 
 // If disconnected, try to connect at minimum this often.
-const MINIMUM_CONNECTION_INTERVAL = 1000;
+const MINIMUM_CONNECTION_INTERVAL = 500;
 
 // Every 60 seconds, send a ping on the websocket connection. This is to ensure that it stays open.
 const WEBSOCKET_PING_MESSAGE_INTERVAL_IN_SECONDS = 60 * 1000;
@@ -43,8 +43,7 @@ export default class WebsocketEventPusher extends EventEmitter {
     // If connected already, close the connection before connecting again.
     if (this.connectionState === CONNECTION_STATES.CONNECTED) {
       this.log({type: 'SOCKET_ALREADY_DISCONNECTED', iteration});
-      this.disconnect();
-      this.gracefulDisconnect = false;
+      return false;
     }
 
     // Ensure that only one connection can occur at a time.
@@ -92,20 +91,22 @@ export default class WebsocketEventPusher extends EventEmitter {
 
       // When the connection disconnects, reconnect after a delay.
       this.socket.onclose = () => {
+        this.connectionState = CONNECTION_STATES.CLOSED;
         this.log({type: 'SOCKET_CLOSE'});
         this.emit('disconnect');
 
         // Clear the interval that sends a ping to the sockets server if it is open.
         if (this.pingIntervalId) {
-          window.clearTimeout(this.pingIntervalId);
+          window.clearInterval(this.pingIntervalId);
         }
 
         if (this.gracefulDisconnect) {
           this.log({type: 'SOCKET_GRACEFUL_DISCONNECT'});
+          this.gracefulDisconnect = false;
           return;
         }
 
-        // We're not gracefulyl disconnecting, so try to reconnect.
+        // We're not gracefully disconnecting, so try to reconnect.
 
         // Calculate the timeout before the next reconnect attempt. Use an exponential backoff.
         const backoffTimeout = MINIMUM_CONNECTION_INTERVAL + (Math.pow(iteration, 2) * 1000);

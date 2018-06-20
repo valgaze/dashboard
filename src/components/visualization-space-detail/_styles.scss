@@ -2,6 +2,7 @@
   @include grid-container;
   margin-top: 40px;
 }
+
 .visualization-space-detail-card {
   margin-top: 40px;
 }
@@ -12,9 +13,20 @@
   display: flex;
   flex-direction: column;
 
+  margin-bottom: 10px;
+
+  font-size: $font-size-base;
+  color: $gray-darker;
+}
+.visualization-space-detail-header-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
   // On a computer, use flex-direction row so the items sprawl horizontally.
   @media (min-width: $screen-xs-max) {
     flex-direction: row;
+    margin-bottom: 40px;
   }
 }
 .visualization-space-detail-header-text-container {
@@ -67,6 +79,7 @@ $visualization-space-detail-header-back-height: 30px;
   font-size: $visualization-space-detail-header-back-height;
   font-weight: bold;
   margin-top: 12px;
+  margin-left: 4px;
 }
 
 // Capacity is shown under the space name.
@@ -75,7 +88,7 @@ $visualization-space-detail-header-back-height: 30px;
   font-size: $font-size-4;
   font-weight: normal;
 
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .visualization-space-detail-capacity-set-link, .visualization-space-detail-capacity-update-link {
   text-decoration: underline;
@@ -97,6 +110,18 @@ $visualization-space-detail-header-back-height: 30px;
   @media (min-width: $screen-xs-max) {
     margin-left: auto;
   }
+}
+
+// Render the space hierarchy above the utilization card. Each item within the hierarchy has spacing
+// around it to ensure that the caret isn't squished.
+.visualization-space-detail-header-hierarchy {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.visualization-space-detail-header-hierarchy-level {
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 // Loading state for whole page

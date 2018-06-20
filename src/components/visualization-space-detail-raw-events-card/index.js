@@ -12,6 +12,8 @@ import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
 
+import commonRanges from '../../helpers/common-ranges';
+
 import gridVariables from '@density/ui/variables/grid.json'
 
 import RawEventsPager from '../visualization-space-detail-raw-events-pager/index';
@@ -136,6 +138,21 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     });
   }
 
+  // updates the state's `startDate` and `endDate` and triggers a `fetchData`
+  setDatesAndFetchData(startDate, endDate) {
+    this.setState({
+      startDate: startDate ? startDate.format() : undefined,
+      endDate: endDate ? endDate.format() : undefined,
+    }, () => {
+      // If the start date and end date were both set, then load data.
+      if (this.state.startDate && this.state.endDate) {
+        this.setState({ state: LOADING, data: null, page: 1 }, () => {
+          this.fetchData();
+        });
+      }
+    });
+  }
+
   // If there are events to download, download a csv containing all the events displayed to the
   // user's system.
   downloadCsv() {
@@ -215,18 +232,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
               startDate={moment.utc(this.state.startDate).tz(space.timeZone).startOf('day')}
               endDate={moment.utc(this.state.endDate).tz(space.timeZone).endOf('day')}
               onChange={({startDate, endDate}) => {
-                // Update the start and end date with the values selected.
-                this.setState({
-                  startDate: startDate ? startDate.format() : undefined,
-                  endDate: endDate ? endDate.format() : undefined,
-                }, () => {
-                  // If the start date and end date were both set, then load data.
-                  if (this.state.startDate && this.state.endDate) {
-                    this.setState({ state: LOADING, data: null, page: 1}, () => {
-                      this.fetchData();
-                    });
-                  }
-                });
+                this.setDatesAndFetchData(startDate, endDate);
               }}
               focusedInput={this.state.datePickerInput}
               onFocusChange={focused => this.setState({datePickerInput: focused})}
@@ -237,6 +243,11 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
               numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
 
               isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc())}
+
+              // common ranges functionality
+              commonRanges={commonRanges}
+              onSelectCommonRange={(r) => this.setDatesAndFetchData(r.startDate, r.endDate)}
+              // showCommonRangeSubtitles={true}
             />
           </div>
         </CardHeader>

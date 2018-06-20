@@ -16,8 +16,7 @@ import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-ran
 
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import formatPercentage from '../../helpers/format-percentage/index';
-
-import getTimeZoneGeneralizedShortName from '../../helpers/get-time-zone-generalized-short-name/index';
+import commonRanges from '../../helpers/common-ranges';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
@@ -25,9 +24,15 @@ import spaceUtilizationPerGroup, {
   TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
 
-import historicalCounts from '@density/chart-historical-counts';
+import lineChart, { dataWaterline } from '@density/chart-line-chart';
+import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
+import {
+  overlayTwoPopups,
+  overlayTwoPopupsPlainTextFormatter,
+} from '@density/chart-line-chart/dist/overlays';
+
 import { chartAsReactComponent } from '@density/charts';
-const HistoricalCountsComponent = chartAsReactComponent(historicalCounts);
+const LineChartComponent = chartAsReactComponent(lineChart);
 
 const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 
@@ -174,6 +179,21 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     return utilizationSum / data.length;
   }
 
+  // updates the state's `startDate` and `endDate` and triggers a `fetchData`
+  setDatesAndFetchData(startDate, endDate) {
+    this.setState({
+      startDate: startDate ? startDate.format() : undefined,
+      endDate: endDate ? endDate.endOf('day').format() : undefined,
+    }, () => {
+      // If the start date and end date were both set, then load data.
+      if (this.state.startDate && this.state.endDate) {
+        this.setState({ state: LOADING, data: null }, () => {
+          this.fetchData();
+        });
+      }
+    });
+  }
+
   componentWillReceiveProps({space}) {
     if (space && (space.id !== this.state.dataSpaceId || space.capacity !== this.state.dataSpaceCapacity)) {
       this.setState({state: LOADING}, () => this.fetchData.call(this));
@@ -199,7 +219,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
 
       // Calculate an average day's utilization graph.
-      let averageUtilizationDatapoints = this.state.data[0].utilization.map(_ => 0);
+      let averageUtilizationDatapoints = (this.state.data[0] ? this.state.data[0].utilization : []).map(_ => 0);
 
       // The average calculation is split into two parts: the sum and the division.
       // - The sum part of the average (step 1) occurs below.
@@ -208,33 +228,44 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       let dataPointCount = 0;
       this.state.data.forEach(group => {
         if (Array.isArray(group.utilization)) {
-          averageUtilizationDatapoints = averageUtilizationDatapoints.map((i, ct) => i + group.utilization[ct])
+          averageUtilizationDatapoints = averageUtilizationDatapoints.map(
+            (i, ct) => i + (group.utilization[ct] || 0) /* ensure that a utilization bucket has data */
+          )
           dataPointCount += 1;
         }
       });
 
-      // 
+      //
       const dataDuration = TIME_SEGMENTS[this.state.timeSegment].end - TIME_SEGMENTS[this.state.timeSegment].start;
 
-      const stamp = moment.utc(this.state.counts[0].timestamp)
+      const initialTimestamp = moment.utc(this.state.counts[0].timestamp)
+        .tz(space.timeZone)
         .startOf('day')
         .add(TIME_SEGMENTS[this.state.timeSegment].start, 'hours');
 
       averageUtilizationDatapointsWithTimestamp = averageUtilizationDatapoints
         .map(i => i / dataPointCount) /* second part of calculating average */
         .map(i => Math.round(i * 1000) / 1000) /* round each number to a single decimal place */
-        .map((i, ct) => ({
-          timestamp: stamp.add(dataDuration / averageUtilizationDatapoints.length, 'hours').format(),
-          count: i * 100,
-        }))
+        .reduce(({timestamp, data}, i, ct) => {
+          // Increment timestamp to get to the next sample's timestamp.
+          timestamp = timestamp.add(dataDuration / averageUtilizationDatapoints.length, 'hours')
+
+          return {
+            timestamp,
+            data: [
+              ...data,
+              { timestamp: timestamp.format(), value: i * 100 },
+            ],
+          };
+        }, {timestamp: initialTimestamp, data: []}).data;
 
       // Calculate the peak utilization of the space by getting the peak count within the raw count
       // data that was fetched and dividing it by the capacity.
       peakUtilizationPercentage = 0;
       peakUtilizationTimestamp = null; /* No peak utilization */
       averageUtilizationDatapointsWithTimestamp.forEach(c => {
-        if (c.count > peakUtilizationPercentage) {
-          peakUtilizationPercentage = c.count;
+        if (c.value > peakUtilizationPercentage) {
+          peakUtilizationPercentage = c.value;
           peakUtilizationTimestamp = c.timestamp;
         }
       });
@@ -263,20 +294,21 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             <InputBox
               type="select"
               className="insights-space-list-time-segment-selector"
+              disabled={this.state.state !== VISIBLE}
               value={this.state.timeSegment}
               onChange={e => {
                 this.setState({
                   state: LOADING,
-                  timeSegment: e.target.value,
+                  timeSegment: e.id,
                 }, () => this.fetchData());
               }}
-            >
-              {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                return <option value={key} key={key}>
-                  {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
-                </option>;
+              choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
+                return {
+                  id: key,
+                  label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
+                };
               })}
-            </InputBox>
+            />
           </div>
           <div className="insights-space-detail-utilization-card-date-picker">
             <DateRangePicker
@@ -289,17 +321,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 }
 
                 // Update the start and end date with the values selected.
-                this.setState({
-                  startDate: startDate ? startDate.format() : undefined,
-                  endDate: endDate ? endDate.endOf('day').format() : undefined,
-                }, () => {
-                  // If the start date and end date were both set, then load data.
-                  if (this.state.startDate && this.state.endDate) {
-                    this.setState({ state: LOADING, data: null}, () => {
-                      this.fetchData();
-                    });
-                  }
-                });
+                this.setDatesAndFetchData(startDate, endDate);
               }}
 
               // Within the component, store if the user has selected the start of end date picker
@@ -317,20 +339,37 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 this.state.datePickerInput,
                 day
               )}
+
+              // common ranges functionality
+              commonRanges={commonRanges}
+              onSelectCommonRange={(r) => {
+                // utilization needs a full day's counts to work
+                // if the endDate of the common range is today, subtract 1 day.
+                // this logic makes sense here, as it specifically pertains to utilization
+                // BR: I couldn't get `isSame()` to work
+                const endDate =
+                  (r.endDate.format('YYYY-MM-DD') === moment.utc().format('YYYY-MM-DD')) ?
+                  r.endDate.clone().subtract(1, 'day') :
+                  r.endDate
+
+                this.setDatesAndFetchData(r.startDate, endDate)
+              }}
+              // showCommonRangeSubtitles={true}
             />
           </div>
         </CardHeader>
 
-        {this.state.state === VISIBLE ? <div>
-          <CardWell>
+        {/* TODO: Make this render a Fragment w/ React 16 */}
+        {this.state.state === VISIBLE ? [
+          <CardWell key={0} type="dark">
             Average utilization of <CardWellHighlight>
               {Math.round(this.calculateAverageUtilization() * 100)}%
             </CardWellHighlight> during <CardWellHighlight>
               {TIME_SEGMENTS[this.state.timeSegment].phrasal}
             </CardWellHighlight>
-          </CardWell>
+          </CardWell>,
 
-          <CardHeader>
+          <CardHeader key={1}>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Weekly Breakdown
               <span className="insights-space-detail-utilization-card-header-timespan">
@@ -343,8 +382,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 </span>
               </span>
             </span>
-          </CardHeader>
-          <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
+          </CardHeader>,
+          <CardBody key={2} className="insights-space-detail-utilization-card-average-weekly-breakdown">
             <div className="insights-space-detail-utilization-card-grid-header">
               <div className="insights-space-detail-utilization-card-grid-item">Weekday</div>
               <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
@@ -361,11 +400,13 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 </div>
               </div>;
             })}
-          </CardBody>
+          </CardBody>,
 
-          <CardWell>
+          <CardWell key={3} type="dark">
             {peakUtilizationTimestamp === null ? <span>
-              No peak utilization during <CardWellHighlight>
+              <CardWellHighlight>
+                No peak utilization
+              </CardWellHighlight> during <CardWellHighlight>
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
               </CardWellHighlight>
             </span> : <span>
@@ -383,16 +424,16 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   } else if (stamp.minute() >= 15) {
                     minute = '15';
                   }
-                  
-                  return stamp.format(`h:[${minute}]a`).slice(0, -1)
+
+                  return stamp.tz(space.timeZone).format(`h:[${minute}]a`).slice(0, -1);
                 })(peakUtilizationTimestamp)}
               </CardWellHighlight> during <CardWellHighlight>
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
               </CardWellHighlight>
             </span>}
-          </CardWell>
+          </CardWell>,
 
-          <CardHeader>
+          <CardHeader key={4}>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Daily Breakdown
               <span className="insights-space-detail-utilization-card-header-timespan">
@@ -405,32 +446,73 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 </span>
               </span>
             </span>
-          </CardHeader>
-          <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
-            <HistoricalCountsComponent
-              data={averageUtilizationDatapointsWithTimestamp}
-              width={950}
-              height={350}
-              capacity={100}
+          </CardHeader>,
+          <div key={5} className="insights-space-detail-utilization-card-daily-breakdown-chart">
+            <LineChartComponent
+              timeZone={space.timeZone}
+              svgWidth={965}
+              svgHeight={350}
 
-              yAxisLabelFormat={n => {
-                if (n === 0 || n === 100) {
-                  return `${formatPercentage(n / 100, 0)}%`;
-                } else {
-                  return '';
-                }
-              }}
-              bottomOverlayLabelFormat={n => {
-                const stamp = moment.utc(n);
-                const timeZoneLabel = getTimeZoneGeneralizedShortName(space.timeZone);
-                return `Avg. Weekday at ${stamp.format('h:mm a')} (${timeZoneLabel})`;
-              }}
-              topOverlayLabelFormat={n => `${formatPercentage(n / 100, 0)}% Utilization`}
-              timeZoneFormat={getTimeZoneGeneralizedShortName}
-              renderPersonIcon={false}
+              xAxis={xAxisDailyTick({
+                formatter: (n) => {
+                  // "5a" or "8p"
+                  const timeFormat = moment.utc(n).tz(space.timeZone).format('hA');
+                  return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
+                },
+              })}
+
+              yAxis={yAxisMinMax({
+                leftOffset: 10,
+                points: [
+                  {value: 100, hasRule: true},
+                ],
+                showMaximumPoint: false,
+                formatter: ({value}) => value === 100 ? '100%' : `${value}`,
+              })}
+              yAxisStart={0}
+
+              // The largest point on the y axis should either be:
+              // 1. The largest point on the graph, if larger than 100. (+ 10% in spacing)
+              // 2. 100.
+              yAxisEnd={Math.max(
+                Math.max.apply(Math, averageUtilizationDatapointsWithTimestamp.map(i => i.value))+10, /* 1 */
+                100 /* 2 */
+              )}
+
+              overlays={[
+                overlayTwoPopups({
+                  topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => `Utilization: ${Math.round(item.value)}%`, 'top'),
+                  bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
+                    (item, {mouseX, xScale}) => {
+                      const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
+                      const time = timestamp.format(`h:mma`).slice(0, -1);
+                      return `Avg. Weekday at ${time}`;
+                    }
+                  ),
+
+                  bottomOverlayTopMargin: 40,
+                  topOverlayBottomMargin: 10,
+
+                  topOverlayWidth: 150,
+                  topOverlayHeight: 42,
+                  bottomOverlayWidth: 200,
+                  bottomOverlayHeight: 42,
+                }),
+              ]}
+
+              data={[
+                {
+                  name: 'default',
+                  type: dataWaterline,
+                  verticalBaselineOffset: 10,
+                  data: averageUtilizationDatapointsWithTimestamp.sort(
+                    (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                  ),
+                },
+              ]}
             />
           </div>
-        </div> : null}
+        ] : null}
         {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
           <span>
             {(() => {
@@ -439,7 +521,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
                 ).weeks() > 2
               ) {
-                return 'Geneating Data (this may take a while ... )'
+                return 'Generating Data (this may take a while ... )'
               } else {
                 return 'Generating Data . . .';
               }

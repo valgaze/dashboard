@@ -9,14 +9,25 @@ import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-da
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 import InputBox from '@density/ui-input-box';
 
+import commonRanges from '../../helpers/common-ranges';
+
 import gridVariables from '@density/ui/variables/grid.json'
 
 import dailyMetrics from '@density/chart-daily-metrics';
-import historicalCounts from '@density/chart-historical-counts';
+import lineChart, { dataWaterline } from '@density/chart-line-chart';
+import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
+import {
+  overlayTwoPopups,
+  overlayTwoPopupsPlainTextFormatter,
+} from '@density/chart-line-chart/dist/overlays';
 
 import { chartAsReactComponent } from '@density/charts';
 const DailyMetricsComponent = chartAsReactComponent(dailyMetrics);
-const HistoricalCountsComponent = chartAsReactComponent(historicalCounts);
+const LineChartComponent = chartAsReactComponent(lineChart);
+
+const ONE_MINUTE_IN_MS = 60 * 1000,
+      ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60,
+      ONE_DAY_IN_MS = ONE_HOUR_IN_MS * 60;
 
 const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
@@ -68,6 +79,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
       endDate: moment.utc().format(),
     };
   }
+
   fetchData() {
     const {space} = this.props;
     const metric = this.state.metricToDisplay;
@@ -127,6 +139,23 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
       });
     });
   }
+
+  // updates the state's `startDate` and `endDate` and triggers a `fetchData`
+  setDatesAndFetchData(startDate, endDate) {
+    // Update the start and end date with the values selected.
+    this.setState({
+      startDate: startDate ? startDate.format() : undefined,
+      endDate: endDate ? endDate.format() : undefined,
+    }, () => {
+      // If the start date and end date were both set, then load data.
+      if (this.state.startDate && this.state.endDate) {
+        this.setState({ state: LOADING, data: null }, () => {
+          this.fetchData();
+        });
+      }
+    });
+  }
+
   render() {
     const {space} = this.props;
     if (space && space.id !== this.state.dataSpaceId) {
@@ -135,7 +164,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
 
     if (space) {
       return <Card className="visualization-space-detail-card">
-        { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
+        {this.state.state === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="visualization-space-detail-daily-metrics-card-header">
           <span className="visualization-space-detail-daily-metrics-card-header-label">
             Daily Metrics
@@ -151,20 +180,21 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             <InputBox
               type="select"
               value={this.state.metricToDisplay}
-              disabled={this.state.state === EMPTY || this.state.state === ERROR}
+              disabled={this.state.state !== VISIBLE}
               onChange={e => {
                 this.setState({
                   state: LOADING,
                   data: null,
-                  metricToDisplay: e.target.value,
+                  metricToDisplay: e.id,
                 }, () => this.fetchData());
               }}
-            >
-              <option value="entrances">Entrances</option>
-              <option value="exits">Exits</option>
-              <option value="total-events">Total Events</option>
-              <option value="peak-occupancy">Peak Occupancy</option>
-            </InputBox>
+              choices={[
+                {id: "entrances", label: "Entrances"},
+                {id: "exits", label: "Exits"},
+                {id: "total-events", label: "Total Events"},
+                {id: "peak-occupancy", label: "Peak Occupancy"},
+              ]}
+            />
           </div>
           <div className="visualization-space-detail-daily-metrics-card-date-picker">
             <DateRangePicker
@@ -176,18 +206,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                   endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
                 }
 
-                // Update the start and end date with the values selected.
-                this.setState({
-                  startDate: startDate ? startDate.format() : undefined,
-                  endDate: endDate ? endDate.format() : undefined,
-                }, () => {
-                  // If the start date and end date were both set, then load data.
-                  if (this.state.startDate && this.state.endDate) {
-                    this.setState({ state: LOADING, data: null}, () => {
-                      this.fetchData();
-                    });
-                  }
-                });
+                this.setDatesAndFetchData(startDate, endDate);
               }}
               // Within the component, store if the user has selected the start of end date picker
               // input
@@ -204,6 +223,11 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                 this.state.datePickerInput,
                 day
               )}
+
+              // common ranges functionality
+              commonRanges={commonRanges}
+              onSelectCommonRange={(r) => this.setDatesAndFetchData(r.startDate, r.endDate)}
+              // showCommonRangeSubtitles={true}
             />
           </div>
         </CardHeader>
@@ -213,17 +237,73 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             if (this.state.data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
               // For more than two weeks of data, show the graph chart.
               return <div className="large-timespan-chart">
-                <HistoricalCountsComponent
-                  data={this.state.data.map(i => {
-                    return {
-                      timestamp: i.timestamp,
-                      count: i.value,
-                    };
-                  })}
-                  width={950}
-                  height={350}
+                <LineChartComponent
                   timeZone={space.timeZone}
-                  xAxisResolution="week"
+                  svgWidth={975}
+                  svgHeight={370}
+
+                  xAxis={xAxisDailyTick({
+                    // Calculate a tick resolutino that makes sense given the selected time range.
+                    tickResolutionInMs: (() => {
+                      const duration = moment.duration(
+                        moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
+                      );
+                      const durationDays = duration.asDays();
+                      if (durationDays > 30) {
+                        return 3 * ONE_DAY_IN_MS;
+                      } else if (durationDays > 14) {
+                        return 1 * ONE_DAY_IN_MS;
+                      } else {
+                        return 0.5 * ONE_DAY_IN_MS;
+                      }
+                    })(),
+                    formatter: n => moment.utc(n).tz(space.timeZone).format(`MM/DD`),
+                  })}
+
+                  yAxis={yAxisMinMax({})}
+                  yAxisStart={0}
+
+                  overlays={[
+                    overlayTwoPopups({
+                      topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => {
+                        const unit = (function(metric) {
+                          switch (metric) {
+                            case 'entrances': return 'Entrances';
+                            case 'exits': return 'Exits';
+                            case 'total-events': return 'Total Events';
+                            case 'peak-occupancy': return 'Peak Occupancy';
+                            default: return 'People';
+                          }
+                        })(this.state.metricToDisplay);
+                        return `${Math.round(item.value)} ${unit}`;
+                      }, 'top'),
+                      bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
+                        (item, {mouseX, xScale}) => {
+                          const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
+                          return timestamp.format(`ddd MMM DD YYYY`);
+                        }
+                      ),
+
+                      bottomOverlayTopMargin: 40,
+                      topOverlayBottomMargin: 20,
+
+                      topOverlayWidth: this.state.metricToDisplay === 'peak-occupancy' ? 180 : 150,
+                      topOverlayHeight: 42,
+                      bottomOverlayWidth: 150,
+                      bottomOverlayHeight: 42,
+                    }),
+                  ]}
+
+                  data={[
+                    {
+                      name: 'default',
+                      type: dataWaterline,
+                      verticalBaselineOffset: 10,
+                      data: this.state.data.sort(
+                        (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                      ),
+                    },
+                  ]}
                 />
               </div>;
             } else {

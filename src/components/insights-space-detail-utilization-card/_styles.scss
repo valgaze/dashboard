@@ -1,7 +1,8 @@
-.insights-space-detail-utilization-card { margin-top: 40px; }
+$insights-space-detail-card-header-breakpoint: 930px;
+
 .insights-space-detail-utilization-card-header {
   display: block;
-  @media (min-width: $screen-xs-max) {
+  @media (min-width: $insights-space-detail-card-header-breakpoint) {
     display: flex;
   }
 
@@ -44,7 +45,7 @@
   margin-top: 10px;
   margin-left: 0px;
 
-  @media (min-width: $screen-xs-max) {
+  @media (min-width: $insights-space-detail-card-header-breakpoint) {
     margin-top: 0px;
     margin-left: 20px;
   }
@@ -114,6 +115,7 @@
 // Ensure that the chart is horizontally scrollable on mobile
 .insights-space-detail-utilization-card-daily-breakdown-chart {
   overflow-x: auto;
+  overflow-y: hidden;
   margin-left: 10px;
 }
 

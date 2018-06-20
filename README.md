@@ -20,6 +20,10 @@ We also have forked a couple open source npm packages and added density-specific
 ## Getting Started
 This project uses `create-react-app` to build the frontend code, and `npm` to manage dependencies.
 ```sh
+# Verify you're running a node version >= 8
+node -v
+v8.11.1
+
 # Download code
 git clone git@github.com:densityco/dashboard.git
 cd dashboard/
@@ -39,6 +43,23 @@ None of these variables are required. They enable optional features that are use
 - `REACT_APP_GA_TRACKING_CODE`: Optional google analytics tracking code for tracking metrics.
 - `REACT_APP_MIXPANEL_TOKEN`: Optional mixpanel token for tracking user interactions.
 - `REACT_APP_ENVIRONMENT`: Optional parameter to set which set of APIs to use (production vs staging). Used by CircleCi and in `src/index.js`.
+
+### Configuring the dashboard to communicate with staging or local deveopment services (advanced)
+The dashboard contains an interface for changing which servers it communicates with for logging in,
+fetching data like spaces, doorways, or tokens, and sending logs to the telemetry system.
+
+To open the environment switcher, press these keys in order: <code>!</code>, <code>!</code>,
+<code>&#96;</code>, <code> </code>.
+
+### Logging
+Logs are periodically sent up to our telemetry servers for analysis and debugging purposes. However,
+if you'd like to see logs in the javascript console for local debugging, read on.
+
+The dashboard uses a package called [`debug`](https://npmjs.com/debug) to manage its logging. By
+default, these logs are hidden. To show them, you'll need to set a flag in localStorage and reload
+the page. This can be done by running something like this in the javascript console:
+`localStorage.debug = 'density:*'; location.reload()`. To read more about the `density:*` syntax,
+[read the `debug` documentation](https://www.npmjs.com/package/debug#wildcards)
 
 ## How would I add `<insert feature here>`?
 
