@@ -283,7 +283,7 @@ describe('Space hierarchy select box', function() {
     // Check that the value prop and value name match expected results
     assert.deepEqual(component.prop('value'), {id: 2, parentId: null, spaceType: 'floor', name: 'baz'});
     assert.notEqual(
-      selectBoxValue.find('span').first().html().indexOf('<!-- react-text: 4 -->baz<!-- /react-text -->'),
+      selectBoxValue.find('span').first().html().indexOf('baz'),
       -1
     );
 
@@ -293,7 +293,7 @@ describe('Space hierarchy select box', function() {
     // Check that value prop and displayed name match the new expected values
     assert.deepEqual(component.prop('value'), {id: 1, parentId: null, spaceType: 'floor', name: 'bar'});
     assert.notEqual(
-      selectBoxValue.find('span').first().html().indexOf('<!-- react-text: 4 -->bar<!-- /react-text -->'),
+      selectBoxValue.find('span').first().html().indexOf('bar'),
       -1
     );
 
@@ -305,8 +305,74 @@ describe('Space hierarchy select box', function() {
     // Check that value prop and displayed name match the new expected values
     assert.deepEqual(component.prop('value'), {id: 0, parentId: null, spaceType: 'floor', name: 'foo'});
     assert.notEqual(
-      selectBoxValue.find('span').first().html().indexOf('<!-- react-text: 4 -->foo<!-- /react-text -->'),
+      selectBoxValue.find('span').first().html().indexOf('foo'),
       -1
     );
   });
+
+  it('should close when the value box is clicked', function() {
+    const component = mount(<SpaceHierarchySelectBox
+      choices={[
+        {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
+        {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
+        {id: 2, parentId: null, spaceType: 'floor', name: 'baz'},
+      ]}
+    />);
+    const selectBoxValue = component.find('.space-hierarchy-select-box-value');
+
+    // Focusing the select box opens it, mousedown closes it
+    selectBoxValue.simulate('focus');
+    assert.equal(component.state().opened, true);
+    assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 1);
+    selectBoxValue.simulate('mousedown');
+    assert.equal(component.state().opened, false);
+    assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 0);
+
+    // mousedown on any internal span inside the select box also closes it
+    selectBoxValue.simulate('focus');
+    selectBoxValue.find('span').first().simulate('mousedown');
+    assert.equal(component.state().opened, false);
+    assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 0);
+  });
+
+  it('should ignore clicks on disabled options', function() {
+    const component = mount(<SpaceHierarchySelectBox
+      choices={[
+        {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
+        {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
+        {id: 2, parentId: null, spaceType: 'floor', name: 'baz', disabled: true},
+      ]}
+    />);
+    const selectBoxValue = component.find('.space-hierarchy-select-box-value');
+
+    // Focusing the select box opens it, click selects an item
+    selectBoxValue.simulate('focus');
+    component.find('.space-hierarchy-select-box-menu li').first().simulate('click');
+    assert.equal(component.state().opened, false);
+    assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 0);
+
+    // Clicking on a disabled item does nothing
+    selectBoxValue.simulate('focus');
+    component.find('.space-hierarchy-select-box-menu li').last().simulate('click');
+    assert.equal(component.state().opened, true);
+    assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 1);
+  });
+
+  // it('should open when focused by tabbing onto the component', function() {
+  //   const component = mount(<div>
+  //     <input type="text" className="test-input" tabIndex="0"></input>
+  //     <SpaceHierarchySelectBox
+  //       choices={[
+  //         {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
+  //         {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
+  //         {id: 2, parentId: null, spaceType: 'floor', name: 'baz', disabled: true},
+  //       ]}
+  //     />
+  //   </div>);
+
+  //   // Tabbing onto the select box focuses it
+  //   component.find('.test-input').simulate('focus');
+  //   component.find('.test-input').simulate('keydown', { key: 'Tab', keyCode: 9, which: 9 });
+  //   assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 1);
+  // });
 });
