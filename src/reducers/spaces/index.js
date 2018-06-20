@@ -30,6 +30,7 @@ const initialState = {
     doorwayId: null,
     search: '',
     sort: SORT_A_Z,
+    parent: null,
   },
 
   // An object that maps space id to an array of events
@@ -49,7 +50,12 @@ export default function spaces(state=initialState, action) {
       ...state,
       loading: false,
       data: action.data.map(objectSnakeToCamel),
-    }
+      filters: {
+        ...state.filters,
+        // If the parent space no longer exists with the space updates, then reset it to null
+        parent: action.data.find(i => i.id === state.filters.parent) ? state.filters.parent : null,
+      },
+    };
 
   // Push an update to a space.
   case COLLECTION_SPACES_PUSH:
