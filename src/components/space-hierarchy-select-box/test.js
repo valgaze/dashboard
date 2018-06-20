@@ -14,14 +14,14 @@ describe('Space hierarchy select box', function() {
           {name: 'Food', id: 0, parentId: null, spaceType: 'building'},
             {name: 'Pickled things', id: 1, parentId: 0, spaceType: 'floor'},
               {name: 'Pickles', id: 2, parentId: 1, spaceType: 'space'},
-              {name: 'Sour crout', id: 3, parentId: 1, spaceType: 'space'},
+              {name: 'Sauerkraut', id: 3, parentId: 1, spaceType: 'space'},
               {name: 'Relish', id: 4, parentId: 1, spaceType: 'space'},
             {name: 'Fruits', id: 5, parentId: 0, spaceType: 'floor'},
               {name: 'Apples', id: 6, parentId: 5, spaceType: 'space'},
                 {name: 'Macintosh', id: 7, parentId: 6, spaceType: 'space'},
                 {name: 'Granny Smith', id: 8, parentId: 6, spaceType: 'space'},
                 {name: 'Gala', id: 9, parentId: 6, spaceType: 'space'},
-              {name: 'Banannas', id: 10, parentId: 5, spaceType: 'space'},
+              {name: 'Bananas', id: 10, parentId: 5, spaceType: 'space'},
               {name: 'Peaches', id: 11, parentId: 5, spaceType: 'space'},
             {name: 'Calamari', id: 12, parentId: 0, spaceType: 'floor'},
         ]}
@@ -43,14 +43,14 @@ describe('Space hierarchy select box', function() {
         { depth: 0, choice: { name: 'Food', spaceType: 'building', id: 0, parentId: null } },
         { depth: 1, choice: { name: 'Pickled things', spaceType: 'floor', id: 1, parentId: 0 } },
         { depth: 2, choice: { name: 'Pickles', spaceType: 'space', id: 2, parentId: 1 } },
-        { depth: 2, choice: { name: 'Sour crout', spaceType: 'space', id: 3, parentId: 1 } },
+        { depth: 2, choice: { name: 'Sauerkraut', spaceType: 'space', id: 3, parentId: 1 } },
         { depth: 2, choice: { name: 'Relish', id: 4, spaceType: 'space', parentId: 1 } },
         { depth: 1, choice: { name: 'Fruits', id: 5, spaceType: 'floor', parentId: 0 } },
         { depth: 2, choice: { name: 'Apples', id: 6, spaceType: 'space', parentId: 5 } },
         { depth: 3, choice: { name: 'Macintosh', id: 7, spaceType: 'space', parentId: 6 } },
         { depth: 3, choice: { name: 'Granny Smith', id: 8, spaceType: 'space', parentId: 6 } },
         { depth: 3, choice: { name: 'Gala', id: 9, spaceType: 'space', parentId: 6 } },
-        { depth: 2, choice: { name: 'Banannas', id: 10, spaceType: 'space', parentId: 5 } },
+        { depth: 2, choice: { name: 'Bananas', id: 10, spaceType: 'space', parentId: 5 } },
         { depth: 2, choice: { name: 'Peaches', id: 11, spaceType: 'space', parentId: 5 } },
         { depth: 1, choice: { name: 'Calamari', id: 12, spaceType: 'floor', parentId: 0 } },
       ]);
@@ -266,5 +266,47 @@ describe('Space hierarchy select box', function() {
     // And after, the select box should not be open.
     assert.equal(component.state().opened, false);
     assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 0);
+  });
+
+  it('should display the value passed in as a prop', function() {
+    // Render the component with a value prop
+    const component = mount(<SpaceHierarchySelectBox
+      choices={[
+        {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
+        {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
+        {id: 2, parentId: null, spaceType: 'floor', name: 'baz'},
+      ]}
+      value={{id: 2, parentId: null, spaceType: 'floor', name: 'baz'}}
+    />);
+    const selectBoxValue = component.find('.space-hierarchy-select-box-value');
+
+    // Check that the value prop and value name match expected results
+    assert.deepEqual(component.prop('value'), {id: 2, parentId: null, spaceType: 'floor', name: 'baz'});
+    assert.notEqual(
+      selectBoxValue.find('span').first().html().indexOf('<!-- react-text: 4 -->baz<!-- /react-text -->'),
+      -1
+    );
+
+    // Programmatically reset the value prop
+    component.setProps({value: {id: 1, parentId: null, spaceType: 'floor', name: 'bar'}});
+
+    // Check that value prop and displayed name match the new expected values
+    assert.deepEqual(component.prop('value'), {id: 1, parentId: null, spaceType: 'floor', name: 'bar'});
+    assert.notEqual(
+      selectBoxValue.find('span').first().html().indexOf('<!-- react-text: 4 -->bar<!-- /react-text -->'),
+      -1
+    );
+
+    // Focus, programmatically reset the value prop, and blur
+    selectBoxValue.simulate('focus');
+    component.setProps({value: {id: 0, parentId: null, spaceType: 'floor', name: 'foo'}});
+    selectBoxValue.simulate('blur');
+
+    // Check that value prop and displayed name match the new expected values
+    assert.deepEqual(component.prop('value'), {id: 0, parentId: null, spaceType: 'floor', name: 'foo'});
+    assert.notEqual(
+      selectBoxValue.find('span').first().html().indexOf('<!-- react-text: 4 -->foo<!-- /react-text -->'),
+      -1
+    );
   });
 });
