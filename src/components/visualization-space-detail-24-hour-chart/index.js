@@ -188,7 +188,7 @@ export default class VisualizationSpaceDetail24HourChart extends React.Component
                 verticalBaselineOffset: 10,
                 data: this.state.data.results.map(i => ({
                     timestamp: i.timestamp,
-                    value: i.count,
+                    value: i.interval.analytics.max,
                   })).sort((a, b) =>
                     moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
                   ),

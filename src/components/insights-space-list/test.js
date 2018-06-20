@@ -65,6 +65,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: 5,
@@ -106,6 +107,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: null, /* no capacity */
@@ -138,6 +140,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: null, /* no capacity */
@@ -157,8 +160,8 @@ describe('insights space list', function() {
 
     // Ensure that all the filters are disabled
     assert.equal(component.find('.insights-space-list-search-box').props().disabled, true);
-    assert.equal(component.find('.insights-space-list-time-segment-selector').props().disabled, true);
-    assert.equal(component.find('.insights-space-list-duration-selector').props().disabled, true);
+    assert.equal(component.find('.insights-space-list-time-segment-selector > .disabled').length, 1);
+    assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
   });
   it('should only ever have one data fetching operation going at once', async function() {
     // Render the component
@@ -168,6 +171,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: null, /* no capacity */
@@ -208,6 +212,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: 5,
@@ -240,6 +245,34 @@ describe('insights space list', function() {
       '100%'
     );
   });
+  it('should disable filters when the space insights card is loading', async function() {
+    // Render the component
+    const component = mount(<InsightsSpaceList
+      spaces={{
+        filters: {search: ''},
+        data: [
+          {
+            id: 'spc_1',
+            spaceType: 'space',
+            name: 'My Space',
+            currentCount: 2,
+            capacity: 5,
+            timeZone: 'America/New_York',
+          },
+        ],
+        events: {},
+      }}
+      activeModal={{name: null, data: null}}
+    />);
+
+    // Put the component into a loading state
+    component.setState({ view: 'LOADING' });
+
+    // Make sure filter selectors are disabled - we don't want people changing the filters while
+    // loading!
+    assert.equal(component.find('.insights-space-list-time-segment-selector > .disabled').length, 1);
+    assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
+  });
 
   describe('sorting of spaces', function() {
     it(`should by default sort spaces in order of name decending`, async function() {
@@ -250,6 +283,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'aa My Space',
               currentCount: 4,
               capacity: 5,
@@ -257,6 +291,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'mm My Space',
               currentCount: 0,
               capacity: 20,
@@ -264,6 +299,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_3',
+              spaceType: 'space',
               name: 'zz My Space',
               currentCount: 2,
               capacity: 2,
@@ -292,6 +328,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'aa My Space',
               currentCount: 4,
               capacity: 5,
@@ -299,6 +336,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'mm My Space',
               currentCount: 0,
               capacity: 20,
@@ -306,6 +344,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_3',
+              spaceType: 'space',
               name: 'zz My Space',
               currentCount: 2,
               capacity: 2,
@@ -339,6 +378,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'aa My Space',
               currentCount: 4,
               capacity: 5,
@@ -346,6 +386,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'mm My Space',
               currentCount: 0,
               capacity: 20,
@@ -353,6 +394,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_3',
+              spaceType: 'space',
               name: 'zz My Space',
               currentCount: 2,
               capacity: 2,
@@ -360,6 +402,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_4',
+              spaceType: 'space',
               name: 'rr My Space',
               currentCount: 1,
               capacity: null, /* no capacity */
@@ -409,6 +452,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space 1',
               currentCount: 4,
               capacity: 5,
@@ -416,6 +460,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'My Space 2',
               currentCount: 0,
               capacity: 20,
@@ -423,6 +468,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_3',
+              spaceType: 'space',
               name: 'My Space 3',
               currentCount: 2,
               capacity: 2,
@@ -430,6 +476,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_4',
+              spaceType: 'space',
               name: 'My Space 4',
               currentCount: 1,
               capacity: null, /* no capacity */
@@ -490,6 +537,7 @@ describe('insights space list', function() {
 
       const SPACE = {
         id: 'spc_1',
+        spaceType: 'space',
         name: 'My Space',
         currentCount: 2,
         capacity: null, /* no capacity */
@@ -544,6 +592,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space',
               currentCount: 2,
               capacity: 5,
@@ -551,6 +600,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'My Space 2',
               currentCount: 2,
               capacity: 5,
@@ -581,6 +631,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space',
               currentCount: 2,
               capacity: 5,
@@ -611,6 +662,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space',
               currentCount: 2,
               capacity: 5,
@@ -618,6 +670,7 @@ describe('insights space list', function() {
             },
             {
               id: 'spc_2',
+              spaceType: 'space',
               name: 'My Space 2',
               currentCount: 2,
               capacity: 5,
@@ -648,6 +701,7 @@ describe('insights space list', function() {
           data: [
             {
               id: 'spc_1',
+              spaceType: 'space',
               name: 'My Space',
               currentCount: 2,
               capacity: 5,
@@ -670,6 +724,206 @@ describe('insights space list', function() {
         'This 1 space has seen 0 visitors during open hours this past week'
       );
     });
+    it(`should render phrase properly when two filtered spaces are shown and a floor is picked`, async function() {
+      // Render the component
+      const component = mount(<InsightsSpaceList
+        spaces={{
+          filters: {
+            search: 'My',
+            parent: 'spc_3',
+          },
+          data: [
+            {
+              id: 'spc_1',
+              name: 'My Space',
+              currentCount: 2,
+              capacity: 5,
+              parentId: 'spc_3',
+              spaceType: 'space',
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_2',
+              name: 'My Space 2',
+              currentCount: 2,
+              capacity: 5,
+              parentId: 'spc_3',
+              spaceType: 'space',
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_3',
+              name: 'My Floor',
+              spaceType: 'floor',
+              timeZone: 'America/New_York',
+            },
+          ],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+      />);
+
+      // For this test, whether the utilization data has been loaded or not is not important. So, to
+      // make the test faster, skip it.
+      component.setState({view: 'VISIBLE'});
+
+      // Ensure that the header uses the right language to describe the 2-space filtered
+      // scenario.
+      assert.equal(
+        component.find('.insights-space-list-summary-header').text(),
+        'These 2 spaces on My Floor have seen 0 visitors during open hours this past week'
+      );
+    });
+    it(`should render phrase properly when two filtered spaces are shown and a building is picked`, async function() {
+      // Render the component
+      const component = mount(<InsightsSpaceList
+        spaces={{
+          filters: {
+            search: 'My',
+            parent: 'spc_3',
+          },
+          data: [
+            {
+              id: 'spc_1',
+              name: 'My Space',
+              currentCount: 2,
+              capacity: 5,
+              parentId: 'spc_3',
+              spaceType: 'space',
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_2',
+              name: 'My Space 2',
+              currentCount: 2,
+              capacity: 5,
+              parentId: 'spc_3',
+              spaceType: 'space',
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_3',
+              name: 'My Building',
+              spaceType: 'building',
+              timeZone: 'America/New_York',
+            },
+          ],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+      />);
+
+      // For this test, whether the utilization data has been loaded or not is not important. So, to
+      // make the test faster, skip it.
+      component.setState({view: 'VISIBLE'});
+
+      // Ensure that the header uses the right language to describe the 2-space filtered
+      // scenario.
+      assert.equal(
+        component.find('.insights-space-list-summary-header').text(),
+        'These 2 spaces in My Building have seen 0 visitors during open hours this past week'
+      );
+    });
+    it(`should render phrase properly when a single filtered space is shown and a campus is picked`, async function() {
+      // Render the component
+      const component = mount(<InsightsSpaceList
+        spaces={{
+          filters: {
+            search: 'My 2',
+            parent: 'spc_3',
+          },
+          data: [
+            {
+              id: 'spc_1',
+              name: 'My Space',
+              currentCount: 2,
+              capacity: 5,
+              parentId: 'spc_3',
+              spaceType: 'space',
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_2',
+              name: 'My Space 2',
+              currentCount: 2,
+              capacity: 5,
+              parentId: 'spc_3',
+              spaceType: 'space',
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_3',
+              name: 'My Campus',
+              spaceType: 'campus',
+              timeZone: 'America/New_York',
+            },
+          ],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+      />);
+
+      // For this test, whether the utilization data has been loaded or not is not important. So, to
+      // make the test faster, skip it.
+      component.setState({view: 'VISIBLE'});
+
+      // Ensure that the header uses the right language to describe the 2-space filtered
+      // scenario.
+      assert.equal(
+        component.find('.insights-space-list-summary-header').text(),
+        'This 1 space in My Campus has seen 0 visitors during open hours this past week'
+      );
+    });
+    it(`should render phrase properly a whole building is picked`, async function() {
+      // Render the component
+      const component = mount(<InsightsSpaceList
+        spaces={{
+          filters: {
+            search: '',
+            parent: 'spc_3',
+          },
+          data: [
+            {
+              id: 'spc_1',
+              name: 'My Space',
+              currentCount: 2,
+              capacity: 5,
+              parentId: 'spc_3',
+              spaceType: 'space',
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_2',
+              name: 'My Space 2',
+              currentCount: 2,
+              capacity: 5,
+              parentId: 'spc_3',
+              spaceType: 'space',
+              timeZone: 'America/New_York',
+            },
+            {
+              id: 'spc_3',
+              name: 'My Building',
+              spaceType: 'building',
+              timeZone: 'America/New_York',
+            },
+          ],
+          events: {},
+        }}
+        activeModal={{name: null, data: null}}
+      />);
+
+      // For this test, whether the utilization data has been loaded or not is not important. So, to
+      // make the test faster, skip it.
+      component.setState({view: 'VISIBLE'});
+
+      // Ensure that the header uses the right language to describe the 2-space filtered
+      // scenario.
+      assert.equal(
+        component.find('.insights-space-list-summary-header').text(),
+        'Your 2 spaces in My Building have seen 0 visitors during open hours this past week'
+      );
+    });
   });
 
   it('should calculate the total number of ingresses for a space', function() {
@@ -680,6 +934,7 @@ describe('insights space list', function() {
         data: [
           {
             id: 'spc_1',
+            spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
             capacity: 5,

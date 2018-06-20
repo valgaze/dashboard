@@ -45,7 +45,7 @@ $insights-space-list-item-height: 43px;
   }
 }
 
-.insights-space-list-filter-row {
+.insights-space-list-filter-spaces-row {
   @include grid-row;
   margin-top: 20px;
   margin-bottom: 40px;
@@ -55,16 +55,6 @@ $insights-space-list-item-height: 43px;
   flex-direction: column;
   @media (min-width: $screen-xs-max) {
     flex-direction: row; /* on desktop, render filters horizontally (and no vertical padding on each filter item) */
-  }
-}
-
-.insights-space-list-filter-item {
-  display: flex;
-  flex-direction: row;
-
-  margin-top: 10px; /* on mobile, add vertical spacing between filter items */
-  @media (min-width: $screen-xs-max) {
-    margin-top: 0px; /* on desktop, filter items are side-by-side. No vertical spacing needed. */
   }
 }
 
@@ -79,21 +69,6 @@ $insights-space-list-item-height: 43px;
   @media (min-width: $screen-xs-max) {
     margin-right: 15px; /* on desktop, render text labels side-by-side with their inputs */
     margin-left: 15px;
-  }
-}
-
-// The "Working hours" / "Whole day" / "Breakfast" / etc selector.
-.insights-space-list-time-segment-selector {
-  color: $gray-cinder;
-  width: 200px;
-}
-
-// The "week" / "month" selector
-.insights-space-list-duration-selector {
-  color: $gray-cinder;
-  width: 200px;
-  @media (min-width: $screen-xs-max) {
-    width: 100px;
   }
 }
 
@@ -165,4 +140,68 @@ $insights-space-list-item-height: 43px;
   font-size: $font-size-x-small;
   color: $brand-primary;
   margin-left: 20px;
+}
+
+.card .insights-space-list-filters {
+  display: flex;
+
+  flex-direction: column; /* on mobile, filter items are displayed vertically */
+  padding: 15px;
+
+  @media (min-width: $screen-xs-max) {
+    flex-direction: row; /* on desktop, filter items are side-by-side. */
+    padding-top: 13px;
+    padding-bottom: 13px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  background-color: $gray-lightest;
+}
+
+.insights-space-list-filter-item {
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 10px; /* on mobile, add vertical spacing between filter items */
+  margin-left: 0px;
+  width: 100%; /* also on mobile, take up full width of column */
+  @media (min-width: $screen-xs-max) {
+    margin-top: 0px; /* on desktop, filter items are side-by-side. No vertical spacing needed. */
+    margin-left: 20px;
+    width: auto; /* on desktop, filter items define their own widths */
+  }
+
+  // The space hierarchy filter is the first one. All other filters after it are right aligned.
+  &:first-child {
+    margin-left: 0px;
+    margin-right: auto;
+  }
+}
+
+// The "space hierarchy" selector - pick building, floor, or campus
+.insights-space-list-space-hierarchy-selector {
+  color: $gray-cinder;
+  width: 100%;
+  @media (min-width: $screen-xs-max) {
+    width: 200px;
+  }
+}
+
+// The "Working hours" / "Whole day" / "Breakfast" / etc selector.
+.insights-space-list-time-segment-selector {
+  color: $gray-cinder;
+  width: 100%;
+  @media (min-width: $screen-xs-max) {
+    width: 200px;
+  }
+}
+
+// The "week" / "month" selector
+.insights-space-list-duration-selector {
+  color: $gray-cinder;
+  width: 100%;
+  @media (min-width: $screen-xs-max) {
+    width: 170px;
+  }
 }

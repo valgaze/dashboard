@@ -219,7 +219,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
 
       // Calculate an average day's utilization graph.
-      let averageUtilizationDatapoints = this.state.data[0].utilization.map(_ => 0);
+      let averageUtilizationDatapoints = (this.state.data[0] ? this.state.data[0].utilization : []).map(_ => 0);
 
       // The average calculation is split into two parts: the sum and the division.
       // - The sum part of the average (step 1) occurs below.
@@ -294,20 +294,21 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             <InputBox
               type="select"
               className="insights-space-list-time-segment-selector"
+              disabled={this.state.state !== VISIBLE}
               value={this.state.timeSegment}
               onChange={e => {
                 this.setState({
                   state: LOADING,
-                  timeSegment: e.target.value,
+                  timeSegment: e.id,
                 }, () => this.fetchData());
               }}
-            >
-              {Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                return <option value={key} key={key}>
-                  {name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})
-                </option>;
+              choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
+                return {
+                  id: key,
+                  label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
+                };
               })}
-            </InputBox>
+            />
           </div>
           <div className="insights-space-detail-utilization-card-date-picker">
             <DateRangePicker
@@ -358,16 +359,17 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           </div>
         </CardHeader>
 
-        {this.state.state === VISIBLE ? <div>
-          <CardWell>
+        {/* TODO: Make this render a Fragment w/ React 16 */}
+        {this.state.state === VISIBLE ? [
+          <CardWell key={0} type="dark">
             Average utilization of <CardWellHighlight>
               {Math.round(this.calculateAverageUtilization() * 100)}%
             </CardWellHighlight> during <CardWellHighlight>
               {TIME_SEGMENTS[this.state.timeSegment].phrasal}
             </CardWellHighlight>
-          </CardWell>
+          </CardWell>,
 
-          <CardHeader>
+          <CardHeader key={1}>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Weekly Breakdown
               <span className="insights-space-detail-utilization-card-header-timespan">
@@ -380,8 +382,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 </span>
               </span>
             </span>
-          </CardHeader>
-          <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
+          </CardHeader>,
+          <CardBody key={2} className="insights-space-detail-utilization-card-average-weekly-breakdown">
             <div className="insights-space-detail-utilization-card-grid-header">
               <div className="insights-space-detail-utilization-card-grid-item">Weekday</div>
               <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
@@ -398,11 +400,13 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 </div>
               </div>;
             })}
-          </CardBody>
+          </CardBody>,
 
-          <CardWell>
+          <CardWell key={3} type="dark">
             {peakUtilizationTimestamp === null ? <span>
-              No peak utilization during <CardWellHighlight>
+              <CardWellHighlight>
+                No peak utilization
+              </CardWellHighlight> during <CardWellHighlight>
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
               </CardWellHighlight>
             </span> : <span>
@@ -427,9 +431,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 {TIME_SEGMENTS[this.state.timeSegment].phrasal}
               </CardWellHighlight>
             </span>}
-          </CardWell>
+          </CardWell>,
 
-          <CardHeader>
+          <CardHeader key={4}>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Daily Breakdown
               <span className="insights-space-detail-utilization-card-header-timespan">
@@ -442,11 +446,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 </span>
               </span>
             </span>
-          </CardHeader>
-          <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
+          </CardHeader>,
+          <div key={5} className="insights-space-detail-utilization-card-daily-breakdown-chart">
             <LineChartComponent
               timeZone={space.timeZone}
-              svgWidth={970}
+              svgWidth={965}
               svgHeight={350}
 
               xAxis={xAxisDailyTick({
@@ -508,7 +512,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               ]}
             />
           </div>
-        </div> : null}
+        ] : null}
         {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
           <span>
             {(() => {

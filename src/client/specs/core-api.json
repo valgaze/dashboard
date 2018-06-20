@@ -52,6 +52,9 @@
         "method": "DELETE",
         "url": "{{{core}}}/{{organisation}}/spaces/{{id}}",
         "desc": "Delete a space by id.",
+        "headers": {
+          "Content-Type": "application/json"
+        },
         "body": {
           "name": "{{name}}"
         }
