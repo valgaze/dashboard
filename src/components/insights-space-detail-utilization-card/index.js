@@ -295,7 +295,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               }, () => this.fetchData.call(this))}
             />
             <span className="insights-space-detail-utilization-card-header-timespan">
-              (Monday &mdash; Friday)
+              (Monday &mdash; {this.state.includeWeekends && !this.state.includeWeekendsProcessing ? 'Sunday' : 'Friday'})
             </span>
           </span>
 
