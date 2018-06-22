@@ -41,7 +41,6 @@ export function isWithinTimeSegment(timestamp, timezone, segment) {
   const weekday = t.isoWeekday();
   const hour = t.get('hour');
   const result = (
-    weekday <= 5 && // Monday - Friday
     hour > segment.start && hour < segment.end // 9am <= hour <= 5pm
   );
   return result;
