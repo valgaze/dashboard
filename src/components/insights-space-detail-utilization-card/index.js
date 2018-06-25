@@ -185,7 +185,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     }
 
     const utilizationSum = data.reduce((acc, i) => acc + i.averageUtilization, 0);
-    return utilizationSum / data.length;
+    const result = utilizationSum / data.length;
+    return Math.round(result);
   }
 
   // updates the state's `startDate` and `endDate` and triggers a `fetchData`
