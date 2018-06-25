@@ -1413,9 +1413,12 @@ describe('space utilization card', function() {
 
     // Then, click on the "Include weekends" switch
     const includeWeekendsSwitch = component.find('.insights-space-detail-utilization-card-header-weekends Switch');
-    includeWeekendsSwitch.props().onChange();
+    includeWeekendsSwitch.props().onChange({ target: { checked: true } });
 
     // Verify that clicking the switch adjusted the `includeWeekends` property
     assert.equal(component.state().includeWeekends, true);
+
+    // And that a loading bar is shown.
+    assert.equal(component.find('CardLoading').length, 1);
   });
 });

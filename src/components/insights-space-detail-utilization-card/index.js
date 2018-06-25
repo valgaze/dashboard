@@ -284,7 +284,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
     if (space) {
       return <Card className="insights-space-detail-utilization-card">
-        { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
+        { this.state.state === LOADING || this.state.includeWeekendsProcessing ?
+          <CardLoading indeterminate /> : null }
         <CardHeader className="insights-space-detail-utilization-card-header">
           <span className="insights-space-detail-utilization-card-header-label">
             Space Utilization
@@ -371,7 +372,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
         {/* TODO: Make this render a Fragment w/ React 16 */}
         {this.state.state === VISIBLE ? [
-          <CardWell type="dark">
+          <CardWell key={0} type="dark">
             Average utilization of <CardWellHighlight>
               {Math.round(this.calculateAverageUtilization() * 100)}%
             </CardWellHighlight> during <CardWellHighlight>
@@ -379,7 +380,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             </CardWellHighlight>
           </CardWell>,
 
-          <CardHeader>
+          <CardHeader key={1}>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Weekly Breakdown
               <span className="insights-space-detail-utilization-card-header-timespan">
@@ -396,9 +397,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 <Switch
                   value={this.state.includeWeekends}
                   disabled={this.state.includeWeekendsProcessing}
-                  onChange={() => {
+                  onChange={event => {
                     this.setState({
-                      includeWeekends: !this.state.includeWeekends,
+                      includeWeekends: event.target.checked,
                       includeWeekendsProcessing: true,
                     }, () => this.fetchData());
                   }}
@@ -406,7 +407,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               </span>
             </span>
           </CardHeader>,
-          <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
+          <CardBody key={2} className="insights-space-detail-utilization-card-average-weekly-breakdown">
             <div className="insights-space-detail-utilization-card-grid-header">
               <div className="insights-space-detail-utilization-card-grid-item">Weekday</div>
               <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
@@ -436,7 +437,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             })}
           </CardBody>,
 
-          <CardWell type="dark">
+          <CardWell key={3} type="dark">
             {peakUtilizationTimestamp === null ? <span>
               <CardWellHighlight>
                 No peak utilization
@@ -467,7 +468,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             </span>}
           </CardWell>,
 
-          <CardHeader>
+          <CardHeader key={4}>
             <span className="insights-space-detail-utilization-card-header-label">
               Average Daily Breakdown
               <span className="insights-space-detail-utilization-card-header-timespan">
@@ -481,7 +482,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               </span>
             </span>
           </CardHeader>,
-          <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
+          <div key={5} className="insights-space-detail-utilization-card-daily-breakdown-chart">
             <LineChartComponent
               timeZone={space.timeZone}
               svgWidth={965}
