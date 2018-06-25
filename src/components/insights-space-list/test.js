@@ -274,6 +274,37 @@ describe('insights space list', function() {
     assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
   });
 
+  it('should allow adjustment of the utilization calculation to take weekends into account', async function() {
+    // Render the component
+    const component = mount(<InsightsSpaceList
+      spaces={{
+        filters: {search: ''},
+        data: [
+          {
+            id: 'spc_1',
+            spaceType: 'space',
+            name: 'My Space',
+            currentCount: 2,
+            capacity: 5,
+            timeZone: 'America/New_York',
+          },
+        ],
+        events: {},
+      }}
+      activeModal={{name: null, data: null}}
+    />);
+
+    // Then, click on the "Include weekends" switch
+    const includeWeekendsSwitch = component.find('.insights-space-list-card-body-header-weekends Switch');
+    includeWeekendsSwitch.props().onChange();
+
+    // Verify that clicking the switch adjusted the `includeWeekends` property
+    assert.equal(component.state().includeWeekends, true);
+
+    // Also verify that clicking the switch put the card into a loading state
+    assert.equal(component.state().view, 'LOADING');
+  });
+
   describe('sorting of spaces', function() {
     it(`should by default sort spaces in order of name decending`, async function() {
       // Render the component

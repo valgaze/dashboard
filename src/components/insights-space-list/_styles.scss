@@ -83,6 +83,29 @@ $insights-space-list-item-height: 43px;
   padding-right: 0px;
 }
 
+.insights-space-list-card-body-header {
+  display: flex;
+  flex-direction: row;
+
+  color: $gray-cinder;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  h3 { margin-top: 5px; }
+}
+
+.insights-space-list-card-body-header-weekends {
+  margin-left: auto;
+  font-size: $font-size-base;
+  font-weight: normal;
+
+  & > .switch {
+    display: inline-block;
+    transform: translate(0px, 4px);
+    margin-left: 10px;
+  }
+}
+
 .insights-space-list {
   table-layout: fixed;
   border-collapse: collapse;
