@@ -8,6 +8,7 @@ import { core } from '../../client';
 import gridVariables from '@density/ui/variables/grid.json';
 import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
 import InputBox from '@density/ui-input-box';
+import Switch from '@density/ui-switch';
 
 import PercentageBar from '@density/ui-percentage-bar';
 
@@ -81,6 +82,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       startDate: moment.utc().tz(this.props.space.timeZone).subtract(7, 'days').startOf('day').format(),
       endDate: moment.utc().tz(this.props.space.timeZone).subtract(1, 'day').endOf('day').format(),
       timeSegment: 'WORKING_HOURS',
+
+      includeWeekends: false,
+      includeWeekendsProcessing: false,
     };
 
     // Fetch initial data
@@ -137,7 +141,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     const filteredGroups = groups.filter(group => {
       // Filter out any days that aren't within monday-friday
       const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
-      return dayOfWeek !== 5 && dayOfWeek !== 6 // Remove saturday and sunday
+      if (this.state.includeWeekends) {
+        return true; // Include all days
+      } else {
+        return dayOfWeek !== 5 && dayOfWeek !== 6; // Remove saturday and sunday
+      }
     }).map(group => {
       // Remove all counts in each bucket that is outside each time segment.
       return {
@@ -157,6 +165,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
     this.setState({
       state: VISIBLE,
+      includeWeekendsProcessing: false,
 
       counts,
       groups,
@@ -176,7 +185,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     }
 
     const utilizationSum = data.reduce((acc, i) => acc + i.averageUtilization, 0);
-    return utilizationSum / data.length;
+    const result = utilizationSum / data.length;
+    return Math.round(result * 100) / 100; /* round to the nearest percentage */
   }
 
   // updates the state's `startDate` and `endDate` and triggers a `fetchData`
@@ -274,7 +284,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
     if (space) {
       return <Card className="insights-space-detail-utilization-card">
-        { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
+        { this.state.state === LOADING || this.state.includeWeekendsProcessing ?
+          <CardLoading indeterminate /> : null }
         <CardHeader className="insights-space-detail-utilization-card-header">
           <span className="insights-space-detail-utilization-card-header-label">
             Space Utilization
@@ -286,7 +297,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               }, () => this.fetchData.call(this))}
             />
             <span className="insights-space-detail-utilization-card-header-timespan">
-              (Monday &mdash; Friday)
+              (Monday &mdash; {this.state.includeWeekends && !this.state.includeWeekendsProcessing ? 'Sunday' : 'Friday'})
             </span>
           </span>
 
@@ -381,6 +392,19 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   ({TIME_SEGMENTS[this.state.timeSegment].name})
                 </span>
               </span>
+              <span className="insights-space-detail-utilization-card-header-weekends">
+                <span>Include Weekends</span>
+                <Switch
+                  value={this.state.includeWeekends}
+                  disabled={this.state.includeWeekendsProcessing}
+                  onChange={event => {
+                    this.setState({
+                      includeWeekends: event.target.checked,
+                      includeWeekendsProcessing: true,
+                    }, () => this.fetchData());
+                  }}
+                />
+              </span>
             </span>
           </CardHeader>,
           <CardBody key={2} className="insights-space-detail-utilization-card-average-weekly-breakdown">
@@ -388,7 +412,18 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <div className="insights-space-detail-utilization-card-grid-item">Weekday</div>
               <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
             </div>
-            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map((day, index) => {
+            {[
+              'Monday',
+              'Tuesday',
+              'Wednesday',
+              'Thursday',
+              'Friday',
+              ...(
+                (this.state.includeWeekends && !this.state.includeWeekendsProcessing) ?
+                ['Saturday', 'Sunday'] :
+                []
+              ),
+            ].map((day, index) => {
               return <div className="insights-space-detail-utilization-card-grid-row" key={day}>
                 <div className="insights-space-detail-utilization-card-grid-item">{day}</div>
                 <div className="insights-space-detail-utilization-card-grid-item">

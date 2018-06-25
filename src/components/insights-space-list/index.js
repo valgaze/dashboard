@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
 import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
 import PercentageBar from '@density/ui-percentage-bar';
+import Switch from '@density/ui-switch';
 
 import gridVariables from '@density/ui/variables/grid.json';
 
@@ -68,6 +69,8 @@ export class InsightsSpaceList extends React.Component {
 
       timeSegment: 'WORKING_HOURS',
       dataDuration: DATA_DURATION_WEEK,
+
+      includeWeekends: false,
     };
 
     this.fetchDataLock = false;
@@ -101,16 +104,25 @@ export class InsightsSpaceList extends React.Component {
       // Store if each space has a capacity and therefore can be used to calculate utilization.
       const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
 
-      // Get the last full week of data.
       // NOTE: The below times don't have timezones. This is purposeful - the
       // `core.spaces.allCounts` call below can accept timezoneless timestamps, which in this case,
       // is desired so that we can get from `startTime` to `endTime` in the timezone of each space,
       // rather than in a fixed timezone between all spaces (since the list of spaces can be in
       // multiple timezones)
+
+      // Get the last full week of data.
+      //
+      // "Some random month"
+      //
+      //              1  2
+      //  3  4  5  6  7  8
+      //  9  10
+      //
+      // ie, if the current date is the 10th, then the last full week goes from the 3rd to the 8th.
       let startTime,
           endTime = moment.utc().subtract(1, 'week').endOf('week').subtract(1, 'day').format('YYYY-MM-DDTHH:mm:ss');
       if (this.state.dataDuration === DATA_DURATION_WEEK) {
-        startTime = moment.utc().subtract(1, 'week').startOf('week').add(1, 'day').startOf('day').format('YYYY-MM-DDTHH:mm:ss');
+        startTime = moment.utc().subtract(1, 'week').startOf('week').subtract(1, 'day').startOf('day').format('YYYY-MM-DDTHH:mm:ss');
       } else {
         startTime = moment.utc().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss');
       }
@@ -153,9 +165,13 @@ export class InsightsSpaceList extends React.Component {
 
         const groups = groupCountsByDay(counts, space.timeZone);
         const filteredGroups = groups.filter(group => {
-          // Filter out any days that aren't within monday-friday
-          const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
-          return dayOfWeek !== 5 && dayOfWeek !== 6 // Remove saturday and sunday
+          if (this.state.includeWeekends) {
+            return true; // Include all days
+          } else {
+            // Filter out any days that aren't within monday-friday
+            const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').isoWeekday();
+            return dayOfWeek !== 5 && dayOfWeek !== 6; // Remove saturday and sunday
+          }
         }).map(group => {
           // Remove all counts in each bucket that is outside each time segment.
           return {
@@ -184,6 +200,7 @@ export class InsightsSpaceList extends React.Component {
 
       this.setState({
         view: VISIBLE,
+
         spaceCounts,
         spaceUtilizations,
       });
@@ -410,6 +427,26 @@ export class InsightsSpaceList extends React.Component {
           </CardBody>
 
           {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
+            <div className="insights-space-list-card-body-header">
+              <h3>Average Utilization</h3>
+
+              <span className="insights-space-list-card-body-header-weekends">
+                <span>Include Weekends</span>
+                <Switch
+                  value={this.state.includeWeekends}
+                  disabled={this.state.view !== VISIBLE}
+                  onChange={() => {
+                    this.setState({
+                      view: LOADING,
+                      includeWeekends: !this.state.includeWeekends,
+
+                      spaceCounts: {},
+                      spaceUtilizations: {},
+                    }, () => this.fetchData());
+                  }}
+                />
+              </span>
+            </div>
             <table className="insights-space-list">
               <tbody>
                 <SortableGridHeader className="insights-space-list-item header">
@@ -504,7 +541,7 @@ export class InsightsSpaceList extends React.Component {
                     </td>
                     <td className="insights-space-list-item-utilization">
                       <PercentageBar
-                        percentage={spaceUtilizations[space.id]}
+                        percentage={spaceUtilizations[space.id] || 0}
                         percentageFormatter={percentage => {
                           // Format the capacity and display as percent as long as these two
                           // conditions are true:
