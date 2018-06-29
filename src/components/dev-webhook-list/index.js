@@ -62,7 +62,7 @@ export function WebhookList({
   </Subnav>;
 
   if (webhooks.loading) {
-    return <div className="webhook-list">
+    return <div className="webhook">
       {modals}
       {subnav}
       <div className="webhook-list-loading"><LoadingSpinner /></div>
@@ -83,7 +83,7 @@ export function WebhookList({
           <h1 className="webhook-list-header-text">Webhooks</h1>
           <DescriptionModal>
             <p>
-              Webhooks allow us to push you data whenever your Density sensors count an event. Create a webhook, tell us what endpoint to hit, and we'll send you a payload over HTTP.
+              Webhooks allow us to push your data whenever your Density sensors count an event. Create a webhook, tell us what endpoint to hit, and we'll send you a payload over HTTP.
             </p>
             <a
               className="webhook-list-description-link"
