@@ -106,7 +106,7 @@ export class InsightsSpaceList extends React.Component {
 
       // NOTE: The below times don't have timezones. This is purposeful - the
       // `core.spaces.allCounts` call below can accept timezoneless timestamps, which in this case,
-      // is desired so that we can get from `startTime` to `endTime` in the timezone of each space,
+      // is desired so that we can get from `startDate` to `endDate` in the timezone of each space,
       // rather than in a fixed timezone between all spaces (since the list of spaces can be in
       // multiple timezones)
 
@@ -119,19 +119,20 @@ export class InsightsSpaceList extends React.Component {
       //  9  10
       //
       // ie, if the current date is the 10th, then the last full week goes from the 3rd to the 8th.
-      let startTime,
-          endTime = moment.utc().subtract(1, 'week').endOf('week').subtract(1, 'day').format('YYYY-MM-DDTHH:mm:ss');
+      let startDate,
+          endDate = moment.utc().subtract(1, 'week').endOf('week').endOf('day').format('YYYY-MM-DDTHH:mm:ss');
+
       if (this.state.dataDuration === DATA_DURATION_WEEK) {
-        startTime = moment.utc().subtract(1, 'week').startOf('week').subtract(1, 'day').startOf('day').format('YYYY-MM-DDTHH:mm:ss');
+        startDate = moment.utc().subtract(1, 'week').startOf('week').format('YYYY-MM-DDTHH:mm:ss');
       } else {
-        startTime = moment.utc().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss');
+        startDate = moment.utc().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss');
       }
 
       // Get all counts within that last full week. Request as many pages as required.
       const data = await fetchAllPages(page => {
         return core.spaces.allCounts({
-          start_time: startTime,
-          end_time: endTime,
+          start_time: startDate,
+          end_time: endDate,
           interval: '10m',
           page,
           page_size: 1000,
@@ -364,6 +365,7 @@ export class InsightsSpaceList extends React.Component {
                     {TIME_SEGMENTS[this.state.timeSegment].phrasal}
                   </CardWellHighlight> this past <CardWellHighlight>
                     {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
+                    {this.state.includeWeekends ? ', including weekends' : ''}
                   </CardWellHighlight>
                 </span>;
               } else {

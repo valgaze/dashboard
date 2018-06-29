@@ -79,8 +79,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       data: null,
       dataSpaceId: null,
 
-      startDate: moment.utc().tz(this.props.space.timeZone).subtract(7, 'days').startOf('day').format(),
-      endDate: moment.utc().tz(this.props.space.timeZone).subtract(1, 'day').endOf('day').format(),
+      startDate: moment.utc().tz(props.space.timeZone).subtract(1, 'week').startOf('week').format(),
+      endDate: moment.utc().tz(props.space.timeZone).subtract(1, 'week').endOf('week').endOf('day').format(),
       timeSegment: 'WORKING_HOURS',
 
       includeWeekends: false,
@@ -192,8 +192,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
   // updates the state's `startDate` and `endDate` and triggers a `fetchData`
   setDatesAndFetchData(startDate, endDate) {
     this.setState({
-      startDate: startDate ? startDate.format() : undefined,
-      endDate: endDate ? endDate.endOf('day').format() : undefined,
+      startDate: startDate ? startDate.tz(this.props.space.timeZone).startOf('day').format() : undefined,
+      endDate: endDate ? endDate.tz(this.props.space.timeZone).endOf('day').format() : undefined,
     }, () => {
       // If the start date and end date were both set, then load data.
       if (this.state.startDate && this.state.endDate) {
