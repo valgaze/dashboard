@@ -77,7 +77,7 @@ export class Account extends React.Component {
           {this.state.mode === EDIT ? 'Edit Account' : 'Account'}
 
           {/* Edit / Cancel button */}
-          <ModalHeaderActionButton
+          {user && !user.isDemo ? <ModalHeaderActionButton
             onClick={() => {
               // If currently in edit mode, then reset all edits before transitioning back to normal
               // mode.
@@ -95,7 +95,7 @@ export class Account extends React.Component {
               }
             }}
             className="account-edit-button"
-          >{this.state.mode === EDIT ? 'Cancel' : 'Edit'}</ModalHeaderActionButton>
+          >{this.state.mode === EDIT ? 'Cancel' : 'Edit'}</ModalHeaderActionButton> : null}
         </CardHeader>
 
         <CardBody>
@@ -157,12 +157,12 @@ export class Account extends React.Component {
           />
 
           {/* Trigger changing the password */}
-          {this.state.mode === NORMAL ? <FormLabel
+          {this.state.mode === NORMAL && user && !user.isDemo ? <FormLabel
             className="account-change-password-link-container"
             label="Password"
             htmlFor="account-change-password"
             input={ <div id="account-change-password" className="account-change-password-value">
-              <span onClick={() => this.setState({mode: PASSWORD_RESET})}>Change Password</span>
+              <span onClick={() => this.setState({mode: PASSWORD_RESET})}>Change a Password</span>
             </div>}
           /> : null}
 
