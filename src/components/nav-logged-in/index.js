@@ -22,6 +22,10 @@ export default function NavLoggedIn({
       ]}
       href="#/onboarding/overview"
       onClick={closeSidebar}
+
+      // Lock the onboarding page in the demo account.
+      locked={user.data && user.data.isDemo}
+      lockedReason="Onboarding is unavailable in the demo account."
     >Onboarding</NavbarMobileItem>,
 
     <NavbarMobileItem
@@ -118,6 +122,10 @@ export default function NavLoggedIn({
         'ACCOUNT_SETUP_DOORWAY_DETAIL',
       ]}
       href="#/onboarding/overview"
+
+      // Lock the onboarding page in the demo account.
+      locked={user.data && user.data.isDemo}
+      lockedReason="Onboarding is unavailable in the demo account."
     >Onboarding</NavbarItem>
 
     <NavbarItem
