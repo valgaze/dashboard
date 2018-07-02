@@ -162,7 +162,7 @@ export class Account extends React.Component {
             label="Password"
             htmlFor="account-change-password"
             input={ <div id="account-change-password" className="account-change-password-value">
-              <span onClick={() => this.setState({mode: PASSWORD_RESET})}>Change a Password</span>
+              <span onClick={() => this.setState({mode: PASSWORD_RESET})}>Change Password</span>
             </div>}
           /> : null}
 
