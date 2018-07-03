@@ -53,8 +53,9 @@ export default class TokenUpdateModal extends React.Component {
               label="Description"
               htmlFor="update-token-description"
               input={<InputBox
-                type="text"
-                id="update-token-description"
+                type="textarea"
+                className="token-update-description-field"
+                id="token-update-description"
                 value={this.state.description}
                 onChange={e => this.setState({description: e.target.value})}
               />}
@@ -98,8 +99,8 @@ export default class TokenUpdateModal extends React.Component {
 
             <p>
               The act of removing a token is irreversible - ie, you might have the token built into
-              a compiled thing somewhere that would be hard / impossible to reassign. Type in the
-              name of this token below (<code>{this.state.name}</code>) to remove.
+              a piece of software such that it would be difficult to reassign. Type in the name of
+              this token below (<code>{this.state.name}</code>) to remove.
             </p>
 
             <div className="token-update-destroy-confirmation">

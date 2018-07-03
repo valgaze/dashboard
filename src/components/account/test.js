@@ -9,11 +9,13 @@ import storeFactory from '../../store';
 import ConnectedAccount, { Account, NORMAL, EDIT, PASSWORD_RESET } from './index';
 
 const user = {
-  fullName: 'foo',
-  nickname: 'bar',
-  email: 'foo@density.io',
-  organization: {
-    name: 'baz',
+  data: {
+    fullName: 'foo',
+    nickname: 'bar',
+    email: 'foo@density.io',
+    organization: {
+      name: 'baz',
+    },
   },
 };
 
@@ -105,7 +107,7 @@ describe('Accounts page', function() {
     component.find('.account-edit-button').simulate('click');
 
     // Ensure that the original value is in the box
-    assert.equal(component.find('.account-nickname-container input').prop('value'), user.nickname);
+    assert.equal(component.find('.account-nickname-container input').prop('value'), user.data.nickname);
   });
   it('sets the nickname to the best guess from the full name', function() {
     const component = mount(<Account

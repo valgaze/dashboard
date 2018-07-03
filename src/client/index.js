@@ -7,18 +7,25 @@ let store;
 function setStore(s) { store = s; }
 
 async function errorHandler(response) {
-  // If the user received a 403 in response to any request, send them to the login page.
-  // Redirect the user to the login page and remove the bad session token from
-  // the reducer.
-  if (response.status === 403) {
-    store.dispatch(userError(`Login session has expired or is invalid. Please login again.`));
-    store.dispatch(sessionTokenUnSet());
-    window.location.href = '#/login';
-  }
+  try {
+    const data = await response.json();
 
-  // If the response wasn't a 403, then return the best representation of the error.
-  const data = await response.json();
-  return data.detail || data.error || JSON.stringify(data);
+    // If the user received a 403 with a body of 'invalid authentication credentials' in response to
+    // any request, send them to the login page.  Redirect the user to the login page and remove the
+    // bad session token from the reducer.
+    if (response.status === 403 && data.detail === 'Incorrect authentication credentials.') {
+      store.dispatch(userError(`Login session has expired or is invalid. Please login again.`));
+      store.dispatch(sessionTokenUnSet());
+      window.location.href = '#/login';
+    }
+
+    // If the response wasn't a 403, then return the best representation of the error.
+    return data.detail || data.error || JSON.stringify(data);
+  } catch (err) {
+    // Handle requests that don't contain json.
+    const text = await response.text();
+    return text;
+  }
 }
 
 const core = clientele({...require('./specs/core-api'), errorFormatter: errorHandler});

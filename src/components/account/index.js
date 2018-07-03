@@ -31,17 +31,17 @@ export class Account extends React.Component {
       passwordConfirmation: '',
 
       // Initialize with a prop passing the initial value from the store
-      fullName: this.props.user ? this.props.user.fullName : '',
-      nickname: this.props.user ? this.props.user.nickname : '',
-      email: this.props.user ? this.props.user.email : '',
+      fullName: this.props.user.data ? this.props.user.data.fullName : '',
+      nickname: this.props.user.data ? this.props.user.data.nickname : '',
+      email: this.props.user.data ? this.props.user.data.email : '',
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      fullName: nextProps.user.fullName || '',
-      nickname: nextProps.user.nickname || '',
-      email: nextProps.user.email || '',
+      fullName: nextProps.user.data.fullName || '',
+      nickname: nextProps.user.data.nickname || '',
+      email: nextProps.user.data.email || '',
     });
   }
 
@@ -77,7 +77,7 @@ export class Account extends React.Component {
           {this.state.mode === EDIT ? 'Edit Account' : 'Account'}
 
           {/* Edit / Cancel button */}
-          <ModalHeaderActionButton
+          {user.data && !user.data.isDemo ? <ModalHeaderActionButton
             onClick={() => {
               // If currently in edit mode, then reset all edits before transitioning back to normal
               // mode.
@@ -86,16 +86,16 @@ export class Account extends React.Component {
                   mode: NORMAL,
 
                   // Reset back to the values in the user prop (what's in redux)
-                  fullName: this.props.user.fullName || '',
-                  nickname: this.props.user.nickname || '',
-                  email: this.props.user.email || '',
+                  fullName: user.data.fullName || '',
+                  nickname: user.data.nickname || '',
+                  email: user.data.email || '',
                 });
               } else {
                 this.setState({mode: EDIT});
               }
             }}
             className="account-edit-button"
-          >{this.state.mode === EDIT ? 'Cancel' : 'Edit'}</ModalHeaderActionButton>
+          >{this.state.mode === EDIT ? 'Cancel' : 'Edit'}</ModalHeaderActionButton> : null}
         </CardHeader>
 
         <CardBody>
@@ -149,7 +149,7 @@ export class Account extends React.Component {
             label="Organization"
             input={<InputBox
               type="text"
-              value={user && user.organization ? user.organization.name : '(unknown organization)'}
+              value={user.data && user.data.organization ? user.data.organization.name : '(unknown organization)'}
               onChange={e => this.setState({email: e.target.value})}
               disabled={true}
               id="account-organization"
@@ -157,7 +157,7 @@ export class Account extends React.Component {
           />
 
           {/* Trigger changing the password */}
-          {this.state.mode === NORMAL ? <FormLabel
+          {this.state.mode === NORMAL && user.data && !user.data.isDemo ? <FormLabel
             className="account-change-password-link-container"
             label="Password"
             htmlFor="account-change-password"
@@ -226,7 +226,7 @@ export class Account extends React.Component {
 
 export default connect(state => {
   return {
-    user: state.user.data,
+    user: state.user,
     activeModal: state.activeModal,
     loading: state.user.loading,
   };
