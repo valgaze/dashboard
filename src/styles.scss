@@ -104,6 +104,10 @@
 @import "../node_modules/@density/ui-switch/variables.json";
 @import "../node_modules/@density/ui-switch/dist/sass";
 
+// Info Popup
+@import "../node_modules/@density/ui-info-popup/variables.json";
+@import "../node_modules/@density/ui-info-popup/dist/sass";
+
 $font-size-x-small: 10px;
 
 
@@ -241,3 +245,4 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/sortable-grid-header/styles";
 @import "./components/insights-set-capacity-modal/styles";
 @import "./components/space-hierarchy-select-box/styles";
+@import "./components/insights-space-trends/styles";

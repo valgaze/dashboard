@@ -17,6 +17,7 @@ import collectionTokensFilter from '../../actions/collection/tokens/filter';
 import collectionTokensDestroy from '../../actions/collection/tokens/destroy';
 
 import InputBox from '@density/ui-input-box';
+import InfoPopup from '@density/ui-info-popup';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 
@@ -80,7 +81,7 @@ export function TokenList({
       <div className="token-list-header">
         <span>
           <h1 className="token-list-header-text">Tokens</h1>
-          <DescriptionModal>
+          <InfoPopup>
             <p>
               Tokens are randomized strings that are used to access your Density data via our API. Keep these secret!
             </p>
@@ -91,7 +92,7 @@ export function TokenList({
               target="_blank"
               rel="noopener noreferrer"
             >View our documentation</a>
-          </DescriptionModal>
+          </InfoPopup>
         </span>
 
         {/* Search box to filter the list of tokens */}

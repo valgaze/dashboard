@@ -1,8 +1,6 @@
 .token-list-container {
   @include grid-container;
   margin: 30px auto;
-
-  position: relative;
 }
 
 // The top section on the token page that contains the token header and a search box
@@ -30,6 +28,7 @@
   padding-left: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-right: 10px;
 }
 .token-list-description-link {
   margin-top: 10px;
@@ -80,4 +79,11 @@
 
   &:hover { opacity: 0.8; }
   &:active { opacity: 1; }
+}
+
+.token-list-container .info-popup-icon {
+  vertical-align: middle;
+}
+.token-list-container .info-popup-popup {
+  z-index: 999;
 }
