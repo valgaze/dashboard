@@ -121,8 +121,8 @@ function InsightsSpaceTrends({
         </InsightsFilterBarItem>
         <InsightsFilterBarItem right>
           <IncludeWeekendsSwitch
-            value={true}
-            onChange={console.log}
+            value={spaces.filters.includeWeekends}
+            onChange={e => onChangeSpaceFilter('includeWeekends', e.target.checked)}
           />
         </InsightsFilterBarItem>
       </InsightsFilterBar>
@@ -137,6 +137,7 @@ function InsightsSpaceTrends({
               startDate={spaces.filters.startDate}
               endDate={spaces.filters.endDate}
               timeSegmentId={spaces.filters.timeSegmentId}
+              includeWeekends={spaces.filters.includeWeekends}
             />
           </div>
           <div className="insights-space-trends-item">
