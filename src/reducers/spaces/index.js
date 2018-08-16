@@ -14,6 +14,7 @@ import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/se
 import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
 import { ROUTE_TRANSITION_LIVE_SPACE_LIST } from '../../actions/route-transition/live-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_DETAIL } from '../../actions/route-transition/live-space-detail';
+import { ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS } from '../../actions/route-transition/insights-space-trends';
 import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
@@ -31,6 +32,11 @@ const initialState = {
     search: '',
     sort: SORT_A_Z,
     parent: null,
+
+    timeSegmentId: 'WORKING_HOURS',
+    startDateRange: null,
+    endDateRange: null,
+    includeWeekends: false,
   },
 
   // An object that maps space id to an array of events
@@ -112,6 +118,7 @@ export default function spaces(state=initialState, action) {
   // When the user changes the active space, update it in the store.
   case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
   case ROUTE_TRANSITION_LIVE_SPACE_DETAIL:
+  case ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS:
     return {...state, error: null, selected: action.id};
   case ROUTE_TRANSITION_LIVE_SPACE_LIST:
     return {...state, error: null};

@@ -1,0 +1,57 @@
+.insights-space-header-container {
+  // Remove the paddings from the width.
+  width: calc(100% - 18px - 18px);
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.insights-space-header {
+  max-width: 980px;
+  width: 100%;
+  margin: 0px auto;
+  padding-left: 0px;
+}
+
+.insights-space-header-text {
+  margin-top: 40px;
+  font-size: 24px;
+  font-weight: 500;
+  color: $gray-cinder;
+}
+
+.insights-space-header-row {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.insights-space-header-capacity {
+  font-size: 16px;
+  font-weight: normal;
+  color: $gray-cinder;
+}
+
+.insights-space-header-capacity-set-link,
+.insights-space-header-capacity-update-link {
+  text-decoration: underline;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.insights-space-header-time-zone {
+  margin-left: auto;
+}
+
+.insights-space-header-hierarchy {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.insights-space-header-hierarchy-level {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.insights-space-header-hierarchy-level:first-of-type { margin-left: 0px; }
+.insights-space-header-hierarchy-level:last-of-type { margin-right: 0px; }

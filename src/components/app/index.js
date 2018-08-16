@@ -12,6 +12,7 @@ import NavLoggedIn from '../nav-logged-in/index';
 import NavLoggedOut from '../nav-logged-out/index';
 import TokenList from '../dev-token-list/index';
 import InsightsSpaceList from '../insights-space-list/index';
+import InsightsSpaceTrends from '../insights-space-trends/index';
 import SpaceDetail from '../visualization-space-detail/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
@@ -92,6 +93,8 @@ function ActivePage({activePage, settings}) {
     return <InsightsSpaceList />;
   case "VISUALIZATION_SPACE_DETAIL":
     return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceDetail />;
+  case "INSIGHTS_SPACE_TRENDS":
+    return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceTrends />;
   case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":
