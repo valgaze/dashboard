@@ -75,8 +75,8 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
       hoursOffsetFromUtc: 0,
       metricToDisplay: 'entrances',
 
-      startDate: moment.utc().subtract(6, 'days').format(),
-      endDate: moment.utc().format(),
+      startDate: null,
+      endDate: null,
     };
   }
 
@@ -143,10 +143,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
   // updates the state's `startDate` and `endDate` and triggers a `fetchData`
   setDatesAndFetchData(startDate, endDate) {
     // Update the start and end date with the values selected.
-    this.setState({
-      startDate: startDate ? startDate.format() : undefined,
-      endDate: endDate ? endDate.format() : undefined,
-    }, () => {
+    this.setState({startDate, endDate}, () => {
       // If the start date and end date were both set, then load data.
       if (this.state.startDate && this.state.endDate) {
         this.setState({ state: LOADING, data: null }, () => {
@@ -156,12 +153,22 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.startDate !== this.state.startDate ||
+      nextProps.endDate !== this.state.endDate
+    ) {
+      this.setState({
+        startDate: nextProps.startDate,
+        endDate: nextProps.endDate,
+      }, () => {
+        this.setDatesAndFetchData(nextProps.startDate, nextProps.endDate);
+      });
+    }
+  }
+
   render() {
     const {space} = this.props;
-    if (space && space.id !== this.state.dataSpaceId) {
-      this.fetchData.call(this);
-    }
-
     if (space) {
       return <Card className="visualization-space-detail-card">
         {this.state.state === LOADING ? <CardLoading indeterminate /> : null }
@@ -194,40 +201,6 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
                 {id: "total-events", label: "Total Events"},
                 {id: "peak-occupancy", label: "Peak Occupancy"},
               ]}
-            />
-          </div>
-          <div className="visualization-space-detail-daily-metrics-card-date-picker">
-            <DateRangePicker
-              startDate={moment.utc(this.state.startDate).tz(space.timeZone).startOf('day')}
-              endDate={moment.utc(this.state.endDate).tz(space.timeZone).startOf('day')}
-              onChange={({startDate, endDate}) => {
-                // If the user selected over 14 days, then clamp them back to 14 days.
-                if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
-                  endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
-                }
-
-                this.setDatesAndFetchData(startDate, endDate);
-              }}
-              // Within the component, store if the user has selected the start of end date picker
-              // input
-              focusedInput={this.state.datePickerInput}
-              onFocusChange={focused => this.setState({datePickerInput: focused})}
-
-              // On mobile, make the calendar one month wide and left aligned.
-              // On desktop, the calendar is two months wide and right aligned.
-              anchor={document.body && document.body.clientWidth > gridVariables.screenSmMin ? ANCHOR_RIGHT : ANCHOR_LEFT}
-              numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
-
-              isOutsideRange={day => isOutsideRange(
-                this.state.startDate,
-                this.state.datePickerInput,
-                day
-              )}
-
-              // common ranges functionality
-              commonRanges={commonRanges}
-              onSelectCommonRange={(r) => this.setDatesAndFetchData(r.startDate, r.endDate)}
-              // showCommonRangeSubtitles={true}
             />
           </div>
         </CardHeader>
@@ -327,7 +300,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
           {this.state.state === ERROR ? <div className="visualization-space-detail-daily-metrics-card-body-error">
             <span>
               <span className="visualization-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
-              {this.state.error}
+              {this.state.error.toString()}
             </span>
           </div> : null }
 

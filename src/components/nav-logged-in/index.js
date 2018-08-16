@@ -33,6 +33,8 @@ export default function NavLoggedIn({
       pageName={['ACCOUNT_SETUP_OVERVIEW']}
       href="#/onboarding/overview"
       indent={2}
+      locked={user.data && user.data.isDemo}
+      lockedReason="Onboarding is unavailable in the demo account."
       onClick={closeSidebar}
     >Overview</NavbarMobileItem>,
     <NavbarMobileItem
@@ -40,6 +42,8 @@ export default function NavLoggedIn({
       pageName={['ACCOUNT_SETUP_DOORWAY_LIST']}
       href="#/onboarding/doorways"
       indent={2}
+      locked={user.data && user.data.isDemo}
+      lockedReason="Onboarding is unavailable in the demo account."
       onClick={closeSidebar}
     >Doorways</NavbarMobileItem>,
 

@@ -19,6 +19,8 @@ import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
 
+import moment from 'moment';
+
 // Store at maximum 500 events per space
 const EVENT_QUEUE_LENGTH = 500;
 
@@ -34,8 +36,8 @@ const initialState = {
     parent: null,
 
     timeSegmentId: 'WORKING_HOURS',
-    startDateRange: null,
-    endDateRange: null,
+    startDate: moment.utc().subtract(6, 'days').format(),
+    endDate: moment.utc().format(),
     includeWeekends: false,
   },
 

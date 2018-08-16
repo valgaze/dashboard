@@ -89,20 +89,18 @@ function InsightsSpaceTrends({
             startDate={moment.utc(spaces.filters.startDate).tz(space.timeZone).startOf('day')}
             endDate={moment.utc(spaces.filters.endDate).tz(space.timeZone).startOf('day')}
             onChange={({startDate, endDate}) => {
-              console.log('ON CHANGE', startDate, endDate);
               // If the user selected over 14 days, then clamp them back to 14 days.
               if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
                 endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
               }
 
-              onChangeSpaceFilter('startDate', startDate);
-              onChangeSpaceFilter('endDate', endDate);
+              onChangeSpaceFilter('startDate', startDate.format());
+              onChangeSpaceFilter('endDate', endDate.format());
             }}
             // Within the component, store if the user has selected the start of end date picker
             // input
             focusedInput={spaces.filters.datePickerInput}
             onFocusChange={(focused, a) => {
-              console.log('FOCUS', focused, a);
               onChangeSpaceFilter('datePickerInput', focused);
             }}
 
@@ -139,6 +137,9 @@ function InsightsSpaceTrends({
           <div className="insights-space-trends-item">
             <Card>
               <CardHeader>An Average Week</CardHeader>
+              <CardWell type="dark">
+                Average utilization of <CardWellHighlight>10%</CardWellHighlight> during <CardWellHighlight>Open Hours</CardWellHighlight>
+              </CardWell>
               <CardBody>
                 stuff in here
               </CardBody>
@@ -147,6 +148,9 @@ function InsightsSpaceTrends({
           <div className="insights-space-trends-item">
             <Card>
               <CardHeader>An Average Day</CardHeader>
+              <CardWell type="dark">
+                Average utilization of <CardWellHighlight>10%</CardWellHighlight> during <CardWellHighlight>Open Hours</CardWellHighlight>
+              </CardWell>
               <CardBody>
                 stuff in here
               </CardBody>
@@ -155,6 +159,8 @@ function InsightsSpaceTrends({
           <div className="insights-space-trends-item">
             <DailyMetricsCard
               space={space}
+              startDate={spaces.filters.startDate}
+              endDate={spaces.filters.endDate}
             />
           </div>
         </div>

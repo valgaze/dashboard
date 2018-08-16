@@ -7,7 +7,6 @@
   padding-bottom: 20px;
 
   // Remove the paddings from the width.
-  height: 43px;
   width: calc(100% - 18px - 18px);
   padding-left: 18px;
   padding-right: 18px;
@@ -18,9 +17,10 @@
 }
 .insights-filter-bar.fixed {
   position: fixed;
-  top: 0px;
+  top: $navbar-height;
   z-index: 999;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  @media (min-width: $screen-xs-max) { top: 0px; }
 }
 
 .insights-filter-bar-items {

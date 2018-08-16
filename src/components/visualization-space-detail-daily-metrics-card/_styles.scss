@@ -38,15 +38,6 @@
     margin-left: auto;
   }
 }
-.visualization-space-detail-daily-metrics-card-date-picker {
-  margin-top: 10px;
-  margin-left: 0px;
-
-  @media (min-width: $screen-xs-max) {
-    margin-top: 0px;
-    margin-left: 20px;
-  }
-}
 
 
 // Horizontally and vertically center errors and info messages in the daily metrics card.
