@@ -5,7 +5,6 @@ import moment from 'moment';
 import 'moment-timezone';
 
 import InputBox from '@density/ui-input-box';
-import Card, { CardHeader, CardBody, CardWell, CardWellHighlight } from '@density/ui-card';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 
 import Subnav, { SubnavItem } from '../subnav/index';
@@ -14,18 +13,15 @@ import InsightsSpaceHeader from '../insights-space-header/index';
 import IncludeWeekendsSwitch from '../include-weekends-switch/index';
 import UtilizationCard from '../insights-space-detail-utilization-card/index';
 
-import DailyMetricsCard from '../visualization-space-detail-daily-metrics-card/index';
+import DailyMetricsCard from '../insights-space-detail-daily-metrics-card/index';
 
-import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
+import DateRangePicker from '@density/ui-date-range-picker';
 import gridVariables from '@density/ui/variables/grid.json'
-import { IconChevronRight } from '@density/ui-icons';
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
 import commonRanges from '../../helpers/common-ranges';
 import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
-
-import { getParentsOfSpace } from '../../helpers/filter-hierarchy/index';
 
 // The maximum number of days that can be selected by the date range picker
 const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import TwentyFourHourCard from '../visualization-space-detail-24-hour-chart/index';
-import DailyMetricsCard from '../visualization-space-detail-daily-metrics-card/index';
+import DailyMetricsCard from '../insights-space-detail-daily-metrics-card/index';
 import RawEventsCard from '../visualization-space-detail-raw-events-card/index';
 import UtilizationCard from '../insights-space-detail-utilization-card/index';
 import SetCapacityModal from '../insights-set-capacity-modal/index';

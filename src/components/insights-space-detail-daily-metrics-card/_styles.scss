@@ -1,8 +1,8 @@
-.visualization-space-detail-daily-metrics-card {
+.insights-space-detail-daily-metrics-card {
   margin-top: 40px;
 }
 
-.card .visualization-space-detail-daily-metrics-card-body {
+.card .insights-space-detail-daily-metrics-card-body {
   padding-left: 0px;
   padding-right: 0px;
   padding-top: 0px;
@@ -15,7 +15,7 @@
   overflow-x: auto;
   & > div { width: 978px; }
 }
-.visualization-space-detail-daily-metrics-card-body .short-timespan-chart {
+.insights-space-detail-daily-metrics-card-body .short-timespan-chart {
   padding-bottom: 20px;
 }
 
@@ -27,15 +27,15 @@
 .insights-space-detail-daily-metrics-card-header-label {
   line-height: 43px;
 }
-.visualization-space-detail-daily-metrics-card-metric-picker {
+.insights-space-detail-daily-metrics-card-metric-picker {
   margin-left: 20px;
   .input-box { color: $gray-cinder; }
 }
 
 
 // Horizontally and vertically center errors and info messages in the daily metrics card.
-.visualization-space-detail-daily-metrics-card-body-info,
-.visualization-space-detail-daily-metrics-card-body-error {
+.insights-space-detail-daily-metrics-card-body-info,
+.insights-space-detail-daily-metrics-card-body-error {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,7 +46,7 @@
   color: $gray-cinder;
 }
 // Errors should be prefixed by the error icon
-.visualization-space-detail-daily-metrics-card-body-error-icon {
+.insights-space-detail-daily-metrics-card-body-error-icon {
   color: $brand-danger;
   font-family: "Densicons";
   margin-right: 10px;

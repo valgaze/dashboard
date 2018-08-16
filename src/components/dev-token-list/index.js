@@ -7,7 +7,6 @@ import hideModal from '../../actions/modal/hide';
 import TokenCard from '../dev-token-card/index';
 import TokenCreateModal from '../dev-token-create-modal/index';
 import TokenUpdateModal from '../dev-token-update-modal/index';
-import DescriptionModal from '../dev-description-popover/index';
 import LoadingSpinner from '../loading-spinner/index';
 import ErrorBar from '../error-bar/index';
 

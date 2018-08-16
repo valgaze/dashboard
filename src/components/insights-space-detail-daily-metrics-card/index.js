@@ -7,13 +7,8 @@ import 'moment-timezone';
 import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
-import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 import InputBox from '@density/ui-input-box';
 import { IconRefresh } from '@density/ui-icons';
-
-import commonRanges from '../../helpers/common-ranges';
-
-import gridVariables from '@density/ui/variables/grid.json'
 
 import dailyMetrics from '@density/chart-daily-metrics';
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
@@ -42,10 +37,6 @@ const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
 // Below this number of days or equal to this number of days, show the normal daily metrics chart.
 // Above this number of days, show the expanded line chart.
 const GRAPH_TYPE_TRANSITION_POINT_IN_DAYS = 14;
-
-// When the user selects a start date, select a range that's this long. THe user can stil ladjust
-// the range up to a maximum length of `MAXIMUM_DAY_LENGTH` though.
-const INITIAL_RANGE_SELECTION = MAXIMUM_DAY_LENGTH / 2;
 
 // Given a day on the calendar and the current day, determine if the square on the calendar should
 // be grayed out or not.
@@ -190,7 +181,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             >
               <IconRefresh color={this.state.state === LOADING ? 'gray' : 'primary'} />
             </span>
-            <div className="visualization-space-detail-daily-metrics-card-metric-picker">
+            <div className="insights-space-detail-daily-metrics-card-metric-picker">
               <InputBox
                 type="select"
                 value={this.state.metricToDisplay}
@@ -213,7 +204,7 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
           </div>
         </CardHeader>
 
-        <CardBody className="visualization-space-detail-daily-metrics-card-body">
+        <CardBody className="insights-space-detail-daily-metrics-card-body">
           {this.state.state === VISIBLE ? (() => {
             if (this.state.data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
               // For more than two weeks of data, show the graph chart.
@@ -305,18 +296,18 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
             }
           })() : null}
 
-          {this.state.state === ERROR ? <div className="visualization-space-detail-daily-metrics-card-body-error">
+          {this.state.state === ERROR ? <div className="insights-space-detail-daily-metrics-card-body-error">
             <span>
-              <span className="visualization-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
+              <span className="insights-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
               {this.state.error.toString()}
             </span>
           </div> : null }
 
-          {this.state.state === EMPTY ? <div className="visualization-space-detail-daily-metrics-card-body-info">
+          {this.state.state === EMPTY ? <div className="insights-space-detail-daily-metrics-card-body-info">
             No data available for this time range.
           </div> : null }
 
-          {this.state.state === LOADING ? <div className="visualization-space-detail-daily-metrics-card-body-info">
+          {this.state.state === LOADING ? <div className="insights-space-detail-daily-metrics-card-body-info">
             Generating Data&nbsp;.&nbsp;.&nbsp;.
           </div> : null }
         </CardBody>

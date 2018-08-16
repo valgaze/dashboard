@@ -6,20 +6,13 @@ import 'moment-timezone';
 
 import { core } from '../../client';
 
-import gridVariables from '@density/ui/variables/grid.json';
 import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
-import InputBox from '@density/ui-input-box';
-import Switch from '@density/ui-switch';
 import { IconRefresh } from '@density/ui-icons';
 
 import PercentageBar from '@density/ui-percentage-bar';
 
-import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
-import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
-
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import formatPercentage from '../../helpers/format-percentage/index';
-import commonRanges from '../../helpers/common-ranges';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
@@ -39,36 +32,11 @@ const LineChartComponent = chartAsReactComponent(lineChart);
 
 const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 
-// Given a day on the calendar and the current day, determine if the square on the calendar should
-// be grayed out or not.
-function isOutsideRange(startISOTime, datePickerInput, day) {
-  const startDate = moment.utc(startISOTime);
-  if (day.isAfter(moment.utc())) {
-    return true;
-  }
-
-  if (datePickerInput === 'endDate') {
-    return datePickerInput === 'endDate' && startDate &&
-      !( // Is the given `day` within `MAXIMUM_DAY_LENGTH` days from the start date?
-        isInclusivelyAfterDay(day, startDate) &&
-        isInclusivelyBeforeDay(day, startDate.clone().add(MAXIMUM_DAY_LENGTH - 1, 'days'))
-      );
-  }
-  return false;
-}
-
 export const LOADING = 'LOADING',
              EMPTY = 'EMPTY',
              VISIBLE = 'VISIBLE',
              REQUIRES_CAPACITY = 'REQUIRES_CAPACITY',
              ERROR = 'ERROR';
-
-// The maximum number of days that can be selected by the date range picker
-const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
-
-// When the user selects a start date, select a range that's this long. THe user can stil ladjust
-// the range up to a maximum length of `MAXIMUM_DAY_LENGTH` though.
-const INITIAL_RANGE_SELECTION = MAXIMUM_DAY_LENGTH / 2;
 
 export default class InsightsSpaceDetailUtilizationCard extends React.Component {
   constructor(props) {
@@ -278,13 +246,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       peakUtilizationPercentage /= 100;
     }
 
-    const header = <CardHeader>
-      <span className="insights-space-detail-utilization-card-header-label">
-        Average Utilization
-      </span>
-    </CardHeader>;
-
-    console.log('STATE', this.state.state)
     const averageWeekHeader = (
       <CardHeader>
         <div className="insights-space-detail-utilization-card-header-container">
@@ -556,11 +517,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         </div>;
       default:
         return null;
-    }
-
-    if (space) {
-    } else {
-      return <span>This space doesn't exist.</span>;
     }
   }
 }
