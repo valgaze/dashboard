@@ -20,23 +20,16 @@
 }
 
 // On mobile, break the pickers to a second row. On a computer, put them all in one row.
-.visualization-space-detail-daily-metrics-card-header {
-  display: block;
-  @media (min-width: $screen-xs-max) {
-    display: flex;
-  }
-  overflow: visible !important; /* ensure that date picker can escape header bounds */
+.insights-space-detail-daily-metrics-card-header-container {
+  display: flex;
+  flex-direction: row;
 }
-.visualization-space-detail-daily-metrics-card-header-label {
+.insights-space-detail-daily-metrics-card-header-label {
   line-height: 43px;
 }
 .visualization-space-detail-daily-metrics-card-metric-picker {
-  margin-left: 0px;
+  margin-left: 20px;
   .input-box { color: $gray-cinder; }
-
-  @media (min-width: $screen-xs-max) {
-    margin-left: auto;
-  }
 }
 
 
@@ -62,13 +55,15 @@
 }
 
 // Refresh icon to refetch data
-.visualization-space-detail-daily-metrics-card-header-refresh:before {
-  content: '\e92d';
-  font-family: "Densicons";
-  margin-left: 10px;
-  font-size: $font-size-base;
-  color: $brand-primary;
+.insights-space-detail-daily-metrics-card-refresh {
+  display: inline-block;
+  transform: translate(0px, 12px);
+  margin-left: auto;
   cursor: pointer;
 }
-.visualization-space-detail-daily-metrics-card-header-refresh:hover { opacity: 0.8; }
-.visualization-space-detail-daily-metrics-card-header-refresh:active { opacity: 1; }
+.insights-space-detail-daily-metrics-card-refresh:hover { opacity: 0.8; }
+.insights-space-detail-daily-metrics-card-refresh:active { opacity: 1; }
+.insights-space-detail-daily-metrics-card-refresh.disabled {
+  cursor: default;
+  pointer-events: none;
+}

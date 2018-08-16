@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+import classnames from 'classnames';
 
 import moment from 'moment';
 import 'moment-timezone';
@@ -8,6 +9,7 @@ import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
 import InputBox from '@density/ui-input-box';
+import { IconRefresh } from '@density/ui-icons';
 
 import commonRanges from '../../helpers/common-ranges';
 
@@ -172,36 +174,42 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
     if (space) {
       return <Card className="visualization-space-detail-card">
         {this.state.state === LOADING ? <CardLoading indeterminate /> : null }
-        <CardHeader className="visualization-space-detail-daily-metrics-card-header">
-          <span className="visualization-space-detail-daily-metrics-card-header-label">
-            Daily Metrics
+        <CardHeader>
+          <div className="insights-space-detail-daily-metrics-card-header-container">
+            <span className="insights-space-detail-daily-metrics-card-header-label">
+              Daily Metrics
+            </span>
             <span
-              className="visualization-space-detail-daily-metrics-card-header-refresh"
+              className={classnames('insights-space-detail-utilization-card-header-refresh', {
+                disabled: this.state.state !== VISIBLE,
+              })}
               onClick={() => this.setState({
                 state: LOADING,
                 data: null,
               }, () => this.fetchData.call(this))}
-            />
-          </span>
-          <div className="visualization-space-detail-daily-metrics-card-metric-picker">
-            <InputBox
-              type="select"
-              value={this.state.metricToDisplay}
-              disabled={this.state.state !== VISIBLE}
-              onChange={e => {
-                this.setState({
-                  state: LOADING,
-                  data: null,
-                  metricToDisplay: e.id,
-                }, () => this.fetchData());
-              }}
-              choices={[
-                {id: "entrances", label: "Entrances"},
-                {id: "exits", label: "Exits"},
-                {id: "total-events", label: "Total Events"},
-                {id: "peak-occupancy", label: "Peak Occupancy"},
-              ]}
-            />
+            >
+              <IconRefresh color={this.state.state === LOADING ? 'gray' : 'primary'} />
+            </span>
+            <div className="visualization-space-detail-daily-metrics-card-metric-picker">
+              <InputBox
+                type="select"
+                value={this.state.metricToDisplay}
+                disabled={this.state.state !== VISIBLE}
+                onChange={e => {
+                  this.setState({
+                    state: LOADING,
+                    data: null,
+                    metricToDisplay: e.id,
+                  }, () => this.fetchData());
+                }}
+                choices={[
+                  {id: "entrances", label: "Entrances"},
+                  {id: "exits", label: "Exits"},
+                  {id: "total-events", label: "Total Events"},
+                  {id: "peak-occupancy", label: "Peak Occupancy"},
+                ]}
+              />
+            </div>
           </div>
         </CardHeader>
 
