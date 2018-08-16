@@ -57,44 +57,43 @@ export function isOutsideRange(startISOTime, datePickerInput, day) {
 }
 
 export default class VisualizationSpaceDetailDailyMetricsCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      state: LOADING,
-      data: null,
-      dataSpaceId: null,
+  state = {
+    view: LOADING,
+    data: null,
+    dataSpaceId: null,
 
-      datePickerInput: null,
-      hoursOffsetFromUtc: 0,
-      metricToDisplay: 'entrances',
+    datePickerInput: null,
+    hoursOffsetFromUtc: 0,
+    metricToDisplay: 'entrances',
 
-      startDate: null,
-      endDate: null,
-    };
+    startDate: null,
+    endDate: null,
   }
 
-  fetchData() {
-    const {space} = this.props;
-    const metric = this.state.metricToDisplay;
+  fetchData = async () => {
+    const { space } = this.props;
+    const { metricToDisplay, startDate, endDate } = this.state;
 
     // Add timezone offset to both start and end times prior to querying for the count.
     const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-    const startTime = moment.utc(this.state.startDate).tz(space.timeZone).startOf('day');
-    const endTime = moment.utc(this.state.endDate).tz(space.timeZone).startOf('day');
+    const startTime = moment.utc(startDate).tz(space.timeZone).startOf('day');
+    const endTime = moment.utc(endDate).tz(space.timeZone).startOf('day');
 
     // Fetch data from the server for the day-long window.
-    return core.spaces.counts({
-      id: space.id,
-      start_time: startTime.format(),
-      // Add a day to the end of the range to return a final bar of the data for the uncompleted
-      // current day.
-      end_time: endTime.add(1, 'day').format(),
-      interval: '1d',
-      order: 'asc',
-    }).then(data => {
+    try {
+      const data = await core.spaces.counts({
+        id: space.id,
+        start_time: startTime.format(),
+        // Add a day to the end of the range to return a final bar of the data for the uncompleted
+        // current day.
+        end_time: endTime.add(1, 'day').format(),
+        interval: '1d',
+        order: 'asc',
+      });
+
       if (data.results.length > 0) {
         this.setState({
-          state: VISIBLE,
+          view: VISIBLE,
           dataSpaceId: space.id,
           hoursOffsetFromUtc,
           // Return the metric requested within the range of time.
@@ -113,207 +112,209 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
               default:
                 return false
               }
-            })(i, metric) || 0,
+            })(i, metricToDisplay) || 0,
           })),
         });
       } else {
         this.setState({
-          state: EMPTY,
+          view: EMPTY,
           dataSpaceId: space.id,
           hoursOffsetFromUtc,
         });
       }
-    }).catch(error => {
+    } catch (error) {
       this.setState({
-        state: ERROR,
+        view: ERROR,
         error,
         dataSpaceId: space.id,
         hoursOffsetFromUtc,
       });
-    });
+    }
   }
 
-  // updates the state's `startDate` and `endDate` and triggers a `fetchData`
-  setDatesAndFetchData(startDate, endDate) {
-    // Update the start and end date with the values selected.
-    this.setState({startDate, endDate}, () => {
-      // If the start date and end date were both set, then load data.
-      if (this.state.startDate && this.state.endDate) {
-        this.setState({ state: LOADING, data: null }, () => {
-          this.fetchData();
-        });
-      }
-    });
-  }
-
+  // When a new start date and end data is received, attempt to refetch data.
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.startDate !== this.state.startDate ||
-      nextProps.endDate !== this.state.endDate
+      nextProps.startDate && nextProps.endDate && (
+        nextProps.startDate !== this.state.startDate ||
+        nextProps.endDate !== this.state.endDate
+      )
     ) {
       this.setState({
+        view: LOADING,
+        data: null,
         startDate: nextProps.startDate,
         endDate: nextProps.endDate,
-      }, () => {
-        this.setDatesAndFetchData(nextProps.startDate, nextProps.endDate);
-      });
+      }, () => this.fetchData());
     }
   }
 
   render() {
-    const {space} = this.props;
+    const { space } = this.props;
+    const {
+      view,
+      error,
+      metricToDisplay,
+      data,
+      startDate,
+      endDate,
+    } = this.state;
+
     if (space) {
-      return <Card className="visualization-space-detail-card">
-        {this.state.state === LOADING ? <CardLoading indeterminate /> : null }
-        <CardHeader>
-          <div className="insights-space-detail-daily-metrics-card-header-container">
-            <span className="insights-space-detail-daily-metrics-card-header-label">
-              Daily Metrics
-            </span>
-            <span
-              className={classnames('insights-space-detail-utilization-card-header-refresh', {
-                disabled: this.state.state !== VISIBLE,
-              })}
-              onClick={() => this.setState({
-                state: LOADING,
-                data: null,
-              }, () => this.fetchData.call(this))}
-            >
-              <IconRefresh color={this.state.state === LOADING ? 'gray' : 'primary'} />
-            </span>
-            <div className="insights-space-detail-daily-metrics-card-metric-picker">
-              <InputBox
-                type="select"
-                value={this.state.metricToDisplay}
-                disabled={this.state.state !== VISIBLE}
-                onChange={e => {
-                  this.setState({
-                    state: LOADING,
-                    data: null,
-                    metricToDisplay: e.id,
-                  }, () => this.fetchData());
-                }}
-                choices={[
-                  {id: "entrances", label: "Entrances"},
-                  {id: "exits", label: "Exits"},
-                  {id: "total-events", label: "Total Events"},
-                  {id: "peak-occupancy", label: "Peak Occupancy"},
-                ]}
-              />
+      return (
+        <Card className="visualization-space-detail-card">
+          {view === LOADING ? <CardLoading indeterminate /> : null }
+
+          <CardHeader>
+            <div className="insights-space-detail-daily-metrics-card-header-container">
+              <span className="insights-space-detail-daily-metrics-card-header-label">
+                Daily Metrics
+              </span>
+              <span
+                className={classnames('insights-space-detail-utilization-card-header-refresh', {
+                  disabled: view !== VISIBLE,
+                })}
+                onClick={() => this.setState({
+                  view: LOADING,
+                  data: null,
+                }, () => this.fetchData())}
+              >
+                <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+              </span>
+              <div className="insights-space-detail-daily-metrics-card-metric-picker">
+                <InputBox
+                  type="select"
+                  value={metricToDisplay}
+                  disabled={view !== VISIBLE}
+                  onChange={e => {
+                    this.setState({
+                      view: LOADING,
+                      data: null,
+                      metricToDisplay: e.id,
+                    }, () => this.fetchData());
+                  }}
+                  choices={[
+                    {id: "entrances", label: "Entrances"},
+                    {id: "exits", label: "Exits"},
+                    {id: "total-events", label: "Total Events"},
+                    {id: "peak-occupancy", label: "Peak Occupancy"},
+                  ]}
+                />
+              </div>
             </div>
-          </div>
-        </CardHeader>
+          </CardHeader>
 
-        <CardBody className="insights-space-detail-daily-metrics-card-body">
-          {this.state.state === VISIBLE ? (() => {
-            if (this.state.data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
-              // For more than two weeks of data, show the graph chart.
-              return <div className="large-timespan-chart">
-                <LineChartComponent
-                  timeZone={space.timeZone}
-                  svgWidth={975}
-                  svgHeight={370}
+          <CardBody className="insights-space-detail-daily-metrics-card-body">
+            {view === VISIBLE ? (() => {
+              if (data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
+                // For more than two weeks of data, show the graph chart.
+                return <div className="large-timespan-chart">
+                  <LineChartComponent
+                    timeZone={space.timeZone}
+                    svgWidth={975}
+                    svgHeight={370}
 
-                  xAxis={xAxisDailyTick({
-                    // Calculate a tick resolutino that makes sense given the selected time range.
-                    tickResolutionInMs: (() => {
-                      const duration = moment.duration(
-                        moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
-                      );
-                      const durationDays = duration.asDays();
-                      if (durationDays > 30) {
-                        return 3 * ONE_DAY_IN_MS;
-                      } else if (durationDays > 14) {
-                        return 1 * ONE_DAY_IN_MS;
-                      } else {
-                        return 0.5 * ONE_DAY_IN_MS;
-                      }
-                    })(),
-                    formatter: n => moment.utc(n).tz(space.timeZone).format(`MM/DD`),
-                  })}
-
-                  yAxis={yAxisMinMax({})}
-                  yAxisStart={0}
-
-                  overlays={[
-                    overlayTwoPopups({
-                      topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => {
-                        const unit = (function(metric) {
-                          switch (metric) {
-                            case 'entrances': return 'Entrances';
-                            case 'exits': return 'Exits';
-                            case 'total-events': return 'Total Events';
-                            case 'peak-occupancy': return 'Peak Occupancy';
-                            default: return 'People';
-                          }
-                        })(this.state.metricToDisplay);
-                        return `${Math.round(item.value)} ${unit}`;
-                      }, 'top'),
-                      bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
-                        (item, {mouseX, xScale}) => {
-                          const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
-                          return timestamp.format(`ddd MMM DD YYYY`);
+                    xAxis={xAxisDailyTick({
+                      // Calculate a tick resolutino that makes sense given the selected time range.
+                      tickResolutionInMs: (() => {
+                        const duration = moment.duration(
+                          moment.utc(endDate).diff(moment.utc(startDate))
+                        );
+                        const durationDays = duration.asDays();
+                        if (durationDays > 30) {
+                          return 3 * ONE_DAY_IN_MS;
+                        } else if (durationDays > 14) {
+                          return 1 * ONE_DAY_IN_MS;
+                        } else {
+                          return 0.5 * ONE_DAY_IN_MS;
                         }
-                      ),
+                      })(),
+                      formatter: n => moment.utc(n).tz(space.timeZone).format(`MM/DD`),
+                    })}
 
-                      bottomOverlayTopMargin: 40,
-                      topOverlayBottomMargin: 20,
+                    yAxis={yAxisMinMax({})}
+                    yAxisStart={0}
 
-                      topOverlayWidth: this.state.metricToDisplay === 'peak-occupancy' ? 180 : 150,
-                      topOverlayHeight: 42,
-                      bottomOverlayWidth: 150,
-                      bottomOverlayHeight: 42,
-                    }),
-                  ]}
+                    overlays={[
+                      overlayTwoPopups({
+                        topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => {
+                          const unit = (function(metric) {
+                            switch (metric) {
+                              case 'entrances': return 'Entrances';
+                              case 'exits': return 'Exits';
+                              case 'total-events': return 'Total Events';
+                              case 'peak-occupancy': return 'Peak Occupancy';
+                              default: return 'People';
+                            }
+                          })(metricToDisplay);
+                          return `${Math.round(item.value)} ${unit}`;
+                        }, 'top'),
+                        bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
+                          (item, {mouseX, xScale}) => {
+                            const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
+                            return timestamp.format(`ddd MMM DD YYYY`);
+                          }
+                        ),
 
-                  data={[
-                    {
-                      name: 'default',
-                      type: dataWaterline,
-                      verticalBaselineOffset: 10,
-                      data: this.state.data.sort(
-                        (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
-                      ),
-                    },
-                  ]}
-                />
-              </div>;
-            } else {
-              // Less than two weeks should stil use the daily metrics chart.
-              return <div className="short-timespan-chart">
-                <DailyMetricsComponent
-                  data={this.state.data.map(i => {
-                    return {
-                      // Remove the offset that was added when the data was fetched.
-                      label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
-                      value: i.value,
-                    };
-                  })}
-                  width={975}
-                  height={350}
-                />
-              </div>;
-            }
-          })() : null}
+                        bottomOverlayTopMargin: 40,
+                        topOverlayBottomMargin: 20,
 
-          {this.state.state === ERROR ? <div className="insights-space-detail-daily-metrics-card-body-error">
-            <span>
-              <span className="insights-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
-              {this.state.error.toString()}
-            </span>
-          </div> : null }
+                        topOverlayWidth: metricToDisplay === 'peak-occupancy' ? 180 : 150,
+                        topOverlayHeight: 42,
+                        bottomOverlayWidth: 150,
+                        bottomOverlayHeight: 42,
+                      }),
+                    ]}
 
-          {this.state.state === EMPTY ? <div className="insights-space-detail-daily-metrics-card-body-info">
-            No data available for this time range.
-          </div> : null }
+                    data={[
+                      {
+                        name: 'default',
+                        type: dataWaterline,
+                        verticalBaselineOffset: 10,
+                        data: data.sort(
+                          (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                        ),
+                      },
+                    ]}
+                  />
+                </div>;
+              } else {
+                // Less than two weeks should stil use the daily metrics chart.
+                return <div className="short-timespan-chart">
+                  <DailyMetricsComponent
+                    data={data.map(i => {
+                      return {
+                        // Remove the offset that was added when the data was fetched.
+                        label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
+                        value: i.value,
+                      };
+                    })}
+                    width={975}
+                    height={350}
+                  />
+                </div>;
+              }
+            })() : null}
 
-          {this.state.state === LOADING ? <div className="insights-space-detail-daily-metrics-card-body-info">
-            Generating Data&nbsp;.&nbsp;.&nbsp;.
-          </div> : null }
-        </CardBody>
-      </Card>;
+            {view === ERROR ? <div className="insights-space-detail-daily-metrics-card-body-error">
+              <span>
+                <span className="insights-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
+                {error.toString()}
+              </span>
+            </div> : null }
+
+            {view === EMPTY ? <div className="insights-space-detail-daily-metrics-card-body-info">
+              No data available for this time range.
+            </div> : null }
+
+            {view === LOADING ? <div className="insights-space-detail-daily-metrics-card-body-info">
+              Generating Data&nbsp;.&nbsp;.&nbsp;.
+            </div> : null }
+          </CardBody>
+        </Card>
+      );
     } else {
-      return <span>This space doesn't exist.</span>;
+      return null;
     }
   }
 }
