@@ -25,32 +25,6 @@ $insights-space-detail-card-header-breakpoint: 930px;
 }
 
 
-// The time segment picker, which allows the user to choose which time segment per day to filter
-// their data within.
-.insights-space-detail-utilization-card-time-segment-picker {
-  .input-box {
-    color: $gray-cinder;
-    margin-left: 0px; /* On mobile, the select box should be at the left edge. */
-    width: 230px;
-  }
-
-  @media (min-width: $screen-xs-max) {
-    margin-left: auto; /* On a computer, the select box should be pushed right */
-  }
-}
-
-// The date range picker lets the user choose the range of time that this chart should search
-// through.
-.insights-space-detail-utilization-card-date-picker {
-  margin-top: 10px;
-  margin-left: 0px;
-
-  @media (min-width: $insights-space-detail-card-header-breakpoint) {
-    margin-top: 0px;
-    margin-left: 20px;
-  }
-}
-
 // Refresh icon to refetch data
 .insights-space-detail-utilization-card-header-refresh:before {
   content: '\e92d';

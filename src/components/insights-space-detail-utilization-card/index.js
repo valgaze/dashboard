@@ -79,16 +79,13 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       data: null,
       dataSpaceId: null,
 
-      startDate: moment.utc().tz(props.space.timeZone).subtract(1, 'week').startOf('week').format(),
-      endDate: moment.utc().tz(props.space.timeZone).subtract(1, 'week').endOf('week').endOf('day').format(),
-      timeSegment: 'WORKING_HOURS',
+      startDate: null,
+      endDate: null,
+      timeSegmentId: null,
 
       includeWeekends: false,
       includeWeekendsProcessing: false,
     };
-
-    // Fetch initial data
-    this.fetchData.call(this);
   }
 
   async fetchData() {
@@ -106,6 +103,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       }, 0);
       return;
     }
+
+    // if (!this.state.startDate || !this.state.endDate || !this.state.timeSegmentId) 
 
     // Step 1: Fetch all counts--which means all pages--of data from the start date to the end data
     // selected on the DateRangePicker. Uses the `fetchAllPages` helper, which encapsulates the
@@ -126,7 +125,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             // For small graphs, fetch data at a finer resolution.
             return '2m';
           }
-        }(this.state.timeSegment),
+        }(this.state.timeSegmentId),
 
         // Fetch with a large page size to try to minimize the number of requests that will be
         // required.
@@ -154,7 +153,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           return isWithinTimeSegment(
             count.timestamp,
             space.timeZone,
-            TIME_SEGMENTS[this.state.timeSegment]
+            TIME_SEGMENTS[this.state.timeSegmentId]
           );
         }),
       };
@@ -189,24 +188,20 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     return Math.round(result * 100) / 100; /* round to the nearest percentage */
   }
 
-  // updates the state's `startDate` and `endDate` and triggers a `fetchData`
-  setDatesAndFetchData(startDate, endDate) {
-    this.setState({
-      startDate: startDate ? startDate.tz(this.props.space.timeZone).startOf('day').format() : undefined,
-      endDate: endDate ? endDate.tz(this.props.space.timeZone).endOf('day').format() : undefined,
-    }, () => {
-      // If the start date and end date were both set, then load data.
-      if (this.state.startDate && this.state.endDate) {
-        this.setState({ state: LOADING, data: null }, () => {
-          this.fetchData();
-        });
-      }
-    });
-  }
-
-  componentWillReceiveProps({space}) {
-    if (space && (space.id !== this.state.dataSpaceId || space.capacity !== this.state.dataSpaceCapacity)) {
-      this.setState({state: LOADING}, () => this.fetchData.call(this));
+  componentWillReceiveProps({space, startDate, endDate, timeSegmentId}) {
+    if (space && (
+      space.id !== this.state.dataSpaceId ||
+      space.capacity !== this.state.dataSpaceCapacity ||
+      startDate !== this.state.startDate ||
+      endDate !== this.state.endDate ||
+      timeSegmentId !== this.state.timeSegmentId
+    )) {
+      this.setState({
+        state: LOADING,
+        startDate,
+        endDate,
+        timeSegmentId,
+      }, () => this.fetchData.call(this));
     }
   }
 
@@ -245,13 +240,12 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         }
       });
 
-      //
-      const dataDuration = TIME_SEGMENTS[this.state.timeSegment].end - TIME_SEGMENTS[this.state.timeSegment].start;
+      const dataDuration = TIME_SEGMENTS[this.state.timeSegmentId].end - TIME_SEGMENTS[this.state.timeSegmentId].start;
 
       const initialTimestamp = moment.utc(this.state.counts[0].timestamp)
         .tz(space.timeZone)
         .startOf('day')
-        .add(TIME_SEGMENTS[this.state.timeSegment].start, 'hours');
+        .add(TIME_SEGMENTS[this.state.timeSegmentId].start, 'hours');
 
       averageUtilizationDatapointsWithTimestamp = averageUtilizationDatapoints
         .map(i => i / dataPointCount) /* second part of calculating average */
@@ -300,74 +294,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               (Monday &mdash; {this.state.includeWeekends && !this.state.includeWeekendsProcessing ? 'Sunday' : 'Friday'})
             </span>
           </span>
-
-          <div className="insights-space-detail-utilization-card-time-segment-picker">
-            <InputBox
-              type="select"
-              className="insights-space-list-time-segment-selector"
-              disabled={this.state.state !== VISIBLE}
-              value={this.state.timeSegment}
-              onChange={e => {
-                this.setState({
-                  state: LOADING,
-                  timeSegment: e.id,
-                }, () => this.fetchData());
-              }}
-              choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                return {
-                  id: key,
-                  label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
-                };
-              })}
-            />
-          </div>
-          <div className="insights-space-detail-utilization-card-date-picker">
-            <DateRangePicker
-              startDate={moment.utc(this.state.startDate).tz(space.timeZone).startOf('day')}
-              endDate={moment.utc(this.state.endDate).tz(space.timeZone).startOf('day')}
-              onChange={({startDate, endDate}) => {
-                // If the user selected over 3 months, then clamp them back to 3 months.
-                if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
-                  endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
-                }
-
-                // Update the start and end date with the values selected.
-                this.setDatesAndFetchData(startDate, endDate);
-              }}
-
-              // Within the component, store if the user has selected the start of end date picker
-              // input
-              focusedInput={this.state.datePickerInput}
-              onFocusChange={focused => this.setState({datePickerInput: focused})}
-
-              // On mobile, make the calendar one month wide and left aligned.
-              // On desktop, the calendar is two months wide and right aligned.
-              anchor={document.body && document.body.clientWidth > gridVariables.screenSmMin ? ANCHOR_RIGHT : ANCHOR_LEFT}
-              numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
-
-              isOutsideRange={day => isOutsideRange(
-                this.state.startDate,
-                this.state.datePickerInput,
-                day
-              )}
-
-              // common ranges functionality
-              commonRanges={commonRanges}
-              onSelectCommonRange={(r) => {
-                // utilization needs a full day's counts to work
-                // if the endDate of the common range is today, subtract 1 day.
-                // this logic makes sense here, as it specifically pertains to utilization
-                // BR: I couldn't get `isSame()` to work
-                const endDate =
-                  (r.endDate.format('YYYY-MM-DD') === moment.utc().format('YYYY-MM-DD')) ?
-                  r.endDate.clone().subtract(1, 'day') :
-                  r.endDate
-
-                this.setDatesAndFetchData(r.startDate, endDate)
-              }}
-              // showCommonRangeSubtitles={true}
-            />
-          </div>
         </CardHeader>
 
         {/* TODO: Make this render a Fragment w/ React 16 */}
@@ -376,7 +302,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             Average utilization of <CardWellHighlight>
               {Math.round(this.calculateAverageUtilization() * 100)}%
             </CardWellHighlight> during <CardWellHighlight>
-              {TIME_SEGMENTS[this.state.timeSegment].phrasal}
+              {TIME_SEGMENTS[this.state.timeSegmentId].phrasal}
             </CardWellHighlight>
           </CardWell>,
 
@@ -389,7 +315,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 {moment.utc(this.state.endDate, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone).format('MMMM D')}
                 &nbsp;
                 <span className="insights-space-detail-utilization-card-header-label-highlight">
-                  ({TIME_SEGMENTS[this.state.timeSegment].name})
+                  ({TIME_SEGMENTS[this.state.timeSegmentId].name})
                 </span>
               </span>
               <span className="insights-space-detail-utilization-card-header-weekends">
@@ -442,7 +368,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <CardWellHighlight>
                 No peak utilization
               </CardWellHighlight> during <CardWellHighlight>
-                {TIME_SEGMENTS[this.state.timeSegment].phrasal}
+                {TIME_SEGMENTS[this.state.timeSegmentId].phrasal}
               </CardWellHighlight>
             </span> : <span>
               On average, peak utilization of <CardWellHighlight>
@@ -463,7 +389,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   return stamp.tz(space.timeZone).format(`h:[${minute}]a`).slice(0, -1);
                 })(peakUtilizationTimestamp)}
               </CardWellHighlight> during <CardWellHighlight>
-                {TIME_SEGMENTS[this.state.timeSegment].phrasal}
+                {TIME_SEGMENTS[this.state.timeSegmentId].phrasal}
               </CardWellHighlight>
             </span>}
           </CardWell>,
@@ -477,7 +403,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 {moment.utc(this.state.endDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
                 &nbsp;
                 <span className="insights-space-detail-utilization-card-header-label-highlight">
-                  ({TIME_SEGMENTS[this.state.timeSegment].name})
+                  ({TIME_SEGMENTS[this.state.timeSegmentId].name})
                 </span>
               </span>
             </span>

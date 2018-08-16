@@ -12,6 +12,7 @@ import Subnav, { SubnavItem } from '../subnav/index';
 import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar/index';
 import InsightsSpaceHeader from '../insights-space-header/index';
 import IncludeWeekendsSwitch from '../include-weekends-switch/index';
+import UtilizationCard from '../insights-space-detail-utilization-card/index';
 
 import DailyMetricsCard from '../visualization-space-detail-daily-metrics-card/index';
 
@@ -135,26 +136,12 @@ function InsightsSpaceTrends({
       <div className="insights-space-trends-container">
         <div className="insights-space-trends">
           <div className="insights-space-trends-item">
-            <Card>
-              <CardHeader>An Average Week</CardHeader>
-              <CardWell type="dark">
-                Average utilization of <CardWellHighlight>10%</CardWellHighlight> during <CardWellHighlight>Open Hours</CardWellHighlight>
-              </CardWell>
-              <CardBody>
-                stuff in here
-              </CardBody>
-            </Card>
-          </div>
-          <div className="insights-space-trends-item">
-            <Card>
-              <CardHeader>An Average Day</CardHeader>
-              <CardWell type="dark">
-                Average utilization of <CardWellHighlight>10%</CardWellHighlight> during <CardWellHighlight>Open Hours</CardWellHighlight>
-              </CardWell>
-              <CardBody>
-                stuff in here
-              </CardBody>
-            </Card>
+            <UtilizationCard
+              space={space}
+              startDate={spaces.filters.startDate}
+              endDate={spaces.filters.endDate}
+              timeSegmentId={spaces.filters.timeSegmentId}
+            />
           </div>
           <div className="insights-space-trends-item">
             <DailyMetricsCard
