@@ -56,6 +56,9 @@ export default class InsightsFilterBar extends Component {
   }
 }
 
-export function InsightsFilterBarItem({right, children}) {
-  return <li className={classnames('insights-filter-bar-item', {right})}>{children}</li>;
+export function InsightsFilterBarItem({label, right, children}) {
+  return <li className={classnames('insights-filter-bar-item', {right})}>
+    <label className="insights-filter-bar-item-label">{label}</label>
+    {children}
+  </li>;
 }

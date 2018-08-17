@@ -72,7 +72,7 @@ function InsightsSpaceTrends({
       </Subnav>
 
       <InsightsFilterBar>
-        <InsightsFilterBarItem>
+        <InsightsFilterBarItem label="Time Segment">
           <InputBox
             type="select"
             className="insights-space-trends-time-segment-box"
@@ -81,7 +81,7 @@ function InsightsSpaceTrends({
             onChange={value => onChangeSpaceFilter('timeSegmentId', value.id)}
           />
         </InsightsFilterBarItem>
-        <InsightsFilterBarItem>
+        <InsightsFilterBarItem label="Date Range">
           <DateRangePicker
             startDate={moment.utc(spaces.filters.startDate).tz(space.timeZone).startOf('day')}
             endDate={moment.utc(spaces.filters.endDate).tz(space.timeZone).startOf('day')}
@@ -119,7 +119,7 @@ function InsightsSpaceTrends({
             }}
           />
         </InsightsFilterBarItem>
-        <InsightsFilterBarItem right>
+        <InsightsFilterBarItem label="Include Weekends">
           <IncludeWeekendsSwitch
             value={spaces.filters.includeWeekends}
             onChange={e => onChangeSpaceFilter('includeWeekends', e.target.checked)}
