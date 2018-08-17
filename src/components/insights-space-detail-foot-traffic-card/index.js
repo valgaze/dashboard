@@ -93,6 +93,10 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     }
   }
 
+  componentDidMount() {
+    this.componentWillReceiveProps(this.props);
+  }
+
   render() {
     const { space } = this.props;
     const {
