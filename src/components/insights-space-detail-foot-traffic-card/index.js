@@ -25,7 +25,7 @@ const LOADING = 'LOADING',
       VISIBLE = 'VISIBLE',
       ERROR = 'ERROR';
 
-export default class VisualizationSpaceDetail24HourChart extends React.Component {
+export default class InsightsSpaceDetailFootTrafficCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import stringToBoolean from '../../helpers/string-to-boolean/index';
 import sessionTokenUnset from '../../actions/session-token/unset';
@@ -13,6 +13,7 @@ import NavLoggedOut from '../nav-logged-out/index';
 import TokenList from '../dev-token-list/index';
 import InsightsSpaceList from '../insights-space-list/index';
 import InsightsSpaceTrends from '../insights-space-trends/index';
+import InsightsSpaceDaily from '../insights-space-daily/index';
 import SpaceDetail from '../visualization-space-detail/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
@@ -95,6 +96,8 @@ function ActivePage({activePage, settings}) {
     return stringToBoolean(settings.insightsPageLocked) ? null : <SpaceDetail />;
   case "INSIGHTS_SPACE_TRENDS":
     return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceTrends />;
+  case "INSIGHTS_SPACE_DAILY":
+    return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceDaily />;
   case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":

@@ -10,6 +10,7 @@ import { ROUTE_TRANSITION_DEV_TOKEN_LIST } from '../../actions/route-transition/
 import { ROUTE_TRANSITION_ACCOUNT_REGISTER } from '../../actions/route-transition/account-register';
 import { ROUTE_TRANSITION_ACCOUNT_FORGOT_PASSWORD } from '../../actions/route-transition/account-forgot-password';
 import { ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS } from '../../actions/route-transition/insights-space-trends';
+import { ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY } from '../../actions/route-transition/insights-space-daily';
 
 import { ROUTE_TRANSITION_ACCOUNT_SETUP_OVERVIEW } from '../../actions/route-transition/account-setup-overview';
 import { ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_LIST } from '../../actions/route-transition/account-setup-doorway-list';
@@ -34,6 +35,8 @@ export default function activePage(state=initialState, action) {
     return "VISUALIZATION_SPACE_DETAIL";
   case ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS:
     return "INSIGHTS_SPACE_TRENDS";
+  case ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY:
+    return "INSIGHTS_SPACE_DAILY";
 
   case ROUTE_TRANSITION_DEV_TOKEN_LIST:
     return "DEV_TOKEN_LIST";

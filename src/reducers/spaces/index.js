@@ -15,6 +15,7 @@ import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route
 import { ROUTE_TRANSITION_LIVE_SPACE_LIST } from '../../actions/route-transition/live-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_DETAIL } from '../../actions/route-transition/live-space-detail';
 import { ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS } from '../../actions/route-transition/insights-space-trends';
+import { ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY } from '../../actions/route-transition/insights-space-daily';
 import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
@@ -36,9 +37,14 @@ const initialState = {
     parent: null,
 
     timeSegmentId: 'WORKING_HOURS',
+    includeWeekends: false,
+
+    // Used for date ranges
     startDate: moment.utc().subtract(6, 'days').format(),
     endDate: moment.utc().format(),
-    includeWeekends: false,
+
+    // Used for a single date
+    date: moment.utc().format(),
   },
 
   // An object that maps space id to an array of events
@@ -121,6 +127,7 @@ export default function spaces(state=initialState, action) {
   case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
   case ROUTE_TRANSITION_LIVE_SPACE_DETAIL:
   case ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS:
+  case ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY:
     return {...state, error: null, selected: action.id};
   case ROUTE_TRANSITION_LIVE_SPACE_LIST:
     return {...state, error: null};
