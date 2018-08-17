@@ -56,7 +56,7 @@ export function isOutsideRange(startISOTime, datePickerInput, day) {
   return false;
 }
 
-export default class VisualizationSpaceDetailDailyMetricsCard extends React.Component {
+export default class InsightsSpaceDetailDailyMetricsCard extends React.Component {
   state = {
     view: LOADING,
     data: null,
@@ -89,6 +89,8 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
         end_time: endTime.add(1, 'day').format(),
         interval: '1d',
         order: 'asc',
+
+        page_size: 1000,
       });
 
       if (data.results.length > 0) {
@@ -147,6 +149,10 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
         endDate: nextProps.endDate,
       }, () => this.fetchData());
     }
+  }
+
+  componentDidMount() {
+    this.componentWillReceiveProps(this.props);
   }
 
   render() {

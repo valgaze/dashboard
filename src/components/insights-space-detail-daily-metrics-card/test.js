@@ -215,29 +215,26 @@ describe('Visualization space daily metrics chart', function() {
           ]
         }),
       });
-      mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
+      const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+        space={space}
+        startDate="2016-12-26T00:00:00-05:00"
+        endDate="2017-01-01T00:00:00-05:00"
+      />);
 
-      // Wait for data to be fetched.
-      await timeout(250);
+      // Delay for data fetching result
+      await timeout(0);
       assert.equal(global.fetch.callCount, 1);
       const requestParameters = global.fetch.getCall(0).args;
 
       // Make sure the request was correctly formulated for the `America/New_York` time zone.
       // On January 1st, the offset is NYC is 5 hours.
-      const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
       assert.equal(requestParameters[1].qs.start_time, '2016-12-26T00:00:00-05:00');
       assert.equal(requestParameters[1].qs.end_time, '2017-01-02T00:00:00-05:00');
 
-      // Verify that the correct day was auto-inserted into the date input field, such that the last
-      // week will be selected.
-      assert.equal(component.find('#DateInput__screen-reader-message-startDate + div').text(), '12/26/2016');
-      assert.equal(component.find('#DateInput__screen-reader-message-endDate + div').text(), '01/01/2017');
-
-      // Also, verify that the correct data was passed to the chart given what the ajax return data.
-      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body > div').children().nodes[0].props;
+      // Verify that the correct data was passed to the chart given what the ajax return data.
+      const chartProps = component.find('.short-timespan-chart > _class').props();
       assert.deepEqual(chartProps.data, [
         {label: '01/07', value: 10},
         {label: '01/06', value: 0},
@@ -353,13 +350,16 @@ describe('Visualization space daily metrics chart', function() {
           ],
         }),
       });
-      mockdate.set(moment('2017-09-14T00:00:00-05:00'));
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
+      const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+        space={space}
+        startDate="2017-09-08T00:00:00-05:00"
+        endDate="2017-09-14T00:00:00-05:00"
+      />);
 
       // Wait for data to be fetched.
-      await timeout(250);
+      await timeout(0);
       assert.equal(global.fetch.callCount, 1);
       const requestParameters = global.fetch.getCall(0).args;
 
@@ -369,13 +369,8 @@ describe('Visualization space daily metrics chart', function() {
       assert.equal(requestParameters[1].qs.start_time, '2017-09-08T00:00:00-04:00');
       assert.equal(requestParameters[1].qs.end_time, '2017-09-15T00:00:00-04:00');
 
-      // Verify that the correct day was auto-inserted into the date input field, such that the last
-      // week will be selected.
-      assert.equal(component.find('#DateInput__screen-reader-message-startDate + div').text(), '09/08/2017');
-      assert.equal(component.find('#DateInput__screen-reader-message-endDate + div').text(), '09/14/2017');
-
       // Also, verify that the correct data was passed to the chart given what the ajax return data.
-      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body > div').children().nodes[0].props;
+      const chartProps = component.find('.short-timespan-chart > _class').props();
       assert.deepEqual(chartProps.data, [
         {label: '09/20', value: 0},
         {label: '09/19', value: 0},
@@ -494,7 +489,11 @@ describe('Visualization space daily metrics chart', function() {
       mockdate.set(moment('2017-09-14T00:00:00-05:00'));
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
+      const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+        space={space}
+        startDate="2017-09-08T00:00:00-05:00"
+        endDate="2017-09-14T00:00:00-05:00"
+      />);
 
       // Wait for data to be fetched.
       await timeout(250);
@@ -507,13 +506,8 @@ describe('Visualization space daily metrics chart', function() {
       assert.equal(requestParameters[1].qs.start_time, '2017-09-07T00:00:00-07:00');
       assert.equal(requestParameters[1].qs.end_time, '2017-09-14T00:00:00-07:00');
 
-      // Verify that the correct day was auto-inserted into the date input field, such that the last
-      // week will be selected.
-      assert.equal(component.find('#DateInput__screen-reader-message-startDate + div').text(), '09/07/2017');
-      assert.equal(component.find('#DateInput__screen-reader-message-endDate + div').text(), '09/13/2017');
-
       // Also, verify that the correct data was passed to the chart given what the ajax return data.
-      const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body > div').children().nodes[0].props;
+      const chartProps = component.find('.short-timespan-chart > _class').props();
       assert.deepEqual(chartProps.data, [
         {label: '09/13', value: 0},
         {label: '09/12', value: 0},
@@ -526,10 +520,8 @@ describe('Visualization space daily metrics chart', function() {
     });
   });
 
-  // TODO: more tests could be used here. Possibly something that actually interacts with the
-  // datepicker rather than just setting state (tried it, the css selectors I was tring weren't
-  // working), maybe a test that tries to switch the type of metric displayed and makes sure the
-  // data is refetched? Just some ideas.
+  // TODO: more tests could be used here. Possibly something that tries to switch the type of metric
+  // displayed and makes sure the data is refetched? Just some ideas.
 
   it('should correctly refetch data when sensor selected date range is changed', async function() {
     const space = {
@@ -677,17 +669,7 @@ describe('Visualization space daily metrics chart', function() {
     // Render the component
     const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
 
-    // Wait for data to be fetched.
-    await timeout(250);
-    assert.equal(global.fetch.callCount, 1);
-
-    // Update selected dates, as if selected by date picker.
-    component.setState({
-      startDate: '2017-11-01T00:00:00Z',
-      endDate: '2017-11-07T00:00:00Z',
-    });
-
-    // Update data stored within tbe component.
+    // Mock data for next data fetch
     global.fetch = sinon.stub().resolves({
       ok: true,
       status: 200,
@@ -820,9 +802,15 @@ describe('Visualization space daily metrics chart', function() {
         ]
       }),
     });
-    await component.instance().fetchData();
+
+    // Update selected dates, as if set by the filter bar. This fetches data.
+    component.setProps({
+      startDate: '2017-11-01T00:00:00Z',
+      endDate: '2017-11-07T00:00:00Z',
+    });
 
     // Assert data was fetched.
+    await timeout(0);
     assert.equal(global.fetch.callCount, 1);
     const requestParameters = global.fetch.getCall(0).args;
 
@@ -832,13 +820,8 @@ describe('Visualization space daily metrics chart', function() {
     assert.equal(requestParameters[1].qs.start_time, '2017-10-31T00:00:00-04:00');
     assert.equal(requestParameters[1].qs.end_time, '2017-11-07T00:00:00-05:00');
 
-    // Verify that the correct day was auto-inserted into the date input field, such that the last
-    // week will be selected.
-    assert.equal(component.find('#DateInput__screen-reader-message-startDate + div').text(), '10/31/2017');
-    assert.equal(component.find('#DateInput__screen-reader-message-endDate + div').text(), '11/06/2017');
-
     // Also, verify that the correct data was passed to the chart given what the ajax return data.
-    const chartProps = component.find('.visualization-space-detail-daily-metrics-card-body > div').children().nodes[0].props;
+    const chartProps = component.find('.short-timespan-chart > _class').props();
     assert.deepEqual(chartProps.data, [
       { label: '11/06', value: 0 },
       { label: '11/05', value: 0 },
@@ -859,147 +842,111 @@ describe('Visualization space daily metrics chart', function() {
       timeZone: `America/New_York`
     };
 
-    // Mock the data fetching call, and the current date so that we can assert properly.
+    // Add mock data with containing 20 days worth of data
     global.fetch = sinon.stub().resolves({
       ok: true,
       status: 200,
       clone() { return this; },
       json: () => Promise.resolve({
-        "total": 8,
+        "total": 7,
         "next": null,
         "previous": null,
         "results": [
           {
-            "timestamp": "2017-11-07T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-11-07T04:00:00Z",
-              "end": "2017-11-08T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-11-06T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-11-06T04:00:00Z",
-              "end": "2017-11-07T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-11-05T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-11-05T04:00:00Z",
-              "end": "2017-11-06T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-11-04T04:00:00Z",
+            "timestamp": "2016-09-13T07:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-04T04:00:00Z",
-              "end": "2017-11-05T03:59:59Z",
+              "start": "2016-09-13T07:00:00Z",
+              "end": "2016-09-14T06:59:59Z",
               "analytics": {
                 "min": 0,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
+                "max": 0
               }
             }
           },
           {
-            "timestamp": "2017-11-03T04:00:00Z",
+            "timestamp": "2016-09-12T07:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-03T04:00:00Z",
-              "end": "2017-11-04T03:59:59Z",
+              "start": "2016-09-12T07:00:00Z",
+              "end": "2016-09-13T06:59:59Z",
               "analytics": {
                 "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
+                "max": 0
               }
             }
           },
           {
-            "timestamp": "2017-11-02T04:00:00Z",
+            "timestamp": "2016-09-11T07:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-02T04:00:00Z",
-              "end": "2017-11-03T03:59:59Z",
+              "start": "2016-09-11T07:00:00Z",
+              "end": "2016-09-12T06:59:59Z",
               "analytics": {
                 "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
+                "max": 0
               }
             }
           },
           {
-            "timestamp": "2017-11-01T04:00:00Z",
+            "timestamp": "2016-09-10T07:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-11-01T04:00:00Z",
-              "end": "2017-11-02T03:59:59Z",
+              "start": "2016-09-10T07:00:00Z",
+              "end": "2016-09-11T06:59:59Z",
               "analytics": {
                 "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
+                "max": 0
               }
             }
           },
           {
-            "timestamp": "2017-10-31T04:00:00Z",
+            "timestamp": "2016-09-09T07:00:00Z",
             "count": 0,
             "interval": {
-              "start": "2017-10-31T04:00:00Z",
-              "end": "2017-11-01T03:59:59Z",
+              "start": "2016-09-09T07:00:00Z",
+              "end": "2016-09-10T06:59:59Z",
               "analytics": {
                 "min": 0,
-                "max": 3,
-                "events": 5,
-                "entrances": 3,
-                "exits": 2
+                "max": 0
               }
             }
           },
+          {
+            "timestamp": "2016-09-08T07:00:00Z",
+            "count": 0,
+            "interval": {
+              "start": "2016-09-08T07:00:00Z",
+              "end": "2016-09-09T06:59:59Z",
+              "analytics": {
+                "min": 0,
+                "max": 0
+              }
+            }
+          },
+          {
+            "timestamp": "2016-09-07T07:00:00Z",
+            "count": 0,
+            "interval": {
+              "start": "2016-09-07T07:00:00Z",
+              "end": "2016-09-08T06:59:59Z",
+              "analytics": {
+                "min": 0,
+                "max": 0
+              }
+            }
+          }
         ]
       }),
     });
-    mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
     // Render the component
-    const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
-
-    // Wait for data to be fetched.
-    await timeout(250);
-    assert.equal(global.fetch.callCount, 1);
+    const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+      space={space}
+      startDate="2017-01-01T00:00:00-05:00"
+      endDate="2017-01-03T00:00:00-05:00"
+    />);
+    await timeout(0);
 
     // Verify that the Daily metrics chart was shown
     assert.equal(component.find('.short-timespan-chart').length, 1);
@@ -1013,267 +960,37 @@ describe('Visualization space daily metrics chart', function() {
       timeZone: `America/New_York`
     };
 
-    // Mock the data fetching call, and the current date so that we can assert properly.
+    // Wait for mock data fetching to resolve
     global.fetch = sinon.stub().resolves({
       ok: true,
       status: 200,
       clone() { return this; },
       json: () => Promise.resolve({
-        "total": 16,
+        "total": 7,
         "next": null,
         "previous": null,
-        "results": [
-          {
-            "timestamp": "2017-11-07T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-11-07T04:00:00Z",
-              "end": "2017-11-08T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
+        "results": Array.from(Array(20)).map(_ => ({
+          "timestamp": "2016-09-13T07:00:00Z",
+          "count": 0,
+          "interval": {
+            "start": "2016-09-13T07:00:00Z",
+            "end": "2016-09-14T06:59:59Z",
+            "analytics": {
+              "min": 0,
+              "max": 0
             }
-          },
-          {
-            "timestamp": "2017-11-06T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-11-06T04:00:00Z",
-              "end": "2017-11-07T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-11-05T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-11-05T04:00:00Z",
-              "end": "2017-11-06T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-11-04T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-11-04T04:00:00Z",
-              "end": "2017-11-05T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-11-03T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-11-03T04:00:00Z",
-              "end": "2017-11-04T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-11-02T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-11-02T04:00:00Z",
-              "end": "2017-11-03T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-11-01T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-11-01T04:00:00Z",
-              "end": "2017-11-02T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-31T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-10-31T04:00:00Z",
-              "end": "2017-11-01T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 3,
-                "events": 5,
-                "entrances": 3,
-                "exits": 2
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-30T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-10-30T04:00:00Z",
-              "end": "2017-10-31T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-29T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-10-29T04:00:00Z",
-              "end": "2017-10-30T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-28T04:00:00Z",
-            "count": 1,
-            "interval": {
-              "start": "2017-10-28T04:00:00Z",
-              "end": "2017-10-29T03:59:59Z",
-              "analytics": {
-                "min": 1,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-27T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-10-27T04:00:00Z",
-              "end": "2017-10-28T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 1,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-26T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-10-26T04:00:00Z",
-              "end": "2017-10-27T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-25T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-10-25T04:00:00Z",
-              "end": "2017-10-26T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-24T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-10-24T04:00:00Z",
-              "end": "2017-10-25T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 0,
-                "events": 0,
-                "entrances": 0,
-                "exits": 0
-              }
-            }
-          },
-          {
-            "timestamp": "2017-10-23T04:00:00Z",
-            "count": 0,
-            "interval": {
-              "start": "2017-10-23T04:00:00Z",
-              "end": "2017-10-24T03:59:59Z",
-              "analytics": {
-                "min": 0,
-                "max": 3,
-                "events": 5,
-                "entrances": 3,
-                "exits": 2
-              }
-            }
-          },
-        ]
+          }
+        })),
       }),
     });
-    mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
     // Render the component
-    const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
-
-    // Wait for data to be fetched.
-    await timeout(250);
-    assert.equal(global.fetch.callCount, 1);
+    const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+      space={space}
+      startDate="2017-01-01T00:00:00-05:00"
+      endDate="2017-01-20T00:00:00-05:00"
+    />);
+    await timeout(0);
 
     // Verify that the larger chart was shown instead of the Daily Metrics Chart
     assert.equal(component.find('.large-timespan-chart').length, 1);

@@ -167,6 +167,10 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     }
   }
 
+  componentDidMount() {
+    this.componentWillReceiveProps(this.props);
+  }
+
   render() {
     const { space } = this.props;
     const { view } = this.state;
