@@ -1,14 +1,14 @@
-.visualization-space-detail-24-hour-card-header {
+.insights-space-detail-foot-traffic-card-header {
   display: flex;
   overflow: visible !important; /* ensure that date picker can escape header bounds */
 }
-.visualization-space-detail-24-hour-card-header-label {
+.insights-space-detail-foot-traffic-card-header-label {
   line-height: 43px;
 }
-.visualization-space-detail-24-hour-card-date-picker { margin-left: auto; }
+.insights-space-detail-foot-traffic-card-date-picker { margin-left: auto; }
 
 // The 24 hour chart is a fixed width and is scrolalble within the card.
-.card .visualization-space-detail-24-hour-card-body {
+.card .insights-space-detail-foot-traffic-card-body {
   padding: 0px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -19,7 +19,7 @@
 
 // The well is the darker section in the card that is darker than the surroundings. It has a number
 // of sections that are line seperated that each contain a numberic value and a label below.
-.visualization-space-detail-well {
+.insights-space-detail-well {
   display: flex;
 
   // On mobile, stack items vertically.
@@ -31,10 +31,10 @@
     height: 150px;
   }
 
-  background-color: $gray-lightest;
+  background-color: $gray-cinder;
   margin-top: 20px;
 }
-.visualization-space-detail-well-section {
+.insights-space-detail-well-section {
   flex: 1;
   // On mobile, make each item a flex parent so that the order of items can be changed with `order`.
   display: flex;
@@ -43,6 +43,7 @@
   margin-bottom: 20px;
 
   text-align: center;
+  color: $gray-dark;
 
   // On a computer, add more spacing above and below each cell. Also, change the display property
   // back to block because the items don't need reordering.
@@ -51,13 +52,13 @@
     margin-bottom: 30px;
     display: block;
 
-    border-left: 2px solid $gray-light;
+    border-left: 2px solid #4E5457;
   }
 }
-.visualization-space-detail-well-section:first-child { border-left-width: 0px; }
+.insights-space-detail-well-section:first-child { border-left-width: 0px; }
 
-.visualization-space-detail-well-section-quantity {
-  color: $brand-primary;
+.insights-space-detail-well-section-quantity {
+  color: #fff;
   font-size: $font-size-3;
   font-weight: $font-weight-3;
 
@@ -77,7 +78,7 @@
     padding-bottom: 5px;
   }
 }
-.visualization-space-detail-well-section-label {
+.insights-space-detail-well-section-label {
   margin-left: 20px;
 
   // On mobile, place the quantity label after the contents.
@@ -95,21 +96,23 @@
 
 
 // Refresh icon to refetch data
-.visualization-space-detail-24-hour-card-header-refresh:before {
-  content: '\e92d';
-  font-family: "Densicons";
-  margin-left: 10px;
-  font-size: $font-size-base;
-  color: $brand-primary;
+.insights-space-detail-foot-traffic-card-header-refresh {
+  display: inline-block;
+  transform: translate(0px, 12px);
+  margin-left: auto;
   cursor: pointer;
 }
-.visualization-space-detail-24-hour-card-header-refresh:hover { opacity: 0.8; }
-.visualization-space-detail-24-hour-card-header-refresh:active { opacity: 1; }
+.insights-space-detail-foot-traffic-card-header-refresh:hover { opacity: 0.8; }
+.insights-space-detail-foot-traffic-card-header-refresh:active { opacity: 1; }
+.insights-space-detail-foot-traffic-card-header-refresh.disabled {
+  cursor: default;
+  pointer-events: none;
+}
 
 
 // Horizontally and vertically center errors and info messages in the 24 hour card.
-.visualization-space-detail-24-hour-card-body-info,
-.visualization-space-detail-24-hour-card-body-error {
+.insights-space-detail-foot-traffic-card-body-info,
+.insights-space-detail-foot-traffic-card-body-error {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -120,7 +123,7 @@
   color: $gray-cinder;
 }
 // Errors should be prefixed by the error icon
-.visualization-space-detail-24-hour-card-body-error-icon {
+.insights-space-detail-foot-traffic-card-body-error-icon {
   color: $brand-danger;
   font-family: "Densicons";
   margin-right: 10px;

@@ -1,12 +1,14 @@
-import * as React from 'react';
+import React from 'react';
+import classnames from 'classnames';
 
 import moment from 'moment';
 import 'moment-timezone';
 
 import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
-import { isInclusivelyBeforeDay } from '@density/react-dates';
-import DatePicker, { ANCHOR_RIGHT } from '@density/ui-date-picker';
+import { IconRefresh } from '@density/ui-icons';
+
+import { isWithinTimeSegment, TIME_SEGMENTS } from '../../helpers/space-utilization/index';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
@@ -26,18 +28,16 @@ const LOADING = 'LOADING',
       ERROR = 'ERROR';
 
 export default class InsightsSpaceDetailFootTrafficCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      state: LOADING,
-      data: null,
-      dataSpaceId: null,
-      datePickerOpen: false,
-      date: moment.utc().format(),
-    };
+  state = {
+    view: LOADING,
+    data: null,
+    dataSpaceId: null,
+    datePickerOpen: false,
+    date: moment.utc().format(),
   }
-  fetchData() {
-    const {space} = this.props;
+
+  fetchData = () => {
+    const { space } = this.props;
     const startTime = moment.utc(this.state.date).tz(space.timeZone).startOf('day');
     const endTime = startTime.clone().add(1, 'day');
 
@@ -51,88 +51,108 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     }).then(data => {
       if (data.results.length > 0) {
         this.setState({
-          state: VISIBLE,
+          view: VISIBLE,
           dataSpaceId: space.id,
-          data,
+          data: [
+            data.results[0],
+            ...data.results.filter(datum => {
+              return isWithinTimeSegment(
+                datum.timestamp,
+                space.timeZone,
+                TIME_SEGMENTS[this.state.timeSegmentId],
+              );
+            }),
+          ],
         });
       } else {
         this.setState({
-          state: EMPTY,
+          view: EMPTY,
           dataSpaceId: space.id,
         });
       }
     }).catch(error => {
       this.setState({
-        state: ERROR,
+        view: ERROR,
         error,
         dataSpaceId: space.id,
       });
     });
   }
-  render() {
-    const {space} = this.props;
-    if (space && space.id !== this.state.dataSpaceId) {
-      this.fetchData.call(this);
+
+  componentWillReceiveProps({space, date, timeSegmentId}) {
+    if (space && (
+      space.id !== this.state.dataSpaceId ||
+      date !== this.state.date ||
+      timeSegmentId !== this.state.timeSegmentId
+    )) {
+      this.setState({
+        view: LOADING,
+        date,
+        timeSegmentId,
+      }, () => this.fetchData());
     }
+  }
 
-    const min = this.state.data ? Math.min.apply(Math, this.state.data.results.map(i => i.count)) : '-';
-    const max = this.state.data ? Math.max.apply(Math, this.state.data.results.map(i => i.count)) : '-';
+  render() {
+    const { space } = this.props;
+    const {
+      view,
+      data,
+      error,
 
-    const startTime = moment.utc(this.state.date).tz(space.timeZone).startOf('day');
-    const endTime = startTime.clone().add(1, 'day');
+      date,
+      timeSegmentId,
+    } = this.state;
+
+    const min = data ? Math.min.apply(Math, data.map(i => i.count)) : '-';
+    const max = data ? Math.max.apply(Math, data.map(i => i.count)) : '-';
+
+    const timeSegment = TIME_SEGMENTS[timeSegmentId] || {start: 0, end: 24};
+    const startOfDayTime = moment.utc(date).tz(space.timeZone).startOf('day');
+    const startTime = startOfDayTime.clone().add(timeSegment.start, 'hours');
+    const endTime = startOfDayTime.clone().add(timeSegment.end, 'hours');
 
     if (space) {
-      const largestCount = this.state.state === 'VISIBLE' ? this.state.data.results.reduce((acc, i) => i.count > acc.count ? i : acc, {count: -1}) : null;
+      const largestCount = view === 'VISIBLE' ? (
+        data.reduce((acc, i) => i.count > acc.count ? i : acc, {count: -1})
+      ) : null;
 
-      return <Card className="visualization-space-detail-card">
-        { this.state.state === LOADING ? <CardLoading indeterminate /> : null }
-        <CardHeader className="visualization-space-detail-24-hour-card-header">
-          <span className="visualization-space-detail-24-hour-card-header-label">
-            24 Hour Chart
-            <span
-              className="visualization-space-detail-24-hour-card-header-refresh"
-              onClick={() => this.setState({
-                state: LOADING,
-                data: null,
-              }, () => this.fetchData.call(this))}
-            />
+      return <Card className="insights-space-detail-card">
+        { view === LOADING ? <CardLoading indeterminate /> : null }
+        <CardHeader className="insights-space-detail-foot-traffic-card-header">
+          <span className="insights-space-detail-foot-traffic-card-header-label">
+            Foot Traffic
           </span>
-          <div className="visualization-space-detail-24-hour-card-date-picker">
-            <DatePicker
-              date={moment.utc(this.state.date).tz(space.timeZone).startOf('day').tz('UTC')}
-              onChange={date => {
-                this.setState({
-                  state: LOADING,
-                  data: null,
-                  date: date.format(),
-                }, () => this.fetchData());
-              }}
-              focused={this.state.datePickerOpen}
-              onFocusChange={({focused}) => this.setState({datePickerOpen: focused})}
-              anchor={ANCHOR_RIGHT}
-
-              isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc().tz(space.timeZone).startOf('day').tz('UTC'))}
-            />
-          </div>
+          <span
+            className={classnames('insights-space-detail-foot-traffic-card-header-refresh', {
+              disabled: view !== VISIBLE,
+            })}
+            onClick={() => this.setState({
+              view: LOADING,
+              data: null,
+            }, () => this.fetchData())}
+          >
+            <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+          </span>
         </CardHeader>
 
-        <div className="visualization-space-detail-well">
-          <div className="visualization-space-detail-well-section capacity">
-            <span className="visualization-space-detail-well-section-quantity">{space.capacity || '-'}</span>
-            <span className="visualization-space-detail-well-section-label">Capacity</span>
+        <div className="insights-space-detail-well">
+          <div className="insights-space-detail-well-section capacity">
+            <span className="insights-space-detail-well-section-quantity">{space.capacity || '-'}</span>
+            <span className="insights-space-detail-well-section-label">Capacity</span>
           </div>
-          <div className="visualization-space-detail-well-section minimum">
-            <span className="visualization-space-detail-well-section-quantity">{min}</span>
-            <span className="visualization-space-detail-well-section-label">Minimum</span>
+          <div className="insights-space-detail-well-section minimum">
+            <span className="insights-space-detail-well-section-quantity">{min}</span>
+            <span className="insights-space-detail-well-section-label">Minimum</span>
           </div>
-          <div className="visualization-space-detail-well-section maximum">
-            <span className="visualization-space-detail-well-section-quantity">{max}</span>
-            <span className="visualization-space-detail-well-section-label">Maximum</span>
+          <div className="insights-space-detail-well-section maximum">
+            <span className="insights-space-detail-well-section-quantity">{max}</span>
+            <span className="insights-space-detail-well-section-label">Maximum</span>
           </div>
         </div>
 
-        <CardBody className="visualization-space-detail-24-hour-card-body">
-          {this.state.state === VISIBLE ? <LineChartComponent
+        <CardBody className="insights-space-detail-foot-traffic-card-body">
+          {view === VISIBLE ? <LineChartComponent
             timeZone={space.timeZone}
             svgWidth={975}
             svgHeight={350}
@@ -186,7 +206,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
                 name: 'default',
                 type: dataWaterline,
                 verticalBaselineOffset: 10,
-                data: this.state.data.results.map(i => ({
+                data: data.map(i => ({
                     timestamp: i.timestamp,
                     value: i.interval.analytics.max,
                   })).sort((a, b) =>
@@ -196,16 +216,16 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
             ]}
           /> : null}
 
-          {this.state.state === LOADING ? <div className="visualization-space-detail-24-hour-card-body-info">
+          {view === LOADING ? <div className="insights-space-detail-foot-traffic-card-body-info">
             <span>Generating Data&nbsp;.&nbsp;.&nbsp;.</span>
           </div> : null}
-          {this.state.state === EMPTY ? <div className="visualization-space-detail-24-hour-card-body-info">
+          {view === EMPTY ? <div className="insights-space-detail-foot-traffic-card-body-info">
             <span>No data found in date range.</span>
           </div> : null}
-          {this.state.state === ERROR ? <div className="visualization-space-detail-24-hour-card-body-info">
+          {view === ERROR ? <div className="insights-space-detail-foot-traffic-card-body-info">
             <span>
-              <span className="visualization-space-detail-24-hour-card-body-error-icon">&#xe91a;</span>
-              {this.state.error}
+              <span className="insights-space-detail-foot-traffic-card-body-error-icon">&#xe91a;</span>
+              {error.toString()}
             </span>
           </div> : null}
           </CardBody>

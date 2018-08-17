@@ -72,6 +72,8 @@ export function InsightsSpaceDaily({
           <div className="insights-space-daily-item">
             <FootTrafficCard
               space={space}
+              date={spaces.filters.date}
+              timeSegmentId={spaces.filters.timeSegmentId}
             />
           </div>
           <div className="insights-space-daily-item">
