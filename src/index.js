@@ -28,7 +28,6 @@ import createRouter from '@density/conduit';
 import routeTransitionEnvironmentSpace from './actions/route-transition/environment-space';
 import routeTransitionLogin from './actions/route-transition/login';
 import routeTransitionInsightsSpaceList from './actions/route-transition/insights-space-list';
-import routeTransitionVisualizationSpaceDetail from './actions/route-transition/visualization-space-detail';
 import routeTransitionInsightsSpaceTrends from './actions/route-transition/insights-space-trends';
 import routeTransitionInsightsSpaceDaily from './actions/route-transition/insights-space-daily';
 import routeTransitionLiveSpaceList from './actions/route-transition/live-space-list';
@@ -119,8 +118,12 @@ trackHashChange();
 
 // Routing helper to redirect to a different url when a user visits a url.
 function redirect(url) {
-  return () => {
-    window.location.href = `#/${url}`;
+  return (...args) => {
+    if (typeof url === 'function') {
+      window.location.href = `#/${url(...args)}`;
+    } else {
+      window.location.href = `#/${url}`;
+    }
     // FIXME: Conduit shouldn't dispatch an action if a function returns undefined. That would let the
     // below line be removed.
     return {type: 'NOOP'};
@@ -135,10 +138,10 @@ router.addRoute('login', () => routeTransitionLogin());
 
 // v I AM DEPRECATED
 router.addRoute('insights/spaces', redirect('spaces/insights')); // DEPRECATED
+router.addRoute('spaces/insights/:id', redirect(id => `spaces/insights/${id}/trends`)); // DEPRECATED
 // ^ I AM DEPRECATED
 
 router.addRoute('spaces/insights', () => routeTransitionInsightsSpaceList());
-router.addRoute('spaces/insights/:id', id => routeTransitionVisualizationSpaceDetail(id));
 router.addRoute('spaces/insights/:id/trends', id => routeTransitionInsightsSpaceTrends(id));
 router.addRoute('spaces/insights/:id/daily', id => routeTransitionInsightsSpaceDaily(id));
 

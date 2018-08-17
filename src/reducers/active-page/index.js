@@ -1,6 +1,5 @@
 import { ROUTE_TRANSITION_LOGIN } from '../../actions/route-transition/login';
 import { ROUTE_TRANSITION_INSIGHTS_SPACE_LIST } from '../../actions/route-transition/insights-space-list';
-import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
 import { ROUTE_TRANSITION_LIVE_SPACE_LIST } from '../../actions/route-transition/live-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_DETAIL } from '../../actions/route-transition/live-space-detail';
 import { ROUTE_TRANSITION_ENVIRONMENT_SPACE } from '../../actions/route-transition/environment-space';
@@ -31,8 +30,6 @@ export default function activePage(state=initialState, action) {
     return "LIVE_SPACE_DETAIL";
   case ROUTE_TRANSITION_INSIGHTS_SPACE_LIST:
     return "INSIGHTS_SPACE_LIST";
-  case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
-    return "VISUALIZATION_SPACE_DETAIL";
   case ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS:
     return "INSIGHTS_SPACE_TRENDS";
   case ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY:

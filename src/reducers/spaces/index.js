@@ -11,7 +11,6 @@ import { COLLECTION_SPACES_ERROR } from '../../actions/collection/spaces/error';
 import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/count-change';
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
 
-import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
 import { ROUTE_TRANSITION_LIVE_SPACE_LIST } from '../../actions/route-transition/live-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_DETAIL } from '../../actions/route-transition/live-space-detail';
 import { ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS } from '../../actions/route-transition/insights-space-trends';
@@ -124,7 +123,6 @@ export default function spaces(state=initialState, action) {
     };
 
   // When the user changes the active space, update it in the store.
-  case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
   case ROUTE_TRANSITION_LIVE_SPACE_DETAIL:
   case ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS:
   case ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY:
