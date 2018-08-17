@@ -34,9 +34,7 @@ export function InsightsSpaceHeader({
 
       <div className="insights-space-header-container">
         <div className="insights-space-header">
-          <h1 className="insights-space-header-text">
-            <span className="insights-space-header-title">{space.name}</span>
-          </h1>
+          <h1 className="insights-space-header-text">{space.name}</h1>
 
           {/* Attempt to display a nicer representation of the time zone, but fall back on the time zone name */}
           <div className="insights-space-header-row">

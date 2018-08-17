@@ -170,36 +170,38 @@ export default class VisualizationSpaceDetailDailyMetricsCard extends React.Comp
               <span className="insights-space-detail-daily-metrics-card-header-label">
                 Daily Metrics
               </span>
-              <span
-                className={classnames('insights-space-detail-utilization-card-header-refresh', {
-                  disabled: view !== VISIBLE,
-                })}
-                onClick={() => this.setState({
-                  view: LOADING,
-                  data: null,
-                }, () => this.fetchData())}
-              >
-                <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-              </span>
-              <div className="insights-space-detail-daily-metrics-card-metric-picker">
-                <InputBox
-                  type="select"
-                  value={metricToDisplay}
-                  disabled={view !== VISIBLE}
-                  onChange={e => {
-                    this.setState({
-                      view: LOADING,
-                      data: null,
-                      metricToDisplay: e.id,
-                    }, () => this.fetchData());
-                  }}
-                  choices={[
-                    {id: "entrances", label: "Entrances"},
-                    {id: "exits", label: "Exits"},
-                    {id: "total-events", label: "Total Events"},
-                    {id: "peak-occupancy", label: "Peak Occupancy"},
-                  ]}
-                />
+              <div className="insights-space-detail-daily-metrics-card-header-controls">
+                <span
+                  className={classnames('insights-space-detail-daily-metrics-card-refresh', {
+                    disabled: view !== VISIBLE,
+                  })}
+                  onClick={() => this.setState({
+                    view: LOADING,
+                    data: null,
+                  }, () => this.fetchData())}
+                >
+                  <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+                </span>
+                <div className="insights-space-detail-daily-metrics-card-metric-picker">
+                  <InputBox
+                    type="select"
+                    value={metricToDisplay}
+                    disabled={view !== VISIBLE}
+                    onChange={e => {
+                      this.setState({
+                        view: LOADING,
+                        data: null,
+                        metricToDisplay: e.id,
+                      }, () => this.fetchData());
+                    }}
+                    choices={[
+                      {id: "entrances", label: "Entrances"},
+                      {id: "exits", label: "Exits"},
+                      {id: "total-events", label: "Total Events"},
+                      {id: "peak-occupancy", label: "Peak Occupancy"},
+                    ]}
+                  />
+                </div>
               </div>
             </div>
           </CardHeader>

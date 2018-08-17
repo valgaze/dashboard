@@ -17,12 +17,22 @@
   font-size: 24px;
   font-weight: 500;
   color: $gray-cinder;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .insights-space-header-row {
   margin-top: 10px;
   display: flex;
-  flex-direction: row;
+
+  // On mobile, render header in a vertical list.
+  // On desktop, render header items in a line horizontally.
+  flex-direction: column;
+  @media (min-width: $screen-sm-min) {
+    flex-direction: row;
+  }
 }
 
 .insights-space-header-capacity {
@@ -39,7 +49,14 @@
 }
 
 .insights-space-header-time-zone {
-  margin-left: auto;
+  margin-top: 15px;
+
+  // On mobile, render header like other items in a left-aligned position.
+  // On desktop, render right aligned.
+  @media (min-width: $screen-sm-min) {
+    margin-top: 0px;
+    margin-left: auto;
+  }
 }
 
 .insights-space-header-hierarchy {
