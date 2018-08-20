@@ -11,7 +11,7 @@ import Subnav, { SubnavItem } from '../subnav/index';
 import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar/index';
 import InsightsSpaceHeader from '../insights-space-header/index';
 import FootTrafficCard from '../insights-space-detail-foot-traffic-card/index';
-import RawEventsCard from '../visualization-space-detail-raw-events-card/index';
+import RawEventsCard from '../insights-space-detail-raw-events-card/index';
 
 import DatePicker from '@density/ui-date-picker';
 
@@ -77,7 +77,11 @@ export function InsightsSpaceDaily({
             />
           </div>
           <div className="insights-space-daily-item">
-            <RawEventsCard space={space} />
+            <RawEventsCard
+              space={space}
+              date={spaces.filters.date}
+              timeSegmentId={spaces.filters.timeSegmentId}
+            />
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-.visualization-space-detail-raw-event-card-header {
+.insights-space-detail-raw-event-card-header {
   display: flex;
 
   // On mobile, orient the header vertically.
@@ -7,22 +7,25 @@
     flex-direction: row;
   }
 }
-.visualization-space-detail-raw-events-card-header-label { line-height: 43px; }
+.insights-space-detail-raw-events-card-header-label {
+  line-height: 33px;
+  margin-top: 10px;
+}
 
-.visualization-space-detail-raw-events-card-body-placeholder {
+.insights-space-detail-raw-events-card-body-placeholder {
   height: 500px;
 }
 
 // Add spacing to the top of the card. Also, specify a minimum height so we never cut off the edge
 // of the date picker.
-.visualization-space-detail-raw-events-card {
+.insights-space-detail-raw-events-card {
   margin-top: 40px;
   min-height: 421px;
 }
 
 // On mobile, allow the event table to be horizontally scrollable.
-.visualization-space-detail-raw-events-card-table { overflow-y: auto; }
-.visualization-space-detail-raw-events-card-table-row {
+.insights-space-detail-raw-events-card-table { overflow-y: auto; }
+.insights-space-detail-raw-events-card-table-row {
   display: flex;
   list-style-type: none;
   padding-top: 13px !important;
@@ -36,16 +39,16 @@
   min-width: 800px;
 }
 
-.visualization-space-detail-raw-events-card-table-row li { flex: 1; }
+.insights-space-detail-raw-events-card-table-row li { flex: 1; }
 
-.visualization-space-detail-raw-events-card-table-row.header {
+.insights-space-detail-raw-events-card-table-row.header {
   font-weight: bold;
   margin-top: 20px;
 }
 
 
 // CSV Download link to the left of the date range selector.
-.visualization-space-detail-raw-events-card-csv-download {
+.insights-space-detail-raw-events-card-csv-download {
   position: relative;
   display: inline-block;
   margin-right: 20px;
@@ -71,14 +74,14 @@
   }
 }
 // When the download link is disabled, gray it out.
-.visualization-space-detail-raw-events-card-csv-download.disabled {
+.insights-space-detail-raw-events-card-csv-download.disabled {
   cursor: default;
   color: $gray-light;
 }
 
 // Horizontally and vertically center errors and info messages in the daily metrics card.
-.visualization-space-detail-raw-events-card-body-info,
-.visualization-space-detail-raw-events-card-body-error {
+.insights-space-detail-raw-events-card-body-info,
+.insights-space-detail-raw-events-card-body-error {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,7 +92,7 @@
   color: $gray-cinder;
 }
 // Errors should be prefixed by the error icon
-.visualization-space-detail-raw-events-card-body-error-icon {
+.insights-space-detail-raw-events-card-body-error-icon {
   color: $brand-danger;
   font-family: "Densicons";
   margin-right: 10px;
@@ -97,13 +100,16 @@
   top: -2px;
 }
 
-
 // Refresh icon to refetch data
-.visualization-space-detail-raw-events-card-header-refresh:before {
-  content: '\e92d';
-  font-family: "Densicons";
-  margin-left: 10px;
-  font-size: $font-size-base;
-  color: $brand-primary;
+.insights-space-detail-raw-events-card-header-refresh {
+  display: inline-block;
+  transform: translate(0px, 12px);
+  margin-left: auto;
   cursor: pointer;
+}
+.insights-space-detail-raw-events-card-header-refresh:hover { opacity: 0.8; }
+.insights-space-detail-raw-events-card-header-refresh:active { opacity: 1; }
+.insights-space-detail-raw-events-card-header-refresh.disabled {
+  cursor: default;
+  pointer-events: none;
 }
