@@ -4,16 +4,11 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import 'moment-timezone';
 
-import InputBox from '@density/ui-input-box';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar/index';
 import InsightsSpaceHeader from '../insights-space-header/index';
-import IncludeWeekendsSwitch from '../include-weekends-switch/index';
-import UtilizationCard from '../insights-space-detail-utilization-card/index';
-
-import DailyMetricsCard from '../insights-space-detail-daily-metrics-card/index';
 
 import DateRangePicker from '@density/ui-date-range-picker';
 import gridVariables from '@density/ui/variables/grid.json'
@@ -21,7 +16,6 @@ import gridVariables from '@density/ui/variables/grid.json'
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
 import commonRanges from '../../helpers/common-ranges';
-import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
 
 // The maximum number of days that can be selected by the date range picker
 const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
@@ -48,40 +42,24 @@ export function isOutsideRange(startISOTime, datePickerInput, day) {
   return false;
 }
 
-function InsightsSpaceTrends({
+function RawEventsExportCard() {
+  return null;
+}
+
+function InsightsSpaceDataExport({
   spaces,
   space,
   onChangeSpaceFilter,
 }) {
   if (space) {
-    const timeSegmentArray = Object.entries(TIME_SEGMENTS).map(([key, {start, end, name}]) => {
-      return {
-        id: key,
-        label: <span>
-          {name} (
-          {start > 12 ? `${start-12}p` : `${start === 0 ? '12' : start}a`} -{' '}
-          {end > 12 ? `${end-12}p` : `${end}a`}
-        ) </span>,
-      };
-    });
-
     return <div>
       <Subnav visible>
-        <SubnavItem active href={`#/spaces/insights/${spaces.selected}/trends`}>Trends</SubnavItem>
+        <SubnavItem href={`#/spaces/insights/${spaces.selected}/trends`}>Trends</SubnavItem>
         <SubnavItem href={`#/spaces/insights/${spaces.selected}/daily`}>Daily</SubnavItem>
-        <SubnavItem href={`#/spaces/insights/${spaces.selected}/data-export`}>Data Export</SubnavItem>
+        <SubnavItem active href={`#/spaces/insights/${spaces.selected}/data-export`}>Data Export</SubnavItem>
       </Subnav>
 
       <InsightsFilterBar>
-        <InsightsFilterBarItem label="Time Segment">
-          <InputBox
-            type="select"
-            className="insights-space-trends-time-segment-box"
-            value={timeSegmentArray.find(i => i.id === spaces.filters.timeSegmentId)}
-            choices={timeSegmentArray}
-            onChange={value => onChangeSpaceFilter('timeSegmentId', value.id)}
-          />
-        </InsightsFilterBarItem>
         <InsightsFilterBarItem label="Date Range">
           <DateRangePicker
             startDate={moment.utc(spaces.filters.startDate).tz(space.timeZone).startOf('day')}
@@ -120,29 +98,14 @@ function InsightsSpaceTrends({
             }}
           />
         </InsightsFilterBarItem>
-        <InsightsFilterBarItem label="Include Weekends">
-          <IncludeWeekendsSwitch
-            value={spaces.filters.includeWeekends}
-            onChange={e => onChangeSpaceFilter('includeWeekends', e.target.checked)}
-          />
-        </InsightsFilterBarItem>
       </InsightsFilterBar>
 
       <InsightsSpaceHeader space={space} />
 
-      <div className="insights-space-trends-container">
-        <div className="insights-space-trends">
-          <div className="insights-space-trends-item">
-            <UtilizationCard
-              space={space}
-              startDate={spaces.filters.startDate}
-              endDate={spaces.filters.endDate}
-              timeSegmentId={spaces.filters.timeSegmentId}
-              includeWeekends={spaces.filters.includeWeekends}
-            />
-          </div>
-          <div className="insights-space-trends-item">
-            <DailyMetricsCard
+      <div className="insights-space-data-export-container">
+        <div className="insights-space-data-export">
+          <div className="insights-space-data-export-item">
+            <RawEventsExportCard
               space={space}
               startDate={spaces.filters.startDate}
               endDate={spaces.filters.endDate}
@@ -168,4 +131,4 @@ export default connect(state => {
       dispatch(collectionSpacesFilter(key, value));
     },
   };
-})(InsightsSpaceTrends);
+})(InsightsSpaceDataExport);

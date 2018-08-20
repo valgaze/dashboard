@@ -112,7 +112,6 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         timestamp: i.timestamp,
         value: i.interval.analytics.max,
     })).sort((a, b) => {
-      console.log('FOO', a, b)
       if (b) {
         return moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf();
       } else {

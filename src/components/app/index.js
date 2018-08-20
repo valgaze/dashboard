@@ -14,6 +14,7 @@ import TokenList from '../dev-token-list/index';
 import InsightsSpaceList from '../insights-space-list/index';
 import InsightsSpaceTrends from '../insights-space-trends/index';
 import InsightsSpaceDaily from '../insights-space-daily/index';
+import InsightsSpaceDataExport from '../insights-space-data-export/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
 import Account from '../account/index';
@@ -95,6 +96,8 @@ function ActivePage({activePage, settings}) {
     return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceTrends />;
   case "INSIGHTS_SPACE_DAILY":
     return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceDaily />;
+  case "INSIGHTS_SPACE_DATA_EXPORT":
+    return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceDataExport />;
   case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":

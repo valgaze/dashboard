@@ -40,6 +40,7 @@ export function InsightsSpaceDaily({
       <Subnav visible>
         <SubnavItem href={`#/spaces/insights/${spaces.selected}/trends`}>Trends</SubnavItem>
         <SubnavItem active href={`#/spaces/insights/${spaces.selected}/daily`}>Daily</SubnavItem>
+        <SubnavItem href={`#/spaces/insights/${spaces.selected}/data-export`}>Data Export</SubnavItem>
       </Subnav>
 
       <InsightsFilterBar>

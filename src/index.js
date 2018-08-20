@@ -30,6 +30,7 @@ import routeTransitionLogin from './actions/route-transition/login';
 import routeTransitionInsightsSpaceList from './actions/route-transition/insights-space-list';
 import routeTransitionInsightsSpaceTrends from './actions/route-transition/insights-space-trends';
 import routeTransitionInsightsSpaceDaily from './actions/route-transition/insights-space-daily';
+import routeTransitionInsightsSpaceDataExport from './actions/route-transition/insights-space-data-export';
 import routeTransitionLiveSpaceList from './actions/route-transition/live-space-list';
 import routeTransitionLiveSpaceDetail from './actions/route-transition/live-space-detail';
 import routeTransitionDevTokenList from './actions/route-transition/dev-token-list';
@@ -144,6 +145,7 @@ router.addRoute('spaces/insights/:id', redirect(id => `spaces/insights/${id}/tre
 router.addRoute('spaces/insights', () => routeTransitionInsightsSpaceList());
 router.addRoute('spaces/insights/:id/trends', id => routeTransitionInsightsSpaceTrends(id));
 router.addRoute('spaces/insights/:id/daily', id => routeTransitionInsightsSpaceDaily(id));
+router.addRoute('spaces/insights/:id/data-export', id => routeTransitionInsightsSpaceDataExport(id));
 
 router.addRoute('spaces/live', () => routeTransitionLiveSpaceList());
 router.addRoute('spaces/live/:id', id => routeTransitionLiveSpaceDetail(id));
