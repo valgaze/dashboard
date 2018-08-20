@@ -108,6 +108,18 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
       timeSegmentId,
     } = this.state;
 
+    const chartData = data ? data.map(i => ({
+        timestamp: i.timestamp,
+        value: i.interval.analytics.max,
+    })).sort((a, b) => {
+      console.log('FOO', a, b)
+      if (b) {
+        return moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf();
+      } else {
+        return 0;
+      }
+    }) : null;
+
     const min = data ? Math.min.apply(Math, data.map(i => i.count)) : '-';
     const max = data ? Math.max.apply(Math, data.map(i => i.count)) : '-';
 
@@ -210,12 +222,8 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
                 name: 'default',
                 type: dataWaterline,
                 verticalBaselineOffset: 10,
-                data: data.map(i => ({
-                    timestamp: i.timestamp,
-                    value: i.interval.analytics.max,
-                  })).sort((a, b) =>
-                    moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
-                  ),
+                // BUG: chart can't render a single datapoint.
+                data: chartData.length === 1 ? [...chartData, ...chartData] : chartData,
               },
             ]}
           /> : null}
