@@ -50,6 +50,7 @@ export default class InsightsFilterBar extends Component {
       removed.
       */}
       {isFixed ? <div
+        className="insights-filter-bar-height-spacer"
         style={{height: this.filterBar.getBoundingClientRect().height}}
       /> : null}
     </div>;

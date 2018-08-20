@@ -51,6 +51,9 @@ export function InsightsSpaceDaily({
 
             focused={spaces.filters.datePickerFocused}
             onFocusChange={({focused}) => onChangeSpaceFilter('datePickerFocused', focused)}
+            arrowRightDisabled={
+              moment.utc(spaces.filters.date).tz(space.timeZone).format('MM/DD/YYYY') === moment.utc().tz(space.timeZone).format('MM/DD/YYYY')
+            }
 
             isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc().tz(space.timeZone).startOf('day').tz('UTC'))}
           />
