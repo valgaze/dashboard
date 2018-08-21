@@ -6,6 +6,7 @@ import 'moment-timezone';
 
 import { core } from '../../client';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
+import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
 
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
@@ -33,6 +34,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     datePickerInput: null,
 
     date: null,
+    timeSegmentId: null,
 
     // A lookup table for doorway information that is mostly used to display the doorway name in
     // the raw events list.
@@ -41,7 +43,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
 
   fetchData = async () => {
     const { space } = this.props;
-    const { date, page, pageSize, doorwayLookup } = this.state;
+    const { date, page, pageSize, doorwayLookup, timeSegmentId } = this.state;
 
     // Add timezone offset to both start and end times prior to querying for the count.
     const day = moment.utc(date).tz(space.timeZone);
@@ -49,8 +51,8 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     try {
       const preData = await core.spaces.events({
         id: space.id,
-        start_time: day.startOf('day').format(),
-        end_time: day.endOf('day').format(),
+        start_time: day.startOf('day').add(TIME_SEGMENTS[timeSegmentId].start, 'hours').format(),
+        end_time: day.startOf('day').add(TIME_SEGMENTS[timeSegmentId].end, 'hours').format(),
         page: page,
         page_size: pageSize,
         order: 'desc',

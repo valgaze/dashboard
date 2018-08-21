@@ -8,7 +8,7 @@ import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
 
-import { isWithinTimeSegment, TIME_SEGMENTS } from '../../helpers/space-utilization/index';
+import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
@@ -38,13 +38,12 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
 
   fetchData = () => {
     const { space } = this.props;
-    const startTime = moment.utc(this.state.date).tz(space.timeZone).startOf('day');
-    const endTime = startTime.clone().add(1, 'day');
+    const day = moment.utc(this.state.date).tz(space.timeZone);
 
     return core.spaces.counts({
       id: space.id,
-      start_time: startTime.format(),
-      end_time: endTime.format(),
+      start_time: day.startOf('day').add(TIME_SEGMENTS[this.state.timeSegmentId].start, 'hours').format(),
+      end_time: day.startOf('day').add(TIME_SEGMENTS[this.state.timeSegmentId].end, 'hours').format(),
       interval: '5m',
       page_size: 1000,
       order: 'desc',
@@ -53,16 +52,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         this.setState({
           view: VISIBLE,
           dataSpaceId: space.id,
-          data: [
-            data.results[0],
-            ...data.results.filter(datum => {
-              return isWithinTimeSegment(
-                datum.timestamp,
-                space.timeZone,
-                TIME_SEGMENTS[this.state.timeSegmentId],
-              );
-            }),
-          ],
+          data: data.results,
         });
       } else {
         this.setState({
