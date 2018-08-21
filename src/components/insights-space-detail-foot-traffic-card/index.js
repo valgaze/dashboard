@@ -7,6 +7,7 @@ import 'moment-timezone';
 import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
+import InfoPopup from '@density/ui-info-popup';
 
 import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
 
@@ -127,6 +128,17 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         <CardHeader className="insights-space-detail-foot-traffic-card-header">
           <span className="insights-space-detail-foot-traffic-card-header-label">
             Foot Traffic
+            <InfoPopup>
+              <p>
+                Count over time for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over
+                the time period of {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}, queried
+                in 5 minute intervals.
+              </p>
+
+              <p>
+                Use this chart to understand visitation over the course of a day.
+              </p>
+            </InfoPopup>
           </span>
           <span
             className={classnames('insights-space-detail-foot-traffic-card-header-refresh', {

@@ -5,6 +5,8 @@ import moment from 'moment';
 import 'moment-timezone';
 
 import InputBox from '@density/ui-input-box';
+import InfoPopup from '@density/ui-info-popup';
+import { IconInfo } from '@density/ui-icons';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 
 import Subnav, { SubnavItem } from '../subnav/index';
@@ -120,7 +122,13 @@ function InsightsSpaceTrends({
             }}
           />
         </InsightsFilterBarItem>
-        <InsightsFilterBarItem label="Include Weekends">
+        <InsightsFilterBarItem label={<span className="insights-space-trends-include-weekends-info">
+          Include Weekends
+          <InfoPopup target={<IconInfo width={12} height={12} color="primary" />}>
+            Include weekend data in <strong>An Average week</strong> and <strong>An Average
+            Day</strong> charts. Daily metrics will always include weekends.
+          </InfoPopup>
+        </span>}>
           <IncludeWeekendsSwitch
             value={spaces.filters.includeWeekends}
             onChange={e => onChangeSpaceFilter('includeWeekends', e.target.checked)}

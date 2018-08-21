@@ -9,6 +9,9 @@ import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import InputBox from '@density/ui-input-box';
 import { IconRefresh } from '@density/ui-icons';
+import InfoPopup from '@density/ui-info-popup';
+
+import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
 
 import dailyMetrics from '@density/chart-daily-metrics';
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
@@ -164,6 +167,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       data,
       startDate,
       endDate,
+      timeSegmentId,
     } = this.state;
 
     if (space) {
@@ -175,6 +179,21 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
             <div className="insights-space-detail-daily-metrics-card-header-container">
               <span className="insights-space-detail-daily-metrics-card-header-label">
                 Daily Metrics
+                <InfoPopup>
+                  Visitation metrics for {timeSegmentId ?
+                  TIME_SEGMENTS[timeSegmentId].phrasal : null}, grouped by day over {' '}
+                  {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
+                  {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
+
+                  Use these metrics to understand the visitation of your space, and how it trends
+                  over time.
+
+                  <ul>
+                    <li><strong>Entrances</strong>: Total number of events from people entering the space.</li>
+                    <li><strong>Exits</strong>: Total number of events from people exiting the space.</li>
+                    <li><strong>Peak Counts</strong>: Peak count at any given point in time over the course of the day.</li>
+                  </ul>
+                </InfoPopup>
               </span>
               <div className="insights-space-detail-daily-metrics-card-header-controls">
                 <span

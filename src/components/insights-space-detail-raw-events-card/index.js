@@ -8,8 +8,9 @@ import { core } from '../../client';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
 
-import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
+import Card, { CardHeader, CardLoading, CardTable } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
+import InfoPopup from '@density/ui-info-popup';
 
 import RawEventsPager from '../insights-space-detail-raw-events-pager/index';
 
@@ -151,13 +152,29 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       page,
       total,
       pageSize,
+      date,
+      timeSegmentId,
     } = this.state;
 
     return <div>
       <Card className="insights-space-detail-raw-events-card">
         {view === LOADING ? <CardLoading indeterminate /> : null}
         <CardHeader className="insights-space-detail-raw-event-card-header">
-          <span className="insights-space-detail-raw-events-card-header-label">Daily Raw Events</span>
+          <span className="insights-space-detail-raw-events-card-header-label">
+            Daily Raw Events
+            <InfoPopup>
+              <p>
+                All events that the doorways within this space have seen over{' '}
+                {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')} during{' '}
+                {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null}.
+              </p>
+
+              <p>
+                Head to the <a href={`#/spaces/insights/${space.id}/data-export`}>data export</a> page
+                to download multiple days worth of event data in csv format.
+              </p>
+            </InfoPopup>
+          </span>
           <span
             className={classnames('insights-space-detail-raw-events-card-header-refresh', {
               disabled: view !== VISIBLE,
@@ -171,21 +188,15 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           </span>
         </CardHeader>
 
-        {view === VISIBLE ? <div className="insights-space-detail-raw-events-card-table">
-          <CardBody className="insights-space-detail-raw-events-card-table-row header">
-            <li>Timestamp</li>
-            <li>Event</li>
-            <li>Doorway</li>
-          </CardBody>
-
-          {data.map((item, ct) => {
-            return <CardBody key={item.id} className="insights-space-detail-raw-events-card-table-row">
-              <li>{moment.utc(item.timestamp).tz(space.timeZone).format('MMM Do YYYY, h:mm:ss a')}</li>
-              <li>{item.direction === 1 ? 'Entrance' : 'Exit'}</li>
-              <li>{doorwayLookup[item.doorwayId] ? doorwayLookup[item.doorwayId].name : item.doorwayId}</li>
-            </CardBody>;
-          })}
-        </div> : null}
+        {view === VISIBLE ? <CardTable
+          headings={["Timestamp", "Event", "Doorway"]}
+          data={data}
+          mapDataItemToRow={item => [
+            moment.utc(item.timestamp).tz(space.timeZone).format('MMM Do YYYY, h:mm:ss a'),
+            item.direction === 1 ? 'Entrance' : 'Exit',
+            doorwayLookup[item.doorwayId] ? doorwayLookup[item.doorwayId].name : item.doorwayId,
+          ]}
+        /> : null}
 
         {view === EMPTY ? <div className="insights-space-detail-raw-events-card-body-info">
           No data available for this time period.

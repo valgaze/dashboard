@@ -23,30 +23,6 @@
   min-height: 421px;
 }
 
-// On mobile, allow the event table to be horizontally scrollable.
-.insights-space-detail-raw-events-card-table { overflow-y: auto; }
-.insights-space-detail-raw-events-card-table-row {
-  display: flex;
-  list-style-type: none;
-  padding-top: 13px !important;
-  padding-bottom: 13px !important;
-
-  font-size: $font-size-base;
-  color: $gray-cinder;
-  border-top: 1px solid $gray-light;
-
-  // The max width caps the row width, making the table row scrollable on mobile.
-  min-width: 800px;
-}
-
-.insights-space-detail-raw-events-card-table-row li { flex: 1; }
-
-.insights-space-detail-raw-events-card-table-row.header {
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-
 // CSV Download link to the left of the date range selector.
 .insights-space-detail-raw-events-card-csv-download {
   position: relative;

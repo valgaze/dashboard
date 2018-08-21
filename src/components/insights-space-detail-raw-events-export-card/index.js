@@ -141,7 +141,10 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
       headers,
       data,
       error,
+      startDate,
+      endDate,
     } = this.state;
+    const { space } = this.props;
 
     return <div>
       <Card className="insights-space-detail-raw-events-export-card">
@@ -161,9 +164,14 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
         </CardHeader>
 
         <CardBody>
-          <p>
-            Maybe something explaining more about the data that is exported? Or something explaining
-            what fields like <code>Count Change</code> mean if that isn't already obvious?
+          <p className="insights-space-detail-raw-events-export-card-description">
+            Download all events from {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
+            {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')} in CSV format. Below is a
+            preview of what data is included in the export.
+          </p>
+          <p className="insights-space-detail-raw-events-export-card-description">
+            <strong>Note</strong>: <em>Current Count</em> refers to the number of visitors in the space at{' '}
+            that given point in time.
           </p>
         </CardBody>
 
