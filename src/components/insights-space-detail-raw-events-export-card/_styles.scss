@@ -32,7 +32,9 @@
   min-width: 800px;
 }
 
-.insights-space-detail-raw-events-export-card-table-row li { flex: 1; }
+.insights-space-detail-raw-events-export-card-table-row li {
+  flex: 1;
+}
 
 .insights-space-detail-raw-events-export-card-table-row.header {
   font-weight: bold;
@@ -40,7 +42,7 @@
 }
 
 
-// Horizontally and vertically center errors and info messages in the daily metrics card.
+// Horizontally and vertically center errors and info messages in the raw events export card.
 .insights-space-detail-raw-events-export-card-body-info,
 .insights-space-detail-raw-events-export-card-body-error {
   display: flex;
@@ -78,7 +80,7 @@
 .insights-space-detail-raw-events-export-card-header-download-link {
   display: inline-block;
   line-height: 43px;
-  // transform: translate(0px, 12px);
+  transform: translate(0px, -2px);
   margin-left: auto;
   cursor: pointer;
 
@@ -86,4 +88,8 @@
   font-weight: normal;
   color: $brand-primary;
   text-decoration: underline;
+}
+.insights-space-detail-raw-events-export-card-header-download-link.loading {
+  color: $gray;
+  cursor: default;
 }

@@ -6,7 +6,7 @@ import 'moment-timezone';
 
 import { core } from '../../client';
 
-import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
+import Card, { CardHeader, CardBody, CardLoading, CardTable } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
 
 export const LOADING_INITIAL = 'LOADING_INITIAL',
@@ -151,6 +151,7 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
           <span
             className={classnames('insights-space-detail-raw-events-export-card-header-download-link', {
               disabled: view !== VISIBLE,
+              loading: view === LOADING_CSV,
             })}
             role="button"
             onClick={() => view !== LOADING_CSV && this.downloadCSV()}
@@ -183,23 +184,17 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
           </span>
         </CardHeader>
 
-        {view === VISIBLE || view === LOADING_CSV ? <div className="insights-space-detail-raw-events-export-card-table">
-          <CardBody className="insights-space-detail-raw-events-export-card-table-row header">
-            {headers.map(header => <li key={header}>{header}</li>)}
-          </CardBody>
-
-          {data.map((row, ct) => {
-            return <CardBody key={row.join(',')} className="insights-space-detail-raw-events-export-card-table-row">
-              {row.map((cell, index) => <li key={`${cell},${index}`}>{cell}</li>)}
-            </CardBody>;
-          })}
-        </div> : null}
+        {view === VISIBLE || view === LOADING_CSV ? <CardTable
+          headings={headers}
+          data={data.map((contents, index) => ({contents, id: index}))}
+          mapDataItemToRow={n => n.contents}
+        /> : null}
 
         {view === EMPTY ? <div className="insights-space-detail-raw-events-export-card-body-info">
           No data available for this time period.
         </div> : null}
         {view === LOADING_PREVIEW || view === LOADING_INITIAL ? <div className="insights-space-detail-raw-events-export-card-body-info">
-          Fetching events...
+          Fetching data preview ...
         </div> : null}
         {view === ERROR ? <div className="insights-space-detail-raw-events-export-card-body-error">
           <span>
