@@ -1,0 +1,89 @@
+.insights-space-detail-raw-event-card-header {
+  display: flex;
+
+  // On mobile, orient the header vertically.
+  flex-direction: column;
+  @media (min-width: $screen-sm-min) {
+    flex-direction: row;
+  }
+}
+.insights-space-detail-raw-events-export-card-header-label {
+  line-height: 33px;
+  margin-top: 10px;
+}
+
+.insights-space-detail-raw-events-export-card-body-placeholder {
+  height: 500px;
+}
+
+// On mobile, allow the event table to be horizontally scrollable.
+.insights-space-detail-raw-events-export-card-table { overflow-y: auto; }
+.insights-space-detail-raw-events-export-card-table-row {
+  display: flex;
+  list-style-type: none;
+  padding-top: 13px !important;
+  padding-bottom: 13px !important;
+
+  font-size: $font-size-base;
+  color: $gray-cinder;
+  border-top: 1px solid $gray-light;
+
+  // The max width caps the row width, making the table row scrollable on mobile.
+  min-width: 800px;
+}
+
+.insights-space-detail-raw-events-export-card-table-row li { flex: 1; }
+
+.insights-space-detail-raw-events-export-card-table-row.header {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+
+// Horizontally and vertically center errors and info messages in the daily metrics card.
+.insights-space-detail-raw-events-export-card-body-info,
+.insights-space-detail-raw-events-export-card-body-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  height: 355px;
+
+  font-size: $font-size-base;
+  color: $gray-cinder;
+}
+// Errors should be prefixed by the error icon
+.insights-space-detail-raw-events-export-card-body-error-icon {
+  color: $brand-danger;
+  font-family: "Densicons";
+  margin-right: 10px;
+  position: relative;
+  top: -2px;
+}
+
+// Refresh icon to refetch data
+.insights-space-detail-raw-events-export-card-header-refresh {
+  display: inline-block;
+  transform: translate(0px, 12px);
+  margin-left: auto;
+  cursor: pointer;
+}
+.insights-space-detail-raw-events-export-card-header-refresh:hover { opacity: 0.8; }
+.insights-space-detail-raw-events-export-card-header-refresh:active { opacity: 1; }
+.insights-space-detail-raw-events-export-card-header-refresh.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.insights-space-detail-raw-events-export-card-header-download-link {
+  display: inline-block;
+  line-height: 43px;
+  // transform: translate(0px, 12px);
+  margin-left: auto;
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: normal;
+  color: $brand-primary;
+  text-decoration: underline;
+}

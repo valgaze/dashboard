@@ -10,6 +10,8 @@ import Subnav, { SubnavItem } from '../subnav/index';
 import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar/index';
 import InsightsSpaceHeader from '../insights-space-header/index';
 
+import RawEventsExportCard from '../insights-space-detail-raw-events-export-card/index';
+
 import DateRangePicker from '@density/ui-date-range-picker';
 import gridVariables from '@density/ui/variables/grid.json'
 
@@ -40,10 +42,6 @@ export function isOutsideRange(startISOTime, datePickerInput, day) {
       );
   }
   return false;
-}
-
-function RawEventsExportCard() {
-  return null;
 }
 
 function InsightsSpaceDataExport({

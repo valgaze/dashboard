@@ -49,7 +49,7 @@ export default function NavLoggedIn({
 
     <NavbarMobileItem
       activePage={activePage}
-      pageName={['INSIGHTS_SPACE_LIST', 'INSIGHTS_SPACE_DAILY', 'INSIGHTS_SPACE_TRENDS']}
+      pageName={['INSIGHTS_SPACE_LIST', 'INSIGHTS_SPACE_DAILY', 'INSIGHTS_SPACE_TRENDS', 'INSIGHTS_SPACE_DATA_EXPORT']}
 
       // Feature flag: Do not allow the user to visit the insights page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
@@ -134,7 +134,7 @@ export default function NavLoggedIn({
 
     <NavbarItem
       activePage={activePage}
-      pageName={['INSIGHTS_SPACE_LIST', 'INSIGHTS_SPACE_DAILY', 'INSIGHTS_SPACE_TRENDS']}
+      pageName={['INSIGHTS_SPACE_LIST', 'INSIGHTS_SPACE_DAILY', 'INSIGHTS_SPACE_TRENDS', 'INSIGHTS_SPACE_DATA_EXPORT']}
 
       // Feature flag: Do not allow the user to visit the visualizations page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways

@@ -112,12 +112,29 @@
         },
         "desc": "Creates a reset on a space."
       },
+      "csvPreview": {
+        "method": "GET",
+        "url": "{{{base}}}/csv/",
+        "desc": "Get first 10 events of csv export for a current space",
+        "headers": {
+          "Accept": "text/csv"
+        },
+        "qs": {
+          "space_id": "{{space_id}}",
+          "start_time": "{{start_time}}",
+          "end_time": "{{end_time}}",
+          "preview": "true"
+        }
+      },
       "csv": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/csv/",
-        "desc": "Get CSV event for a given space.",
+        "url": "{{{base}}}/csv/",
+        "desc": "Get csv export of events for a current space",
+        "headers": {
+          "Accept": "text/csv"
+        },
         "qs": {
-          "doorway_id": "{{doorway_id}}",
+          "space_id": "{{space_id}}",
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}"
         }
