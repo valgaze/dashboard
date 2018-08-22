@@ -12,10 +12,6 @@
   margin-top: 10px;
 }
 
-.insights-space-detail-raw-events-export-card-body-placeholder {
-  height: 500px;
-}
-
 
 
 // Horizontally and vertically center errors and info messages in the raw events export card.
@@ -53,28 +49,42 @@
   pointer-events: none;
 }
 
-.insights-space-detail-raw-events-export-card-header-download-link {
-  display: inline-block;
+.insights-space-detail-raw-events-export-card-download-bar {
   line-height: 43px;
-  transform: translate(0px, -2px);
-  margin-left: auto;
   cursor: pointer;
+  user-select: none;
 
   font-size: 14px;
   font-weight: normal;
-  color: $brand-primary;
-  text-decoration: underline;
+  background-color: $brand-primary;
+  color: #fff;
+  text-align: center;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  transition: all 100ms ease-in-out;
+
+  &:hover { opacity: 0.9; }
+  &:active { opacity: 1; }
 }
-.insights-space-detail-raw-events-export-card-header-download-link.loading {
+.insights-space-detail-raw-events-export-card-header-download-bar.loading {
   color: $gray;
   cursor: default;
 }
 
 
 .insights-space-detail-raw-events-export-card-description {
-  margin-bottom: 10px;
   line-height: 20px;
   font-size: 14px;
   color: $gray-cinder;
 }
 .insights-space-detail-raw-events-export-card-description:last-of-type { margin-bottom: 0px; }
+
+.card .insights-space-detail-raw-events-export-card-sample-rows {
+  padding-bottom: 0px;
+  color: $gray-cinder;
+}
+
+.insights-space-detail-raw-events-export-card-header-label .info-popup-container {
+  margin-left: 4px;
+  display: inline-block;
+}

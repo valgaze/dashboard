@@ -8,6 +8,7 @@ import { core } from '../../client';
 
 import Card, { CardHeader, CardBody, CardLoading, CardTable } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
+import InfoPopup from '@density/ui-info-popup';
 
 export const LOADING_INITIAL = 'LOADING_INITIAL',
       LOADING_PREVIEW = 'LOADING_PREVIEW',
@@ -150,34 +151,19 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
       <Card className="insights-space-detail-raw-events-export-card">
         {view === LOADING_INITIAL || view === LOADING_PREVIEW || view === LOADING_CSV ? <CardLoading indeterminate /> : null}
         <CardHeader className="insights-space-detail-raw-event-card-header">
-          <span className="insights-space-detail-raw-events-export-card-header-label">Raw Events</span>
-          <span
-            className={classnames('insights-space-detail-raw-events-export-card-header-download-link', {
-              disabled: view !== VISIBLE,
-              loading: view === LOADING_CSV,
-            })}
-            role="button"
-            onClick={() => view !== LOADING_CSV && this.downloadCSV()}
-          >
-            { view === LOADING_CSV ? 'Generating CSV ...' : 'Download CSV' }
-          </span>
-        </CardHeader>
-
-        <CardBody>
-          <p className="insights-space-detail-raw-events-export-card-description">
-            Download all events from {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-            {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')} in CSV format. Below is a
-            preview of what data is included in the export.
-          </p>
-          <p className="insights-space-detail-raw-events-export-card-description">
-            <strong>Note</strong>: <em>Current Count</em> refers to the number of visitors in the space at{' '}
-            that given point in time.
-          </p>
-        </CardBody>
-
-        <CardHeader className="insights-space-detail-raw-event-card-header">
           <span className="insights-space-detail-raw-events-export-card-header-label">
-            Data Preview <small>(first 10 rows)</small>
+            CSV Event Export
+            <InfoPopup>
+              <p className="insights-space-detail-raw-events-export-card-description">
+                Download all events from {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
+                {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')} in CSV format. Below is a
+                preview of what data is included in the export.
+              </p>
+              <p className="insights-space-detail-raw-events-export-card-description">
+                <strong>Note</strong>: <em>Current Count</em> refers to the number of visitors in the space at{' '}
+                that given point in time.
+              </p>
+            </InfoPopup>
           </span>
           <span
             className={classnames('insights-space-detail-raw-events-export-card-header-refresh', {
@@ -192,9 +178,13 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
           </span>
         </CardHeader>
 
+        <CardBody className="insights-space-detail-raw-events-export-card-sample-rows">
+          <strong>Sample rows</strong>
+        </CardBody>
+
         {view === VISIBLE || view === LOADING_CSV ? <CardTable
           headings={headers}
-          data={data.map((contents, index) => ({contents, id: index}))}
+          data={data.map((contents, index) => ({contents, id: contents[0]}))}
           mapDataItemToRow={n => n.contents}
         /> : null}
 
@@ -210,6 +200,24 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
             {error.toString()}
           </span>
         </div> : null}
+
+        <div
+          className={classnames('insights-space-detail-raw-events-export-card-download-bar', {
+            disabled: view !== VISIBLE,
+            loading: view === LOADING_CSV,
+          })}
+          role="button"
+          onClick={() => view !== LOADING_CSV && this.downloadCSV()}
+        >
+          { view === LOADING_CSV || view === LOADING_INITIAL ? (
+            <span>Generating CSV ...</span>
+          ) : (
+            <span>
+              Download All Events{' '}
+              ({startDate.format('MM/DD/YYYY')} - {endDate.format('MM/DD/YYYY')})
+            </span>
+          )}
+        </div>
       </Card>
     </div>;
   }
