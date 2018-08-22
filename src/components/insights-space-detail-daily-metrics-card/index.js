@@ -71,11 +71,12 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
 
     startDate: null,
     endDate: null,
+    includeWeekends: null,
   }
 
   fetchData = async () => {
     const { space } = this.props;
-    const { metricToDisplay, startDate, endDate } = this.state;
+    const { metricToDisplay, startDate, endDate, includeWeekends } = this.state;
 
     // Add timezone offset to both start and end times prior to querying for the count.
     const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
@@ -102,7 +103,15 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
           dataSpaceId: space.id,
           hoursOffsetFromUtc,
           // Return the metric requested within the range of time.
-          data: data.results.map(i => ({
+          data: data.results.filter(({timestamp}) => {
+            // Filter out any days that aren't within monday-friday
+            const dayOfWeek = moment.utc(timestamp).tz(space.timeZone).isoWeekday();
+            if (includeWeekends) {
+              return true; // Include all days
+            } else {
+              return dayOfWeek !== 6 && dayOfWeek !== 7; // Remove saturday and sunday
+            }
+          }).map(i => ({
             timestamp: i.timestamp,
             value: (function(i, metric) {
               switch (metric) {
@@ -142,7 +151,8 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
     if (
       nextProps.startDate && nextProps.endDate && (
         nextProps.startDate !== this.state.startDate ||
-        nextProps.endDate !== this.state.endDate
+        nextProps.endDate !== this.state.endDate ||
+        nextProps.includeWeekends !== this.state.includeWeekends
       )
     ) {
       this.setState({
@@ -150,6 +160,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
         data: null,
         startDate: nextProps.startDate,
         endDate: nextProps.endDate,
+        includeWeekends: nextProps.includeWeekends,
       }, () => this.fetchData());
     }
   }

@@ -154,6 +154,7 @@ function InsightsSpaceTrends({
               space={space}
               startDate={spaces.filters.startDate}
               endDate={spaces.filters.endDate}
+              includeWeekends={spaces.filters.includeWeekends}
             />
           </div>
         </div>
