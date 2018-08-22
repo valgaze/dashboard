@@ -246,6 +246,163 @@ describe('Insights space daily metrics chart', function() {
         {label: '01/01', value: 0},
       ]);
     });
+    it('should fetch entrance data wihout weekends for january 1st, 2017 and display it', async function() {
+      const space = {
+        id: 'spc_123',
+        name: 'foo',
+        currentCount: 5,
+        timeZone: `America/New_York`
+      };
+
+      // Mock the data fetching call, and the current date so that we can assert properly.
+      global.fetch = sinon.stub().resolves({
+        ok: true,
+        status: 200,
+        clone() { return this; },
+        json: () => Promise.resolve({
+          "total": 7,
+          "next": null,
+          "previous": null,
+          "results": [
+            {
+              "timestamp": "2017-01-07T05:00:00Z",
+              "count": 9,
+              "interval": {
+                "start": "2017-01-07T05:00:00Z",
+                "end": "2017-01-08T04:59:59Z",
+                "analytics": {
+                  "min": 9,
+                  "max": 9,
+                  "events": 9,
+                  "entrances": 10,
+                  "exits": 1
+                }
+              }
+            },
+            {
+              "timestamp": "2017-01-06T05:00:00Z",
+              "count": 9,
+              "interval": {
+                "start": "2017-01-06T05:00:00Z",
+                "end": "2017-01-07T04:59:59Z",
+                "analytics": {
+                  "min": 9,
+                  "max": 9,
+                  "events": 0,
+                  "entrances": 0,
+                  "exits": 0
+                }
+              }
+            },
+            {
+              "timestamp": "2017-01-05T05:00:00Z",
+              "count": 9,
+              "interval": {
+                "start": "2017-01-05T05:00:00Z",
+                "end": "2017-01-06T04:59:59Z",
+                "analytics": {
+                  "min": 9,
+                  "max": 9,
+                  "events": 0,
+                  "entrances": 0,
+                  "exits": 0,
+                }
+              }
+            },
+            {
+              "timestamp": "2017-01-04T05:00:00Z",
+              "count": 9,
+              "interval": {
+                "start": "2017-01-04T05:00:00Z",
+                "end": "2017-01-05T04:59:59Z",
+                "analytics": {
+                  "min": 9,
+                  "max": 9,
+                  "events": 0,
+                  "entrances": 0,
+                  "exits": 0
+                }
+              }
+            },
+            {
+              "timestamp": "2017-01-03T05:00:00Z",
+              "count": 9,
+              "interval": {
+                "start": "2017-01-03T05:00:00Z",
+                "end": "2017-01-04T04:59:59Z",
+                "analytics": {
+                  "min": 9,
+                  "max": 9,
+                  "events": 0,
+                  "entrances": 0,
+                  "exits": 0
+                }
+              }
+            },
+            {
+              "timestamp": "2017-01-02T05:00:00Z",
+              "count": 9,
+              "interval": {
+                "start": "2017-01-02T05:00:00Z",
+                "end": "2017-01-03T04:59:59Z",
+                "analytics": {
+                  "min": 9,
+                  "max": 9,
+                  "events": 0,
+                  "entrances": 0,
+                  "exits": 0,
+                }
+              }
+            },
+            {
+              "timestamp": "2017-01-01T05:00:00Z",
+              "count": 9,
+              "interval": {
+                "start": "2017-01-01T05:00:00Z",
+                "end": "2017-01-02T04:59:59Z",
+                "analytics": {
+                  "min": 9,
+                  "max": 9,
+                  "events": 0,
+                  "entrances": 0,
+                  "exits": 0
+                }
+              }
+            },
+          ]
+        }),
+      });
+
+      // Render the component without weekends
+      const component = mount(<DailyMetricsCard
+        space={space}
+        startDate="2016-12-26T00:00:00-05:00"
+        endDate="2017-01-01T00:00:00-05:00"
+        includeWeekends={false}
+      />);
+
+      // Delay for data fetching result
+      await timeout(0);
+      assert.equal(global.fetch.callCount, 1);
+      const requestParameters = global.fetch.getCall(0).args;
+
+      // Make sure the request was correctly formulated for the `America/New_York` time zone.
+      // On January 1st, the offset is NYC is 5 hours.
+      assert.equal(requestParameters[1].qs.start_time, '2016-12-26T00:00:00-05:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-02T00:00:00-05:00');
+
+      // Verify that the correct data was passed to the chart given what the ajax return data.
+      const chartProps = component.find('.short-timespan-chart > _class').props();
+      assert.deepEqual(chartProps.data, [
+        // No 01/07 - a weekend
+        {label: '01/06', value: 0},
+        {label: '01/05', value: 0},
+        {label: '01/04', value: 0},
+        {label: '01/03', value: 0},
+        {label: '01/02', value: 0},
+        // No 01/01 - a weekend
+      ]);
+    });
     it('should fetch exit data and display it during a different part of the year', async function() {
       const space = {
         id: 'spc_123',
