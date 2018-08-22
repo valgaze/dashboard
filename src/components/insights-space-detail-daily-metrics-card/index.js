@@ -188,10 +188,16 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                   Use these metrics to understand the visitation of your space, and how it trends
                   over time.
 
-                  <ul>
-                    <li><strong>Entrances</strong>: Total number of events from people entering the space.</li>
-                    <li><strong>Exits</strong>: Total number of events from people exiting the space.</li>
-                    <li><strong>Peak Counts</strong>: Peak count at any given point in time over the course of the day.</li>
+                  <ul className="insights-space-detail-daily-metrics-card-popup-ul">
+                    <li>
+                      <strong>Entrances</strong>: Total number of events from people entering the space.
+                    </li>
+                    <li>
+                      <strong>Exits</strong>: Total number of events from people exiting the space.
+                    </li>
+                    <li>
+                      <strong>Peak Counts</strong>: Peak count at any given point in time over the course of the day.
+                    </li>
                   </ul>
                 </InfoPopup>
               </span>

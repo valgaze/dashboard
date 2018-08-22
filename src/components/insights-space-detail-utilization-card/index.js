@@ -177,8 +177,10 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     const { view, timeSegmentId, startDate, endDate } = this.state;
 
     let utilizationsByDay,
+      averageUtilizationDatapoints,
       peakUtilizationPercentage,
       peakUtilizationTimestamp,
+      peakUtilizationIndex,
       averageUtilizationDatapointsWithTimestamp;
 
     if (view === VISIBLE) {
@@ -193,7 +195,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
 
       // Calculate an average day's utilization graph.
-      let averageUtilizationDatapoints = (this.state.data[0] ? this.state.data[0].utilization : []).map(_ => 0);
+      averageUtilizationDatapoints = (this.state.data[0] ? this.state.data[0].utilization : []).map(_ => 0);
 
       // The average calculation is split into two parts: the sum and the division.
       // - The sum part of the average (step 1) occurs below.
@@ -236,10 +238,12 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       // data that was fetched and dividing it by the capacity.
       peakUtilizationPercentage = 0;
       peakUtilizationTimestamp = null; /* No peak utilization */
-      averageUtilizationDatapointsWithTimestamp.forEach(c => {
+      peakUtilizationIndex = -1;
+      averageUtilizationDatapointsWithTimestamp.forEach((c, index) => {
         if (c.value > peakUtilizationPercentage) {
           peakUtilizationPercentage = c.value;
           peakUtilizationTimestamp = c.timestamp;
+          peakUtilizationIndex = index;
         }
       });
       peakUtilizationPercentage /= 100;
@@ -469,26 +473,30 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                     {TIME_SEGMENTS[this.state.timeSegmentId].phrasal}
                   </CardWellHighlight>
                   </span> : <span>
-                  On average, peak utilization of <CardWellHighlight>
-                    {Math.round(peakUtilizationPercentage * 100)}%
-                    </CardWellHighlight> happens around <CardWellHighlight>
+                  Most busy around <CardWellHighlight>
                     {(timestamp => {
-                      const stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ');
+                      let stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone);
                       let minute = '00';
+                      const stampMinute = stamp.minute();
 
-                      if (stamp.minute() >= 45) {
+                      if (stampMinute > (45 + 7.5)) {
+                        minute = '00';
+                        stamp = stamp.add(1, 'hour');
+                      } else if (stampMinute > (45 - 7.5) && stampMinute <= (45 + 7.5)) {
                         minute = '45';
-                      } else if (stamp.minute() >= 30) {
+                      } else if (stampMinute > (30 - 7.5) && stampMinute <= (30 + 7.5)) {
                         minute = '30';
-                      } else if (stamp.minute() >= 15) {
+                      } else if (stampMinute > (15 - 7.5) && stampMinute <= (15 + 7.5)) {
                         minute = '15';
+                      } else {
+                        minute = '30';
                       }
 
-                      return stamp.tz(space.timeZone).format(`h:[${minute}]a`).slice(0, -1);
+                      return stamp.format(`h:[${minute}]a`).slice(0, -1);
                     })(peakUtilizationTimestamp)}
-                    </CardWellHighlight> during <CardWellHighlight>
-                    {TIME_SEGMENTS[this.state.timeSegmentId].phrasal}
-                  </CardWellHighlight>
+                  </CardWellHighlight> &mdash; around <CardWellHighlight>
+                    {Math.round(peakUtilizationPercentage * space.capacity)} People
+                  </CardWellHighlight> ({Math.round(peakUtilizationPercentage * 100)}% utilization)
                 </span>}
               </CardWell>
 

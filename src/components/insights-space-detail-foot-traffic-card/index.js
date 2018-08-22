@@ -186,6 +186,8 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
               },
             })}
 
+            yAxisStart={0}
+            yAxisEnd={space.capacity !== null ?  Math.max(space.capacity, largestCount.count) : undefined}
             yAxis={yAxisMinMax({
               leftOffset: 20,
               points: [
@@ -194,7 +196,6 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
               ],
               showMaximumPoint: false,
             })}
-            yAxisEnd={space.capacity !== null ?  Math.max(space.capacity, largestCount.count) : undefined}
 
             overlays={[
               overlayTwoPopups({

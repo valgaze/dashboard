@@ -31,6 +31,7 @@
   line-height: 43px;
   flex: 1;
 }
+.insights-space-detail-daily-metrics-card-header-label .info-popup-container { margin-left: 4px; }
 .insights-space-detail-daily-metrics-card-header-controls {
   display: flex;
   flex-direction: row;
@@ -73,4 +74,9 @@
 .insights-space-detail-daily-metrics-card-refresh.disabled {
   cursor: default;
   pointer-events: none;
+}
+
+
+.insights-space-detail-daily-metrics-card-popup-ul li {
+  margin-bottom: 10px;
 }

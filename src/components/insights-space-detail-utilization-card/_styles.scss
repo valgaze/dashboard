@@ -29,6 +29,9 @@ $insights-space-detail-card-header-breakpoint: 930px;
     margin-bottom: 0px;
   }
 }
+.insights-space-detail-utilization-card-header-label .info-popup-container {
+  transform: translate(4px, 0px);
+}
 
 // Refresh icon to refetch data
 .insights-space-detail-utilization-card-header-refresh {
