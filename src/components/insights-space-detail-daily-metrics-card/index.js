@@ -172,7 +172,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
 
     if (space) {
       return (
-        <Card className="visualization-space-detail-card">
+        <Card>
           {view === LOADING ? <CardLoading indeterminate /> : null }
 
           <CardHeader>
