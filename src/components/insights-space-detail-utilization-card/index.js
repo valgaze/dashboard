@@ -180,7 +180,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       averageUtilizationDatapoints,
       peakUtilizationPercentage,
       peakUtilizationTimestamp,
-      peakUtilizationIndex,
       averageUtilizationDatapointsWithTimestamp;
 
     if (view === VISIBLE) {
@@ -238,12 +237,10 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       // data that was fetched and dividing it by the capacity.
       peakUtilizationPercentage = 0;
       peakUtilizationTimestamp = null; /* No peak utilization */
-      peakUtilizationIndex = -1;
       averageUtilizationDatapointsWithTimestamp.forEach((c, index) => {
         if (c.value > peakUtilizationPercentage) {
           peakUtilizationPercentage = c.value;
           peakUtilizationTimestamp = c.timestamp;
-          peakUtilizationIndex = index;
         }
       });
       peakUtilizationPercentage /= 100;

@@ -7,13 +7,13 @@ import mockdate from 'mockdate';
 import moment from 'moment';
 import 'moment-timezone';
 
-import VisualizationSpaceDetail24HourChart from './index';
+import FootTrafficCard from './index';
 
 function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
 
-describe('Visualization space 24 hour chart', function() {
+describe('Visualization space foot traffic hour chart', function() {
   afterEach(() => mockdate.reset());
 
   describe('data fetching', function() {
@@ -65,9 +65,10 @@ describe('Visualization space 24 hour chart', function() {
       });
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetail24HourChart
+      const component = mount(<FootTrafficCard
         space={space}
         date="2017-01-01T00:00:00-05:00"
+        timeSegmentId="WHOLE_DAY"
       />);
 
       // Wait for data to be fetched.
@@ -130,7 +131,10 @@ describe('Visualization space 24 hour chart', function() {
       mockdate.set(moment('2017-09-14T00:00:00-05:00'));
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetail24HourChart space={space} />);
+      const component = mount(<FootTrafficCard
+        space={space}
+        timeSegmentId="WHOLE_DAY"
+      />);
 
       // Wait for data to be fetched.
       await timeout(250);
@@ -192,7 +196,10 @@ describe('Visualization space 24 hour chart', function() {
       mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetail24HourChart space={space} />);
+      const component = mount(<FootTrafficCard
+        space={space}
+        timeSegmentId="WHOLE_DAY"
+      />);
 
       // Wait for data to be fetched.
       await timeout(250);
@@ -204,6 +211,71 @@ describe('Visualization space 24 hour chart', function() {
       const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
       assert.equal(requestParameters[1].qs.start_time, '2016-12-31T00:00:00-08:00');
       assert.equal(requestParameters[1].qs.end_time, '2017-01-01T00:00:00-08:00');
+    });
+    it('should fetch data and display it, only including data in the time segment', async function() {
+      const space = {
+        id: 'spc_123',
+        name: 'foo',
+        currentCount: 5,
+        timeZone: `America/New_York`
+      };
+
+      // Mock the data fetching call, and the current date so that we can assert properly.
+      global.fetch = sinon.stub().resolves({
+        ok: true,
+        status: 200,
+        clone() { return this; },
+        json: () => Promise.resolve({
+          total: 3,
+          results: [
+            {
+              count: 0,
+              interval: {
+                start: "2017-01-01T03:55:00.000Z",
+                end: "2017-01-01T03:59:59.999Z",
+                analytics: {min: 0, max: 0},
+              },
+              timestamp: "2017-01-01T03:55:00.000Z",
+            },
+            {
+              count: 1,
+              interval: {
+                start: "2017-01-01T04:00:00.000Z",
+                end: "2017-01-01T04:05:00.000Z",
+                analytics: {min: 0, max: 1},
+              },
+              timestamp: "2017-01-01T04:00:00.000Z",
+            },
+            {
+              count: 2,
+              interval: {
+                start: "2017-01-01T04:05:00.000Z",
+                end: "2017-01-01T04:10:00.000Z",
+                analytics: {min: 0, max: 2},
+              },
+              timestamp: "2017-01-01T04:00:00.000Z",
+            },
+          ],
+        }),
+      });
+
+      // Render the component
+      const component = mount(<FootTrafficCard
+        space={space}
+        date="2017-01-01T00:00:00-05:00"
+        timeSegmentId="AFTERNOON"
+      />);
+
+      // Wait for data to be fetched.
+      await timeout(0);
+      assert.equal(global.fetch.callCount, 1);
+      const requestParameters = global.fetch.getCall(0).args;
+
+      // Make sure the request was correctly formulated for the `America/New_York` time zone.
+      // On January 1st, the offset is NYC is 5 hours.
+      const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
+      assert.equal(requestParameters[1].qs.start_time, '2017-01-01T12:00:00-05:00'); // 12pm
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T18:00:00-05:00'); // 6pm
     });
   });
 
@@ -260,7 +332,7 @@ describe('Visualization space 24 hour chart', function() {
       };
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetail24HourChart
+      const component = mount(<FootTrafficCard
         space={space}
         date="2017-01-01T00:00:00-05:00"
         timeSegmentId="WHOLE_DAY"
@@ -287,7 +359,10 @@ describe('Visualization space 24 hour chart', function() {
       };
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetail24HourChart space={space} />);
+      const component = mount(<FootTrafficCard
+        space={space}
+        timeSegmentId="WHOLE_DAY"
+      />);
 
       // Don't wait for loading to happen!
 
@@ -310,7 +385,10 @@ describe('Visualization space 24 hour chart', function() {
       };
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetail24HourChart space={space} />);
+      const component = mount(<FootTrafficCard
+        space={space}
+        timeSegmentId="WHOLE_DAY"
+      />);
 
       // Don't wait for loading to happen!
 
