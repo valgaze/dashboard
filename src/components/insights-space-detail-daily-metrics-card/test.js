@@ -7,7 +7,7 @@ import mockdate from 'mockdate';
 import moment from 'moment';
 import 'moment-timezone';
 
-import VisualizationSpaceDetailDailyMetricsCard, { isOutsideRange } from './index';
+import DailyMetricsCard, { isOutsideRange } from './index';
 
 function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
@@ -217,10 +217,11 @@ describe('Insights space daily metrics chart', function() {
       });
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+      const component = mount(<DailyMetricsCard
         space={space}
         startDate="2016-12-26T00:00:00-05:00"
         endDate="2017-01-01T00:00:00-05:00"
+        includeWeekends={true}
       />);
 
       // Delay for data fetching result
@@ -352,10 +353,11 @@ describe('Insights space daily metrics chart', function() {
       });
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+      const component = mount(<DailyMetricsCard
         space={space}
         startDate="2017-09-08T00:00:00-05:00"
         endDate="2017-09-14T00:00:00-05:00"
+        includeWeekends={true}
       />);
 
       // Wait for data to be fetched.
@@ -489,10 +491,11 @@ describe('Insights space daily metrics chart', function() {
       mockdate.set(moment('2017-09-14T00:00:00-05:00'));
 
       // Render the component
-      const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+      const component = mount(<DailyMetricsCard
         space={space}
         startDate="2017-09-08T00:00:00-05:00"
         endDate="2017-09-14T00:00:00-05:00"
+        includeWeekends={true}
       />);
 
       // Wait for data to be fetched.
@@ -667,7 +670,10 @@ describe('Insights space daily metrics chart', function() {
     mockdate.set(moment('2017-01-01T00:00:00-05:00'));
 
     // Render the component
-    const component = mount(<VisualizationSpaceDetailDailyMetricsCard space={space} />);
+    const component = mount(<DailyMetricsCard
+      space={space}
+      includeWeekends={true}
+    />);
 
     // Mock data for next data fetch
     global.fetch = sinon.stub().resolves({
@@ -941,7 +947,7 @@ describe('Insights space daily metrics chart', function() {
     });
 
     // Render the component
-    const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+    const component = mount(<DailyMetricsCard
       space={space}
       startDate="2017-01-01T00:00:00-05:00"
       endDate="2017-01-03T00:00:00-05:00"
@@ -985,7 +991,7 @@ describe('Insights space daily metrics chart', function() {
     });
 
     // Render the component
-    const component = mount(<VisualizationSpaceDetailDailyMetricsCard
+    const component = mount(<DailyMetricsCard
       space={space}
       startDate="2017-01-01T00:00:00-05:00"
       endDate="2017-01-20T00:00:00-05:00"
