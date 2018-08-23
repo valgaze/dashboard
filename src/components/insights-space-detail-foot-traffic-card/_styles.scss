@@ -20,7 +20,7 @@
 
 // The well is the darker section in the card that is darker than the surroundings. It has a number
 // of sections that are line seperated that each contain a numberic value and a label below.
-.insights-space-detail-well {
+.insights-space-detail-foot-traffic-card-well {
   display: flex;
 
   // On mobile, stack items vertically.
@@ -33,9 +33,8 @@
   }
 
   background-color: $gray-cinder;
-  margin-top: 20px;
 }
-.insights-space-detail-well-section {
+.insights-space-detail-foot-traffic-card-well-section {
   flex: 1;
   // On mobile, make each item a flex parent so that the order of items can be changed with `order`.
   display: flex;
@@ -56,9 +55,9 @@
     border-left: 2px solid #4E5457;
   }
 }
-.insights-space-detail-well-section:first-child { border-left-width: 0px; }
+.insights-space-detail-foot-traffic-card-well-section:first-child { border-left-width: 0px; }
 
-.insights-space-detail-well-section-quantity {
+.insights-space-detail-foot-traffic-card-well-section-quantity {
   color: #fff;
   font-size: $font-size-3;
   font-weight: $font-weight-3;
@@ -79,7 +78,7 @@
     padding-bottom: 5px;
   }
 }
-.insights-space-detail-well-section-label {
+.insights-space-detail-foot-traffic-card-well-section-label {
   margin-left: 20px;
 
   // On mobile, place the quantity label after the contents.
@@ -99,7 +98,7 @@
 // Refresh icon to refetch data
 .insights-space-detail-foot-traffic-card-header-refresh {
   display: inline-block;
-  transform: translate(0px, 12px);
+  transform: translate(0px, 3px);
   margin-left: auto;
   cursor: pointer;
 }

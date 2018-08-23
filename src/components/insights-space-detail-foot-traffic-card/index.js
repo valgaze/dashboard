@@ -126,20 +126,18 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
       return <Card className="insights-space-detail-card">
         { view === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="insights-space-detail-foot-traffic-card-header">
-          <span className="insights-space-detail-foot-traffic-card-header-label">
-            Foot Traffic
-            <InfoPopup>
-              <p>
-                Count over time for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over
-                the time period of {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}, queried
-                in 5 minute intervals.
-              </p>
+          Foot Traffic
+          <InfoPopup>
+            <p>
+              Count over time for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over
+              the time period of {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}, queried
+              in 5 minute intervals.
+            </p>
 
-              <p>
-                Use this chart to understand visitation over the course of a day.
-              </p>
-            </InfoPopup>
-          </span>
+            <p>
+              Use this chart to understand visitation over the course of a day.
+            </p>
+          </InfoPopup>
           <span
             className={classnames('insights-space-detail-foot-traffic-card-header-refresh', {
               disabled: view !== VISIBLE,
@@ -153,18 +151,18 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
           </span>
         </CardHeader>
 
-        <div className="insights-space-detail-well">
-          <div className="insights-space-detail-well-section capacity">
-            <span className="insights-space-detail-well-section-quantity">{space.capacity || '-'}</span>
-            <span className="insights-space-detail-well-section-label">Capacity</span>
+        <div className="insights-space-detail-foot-traffic-card-well">
+          <div className="insights-space-detail-foot-traffic-card-well-section capacity">
+            <span className="insights-space-detail-foot-traffic-card-well-section-quantity">{space.capacity || '-'}</span>
+            <span className="insights-space-detail-foot-traffic-card-well-section-label">Capacity</span>
           </div>
-          <div className="insights-space-detail-well-section minimum">
-            <span className="insights-space-detail-well-section-quantity">{min}</span>
-            <span className="insights-space-detail-well-section-label">Minimum</span>
+          <div className="insights-space-detail-foot-traffic-card-well-section minimum">
+            <span className="insights-space-detail-foot-traffic-card-well-section-quantity">{min}</span>
+            <span className="insights-space-detail-foot-traffic-card-well-section-label">Minimum</span>
           </div>
-          <div className="insights-space-detail-well-section maximum">
-            <span className="insights-space-detail-well-section-quantity">{max}</span>
-            <span className="insights-space-detail-well-section-label">Maximum</span>
+          <div className="insights-space-detail-foot-traffic-card-well-section maximum">
+            <span className="insights-space-detail-foot-traffic-card-well-section-quantity">{max}</span>
+            <span className="insights-space-detail-foot-traffic-card-well-section-label">Maximum</span>
           </div>
         </div>
 

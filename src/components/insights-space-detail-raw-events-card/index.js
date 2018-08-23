@@ -159,22 +159,20 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     return <div>
       <Card className="insights-space-detail-raw-events-card">
         {view === LOADING ? <CardLoading indeterminate /> : null}
-        <CardHeader className="insights-space-detail-raw-event-card-header">
-          <span className="insights-space-detail-raw-events-card-header-label">
-            Daily Raw Events
-            <InfoPopup>
-              <p>
-                All events that the doorways within this space have seen over{' '}
-                {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')} during{' '}
-                {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null}.
-              </p>
+        <CardHeader>
+          Daily Raw Events
+          <InfoPopup>
+            <p>
+              All events that the doorways within this space have seen over{' '}
+              {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')} during{' '}
+              {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null}.
+            </p>
 
-              <p>
-                Head to the <a href={`#/spaces/insights/${space.id}/data-export`}>data export</a> page
-                to download multiple days worth of event data in csv format.
-              </p>
-            </InfoPopup>
-          </span>
+            <p>
+              Head to the <a href={`#/spaces/insights/${space.id}/data-export`}>data export</a> page
+              to download multiple days worth of event data in csv format.
+            </p>
+          </InfoPopup>
           <span
             className={classnames('insights-space-detail-raw-events-card-header-refresh', {
               disabled: view !== VISIBLE,

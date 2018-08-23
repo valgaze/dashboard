@@ -248,80 +248,72 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
     const averageWeekHeader = (
       <CardHeader>
-        <div className="insights-space-detail-utilization-card-header-container">
-          <span className="insights-space-detail-utilization-card-header-label">
-            An Average Week
-            <InfoPopup>
-              <p>
-                Utilization for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over the
-                time period of {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-                {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}, grouped and averaged
-                by day of week.
-              </p>
+        An Average Week
+        <InfoPopup>
+          <p>
+            Utilization for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over the
+            time period of {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
+            {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}, grouped and averaged
+            by day of week.
+          </p>
 
-              <p>
-                Use this metric to understand your space's average utilization, as well as how
-                utilization varies from day to day. 
-              </p>
+          <p>
+            Use this metric to understand your space's average utilization, as well as how
+            utilization varies from day to day. 
+          </p>
 
-              <p>
-                Utilization is calculated by dividing visitors by space capacity (with a granularity
-                of 10 minute intervals). Does not include incomplete days of data.
-              </p>
-            </InfoPopup>
-          </span>
-          <span
-            className={classnames('insights-space-detail-utilization-card-header-refresh', {
-              disabled: view !== VISIBLE,
-            })}
-            onClick={() => this.setState({
-              view: LOADING,
-              data: null,
-            }, () => this.fetchData())}
-          >
-            <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-          </span>
-        </div>
+          <p>
+            Utilization is calculated by dividing visitors by space capacity (with a granularity
+            of 10 minute intervals). Does not include incomplete days of data.
+          </p>
+        </InfoPopup>
+        <span
+          className={classnames('insights-space-detail-utilization-card-header-refresh', {
+            disabled: view !== VISIBLE,
+          })}
+          onClick={() => this.setState({
+            view: LOADING,
+            data: null,
+          }, () => this.fetchData())}
+        >
+          <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+        </span>
       </CardHeader>
     );
 
     const averageDayHeader = (
       <CardHeader>
-        <div className="insights-space-detail-utilization-card-header-container">
-          <span className="insights-space-detail-utilization-card-header-label">
-            An Average Day
-            <InfoPopup>
-              <p>
-                An average daily breakdown of utilization for {timeSegmentId ?
-                  TIME_SEGMENTS[timeSegmentId].phrasal : null} over the time period of{' '}
-                  {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-                  {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
-              </p>
+        An Average Day
+        <InfoPopup>
+          <p>
+            An average daily breakdown of utilization for {timeSegmentId ?
+              TIME_SEGMENTS[timeSegmentId].phrasal : null} over the time period of{' '}
+              {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
+              {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
+          </p>
 
-              <p>
-                Use this to understand average peak and trends in utilization over the course of a
-                day. 
-              </p>
+          <p>
+            Use this to understand average peak and trends in utilization over the course of a
+            day. 
+          </p>
 
-              <p>
-                Utilization is calculated by dividing visitors by the space's capacity (with a
-                granularity of 10 minute intervals). Utilization is then averaged across all days
-                within the date range. Does not include incomplete days of data.
-              </p>
-            </InfoPopup>
-          </span>
-          <span
-            className={classnames('insights-space-detail-utilization-card-header-refresh', {
-              disabled: view !== VISIBLE,
-            })}
-            onClick={() => this.setState({
-              view: LOADING,
-              data: null,
-            }, () => this.fetchData())}
-          >
-            <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-          </span>
-        </div>
+          <p>
+            Utilization is calculated by dividing visitors by the space's capacity (with a
+            granularity of 10 minute intervals). Utilization is then averaged across all days
+            within the date range. Does not include incomplete days of data.
+          </p>
+        </InfoPopup>
+        <span
+          className={classnames('insights-space-detail-utilization-card-header-refresh', {
+            disabled: view !== VISIBLE,
+          })}
+          onClick={() => this.setState({
+            view: LOADING,
+            data: null,
+          }, () => this.fetchData())}
+        >
+          <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+        </span>
       </CardHeader>
     );
 
@@ -497,11 +489,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 </span>}
               </CardWell>
 
-              <CardHeader>
-                <span className="insights-space-detail-utilization-card-header-label">
-                  Average Daily Breakdown
-                </span>
-              </CardHeader>
               <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
                 <LineChartComponent
                   timeZone={space.timeZone}

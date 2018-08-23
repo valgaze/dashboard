@@ -38,7 +38,7 @@
 // Refresh icon to refetch data
 .insights-space-detail-raw-events-export-card-header-refresh {
   display: inline-block;
-  transform: translate(0px, 12px);
+  transform: translate(0px, 3px);
   margin-left: auto;
   cursor: pointer;
 }
@@ -77,14 +77,8 @@
   font-size: 14px;
   color: $gray-cinder;
 }
-.insights-space-detail-raw-events-export-card-description:last-of-type { margin-bottom: 0px; }
 
 .card .insights-space-detail-raw-events-export-card-sample-rows {
-  padding-bottom: 0px;
+  padding-bottom: 10px;
   color: $gray-cinder;
-}
-
-.insights-space-detail-raw-events-export-card-header-label .info-popup-container {
-  margin-left: 4px;
-  display: inline-block;
 }

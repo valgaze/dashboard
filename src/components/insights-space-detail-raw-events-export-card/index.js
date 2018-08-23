@@ -150,21 +150,15 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
     return <div>
       <Card className="insights-space-detail-raw-events-export-card">
         {view === LOADING_INITIAL || view === LOADING_PREVIEW || view === LOADING_CSV ? <CardLoading indeterminate /> : null}
-        <CardHeader className="insights-space-detail-raw-event-card-header">
-          <span className="insights-space-detail-raw-events-export-card-header-label">
-            CSV Event Export
-            <InfoPopup>
-              <p className="insights-space-detail-raw-events-export-card-description">
-                Download all events from {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-                {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')} in CSV format. Below is a
-                preview of what data is included in the export.
-              </p>
-              <p className="insights-space-detail-raw-events-export-card-description">
-                <strong>Note</strong>: <em>Current Count</em> refers to the number of visitors in the space at{' '}
-                that given point in time.
-              </p>
-            </InfoPopup>
-          </span>
+        <CardHeader>
+          CSV Event Export
+          <InfoPopup>
+            <p className="insights-space-detail-raw-events-export-card-description">
+              Download all events from {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
+              {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')} in CSV format. Below is a
+              preview of what data is included in the export.
+            </p>
+          </InfoPopup>
           <span
             className={classnames('insights-space-detail-raw-events-export-card-header-refresh', {
               disabled: view !== VISIBLE,
