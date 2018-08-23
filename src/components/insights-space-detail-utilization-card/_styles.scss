@@ -10,33 +10,11 @@ $insights-space-detail-card-header-breakpoint: 930px;
   flex-direction: row;
 }
 
-.insights-space-detail-utilization-card-header {
-  display: block;
-  @media (min-width: $insights-space-detail-card-header-breakpoint) {
-    display: flex;
-  }
-
-  margin-bottom: 20px;
-  overflow: visible !important; /* ensure that date picker can escape header bounds */
-}
-.insights-space-detail-utilization-card-header-label {
-  display: flex;
-
-  line-height: 32px;
-  margin-bottom: 10px;
-  @media (min-width: $screen-xs-max) {
-    line-height: 43px;
-    margin-bottom: 0px;
-  }
-}
-.insights-space-detail-utilization-card-header-label .info-popup-container {
-  transform: translate(4px, 0px);
-}
-
 // Refresh icon to refetch data
 .insights-space-detail-utilization-card-header-refresh {
   margin-left: auto;
   cursor: pointer;
+  transform: translate(0px, 3px);
 }
 .insights-space-detail-utilization-card-header-refresh:hover { opacity: 0.8; }
 .insights-space-detail-utilization-card-header-refresh:active { opacity: 1; }
