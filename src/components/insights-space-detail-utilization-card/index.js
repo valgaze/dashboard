@@ -249,7 +249,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     const averageWeekHeader = (
       <CardHeader>
         An Average Week
-        <InfoPopup>
+        <InfoPopup horizontalIconOffset={8}>
           <p>
             Utilization for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over the
             time period of {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
@@ -284,7 +284,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     const averageDayHeader = (
       <CardHeader>
         An Average Day
-        <InfoPopup>
+        <InfoPopup horizontalIconOffset={8}>
           <p>
             An average daily breakdown of utilization for {timeSegmentId ?
               TIME_SEGMENTS[timeSegmentId].phrasal : null} over the time period of{' '}

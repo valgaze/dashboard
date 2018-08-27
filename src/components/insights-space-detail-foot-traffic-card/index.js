@@ -127,7 +127,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         { view === LOADING ? <CardLoading indeterminate /> : null }
         <CardHeader className="insights-space-detail-foot-traffic-card-header">
           Foot Traffic
-          <InfoPopup>
+          <InfoPopup horizontalIconOffset={8}>
             <p>
               Count over time for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over
               the time period of {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}, queried

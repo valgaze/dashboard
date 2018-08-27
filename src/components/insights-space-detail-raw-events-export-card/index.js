@@ -152,7 +152,7 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
         {view === LOADING_INITIAL || view === LOADING_PREVIEW || view === LOADING_CSV ? <CardLoading indeterminate /> : null}
         <CardHeader>
           CSV Event Export
-          <InfoPopup>
+          <InfoPopup horizontalIconOffset={8}>
             <p className="insights-space-detail-raw-events-export-card-description">
               Download all events from {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
               {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')} in CSV format. Below is a

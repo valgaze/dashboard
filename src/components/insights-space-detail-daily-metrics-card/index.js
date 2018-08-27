@@ -188,7 +188,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
 
           <CardHeader>
             Daily Metrics
-            <InfoPopup>
+            <InfoPopup horizontalIconOffset={8}>
               Visitation metrics for {timeSegmentId ?
               TIME_SEGMENTS[timeSegmentId].phrasal : null}, grouped by day over {' '}
               {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}

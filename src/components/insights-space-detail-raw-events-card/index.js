@@ -161,7 +161,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         {view === LOADING ? <CardLoading indeterminate /> : null}
         <CardHeader>
           Daily Raw Events
-          <InfoPopup>
+          <InfoPopup horizontalIconOffset={8}>
             <p>
               All events that the doorways within this space have seen over{' '}
               {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')} during{' '}
