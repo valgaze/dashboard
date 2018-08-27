@@ -13,7 +13,7 @@ function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
 
-describe('Visualization space foot traffic hour chart', function() {
+describe('Insights space foot traffic hour chart', function() {
   afterEach(() => mockdate.reset());
 
   describe('data fetching', function() {
@@ -342,9 +342,9 @@ describe('Visualization space foot traffic hour chart', function() {
       await timeout(250);
 
       // Correctly render the minimum, maximum, and capacity in the well above the chart
-      const renderedCapacity = component.find('.insights-space-detail-well-section.capacity .insights-space-detail-well-section-quantity').text(),
-            renderedMinimum = component.find('.insights-space-detail-well-section.minimum .insights-space-detail-well-section-quantity').text(),
-            renderedMaximum = component.find('.insights-space-detail-well-section.maximum .insights-space-detail-well-section-quantity').text();
+      const renderedCapacity = component.find('.insights-space-detail-foot-traffic-card-well-section.capacity .insights-space-detail-foot-traffic-card-well-section-quantity').text(),
+            renderedMinimum = component.find('.insights-space-detail-foot-traffic-card-well-section.minimum .insights-space-detail-foot-traffic-card-well-section-quantity').text(),
+            renderedMaximum = component.find('.insights-space-detail-foot-traffic-card-well-section.maximum .insights-space-detail-foot-traffic-card-well-section-quantity').text();
       assert.equal(renderedCapacity, 10);
       assert.equal(renderedMinimum, 0);
       assert.equal(renderedMaximum, 2);
@@ -368,9 +368,9 @@ describe('Visualization space foot traffic hour chart', function() {
 
       // Render dashes for the minimum, and maximum in the well above the chart. Capacity is already
       // in the space model so that is already known.
-      const renderedCapacity = component.find('.insights-space-detail-well-section.capacity .insights-space-detail-well-section-quantity').text(),
-            renderedMinimum = component.find('.insights-space-detail-well-section.minimum .insights-space-detail-well-section-quantity').text(),
-            renderedMaximum = component.find('.insights-space-detail-well-section.maximum .insights-space-detail-well-section-quantity').text();
+      const renderedCapacity = component.find('.insights-space-detail-foot-traffic-card-well-section.capacity .insights-space-detail-foot-traffic-card-well-section-quantity').text(),
+            renderedMinimum = component.find('.insights-space-detail-foot-traffic-card-well-section.minimum .insights-space-detail-foot-traffic-card-well-section-quantity').text(),
+            renderedMaximum = component.find('.insights-space-detail-foot-traffic-card-well-section.maximum .insights-space-detail-foot-traffic-card-well-section-quantity').text();
       assert.equal(renderedCapacity, 10);
       assert.equal(renderedMinimum, '-');
       assert.equal(renderedMaximum, '-');
@@ -393,7 +393,7 @@ describe('Visualization space foot traffic hour chart', function() {
       // Don't wait for loading to happen!
 
       // Capacity should not be set.
-      const renderedCapacity = component.find('.insights-space-detail-well-section.capacity .insights-space-detail-well-section-quantity').text();
+      const renderedCapacity = component.find('.insights-space-detail-foot-traffic-card-well-section.capacity .insights-space-detail-foot-traffic-card-well-section-quantity').text();
       assert.equal(renderedCapacity, '-');
     });
   });
