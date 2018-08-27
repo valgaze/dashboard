@@ -59,7 +59,7 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
         return;
       }
 
-      const parsedPreviewData = previewData.slice(0, 2000).split('\n').slice(0, 11).map(row => row.split(','));
+      const parsedPreviewData = previewData.split('\n').map(row => row.split(','));
       const previewDataHeaders = parsedPreviewData[0];
       const previewDataBody = parsedPreviewData.slice(1);
 
