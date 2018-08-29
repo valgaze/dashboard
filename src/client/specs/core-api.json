@@ -6,7 +6,7 @@
     "spaces": {
       "list": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/spaces/",
+        "url": "{{{core}}}/spaces/",
         "desc": "List all spaces.",
         "qs": {
           "detail": "{{detail}}"
@@ -14,12 +14,12 @@
       },
       "get": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/",
+        "url": "{{{core}}}/spaces/{{id}}/",
         "desc": "Get a space by id."
       },
       "create": {
         "method": "POST",
-        "url": "{{{core}}}/{{organisation}}/spaces/",
+        "url": "{{{core}}}/spaces/",
         "desc": "Create a space.",
         "headers": {
           "Content-Type": "application/json",
@@ -34,7 +34,7 @@
       },
       "update": {
         "method": "PUT",
-        "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/",
+        "url": "{{{core}}}/spaces/{{id}}/",
         "desc": "Update a space.",
         "headers": {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@
       },
       "delete": {
         "method": "DELETE",
-        "url": "{{{core}}}/{{organisation}}/spaces/{{id}}",
+        "url": "{{{core}}}/spaces/{{id}}",
         "desc": "Delete a space by id.",
         "headers": {
           "Content-Type": "application/json"
@@ -61,7 +61,7 @@
       },
       "counts": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/counts/",
+        "url": "{{{core}}}/spaces/{{id}}/counts/",
         "desc": "Query counts over time for a space, at specified intervals. Includes analytics specifying the minimum and maximum count that was recorded in each interval.",
         "qs": {
           "start_time": "{{start_time}}",
@@ -74,7 +74,7 @@
       },
       "allCounts": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/spaces/counts/",
+        "url": "{{{core}}}/spaces/counts/",
         "desc": "Query counts over time for all spaces in the organization, at specified intervals. Includes analytics specifying the minimum and maximum count that was recorded in each interval.",
         "qs": {
           "start_time": "{{start_time}}",
@@ -87,7 +87,7 @@
       },
       "events": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/events/",
+        "url": "{{{core}}}/spaces/{{id}}/events/",
         "desc": "Query individual traffic events over time for a space.",
         "qs": {
           "start_time": "{{start_time}}",
@@ -101,7 +101,7 @@
       },
       "reset": {
         "method": "POST",
-        "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/resets/",
+        "url": "{{{core}}}/spaces/{{id}}/resets/",
         "headers": {
           "Content-Type": "application/json",
           "Accept": "application/json"
@@ -114,7 +114,7 @@
       },
       "csv": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/spaces/{{id}}/csv/",
+        "url": "{{{core}}}/spaces/{{id}}/csv/",
         "desc": "Get CSV event for a given space.",
         "qs": {
           "doorway_id": "{{doorway_id}}",
@@ -126,7 +126,7 @@
     "doorways": {
       "list": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/doorways/",
+        "url": "{{{core}}}/doorways/",
         "desc": "List all doorways.",
         "qs": {
           "detail": "{{detail}}",
@@ -135,12 +135,12 @@
       },
       "get": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/doorways/{{id}}/",
+        "url": "{{{core}}}/doorways/{{id}}/",
         "desc": "Get a doorway by id."
       },
       "create": {
         "method": "POST",
-        "url": "{{{core}}}/{{organisation}}/doorways/",
+        "url": "{{{core}}}/doorways/",
         "desc": "Create a doorway.",
         "headers": {
           "Content-Type": "application/json",
@@ -160,7 +160,7 @@
       },
       "update": {
         "method": "PUT",
-        "url": "{{{core}}}/{{organisation}}/doorways/{{id}}/",
+        "url": "{{{core}}}/doorways/{{id}}/",
         "desc": "Update a doorway.",
         "headers": {
           "Content-Type": "application/json",
@@ -180,14 +180,14 @@
       },
       "delete": {
         "method": "DELETE",
-        "url": "{{{core}}}/{{organisation}}/doorways/{{id}}",
+        "url": "{{{core}}}/doorways/{{id}}",
         "desc": "Delete a doorway by id."
       }
     },
     "events": {
       "list": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/events/",
+        "url": "{{{core}}}/events/",
         "qs": {
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}",
@@ -203,7 +203,7 @@
     "resets": {
       "list": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/resets/",
+        "url": "{{{core}}}/resets/",
         "qs": {
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}",
@@ -217,7 +217,7 @@
     "sensors": {
       "list": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/sensors/",
+        "url": "{{{core}}}/sensors/",
         "qs": {
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}",
@@ -228,19 +228,19 @@
       },
       "get": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/sensors/{{id}}",
+        "url": "{{{core}}}/sensors/{{id}}",
         "desc": "Get a sensor by id."
       },
       "delete": {
         "method": "DELETE",
-        "url": "{{{core}}}/{{organisation}}/sensors/{{id}}",
+        "url": "{{{core}}}/sensors/{{id}}",
         "desc": "Delete a sensor by id."
       }
     },
     "links": {
       "list": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/links/",
+        "url": "{{{core}}}/links/",
         "desc": "List all links.",
         "qs": {
           "space_id": "{{space_id}}",
@@ -249,12 +249,12 @@
       },
       "get": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/links/{{id}}/",
+        "url": "{{{core}}}/links/{{id}}/",
         "desc": "Get a link by id."
       },
       "create": {
         "method": "POST",
-        "url": "{{{core}}}/{{organisation}}/links/",
+        "url": "{{{core}}}/links/",
         "desc": "Create a new link.",
         "headers": {
           "Content-Type": "application/json",
@@ -268,7 +268,7 @@
       },
       "update": {
         "method": "PUT",
-        "url": "{{{core}}}/{{organisation}}/links/{{id}}/",
+        "url": "{{{core}}}/links/{{id}}/",
         "desc": "Update a link's sensor placement.",
         "headers": {
           "Content-Type": "application/json",
@@ -280,24 +280,24 @@
       },
       "delete": {
         "method": "DELETE",
-        "url": "{{{core}}}/{{organisation}}/links/{{id}}/",
+        "url": "{{{core}}}/links/{{id}}/",
         "desc": "Delete a link."
       }
     },
     "webhooks": {
       "list": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/webhooks/",
+        "url": "{{{core}}}/webhooks/",
         "desc": "List all webhooks."
       },
       "get": {
         "method": "GET",
-        "url": "{{{core}}}/{{organisation}}/webhooks/{{id}}/",
+        "url": "{{{core}}}/webhooks/{{id}}/",
         "desc": "Get a webhook by id."
       },
       "create": {
         "method": "POST",
-        "url": "{{{core}}}/{{organisation}}/webhooks/",
+        "url": "{{{core}}}/webhooks/",
         "desc": "Create a new webhook.",
         "headers": {
           "Content-Type": "application/json",
@@ -311,7 +311,7 @@
       },
       "update": {
         "method": "PUT",
-        "url": "{{{core}}}/{{organisation}}/webhooks/{{id}}/",
+        "url": "{{{core}}}/webhooks/{{id}}/",
         "desc": "Update a webhook's endpoint.",
         "headers": {
           "Content-Type": "application/json",
@@ -325,7 +325,7 @@
       },
       "delete": {
         "method": "DELETE",
-        "url": "{{{core}}}/{{organisation}}/webhooks/{{id}}/",
+        "url": "{{{core}}}/webhooks/{{id}}/",
         "desc": "Delete a webhook."
       }
     },
