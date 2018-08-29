@@ -5,7 +5,7 @@ import './built-css/styles.css';
 import { core, accounts, setStore as setStoreInApiClientModule } from './client';
 import ReactGA from 'react-ga';
 import moment from 'moment';
-import queryString from 'query-string';
+import queryString from 'qs';
 
 import userSet from './actions/user/set';
 
