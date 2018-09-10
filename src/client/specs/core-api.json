@@ -356,6 +356,13 @@
           "Accept": "application/json"
         }
       }
+    },
+    "time_segment_groups": {
+      "list": {
+        "method": "GET",
+        "url": "{{{core}}}/time_segment_groups/",
+        "desc": "List all time segment groups."
+      }
     }
   }
 }
