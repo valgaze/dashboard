@@ -41,6 +41,7 @@
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
     "normalize.css": "^7.0.0",
+    "qs": "^6.5.2",
     "react": "^15.5.4",
     "react-addons-shallow-compare": "^15.6.0",
     "react-dnd": "^2.4.0",
