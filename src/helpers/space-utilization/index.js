@@ -40,7 +40,7 @@ export function isWithinTimeSegment(timestamp, timezone, segment) {
   const t = timestamp instanceof moment ? timestamp : moment.utc(timestamp).tz(timezone);
   const hour = t.get('hour');
   const result = (
-    hour > segment.start && hour < segment.end // 9am <= hour <= 5pm
+    hour >= segment.start && hour <= segment.end // 9am <= hour <= 5pm
   );
   return result;
 }

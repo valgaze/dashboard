@@ -1,92 +1,26 @@
 $insights-space-detail-card-header-breakpoint: 930px;
 
-.insights-space-detail-utilization-card-header {
-  display: block;
-  @media (min-width: $insights-space-detail-card-header-breakpoint) {
-    display: flex;
-  }
-
-  margin-bottom: 20px;
-  overflow: visible !important; /* ensure that date picker can escape header bounds */
+.insights-space-detail-utilization-card-average-week {
+  margin-bottom: 40px;
 }
-.insights-space-detail-utilization-card-header-label {
+
+
+.insights-space-detail-utilization-card-header-container {
   display: flex;
-
-  line-height: 32px;
-  margin-bottom: 10px;
-  @media (min-width: $screen-xs-max) {
-    line-height: 43px;
-    margin-bottom: 0px;
-  }
-}
-.insights-space-detail-utilization-card-header-label-highlight {
-  color: $brand-primary;
-  margin-left: 6px;
-}
-
-
-// The time segment picker, which allows the user to choose which time segment per day to filter
-// their data within.
-.insights-space-detail-utilization-card-time-segment-picker {
-  .input-box {
-    color: $gray-cinder;
-    margin-left: 0px; /* On mobile, the select box should be at the left edge. */
-    width: 230px;
-  }
-
-  @media (min-width: $screen-xs-max) {
-    margin-left: auto; /* On a computer, the select box should be pushed right */
-  }
-}
-
-// The date range picker lets the user choose the range of time that this chart should search
-// through.
-.insights-space-detail-utilization-card-date-picker {
-  margin-top: 10px;
-  margin-left: 0px;
-
-  @media (min-width: $insights-space-detail-card-header-breakpoint) {
-    margin-top: 0px;
-    margin-left: 20px;
-  }
+  flex-direction: row;
 }
 
 // Refresh icon to refetch data
-.insights-space-detail-utilization-card-header-refresh:before {
-  content: '\e92d';
-  font-family: "Densicons";
-  margin-left: 10px;
-  font-size: $font-size-base;
-  color: $brand-primary;
+.insights-space-detail-utilization-card-header-refresh {
+  margin-left: auto;
   cursor: pointer;
+  transform: translate(0px, 3px);
 }
 .insights-space-detail-utilization-card-header-refresh:hover { opacity: 0.8; }
 .insights-space-detail-utilization-card-header-refresh:active { opacity: 1; }
-
-// The `(Monday - Friday)` label in the header
-.insights-space-detail-utilization-card-header-timespan {
-  color: $gray-dark;
-  font-size: $font-size-base;
-  font-weight: normal;
-
-  display: block;
-  margin-left: 0px;
-  @media (min-width: $screen-xs-max) {
-    display: inline-block;
-    margin-left: 20px;
-  }
-}
-
-.insights-space-detail-utilization-card-header-weekends {
-  margin-left: auto;
-  font-size: $font-size-base;
-  font-weight: normal;
-
-  & > .switch {
-    display: inline-block;
-    transform: translate(0px, 4px);
-    margin-left: 10px;
-  }
+.insights-space-detail-utilization-card-header-refresh.disabled {
+  cursor: default;
+  pointer-events: none;
 }
 
 

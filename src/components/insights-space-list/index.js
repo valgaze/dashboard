@@ -521,7 +521,7 @@ export class InsightsSpaceList extends React.Component {
                     key={space.id}
 
                     // When the row is clicked, move to the detail page.
-                    onClick={() => window.location.href = `#/spaces/insights/${space.id}`}
+                    onClick={() => window.location.href = `#/spaces/insights/${space.id}/trends`}
                   >
                     <td className="insights-space-list-item-name">{space.name}</td>
                     <td

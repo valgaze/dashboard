@@ -11,12 +11,16 @@ import { COLLECTION_SPACES_ERROR } from '../../actions/collection/spaces/error';
 import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/count-change';
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
 
-import { ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL } from '../../actions/route-transition/visualization-space-detail';
 import { ROUTE_TRANSITION_LIVE_SPACE_LIST } from '../../actions/route-transition/live-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_DETAIL } from '../../actions/route-transition/live-space-detail';
+import { ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS } from '../../actions/route-transition/insights-space-trends';
+import { ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY } from '../../actions/route-transition/insights-space-daily';
+import { ROUTE_TRANSITION_INSIGHTS_SPACE_DATA_EXPORT } from '../../actions/route-transition/insights-space-data-export';
 import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
+
+import moment from 'moment';
 
 // Store at maximum 500 events per space
 const EVENT_QUEUE_LENGTH = 500;
@@ -31,6 +35,16 @@ const initialState = {
     search: '',
     sort: SORT_A_Z,
     parent: null,
+
+    timeSegmentId: 'WORKING_HOURS',
+    includeWeekends: false,
+
+    // Used for date ranges
+    startDate: moment.utc().subtract(6, 'days').format(),
+    endDate: moment.utc().format(),
+
+    // Used for a single date
+    date: moment.utc().format(),
   },
 
   // An object that maps space id to an array of events
@@ -110,8 +124,10 @@ export default function spaces(state=initialState, action) {
     };
 
   // When the user changes the active space, update it in the store.
-  case ROUTE_TRANSITION_VISUALIZATION_SPACE_DETAIL:
   case ROUTE_TRANSITION_LIVE_SPACE_DETAIL:
+  case ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS:
+  case ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY:
+  case ROUTE_TRANSITION_INSIGHTS_SPACE_DATA_EXPORT:
     return {...state, error: null, selected: action.id};
   case ROUTE_TRANSITION_LIVE_SPACE_LIST:
     return {...state, error: null};

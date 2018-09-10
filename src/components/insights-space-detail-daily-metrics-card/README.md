@@ -6,3 +6,5 @@ screen. It is stateful.
 
 ## Component Props
 - `space: DensitySpace` - Space to fetch data for in the component.
+- `startDate: string` - A timestamp representing the start of the date range to display.
+- `endDate: string` - A timestamp representing the end of the date range to display.
