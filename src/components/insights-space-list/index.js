@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
 import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
 import PercentageBar from '@density/ui-percentage-bar';
-import Switch from '@density/ui-switch';
 
 import gridVariables from '@density/ui/variables/grid.json';
 
@@ -24,9 +23,8 @@ import hideModal from '../../actions/modal/hide';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
-  isWithinTimeSegment,
-  TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
+import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import commaFormatNumber from '../../helpers/comma-format-number/index';
 import formatPercentage from '../../helpers/format-percentage/index';
@@ -67,10 +65,8 @@ export class InsightsSpaceList extends React.Component {
       activeColumn: COLUMN_SPACE_NAME,
       columnSortOrder: DEFAULT_SORT_DIRECTION,
 
-      timeSegment: 'WORKING_HOURS',
+      timeSegmentGroupId: DEFAULT_TIME_SEGMENT_GROUP.id,
       dataDuration: DATA_DURATION_WEEK,
-
-      includeWeekends: false,
     };
 
     this.fetchDataLock = false;
@@ -89,6 +85,10 @@ export class InsightsSpaceList extends React.Component {
 
     // Only allow one data fetching attempt to happen at once.
     this.fetchDataLock = true;
+
+    const {
+      timeSegmentGroupId,
+    } = this.state;
 
     try {
       const spacesToFetch = spaces.data
@@ -136,6 +136,7 @@ export class InsightsSpaceList extends React.Component {
           interval: '10m',
           page,
           page_size: 1000,
+          time_segment_group_id: timeSegmentGroupId,
         });
       });
 
@@ -165,29 +166,7 @@ export class InsightsSpaceList extends React.Component {
         const counts = spaceCounts[spaceId];
 
         const groups = groupCountsByDay(counts, space.timeZone);
-        const filteredGroups = groups.filter(group => {
-          if (this.state.includeWeekends) {
-            return true; // Include all days
-          } else {
-            // Filter out any days that aren't within monday-friday
-            const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').isoWeekday();
-            return dayOfWeek !== 5 && dayOfWeek !== 6; // Remove saturday and sunday
-          }
-        }).map(group => {
-          // Remove all counts in each bucket that is outside each time segment.
-          return {
-            ...group,
-            counts: group.counts.filter(count => {
-              return isWithinTimeSegment(
-                count.timestampAsMoment,
-                space.timeZone,
-                TIME_SEGMENTS[this.state.timeSegment]
-              );
-            }),
-          };
-        });
-
-        const result = spaceUtilizationPerGroup(space, filteredGroups);
+        const result = spaceUtilizationPerGroup(space, groups);
 
         return {
           ...acc,
@@ -234,20 +213,8 @@ export class InsightsSpaceList extends React.Component {
       if (spaceIds.indexOf(id) === -1) { continue }
       const counts = this.state.spaceCounts[id];
 
-      // Remove all counts outside of the time range
-      const countsWithinTimeSegment = counts.filter(i => {
-        return isWithinTimeSegment(
-          i.timestampAsMoment,
-          spaceTimeZones[id],
-          TIME_SEGMENTS[this.state.timeSegment]
-        );
-      });
-
       // Total up all ingresses within each count bucket in that time range
-      eventCount += countsWithinTimeSegment.reduce(
-        (acc, i) => acc + i.interval.analytics.entrances,
-        0
-      );
+      eventCount += counts.reduce((acc, i) => acc + i.interval.analytics.entrances, 0);
     }
 
     return eventCount;
@@ -256,6 +223,7 @@ export class InsightsSpaceList extends React.Component {
   render() {
     const {
       spaces,
+      timeSegmentGroups,
       activeModal,
 
       onSpaceSearch,
@@ -265,10 +233,26 @@ export class InsightsSpaceList extends React.Component {
       onSetCapacity,
     } = this.props;
 
+    const {
+      view,
+      spaceUtilizations,
+      spaceCounts,
+    } = this.state;
+
+    const parentSpace = spaces.filters.parent ?
+      spaces.data.find(i => i.id === spaces.filters.parent) :
+      null;
+
+    const timeSegmentGroup = timeSegmentGroups.data.find(
+      i => i.id === this.state.timeSegmentGroupId
+    ) || DEFAULT_TIME_SEGMENT_GROUP;
+
+
     // Filter space list
     // 1. Using the space hierarchy `parent value`
     // 2. Using the fuzzy search
     // 3. Only show 'space' type spaces
+    // 4. Within the time segment group that was specified
     let filteredSpaces = spaces.data;
     if (spaces.filters.parent) {
       filteredSpaces = filterHierarchy(filteredSpaces, spaces.filters.parent);
@@ -276,13 +260,17 @@ export class InsightsSpaceList extends React.Component {
     if (spaces.filters.search) {
       filteredSpaces = spaceFilter(filteredSpaces, spaces.filters.search);
     }
-    filteredSpaces = filteredSpaces.filter(space => space.spaceType === 'space')
-
-    const parentSpace = spaces.filters.parent ?
-      spaces.data.find(i => i.id === spaces.filters.parent) :
-      null;
-
-    const spaceUtilizations = this.state.spaceUtilizations;
+    filteredSpaces = filteredSpaces
+      .filter(space => space.spaceType === 'space')
+      .filter(space => {
+        if (view === LOADING) {
+          // When still loading / calculating the `spaceCounts` object, show all spaces
+          return true;
+        } else {
+          // Ensure that all shown spaces have count data that was returned from the server
+          return typeof spaceCounts[space.id] !== 'undefined';
+        }
+      })
 
     return <div className="insights-space-list">
       {/* Show errors in the spaces collection. */}
@@ -362,10 +350,9 @@ export class InsightsSpaceList extends React.Component {
                       this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces)
                     )} visitors
                   </CardWellHighlight> during <CardWellHighlight>
-                    {TIME_SEGMENTS[this.state.timeSegment].phrasal}
+                    {timeSegmentGroup.name}
                   </CardWellHighlight> this past <CardWellHighlight>
                     {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
-                    {this.state.includeWeekends ? ', including weekends' : ''}
                   </CardWellHighlight>
                 </span>;
               } else {
@@ -389,22 +376,20 @@ export class InsightsSpaceList extends React.Component {
               <InputBox
                 type="select"
                 className="insights-space-list-time-segment-selector"
-                value={this.state.timeSegment}
+                value={this.state.timeSegmentGroupId}
                 disabled={this.state.view !== VISIBLE}
                 onChange={e => {
                   this.setState({
                     view: LOADING,
-                    timeSegment: e.id,
+                    timeSegmentGroupId: e.id,
                     spaceCounts: {},
                     spaceUtilizations: {},
                   }, () => this.fetchData());
                 }}
-                choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                  return {
-                    id: key,
-                    label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
-                  };
-                })}
+                choices={[
+                  DEFAULT_TIME_SEGMENT_GROUP,
+                  ...timeSegmentGroups.data,
+                ].map(({id, name}) => ({ id, label: <span>{name}</span> }))}
               />
             </div>
             <div className="insights-space-list-filter-item">
@@ -431,23 +416,6 @@ export class InsightsSpaceList extends React.Component {
           {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
             <div className="insights-space-list-card-body-header">
               <h3>Average Utilization</h3>
-
-              <span className="insights-space-list-card-body-header-weekends">
-                <span>Include Weekends</span>
-                <Switch
-                  value={this.state.includeWeekends}
-                  disabled={this.state.view !== VISIBLE}
-                  onChange={() => {
-                    this.setState({
-                      view: LOADING,
-                      includeWeekends: !this.state.includeWeekends,
-
-                      spaceCounts: {},
-                      spaceUtilizations: {},
-                    }, () => this.fetchData());
-                  }}
-                />
-              </span>
             </div>
             <table className="insights-space-list">
               <tbody>
@@ -572,6 +540,7 @@ export default connect(state => {
   return {
     spaces: state.spaces,
     activeModal: state.activeModal,
+    timeSegmentGroups: state.timeSegmentGroups,
   };
 }, dispatch => {
   return {

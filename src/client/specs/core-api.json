@@ -81,6 +81,7 @@
           "end_time": "{{end_time}}",
           "interval": "{{interval}}",
           "page_size": "{{page_size}}",
+          "time_segment_group_id": "{{time_segment_group_id}}",
           "page": "{{page}}",
           "order": "{{order}}"
         }
