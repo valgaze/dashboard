@@ -130,7 +130,8 @@
         "desc": "List all doorways.",
         "qs": {
           "detail": "{{detail}}",
-          "environment": "{{#environment}}True{{/environment}}"
+          "environment": "{{#environment}}True{{/environment}}",
+          "page_size": "1000"
         }
       },
       "get": {
@@ -222,7 +223,8 @@
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}",
           "space_id": "{{id}}",
-          "shadow": "{{shadow}}"
+          "shadow": "{{shadow}}",
+          "page_size": "1000"
         },
         "desc": "List all sensors."
       },
@@ -244,7 +246,8 @@
         "desc": "List all links.",
         "qs": {
           "space_id": "{{space_id}}",
-          "doorway_id": "{{doorway_id}}"
+          "doorway_id": "{{doorway_id}}",
+          "page_size": "1000"
         }
       },
       "get": {
@@ -288,7 +291,8 @@
       "list": {
         "method": "GET",
         "url": "{{{core}}}/webhooks/",
-        "desc": "List all webhooks."
+        "desc": "List all webhooks.",
+        "page_size": "1000"
       },
       "get": {
         "method": "GET",
