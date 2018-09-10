@@ -25,16 +25,10 @@ export function InsightsSpaceDaily({
   onChangeSpaceFilter,
 }) {
   if (space) {
-    const timeSegmentArray = Object.entries(TIME_SEGMENTS).map(([key, {start, end, name}]) => {
-      return {
-        id: key,
-        label: <span>
-          {name} (
-          {start > 12 ? `${start-12}p` : `${start === 0 ? '12' : start}a`} -{' '}
-          {end > 12 ? `${end-12}p` : `${end}a`}
-        ) </span>,
-      };
-    });
+    const timeSegmentArray = [
+      {id: null, label: 'All'},
+      ...space.timeSegmentGroups.map(ts => ({id: ts.id, label: ts.name})),
+    ];
 
     return <div>
       <Subnav visible>

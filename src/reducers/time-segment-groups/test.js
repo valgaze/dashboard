@@ -1,7 +1,6 @@
-
 import assert from 'assert';
-import timeSegments from './index';
+import timeSegmentGroups from './index';
 
-describe('time-segments', function() {
+describe('time-segment-groups', function() {
 });
 

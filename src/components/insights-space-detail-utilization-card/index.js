@@ -50,8 +50,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     // Set by props and used to determine when the data should be refetched.
     startDate: null,
     endDate: null,
-    timeSegmentId: null,
     includeWeekends: false,
+    timeSegmentGroupId: null,
   }
 
   fetchData = async () => {
@@ -87,7 +87,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             // For small graphs, fetch data at a finer resolution.
             return '2m';
           }
-        }(this.state.timeSegmentId),
+        }(this.state.timeSegmentGroupId),
 
         // Fetch with a large page size to try to minimize the number of requests that will be
         // required.
@@ -115,7 +115,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           return isWithinTimeSegment(
             count.timestamp,
             space.timeZone,
-            TIME_SEGMENTS[this.state.timeSegmentId]
+            TIME_SEGMENTS[this.state.timeSegmentGroupId],
           );
         }),
       };
@@ -149,20 +149,20 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     return Math.round(result * 100) / 100; /* round to the nearest percentage */
   }
 
-  componentWillReceiveProps({space, startDate, endDate, timeSegmentId, includeWeekends}) {
+  componentWillReceiveProps({space, startDate, endDate, timeSegmentGroupId, includeWeekends}) {
     if (space && (
       space.id !== this.state.dataSpaceId ||
       space.capacity !== this.state.dataSpaceCapacity ||
       startDate !== this.state.startDate ||
       endDate !== this.state.endDate ||
-      timeSegmentId !== this.state.timeSegmentId ||
+      timeSegmentGroupId !== this.state.timeSegmentGroupId ||
       includeWeekends !== this.state.includeWeekends
     )) {
       this.setState({
         view: LOADING,
         startDate,
         endDate,
-        timeSegmentId,
+        timeSegmentGroupId,
         includeWeekends,
       }, () => this.fetchData());
     }
@@ -174,7 +174,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
   render() {
     const { space } = this.props;
-    const { view, timeSegmentId, startDate, endDate } = this.state;
+    const { view, timeSegmentGroupId, startDate, endDate } = this.state;
 
     let utilizationsByDay,
       averageUtilizationDatapoints,
@@ -210,12 +210,12 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         }
       });
 
-      const dataDuration = TIME_SEGMENTS[this.state.timeSegmentId].end - TIME_SEGMENTS[this.state.timeSegmentId].start;
+      const dataDuration = TIME_SEGMENTS[this.state.timeSegmentGroupId].end - TIME_SEGMENTS[this.state.timeSegmentGroupId].start;
 
       const initialTimestamp = moment.utc(this.state.counts[0].timestamp)
         .tz(space.timeZone)
         .startOf('day')
-        .add(TIME_SEGMENTS[this.state.timeSegmentId].start, 'hours');
+        .add(TIME_SEGMENTS[this.state.timeSegmentGroupId].start, 'hours');
 
       averageUtilizationDatapointsWithTimestamp = averageUtilizationDatapoints
         .map(i => i / dataPointCount) /* second part of calculating average */
@@ -251,7 +251,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         An Average Week
         <InfoPopup horizontalIconOffset={8}>
           <p>
-            Utilization for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over the
+            Utilization for {timeSegmentGroupId ? TIME_SEGMENTS[timeSegmentGroupId].phrasal : null} over the
             time period of {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
             {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}, grouped and averaged
             by day of week.
@@ -286,8 +286,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         An Average Day
         <InfoPopup horizontalIconOffset={8}>
           <p>
-            An average daily breakdown of utilization for {timeSegmentId ?
-              TIME_SEGMENTS[timeSegmentId].phrasal : null} over the time period of{' '}
+            An average daily breakdown of utilization for {timeSegmentGroupId ?
+              TIME_SEGMENTS[timeSegmentGroupId].phrasal : null} over the time period of{' '}
               {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
               {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
           </p>
@@ -423,7 +423,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                 Average utilization of <CardWellHighlight>
                   {Math.round(this.calculateAverageUtilization() * 100)}%
                   </CardWellHighlight> during <CardWellHighlight>
-                  {TIME_SEGMENTS[this.state.timeSegmentId].phrasal}
+                  {TIME_SEGMENTS[this.state.timeSegmentGroupId].phrasal}
                 </CardWellHighlight>
               </CardWell>
               <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
@@ -459,7 +459,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   <CardWellHighlight>
                     No peak utilization
                     </CardWellHighlight> during <CardWellHighlight>
-                    {TIME_SEGMENTS[this.state.timeSegmentId].phrasal}
+                    {TIME_SEGMENTS[this.state.timeSegmentGroupId].phrasal}
                   </CardWellHighlight>
                   </span> : <span>
                   Most busy around <CardWellHighlight>

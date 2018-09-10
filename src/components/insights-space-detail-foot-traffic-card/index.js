@@ -43,8 +43,8 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
 
     return core.spaces.counts({
       id: space.id,
-      start_time: day.startOf('day').add(TIME_SEGMENTS[this.state.timeSegmentId].start, 'hours').format(),
-      end_time: day.startOf('day').add(TIME_SEGMENTS[this.state.timeSegmentId].end, 'hours').format(),
+      start_time: day.startOf('day').add(TIME_SEGMENTS[this.state.timeSegmentGroupId].start, 'hours').format(),
+      end_time: day.startOf('day').add(TIME_SEGMENTS[this.state.timeSegmentGroupId].end, 'hours').format(),
       interval: '5m',
       page_size: 1000,
       order: 'desc',
@@ -70,16 +70,16 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     });
   }
 
-  componentWillReceiveProps({space, date, timeSegmentId}) {
+  componentWillReceiveProps({space, date, timeSegmentGroupId}) {
     if (space && (
       space.id !== this.state.dataSpaceId ||
       date !== this.state.date ||
-      timeSegmentId !== this.state.timeSegmentId
+      timeSegmentGroupId !== this.state.timeSegmentGroupId
     )) {
       this.setState({
         view: LOADING,
         date,
-        timeSegmentId,
+        timeSegmentGroupId,
       }, () => this.fetchData());
     }
   }
@@ -96,7 +96,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
       error,
 
       date,
-      timeSegmentId,
+      timeSegmentGroupId,
     } = this.state;
 
     const chartData = data ? data.map(i => ({
@@ -113,7 +113,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     const min = data ? Math.min.apply(Math, data.map(i => i.count)) : '-';
     const max = data ? Math.max.apply(Math, data.map(i => i.count)) : '-';
 
-    const timeSegment = TIME_SEGMENTS[timeSegmentId] || {start: 0, end: 24};
+    const timeSegment = TIME_SEGMENTS[timeSegmentGroupId] || {start: 0, end: 24};
     const startOfDayTime = moment.utc(date).tz(space.timeZone).startOf('day');
     const startTime = startOfDayTime.clone().add(timeSegment.start, 'hours');
     const endTime = startOfDayTime.clone().add(timeSegment.end, 'hours');
@@ -129,7 +129,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
           Foot Traffic
           <InfoPopup horizontalIconOffset={8}>
             <p>
-              Count over time for {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null} over
+              Count over time for {timeSegmentGroupId ? TIME_SEGMENTS[timeSegmentGroupId].phrasal : null} over
               the time period of {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}, queried
               in 5 minute intervals.
             </p>

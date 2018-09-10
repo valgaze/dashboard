@@ -72,14 +72,15 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
     startDate: null,
     endDate: null,
     includeWeekends: null,
+    timeSegmentGroupId: null,
   }
 
   fetchData = async () => {
     const { space } = this.props;
     const { metricToDisplay, startDate, endDate, includeWeekends } = this.state;
+    const { metricToDisplay, startDate, endDate, includeWeekends, timeSegmentGroupId } = this.state;
 
     // Add timezone offset to both start and end times prior to querying for the count.
-    const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
     const startTime = moment.utc(startDate).tz(space.timeZone).startOf('day');
     const endTime = moment.utc(endDate).tz(space.timeZone).startOf('day');
 
@@ -88,6 +89,8 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       const data = await core.spaces.counts({
         id: space.id,
         start_time: startTime.format(),
+        time_segment_group_id: timeSegmentGroupId === null ? '' : timeSegmentGroupId,
+
         // Add a day to the end of the range to return a final bar of the data for the uncompleted
         // current day.
         end_time: endTime.add(1, 'day').format(),
@@ -101,7 +104,6 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
         this.setState({
           view: VISIBLE,
           dataSpaceId: space.id,
-          hoursOffsetFromUtc,
           // Return the metric requested within the range of time.
           data: data.results.filter(({timestamp}) => {
             // Filter out any days that aren't within monday-friday
@@ -133,7 +135,6 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
         this.setState({
           view: EMPTY,
           dataSpaceId: space.id,
-          hoursOffsetFromUtc,
         });
       }
     } catch (error) {
@@ -141,7 +142,6 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
         view: ERROR,
         error,
         dataSpaceId: space.id,
-        hoursOffsetFromUtc,
       });
     }
   }
@@ -178,7 +178,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       data,
       startDate,
       endDate,
-      timeSegmentId,
+      timeSegmentGroupId,
     } = this.state;
 
     if (space) {
@@ -189,8 +189,8 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
           <CardHeader>
             Daily Metrics
             <InfoPopup horizontalIconOffset={8}>
-              Visitation metrics for {timeSegmentId ?
-              TIME_SEGMENTS[timeSegmentId].phrasal : null}, grouped by day over {' '}
+              Visitation metrics for {timeSegmentGroupId ?
+              TIME_SEGMENTS[timeSegmentGroupId].phrasal : null}, grouped by day over {' '}
               {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
               {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
 
