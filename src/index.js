@@ -114,8 +114,9 @@ function trackHashChange() {
     'utm_campaign',
     'utm_content',
   ].reduce((acc, tag) => {
-    if (qs[tag]) {
-      return {...acc, [tag]: qs[tag]};
+    const value = qs[`?${tag}`] || qs[tag];
+    if (value) {
+      return {...acc, [tag]: value};
     } else {
       return acc;
     }
