@@ -8,8 +8,8 @@ export const DEFAULT_TIME_SEGMENT_GROUP = {
     {
       id: 'tsm_default',
       name: 'Whole Day',
-      startTime: '00:00:00',
-      endTime: '23:59:59',
+      start: '00:00:00',
+      end: '23:59:59',
       days: [
         'Sunday',
         'Monday',
@@ -22,6 +22,7 @@ export const DEFAULT_TIME_SEGMENT_GROUP = {
     },
   ],
 };
+export const DEFAULT_TIME_SEGMENT = DEFAULT_TIME_SEGMENT_GROUP.timeSegments[0];
 
 // Calculate which "time segment" within the "time segment group" this space belongs to.
 export function findTimeSegmentInTimeSegmentGroupForSpace(timeSegmentGroup, space) {
@@ -32,7 +33,7 @@ export function findTimeSegmentInTimeSegmentGroupForSpace(timeSegmentGroup, spac
 
   // Figure out all time segment ids that are both in the time segment group and also in the
   // space. All spaces belong to the DEFAULT_TIME_SEGMENT_GROUP, which is why it's added manually.
-  const spaceTimeSegments = [...space.timeSegments, DEFAULT_TIME_SEGMENT_GROUP.timeSegments[0]];
+  const spaceTimeSegments = [...space.timeSegments, DEFAULT_TIME_SEGMENT];
   const intersection = spaceTimeSegments.filter(
     i => timeSegmentIdsWithinGroup.indexOf(i.id) !== -1
   );

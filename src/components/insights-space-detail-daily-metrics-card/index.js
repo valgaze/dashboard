@@ -11,7 +11,7 @@ import InputBox from '@density/ui-input-box';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
-import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
+import { DEFAULT_TIME_SEGMENT_GROUP, DEFAULT_TIME_SEGMENT } from '../../helpers/time-segments/index';
 
 import dailyMetrics from '@density/chart-daily-metrics';
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
@@ -28,6 +28,16 @@ const LineChartComponent = chartAsReactComponent(lineChart);
 const ONE_MINUTE_IN_MS = 60 * 1000,
       ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60,
       ONE_DAY_IN_MS = ONE_HOUR_IN_MS * 60;
+
+const DAY_TO_INDEX = {
+  'Monday': 0,
+  'Tuesday': 1,
+  'Wednesday': 2,
+  'Thursday': 3,
+  'Friday': 4,
+  'Saturday': 5,
+  'Sunday': 6,
+};
 
 const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
@@ -71,13 +81,13 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
 
     startDate: null,
     endDate: null,
-    includeWeekends: null,
-    timeSegmentGroupId: null,
+    timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
+    timeSegment: DEFAULT_TIME_SEGMENT,
   }
 
   fetchData = async () => {
     const { space } = this.props;
-    const { metricToDisplay, startDate, endDate, includeWeekends } = this.state;
+    const { metricToDisplay, startDate, endDate, timeSegment, timeSegmentGroup } = this.state;
 
     // Add timezone offset to both start and end times prior to querying for the count.
     const startTime = moment.utc(startDate).tz(space.timeZone).startOf('day');
@@ -88,6 +98,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       const data = await core.spaces.counts({
         id: space.id,
         start_time: startTime.format(),
+        time_segment_group_id: timeSegmentGroup.Id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.Id,
 
         // Add a day to the end of the range to return a final bar of the data for the uncompleted
         // current day.
@@ -103,14 +114,12 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
           view: VISIBLE,
           dataSpaceId: space.id,
           // Return the metric requested within the range of time.
-          data: data.results.filter(({timestamp}) => {
-            // Filter out any days that aren't within monday-friday
-            const dayOfWeek = moment.utc(timestamp).tz(space.timeZone).isoWeekday();
-            if (includeWeekends) {
-              return true; // Include all days
-            } else {
-              return dayOfWeek !== 6 && dayOfWeek !== 7; // Remove saturday and sunday
-            }
+          data: data.results.filter(i => {
+            // Remove days from the dataset that are not in the time segment
+            const dayOfWeek = moment.utc(i.timestamp).tz(space.timeZone).day();
+            return timeSegment.days
+              .map(i => DAY_TO_INDEX[i])
+              .indexOf(dayOfWeek) !== -1;
           }).map(i => ({
             timestamp: i.timestamp,
             value: (function(i, metric) {
@@ -150,7 +159,8 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       nextProps.startDate && nextProps.endDate && (
         nextProps.startDate !== this.state.startDate ||
         nextProps.endDate !== this.state.endDate ||
-        nextProps.includeWeekends !== this.state.includeWeekends
+        nextProps.timeSegment !== this.state.timeSegment ||
+        nextProps.timeSegmentGroup !== this.state.timeSegmentGroup
       )
     ) {
       this.setState({
@@ -158,7 +168,8 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
         data: null,
         startDate: nextProps.startDate,
         endDate: nextProps.endDate,
-        includeWeekends: nextProps.includeWeekends,
+        timeSegment: nextProps.timeSegment,
+        timeSegmentGroup: nextProps.timeSegmentGroup,
       }, () => this.fetchData());
     }
   }
@@ -176,7 +187,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       data,
       startDate,
       endDate,
-      timeSegmentGroupId,
+      timeSegmentGroup,
     } = this.state;
 
     if (space) {
@@ -187,8 +198,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
           <CardHeader>
             Daily Metrics
             <InfoPopup horizontalIconOffset={8}>
-              Visitation metrics for {timeSegmentGroupId ?
-              TIME_SEGMENTS[timeSegmentGroupId].phrasal : null}, grouped by day over {' '}
+              Visitation metrics for time segment {timeSegmentGroup.name}, grouped by day over {' '}
               {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
               {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
 

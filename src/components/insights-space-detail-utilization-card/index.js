@@ -17,9 +17,12 @@ import formatPercentage from '../../helpers/format-percentage/index';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
-  isWithinTimeSegment,
-  TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
+import {
+  DEFAULT_TIME_SEGMENT_GROUP,
+  DEFAULT_TIME_SEGMENT,
+  parseTimeInTimeSegmentToSeconds,
+} from '../../helpers/time-segments/index';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
@@ -32,6 +35,18 @@ import { chartAsReactComponent } from '@density/charts';
 const LineChartComponent = chartAsReactComponent(lineChart);
 
 const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
+
+const ONE_HOUR_IN_SECONDS = 60 * 60;
+
+const DAY_TO_INDEX = {
+  'Monday': 0,
+  'Tuesday': 1,
+  'Wednesday': 2,
+  'Thursday': 3,
+  'Friday': 4,
+  'Saturday': 5,
+  'Sunday': 6,
+};
 
 export const LOADING = 'LOADING',
              EMPTY = 'EMPTY',
@@ -51,11 +66,14 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     startDate: null,
     endDate: null,
     includeWeekends: false,
-    timeSegmentGroupId: null,
+
+    timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
+    timeSegment: DEFAULT_TIME_SEGMENT,
   }
 
   fetchData = async () => {
     const { space } = this.props;
+    const { timeSegmentGroup, timeSegment } = this.state;
 
     if (!space.capacity) {
       this.setState({
@@ -68,6 +86,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       return;
     }
 
+    const timeSegmentDurationInSeconds = parseTimeInTimeSegmentToSeconds(timeSegment.end) - parseTimeInTimeSegmentToSeconds(timeSegment.start);
+
     // Step 1: Fetch all counts--which means all pages--of data from the start date to the end data
     // selected on the DateRangePicker. Uses the `fetchAllPages` helper, which encapsulates the
     // logic required to fetch all pages of data from the server.
@@ -77,17 +97,17 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
         start_time: this.state.startDate,
         end_time: this.state.endDate,
+        time_segment_group_id: timeSegmentGroup.Id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.Id,
 
-        interval: function(timeSegment) {
-          const numberOfHoursVisible = TIME_SEGMENTS[timeSegment].end - TIME_SEGMENTS[timeSegment].start;
-          if (numberOfHoursVisible > 4) {
+        interval: function(timeSegmentDurationInSeconds) {
+          if (timeSegmentDurationInSeconds > 4 * ONE_HOUR_IN_SECONDS) {
             // For large graphs, fetch data at a coarser resolution.
             return '10m';
           } else {
             // For small graphs, fetch data at a finer resolution.
             return '2m';
           }
-        }(this.state.timeSegmentGroupId),
+        }(timeSegmentDurationInSeconds),
 
         // Fetch with a large page size to try to minimize the number of requests that will be
         // required.
@@ -99,30 +119,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     // Group into counts into buckets, one bucket for each day.
     const groups = groupCountsByDay(counts, space.timeZone);
 
-    const filteredGroups = groups.filter(group => {
-      // Filter out any days that aren't within monday-friday
-      const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
-      if (this.state.includeWeekends) {
-        return true; // Include all days
-      } else {
-        return dayOfWeek !== 5 && dayOfWeek !== 6; // Remove saturday and sunday
-      }
-    }).map(group => {
-      // Remove all counts in each bucket that is outside each time segment.
-      return {
-        ...group,
-        counts: group.counts.filter(count => {
-          return isWithinTimeSegment(
-            count.timestamp,
-            space.timeZone,
-            TIME_SEGMENTS[this.state.timeSegmentGroupId],
-          );
-        }),
-      };
-    });
-
-    // Calculate space utilization using this dat with un-important time segments removed.
-    const utilizations = spaceUtilizationPerGroup(space, filteredGroups);
+    // Calculate space utilization using this grouped data.
+    const utilizations = spaceUtilizationPerGroup(space, groups);
 
     this.setState({
       view: VISIBLE,
@@ -149,21 +147,21 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     return Math.round(result * 100) / 100; /* round to the nearest percentage */
   }
 
-  componentWillReceiveProps({space, startDate, endDate, timeSegmentGroupId, includeWeekends}) {
+  componentWillReceiveProps({space, startDate, endDate, timeSegment, timeSegmentGroup}) {
     if (space && (
       space.id !== this.state.dataSpaceId ||
       space.capacity !== this.state.dataSpaceCapacity ||
       startDate !== this.state.startDate ||
       endDate !== this.state.endDate ||
-      timeSegmentGroupId !== this.state.timeSegmentGroupId ||
-      includeWeekends !== this.state.includeWeekends
+      timeSegment.id !== this.state.timeSegment.id ||
+      timeSegmentGroup.id !== this.state.timeSegmentGroup.id
     )) {
       this.setState({
         view: LOADING,
         startDate,
         endDate,
-        timeSegmentGroupId,
-        includeWeekends,
+        timeSegment,
+        timeSegmentGroup,
       }, () => this.fetchData());
     }
   }
@@ -174,13 +172,22 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
   render() {
     const { space } = this.props;
-    const { view, timeSegmentGroupId, startDate, endDate } = this.state;
+    const {
+      view,
+      timeSegmentGroupId,
+      startDate,
+      endDate,
+      timeSegment,
+      timeSegmentGroup,
+    } = this.state;
 
     let utilizationsByDay,
       averageUtilizationDatapoints,
       peakUtilizationPercentage,
       peakUtilizationTimestamp,
       averageUtilizationDatapointsWithTimestamp;
+
+    const timeSegmentDurationInSeconds = parseTimeInTimeSegmentToSeconds(timeSegment.end) - parseTimeInTimeSegmentToSeconds(timeSegment.start);
 
     if (view === VISIBLE) {
       //
@@ -210,19 +217,17 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         }
       });
 
-      const dataDuration = TIME_SEGMENTS[this.state.timeSegmentGroupId].end - TIME_SEGMENTS[this.state.timeSegmentGroupId].start;
-
       const initialTimestamp = moment.utc(this.state.counts[0].timestamp)
         .tz(space.timeZone)
         .startOf('day')
-        .add(TIME_SEGMENTS[this.state.timeSegmentGroupId].start, 'hours');
+        .add(parseTimeInTimeSegmentToSeconds(timeSegment.start), 'seconds');
 
       averageUtilizationDatapointsWithTimestamp = averageUtilizationDatapoints
         .map(i => i / dataPointCount) /* second part of calculating average */
         .map(i => Math.round(i * 1000) / 1000) /* round each number to a single decimal place */
         .reduce(({timestamp, data}, i, ct) => {
           // Increment timestamp to get to the next sample's timestamp.
-          timestamp = timestamp.add(dataDuration / averageUtilizationDatapoints.length, 'hours')
+          timestamp = timestamp.add(timeSegmentDurationInSeconds / averageUtilizationDatapoints.length, 'seconds')
 
           return {
             timestamp,
@@ -251,7 +256,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         An Average Week
         <InfoPopup horizontalIconOffset={8}>
           <p>
-            Utilization for {timeSegmentGroupId ? TIME_SEGMENTS[timeSegmentGroupId].phrasal : null} over the
+            Utilization for time segment {timeSegmentGroup.name} over the
             time period of {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
             {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}, grouped and averaged
             by day of week.
@@ -286,10 +291,10 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         An Average Day
         <InfoPopup horizontalIconOffset={8}>
           <p>
-            An average daily breakdown of utilization for {timeSegmentGroupId ?
-              TIME_SEGMENTS[timeSegmentGroupId].phrasal : null} over the time period of{' '}
-              {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-              {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
+            An average daily breakdown of utilization for time segment {timeSegmentGroup.name} over
+            the time period of{' '}
+            {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
+            {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
           </p>
 
           <p>
@@ -422,8 +427,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               <CardWell type="dark">
                 Average utilization of <CardWellHighlight>
                   {Math.round(this.calculateAverageUtilization() * 100)}%
-                  </CardWellHighlight> during <CardWellHighlight>
-                  {TIME_SEGMENTS[this.state.timeSegmentGroupId].phrasal}
+                </CardWellHighlight> during <CardWellHighlight>
+                  {timeSegmentGroup.name}
                 </CardWellHighlight>
               </CardWell>
               <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
@@ -431,14 +436,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   <div className="insights-space-detail-utilization-card-grid-item">Day</div>
                   <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
                 </div>
-                {[
-                  'Monday',
-                  'Tuesday',
-                  'Wednesday',
-                  'Thursday',
-                  'Friday',
-                  ...(this.state.includeWeekends ? ['Saturday', 'Sunday'] : []),
-                ].map((day, index) => {
+                {timeSegment.days.map(day => {
+                  const index = DAY_TO_INDEX[day];
                   return <div className="insights-space-detail-utilization-card-grid-row" key={day}>
                     <div className="insights-space-detail-utilization-card-grid-item">{day}</div>
                     <div className="insights-space-detail-utilization-card-grid-item">
@@ -459,7 +458,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   <CardWellHighlight>
                     No peak utilization
                     </CardWellHighlight> during <CardWellHighlight>
-                    {TIME_SEGMENTS[this.state.timeSegmentGroupId].phrasal}
+                    {timeSegmentGroup.name}
                   </CardWellHighlight>
                   </span> : <span>
                   Most busy around <CardWellHighlight>
@@ -484,7 +483,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                       return stamp.format(`h:[${minute}]a`).slice(0, -1);
                     })(peakUtilizationTimestamp)}
                   </CardWellHighlight> &mdash; around <CardWellHighlight>
-                    {Math.round(peakUtilizationPercentage * space.capacity)} People
+                    {Math.round(peakUtilizationPercentage * space.capacity)} people
                   </CardWellHighlight> ({Math.round(peakUtilizationPercentage * 100)}% utilization)
                 </span>}
               </CardWell>

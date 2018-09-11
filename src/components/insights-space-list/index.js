@@ -136,7 +136,7 @@ export class InsightsSpaceList extends React.Component {
           interval: '10m',
           page,
           page_size: 1000,
-          time_segment_group_id: timeSegmentGroupId,
+          time_segment_group_id: timeSegmentGroupId === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroupId,
         });
       });
 

@@ -130,20 +130,22 @@ function InsightsSpaceTrends({
       <div className="insights-space-trends-container">
         <div className="insights-space-trends">
           <div className="insights-space-trends-item">
-            {/* <UtilizationCard */}
-            {/*   space={space} */}
-            {/*   startDate={spaces.filters.startDate} */}
-            {/*   endDate={spaces.filters.endDate} */}
-            {/*   timeSegment={applicableTimeSegment} */}
-            {/* /> */}
+            <UtilizationCard
+              space={space}
+              startDate={spaces.filters.startDate}
+              endDate={spaces.filters.endDate}
+              timeSegmentGroup={selectedTimeSegmentGroup}
+              timeSegment={applicableTimeSegment}
+            />
           </div>
           <div className="insights-space-trends-item">
-            {/* <DailyMetricsCard */}
-            {/*   space={space} */}
-            {/*   startDate={spaces.filters.startDate} */}
-            {/*   endDate={spaces.filters.endDate} */}
-            {/*   timeSegment={applicableTimeSegment} */}
-            {/* /> */}
+            <DailyMetricsCard
+              space={space}
+              startDate={spaces.filters.startDate}
+              endDate={spaces.filters.endDate}
+              timeSegmentGroup={selectedTimeSegmentGroup}
+              timeSegment={applicableTimeSegment}
+            />
           </div>
         </div>
       </div>
