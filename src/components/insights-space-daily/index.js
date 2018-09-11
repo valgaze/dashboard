@@ -86,11 +86,12 @@ export function InsightsSpaceDaily({
             />
           </div>
           <div className="insights-space-daily-item">
-            {/* <RawEventsCard */}
-            {/*   space={space} */}
-            {/*   date={spaces.filters.date} */}
-            {/*   timeSegmentId={spaces.filters.timeSegmentId} */}
-            {/* /> */}
+            <RawEventsCard
+              space={space}
+              date={spaces.filters.date}
+              timeSegmentGroup={selectedTimeSegmentGroup}
+              timeSegment={applicableTimeSegment}
+            />
           </div>
         </div>
       </div>

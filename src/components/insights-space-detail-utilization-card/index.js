@@ -174,7 +174,6 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     const { space } = this.props;
     const {
       view,
-      timeSegmentGroupId,
       startDate,
       endDate,
       timeSegment,

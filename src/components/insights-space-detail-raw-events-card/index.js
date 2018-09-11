@@ -14,6 +14,11 @@ import InfoPopup from '@density/ui-info-popup';
 
 import RawEventsPager from '../insights-space-detail-raw-events-pager/index';
 
+import {
+  DEFAULT_TIME_SEGMENT_GROUP,
+  DEFAULT_TIME_SEGMENT,
+} from '../../helpers/time-segments/index';
+
 export const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
       VISIBLE = 'VISIBLE',
@@ -35,7 +40,8 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     datePickerInput: null,
 
     date: null,
-    timeSegmentId: null,
+    timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
+    timeSegment: DEFAULT_TIME_SEGMENT,
 
     // A lookup table for doorway information that is mostly used to display the doorway name in
     // the raw events list.
@@ -44,7 +50,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
 
   fetchData = async () => {
     const { space } = this.props;
-    const { date, page, pageSize, doorwayLookup, timeSegmentId } = this.state;
+    const { date, page, pageSize, doorwayLookup, timeSegmentGroup } = this.state;
 
     // Add timezone offset to both start and end times prior to querying for the count.
     const day = moment.utc(date).tz(space.timeZone);
@@ -52,8 +58,9 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     try {
       const preData = await core.spaces.events({
         id: space.id,
-        start_time: day.startOf('day').add(TIME_SEGMENTS[timeSegmentId].start, 'hours').format(),
-        end_time: day.startOf('day').add(TIME_SEGMENTS[timeSegmentId].end, 'hours').format(),
+        start_time: day.startOf('day').format(),
+        end_time: day.endOf('day').format(),
+        time_segment_group_id: timeSegmentGroup.Id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.Id,
         page: page,
         page_size: pageSize,
         order: 'desc',
@@ -128,16 +135,18 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     }
   }
 
-  componentWillReceiveProps({space, date, timeSegmentId}) {
+  componentWillReceiveProps({space, date, timeSegment, timeSegmentGroup}) {
     if (space && (
       space.id !== this.state.dataSpaceId ||
       date !== this.state.date ||
-      timeSegmentId !== this.state.timeSegmentId
+      timeSegment.Id !== this.state.timeSegment.Id ||
+      timeSegmentGroup.Id !== this.state.timeSegmentGroup.Id
     )) {
       this.setState({
         view: LOADING,
         date,
-        timeSegmentId,
+        timeSegment,
+        timeSegmentGroup,
       }, () => this.fetchData());
     }
   }
