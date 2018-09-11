@@ -9,7 +9,11 @@ import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
-import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
+import {
+  DEFAULT_TIME_SEGMENT,
+  DEFAULT_TIME_SEGMENT_GROUP,
+  parseTimeInTimeSegmentToSeconds,
+} from '../../helpers/time-segments/index';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
@@ -35,16 +39,21 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     dataSpaceId: null,
     datePickerOpen: false,
     date: moment.utc().format(),
+
+    timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
+    timeSegment: DEFAULT_TIME_SEGMENT,
   }
 
   fetchData = () => {
     const { space } = this.props;
+    const { timeSegmentGroup } = this.state;
     const day = moment.utc(this.state.date).tz(space.timeZone);
 
     return core.spaces.counts({
       id: space.id,
-      start_time: day.startOf('day').add(TIME_SEGMENTS[this.state.timeSegmentGroupId].start, 'hours').format(),
-      end_time: day.startOf('day').add(TIME_SEGMENTS[this.state.timeSegmentGroupId].end, 'hours').format(),
+      start_time: day.startOf('day').format(),
+      end_time: day.endOf('day').format(),
+      time_segment_group_id: timeSegmentGroup.Id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.Id,
       interval: '5m',
       page_size: 1000,
       order: 'desc',
@@ -70,16 +79,18 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     });
   }
 
-  componentWillReceiveProps({space, date, timeSegmentGroupId}) {
+  componentWillReceiveProps({space, date, timeSegment, timeSegmentGroup}) {
     if (space && (
       space.id !== this.state.dataSpaceId ||
       date !== this.state.date ||
-      timeSegmentGroupId !== this.state.timeSegmentGroupId
+      timeSegment.id !== this.state.timeSegment.id ||
+      timeSegmentGroup.Id !== this.state.timeSegmentGroup.Id
     )) {
       this.setState({
         view: LOADING,
         date,
-        timeSegmentGroupId,
+        timeSegment,
+        timeSegmentGroup,
       }, () => this.fetchData());
     }
   }
@@ -96,7 +107,8 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
       error,
 
       date,
-      timeSegmentGroupId,
+      timeSegment,
+      timeSegmentGroup,
     } = this.state;
 
     const chartData = data ? data.map(i => ({
@@ -113,10 +125,13 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     const min = data ? Math.min.apply(Math, data.map(i => i.count)) : '-';
     const max = data ? Math.max.apply(Math, data.map(i => i.count)) : '-';
 
-    const timeSegment = TIME_SEGMENTS[timeSegmentGroupId] || {start: 0, end: 24};
     const startOfDayTime = moment.utc(date).tz(space.timeZone).startOf('day');
-    const startTime = startOfDayTime.clone().add(timeSegment.start, 'hours');
-    const endTime = startOfDayTime.clone().add(timeSegment.end, 'hours');
+    const startTime = startOfDayTime
+      .clone()
+      .add(parseTimeInTimeSegmentToSeconds(timeSegment.start), 'seconds');
+    const endTime = startOfDayTime
+      .clone()
+      .add(parseTimeInTimeSegmentToSeconds(timeSegment.end), 'seconds');
 
     if (space) {
       const largestCount = view === 'VISIBLE' ? (
@@ -129,7 +144,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
           Foot Traffic
           <InfoPopup horizontalIconOffset={8}>
             <p>
-              Count over time for {timeSegmentGroupId ? TIME_SEGMENTS[timeSegmentGroupId].phrasal : null} over
+              Count over time for {timeSegmentGroup.name} over
               the time period of {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}, queried
               in 5 minute intervals.
             </p>

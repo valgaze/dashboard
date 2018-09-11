@@ -17,7 +17,10 @@ import DatePicker from '@density/ui-date-picker';
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
-import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
+import {
+  DEFAULT_TIME_SEGMENT_GROUP,
+  findTimeSegmentInTimeSegmentGroupForSpace,
+} from '../../helpers/time-segments/index';
 
 export function InsightsSpaceDaily({
   spaces,
@@ -25,10 +28,17 @@ export function InsightsSpaceDaily({
   onChangeSpaceFilter,
 }) {
   if (space) {
-    const timeSegmentArray = [
-      {id: null, label: 'All'},
-      ...space.timeSegmentGroups.map(ts => ({id: ts.id, label: ts.name})),
-    ];
+    const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
+
+    // Which time segment group was selected?
+    const selectedTimeSegmentGroup = timeSegmentGroupArray.find(i => i.id === spaces.filters.timeSegmentGroupId);
+
+    // And, with the knowlege of the selected space, which time segment within that time segment
+    // group is applicable to this space?
+    const applicableTimeSegment = findTimeSegmentInTimeSegmentGroupForSpace(
+      selectedTimeSegmentGroup,
+      space,
+    );
 
     return <div>
       <Subnav visible>
@@ -56,9 +66,9 @@ export function InsightsSpaceDaily({
           <InputBox
             type="select"
             className="insights-space-daily-time-segment-box"
-            value={timeSegmentArray.find(i => i.id === spaces.filters.timeSegmentId)}
-            choices={timeSegmentArray}
-            onChange={value => onChangeSpaceFilter('timeSegmentId', value.id)}
+            value={selectedTimeSegmentGroup.id}
+            choices={timeSegmentGroupArray.map(ts => ({id: ts.id, label: ts.name}))}
+            onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
           />
         </InsightsFilterBarItem>
       </InsightsFilterBar>
@@ -71,15 +81,16 @@ export function InsightsSpaceDaily({
             <FootTrafficCard
               space={space}
               date={spaces.filters.date}
-              timeSegmentId={spaces.filters.timeSegmentId}
+              timeSegmentGroup={selectedTimeSegmentGroup}
+              timeSegment={applicableTimeSegment}
             />
           </div>
           <div className="insights-space-daily-item">
-            <RawEventsCard
-              space={space}
-              date={spaces.filters.date}
-              timeSegmentId={spaces.filters.timeSegmentId}
-            />
+            {/* <RawEventsCard */}
+            {/*   space={space} */}
+            {/*   date={spaces.filters.date} */}
+            {/*   timeSegmentId={spaces.filters.timeSegmentId} */}
+            {/* /> */}
           </div>
         </div>
       </div>
