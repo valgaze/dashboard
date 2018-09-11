@@ -10,7 +10,6 @@ import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-da
 import Subnav, { SubnavItem } from '../subnav/index';
 import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar/index';
 import InsightsSpaceHeader from '../insights-space-header/index';
-import IncludeWeekendsSwitch from '../include-weekends-switch/index';
 import UtilizationCard from '../insights-space-detail-utilization-card/index';
 
 import DailyMetricsCard from '../insights-space-detail-daily-metrics-card/index';
@@ -21,7 +20,10 @@ import gridVariables from '@density/ui/variables/grid.json'
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
 import commonRanges from '../../helpers/common-ranges';
-import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
+import {
+  DEFAULT_TIME_SEGMENT_GROUP,
+  findTimeSegmentInTimeSegmentGroupForSpace,
+} from '../../helpers/time-segments/index';
 
 // The maximum number of days that can be selected by the date range picker
 const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
@@ -54,10 +56,17 @@ function InsightsSpaceTrends({
   onChangeSpaceFilter,
 }) {
   if (space) {
-    const timeSegmentArray = [
-      {id: null, label: 'All'},
-      ...space.timeSegmentGroups.map(ts => ({id: ts.id, label: ts.name})),
-    ];
+    const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
+
+    // Which time segment group was selected?
+    const selectedTimeSegmentGroup = timeSegmentGroupArray.find(i => i.id === spaces.filters.timeSegmentGroupId);
+
+    // And, with the knowlege of the selected space, which time segment within that time segment
+    // group is applicable to this space?
+    const applicableTimeSegment = findTimeSegmentInTimeSegmentGroupForSpace(
+      selectedTimeSegmentGroup,
+      space,
+    );
 
     return <div>
       <Subnav visible>
@@ -71,9 +80,9 @@ function InsightsSpaceTrends({
           <InputBox
             type="select"
             className="insights-space-trends-time-segment-box"
-            value={timeSegmentArray.find(i => i.id === spaces.filters.timeSegmentId)}
-            choices={timeSegmentArray}
-            onChange={value => onChangeSpaceFilter('timeSegmentId', value.id)}
+            value={selectedTimeSegmentGroup.id}
+            choices={timeSegmentGroupArray.map(ts => ({id: ts.id, label: ts.name}))}
+            onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
           />
         </InsightsFilterBarItem>
         <InsightsFilterBarItem label="Date Range">
@@ -114,14 +123,6 @@ function InsightsSpaceTrends({
             }}
           />
         </InsightsFilterBarItem>
-        <InsightsFilterBarItem label={<span className="insights-space-trends-include-weekends-info">
-          Include Weekends
-        </span>}>
-          <IncludeWeekendsSwitch
-            value={spaces.filters.includeWeekends}
-            onChange={e => onChangeSpaceFilter('includeWeekends', e.target.checked)}
-          />
-        </InsightsFilterBarItem>
       </InsightsFilterBar>
 
       <InsightsSpaceHeader space={space} />
@@ -129,22 +130,20 @@ function InsightsSpaceTrends({
       <div className="insights-space-trends-container">
         <div className="insights-space-trends">
           <div className="insights-space-trends-item">
-            <UtilizationCard
-              space={space}
-              startDate={spaces.filters.startDate}
-              endDate={spaces.filters.endDate}
-              timeSegmentGroupId={spaces.filters.timeSegmentGroupId}
-              includeWeekends={spaces.filters.includeWeekends}
-            />
+            {/* <UtilizationCard */}
+            {/*   space={space} */}
+            {/*   startDate={spaces.filters.startDate} */}
+            {/*   endDate={spaces.filters.endDate} */}
+            {/*   timeSegment={applicableTimeSegment} */}
+            {/* /> */}
           </div>
           <div className="insights-space-trends-item">
-            <DailyMetricsCard
-              space={space}
-              startDate={spaces.filters.startDate}
-              endDate={spaces.filters.endDate}
-              timeSegmentGroupId={spaces.filters.timeSegmentGroupId}
-              includeWeekends={spaces.filters.includeWeekends}
-            />
+            {/* <DailyMetricsCard */}
+            {/*   space={space} */}
+            {/*   startDate={spaces.filters.startDate} */}
+            {/*   endDate={spaces.filters.endDate} */}
+            {/*   timeSegment={applicableTimeSegment} */}
+            {/* /> */}
           </div>
         </div>
       </div>

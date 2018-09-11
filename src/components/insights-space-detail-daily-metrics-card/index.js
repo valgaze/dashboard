@@ -78,7 +78,6 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
   fetchData = async () => {
     const { space } = this.props;
     const { metricToDisplay, startDate, endDate, includeWeekends } = this.state;
-    const { metricToDisplay, startDate, endDate, includeWeekends, timeSegmentGroupId } = this.state;
 
     // Add timezone offset to both start and end times prior to querying for the count.
     const startTime = moment.utc(startDate).tz(space.timeZone).startOf('day');
@@ -89,7 +88,6 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       const data = await core.spaces.counts({
         id: space.id,
         start_time: startTime.format(),
-        time_segment_group_id: timeSegmentGroupId === null ? '' : timeSegmentGroupId,
 
         // Add a day to the end of the range to return a final bar of the data for the uncompleted
         // current day.

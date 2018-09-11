@@ -31,13 +31,14 @@ export function findTimeSegmentInTimeSegmentGroupForSpace(timeSegmentGroup, spac
   const timeSegmentIdsWithinGroup = timeSegmentGroup.timeSegments.map(i => i.id);
 
   // Figure out all time segment ids that are both in the time segment group and also in the
-  // space.
-  const intersection = space.timeSegments.filter(
-    i => timeSegmentIdsWithinGroup.indexOf(i.id) === -1
+  // space. All spaces belong to the DEFAULT_TIME_SEGMENT_GROUP, which is why it's added manually.
+  const spaceTimeSegments = [...space.timeSegments, DEFAULT_TIME_SEGMENT_GROUP.timeSegments[0]];
+  const intersection = spaceTimeSegments.filter(
+    i => timeSegmentIdsWithinGroup.indexOf(i.id) !== -1
   );
 
   if (intersection.length > 0) {
-    return space.timeSegments.find(i => i.id === intersection[0]);
+    return intersection[0];
   } else {
     throw new Error(`This space doesn't have an applicable time segment within the selected time segment group.`);
   }

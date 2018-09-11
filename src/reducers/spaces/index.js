@@ -20,6 +20,8 @@ import { SORT_A_Z } from '../../helpers/sort-collection/index';
 import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
 
+import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
+
 import moment from 'moment';
 
 // Store at maximum 500 events per space
@@ -36,7 +38,7 @@ const initialState = {
     sort: SORT_A_Z,
     parent: null,
 
-    timeSegmentId: 'WORKING_HOURS',
+    timeSegmentGroupId: DEFAULT_TIME_SEGMENT_GROUP.id,
     includeWeekends: false,
 
     // Used for date ranges
