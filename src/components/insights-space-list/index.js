@@ -206,8 +206,6 @@ export class InsightsSpaceList extends React.Component {
 
   calculateTotalNumberOfIngressesForSpaces(spaces=this.props.spaces.data) {
     const spaceIds = spaces.map(i => i.id);
-    const spaceTimeZones = spaces.reduce((acc, i) => ({...acc, [i.id]: i.timeZone}), {});
-
     let eventCount = 0;
     for (let id in this.state.spaceCounts) {
       if (spaceIds.indexOf(id) === -1) { continue }

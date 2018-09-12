@@ -6,7 +6,6 @@ import 'moment-timezone';
 
 import { core } from '../../client';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
-import { TIME_SEGMENTS } from '../../helpers/space-utilization/index';
 
 import Card, { CardHeader, CardLoading, CardTable } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
@@ -162,7 +161,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       total,
       pageSize,
       date,
-      timeSegmentId,
+      timeSegmentGroup,
     } = this.state;
 
     return <div>
@@ -174,7 +173,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
             <p>
               All events that the doorways within this space have seen over{' '}
               {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')} during{' '}
-              {timeSegmentId ? TIME_SEGMENTS[timeSegmentId].phrasal : null}.
+              {timeSegmentGroup.name}.
             </p>
 
             <p>
