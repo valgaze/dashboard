@@ -59,7 +59,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         id: space.id,
         start_time: day.startOf('day').format(),
         end_time: day.endOf('day').format(),
-        time_segment_group_id: timeSegmentGroup.Id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.Id,
+        time_segment_group_id: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
         page: page,
         page_size: pageSize,
         order: 'desc',
@@ -138,8 +138,8 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     if (space && (
       space.id !== this.state.dataSpaceId ||
       date !== this.state.date ||
-      timeSegment.Id !== this.state.timeSegment.Id ||
-      timeSegmentGroup.Id !== this.state.timeSegmentGroup.Id
+      timeSegment.id !== this.state.timeSegment.id ||
+      timeSegmentGroup.id !== this.state.timeSegmentGroup.id
     )) {
       this.setState({
         view: LOADING,

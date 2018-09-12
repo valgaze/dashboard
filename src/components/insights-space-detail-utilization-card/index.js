@@ -97,7 +97,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
         start_time: this.state.startDate,
         end_time: this.state.endDate,
-        time_segment_group_id: timeSegmentGroup.Id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.Id,
+        time_segment_group_id: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
 
         interval: function(timeSegmentDurationInSeconds) {
           if (timeSegmentDurationInSeconds > 4 * ONE_HOUR_IN_SECONDS) {

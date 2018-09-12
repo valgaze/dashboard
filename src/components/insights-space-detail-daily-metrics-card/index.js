@@ -98,7 +98,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       const data = await core.spaces.counts({
         id: space.id,
         start_time: startTime.format(),
-        time_segment_group_id: timeSegmentGroup.Id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.Id,
+        time_segment_group_id: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
 
         // Add a day to the end of the range to return a final bar of the data for the uncompleted
         // current day.
