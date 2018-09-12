@@ -29,7 +29,7 @@ export function findTimeSegmentInTimeSegmentGroupForSpace(timeSegmentGroup, spac
   timeSegmentGroup = timeSegmentGroup || DEFAULT_TIME_SEGMENT_GROUP;
 
   // Calculate a list of time segment ids found in the time segment group
-  const timeSegmentIdsWithinGroup = timeSegmentGroup.timeSegments.map(i => i.id);
+  const timeSegmentIdsWithinGroup = timeSegmentGroup.timeSegments.map(i => i.timeSegmentId || i.id);
 
   // Figure out all time segment ids that are both in the time segment group and also in the
   // space. All spaces belong to the DEFAULT_TIME_SEGMENT_GROUP, which is why it's added manually.
