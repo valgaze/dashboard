@@ -12,6 +12,7 @@ import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar
 import InsightsSpaceHeader from '../insights-space-header/index';
 import FootTrafficCard from '../insights-space-detail-foot-traffic-card/index';
 import RawEventsCard from '../insights-space-detail-raw-events-card/index';
+import ErrorBar from '../error-bar/index';
 
 import DatePicker from '@density/ui-date-picker';
 
@@ -25,6 +26,8 @@ import {
 export function InsightsSpaceDaily({
   spaces,
   space,
+  timeSegmentGroups,
+  activeModal,
   onChangeSpaceFilter,
 }) {
   if (space) {
@@ -73,6 +76,11 @@ export function InsightsSpaceDaily({
         </InsightsFilterBarItem>
       </InsightsFilterBar>
 
+      <ErrorBar
+        message={spaces.error || timeSegmentGroups.error}
+        modalOpen={activeModal.name !== null}
+      />
+
       <InsightsSpaceHeader space={space} />
 
       <div className="insights-space-daily-container">
@@ -105,6 +113,7 @@ export default connect(state => {
   return {
     spaces: state.spaces,
     space: state.spaces.data.find(space => space.id === state.spaces.selected),
+    timeSegmentGroups: state.timeSegmentGroups,
     activeModal: state.activeModal,
   };
 }, dispatch => {

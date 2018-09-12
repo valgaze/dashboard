@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
 import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
@@ -271,9 +271,8 @@ export class InsightsSpaceList extends React.Component {
       })
 
     return <div className="insights-space-list">
-      {/* Show errors in the spaces collection. */}
       <ErrorBar
-        message={spaces.error || this.state.error}
+        message={spaces.error || timeSegmentGroups.error || this.state.error}
         modalOpen={activeModal.name !== null}
       />
 

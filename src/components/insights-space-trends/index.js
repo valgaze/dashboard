@@ -11,6 +11,7 @@ import Subnav, { SubnavItem } from '../subnav/index';
 import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar/index';
 import InsightsSpaceHeader from '../insights-space-header/index';
 import UtilizationCard from '../insights-space-detail-utilization-card/index';
+import ErrorBar from '../error-bar/index';
 
 import DailyMetricsCard from '../insights-space-detail-daily-metrics-card/index';
 
@@ -53,6 +54,8 @@ export function isOutsideRange(startISOTime, datePickerInput, day) {
 function InsightsSpaceTrends({
   spaces,
   space,
+  activeModal,
+  timeSegmentGroups,
   onChangeSpaceFilter,
 }) {
   if (space) {
@@ -125,6 +128,11 @@ function InsightsSpaceTrends({
         </InsightsFilterBarItem>
       </InsightsFilterBar>
 
+      <ErrorBar
+        message={spaces.error || timeSegmentGroups.error}
+        modalOpen={activeModal.name !== null}
+      />
+
       <InsightsSpaceHeader space={space} />
 
       <div className="insights-space-trends-container">
@@ -160,6 +168,7 @@ export default connect(state => {
     spaces: state.spaces,
     space: state.spaces.data.find(space => space.id === state.spaces.selected),
     activeModal: state.activeModal,
+    timeSegmentGroups: state.timeSegmentGroups,
   };
 }, dispatch => {
   return {
