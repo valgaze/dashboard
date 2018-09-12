@@ -347,7 +347,7 @@ export class AccountSetupDoorwayDetail extends React.Component {
               (Optional) How will you power the unit?
             </p>
             <RadioButton
-              text="Power over Ethernet (PoE)"
+              text="Power over Ethernet (803.2at PoE+)"
               checked={this.state.doorway.environment ? this.state.doorway.environment.powerType === POWER_OVER_ETHERNET : false}
               onChange={() => this.setState({
                 doorway: {
