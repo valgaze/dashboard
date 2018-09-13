@@ -13,6 +13,8 @@ function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
 
+import { DEFAULT_TIME_SEGMENT_GROUP, DEFAULT_TIME_SEGMENT } from '../../helpers/time-segments/index';
+
 describe('Insights space daily metrics chart', function() {
   afterEach(() => mockdate.reset());
 
@@ -221,7 +223,8 @@ describe('Insights space daily metrics chart', function() {
         space={space}
         startDate="2016-12-26T00:00:00-05:00"
         endDate="2017-01-01T00:00:00-05:00"
-        includeWeekends={true}
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Delay for data fetching result
@@ -246,7 +249,7 @@ describe('Insights space daily metrics chart', function() {
         {label: '01/01', value: 0},
       ]);
     });
-    it('should fetch entrance data wihout weekends for january 1st, 2017 and display it', async function() {
+    it('should fetch entrance data with a time segment for january 1st, 2017 and display it', async function() {
       const space = {
         id: 'spc_123',
         name: 'foo',
@@ -264,21 +267,6 @@ describe('Insights space daily metrics chart', function() {
           "next": null,
           "previous": null,
           "results": [
-            {
-              "timestamp": "2017-01-07T05:00:00Z",
-              "count": 9,
-              "interval": {
-                "start": "2017-01-07T05:00:00Z",
-                "end": "2017-01-08T04:59:59Z",
-                "analytics": {
-                  "min": 9,
-                  "max": 9,
-                  "events": 9,
-                  "entrances": 10,
-                  "exits": 1
-                }
-              }
-            },
             {
               "timestamp": "2017-01-06T05:00:00Z",
               "count": 9,
@@ -354,31 +342,25 @@ describe('Insights space daily metrics chart', function() {
                 }
               }
             },
-            {
-              "timestamp": "2017-01-01T05:00:00Z",
-              "count": 9,
-              "interval": {
-                "start": "2017-01-01T05:00:00Z",
-                "end": "2017-01-02T04:59:59Z",
-                "analytics": {
-                  "min": 9,
-                  "max": 9,
-                  "events": 0,
-                  "entrances": 0,
-                  "exits": 0
-                }
-              }
-            },
           ]
         }),
       });
+
+      // Create a custom time segment to inject into the component with a different id
+      // This time segment doesn't have weekends.
+      const customTimeSegmentGroup = { ...DEFAULT_TIME_SEGMENT_GROUP, id: 'tsg_custom' };
+      customTimeSegmentGroup.timeSegments[0] = {
+        ...DEFAULT_TIME_SEGMENT,
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      };
 
       // Render the component without weekends
       const component = mount(<DailyMetricsCard
         space={space}
         startDate="2016-12-26T00:00:00-05:00"
         endDate="2017-01-01T00:00:00-05:00"
-        includeWeekends={false}
+        timeSegmentGroup={customTimeSegmentGroup}
+        timeSegment={customTimeSegmentGroup.timeSegments[0]}
       />);
 
       // Delay for data fetching result
@@ -514,7 +496,8 @@ describe('Insights space daily metrics chart', function() {
         space={space}
         startDate="2017-09-08T00:00:00-05:00"
         endDate="2017-09-14T00:00:00-05:00"
-        includeWeekends={true}
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Wait for data to be fetched.
@@ -652,7 +635,8 @@ describe('Insights space daily metrics chart', function() {
         space={space}
         startDate="2017-09-08T00:00:00-05:00"
         endDate="2017-09-14T00:00:00-05:00"
-        includeWeekends={true}
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Wait for data to be fetched.
@@ -829,7 +813,8 @@ describe('Insights space daily metrics chart', function() {
     // Render the component
     const component = mount(<DailyMetricsCard
       space={space}
-      includeWeekends={true}
+      timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+      timeSegment={DEFAULT_TIME_SEGMENT}
     />);
 
     // Mock data for next data fetch
@@ -1108,6 +1093,8 @@ describe('Insights space daily metrics chart', function() {
       space={space}
       startDate="2017-01-01T00:00:00-05:00"
       endDate="2017-01-03T00:00:00-05:00"
+      timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+      timeSegment={DEFAULT_TIME_SEGMENT}
     />);
     await timeout(0);
 
@@ -1152,6 +1139,8 @@ describe('Insights space daily metrics chart', function() {
       space={space}
       startDate="2017-01-01T00:00:00-05:00"
       endDate="2017-01-20T00:00:00-05:00"
+      timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+      timeSegment={DEFAULT_TIME_SEGMENT}
     />);
     await timeout(0);
 

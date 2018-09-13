@@ -68,6 +68,7 @@
           "end_time": "{{end_time}}",
           "interval": "{{interval}}",
           "page_size": "{{page_size}}",
+          "time_segment_groups": "{{time_segment_groups}}",
           "page": "{{page}}",
           "order": "{{order}}"
         }
@@ -81,7 +82,7 @@
           "end_time": "{{end_time}}",
           "interval": "{{interval}}",
           "page_size": "{{page_size}}",
-          "time_segment_group_id": "{{time_segment_group_id}}",
+          "time_segment_groups": "{{time_segment_groups}}",
           "page": "{{page}}",
           "order": "{{order}}"
         }
@@ -93,6 +94,7 @@
         "qs": {
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}",
+          "time_segment_groups": "{{time_segment_groups}}",
           "doorway_id": "{{doorway_id}}",
           "direction": "{{direction}}",
           "page_size": "{{page_size}}",

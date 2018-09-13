@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { mount } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
@@ -8,6 +8,10 @@ import moment from 'moment';
 import 'moment-timezone';
 
 import FootTrafficCard from './index';
+import {
+  DEFAULT_TIME_SEGMENT_GROUP,
+  DEFAULT_TIME_SEGMENT,
+} from '../../helpers/time-segments/index';
 
 function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
@@ -68,7 +72,8 @@ describe('Insights space foot traffic hour chart', function() {
       const component = mount(<FootTrafficCard
         space={space}
         date="2017-01-01T00:00:00-05:00"
-        timeSegmentId="WHOLE_DAY"
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Wait for data to be fetched.
@@ -80,7 +85,7 @@ describe('Insights space foot traffic hour chart', function() {
       // On January 1st, the offset is NYC is 5 hours.
       const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
       assert.equal(requestParameters[1].qs.start_time, '2017-01-01T00:00:00-05:00');
-      assert.equal(requestParameters[1].qs.end_time, '2017-01-02T00:00:00-05:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T23:59:59-05:00');
     });
     it('should fetch data and display it during a different part of the year', async function() {
       const space = {
@@ -133,7 +138,8 @@ describe('Insights space foot traffic hour chart', function() {
       // Render the component
       const component = mount(<FootTrafficCard
         space={space}
-        timeSegmentId="WHOLE_DAY"
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Wait for data to be fetched.
@@ -145,7 +151,7 @@ describe('Insights space foot traffic hour chart', function() {
       // On January 1st, the offset is NYC is 4 hours.
       const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
       assert.equal(requestParameters[1].qs.start_time, '2017-09-14T00:00:00-04:00');
-      assert.equal(requestParameters[1].qs.end_time, '2017-09-15T00:00:00-04:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-09-14T23:59:59-04:00');
     });
     it('should fetch data and display it in a different time zone', async function() {
       const space = {
@@ -198,7 +204,8 @@ describe('Insights space foot traffic hour chart', function() {
       // Render the component
       const component = mount(<FootTrafficCard
         space={space}
-        timeSegmentId="WHOLE_DAY"
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Wait for data to be fetched.
@@ -210,7 +217,7 @@ describe('Insights space foot traffic hour chart', function() {
       // On January 1st, the offset is NYC is 5 hours.
       const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
       assert.equal(requestParameters[1].qs.start_time, '2016-12-31T00:00:00-08:00');
-      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T00:00:00-08:00');
+      assert.equal(requestParameters[1].qs.end_time, '2016-12-31T23:59:59-08:00');
     });
     it('should fetch data and display it, only including data in the time segment', async function() {
       const space = {
@@ -259,11 +266,15 @@ describe('Insights space foot traffic hour chart', function() {
         }),
       });
 
+      // Create a custom time segment to inject into the component with a different id
+      const customTimeSegmentGroup = { ...DEFAULT_TIME_SEGMENT, id: 'tsg_custom' };
+
       // Render the component
       const component = mount(<FootTrafficCard
         space={space}
         date="2017-01-01T00:00:00-05:00"
-        timeSegmentId="AFTERNOON"
+        timeSegmentGroup={customTimeSegmentGroup}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Wait for data to be fetched.
@@ -272,10 +283,12 @@ describe('Insights space foot traffic hour chart', function() {
       const requestParameters = global.fetch.getCall(0).args;
 
       // Make sure the request was correctly formulated for the `America/New_York` time zone.
-      // On January 1st, the offset is NYC is 5 hours.
+      // On January 1st, the offset is NYC is 5 hours. ALso, ensure that the correct time segment
+      // group was passed.
       const hoursOffsetFromUtc = parseInt(moment.tz(space.timeZone).format('Z').split(':')[0], 10);
-      assert.equal(requestParameters[1].qs.start_time, '2017-01-01T12:00:00-05:00'); // 12pm
-      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T18:00:00-05:00'); // 6pm
+      assert.equal(requestParameters[1].qs.start_time, '2017-01-01T00:00:00-05:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T23:59:59-05:00');
+      assert.equal(requestParameters[1].qs.time_segment_groups, customTimeSegmentGroup.id);
     });
   });
 
@@ -335,7 +348,8 @@ describe('Insights space foot traffic hour chart', function() {
       const component = mount(<FootTrafficCard
         space={space}
         date="2017-01-01T00:00:00-05:00"
-        timeSegmentId="WHOLE_DAY"
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Wait for data to be fetched.
@@ -361,7 +375,8 @@ describe('Insights space foot traffic hour chart', function() {
       // Render the component
       const component = mount(<FootTrafficCard
         space={space}
-        timeSegmentId="WHOLE_DAY"
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Don't wait for loading to happen!
@@ -387,7 +402,8 @@ describe('Insights space foot traffic hour chart', function() {
       // Render the component
       const component = mount(<FootTrafficCard
         space={space}
-        timeSegmentId="WHOLE_DAY"
+        timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+        timeSegment={DEFAULT_TIME_SEGMENT}
       />);
 
       // Don't wait for loading to happen!

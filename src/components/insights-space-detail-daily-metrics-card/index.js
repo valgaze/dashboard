@@ -30,13 +30,13 @@ const ONE_MINUTE_IN_MS = 60 * 1000,
       ONE_DAY_IN_MS = ONE_HOUR_IN_MS * 60;
 
 const DAY_TO_INDEX = {
-  'Monday': 0,
-  'Tuesday': 1,
-  'Wednesday': 2,
-  'Thursday': 3,
-  'Friday': 4,
-  'Saturday': 5,
-  'Sunday': 6,
+  'Monday': 1,
+  'Tuesday': 2,
+  'Wednesday': 3,
+  'Thursday': 4,
+  'Friday': 5,
+  'Saturday': 6,
+  'Sunday': 0,
 };
 
 const LOADING = 'LOADING',
@@ -98,7 +98,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
       const data = await core.spaces.counts({
         id: space.id,
         start_time: startTime.format(),
-        time_segment_group_id: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
+        time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
 
         // Add a day to the end of the range to return a final bar of the data for the uncompleted
         // current day.

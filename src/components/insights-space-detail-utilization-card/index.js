@@ -39,13 +39,13 @@ const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
 const DAY_TO_INDEX = {
-  'Monday': 0,
-  'Tuesday': 1,
-  'Wednesday': 2,
-  'Thursday': 3,
-  'Friday': 4,
-  'Saturday': 5,
-  'Sunday': 6,
+  'Monday': 1,
+  'Tuesday': 2,
+  'Wednesday': 3,
+  'Thursday': 4,
+  'Friday': 5,
+  'Saturday': 6,
+  'Sunday': 0,
 };
 
 export const LOADING = 'LOADING',
@@ -97,7 +97,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
         start_time: this.state.startDate,
         end_time: this.state.endDate,
-        time_segment_group_id: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
+        time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
 
         interval: function(timeSegmentDurationInSeconds) {
           if (timeSegmentDurationInSeconds > 4 * ONE_HOUR_IN_SECONDS) {

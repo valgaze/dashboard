@@ -59,7 +59,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         id: space.id,
         start_time: day.startOf('day').format(),
         end_time: day.endOf('day').format(),
-        time_segment_group_id: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
+        time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
         page: page,
         page_size: pageSize,
         order: 'desc',

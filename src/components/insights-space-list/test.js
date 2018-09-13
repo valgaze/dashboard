@@ -12,6 +12,35 @@ function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
 
+const timeSegmentGroups = {
+  data: [
+    {
+      "id": "tsg_575378014376820745",
+      "name": "Lunch Group",
+      "timeSegments": [
+        {
+          "timeSegmentId": "tsm_575377905756930055",
+          "name": "Lunchtime"
+        },
+        {
+          "timeSegmentId": "tsm_575377670754271236",
+          "name": "New Time Segment Name"
+        }
+      ]
+    },
+    {
+      "id": "tsg_575377720670683141",
+      "name": "New Time Seg Group 2",
+      "timeSegments": [
+        {
+          "timeSegmentId": "tsm_575377670754271236",
+          "name": "New Time Segment Name"
+        }
+      ]
+    },
+  ],
+};
+
 describe('insights space list', function() {
   // Stub out the data fetching api call. Use the same data for each test for now and if this needs
   // to change later I can address then.
@@ -75,6 +104,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Ensure that a single space was rendered
@@ -117,6 +147,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Ensure that a single space was rendered
@@ -150,6 +181,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Wait for the promise to reject.
@@ -181,6 +213,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     const instance = component.instance();
@@ -222,6 +255,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Set capacities to known values. This is important to make sure the sorting order tests work
@@ -263,6 +297,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Put the component into a loading state
@@ -292,6 +327,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Then, click on the "Include weekends" switch
@@ -340,6 +376,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // Ensure that two spaces were rendered
@@ -385,6 +422,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // Ensure that three spaces were rendered
@@ -443,6 +481,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // Ensure that three spaces were rendered
@@ -517,6 +556,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // Set capacities to known values. This is important to make sure the sorting order tests work
@@ -582,6 +622,7 @@ describe('insights space list', function() {
           data: [SPACE],
           events: {},
         }}
+        timeSegmentGroups={timeSegmentGroups}
         activeModal={{name: null, data: null}}
         onOpenModal={onOpenModal}
         onSetCapacity={onSetCapacity}
@@ -641,6 +682,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // For this test, whether the utilization data has been loaded or not is not important. So, to
@@ -672,6 +714,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // For this test, whether the utilization data has been loaded or not is not important. So, to
@@ -711,6 +754,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // For this test, whether the utilization data has been loaded or not is not important. So, to
@@ -742,6 +786,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // For this test, whether the utilization data has been loaded or not is not important. So, to
@@ -792,6 +837,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // For this test, whether the utilization data has been loaded or not is not important. So, to
@@ -842,6 +888,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // For this test, whether the utilization data has been loaded or not is not important. So, to
@@ -892,6 +939,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // For this test, whether the utilization data has been loaded or not is not important. So, to
@@ -942,6 +990,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // For this test, whether the utilization data has been loaded or not is not important. So, to
@@ -975,6 +1024,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Add a couple empty count buckets
