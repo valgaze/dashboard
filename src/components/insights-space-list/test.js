@@ -1,10 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import { mount, shallow } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
 import moment from 'moment';
 
 import { InsightsSpaceList } from './index';
+
+import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
 
 const MDASH = String.fromCharCode(8212);
 
@@ -668,7 +670,7 @@ describe('insights space list', function() {
     });
   });
 
-  describe.skip('rendering phrases correctly', function() {
+  describe('rendering phrases correctly', function() {
     it(`should render phrase properly when a number of unfiltered spaces are shown`, async function() {
       // Render the component
       const component = mount(<InsightsSpaceList
@@ -682,6 +684,8 @@ describe('insights space list', function() {
               currentCount: 2,
               capacity: 5,
               timeZone: 'America/New_York',
+              timeSegmentGroups: [],
+              timeSegments: [],
             },
             {
               id: 'spc_2',
@@ -690,6 +694,8 @@ describe('insights space list', function() {
               currentCount: 2,
               capacity: 5,
               timeZone: 'America/New_York',
+              timeSegmentGroups: [],
+              timeSegments: [],
             },
           ],
           events: {},
@@ -698,15 +704,21 @@ describe('insights space list', function() {
         timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space unfiltered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'Your 2 spaces have seen 0 visitors during open hours this past week'
+        `Your 2 spaces have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when a simgle unfiltered space is shown`, async function() {
@@ -730,15 +742,21 @@ describe('insights space list', function() {
         timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 1-space unfiltered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'Your 1 space has seen 0 visitors during open hours this past week'
+        `Your 1 space has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when two filtered spaces are shown`, async function() {
@@ -770,15 +788,21 @@ describe('insights space list', function() {
         timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'These 2 spaces have seen 0 visitors during open hours this past week'
+        `These 2 spaces have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when a single filtered space is shown`, async function() {
@@ -802,15 +826,21 @@ describe('insights space list', function() {
         timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 1-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'This 1 space has seen 0 visitors during open hours this past week'
+        `This 1 space has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when two filtered spaces are shown and a floor is picked`, async function() {
@@ -853,15 +883,21 @@ describe('insights space list', function() {
         timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'These 2 spaces on My Floor have seen 0 visitors during open hours this past week'
+        `These 2 spaces on My Floor have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when two filtered spaces are shown and a building is picked`, async function() {
@@ -904,15 +940,21 @@ describe('insights space list', function() {
         timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'These 2 spaces in My Building have seen 0 visitors during open hours this past week'
+        `These 2 spaces in My Building have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when a single filtered space is shown and a campus is picked`, async function() {
@@ -955,15 +997,21 @@ describe('insights space list', function() {
         timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'This 1 space in My Campus has seen 0 visitors during open hours this past week'
+        `This 1 space in My Campus has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly a whole building is picked`, async function() {
@@ -1006,15 +1054,21 @@ describe('insights space list', function() {
         timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'Your 2 spaces in My Building have seen 0 visitors during open hours this past week'
+        `Your 2 spaces in My Building have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
   });
