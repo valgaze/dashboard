@@ -47,11 +47,14 @@ export function findTimeSegmentInTimeSegmentGroupForSpace(timeSegmentGroup, spac
 
 // Moment only supports parsing dates. So, in order to support handling time ranges, we need to
 // write a bit of custom parsing logic for the times returned from the core api.
+//
+// This code might blow up on leap years or something like that where the length of a day slightly
+// changes (since we're using a hard-coded initial start date value.)
 const TIME_SEGMENT_REGEX = /^([0-9]+):([0-9]+):([0-9]+)$/;
 export function parseTimeInTimeSegmentToSeconds(value) {
   const match = TIME_SEGMENT_REGEX.exec(value);
   if (match) {
-    const now = moment.utc().startOf('day');
+    const now = moment.utc('2014-05-07T00:00:00Z' /* density epoch */).startOf('day');
     const withTime = now.clone()
       .add(match[1], 'hours')
       .add(match[2], 'minutes')
