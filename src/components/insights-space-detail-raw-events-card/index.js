@@ -183,7 +183,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           </InfoPopup>
           <span
             className={classnames('insights-space-detail-raw-events-card-header-refresh', {
-              disabled: view !== VISIBLE,
+              disabled: !(view === VISIBLE || view === EMPTY),
             })}
             onClick={() => this.setState({
               view: LOADING,
