@@ -290,10 +290,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         An Average Day
         <InfoPopup horizontalIconOffset={8}>
           <p>
-            An average daily breakdown of utilization for time segment {timeSegmentGroup.name} over
-            the time period of{' '}
-            {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-            {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
+            An average daily breakdown of utilization for
+            time segment <strong>{timeSegmentGroup.name}</strong> over the time period
+            of <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>
+            {' - '}
+            <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>.
           </p>
 
           <p>

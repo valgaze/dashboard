@@ -195,28 +195,47 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
         <Card>
           {view === LOADING ? <CardLoading indeterminate /> : null }
 
-          <CardHeader>
-            Daily Metrics
-            <InfoPopup horizontalIconOffset={8}>
-              Visitation metrics for time segment {timeSegmentGroup.name}, grouped by day over {' '}
-              {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-              {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}.
+          <CardHeader className="insights-space-detail-daily-metrics-card-header">
+            <div className="insights-space-detail-daily-metrics-card-title">
+              Daily Metrics
+              <InfoPopup horizontalIconOffset={8}>
+                <p className="insights-space-detail-daily-metrics-card-popup-p">
+                  Visitation metrics for time segment <strong>{timeSegmentGroup.name}</strong>,{' '}
+                  grouped by day over{' '}
+                  <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>
+                  {' - '}
+                  <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>.
+                </p>
 
-              Use these metrics to understand the visitation of your space, and how it trends
-              over time.
+                <p className="insights-space-detail-daily-metrics-card-popup-p">
+                  Use these metrics to understand the visitation of your space, and how it trends
+                  over time.
+                </p>
 
-              <ul className="insights-space-detail-daily-metrics-card-popup-ul">
-                <li>
-                  <strong>Entrances</strong>: Total number of events from people entering the space.
-                </li>
-                <li>
-                  <strong>Exits</strong>: Total number of events from people exiting the space.
-                </li>
-                <li>
-                  <strong>Peak Counts</strong>: Peak count at any given point in time over the course of the day.
-                </li>
-              </ul>
-            </InfoPopup>
+                <ul className="insights-space-detail-daily-metrics-card-popup-ul">
+                  <li>
+                    <strong>Entrances</strong>: Total number of events from people entering the space.
+                  </li>
+                  <li>
+                    <strong>Exits</strong>: Total number of events from people exiting the space.
+                  </li>
+                  <li>
+                    <strong>Peak Counts</strong>: Peak count at any given point in time over the course of the day.
+                  </li>
+                </ul>
+              </InfoPopup>
+              <span
+                className={classnames('insights-space-detail-daily-metrics-card-refresh mid', {
+                  disabled: view !== VISIBLE,
+                })}
+                onClick={() => this.setState({
+                  view: LOADING,
+                  data: null,
+                }, () => this.fetchData())}
+              >
+                <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+              </span>
+            </div>
             <div className="insights-space-detail-daily-metrics-card-metric-picker">
               <InputBox
                 type="select"
@@ -238,7 +257,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
               />
             </div>
             <span
-              className={classnames('insights-space-detail-daily-metrics-card-refresh', {
+              className={classnames('insights-space-detail-daily-metrics-card-refresh end', {
                 disabled: view !== VISIBLE,
               })}
               onClick={() => this.setState({
