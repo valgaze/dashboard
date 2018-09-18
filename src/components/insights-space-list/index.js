@@ -154,16 +154,15 @@ export class InsightsSpaceList extends React.Component {
           ).tz(space.timeZone);
         }
       }
-      const spaceCounts = { ...this.state.spaceCounts, ...data };
 
       // Utilization calculation.
       // For each space, group counts into buckets, each a single day long.
-      const spaceUtilizations = Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
+      const spaceUtilizations = Object.keys(data).reduce((acc, spaceId, ct) => {
         // If a space doesn't have a capacity, don't use it for calculating utilization.
         if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
 
         const space = spaces.data.find(i => i.id === spaceId);
-        const counts = spaceCounts[spaceId];
+        const counts = data[spaceId];
 
         const groups = groupCountsByDay(counts, space.timeZone);
         const result = spaceUtilizationPerGroup(space, groups);
@@ -181,7 +180,7 @@ export class InsightsSpaceList extends React.Component {
       this.setState({
         view: VISIBLE,
 
-        spaceCounts,
+        spaceCounts: data,
         spaceUtilizations,
       });
     } catch (error) {
