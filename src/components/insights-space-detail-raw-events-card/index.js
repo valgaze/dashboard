@@ -170,13 +170,13 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
         <CardHeader>
           Daily Raw Events
           <InfoPopup horizontalIconOffset={8}>
-            <p>
+            <p className="insights-space-detail-raw-events-card-popup-p">
               All events that the doorways within this space have seen over{' '}
-              {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')} during{' '}
-              {timeSegmentGroup.name}.
+              <strong>{moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}</strong> during{' '}
+              the time segment <strong>{timeSegmentGroup.name}</strong>.
             </p>
 
-            <p>
+            <p className="insights-space-detail-raw-events-card-popup-p">
               Head to the <a href={`#/spaces/insights/${space.id}/data-export`}>data export</a> page
               to download multiple days worth of event data in csv format.
             </p>

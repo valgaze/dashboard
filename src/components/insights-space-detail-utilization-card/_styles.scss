@@ -10,6 +10,12 @@ $insights-space-detail-card-header-breakpoint: 930px;
   flex-direction: row;
 }
 
+.insights-space-detail-utilization-card-popup-p {
+  line-height: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 // Refresh icon to refetch data
 .insights-space-detail-utilization-card-header-refresh {
   margin-left: auto;

@@ -144,13 +144,14 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         <CardHeader className="insights-space-detail-foot-traffic-card-header">
           Foot Traffic
           <InfoPopup horizontalIconOffset={8}>
-            <p>
-              Count over time for {timeSegmentGroup.name} over
-              the time period of {moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}, queried
+            <p className="insights-space-detail-foot-traffic-card-popup-p">
+              Count over time for <strong>{timeSegmentGroup.name}</strong> over
+              the time period of{' '}
+              <strong>{moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}</strong>, queried
               in 5 minute intervals.
             </p>
 
-            <p>
+            <p className="insights-space-detail-foot-traffic-card-popup-p">
               Use this chart to understand visitation over the course of a day.
             </p>
           </InfoPopup>

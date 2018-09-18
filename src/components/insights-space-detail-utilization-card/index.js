@@ -38,14 +38,14 @@ const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
-const DAY_TO_INDEX = {
-  'Monday': 1,
-  'Tuesday': 2,
-  'Wednesday': 3,
-  'Thursday': 4,
-  'Friday': 5,
-  'Saturday': 6,
-  'Sunday': 0,
+const DAY_TO_INDEX_IN_UTILIZAITIONS_BY_DAY = {
+  'Monday': 0,
+  'Tuesday': 1,
+  'Wednesday': 2,
+  'Thursday': 3,
+  'Friday': 4,
+  'Saturday': 5,
+  'Sunday': 6,
 };
 
 export const LOADING = 'LOADING',
@@ -254,19 +254,19 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       <CardHeader>
         An Average Week
         <InfoPopup horizontalIconOffset={8}>
-          <p>
-            Utilization for time segment {timeSegmentGroup.name} over the
-            time period of {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-            {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}, grouped and averaged
+          <p className="insights-space-detail-utilization-card-popup-p">
+            Utilization for time segment <strong>{timeSegmentGroup.name}</strong> over the
+            time period of <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong> -{' '}
+            <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>, grouped and averaged
             by day of week.
           </p>
 
-          <p>
+          <p className="insights-space-detail-utilization-card-popup-p">
             Use this metric to understand your space's average utilization, as well as how
             utilization varies from day to day. 
           </p>
 
-          <p>
+          <p className="insights-space-detail-utilization-card-popup-p">
             Utilization is calculated by dividing visitors by space capacity (with a granularity
             of 10 minute intervals). Does not include incomplete days of data.
           </p>
@@ -289,7 +289,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       <CardHeader>
         An Average Day
         <InfoPopup horizontalIconOffset={8}>
-          <p>
+          <p className="insights-space-detail-utilization-card-popup-p">
             An average daily breakdown of utilization for
             time segment <strong>{timeSegmentGroup.name}</strong> over the time period
             of <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>
@@ -297,12 +297,12 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>.
           </p>
 
-          <p>
+          <p className="insights-space-detail-utilization-card-popup-p">
             Use this to understand average peak and trends in utilization over the course of a
             day. 
           </p>
 
-          <p>
+          <p className="insights-space-detail-utilization-card-popup-p">
             Utilization is calculated by dividing visitors by the space's capacity (with a
             granularity of 10 minute intervals). Utilization is then averaged across all days
             within the date range. Does not include incomplete days of data.
@@ -437,7 +437,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
                 </div>
                 {timeSegment.days.map(day => {
-                  const index = DAY_TO_INDEX[day];
+                  const index = DAY_TO_INDEX_IN_UTILIZAITIONS_BY_DAY[day];
                   return <div className="insights-space-detail-utilization-card-grid-row" key={day}>
                     <div className="insights-space-detail-utilization-card-grid-item">{day}</div>
                     <div className="insights-space-detail-utilization-card-grid-item">
