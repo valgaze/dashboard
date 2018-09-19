@@ -9,7 +9,7 @@ export default function WebhookCard({
   onClickEdit,
 }) {
   return <Card className="webhook-card">
-    <CardHeader size="small">
+    <CardHeader size="small" className="webhook-card-header">
       <span className="webhook-card-header-text">{webhook.name || '(no name)'}</span>
 
       <ModalHeaderActionButton
