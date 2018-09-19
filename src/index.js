@@ -5,6 +5,7 @@ import './built-css/styles.css';
 import { core, accounts, setStore as setStoreInApiClientModule } from './client';
 import ReactGA from 'react-ga';
 import moment from 'moment';
+import queryString from 'qs';
 
 import userSet from './actions/user/set';
 
@@ -106,12 +107,33 @@ if (process.env.REACT_APP_GA_TRACKING_CODE) {
   ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_CODE);
 }
 function trackHashChange() {
-  // Mixpanel: track url change
-  mixpanelTrack('Pageview', { url: window.location.hash });
+  // Any query parameters in the below list will be sent to google analytics and mixpanel
+  const qs = queryString.parse(window.location.search);
+  const analyticsParameters = [
+    'ref',
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_content',
+  ].reduce((acc, tag) => {
+    const value = qs[`?${tag}`] || qs[tag];
+    if (value) {
+      return {...acc, [tag]: value};
+    } else {
+      return acc;
+    }
+  }, {});
+
+  // Mixpanel: track url chage
+  mixpanelTrack('Pageview', {
+    ...analyticsParameters,
+    url: window.location.hash,
+  });
 
   // Google analytics: track page view
   if (process.env.REACT_APP_GA_TRACKING_CODE) {
     ReactGA.pageview(window.location.hash);
+    ReactGA.set(analyticsParameters);
   }
 };
 window.addEventListener('hashchange', trackHashChange);
