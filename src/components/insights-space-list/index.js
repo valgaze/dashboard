@@ -58,6 +58,7 @@ export class InsightsSpaceList extends React.Component {
       view: LOADING,
       error: null,
 
+      spaceListHash: this.calculateSpaceListHash(this.props.spaces),
       spaceCounts: {},
       spaceUtilizations: {},
 
@@ -69,37 +70,19 @@ export class InsightsSpaceList extends React.Component {
       dataDuration: DATA_DURATION_WEEK,
     };
 
-    this.fetchDataLock = false;
-
-    this.fetchData();
+    if (this.props.spaces && this.props.spaces.data.length > 0) {
+      this.fetchData();
+    }
   }
 
-  async fetchData(spaces=this.props.spaces) {
-    if (!(spaces && Array.isArray(spaces.data))) {
-      return
-    }
-
-    if (this.fetchDataLock) {
-      return;
-    }
-
-    // Only allow one data fetching attempt to happen at once.
-    this.fetchDataLock = true;
-
-    const {
-      timeSegmentGroupId,
-    } = this.state;
+  async fetchData() {
+    const { spaces } = this.props;
+    const { timeSegmentGroupId } = this.state;
 
     try {
       const spacesToFetch = spaces.data
         // Remove all spaces that have already had their counts fetched.
         .filter(space => typeof this.state.spaceCounts[space.id] === 'undefined')
-
-      // Bail early if there is no work to do.
-      if (spacesToFetch.length === 0) {
-        this.fetchDataLock = false;
-        return
-      }
 
       // Store if each space has a capacity and therefore can be used to calculate utilization.
       const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
@@ -128,6 +111,9 @@ export class InsightsSpaceList extends React.Component {
         startDate = moment.utc().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss');
       }
 
+      // https://stackoverflow.com/a/47250621/4115328
+      this.abortController = new window.AbortController();
+
       // Get all counts within that last full week. Request as many pages as required.
       const data = await fetchAllPages(page => {
         return core.spaces.allCounts({
@@ -137,8 +123,15 @@ export class InsightsSpaceList extends React.Component {
           page,
           page_size: 1000,
           time_segment_groups: timeSegmentGroupId === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroupId,
+
+          // Pass this abortcontroller to the fetch call so that we can cancel the call if it's in
+          // progress and the component unmounts.
+          raw: { signal: this.abortController.signal },
         });
       });
+
+      // Requests have completed, so there are no requests to abort if the component unmounts.
+      delete this.abortController;
 
       // Add a `timestampAsMoment` property which converts the timestamp into a moment. This is so
       // that this expensive step doesn't have to be performed on each component render in the
@@ -173,10 +166,6 @@ export class InsightsSpaceList extends React.Component {
         };
       }, {});
 
-      // NOTE: This is kinda an antipattern, but cancelling fetch calls looks to be a bit involved, so
-      // taking the easy solution for now.
-      if (!this.mounted) { return; }
-
       this.setState({
         view: VISIBLE,
 
@@ -184,23 +173,42 @@ export class InsightsSpaceList extends React.Component {
         spaceUtilizations,
       });
     } catch (error) {
-      // NOTE: This is kinda an antipattern, but cancelling fetch calls looks to be a bit involved, so
-      // taking the easy solution for now.
-      if (!this.mounted) { return; }
+      if (error.name === 'AbortError') {
+        // Request was aborted, probably because the component was unmounted.
+        return;
+      }
 
       // Something went wrong. Update the state of the component such that it shows the error in the
       // error bar.
       this.setState({view: ERROR, error: `Could not fetch space counts: ${error.message}`});
     }
-
-    this.fetchDataLock = false;
   }
 
-  componentDidMount() { this.mounted = true; }
-  componentWillUnmount() { this.mounted = false; }
+  // When the component is unmounted, cancel any requests that are currently being processed.
+  componentWillUnmount() {
+    if (this.abortController) {
+      this.abortController.abort();
+    }
+  }
 
-  componentWillReceiveProps(nextProps) {
-    this.fetchData(nextProps.spaces);
+  // Given a value of the space collection, return a unique value corresponding to the number and id
+  // of spaces contained within. This value can be compared with a future-ly calculated value to
+  // determine if the number or ids of spaces in the collection have changed.
+  calculateSpaceListHash(spaces) {
+    if (spaces && spaces.data) {
+      return spaces.data.map(i => i.id).join(',');
+    } else {
+      return '';
+    }
+  }
+
+  componentWillReceiveProps({spaces}) {
+    const newSpaceListHash = this.calculateSpaceListHash(spaces);
+    if (this.state.spaceListHash !== newSpaceListHash) {
+      this.setState({spaceListHash: newSpaceListHash}, () => {
+        this.fetchData();
+      });
+    }
   }
 
   calculateTotalNumberOfIngressesForSpaces(spaces=this.props.spaces.data) {
