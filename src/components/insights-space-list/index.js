@@ -112,7 +112,9 @@ export class InsightsSpaceList extends React.Component {
       }
 
       // https://stackoverflow.com/a/47250621/4115328
-      this.abortController = new window.AbortController();
+      if (window.AbortController) {
+        this.abortController = new window.AbortController();
+      }
 
       // Get all counts within that last full week. Request as many pages as required.
       const data = await fetchAllPages(page => {
@@ -126,7 +128,7 @@ export class InsightsSpaceList extends React.Component {
 
           // Pass this abortcontroller to the fetch call so that we can cancel the call if it's in
           // progress and the component unmounts.
-          raw: { signal: this.abortController.signal },
+          raw: { signal: this.abortController ? this.abortController.signal : undefined },
         });
       });
 

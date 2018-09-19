@@ -199,48 +199,6 @@ describe('insights space list', function() {
     assert.equal(component.find('.insights-space-list-time-segment-selector > .disabled').length, 1);
     assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
   });
-  it('should only ever have one data fetching operation going at once', async function() {
-    // Render the component
-    const component = shallow(<InsightsSpaceList
-      spaces={{
-        filters: {search: ''},
-        data: [
-          {
-            id: 'spc_1',
-            spaceType: 'space',
-            name: 'My Space',
-            currentCount: 2,
-            capacity: null, /* no capacity */
-            timeZone: 'America/New_York',
-          },
-        ],
-        events: {},
-      }}
-      activeModal={{name: null, data: null}}
-      timeSegmentGroups={timeSegmentGroups}
-    />);
-
-    const instance = component.instance();
-
-    // Start the data fetching
-    instance.fetchData();
-
-    // Verify that the data fetching lock is on
-    assert.equal(instance.fetchDataLock, true);
-
-    // Also verify that fetch has been called.
-    assert.equal(global.fetch.callCount, 1);
-
-    // Fetch data again.
-    instance.fetchData();
-
-    // Verify that the data fetching lock is still on
-    assert.equal(instance.fetchDataLock, true);
-
-    // And that fetch hasn't been called again (in other words, the second `fetchData` call was a
-    // noop)
-    assert.equal(global.fetch.callCount, 1);
-  });
   it('should ensure that a utilization bar that is over 100% only ever renders at 100% (and never overflows)', async function() {
     // Render the component
     const component = mount(<InsightsSpaceList
