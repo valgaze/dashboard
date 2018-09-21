@@ -139,8 +139,8 @@ function InsightsSpaceTrends({
             // common ranges functionality
             commonRanges={commonRanges}
             onSelectCommonRange={({startDate, endDate}) => {
-              onChangeSpaceFilter('startDate', startDate);
-              onChangeSpaceFilter('endDate', endDate);
+              onChangeSpaceFilter('startDate', startDate.format());
+              onChangeSpaceFilter('endDate', endDate.format());
             }}
           />
         </InsightsFilterBarItem>
