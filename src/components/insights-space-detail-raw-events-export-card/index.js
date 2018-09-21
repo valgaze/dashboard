@@ -40,7 +40,7 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
     try {
       const previewData = await core.spaces.csvPreview({
         base: core.config().core.replace('v2', 'v1'),
-        id: space.id,
+        space_id: space.id,
         start_time: startDate.format(),
         end_time: endDate.format(),
         page: 1,
@@ -89,7 +89,7 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
     try {
       const csv = await core.spaces.csv({
         base: core.config().core.replace('v2', 'v1'),
-        id: space.id,
+        space_id: space.id,
         start_time: startDate.format(),
         end_time: endDate.format(),
         page: 1,
