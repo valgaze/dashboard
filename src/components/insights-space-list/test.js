@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { mount, shallow } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
@@ -6,11 +6,42 @@ import moment from 'moment';
 
 import { InsightsSpaceList } from './index';
 
+import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
+
 const MDASH = String.fromCharCode(8212);
 
 function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
+
+const timeSegmentGroups = {
+  data: [
+    {
+      "id": "tsg_575378014376820745",
+      "name": "Lunch Group",
+      "timeSegments": [
+        {
+          "timeSegmentId": "tsm_575377905756930055",
+          "name": "Lunchtime"
+        },
+        {
+          "timeSegmentId": "tsm_575377670754271236",
+          "name": "New Time Segment Name"
+        }
+      ]
+    },
+    {
+      "id": "tsg_575377720670683141",
+      "name": "New Time Seg Group 2",
+      "timeSegments": [
+        {
+          "timeSegmentId": "tsm_575377670754271236",
+          "name": "New Time Segment Name"
+        }
+      ]
+    },
+  ],
+};
 
 describe('insights space list', function() {
   // Stub out the data fetching api call. Use the same data for each test for now and if this needs
@@ -23,35 +54,37 @@ describe('insights space list', function() {
       json: () => Promise.resolve({
         total: 3,
         next: null,
-        results: [
-          {
-            count: 0,
-            interval: {
-              start: "2017-01-01T03:55:00Z",
-              end: "2017-01-01T03:59:59Z",
-              analytics: {min: 0, max: 0},
+        results: {
+          spc_1: [
+            {
+              count: 0,
+              interval: {
+                start: "2017-01-01T03:55:00Z",
+                end: "2017-01-01T03:59:59Z",
+                analytics: {min: 0, max: 0},
+              },
+              timestamp: "2017-01-01T03:55:00Z",
             },
-            timestamp: "2017-01-01T03:55:00Z",
-          },
-          {
-            count: 1,
-            interval: {
-              start: "2017-01-01T04:00:00Z",
-              end: "2017-01-01T04:05:00Z",
-              analytics: {min: 0, max: 1},
+            {
+              count: 1,
+              interval: {
+                start: "2017-01-01T04:00:00Z",
+                end: "2017-01-01T04:05:00Z",
+                analytics: {min: 0, max: 1},
+              },
+              timestamp: "2017-01-01T04:00:00Z",
             },
-            timestamp: "2017-01-01T04:00:00Z",
-          },
-          {
-            count: 2,
-            interval: {
-              start: "2017-01-01T04:05:00Z",
-              end: "2017-01-01T04:10:00Z",
-              analytics: {min: 0, max: 2},
+            {
+              count: 2,
+              interval: {
+                start: "2017-01-01T04:05:00Z",
+                end: "2017-01-01T04:10:00Z",
+                analytics: {min: 0, max: 2},
+              },
+              timestamp: "2017-01-01T04:00:00Z",
             },
-            timestamp: "2017-01-01T04:00:00Z",
-          },
-        ],
+          ],
+        },
       }),
     });
   });
@@ -75,6 +108,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Ensure that a single space was rendered
@@ -117,6 +151,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Ensure that a single space was rendered
@@ -150,6 +185,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Wait for the promise to reject.
@@ -162,47 +198,6 @@ describe('insights space list', function() {
     assert.equal(component.find('.insights-space-list-search-box').props().disabled, true);
     assert.equal(component.find('.insights-space-list-time-segment-selector > .disabled').length, 1);
     assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
-  });
-  it('should only ever have one data fetching operation going at once', async function() {
-    // Render the component
-    const component = shallow(<InsightsSpaceList
-      spaces={{
-        filters: {search: ''},
-        data: [
-          {
-            id: 'spc_1',
-            spaceType: 'space',
-            name: 'My Space',
-            currentCount: 2,
-            capacity: null, /* no capacity */
-            timeZone: 'America/New_York',
-          },
-        ],
-        events: {},
-      }}
-      activeModal={{name: null, data: null}}
-    />);
-
-    const instance = component.instance();
-
-    // Start the data fetching
-    instance.fetchData();
-
-    // Verify that the data fetching lock is on
-    assert.equal(instance.fetchDataLock, true);
-
-    // Also verify that fetch has been called.
-    assert.equal(global.fetch.callCount, 1);
-
-    // Fetch data again.
-    instance.fetchData();
-
-    // Verify that the data fetching lock is still on
-    assert.equal(instance.fetchDataLock, true);
-
-    // And that fetch hasn't been called again (in other words, the second `fetchData` call was a
-    // noop)
-    assert.equal(global.fetch.callCount, 1);
   });
   it('should ensure that a utilization bar that is over 100% only ever renders at 100% (and never overflows)', async function() {
     // Render the component
@@ -222,6 +217,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Set capacities to known values. This is important to make sure the sorting order tests work
@@ -263,6 +259,7 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Put the component into a loading state
@@ -274,7 +271,7 @@ describe('insights space list', function() {
     assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
   });
 
-  it('should allow adjustment of the utilization calculation to take weekends into account', async function() {
+  it('should allow adjustment of the utilization calculation to use a different time segment', async function() {
     // Render the component
     const component = mount(<InsightsSpaceList
       spaces={{
@@ -292,17 +289,29 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
-    // Then, click on the "Include weekends" switch
-    const includeWeekendsSwitch = component.find('.insights-space-list-card-body-header-weekends Switch');
-    includeWeekendsSwitch.props().onChange();
+    await timeout(100);
 
-    // Verify that clicking the switch adjusted the `includeWeekends` property
-    assert.equal(component.state().includeWeekends, true);
+    // Verify that the component is finished loading
+    assert.equal(component.state().view, 'VISIBLE');
 
-    // Also verify that clicking the switch put the card into a loading state
+    // Then, switch the active time segment.
+    component
+      .find('.insights-space-list-time-segment-selector #input-box-select-tsg_575378014376820745')
+      .props().onClick();
+
+    // Verify that clicking the select box item put the card into a loading state
     assert.equal(component.state().view, 'LOADING');
+
+    await timeout(100);
+
+    // Verify that the component is finished loading
+    assert.equal(component.state().view, 'VISIBLE');
+
+    // Verify that clicking the switch adjusted the `timeSegmentGroupId` property
+    assert.equal(component.state().timeSegmentGroupId, 'tsg_575378014376820745');
   });
 
   describe('sorting of spaces', function() {
@@ -340,6 +349,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // Ensure that two spaces were rendered
@@ -385,6 +395,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // Ensure that three spaces were rendered
@@ -443,6 +454,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // Ensure that three spaces were rendered
@@ -517,6 +529,7 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
       // Set capacities to known values. This is important to make sure the sorting order tests work
@@ -582,6 +595,7 @@ describe('insights space list', function() {
           data: [SPACE],
           events: {},
         }}
+        timeSegmentGroups={timeSegmentGroups}
         activeModal={{name: null, data: null}}
         onOpenModal={onOpenModal}
         onSetCapacity={onSetCapacity}
@@ -628,6 +642,8 @@ describe('insights space list', function() {
               currentCount: 2,
               capacity: 5,
               timeZone: 'America/New_York',
+              timeSegmentGroups: [],
+              timeSegments: [],
             },
             {
               id: 'spc_2',
@@ -636,22 +652,31 @@ describe('insights space list', function() {
               currentCount: 2,
               capacity: 5,
               timeZone: 'America/New_York',
+              timeSegmentGroups: [],
+              timeSegments: [],
             },
           ],
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space unfiltered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'Your 2 spaces have seen 0 visitors during open hours this past week'
+        `Your 2 spaces have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when a simgle unfiltered space is shown`, async function() {
@@ -672,17 +697,24 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 1-space unfiltered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'Your 1 space has seen 0 visitors during open hours this past week'
+        `Your 1 space has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when two filtered spaces are shown`, async function() {
@@ -711,17 +743,24 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'These 2 spaces have seen 0 visitors during open hours this past week'
+        `These 2 spaces have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when a single filtered space is shown`, async function() {
@@ -742,17 +781,24 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 1-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'This 1 space has seen 0 visitors during open hours this past week'
+        `This 1 space has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when two filtered spaces are shown and a floor is picked`, async function() {
@@ -792,17 +838,24 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'These 2 spaces on My Floor have seen 0 visitors during open hours this past week'
+        `These 2 spaces on My Floor have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when two filtered spaces are shown and a building is picked`, async function() {
@@ -842,17 +895,24 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'These 2 spaces in My Building have seen 0 visitors during open hours this past week'
+        `These 2 spaces in My Building have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly when a single filtered space is shown and a campus is picked`, async function() {
@@ -892,17 +952,24 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'This 1 space in My Campus has seen 0 visitors during open hours this past week'
+        `This 1 space in My Campus has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
     it(`should render phrase properly a whole building is picked`, async function() {
@@ -942,17 +1009,24 @@ describe('insights space list', function() {
           events: {},
         }}
         activeModal={{name: null, data: null}}
+        timeSegmentGroups={timeSegmentGroups}
       />);
 
-      // For this test, whether the utilization data has been loaded or not is not important. So, to
-      // make the test faster, skip it.
-      component.setState({view: 'VISIBLE'});
+      // Load in some fake count data
+      component.setState({
+        view: 'VISIBLE',
+        spaceCounts: {
+          spc_1: [],
+          spc_2: [],
+          spc_3: [],
+        },
+      });
 
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
         component.find('.insights-space-list-summary-header').text(),
-        'Your 2 spaces in My Building have seen 0 visitors during open hours this past week'
+        `Your 2 spaces in My Building have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
   });
@@ -975,11 +1049,11 @@ describe('insights space list', function() {
         events: {},
       }}
       activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
     />);
 
     // Add a couple empty count buckets
     component.setState({
-      timeSegment: 'WHOLE_DAY',
       spaceCounts: {
         spc_1: [
           {
@@ -1030,27 +1104,5 @@ describe('insights space list', function() {
 
     // And verify that the number of ingresses reflected the change in data
     assert.equal(component.instance().calculateTotalNumberOfIngressesForSpaces(), 7);
-
-    // Add a few ingresses into the data
-    component.setState({
-      timeSegment: 'WORKING_HOURS',
-      spaceCounts: {
-        spc_1: [
-          {
-            timestamp: '2018-05-08T00:36:48.562Z', /* NOT DURING WORKING HOURS */
-            timestampAsMoment: moment.utc('2018-05-08T00:36:48.562Z'), /* optimization */
-            interval: {analytics: {entrances: 6, exits: 0}},
-          },
-          {
-            timestamp: '2018-05-08T12:36:48.562Z', /* DURING WORKING HOURS */
-            timestampAsMoment: moment.utc('2018-05-08T12:36:48.562Z'), /* optimization */
-            interval: {analytics: {entrances: 3, exits: 0}},
-          },
-        ],
-      },
-    });
-
-    // And verify that the number of ingresses reflected the change in data
-    assert.equal(component.instance().calculateTotalNumberOfIngressesForSpaces(), 3);
   });
 });

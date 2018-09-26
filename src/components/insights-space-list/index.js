@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
 import SortableGridHeader, { SortableGridHeaderItem, SORT_ASC, SORT_DESC } from '../sortable-grid-header/index';
 import PercentageBar from '@density/ui-percentage-bar';
-import Switch from '@density/ui-switch';
 
 import gridVariables from '@density/ui/variables/grid.json';
 
@@ -24,9 +23,8 @@ import hideModal from '../../actions/modal/hide';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
-  isWithinTimeSegment,
-  TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
+import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import commaFormatNumber from '../../helpers/comma-format-number/index';
 import formatPercentage from '../../helpers/format-percentage/index';
@@ -60,6 +58,7 @@ export class InsightsSpaceList extends React.Component {
       view: LOADING,
       error: null,
 
+      spaceListHash: this.calculateSpaceListHash(this.props.spaces),
       spaceCounts: {},
       spaceUtilizations: {},
 
@@ -67,39 +66,23 @@ export class InsightsSpaceList extends React.Component {
       activeColumn: COLUMN_SPACE_NAME,
       columnSortOrder: DEFAULT_SORT_DIRECTION,
 
-      timeSegment: 'WORKING_HOURS',
+      timeSegmentGroupId: DEFAULT_TIME_SEGMENT_GROUP.id,
       dataDuration: DATA_DURATION_WEEK,
-
-      includeWeekends: false,
     };
 
-    this.fetchDataLock = false;
-
-    this.fetchData();
+    if (this.props.spaces && this.props.spaces.data.length > 0) {
+      this.fetchData();
+    }
   }
 
-  async fetchData(spaces=this.props.spaces) {
-    if (!(spaces && Array.isArray(spaces.data))) {
-      return
-    }
-
-    if (this.fetchDataLock) {
-      return;
-    }
-
-    // Only allow one data fetching attempt to happen at once.
-    this.fetchDataLock = true;
+  async fetchData() {
+    const { spaces } = this.props;
+    const { timeSegmentGroupId } = this.state;
 
     try {
       const spacesToFetch = spaces.data
         // Remove all spaces that have already had their counts fetched.
         .filter(space => typeof this.state.spaceCounts[space.id] === 'undefined')
-
-      // Bail early if there is no work to do.
-      if (spacesToFetch.length === 0) {
-        this.fetchDataLock = false;
-        return
-      }
 
       // Store if each space has a capacity and therefore can be used to calculate utilization.
       const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
@@ -128,6 +111,11 @@ export class InsightsSpaceList extends React.Component {
         startDate = moment.utc().subtract(1, 'month').format('YYYY-MM-DDTHH:mm:ss');
       }
 
+      // https://stackoverflow.com/a/47250621/4115328
+      if (window.AbortController) {
+        this.abortController = new window.AbortController();
+      }
+
       // Get all counts within that last full week. Request as many pages as required.
       const data = await fetchAllPages(page => {
         return core.spaces.allCounts({
@@ -136,8 +124,16 @@ export class InsightsSpaceList extends React.Component {
           interval: '10m',
           page,
           page_size: 1000,
+          time_segment_groups: timeSegmentGroupId === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroupId,
+
+          // Pass this abortcontroller to the fetch call so that we can cancel the call if it's in
+          // progress and the component unmounts.
+          raw: { signal: this.abortController ? this.abortController.signal : undefined },
         });
       });
+
+      // Requests have completed, so there are no requests to abort if the component unmounts.
+      delete this.abortController;
 
       // Add a `timestampAsMoment` property which converts the timestamp into a moment. This is so
       // that this expensive step doesn't have to be performed on each component render in the
@@ -153,41 +149,18 @@ export class InsightsSpaceList extends React.Component {
           ).tz(space.timeZone);
         }
       }
-      const spaceCounts = { ...this.state.spaceCounts, ...data };
 
       // Utilization calculation.
       // For each space, group counts into buckets, each a single day long.
-      const spaceUtilizations = Object.keys(spaceCounts).reduce((acc, spaceId, ct) => {
+      const spaceUtilizations = Object.keys(data).reduce((acc, spaceId, ct) => {
         // If a space doesn't have a capacity, don't use it for calculating utilization.
         if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
 
         const space = spaces.data.find(i => i.id === spaceId);
-        const counts = spaceCounts[spaceId];
+        const counts = data[spaceId];
 
         const groups = groupCountsByDay(counts, space.timeZone);
-        const filteredGroups = groups.filter(group => {
-          if (this.state.includeWeekends) {
-            return true; // Include all days
-          } else {
-            // Filter out any days that aren't within monday-friday
-            const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').isoWeekday();
-            return dayOfWeek !== 5 && dayOfWeek !== 6; // Remove saturday and sunday
-          }
-        }).map(group => {
-          // Remove all counts in each bucket that is outside each time segment.
-          return {
-            ...group,
-            counts: group.counts.filter(count => {
-              return isWithinTimeSegment(
-                count.timestampAsMoment,
-                space.timeZone,
-                TIME_SEGMENTS[this.state.timeSegment]
-              );
-            }),
-          };
-        });
-
-        const result = spaceUtilizationPerGroup(space, filteredGroups);
+        const result = spaceUtilizationPerGroup(space, groups);
 
         return {
           ...acc,
@@ -195,59 +168,60 @@ export class InsightsSpaceList extends React.Component {
         };
       }, {});
 
-      // NOTE: This is kinda an antipattern, but cancelling fetch calls looks to be a bit involved, so
-      // taking the easy solution for now.
-      if (!this.mounted) { return; }
-
       this.setState({
         view: VISIBLE,
 
-        spaceCounts,
+        spaceCounts: data,
         spaceUtilizations,
       });
     } catch (error) {
-      // NOTE: This is kinda an antipattern, but cancelling fetch calls looks to be a bit involved, so
-      // taking the easy solution for now.
-      if (!this.mounted) { return; }
+      if (error.name === 'AbortError') {
+        // Request was aborted, probably because the component was unmounted.
+        return;
+      }
 
       // Something went wrong. Update the state of the component such that it shows the error in the
       // error bar.
       this.setState({view: ERROR, error: `Could not fetch space counts: ${error.message}`});
     }
-
-    this.fetchDataLock = false;
   }
 
-  componentDidMount() { this.mounted = true; }
-  componentWillUnmount() { this.mounted = false; }
+  // When the component is unmounted, cancel any requests that are currently being processed.
+  componentWillUnmount() {
+    if (this.abortController) {
+      this.abortController.abort();
+    }
+  }
 
-  componentWillReceiveProps(nextProps) {
-    this.fetchData(nextProps.spaces);
+  // Given a value of the space collection, return a unique value corresponding to the number and id
+  // of spaces contained within. This value can be compared with a future-ly calculated value to
+  // determine if the number or ids of spaces in the collection have changed.
+  calculateSpaceListHash(spaces) {
+    if (spaces && spaces.data) {
+      return spaces.data.map(i => i.id).join(',');
+    } else {
+      return '';
+    }
+  }
+
+  componentWillReceiveProps({spaces}) {
+    const newSpaceListHash = this.calculateSpaceListHash(spaces);
+    if (this.state.spaceListHash !== newSpaceListHash) {
+      this.setState({spaceListHash: newSpaceListHash}, () => {
+        this.fetchData();
+      });
+    }
   }
 
   calculateTotalNumberOfIngressesForSpaces(spaces=this.props.spaces.data) {
     const spaceIds = spaces.map(i => i.id);
-    const spaceTimeZones = spaces.reduce((acc, i) => ({...acc, [i.id]: i.timeZone}), {});
-
     let eventCount = 0;
     for (let id in this.state.spaceCounts) {
       if (spaceIds.indexOf(id) === -1) { continue }
       const counts = this.state.spaceCounts[id];
 
-      // Remove all counts outside of the time range
-      const countsWithinTimeSegment = counts.filter(i => {
-        return isWithinTimeSegment(
-          i.timestampAsMoment,
-          spaceTimeZones[id],
-          TIME_SEGMENTS[this.state.timeSegment]
-        );
-      });
-
       // Total up all ingresses within each count bucket in that time range
-      eventCount += countsWithinTimeSegment.reduce(
-        (acc, i) => acc + i.interval.analytics.entrances,
-        0
-      );
+      eventCount += counts.reduce((acc, i) => acc + i.interval.analytics.entrances, 0);
     }
 
     return eventCount;
@@ -256,6 +230,7 @@ export class InsightsSpaceList extends React.Component {
   render() {
     const {
       spaces,
+      timeSegmentGroups,
       activeModal,
 
       onSpaceSearch,
@@ -265,10 +240,26 @@ export class InsightsSpaceList extends React.Component {
       onSetCapacity,
     } = this.props;
 
+    const {
+      view,
+      spaceUtilizations,
+      spaceCounts,
+    } = this.state;
+
+    const parentSpace = spaces.filters.parent ?
+      spaces.data.find(i => i.id === spaces.filters.parent) :
+      null;
+
+    const timeSegmentGroup = timeSegmentGroups.data.find(
+      i => i.id === this.state.timeSegmentGroupId
+    ) || DEFAULT_TIME_SEGMENT_GROUP;
+
+
     // Filter space list
     // 1. Using the space hierarchy `parent value`
     // 2. Using the fuzzy search
     // 3. Only show 'space' type spaces
+    // 4. Within the time segment group that was specified
     let filteredSpaces = spaces.data;
     if (spaces.filters.parent) {
       filteredSpaces = filterHierarchy(filteredSpaces, spaces.filters.parent);
@@ -276,18 +267,21 @@ export class InsightsSpaceList extends React.Component {
     if (spaces.filters.search) {
       filteredSpaces = spaceFilter(filteredSpaces, spaces.filters.search);
     }
-    filteredSpaces = filteredSpaces.filter(space => space.spaceType === 'space')
-
-    const parentSpace = spaces.filters.parent ?
-      spaces.data.find(i => i.id === spaces.filters.parent) :
-      null;
-
-    const spaceUtilizations = this.state.spaceUtilizations;
+    filteredSpaces = filteredSpaces
+      .filter(space => space.spaceType === 'space')
+      .filter(space => {
+        if (view === LOADING) {
+          // When still loading / calculating the `spaceCounts` object, show all spaces
+          return true;
+        } else {
+          // Ensure that all shown spaces have count data that was returned from the server
+          return typeof spaceCounts[space.id] !== 'undefined';
+        }
+      })
 
     return <div className="insights-space-list">
-      {/* Show errors in the spaces collection. */}
       <ErrorBar
-        message={spaces.error || this.state.error}
+        message={spaces.error || timeSegmentGroups.error || this.state.error}
         modalOpen={activeModal.name !== null}
       />
 
@@ -362,10 +356,9 @@ export class InsightsSpaceList extends React.Component {
                       this.calculateTotalNumberOfIngressesForSpaces(filteredSpaces)
                     )} visitors
                   </CardWellHighlight> during <CardWellHighlight>
-                    {TIME_SEGMENTS[this.state.timeSegment].phrasal}
+                    {timeSegmentGroup.name}
                   </CardWellHighlight> this past <CardWellHighlight>
                     {this.state.dataDuration === DATA_DURATION_WEEK ? 'week' : 'month'}
-                    {this.state.includeWeekends ? ', including weekends' : ''}
                   </CardWellHighlight>
                 </span>;
               } else {
@@ -389,22 +382,20 @@ export class InsightsSpaceList extends React.Component {
               <InputBox
                 type="select"
                 className="insights-space-list-time-segment-selector"
-                value={this.state.timeSegment}
+                value={this.state.timeSegmentGroupId}
                 disabled={this.state.view !== VISIBLE}
                 onChange={e => {
                   this.setState({
                     view: LOADING,
-                    timeSegment: e.id,
+                    timeSegmentGroupId: e.id,
                     spaceCounts: {},
                     spaceUtilizations: {},
                   }, () => this.fetchData());
                 }}
-                choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                  return {
-                    id: key,
-                    label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
-                  };
-                })}
+                choices={[
+                  DEFAULT_TIME_SEGMENT_GROUP,
+                  ...timeSegmentGroups.data,
+                ].map(({id, name}) => ({ id, label: <span>{name}</span> }))}
               />
             </div>
             <div className="insights-space-list-filter-item">
@@ -431,23 +422,6 @@ export class InsightsSpaceList extends React.Component {
           {filteredSpaces.length > 0 ? <CardBody className="insights-space-list-card-body">
             <div className="insights-space-list-card-body-header">
               <h3>Average Utilization</h3>
-
-              <span className="insights-space-list-card-body-header-weekends">
-                <span>Include Weekends</span>
-                <Switch
-                  value={this.state.includeWeekends}
-                  disabled={this.state.view !== VISIBLE}
-                  onChange={() => {
-                    this.setState({
-                      view: LOADING,
-                      includeWeekends: !this.state.includeWeekends,
-
-                      spaceCounts: {},
-                      spaceUtilizations: {},
-                    }, () => this.fetchData());
-                  }}
-                />
-              </span>
             </div>
             <table className="insights-space-list">
               <tbody>
@@ -521,7 +495,7 @@ export class InsightsSpaceList extends React.Component {
                     key={space.id}
 
                     // When the row is clicked, move to the detail page.
-                    onClick={() => window.location.href = `#/spaces/insights/${space.id}`}
+                    onClick={() => window.location.href = `#/spaces/insights/${space.id}/trends`}
                   >
                     <td className="insights-space-list-item-name">{space.name}</td>
                     <td
@@ -572,6 +546,7 @@ export default connect(state => {
   return {
     spaces: state.spaces,
     activeModal: state.activeModal,
+    timeSegmentGroups: state.timeSegmentGroups,
   };
 }, dispatch => {
   return {

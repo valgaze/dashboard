@@ -104,6 +104,10 @@
 @import "../node_modules/@density/ui-switch/variables.json";
 @import "../node_modules/@density/ui-switch/dist/sass";
 
+// Info Popup
+@import "../node_modules/@density/ui-info-popup/variables.json";
+@import "../node_modules/@density/ui-info-popup/dist/sass";
+
 $font-size-x-small: 10px;
 
 
@@ -205,7 +209,6 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/dev-webhook-list/styles";
 @import "./components/dev-webhook-card/styles";
 @import "./components/dev-webhook-create/styles";
-@import "./components/visualization-space-detail/styles";
 @import "./components/account-registration/styles";
 @import "./components/dev-token-update-modal/styles";
 @import "./components/live-space-card/styles";
@@ -221,11 +224,11 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/environment-switcher/styles";
 @import "./components/environment-space-dismissable-toast/styles";
 @import "./components/environment-modal-doorway-already-in-space/styles";
-@import "./components/visualization-space-detail-24-hour-chart/styles";
-@import "./components/visualization-space-detail-daily-metrics-card/styles";
-@import "./components/visualization-space-detail-raw-events-card/styles";
+@import "./components/insights-space-detail-foot-traffic-card/styles";
+@import "./components/insights-space-detail-daily-metrics-card/styles";
+@import "./components/insights-space-detail-raw-events-card/styles";
 @import "./components/insights-edit-count-modal/styles";
-@import "./components/visualization-space-detail-raw-events-pager/styles";
+@import "./components/insights-space-detail-raw-events-pager/styles";
 @import "./components/account-setup-overview/styles";
 @import "./components/account-setup-header/styles";
 @import "./components/account-setup-doorway-list/styles";
@@ -241,3 +244,9 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/sortable-grid-header/styles";
 @import "./components/insights-set-capacity-modal/styles";
 @import "./components/space-hierarchy-select-box/styles";
+@import "./components/insights-space-trends/styles";
+@import "./components/insights-filter-bar/styles";
+@import "./components/insights-space-header/styles";
+@import "./components/insights-space-daily/styles";
+@import "./components/insights-space-data-export/styles";
+@import "./components/insights-space-detail-raw-events-export-card/styles";

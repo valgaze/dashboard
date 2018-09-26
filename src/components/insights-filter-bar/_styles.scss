@@ -1,0 +1,76 @@
+.insights-filter-bar {
+  font-size: $font-size-base;
+  background-color: #fff;
+  color: $gray-cinder;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  // Remove the paddings from the width.
+  width: calc(100% - 18px - 18px);
+  padding-left: 18px;
+  padding-right: 18px;
+}
+.insights-filter-bar.no-select {
+  user-select: none;
+  pointer-events: none;
+}
+.insights-filter-bar.fixed {
+  @media (min-width: $screen-xs-max) {
+    position: fixed;
+    top: $navbar-height;
+    z-index: 999;
+    top: 0px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.insights-filter-bar-height-spacer {
+  display: none;
+  @media (min-width: $screen-xs-max) {
+    display: block;
+  }
+}
+
+.insights-filter-bar-items {
+  max-width: 980px;
+  width: 100%;
+  margin: 0px auto;
+
+  padding-left: 0px;
+  list-style-type: none;
+
+  display: flex;
+  flex-direction: column;
+  @media (min-width: $screen-sm-min) {
+    flex-direction: row;
+  }
+}
+
+.insights-filter-bar-item {
+  margin-bottom: 10px;
+  @media (min-width: $screen-sm-min) {
+    margin-bottom: 0px;
+    &.right { margin-left: auto; }
+  }
+}
+
+// Add margin between each item in the filter bar
+.insights-filter-bar-item { margin-right: 15px; }
+.insights-filter-bar-item:last-of-type {
+  margin-right: 0px;
+  margin-bottom: 0px;
+}
+
+.insights-filter-bar-item-label {
+  margin-bottom: 10px;
+  font-weight: bold;
+  display: block;
+  font-size: 12px;
+
+  // On phones, add spacing above each label when stacking vertically
+  margin-top: 5px;
+  @media (min-width: $screen-sm-max) {
+    margin-top: 0px;
+  }
+}

@@ -68,6 +68,7 @@
           "end_time": "{{end_time}}",
           "interval": "{{interval}}",
           "page_size": "{{page_size}}",
+          "time_segment_groups": "{{time_segment_groups}}",
           "page": "{{page}}",
           "order": "{{order}}"
         }
@@ -81,6 +82,7 @@
           "end_time": "{{end_time}}",
           "interval": "{{interval}}",
           "page_size": "{{page_size}}",
+          "time_segment_groups": "{{time_segment_groups}}",
           "page": "{{page}}",
           "order": "{{order}}"
         }
@@ -92,6 +94,7 @@
         "qs": {
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}",
+          "time_segment_groups": "{{time_segment_groups}}",
           "doorway_id": "{{doorway_id}}",
           "direction": "{{direction}}",
           "page_size": "{{page_size}}",
@@ -112,12 +115,29 @@
         },
         "desc": "Creates a reset on a space."
       },
+      "csvPreview": {
+        "method": "GET",
+        "url": "{{{base}}}/csv/",
+        "desc": "Get first 10 events of csv export for a current space",
+        "headers": {
+          "Accept": "text/csv"
+        },
+        "qs": {
+          "space_id": "{{space_id}}",
+          "start_time": "{{start_time}}",
+          "end_time": "{{end_time}}",
+          "preview": "true"
+        }
+      },
       "csv": {
         "method": "GET",
-        "url": "{{{core}}}/spaces/{{id}}/csv/",
-        "desc": "Get CSV event for a given space.",
+        "url": "{{{base}}}/csv/",
+        "desc": "Get csv export of events for a current space",
+        "headers": {
+          "Accept": "text/csv"
+        },
         "qs": {
-          "doorway_id": "{{doorway_id}}",
+          "space_id": "{{space_id}}",
           "start_time": "{{start_time}}",
           "end_time": "{{end_time}}"
         }
@@ -342,6 +362,13 @@
           "Content-Type": "application/json",
           "Accept": "application/json"
         }
+      }
+    },
+    "time_segment_groups": {
+      "list": {
+        "method": "GET",
+        "url": "{{{core}}}/time_segment_groups/",
+        "desc": "List all time segment groups."
       }
     }
   }

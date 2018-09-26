@@ -33,6 +33,8 @@ export default function NavLoggedIn({
       pageName={['ACCOUNT_SETUP_OVERVIEW']}
       href="#/onboarding/overview"
       indent={2}
+      locked={user.data && user.data.isDemo}
+      lockedReason="Onboarding is unavailable in the demo account."
       onClick={closeSidebar}
     >Overview</NavbarMobileItem>,
     <NavbarMobileItem
@@ -40,12 +42,14 @@ export default function NavLoggedIn({
       pageName={['ACCOUNT_SETUP_DOORWAY_LIST']}
       href="#/onboarding/doorways"
       indent={2}
+      locked={user.data && user.data.isDemo}
+      lockedReason="Onboarding is unavailable in the demo account."
       onClick={closeSidebar}
     >Doorways</NavbarMobileItem>,
 
     <NavbarMobileItem
       activePage={activePage}
-      pageName={['INSIGHTS_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
+      pageName={['INSIGHTS_SPACE_LIST', 'INSIGHTS_SPACE_DAILY', 'INSIGHTS_SPACE_TRENDS', 'INSIGHTS_SPACE_DATA_EXPORT']}
 
       // Feature flag: Do not allow the user to visit the insights page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
@@ -130,7 +134,7 @@ export default function NavLoggedIn({
 
     <NavbarItem
       activePage={activePage}
-      pageName={['INSIGHTS_SPACE_LIST', 'VISUALIZATION_SPACE_DETAIL']}
+      pageName={['INSIGHTS_SPACE_LIST', 'INSIGHTS_SPACE_DAILY', 'INSIGHTS_SPACE_TRENDS', 'INSIGHTS_SPACE_DATA_EXPORT']}
 
       // Feature flag: Do not allow the user to visit the visualizations page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways

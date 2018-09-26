@@ -1,6 +1,6 @@
 // Right align the header button in the header of the card.
 .token-card-edit {
-  float: right;
+  margin-left: auto;
   font-weight: normal;
 }
 
@@ -14,6 +14,8 @@
   display: flex;
   flex-direction: row;
 }
+
+.card .token-card-header { padding-bottom: 10px; }
 
 // Token card contents
 .token-card-token-content {

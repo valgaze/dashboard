@@ -38,4 +38,19 @@ describe('object-snake-to-camel', function() {
 
     assert.deepEqual(objectSnakeToCamel(input), actual);
   });
+  it('should work for deeply nested arrays', function() {
+    const actual = {
+      fooBar: 'baz',
+      alreadyCamel: 'bla',
+      deeplyNested: [0, 1, 'two'],
+    };
+
+    const input = {
+      foo_bar: 'baz',
+      alreadyCamel: 'bla',
+      deeply_nested: [0, 1, 'two'],
+    };
+
+    assert.deepEqual(objectSnakeToCamel(input), actual);
+  });
 });

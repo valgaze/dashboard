@@ -6,7 +6,7 @@ import ModalHeaderActionButton from '../modal-header-action-button/index';
 
 export default function TokenCard({token, onClickEdit}) {
   return <Card>
-    <CardHeader size="small">
+    <CardHeader size="small" className="token-card-header">
       <span className="token-card-header-text">{token.name || '(no name)'}</span>
 
       <div className="token-card-permissions-badge">

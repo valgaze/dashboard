@@ -1,29 +1,28 @@
-import * as React from 'react';
+import React from 'react';
+import classnames from 'classnames';
 
 import moment from 'moment';
 import 'moment-timezone';
 
 import { core } from '../../client';
 
-import gridVariables from '@density/ui/variables/grid.json';
 import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
-import InputBox from '@density/ui-input-box';
-import Switch from '@density/ui-switch';
+import { IconRefresh } from '@density/ui-icons';
+import InfoPopup from '@density/ui-info-popup';
 
 import PercentageBar from '@density/ui-percentage-bar';
 
-import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
-import DateRangePicker, { ANCHOR_RIGHT, ANCHOR_LEFT } from '@density/ui-date-range-picker';
-
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import formatPercentage from '../../helpers/format-percentage/index';
-import commonRanges from '../../helpers/common-ranges';
 
 import spaceUtilizationPerGroup, {
   groupCountsByDay,
-  isWithinTimeSegment,
-  TIME_SEGMENTS,
 } from '../../helpers/space-utilization/index';
+import {
+  DEFAULT_TIME_SEGMENT_GROUP,
+  DEFAULT_TIME_SEGMENT,
+  parseTimeInTimeSegmentToSeconds,
+} from '../../helpers/time-segments/index';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
@@ -37,23 +36,17 @@ const LineChartComponent = chartAsReactComponent(lineChart);
 
 const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 
-// Given a day on the calendar and the current day, determine if the square on the calendar should
-// be grayed out or not.
-function isOutsideRange(startISOTime, datePickerInput, day) {
-  const startDate = moment.utc(startISOTime);
-  if (day.isAfter(moment.utc())) {
-    return true;
-  }
+const ONE_HOUR_IN_SECONDS = 60 * 60;
 
-  if (datePickerInput === 'endDate') {
-    return datePickerInput === 'endDate' && startDate &&
-      !( // Is the given `day` within `MAXIMUM_DAY_LENGTH` days from the start date?
-        isInclusivelyAfterDay(day, startDate) &&
-        isInclusivelyBeforeDay(day, startDate.clone().add(MAXIMUM_DAY_LENGTH - 1, 'days'))
-      );
-  }
-  return false;
-}
+const DAY_TO_INDEX_IN_UTILIZAITIONS_BY_DAY = {
+  'Monday': 0,
+  'Tuesday': 1,
+  'Wednesday': 2,
+  'Thursday': 3,
+  'Friday': 4,
+  'Saturday': 5,
+  'Sunday': 6,
+};
 
 export const LOADING = 'LOADING',
              EMPTY = 'EMPTY',
@@ -61,51 +54,39 @@ export const LOADING = 'LOADING',
              REQUIRES_CAPACITY = 'REQUIRES_CAPACITY',
              ERROR = 'ERROR';
 
-// The maximum number of days that can be selected by the date range picker
-const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
-
-// When the user selects a start date, select a range that's this long. THe user can stil ladjust
-// the range up to a maximum length of `MAXIMUM_DAY_LENGTH` though.
-const INITIAL_RANGE_SELECTION = MAXIMUM_DAY_LENGTH / 2;
-
 export default class InsightsSpaceDetailUtilizationCard extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    view: LOADING,
 
-    this.state = {
-      state: LOADING,
+    groups: null,
+    data: null,
+    dataSpaceId: null,
 
-      groups: null,
-      data: null,
-      dataSpaceId: null,
+    // Set by props and used to determine when the data should be refetched.
+    startDate: null,
+    endDate: null,
+    includeWeekends: false,
 
-      startDate: moment.utc().tz(props.space.timeZone).subtract(1, 'week').startOf('week').format(),
-      endDate: moment.utc().tz(props.space.timeZone).subtract(1, 'week').endOf('week').endOf('day').format(),
-      timeSegment: 'WORKING_HOURS',
-
-      includeWeekends: false,
-      includeWeekendsProcessing: false,
-    };
-
-    // Fetch initial data
-    this.fetchData.call(this);
+    timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
+    timeSegment: DEFAULT_TIME_SEGMENT,
   }
 
-  async fetchData() {
+  fetchData = async () => {
     const { space } = this.props;
+    const { timeSegmentGroup, timeSegment } = this.state;
 
     if (!space.capacity) {
-      setTimeout(() => {
-        this.setState({
-          state: REQUIRES_CAPACITY,
+      this.setState({
+        view: REQUIRES_CAPACITY,
 
-          // Along with the utilization data, store the space id that the data has been calculated for.
-          // In this way, if the space id changes, then we know to refetch utilization data.
-          dataSpaceId: space.id,
-        });
-      }, 0);
+        // Along with the utilization data, store the space id that the data has been calculated for.
+        // In this way, if the space id changes, then we know to refetch utilization data.
+        dataSpaceId: space.id,
+      });
       return;
     }
+
+    const timeSegmentDurationInSeconds = parseTimeInTimeSegmentToSeconds(timeSegment.end) - parseTimeInTimeSegmentToSeconds(timeSegment.start);
 
     // Step 1: Fetch all counts--which means all pages--of data from the start date to the end data
     // selected on the DateRangePicker. Uses the `fetchAllPages` helper, which encapsulates the
@@ -116,17 +97,17 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
         start_time: this.state.startDate,
         end_time: this.state.endDate,
+        time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
 
-        interval: function(timeSegment) {
-          const numberOfHoursVisible = TIME_SEGMENTS[timeSegment].end - TIME_SEGMENTS[timeSegment].start;
-          if (numberOfHoursVisible > 4) {
+        interval: function(timeSegmentDurationInSeconds) {
+          if (timeSegmentDurationInSeconds > 4 * ONE_HOUR_IN_SECONDS) {
             // For large graphs, fetch data at a coarser resolution.
             return '10m';
           } else {
             // For small graphs, fetch data at a finer resolution.
             return '2m';
           }
-        }(this.state.timeSegment),
+        }(timeSegmentDurationInSeconds),
 
         // Fetch with a large page size to try to minimize the number of requests that will be
         // required.
@@ -138,34 +119,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     // Group into counts into buckets, one bucket for each day.
     const groups = groupCountsByDay(counts, space.timeZone);
 
-    const filteredGroups = groups.filter(group => {
-      // Filter out any days that aren't within monday-friday
-      const dayOfWeek = moment.utc(group.date, 'YYYY-MM-DD').tz(space.timeZone).isoWeekday();
-      if (this.state.includeWeekends) {
-        return true; // Include all days
-      } else {
-        return dayOfWeek !== 5 && dayOfWeek !== 6; // Remove saturday and sunday
-      }
-    }).map(group => {
-      // Remove all counts in each bucket that is outside each time segment.
-      return {
-        ...group,
-        counts: group.counts.filter(count => {
-          return isWithinTimeSegment(
-            count.timestamp,
-            space.timeZone,
-            TIME_SEGMENTS[this.state.timeSegment]
-          );
-        }),
-      };
-    });
-
-    // Calculate space utilization using this dat with un-important time segments removed.
-    const utilizations = spaceUtilizationPerGroup(space, filteredGroups);
+    // Calculate space utilization using this grouped data.
+    const utilizations = spaceUtilizationPerGroup(space, groups);
 
     this.setState({
-      state: VISIBLE,
-      includeWeekendsProcessing: false,
+      view: VISIBLE,
 
       counts,
       groups,
@@ -189,35 +147,48 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     return Math.round(result * 100) / 100; /* round to the nearest percentage */
   }
 
-  // updates the state's `startDate` and `endDate` and triggers a `fetchData`
-  setDatesAndFetchData(startDate, endDate) {
-    this.setState({
-      startDate: startDate ? startDate.tz(this.props.space.timeZone).startOf('day').format() : undefined,
-      endDate: endDate ? endDate.tz(this.props.space.timeZone).endOf('day').format() : undefined,
-    }, () => {
-      // If the start date and end date were both set, then load data.
-      if (this.state.startDate && this.state.endDate) {
-        this.setState({ state: LOADING, data: null }, () => {
-          this.fetchData();
-        });
-      }
-    });
-  }
-
-  componentWillReceiveProps({space}) {
-    if (space && (space.id !== this.state.dataSpaceId || space.capacity !== this.state.dataSpaceCapacity)) {
-      this.setState({state: LOADING}, () => this.fetchData.call(this));
+  componentWillReceiveProps({space, startDate, endDate, timeSegment, timeSegmentGroup}) {
+    if (space && (
+      space.id !== this.state.dataSpaceId ||
+      space.capacity !== this.state.dataSpaceCapacity ||
+      startDate !== this.state.startDate ||
+      endDate !== this.state.endDate ||
+      timeSegment.id !== this.state.timeSegment.id ||
+      timeSegmentGroup.id !== this.state.timeSegmentGroup.id
+    )) {
+      this.setState({
+        view: LOADING,
+        startDate,
+        endDate,
+        timeSegment,
+        timeSegmentGroup,
+      }, () => this.fetchData());
     }
   }
 
+  componentDidMount() {
+    this.componentWillReceiveProps(this.props);
+  }
+
   render() {
-    const {space} = this.props;
+    const { space } = this.props;
+    const {
+      view,
+      startDate,
+      endDate,
+      timeSegment,
+      timeSegmentGroup,
+    } = this.state;
 
     let utilizationsByDay,
-      peakUtilizationPercentage, peakUtilizationTimestamp,
+      averageUtilizationDatapoints,
+      peakUtilizationPercentage,
+      peakUtilizationTimestamp,
       averageUtilizationDatapointsWithTimestamp;
 
-    if (this.state.state === VISIBLE) {
+    const timeSegmentDurationInSeconds = parseTimeInTimeSegmentToSeconds(timeSegment.end) - parseTimeInTimeSegmentToSeconds(timeSegment.start);
+
+    if (view === VISIBLE) {
       //
 
       // Calculate the average utilization for each day within the specified time segment.
@@ -229,7 +200,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
 
       // Calculate an average day's utilization graph.
-      let averageUtilizationDatapoints = (this.state.data[0] ? this.state.data[0].utilization : []).map(_ => 0);
+      averageUtilizationDatapoints = (this.state.data[0] ? this.state.data[0].utilization : []).map(_ => 0);
 
       // The average calculation is split into two parts: the sum and the division.
       // - The sum part of the average (step 1) occurs below.
@@ -245,20 +216,17 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         }
       });
 
-      //
-      const dataDuration = TIME_SEGMENTS[this.state.timeSegment].end - TIME_SEGMENTS[this.state.timeSegment].start;
-
       const initialTimestamp = moment.utc(this.state.counts[0].timestamp)
         .tz(space.timeZone)
         .startOf('day')
-        .add(TIME_SEGMENTS[this.state.timeSegment].start, 'hours');
+        .add(parseTimeInTimeSegmentToSeconds(timeSegment.start), 'seconds');
 
       averageUtilizationDatapointsWithTimestamp = averageUtilizationDatapoints
         .map(i => i / dataPointCount) /* second part of calculating average */
         .map(i => Math.round(i * 1000) / 1000) /* round each number to a single decimal place */
         .reduce(({timestamp, data}, i, ct) => {
           // Increment timestamp to get to the next sample's timestamp.
-          timestamp = timestamp.add(dataDuration / averageUtilizationDatapoints.length, 'hours')
+          timestamp = timestamp.add(timeSegmentDurationInSeconds / averageUtilizationDatapoints.length, 'seconds')
 
           return {
             timestamp,
@@ -273,7 +241,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       // data that was fetched and dividing it by the capacity.
       peakUtilizationPercentage = 0;
       peakUtilizationTimestamp = null; /* No peak utilization */
-      averageUtilizationDatapointsWithTimestamp.forEach(c => {
+      averageUtilizationDatapointsWithTimestamp.forEach((c, index) => {
         if (c.value > peakUtilizationPercentage) {
           peakUtilizationPercentage = c.value;
           peakUtilizationTimestamp = c.timestamp;
@@ -282,273 +250,82 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       peakUtilizationPercentage /= 100;
     }
 
-    if (space) {
-      return <Card className="insights-space-detail-utilization-card">
-        { this.state.state === LOADING || this.state.includeWeekendsProcessing ?
-          <CardLoading indeterminate /> : null }
-        <CardHeader className="insights-space-detail-utilization-card-header">
-          <span className="insights-space-detail-utilization-card-header-label">
-            Space Utilization
-            <span
-              className="insights-space-detail-utilization-card-header-refresh"
-              onClick={() => this.setState({
-                state: LOADING,
-                data: null,
-              }, () => this.fetchData.call(this))}
-            />
-            <span className="insights-space-detail-utilization-card-header-timespan">
-              (Monday &mdash; {this.state.includeWeekends && !this.state.includeWeekendsProcessing ? 'Sunday' : 'Friday'})
-            </span>
-          </span>
+    const averageWeekHeader = (
+      <CardHeader>
+        An Average Week
+        <InfoPopup horizontalIconOffset={8}>
+          <p className="insights-space-detail-utilization-card-popup-p">
+            Utilization for time segment <strong>{timeSegmentGroup.name}</strong> over the
+            time period of <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong> -{' '}
+            <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>, grouped and averaged
+            by day of week.
+          </p>
 
-          <div className="insights-space-detail-utilization-card-time-segment-picker">
-            <InputBox
-              type="select"
-              className="insights-space-list-time-segment-selector"
-              disabled={this.state.state !== VISIBLE}
-              value={this.state.timeSegment}
-              onChange={e => {
-                this.setState({
-                  state: LOADING,
-                  timeSegment: e.id,
-                }, () => this.fetchData());
-              }}
-              choices={Object.keys(TIME_SEGMENTS).map(i => [i, TIME_SEGMENTS[i]]).map(([key, {start, end, name}]) => {
-                return {
-                  id: key,
-                  label: <span>{name} ({start > 12 ? `${start-12}p` : `${start}a`} - {end > 12 ? `${end-12}p` : `${end}a`})</span>,
-                };
-              })}
-            />
-          </div>
-          <div className="insights-space-detail-utilization-card-date-picker">
-            <DateRangePicker
-              startDate={moment.utc(this.state.startDate).tz(space.timeZone).startOf('day')}
-              endDate={moment.utc(this.state.endDate).tz(space.timeZone).startOf('day')}
-              onChange={({startDate, endDate}) => {
-                // If the user selected over 3 months, then clamp them back to 3 months.
-                if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
-                  endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
-                }
+          <p className="insights-space-detail-utilization-card-popup-p">
+            Use this metric to understand your space's average utilization, as well as how
+            utilization varies from day to day. 
+          </p>
 
-                // Update the start and end date with the values selected.
-                this.setDatesAndFetchData(startDate, endDate);
-              }}
+          <p className="insights-space-detail-utilization-card-popup-p">
+            Utilization is calculated by dividing visitors by space capacity (with a granularity
+            of 10 minute intervals). Does not include incomplete days of data.
+          </p>
+        </InfoPopup>
+        <span
+          className={classnames('insights-space-detail-utilization-card-header-refresh', {
+            disabled: view !== VISIBLE,
+          })}
+          onClick={() => this.setState({
+            view: LOADING,
+            data: null,
+          }, () => this.fetchData())}
+        >
+          <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+        </span>
+      </CardHeader>
+    );
 
-              // Within the component, store if the user has selected the start of end date picker
-              // input
-              focusedInput={this.state.datePickerInput}
-              onFocusChange={focused => this.setState({datePickerInput: focused})}
+    const averageDayHeader = (
+      <CardHeader>
+        An Average Day
+        <InfoPopup horizontalIconOffset={8}>
+          <p className="insights-space-detail-utilization-card-popup-p">
+            An average daily breakdown of utilization for
+            time segment <strong>{timeSegmentGroup.name}</strong> over the time period
+            of <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>
+            {' - '}
+            <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>.
+          </p>
 
-              // On mobile, make the calendar one month wide and left aligned.
-              // On desktop, the calendar is two months wide and right aligned.
-              anchor={document.body && document.body.clientWidth > gridVariables.screenSmMin ? ANCHOR_RIGHT : ANCHOR_LEFT}
-              numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
+          <p className="insights-space-detail-utilization-card-popup-p">
+            Use this to understand average peak and trends in utilization over the course of a
+            day. 
+          </p>
 
-              isOutsideRange={day => isOutsideRange(
-                this.state.startDate,
-                this.state.datePickerInput,
-                day
-              )}
+          <p className="insights-space-detail-utilization-card-popup-p">
+            Utilization is calculated by dividing visitors by the space's capacity (with a
+            granularity of 10 minute intervals). Utilization is then averaged across all days
+            within the date range. Does not include incomplete days of data.
+          </p>
+        </InfoPopup>
+        <span
+          className={classnames('insights-space-detail-utilization-card-header-refresh', {
+            disabled: view !== VISIBLE,
+          })}
+          onClick={() => this.setState({
+            view: LOADING,
+            data: null,
+          }, () => this.fetchData())}
+        >
+          <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+        </span>
+      </CardHeader>
+    );
 
-              // common ranges functionality
-              commonRanges={commonRanges}
-              onSelectCommonRange={(r) => {
-                // utilization needs a full day's counts to work
-                // if the endDate of the common range is today, subtract 1 day.
-                // this logic makes sense here, as it specifically pertains to utilization
-                // BR: I couldn't get `isSame()` to work
-                const endDate =
-                  (r.endDate.format('YYYY-MM-DD') === moment.utc().format('YYYY-MM-DD')) ?
-                  r.endDate.clone().subtract(1, 'day') :
-                  r.endDate
-
-                this.setDatesAndFetchData(r.startDate, endDate)
-              }}
-              // showCommonRangeSubtitles={true}
-            />
-          </div>
-        </CardHeader>
-
-        {/* TODO: Make this render a Fragment w/ React 16 */}
-        {this.state.state === VISIBLE ? [
-          <CardWell key={0} type="dark">
-            Average utilization of <CardWellHighlight>
-              {Math.round(this.calculateAverageUtilization() * 100)}%
-            </CardWellHighlight> during <CardWellHighlight>
-              {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-            </CardWellHighlight>
-          </CardWell>,
-
-          <CardHeader key={1}>
-            <span className="insights-space-detail-utilization-card-header-label">
-              Average Weekly Breakdown
-              <span className="insights-space-detail-utilization-card-header-timespan">
-                {moment.utc(this.state.startDate, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone).format('MMMM D')}
-                &nbsp;&mdash;&nbsp;
-                {moment.utc(this.state.endDate, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone).format('MMMM D')}
-                &nbsp;
-                <span className="insights-space-detail-utilization-card-header-label-highlight">
-                  ({TIME_SEGMENTS[this.state.timeSegment].name})
-                </span>
-              </span>
-              <span className="insights-space-detail-utilization-card-header-weekends">
-                <span>Include Weekends</span>
-                <Switch
-                  value={this.state.includeWeekends}
-                  disabled={this.state.includeWeekendsProcessing}
-                  onChange={event => {
-                    this.setState({
-                      includeWeekends: event.target.checked,
-                      includeWeekendsProcessing: true,
-                    }, () => this.fetchData());
-                  }}
-                />
-              </span>
-            </span>
-          </CardHeader>,
-          <CardBody key={2} className="insights-space-detail-utilization-card-average-weekly-breakdown">
-            <div className="insights-space-detail-utilization-card-grid-header">
-              <div className="insights-space-detail-utilization-card-grid-item">Weekday</div>
-              <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
-            </div>
-            {[
-              'Monday',
-              'Tuesday',
-              'Wednesday',
-              'Thursday',
-              'Friday',
-              ...(
-                (this.state.includeWeekends && !this.state.includeWeekendsProcessing) ?
-                ['Saturday', 'Sunday'] :
-                []
-              ),
-            ].map((day, index) => {
-              return <div className="insights-space-detail-utilization-card-grid-row" key={day}>
-                <div className="insights-space-detail-utilization-card-grid-item">{day}</div>
-                <div className="insights-space-detail-utilization-card-grid-item">
-                  <PercentageBar
-                    percentage={this.calculateAverageUtilization(utilizationsByDay[index])}
-                    percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
-                    breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
-                  />
-                </div>
-              </div>;
-            })}
-          </CardBody>,
-
-          <CardWell key={3} type="dark">
-            {peakUtilizationTimestamp === null ? <span>
-              <CardWellHighlight>
-                No peak utilization
-              </CardWellHighlight> during <CardWellHighlight>
-                {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-              </CardWellHighlight>
-            </span> : <span>
-              On average, peak utilization of <CardWellHighlight>
-                {Math.round(peakUtilizationPercentage * 100)}%
-              </CardWellHighlight> happens around <CardWellHighlight>
-                {(timestamp => {
-                  const stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ');
-                  let minute = '00';
-
-                  if (stamp.minute() >= 45) {
-                    minute = '45';
-                  } else if (stamp.minute() >= 30) {
-                    minute = '30';
-                  } else if (stamp.minute() >= 15) {
-                    minute = '15';
-                  }
-
-                  return stamp.tz(space.timeZone).format(`h:[${minute}]a`).slice(0, -1);
-                })(peakUtilizationTimestamp)}
-              </CardWellHighlight> during <CardWellHighlight>
-                {TIME_SEGMENTS[this.state.timeSegment].phrasal}
-              </CardWellHighlight>
-            </span>}
-          </CardWell>,
-
-          <CardHeader key={4}>
-            <span className="insights-space-detail-utilization-card-header-label">
-              Average Daily Breakdown
-              <span className="insights-space-detail-utilization-card-header-timespan">
-                {moment.utc(this.state.startDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
-                &nbsp;&mdash;&nbsp;
-                {moment.utc(this.state.endDate, 'YYYY-MM-DDTHH:mm:ssZ').format('MMMM D')}
-                &nbsp;
-                <span className="insights-space-detail-utilization-card-header-label-highlight">
-                  ({TIME_SEGMENTS[this.state.timeSegment].name})
-                </span>
-              </span>
-            </span>
-          </CardHeader>,
-          <div key={5} className="insights-space-detail-utilization-card-daily-breakdown-chart">
-            <LineChartComponent
-              timeZone={space.timeZone}
-              svgWidth={965}
-              svgHeight={350}
-
-              xAxis={xAxisDailyTick({
-                formatter: (n) => {
-                  // "5a" or "8p"
-                  const timeFormat = moment.utc(n).tz(space.timeZone).format('hA');
-                  return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
-                },
-              })}
-
-              yAxis={yAxisMinMax({
-                leftOffset: 10,
-                points: [
-                  {value: 100, hasRule: true},
-                ],
-                showMaximumPoint: false,
-                formatter: ({value}) => value === 100 ? '100%' : `${value}`,
-              })}
-              yAxisStart={0}
-
-              // The largest point on the y axis should either be:
-              // 1. The largest point on the graph, if larger than 100. (+ 10% in spacing)
-              // 2. 100.
-              yAxisEnd={Math.max(
-                Math.max.apply(Math, averageUtilizationDatapointsWithTimestamp.map(i => i.value))+10, /* 1 */
-                100 /* 2 */
-              )}
-
-              overlays={[
-                overlayTwoPopups({
-                  topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => `Utilization: ${Math.round(item.value)}%`, 'top'),
-                  bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
-                    (item, {mouseX, xScale}) => {
-                      const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
-                      const time = timestamp.format(`h:mma`).slice(0, -1);
-                      return `Avg. Weekday at ${time}`;
-                    }
-                  ),
-
-                  bottomOverlayTopMargin: 40,
-                  topOverlayBottomMargin: 10,
-
-                  topOverlayWidth: 150,
-                  topOverlayHeight: 42,
-                  bottomOverlayWidth: 200,
-                  bottomOverlayHeight: 42,
-                }),
-              ]}
-
-              data={[
-                {
-                  name: 'default',
-                  type: dataWaterline,
-                  verticalBaselineOffset: 10,
-                  data: averageUtilizationDatapointsWithTimestamp.sort(
-                    (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
-                  ),
-                },
-              ]}
-            />
-          </div>
-        ] : null}
-        {this.state.state === LOADING ? <div className="insights-space-detail-utilization-card-body-info">
+    let body;
+    switch (this.state.view) {
+      case LOADING:
+        body = (
           <span>
             {(() => {
               if (
@@ -562,22 +339,226 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
               }
             })()}
           </span>
-        </div> : null}
-        {this.state.state === REQUIRES_CAPACITY ? <div className="insights-space-detail-utilization-card-body-info">
-          <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
-        </div> : null}
-        {this.state.state === EMPTY ? <div className="insights-space-detail-utilization-card-body-info">
-          <span>No data found in date range.</span>
-        </div> : null}
-        {this.state.state === ERROR ? <div className="insights-space-detail-utilization-card-body-info">
-          <span>
-            <span className="insights-space-detail-utilization-card-body-error-icon">&#xe91a;</span>
-            {this.state.error}
-          </span>
-        </div> : null}
-      </Card>;
-    } else {
-      return <span>This space doesn't exist.</span>;
+        );
+
+        return (
+          <div>
+            <Card className="insights-space-detail-utilization-card-average-week">
+              <CardLoading indeterminate />
+              {averageWeekHeader}
+              <div className="insights-space-detail-utilization-card-body-info" style={{height: 514}}>
+                {body}
+              </div>
+            </Card>
+            <Card className="insights-space-detail-utilization-card-average-day">
+              <CardLoading indeterminate />
+              {averageDayHeader}
+              <div className="insights-space-detail-utilization-card-body-info" style={{height: 624}}>
+                {body}
+              </div>
+            </Card>
+          </div>
+        );
+
+      case REQUIRES_CAPACITY:
+        body = (
+          <div className="insights-space-detail-utilization-card-body-info">
+            <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
+          </div>
+        );
+
+        return (
+          <div>
+            <Card className="insights-space-detail-utilization-card-average-week">
+              {averageWeekHeader}
+              {body}
+            </Card>
+            <Card className="insights-space-detail-utilization-card-average-day">
+              {averageDayHeader}
+              {body}
+            </Card>
+          </div>
+        );
+
+      case EMPTY:
+        body = (
+          <div className="insights-space-detail-utilization-card-body-info">
+            <span>No data found in date range.</span>
+          </div>
+        );
+
+        return <div>
+          <Card className="insights-space-detail-utilization-card-average-week">
+            {averageWeekHeader}
+            {body}
+          </Card>
+          <Card className="insights-space-detail-utilization-card-average-day">
+            {averageDayHeader}
+            {body}
+          </Card>
+        </div>;
+
+      case ERROR:
+        body = (
+          <div className="insights-space-detail-utilization-card-body-info">
+            <span>
+              <span className="insights-space-detail-utilization-card-body-error-icon">&#xe91a;</span>
+              {this.state.error}
+            </span>
+          </div>
+        );
+
+        return <div>
+          <Card className="insights-space-detail-utilization-card-average-week">
+            {averageWeekHeader}
+            {body}
+          </Card>
+          <Card className="insights-space-detail-utilization-card-average-day">
+            {averageDayHeader}
+            {body}
+          </Card>
+        </div>;
+
+      case VISIBLE:
+        return (
+          <div>
+            <Card className="insights-space-detail-utilization-card-average-week">
+              {averageWeekHeader}
+              <CardWell type="dark">
+                Average utilization of <CardWellHighlight>
+                  {Math.round(this.calculateAverageUtilization() * 100)}%
+                </CardWellHighlight> during <CardWellHighlight>
+                  {timeSegmentGroup.name}
+                </CardWellHighlight>
+              </CardWell>
+              <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
+                <div className="insights-space-detail-utilization-card-grid-header">
+                  <div className="insights-space-detail-utilization-card-grid-item">Day</div>
+                  <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
+                </div>
+                {timeSegment.days.map(day => {
+                  const index = DAY_TO_INDEX_IN_UTILIZAITIONS_BY_DAY[day];
+                  return <div className="insights-space-detail-utilization-card-grid-row" key={day}>
+                    <div className="insights-space-detail-utilization-card-grid-item">{day}</div>
+                    <div className="insights-space-detail-utilization-card-grid-item">
+                      <PercentageBar
+                        percentage={this.calculateAverageUtilization(utilizationsByDay[index])}
+                        percentageFormatter={percentage => percentage !== null ? `${formatPercentage(percentage, 0)}%` : null}
+                        breakWidth={AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX}
+                      />
+                    </div>
+                  </div>;
+                })}
+              </CardBody>
+            </Card>
+            <Card className="insights-space-detail-utilization-card-average-day">
+              {averageDayHeader}
+              <CardWell type="dark">
+                {peakUtilizationTimestamp === null ? <span>
+                  <CardWellHighlight>
+                    No peak utilization
+                    </CardWellHighlight> during <CardWellHighlight>
+                    {timeSegmentGroup.name}
+                  </CardWellHighlight>
+                  </span> : <span>
+                  Most busy around <CardWellHighlight>
+                    {(timestamp => {
+                      let stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone);
+                      let minute = '00';
+                      const stampMinute = stamp.minute();
+
+                      if (stampMinute > (45 + 7.5)) {
+                        minute = '00';
+                        stamp = stamp.add(1, 'hour');
+                      } else if (stampMinute > (45 - 7.5) && stampMinute <= (45 + 7.5)) {
+                        minute = '45';
+                      } else if (stampMinute > (30 - 7.5) && stampMinute <= (30 + 7.5)) {
+                        minute = '30';
+                      } else if (stampMinute > (15 - 7.5) && stampMinute <= (15 + 7.5)) {
+                        minute = '15';
+                      } else {
+                        minute = '30';
+                      }
+
+                      return stamp.format(`h:[${minute}]a`).slice(0, -1);
+                    })(peakUtilizationTimestamp)}
+                  </CardWellHighlight> &mdash; around <CardWellHighlight>
+                    {Math.round(peakUtilizationPercentage * space.capacity)} people
+                  </CardWellHighlight> ({Math.round(peakUtilizationPercentage * 100)}% utilization)
+                </span>}
+              </CardWell>
+
+              <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
+                <LineChartComponent
+                  timeZone={space.timeZone}
+                  svgWidth={965}
+                  svgHeight={350}
+
+                  xAxis={xAxisDailyTick({
+                    formatter: (n) => {
+                      // "5a" or "8p"
+                      const timeFormat = moment.utc(n).tz(space.timeZone).format('hA');
+                      return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
+                    },
+                  })}
+
+                  yAxis={yAxisMinMax({
+                    leftOffset: 10,
+                    points: [
+                      {value: 100, hasRule: true},
+                    ],
+                    showMaximumPoint: false,
+                    formatter: ({value}) => value === 100 ? '100%' : `${value}`,
+                  })}
+                  yAxisStart={0}
+
+                  // The largest point on the y axis should either be:
+                  // 1. The largest point on the graph, if larger than 100. (+ 10% in spacing)
+                  // 2. 100.
+                  yAxisEnd={Math.max(
+                    Math.max.apply(Math, averageUtilizationDatapointsWithTimestamp.map(i => i.value))+10, /* 1 */
+                    100 /* 2 */
+                  )}
+
+                  overlays={[
+                    overlayTwoPopups({
+                      topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => `Utilization: ${Math.round(item.value)}%`, 'top'),
+                      bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
+                        (item, {mouseX, xScale}) => {
+                          const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
+                          const time = timestamp.format(`h:mma`).slice(0, -1);
+                          return `Avg. Weekday at ${time}`;
+                        }
+                      ),
+
+                      bottomOverlayTopMargin: 40,
+                      topOverlayBottomMargin: 10,
+
+                      topOverlayWidth: 150,
+                      topOverlayHeight: 42,
+                      bottomOverlayWidth: 200,
+                      bottomOverlayHeight: 42,
+                    }),
+                  ]}
+
+                  data={[
+                    {
+                      name: 'default',
+                      type: dataWaterline,
+                      verticalBaselineOffset: 10,
+                      data: averageUtilizationDatapointsWithTimestamp.sort(
+                        (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                      ),
+                    },
+                  ]}
+                />
+              </div>
+            </Card>
+          </div>
+        );
+
+      default:
+        return null;
     }
   }
 }
