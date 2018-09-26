@@ -71,24 +71,30 @@ export function InsightsSpaceDaily({
             type="select"
             className="insights-space-daily-time-segment-box"
             value={selectedTimeSegmentGroup.id}
-            choices={timeSegmentGroupArray.map(ts => ({
-              id: ts.id,
-              label: `${ts.name} (${(
-                moment.utc()
-                  .tz(space.timeZone)
-                  .startOf('day')
-                  .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegment.start), 'seconds')
-                  .format('h:mma')
-                  .slice(0, -1) /* am -> a */
-              )} - ${(
-                moment.utc()
-                  .tz(space.timeZone)
-                  .startOf('day')
-                  .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegment.end), 'seconds')
-                  .format('h:mma')
-                  .slice(0, -1) /* am -> a */
-              )})`,
-            }))}
+            choices={timeSegmentGroupArray.map(ts => {
+              const applicableTimeSegmentForGroup = findTimeSegmentInTimeSegmentGroupForSpace(
+                ts,
+                space,
+              );
+              return {
+                id: ts.id,
+                label: `${ts.name} (${(
+                  moment.utc()
+                    .tz(space.timeZone)
+                    .startOf('day')
+                    .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.start), 'seconds')
+                    .format('h:mma')
+                    .slice(0, -1) /* am -> a */
+                )} - ${(
+                  moment.utc()
+                    .tz(space.timeZone)
+                    .startOf('day')
+                    .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.end), 'seconds')
+                    .format('h:mma')
+                    .slice(0, -1) /* am -> a */
+                )})`,
+              };
+            })}
             onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
           />
         </InsightsFilterBarItem>
