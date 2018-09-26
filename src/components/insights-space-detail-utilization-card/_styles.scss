@@ -1,14 +1,8 @@
-$insights-space-detail-card-header-breakpoint: 930px;
-
-.insights-space-detail-utilization-card-average-week {
+.insights-space-detail-utilization-card-container > :first-of-type {
   margin-bottom: 40px;
 }
 
 
-.insights-space-detail-utilization-card-header-container {
-  display: flex;
-  flex-direction: row;
-}
 
 .insights-space-detail-utilization-card-popup-p {
   line-height: 20px;
@@ -16,26 +10,7 @@ $insights-space-detail-card-header-breakpoint: 930px;
   margin-bottom: 5px;
 }
 
-// Refresh icon to refetch data
-.insights-space-detail-utilization-card-header-refresh {
-  margin-left: auto;
-  cursor: pointer;
-  transform: translate(0px, 3px);
-}
-.insights-space-detail-utilization-card-header-refresh:hover { opacity: 0.8; }
-.insights-space-detail-utilization-card-header-refresh:active { opacity: 1; }
-.insights-space-detail-utilization-card-header-refresh.disabled {
-  cursor: default;
-  pointer-events: none;
-}
 
-
-.insights-space-detail-utilization-card-average-weekly-breakdown {
-  padding-top: 0px;
-  @media (min-width: $screen-xs-max) {
-    padding-top: 20px;
-  }
-}
 
 
 .insights-space-detail-utilization-card-grid-header {
@@ -79,27 +54,4 @@ $insights-space-detail-card-header-breakpoint: 930px;
 
 .insights-space-detail-utilization-card .historical-counts .historical-counts-capacity-region {
   fill: transparent;
-}
-
-
-// Horizontally and vertically center errors and info messages in the 24 hour card.
-.insights-space-detail-utilization-card-body-info,
-.insights-space-detail-utilization-card-body-error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  height: 405px;
-  margin-left: 20px;
-  margin-right: 10px;
-
-  font-size: $font-size-base;
-  color: $gray-cinder;
-}
-// Errors should be prefixed by the error icon
-.insights-space-detail-utilization-card-body-error-icon {
-  color: $brand-danger;
-  font-family: "Densicons";
-  margin-right: 10px;
-  position: relative;
 }

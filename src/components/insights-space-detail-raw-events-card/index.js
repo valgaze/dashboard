@@ -8,6 +8,7 @@ import { core } from '../../client';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 import Card, { CardHeader, CardLoading, CardTable } from '@density/ui-card';
+import CardDataModule from '@density/ui-card-data-module';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
@@ -165,9 +166,11 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     } = this.state;
 
     return <div>
-      <Card className="insights-space-detail-raw-events-card">
-        {view === LOADING ? <CardLoading indeterminate /> : null}
-        <CardHeader>
+
+      <CardDataModule
+        loading={view === LOADING}
+        height='auto'
+        title={<span>
           Daily Raw Events
           <InfoPopup horizontalIconOffset={8}>
             <p className="insights-space-detail-raw-events-card-popup-p">
@@ -181,19 +184,14 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
               to download multiple days worth of event data in csv format.
             </p>
           </InfoPopup>
-          <span
-            className={classnames('insights-space-detail-raw-events-card-header-refresh', {
-              disabled: !(view === VISIBLE || view === EMPTY),
-            })}
-            onClick={() => this.setState({
-              view: LOADING,
-              data: null,
-            }, () => this.fetchData())}
-          >
-            <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-          </span>
-        </CardHeader>
-
+        </span>}
+        error={view === ERROR && error.toString()}
+        refreshDisabled={view !== VISIBLE}
+        onRefresh={() => this.setState({
+          view: LOADING,
+          data: null,
+        }, () => this.fetchData())}
+      >
         {view === VISIBLE ? <CardTable
           headings={["Timestamp", "Event", "Doorway"]}
           data={data}
@@ -216,7 +214,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
             {error.toString()}
           </span>
         </div> : null}
-      </Card>
+      </CardDataModule>
 
       <RawEventsPager
         disabled={view !== VISIBLE}

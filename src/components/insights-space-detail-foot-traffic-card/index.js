@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'moment-timezone';
 
 import { core } from '../../client';
-import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
+import CardDataModule from '@density/ui-card-data-module';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
@@ -139,9 +139,10 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         data.reduce((acc, i) => i.count > acc.count ? i : acc, {count: -1})
       ) : null;
 
-      return <Card className="insights-space-detail-card">
-        { view === LOADING ? <CardLoading indeterminate /> : null }
-        <CardHeader className="insights-space-detail-foot-traffic-card-header">
+      return <CardDataModule
+        loading={view === LOADING}
+        height={585}
+        title={<span>
           Foot Traffic
           <InfoPopup horizontalIconOffset={8}>
             <p className="insights-space-detail-foot-traffic-card-popup-p">
@@ -155,19 +156,14 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
               Use this chart to understand visitation over the course of a day.
             </p>
           </InfoPopup>
-          <span
-            className={classnames('insights-space-detail-foot-traffic-card-header-refresh', {
-              disabled: view !== VISIBLE,
-            })}
-            onClick={() => this.setState({
-              view: LOADING,
-              data: null,
-            }, () => this.fetchData())}
-          >
-            <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-          </span>
-        </CardHeader>
-
+        </span>}
+        error={view === ERROR && error.toString()}
+        refreshDisabled={view !== VISIBLE}
+        onRefresh={() => this.setState({
+          view: LOADING,
+          data: null,
+        }, () => this.fetchData())}
+      >
         <div className="insights-space-detail-foot-traffic-card-well">
           <div className="insights-space-detail-foot-traffic-card-well-section capacity">
             <span className="insights-space-detail-foot-traffic-card-well-section-quantity">{space.capacity || '-'}</span>
@@ -183,7 +179,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
           </div>
         </div>
 
-        <CardBody className="insights-space-detail-foot-traffic-card-body">
+        <div className="insights-space-detail-foot-traffic-card-body">
           {view === VISIBLE ? <LineChartComponent
             timeZone={space.timeZone}
             svgWidth={975}
@@ -257,8 +253,8 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
               {error.toString()}
             </span>
           </div> : null}
-          </CardBody>
-      </Card>;
+        </div>
+      </CardDataModule>;
     } else {
       return <span>This space doesn't exist.</span>;
     }

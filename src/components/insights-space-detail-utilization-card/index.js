@@ -321,7 +321,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         })();
 
         return (
-          <div>
+          <div className="insights-space-detail-utilization-card-container">
             <CardDataModule
               title={averageWeekTitle}
               height={650}
@@ -347,37 +347,33 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
       case REQUIRES_CAPACITY:
         return (
-          <div>
+          <div className="insights-space-detail-utilization-card-container">
             <CardDataModule
               title="An Average Week"
               height={650}
+              refreshDisabled
               onRefresh={() => this.setState({
                 view: LOADING,
                 data: null,
               }, () => this.fetchData())}
-            >
-              <div className="insights-space-detail-utilization-card-body-info">
-                <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
-              </div>
-            </CardDataModule>
+              pageMessage="No capacity is set for this space. Capacity is required to calculate utilization."
+            />
             <CardDataModule
               title="An Average Day"
               height={500}
+              refreshDisabled
               onRefresh={() => this.setState({
                 view: LOADING,
                 data: null,
               }, () => this.fetchData())}
-            >
-              <div className="insights-space-detail-utilization-card-body-info">
-                <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
-              </div>
-            </CardDataModule>
+              pageMessage="No capacity is set for this space. Capacity is required to calculate utilization."
+            />
           </div>
         );
 
       case EMPTY:
         return (
-          <div>
+          <div className="insights-space-detail-utilization-card-container">
             <CardDataModule
               title="An Average Week"
               height={650}
@@ -407,7 +403,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
       case ERROR:
         return (
-          <div>
+          <div className="insights-space-detail-utilization-card-container">
             <CardDataModule
               title="An Average Week"
               height={650}
@@ -431,7 +427,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
       case VISIBLE:
         return (
-          <div>
+          <div className="insights-space-detail-utilization-card-container">
             <CardDataModule
               title={averageWeekTitle}
               height={650}
@@ -470,35 +466,21 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             </CardDataModule>
             <CardDataModule
               title={averageDayTitle}
-              height={500}
+              height={625}
               onRefresh={() => this.setState({
                 view: LOADING,
                 data: null,
               }, () => this.fetchData())}
             >
-            </CardDataModule>
-          </div>
-        );
-        return (
-          <div>
-            <Card className="insights-space-detail-utilization-card-average-week">
-              {averageWeekTitle}
-              <CardWell type="dark">
-              </CardWell>
-              <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
-              </CardBody>
-            </Card>
-            <Card className="insights-space-detail-utilization-card-average-day">
-              {averageDayTitle}
-              <CardWell type="dark">
+              <CardDataModuleWell>
                 {peakUtilizationTimestamp === null ? <span>
-                  <CardWellHighlight>
+                  <CardDataModuleWellHighlight>
                     No peak utilization
-                    </CardWellHighlight> during <CardWellHighlight>
+                    </CardDataModuleWellHighlight> during <CardDataModuleWellHighlight>
                     {timeSegmentGroup.name}
-                  </CardWellHighlight>
+                  </CardDataModuleWellHighlight>
                   </span> : <span>
-                  Most busy around <CardWellHighlight>
+                  Most busy around <CardDataModuleWellHighlight>
                     {(timestamp => {
                       let stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone);
                       let minute = '00';
@@ -519,11 +501,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
                       return stamp.format(`h:[${minute}]a`).slice(0, -1);
                     })(peakUtilizationTimestamp)}
-                  </CardWellHighlight> &mdash; around <CardWellHighlight>
+                  </CardDataModuleWellHighlight> &mdash; around <CardDataModuleWellHighlight>
                     {Math.round(peakUtilizationPercentage * space.capacity)} people
-                  </CardWellHighlight> ({Math.round(peakUtilizationPercentage * 100)}% utilization)
+                  </CardDataModuleWellHighlight> ({Math.round(peakUtilizationPercentage * 100)}% utilization)
                 </span>}
-              </CardWell>
+              </CardDataModuleWell>
 
               <div className="insights-space-detail-utilization-card-daily-breakdown-chart">
                 <LineChartComponent
@@ -590,10 +572,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   ]}
                 />
               </div>
-            </Card>
+            </CardDataModule>
           </div>
         );
-
       default:
         return null;
     }
