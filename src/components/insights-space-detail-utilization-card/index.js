@@ -7,6 +7,11 @@ import 'moment-timezone';
 import { core } from '../../client';
 
 import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
+import CardDataModule, {
+  CardDataModuleWell,
+  CardDataModuleWellHighlight,
+  CardDataModuleSection,
+} from '@density/ui-card-data-module';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
@@ -250,8 +255,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
       peakUtilizationPercentage /= 100;
     }
 
-    const averageWeekHeader = (
-      <CardHeader>
+    const averageWeekTitle = (
+      <span>
         An Average Week
         <InfoPopup horizontalIconOffset={8}>
           <p className="insights-space-detail-utilization-card-popup-p">
@@ -271,22 +276,11 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             of 10 minute intervals). Does not include incomplete days of data.
           </p>
         </InfoPopup>
-        <span
-          className={classnames('insights-space-detail-utilization-card-header-refresh', {
-            disabled: view !== VISIBLE,
-          })}
-          onClick={() => this.setState({
-            view: LOADING,
-            data: null,
-          }, () => this.fetchData())}
-        >
-          <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-        </span>
-      </CardHeader>
+      </span>
     );
 
-    const averageDayHeader = (
-      <CardHeader>
+    const averageDayTitle = (
+      <span>
         An Average Day
         <InfoPopup horizontalIconOffset={8}>
           <p className="insights-space-detail-utilization-card-popup-p">
@@ -308,130 +302,153 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
             within the date range. Does not include incomplete days of data.
           </p>
         </InfoPopup>
-        <span
-          className={classnames('insights-space-detail-utilization-card-header-refresh', {
-            disabled: view !== VISIBLE,
-          })}
-          onClick={() => this.setState({
-            view: LOADING,
-            data: null,
-          }, () => this.fetchData())}
-        >
-          <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-        </span>
-      </CardHeader>
+      </span>
     );
 
     let body;
     switch (this.state.view) {
       case LOADING:
-        body = (
-          <span>
-            {(() => {
-              if (
-                moment.duration(
-                  moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
-                ).weeks() > 2
-              ) {
-                return 'Generating Data (this may take a while ... )'
-              } else {
-                return 'Generating Data . . .';
-              }
-            })()}
-          </span>
-        );
+        const loadingMessage = (() => {
+          if (
+            moment.duration(
+              moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
+            ).weeks() > 2
+          ) {
+            return 'Generating Data (this may take a while ... )'
+          } else {
+            return 'Generating Data . . .';
+          }
+        })();
 
         return (
           <div>
-            <Card className="insights-space-detail-utilization-card-average-week">
-              <CardLoading indeterminate />
-              {averageWeekHeader}
-              <div className="insights-space-detail-utilization-card-body-info" style={{height: 514}}>
-                {body}
-              </div>
-            </Card>
-            <Card className="insights-space-detail-utilization-card-average-day">
-              <CardLoading indeterminate />
-              {averageDayHeader}
-              <div className="insights-space-detail-utilization-card-body-info" style={{height: 624}}>
-                {body}
-              </div>
-            </Card>
+            <CardDataModule
+              title={averageWeekTitle}
+              height={650}
+              loading
+              customLoadingMessage={loadingMessage}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            />
+            <CardDataModule
+              title={averageDayTitle}
+              height={500}
+              loading
+              customLoadingMessage={loadingMessage}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            />
           </div>
         );
 
       case REQUIRES_CAPACITY:
-        body = (
-          <div className="insights-space-detail-utilization-card-body-info">
-            <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
-          </div>
-        );
-
         return (
           <div>
-            <Card className="insights-space-detail-utilization-card-average-week">
-              {averageWeekHeader}
-              {body}
-            </Card>
-            <Card className="insights-space-detail-utilization-card-average-day">
-              {averageDayHeader}
-              {body}
-            </Card>
+            <CardDataModule
+              title="An Average Week"
+              height={650}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            >
+              <div className="insights-space-detail-utilization-card-body-info">
+                <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
+              </div>
+            </CardDataModule>
+            <CardDataModule
+              title="An Average Day"
+              height={500}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            >
+              <div className="insights-space-detail-utilization-card-body-info">
+                <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
+              </div>
+            </CardDataModule>
           </div>
         );
 
       case EMPTY:
-        body = (
-          <div className="insights-space-detail-utilization-card-body-info">
-            <span>No data found in date range.</span>
+        return (
+          <div>
+            <CardDataModule
+              title="An Average Week"
+              height={650}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            >
+              <div className="insights-space-detail-utilization-card-body-info">
+                <span>No data found in time range.</span>
+              </div>
+            </CardDataModule>
+            <CardDataModule
+              title="An Average Day"
+              height={500}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            >
+              <div className="insights-space-detail-utilization-card-body-info">
+                <span>No data found in time range.</span>
+              </div>
+            </CardDataModule>
           </div>
         );
-
-        return <div>
-          <Card className="insights-space-detail-utilization-card-average-week">
-            {averageWeekHeader}
-            {body}
-          </Card>
-          <Card className="insights-space-detail-utilization-card-average-day">
-            {averageDayHeader}
-            {body}
-          </Card>
-        </div>;
 
       case ERROR:
-        body = (
-          <div className="insights-space-detail-utilization-card-body-info">
-            <span>
-              <span className="insights-space-detail-utilization-card-body-error-icon">&#xe91a;</span>
-              {this.state.error}
-            </span>
+        return (
+          <div>
+            <CardDataModule
+              title="An Average Week"
+              height={650}
+              error={this.state.error}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            />
+            <CardDataModule
+              title="An Average Day"
+              height={500}
+              error={this.state.error}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            />
           </div>
         );
-
-        return <div>
-          <Card className="insights-space-detail-utilization-card-average-week">
-            {averageWeekHeader}
-            {body}
-          </Card>
-          <Card className="insights-space-detail-utilization-card-average-day">
-            {averageDayHeader}
-            {body}
-          </Card>
-        </div>;
 
       case VISIBLE:
         return (
           <div>
-            <Card className="insights-space-detail-utilization-card-average-week">
-              {averageWeekHeader}
-              <CardWell type="dark">
-                Average utilization of <CardWellHighlight>
+            <CardDataModule
+              title={averageWeekTitle}
+              height={650}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            >
+              <CardDataModuleWell>
+                Average utilization of <CardDataModuleWellHighlight>
                   {Math.round(this.calculateAverageUtilization() * 100)}%
-                </CardWellHighlight> during <CardWellHighlight>
+                </CardDataModuleWellHighlight> during <CardDataModuleWellHighlight>
                   {timeSegmentGroup.name}
-                </CardWellHighlight>
-              </CardWell>
-              <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
+                </CardDataModuleWellHighlight>
+              </CardDataModuleWell>
+
+              <CardDataModuleSection>
                 <div className="insights-space-detail-utilization-card-grid-header">
                   <div className="insights-space-detail-utilization-card-grid-item">Day</div>
                   <div className="insights-space-detail-utilization-card-grid-item">Average Utilization</div>
@@ -449,10 +466,30 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                     </div>
                   </div>;
                 })}
+              </CardDataModuleSection>
+            </CardDataModule>
+            <CardDataModule
+              title={averageDayTitle}
+              height={500}
+              onRefresh={() => this.setState({
+                view: LOADING,
+                data: null,
+              }, () => this.fetchData())}
+            >
+            </CardDataModule>
+          </div>
+        );
+        return (
+          <div>
+            <Card className="insights-space-detail-utilization-card-average-week">
+              {averageWeekTitle}
+              <CardWell type="dark">
+              </CardWell>
+              <CardBody className="insights-space-detail-utilization-card-average-weekly-breakdown">
               </CardBody>
             </Card>
             <Card className="insights-space-detail-utilization-card-average-day">
-              {averageDayHeader}
+              {averageDayTitle}
               <CardWell type="dark">
                 {peakUtilizationTimestamp === null ? <span>
                   <CardWellHighlight>

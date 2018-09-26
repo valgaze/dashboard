@@ -1,14 +1,12 @@
 import React from 'react';
-import classnames from 'classnames';
 
 import moment from 'moment';
 import 'moment-timezone';
 
 import { core } from '../../client';
-import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
+import CardDataModule from '@density/ui-card-data-module';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import InputBox from '@density/ui-input-box';
-import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
 import { DEFAULT_TIME_SEGMENT_GROUP, DEFAULT_TIME_SEGMENT } from '../../helpers/time-segments/index';
@@ -192,84 +190,71 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
 
     if (space) {
       return (
-        <Card>
-          {view === LOADING ? <CardLoading indeterminate /> : null }
+        <CardDataModule
+          loading={view === LOADING}
+          height={450}
+          title={<span>
+            Daily Metrics
+            <InfoPopup horizontalIconOffset={8}>
+              <p className="insights-space-detail-daily-metrics-card-popup-p">
+                Visitation metrics for time segment <strong>{timeSegmentGroup.name}</strong>,{' '}
+                grouped by day over{' '}
+                <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>
+                {' - '}
+                <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>.
+              </p>
 
-          <CardHeader className="insights-space-detail-daily-metrics-card-header">
-            <div className="insights-space-detail-daily-metrics-card-title">
-              Daily Metrics
-              <InfoPopup horizontalIconOffset={8}>
-                <p className="insights-space-detail-daily-metrics-card-popup-p">
-                  Visitation metrics for time segment <strong>{timeSegmentGroup.name}</strong>,{' '}
-                  grouped by day over{' '}
-                  <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>
-                  {' - '}
-                  <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>.
-                </p>
+              <p className="insights-space-detail-daily-metrics-card-popup-p">
+                Use these metrics to understand the visitation of your space, and how it trends
+                over time.
+              </p>
 
-                <p className="insights-space-detail-daily-metrics-card-popup-p">
-                  Use these metrics to understand the visitation of your space, and how it trends
-                  over time.
-                </p>
-
-                <ul className="insights-space-detail-daily-metrics-card-popup-ul">
-                  <li>
-                    <strong>Entrances</strong>: Total number of events from people entering the space.
-                  </li>
-                  <li>
-                    <strong>Exits</strong>: Total number of events from people exiting the space.
-                  </li>
-                  <li>
-                    <strong>Peak Counts</strong>: Peak count at any given point in time over the course of the day.
-                  </li>
-                </ul>
-              </InfoPopup>
-              <span
-                className={classnames('insights-space-detail-daily-metrics-card-refresh mid', {
-                  disabled: view !== VISIBLE,
-                })}
-                onClick={() => this.setState({
-                  view: LOADING,
-                  data: null,
-                }, () => this.fetchData())}
-              >
-                <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-              </span>
-            </div>
-            <div className="insights-space-detail-daily-metrics-card-metric-picker">
-              <InputBox
-                type="select"
-                value={metricToDisplay}
-                disabled={view !== VISIBLE}
-                onChange={e => {
-                  this.setState({
-                    view: LOADING,
-                    data: null,
-                    metricToDisplay: e.id,
-                  }, () => this.fetchData());
-                }}
-                choices={[
-                  {id: "entrances", label: "Entrances"},
-                  {id: "exits", label: "Exits"},
-                  {id: "total-events", label: "Total Events"},
-                  {id: "peak-occupancy", label: "Peak Occupancy"},
-                ]}
-              />
-            </div>
-            <span
-              className={classnames('insights-space-detail-daily-metrics-card-refresh end', {
-                disabled: view !== VISIBLE,
-              })}
-              onClick={() => this.setState({
-                view: LOADING,
-                data: null,
-              }, () => this.fetchData())}
-            >
-              <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-            </span>
-          </CardHeader>
-
-          <CardBody className="insights-space-detail-daily-metrics-card-body">
+              <ul className="insights-space-detail-daily-metrics-card-popup-ul">
+                <li>
+                  <strong>Entrances</strong>: Total number of events from people entering the space.
+                </li>
+                <li>
+                  <strong>Exits</strong>: Total number of events from people exiting the space.
+                </li>
+                <li>
+                  <strong>Peak Counts</strong>: Peak count at any given point in time over the course of the day.
+                </li>
+              </ul>
+            </InfoPopup>
+          </span>}
+          controls={[
+            {
+              key: 'metric-picker',
+              control: (
+                <InputBox
+                  type="select"
+                  value={metricToDisplay}
+                  disabled={view !== VISIBLE}
+                  onChange={e => {
+                    this.setState({
+                      view: LOADING,
+                      data: null,
+                      metricToDisplay: e.id,
+                    }, () => this.fetchData());
+                  }}
+                  choices={[
+                    {id: "entrances", label: "Entrances"},
+                    {id: "exits", label: "Exits"},
+                    {id: "total-events", label: "Total Events"},
+                    {id: "peak-occupancy", label: "Peak Occupancy"},
+                  ]}
+                />
+              ),
+            },
+          ]}
+          error={view === ERROR && error.toString()}
+          refreshDisabled={view !== VISIBLE}
+          onRefresh={() => this.setState({
+            view: LOADING,
+            data: null,
+          }, () => this.fetchData())}
+        >
+          <div className="insights-space-detail-daily-metrics-card-body">
             {view === VISIBLE ? (() => {
               if (data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
                 // For more than two weeks of data, show the graph chart.
@@ -361,22 +346,11 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
               }
             })() : null}
 
-            {view === ERROR ? <div className="insights-space-detail-daily-metrics-card-body-error">
-              <span>
-                <span className="insights-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
-                {error.toString()}
-              </span>
-            </div> : null }
-
             {view === EMPTY ? <div className="insights-space-detail-daily-metrics-card-body-info">
               No data available for this time range.
             </div> : null }
-
-            {view === LOADING ? <div className="insights-space-detail-daily-metrics-card-body-info">
-              Generating Data&nbsp;.&nbsp;.&nbsp;.
-            </div> : null }
-          </CardBody>
-        </Card>
+          </div>
+        </CardDataModule>
       );
     } else {
       return null;

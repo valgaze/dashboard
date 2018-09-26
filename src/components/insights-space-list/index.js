@@ -285,7 +285,6 @@ export class InsightsSpaceList extends React.Component {
         modalOpen={activeModal.name !== null}
       />
 
-
       {/* Modal that is used to let the user set the capacity of a space. Shown when the user clicks
       on a 'set capacity' link within a space row if the space capacity isn't set. If the capacity
       is already set, the capacity can be adjusted from within the detail page. */}
