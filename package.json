@@ -16,7 +16,6 @@
     "@density/ui": "5.0.1",
     "@density/ui-button": "^0.1.4",
     "@density/ui-card": "^1.0.4",
-    "@density/ui-context-menu": "^0.2.0",
     "@density/ui-date-picker": "^2.0.1",
     "@density/ui-date-range-picker": "^1.0.4",
     "@density/ui-density-mark": "^1.0.0",
