@@ -36,7 +36,9 @@ export class AccountForgotPassword extends React.Component {
     return <div className="account-forgot-password">
       <ErrorBar message={this.state.error} showRefresh />
 
-      <Mark className="account-forgot-password-mark" />
+      <div className="account-forgot-password-mark">
+        <Mark size={100} />
+      </div>
 
       <p className="account-forgot-password-lead-in">
         Password change request:

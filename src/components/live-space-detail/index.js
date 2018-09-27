@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import Mark from '@density/ui-density-mark';
@@ -28,7 +28,9 @@ export function LiveSpaceDetail({
     return <div>Error: {spacesError}</div>;
   } else {
     return <div className="live-space-detail">
-      <Mark className="live-space-detail-mark" />
+      <div className="live-space-detail-mark">
+        <Mark size={100} />
+      </div>
       <div className="live-space-detail-stats">
         <div className="live-space-detail-stats-item">
           <h2 className="live-space-detail-stats-count">

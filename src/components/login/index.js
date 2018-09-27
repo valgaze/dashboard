@@ -190,7 +190,9 @@ export class Login extends React.Component {
           <p>{this.state.error}</p>
         </Toast> : null}
 
-        <Mark className="login-density-logo" />
+        <div className="login-density-logo">
+          <Mark size={100} />
+        </div>
 
         {/* Login inputs */}
         {this.state.view === LOGIN ?
