@@ -13,7 +13,9 @@ export default function EnvironmentModalDoorwayAlreadyInSpace({doorway, space, o
           doorway and space are already linked together.
         </p>
 
-        <Button className="environment-modal-doorway-already-in-space-button" onClick={onDismiss}>Ok</Button>
+        <div className="environment-modal-doorway-already-in-space-button">
+          <Button onClick={onDismiss}>Ok</Button>
+        </div>
       </CardBody>
     </Card>
   </Modal>;

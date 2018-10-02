@@ -58,6 +58,6 @@ describe('set-settings-flag', function() {
     const setSettingsFlag = setSettingsFlagConstructor(store);
     assert.throws(() => {
       setSettingsFlag('key', 'value');
-    }, 'Please wait for the user collection to load before changing settings flags.');
+    }, new Error('Please wait for the user collection to load before changing settings flags.'));
   });
 });

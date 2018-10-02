@@ -67,15 +67,16 @@ export default class TokenUpdateModal extends React.Component {
               input={<span>To update permissions you must create a new token.</span>}
             />
 
-            <Button
-              className="token-update-modal-submit"
-              disabled={this.state.name.length === 0}
-              onClick={() => this.props.onSubmit({
-                name: this.state.name,
-                description: this.state.description,
-                key: this.state.key,
-              })}
-            >Save Changes</Button>
+            <div className="token-update-modal-submit">
+              <Button
+                disabled={this.state.name.length === 0}
+                onClick={() => this.props.onSubmit({
+                  name: this.state.name,
+                  description: this.state.description,
+                  key: this.state.key,
+                })}
+              >Save Changes</Button>
+            </div>
           </CardBody>
         </Card>
       </Modal>
@@ -112,11 +113,12 @@ export default class TokenUpdateModal extends React.Component {
               />
             </div>
 
-            <Button
-              className="token-update-destroy-submit"
-              disabled={this.state.name !== this.state.destroyNameConfirmation}
-              onClick={() => this.props.onDestroyToken(this.props.initialToken)}
-            >I understand the consequences. Delete.</Button>
+            <div className="token-update-destroy-submit">
+              <Button
+                disabled={this.state.name !== this.state.destroyNameConfirmation}
+                onClick={() => this.props.onDestroyToken(this.props.initialToken)}
+              >I understand the consequences. Delete.</Button>
+            </div>
           </CardBody>
         </Card>
       </Modal>

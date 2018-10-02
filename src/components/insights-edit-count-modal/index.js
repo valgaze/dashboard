@@ -58,10 +58,11 @@ export default class InsightsEditCountModal extends React.Component {
               >+</button>
             </div>
 
-            <Button
-              className="insights-edit-count-modal-submit"
-              onClick={() => this.props.onSubmit(this.state.count)}
-            >Save Changes</Button>
+            <div className="insights-edit-count-modal-submit">
+              <Button
+                onClick={() => this.props.onSubmit(this.state.count)}
+              >Save Changes</Button>
+            </div>
           </CardBody>
         </Card>
       </Modal>

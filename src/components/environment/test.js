@@ -1025,15 +1025,15 @@ describe('Empty state, without doorways or spaces', function() {
     assert.equal(component.find('.environment-space-empty').length, 1);
 
     // Should disable the search and filter box for the space
-    assert.equal(component.find('.environment-space-search-box').prop('disabled'), true);
-    assert.equal(component.find('.environment-space-order-box > .disabled').length, 1);
+    assert.equal(component.find('.environment-space-search-box InputBox').prop('disabled'), true);
+    assert.equal(component.find('.environment-space-order-box InputBox').prop('disabled'), true);
 
     // Should render the empty state for the doorway
     assert.equal(component.find('.environment-doorway-empty').length, 1);
 
     // Should disable the search and filter box for the doorway
-    assert.equal(component.find('.environment-doorway-search-box').prop('disabled'), true);
-    assert.equal(component.find('.environment-doorway-order-box > .disabled').length, 1);
+    assert.equal(component.find('.environment-doorway-search-box InputBox').prop('disabled'), true);
+    assert.equal(component.find('.environment-doorway-order-box InputBox').prop('disabled'), true);
   });
 });
 
@@ -1188,7 +1188,7 @@ describe('Link workflows (aka, dragging doorways to spaces)', function() {
     assert.equal(component.find('.environment-modal-doorway-already-in-space').length, 1);
 
     // Click the dismiss button on the modal.
-    component.find('.environment-modal-doorway-already-in-space-button').simulate('click');
+    component.find('.environment-modal-doorway-already-in-space-button Button').simulate('click');
 
     // Modal should be closed.
     assert.equal(store.getState().activeModal.name, null);
@@ -1311,7 +1311,7 @@ describe('Link workflows (aka, dragging doorways to spaces)', function() {
         sensor_placement: 1,
       }),
     });
-    component.find('.environment-modal-sensor-placement-button-yes').simulate('click');
+    component.find('.environment-modal-sensor-placement-button-yes Button').simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(25);

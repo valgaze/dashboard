@@ -62,12 +62,13 @@ export class AccountForgotPassword extends React.Component {
         </InputStackGroup>
       </div>
 
-      <Button
-        onClick={this.onSubmit.bind(this)}
-        disabled={this.state.loading || !(this.state.password.length > 0 && this.state.password === this.state.passwordConfirmation)}
-        size="large"
-        className="account-forgot-password-submit-button"
-      >Update Password</Button>
+      <div className="account-forgot-password-submit-button">
+        <Button
+          onClick={this.onSubmit.bind(this)}
+          disabled={this.state.loading || !(this.state.password.length > 0 && this.state.password === this.state.passwordConfirmation)}
+          size="large"
+        >Update Password</Button>
+      </div>
     </div>;
   }
 }

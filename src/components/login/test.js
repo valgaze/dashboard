@@ -31,27 +31,27 @@ describe('Login page', function() {
     // No email or password: invalid.
     component.find('input[type="email"]').simulate('change', {target: {value: ''}});
     component.find('input[type="password"]').simulate('change', {target: {value: ''}});
-    assert.equal(component.find('.login-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.login-submit-button Button').prop('disabled'), true);
 
     // Valid email, but no password: invalid.
     component.find('input[type="email"]').simulate('change', {target: {value: 'foo@example.com'}});
     component.find('input[type="password"]').simulate('change', {target: {value: ''}});
-    assert.equal(component.find('.login-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.login-submit-button Button').prop('disabled'), true);
 
     // Valid password, but no email: invalid.
     component.find('input[type="email"]').simulate('change', {target: {value: ''}});
     component.find('input[type="password"]').simulate('change', {target: {value: 'bar'}});
-    assert.equal(component.find('.login-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.login-submit-button Button').prop('disabled'), true);
 
     // Valid password, but invalid email: invalid.
     component.find('input[type="email"]').simulate('change', {target: {value: 'not an email'}});
     component.find('input[type="password"]').simulate('change', {target: {value: 'bar'}});
-    assert.equal(component.find('.login-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.login-submit-button Button').prop('disabled'), true);
 
     // Valid email and password: valid.
     component.find('input[type="email"]').simulate('change', {target: {value: 'a@a'}});
     component.find('input[type="password"]').simulate('change', {target: {value: 'a'}});
-    assert.equal(component.find('.login-submit-button').prop('disabled'), false);
+    assert.equal(component.find('.login-submit-button Button').prop('disabled'), false);
   });
 
   it('should only allow submission when the password change request form is valid', async function() {
@@ -60,15 +60,15 @@ describe('Login page', function() {
 
     // No email: invalid.
     component.find('input[type="email"]').simulate('change', {target: {value: ''}});
-    assert.equal(component.find('.login-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.login-submit-button Button').prop('disabled'), true);
 
     // Malformed email: invalid (just checking for the presence of @)
     component.find('input[type="email"]').simulate('change', {target: {value: 'not an email'}});
-    assert.equal(component.find('.login-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.login-submit-button Button').prop('disabled'), true);
 
     // Valid email: valid.
     component.find('input[type="email"]').simulate('change', {target: {value: 'a@a'}});
-    assert.equal(component.find('.login-submit-button').prop('disabled'), false);
+    assert.equal(component.find('.login-submit-button Button').prop('disabled'), false);
   });
 
   it('should submit login form via enter when that page is focused', async function() {
@@ -155,7 +155,9 @@ describe('Login page', function() {
     component.setState({error: 'boom!'});
 
     // Make sure an error toast is visible.
-    assert.equal(component.find('.login-toast.toast-danger').length, 1);
+    const toast = component.find('.login-toast Toast');
+    assert.equal(toast.length, 1);
+    assert.equal(toast.props().type, 'danger');
   });
 
   it('shows a toast when referred to from the forgot password page', function() {

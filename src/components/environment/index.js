@@ -178,25 +178,27 @@ export function Environment({
 
             {/* Header above the column. Allows searching and ordering of data. */}
             <div className="environment-space-column-header-row2">
-              <InputBox
-                className="environment-space-search-box"
-                type="text"
-                placeholder="Filter spaces ..."
-                value={spaces.filters.search}
-                onChange={e => onSpaceSearch(e.target.value)}
-                disabled={spaces.data.length === 0}
-              />
-              <InputBox
-                className="environment-space-order-box"
-                type="select"
-                value={spaces.filters.sort}
-                onChange={e => onSpaceSort(e.id)}
-                disabled={spaces.data.length === 0}
-                choices={[
-                  {id: SORT_A_Z, label: 'A - Z'},
-                  {id: SORT_NEWEST, label: 'Newest'},
-                ]}
-              />
+              <div className="environment-space-search-box">
+                <InputBox
+                  type="text"
+                  placeholder="Filter spaces ..."
+                  value={spaces.filters.search}
+                  onChange={e => onSpaceSearch(e.target.value)}
+                  disabled={spaces.data.length === 0}
+                />
+              </div>
+              <div className="environment-space-order-box">
+                <InputBox
+                  type="select"
+                  value={spaces.filters.sort}
+                  onChange={e => onSpaceSort(e.id)}
+                  disabled={spaces.data.length === 0}
+                  choices={[
+                    {id: SORT_A_Z, label: 'A - Z'},
+                    {id: SORT_NEWEST, label: 'Newest'},
+                  ]}
+                />
+              </div>
             </div>
             <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>
               <DismissableToast
@@ -265,25 +267,27 @@ export function Environment({
 
             {/* Header above the column. Allows searching and ordering of data. */}
             <div className="environment-doorway-column-header-row2">
-              <InputBox
-                className="environment-doorway-search-box"
-                type="text"
-                placeholder="Filter doorways ..."
-                value={doorways.filters.search}
-                onChange={e => onDoorwaySearch(e.target.value)}
-                disabled={doorways.data.length === 0}
-              />
-              <InputBox
-                className="environment-doorway-order-box"
-                type="select"
-                value={doorways.filters.sort}
-                onChange={e => onDoorwaySort(e.id)}
-                disabled={doorways.data.length === 0}
-                choices={[
-                  {id: SORT_A_Z, label: 'A - Z'},
-                  {id: SORT_NEWEST, label: 'Newest'},
-                ]}
-              />
+              <div className="environment-doorway-search-box">
+                <InputBox
+                  type="text"
+                  placeholder="Filter doorways ..."
+                  value={doorways.filters.search}
+                  onChange={e => onDoorwaySearch(e.target.value)}
+                  disabled={doorways.data.length === 0}
+                />
+              </div>
+              <div className="environment-doorway-order-box">
+                <InputBox
+                  type="select"
+                  value={doorways.filters.sort}
+                  onChange={e => onDoorwaySort(e.id)}
+                  disabled={doorways.data.length === 0}
+                  choices={[
+                    {id: SORT_A_Z, label: 'A - Z'},
+                    {id: SORT_NEWEST, label: 'Newest'},
+                  ]}
+                />
+              </div>
             </div>
 
             <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>

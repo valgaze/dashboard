@@ -80,15 +80,16 @@ export default class WebhookCreateModal extends React.Component {
 
             {this.props.error ? <span>Error: {this.props.error}</span> : null}
 
-            <Button
-              className="webhook-create-modal-submit"
-              disabled={this.state.endpoint.length === 0}
-              onClick={() => this.props.onSubmit({
-                name: this.state.name,
-                desc: this.state.desc,
-                endpoint: this.state.endpoint,
-              })}
-            >Submit</Button>
+            <div className="webhook-create-modal-submit">
+              <Button
+                disabled={this.state.endpoint.length === 0}
+                onClick={() => this.props.onSubmit({
+                  name: this.state.name,
+                  desc: this.state.desc,
+                  endpoint: this.state.endpoint,
+                })}
+              >Submit</Button>
+            </div>
           </CardBody>
         </Card>
       </div>

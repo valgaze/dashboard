@@ -18,27 +18,27 @@ describe('forgot-password', function() {
     />);
 
     // Empty form: invalid
-    assert.equal(component.find('.account-forgot-password-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.account-forgot-password-submit-button Button').prop('disabled'), true);
 
     // Only enter a password into the first box: invalid
     component.find('.account-forgot-password-form input').first().simulate('change', {target: {value: 'p@ssw0rd'}});
     component.find('.account-forgot-password-form input').last().simulate('change', {target: {value: ''}});
-    assert.equal(component.find('.account-forgot-password-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.account-forgot-password-submit-button Button').prop('disabled'), true);
 
     // Only enter a password into the last box: invalid
     component.find('.account-forgot-password-form input').first().simulate('change', {target: {value: ''}});
     component.find('.account-forgot-password-form input').last().simulate('change', {target: {value: 'p@ssw0rd'}});
-    assert.equal(component.find('.account-forgot-password-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.account-forgot-password-submit-button Button').prop('disabled'), true);
 
     // Enter different passwords in both boxes: invalid
     component.find('.account-forgot-password-form input').first().simulate('change', {target: {value: 'not password'}});
     component.find('.account-forgot-password-form input').last().simulate('change', {target: {value: 'p@ssw0rd'}});
-    assert.equal(component.find('.account-forgot-password-submit-button').prop('disabled'), true);
+    assert.equal(component.find('.account-forgot-password-submit-button Button').prop('disabled'), true);
 
     // Enter same password into both boxes: valid
     component.find('.account-forgot-password-form input').first().simulate('change', {target: {value: 'p@ssw0rd'}});
     component.find('.account-forgot-password-form input').last().simulate('change', {target: {value: 'p@ssw0rd'}});
-    assert.equal(component.find('.account-forgot-password-submit-button').prop('disabled'), false);
+    assert.equal(component.find('.account-forgot-password-submit-button Button').prop('disabled'), false);
   });
   it('should make a request to accounts api when a password is successfully reset', async function() {
     const onUserLoggedIn = sinon.spy();
@@ -52,7 +52,7 @@ describe('forgot-password', function() {
     component.find('.account-forgot-password-form input').last().simulate('change', {target: {value: 'p@ssw0rd'}});
 
     // Verify the submit button is enabled
-    assert.equal(component.find('.account-forgot-password-submit-button').prop('disabled'), false);
+    assert.equal(component.find('.account-forgot-password-submit-button Button').prop('disabled'), false);
 
     // Mock the impending request that is going to be made to accounts api
     global.fetch = sinon.stub().resolves({
@@ -63,7 +63,7 @@ describe('forgot-password', function() {
     });
 
     // Click the submit button
-    component.find('.account-forgot-password-submit-button').simulate('click');
+    component.find('.account-forgot-password-submit-button Button').simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(100);

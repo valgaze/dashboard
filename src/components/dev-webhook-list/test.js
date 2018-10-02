@@ -58,14 +58,14 @@ describe('Webhook list page', function() {
     assert.equal(component.find('.webhook-create').length, 1);
 
     // The button in the modal should be disabled by default.
-    assert.equal(component.find('.webhook-create-modal-submit').prop('disabled'), true);
+    assert.equal(component.find('.webhook-create-modal-submit Button').prop('disabled'), true);
 
     // Add a webhook name and endpoint
     component.find('.webhook-create-name-container input').simulate('change', {target: {value: 'webhook name'}});
     component.find('.webhook-create-endpoint-container input').simulate('change', {target: {value: 'http://example.com'}});
 
     // The button in the modal should now be enabled.
-    assert.equal(component.find('.webhook-create-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.webhook-create-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should create a new webhook on the server.
     global.fetch = sinon.stub().resolves({
@@ -79,7 +79,7 @@ describe('Webhook list page', function() {
         endpoint: 'http://example.com',
       }),
     });
-    component.find('.webhook-create-modal-submit').simulate('click');
+    component.find('.webhook-create-modal-submit Button').simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().webhooks.loading, true);
@@ -109,14 +109,14 @@ describe('Webhook list page', function() {
     assert.equal(component.find('.webhook-create').length, 1);
 
     // The button in the modal should be disabled by default.
-    assert.equal(component.find('.webhook-create-modal-submit').prop('disabled'), true);
+    assert.equal(component.find('.webhook-create-modal-submit Button').prop('disabled'), true);
 
     // Add a webhook name and endpoint
     component.find('.webhook-create-name-container input').simulate('change', {target: {value: 'webhook name'}});
     component.find('.webhook-create-endpoint-container input').simulate('change', {target: {value: 'http://example.com'}});
 
     // The button in the modal should now be enabled.
-    assert.equal(component.find('.webhook-create-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.webhook-create-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should create a new webhook on the server.
     global.fetch = sinon.stub().resolves({
@@ -125,7 +125,7 @@ describe('Webhook list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
     });
-    component.find('.webhook-create-modal-submit').simulate('click');
+    component.find('.webhook-create-modal-submit Button').simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().webhooks.loading, true);
@@ -156,13 +156,13 @@ describe('Webhook list page', function() {
     assert.equal(component.find('.webhook-update-modal').length, 1);
 
     // The button in the modal should be enabled, since the webhook was valid already.
-    assert.equal(component.find('.webhook-update-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.webhook-update-modal-submit Button').prop('disabled'), false);
 
     // Update name
     component.find('.webhook-update-name-container input').simulate('change', {target: {value: 'foo!'}});
 
     // The button in the modal should still be enabled.
-    assert.equal(component.find('.webhook-update-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.webhook-update-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should create a new webhook on the server.
     global.fetch = sinon.stub().resolves({
@@ -176,7 +176,7 @@ describe('Webhook list page', function() {
         endpoint: 'http://example.com',
       }),
     });
-    component.find('.webhook-update-modal-submit').simulate('click');
+    component.find('.webhook-update-modal-submit Button').simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().webhooks.loading, true);
@@ -206,13 +206,13 @@ describe('Webhook list page', function() {
     assert.equal(component.find('.webhook-update-modal').length, 1);
 
     // The button in the modal should be enabled, since the webhook was valid already.
-    assert.equal(component.find('.webhook-update-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.webhook-update-modal-submit Button').prop('disabled'), false);
 
     // Update name
     component.find('.webhook-update-name-container input').simulate('change', {target: {value: 'foo!'}});
 
     // The button in the modal should still be enabled.
-    assert.equal(component.find('.webhook-update-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.webhook-update-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should attempt to update the webhook.
     global.fetch = sinon.stub().resolves({
@@ -221,7 +221,7 @@ describe('Webhook list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
     });
-    component.find('.webhook-update-modal-submit').simulate('click');
+    component.find('.webhook-update-modal-submit Button').simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().webhooks.loading, true);
@@ -267,7 +267,7 @@ describe('Webhook list page', function() {
         endpoint: 'http://example.com',
       }),
     });
-    component.find('.webhook-update-modal-destroy-submit').simulate('click');
+    component.find('.webhook-update-modal-destroy-submit Button').simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().webhooks.loading, true);
@@ -305,7 +305,7 @@ describe('Webhook list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
     });
-    component.find('.webhook-update-modal-destroy-submit').simulate('click');
+    component.find('.webhook-update-modal-destroy-submit Button').simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().webhooks.loading, true);
