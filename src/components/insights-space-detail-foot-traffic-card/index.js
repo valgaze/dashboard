@@ -123,8 +123,8 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
       }
     }) : null;
 
-    const min = data ? Math.min.apply(Math, data.map(i => i.count)) : '-';
-    const max = data ? Math.max.apply(Math, data.map(i => i.count)) : '-';
+    const min = data ? Math.min.apply(Math, data.map(i => i.interval.analytics.min)) : '-';
+    const max = data ? Math.max.apply(Math, data.map(i => i.interval.analytics.max)) : '-';
 
     const startOfDayTime = moment.utc(date).tz(space.timeZone).startOf('day');
     const startTime = startOfDayTime
