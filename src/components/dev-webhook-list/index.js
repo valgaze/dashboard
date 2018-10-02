@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import InputBox from '@density/ui-input-box';
+import InfoPopup from '@density/ui-info-popup';
 
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
@@ -17,7 +18,6 @@ import Subnav, { SubnavItem } from '../subnav/index';
 import WebhookCard from '../dev-webhook-card/index';
 import WebhookCreateModal from '../dev-webhook-create/index';
 import WebhookUpdateModal from '../dev-webhook-update-modal/index';
-import DescriptionModal from '../dev-description-popover/index';
 
 import filterCollection from '../../helpers/filter-collection/index';
 
@@ -81,7 +81,10 @@ export function WebhookList({
       <div className="webhook-list-header">
         <span>
           <h1 className="webhook-list-header-text">Webhooks</h1>
-          <DescriptionModal>
+          <InfoPopup
+            horizontalIconOffset={8}
+            verticalIconOffset={-100}
+          >
             <p>
               Webhooks allow us to push your data whenever your Density sensors count an event. Create a webhook, tell us what endpoint to hit, and we'll send you a HTTP request for each event.
             </p>
@@ -91,7 +94,7 @@ export function WebhookList({
               target="_blank"
               rel="noopener noreferrer"
             >View our API Documentation</a>
-          </DescriptionModal>
+          </InfoPopup>
         </span>
 
         {/* Search box to filter webhook list */}

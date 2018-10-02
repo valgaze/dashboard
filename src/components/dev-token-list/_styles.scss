@@ -37,6 +37,7 @@
 
 .token-list-row {
   @include grid-row;
+  z-index: -5;
 }
 
 .token-list-item {
@@ -83,7 +84,4 @@
 
 .token-list-container .info-popup-icon {
   vertical-align: middle;
-}
-.token-list-container .info-popup-popup {
-  z-index: 999;
 }
