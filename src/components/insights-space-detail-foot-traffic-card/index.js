@@ -92,6 +92,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         date,
         timeSegment,
         timeSegmentGroup,
+        dataSpaceId: space.id,
       }, () => this.fetchData());
     }
   }
@@ -112,20 +113,6 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
       timeSegmentGroup,
     } = this.state;
 
-    const chartData = data ? data.map(i => ({
-        timestamp: i.timestamp,
-        value: i.interval.analytics.max,
-    })).sort((a, b) => {
-      if (b) {
-        return moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf();
-      } else {
-        return 0;
-      }
-    }) : null;
-
-    const min = data ? Math.min.apply(Math, data.map(i => i.count)) : '-';
-    const max = data ? Math.max.apply(Math, data.map(i => i.count)) : '-';
-
     const startOfDayTime = moment.utc(date).tz(space.timeZone).startOf('day');
     const startTime = startOfDayTime
       .clone()
@@ -133,6 +120,47 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     const endTime = startOfDayTime
       .clone()
       .add(parseTimeInTimeSegmentToSeconds(timeSegment.end), 'seconds');
+
+    let chartData = null,
+        min = '-',
+        max = '-';
+
+    if (data) {
+      chartData = data.map(i => ({
+        timestamp: i.timestamp,
+        value: i.interval.analytics.max,
+      })).filter(i => {
+        // Remove all timestamps that fall off the right edge of the chart.
+        return moment.utc(i.timestamp).valueOf() < endTime.valueOf();
+      }).sort((a, b) => {
+        if (b) {
+          return moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf();
+        } else {
+          return 0;
+        }
+      });
+
+      const isToday = (
+        moment.utc(this.state.date).tz(space.timeZone).format('YYYY-MM-DD') ===
+        moment.utc().tz(space.timeZone).format('YYYY-MM-DD')
+      );
+
+      // Add a final point at the end of the chart that aligns with the right side of the chart.
+      // This ensures that if a few minutes of data are filtered out because the bucket would
+      // overflow the right side that the chart is still "filled out" up until the right side.
+      //
+      // In addition, don't attempt to "fill in" data for the current day, as it hasn't happened
+      // yet!
+      if (chartData.length > 0 && !isToday) {
+        chartData.push({
+          timestamp: endTime,
+          value: chartData[chartData.length-1].value,
+        });
+      }
+
+      min = Math.min.apply(Math, data.map(i => i.count));
+      max = Math.max.apply(Math, data.map(i => i.count));
+    }
 
     if (space) {
       const largestCount = view === 'VISIBLE' ? (
