@@ -10,11 +10,26 @@
 
 // The middle section, used to provide a freeform imput to move to a new page.
 .visualization-space-detail-raw-events-pager-picker {
+  display: flex;
+  align-items: center;
   margin-left: auto;
   margin-right: auto;
 }
 .visualization-space-detail-raw-events-pager-picker * { display: inline-block; }
 .visualization-space-detail-raw-events-pager-picker-box {
+  display: block;
+  resize: none;
+
+  font-family: $font-base;
+  font-size: $font-size-base;
+
+  color: $gray-darker;
+  background-color: #fff;
+
+  border: 1px solid $gray-light;
+  border-radius: $border-radius-base;
+
+  outline: none;
   padding-left: 0px;
   height: 29px;
   width: 4em;
@@ -24,4 +39,7 @@
 
   text-align: center;
   font-size: $font-size-base;
+
+  &:focus { border-color: $brand-primary; }
+  &::placeholder { color: $gray; }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import InputBox from '@density/ui-input-box';
 import PagerButtonGroup from '@density/ui-pager-button-group';
 
 export default class VisualizationSpaceDetailRawEventsPager extends React.Component {
@@ -23,7 +22,7 @@ export default class VisualizationSpaceDetailRawEventsPager extends React.Compon
       </div>
       <div className="visualization-space-detail-raw-events-pager-picker">
         <span>Page</span>
-        <InputBox
+        <input
           type="text"
           className="visualization-space-detail-raw-events-pager-picker-box"
           value={this.state.textPage === false ? page : this.state.textPage}
