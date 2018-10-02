@@ -202,6 +202,7 @@ export function Environment({
             </div>
             <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>
               <DismissableToast
+                type="primary"
                 storageKey="environment-space-space-column"
                 className="environment-space-header"
                 icon="&#xe91e;"
@@ -292,6 +293,7 @@ export function Environment({
 
             <div className={classnames('column-body', {'column-body-locked': activeModal.name})}>
               <DismissableToast
+                type="primary"
                 storageKey="environment-space-doorway-column"
                 className="environment-doorway-header"
                 icon="&#xe91e;"
