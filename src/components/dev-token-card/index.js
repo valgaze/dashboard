@@ -20,6 +20,7 @@ export default function TokenCard({token, onClickEdit}) {
         type="text"
         className="token-card-token-content"
         value={token.key}
+        width="100%"
         readOnly={true}
         // Text box is read only and does not contain data that can be spell-checked.
         autoComplete="off"

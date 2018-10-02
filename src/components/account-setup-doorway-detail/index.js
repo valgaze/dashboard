@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import Button from '@density/ui-button';
@@ -222,13 +222,15 @@ export class AccountSetupDoorwayDetail extends React.Component {
               className="account-setup-doorway-detail-body-input-label"
               htmlFor="account-setup-doorway-detail-body-doorway-name"
             >Doorway Name <span className="account-setup-doorway-detail-body-input-required">*</span></label>
-            <InputBox
-              type="text"
-              className="account-setup-doorway-detail-body-input"
-              placeholder="Doorway Name"
-              onChange={e => this.setState({doorway: {...this.state.doorway, name: e.target.value}})}
-              value={this.state.doorway.name || ''}
-            />
+            <div className="account-setup-doorway-detail-body-input">
+              <InputBox
+                type="text"
+                width="100%"
+                placeholder="Doorway Name"
+                onChange={e => this.setState({doorway: {...this.state.doorway, name: e.target.value}})}
+                value={this.state.doorway.name || ''}
+              />
+            </div>
 
 
             <h2 className="account-setup-doorway-detail-body-header">
@@ -247,19 +249,21 @@ export class AccountSetupDoorwayDetail extends React.Component {
             </div>
 
             <div className="account-setup-doorway-detail-body-measurement-radio-container">
-              <RadioButton
-                text="Metric"
-                checked={this.state.measurementUnit === METRIC}
-                onChange={() => {
-                  const numericalInputWidth = window.parseFloat(this.state.inputWidth, 10);
-                  const numericalInputHeight = window.parseFloat(this.state.inputHeight, 10);
-                  this.setState({
-                    measurementUnit: METRIC,
-                    inputWidth: isNaN(numericalInputWidth) === false ? `${this.state.inputWidth * CENTIMETERS_PER_INCH}` : '',
-                    inputHeight: isNaN(numericalInputHeight) === false ? `${this.state.inputHeight * CENTIMETERS_PER_INCH}` : '',
-                  });
-                }}
-              />
+              <span className="account-setup-doorway-detail-body-measurement-radio-container-item">
+                <RadioButton
+                  text="Metric"
+                  checked={this.state.measurementUnit === METRIC}
+                  onChange={() => {
+                    const numericalInputWidth = window.parseFloat(this.state.inputWidth, 10);
+                    const numericalInputHeight = window.parseFloat(this.state.inputHeight, 10);
+                    this.setState({
+                      measurementUnit: METRIC,
+                      inputWidth: isNaN(numericalInputWidth) === false ? `${this.state.inputWidth * CENTIMETERS_PER_INCH}` : '',
+                      inputHeight: isNaN(numericalInputHeight) === false ? `${this.state.inputHeight * CENTIMETERS_PER_INCH}` : '',
+                    });
+                  }}
+                />
+              </span>
               <RadioButton
                 text="Imperial"
                 checked={this.state.measurementUnit === IMPERIAL}
@@ -282,13 +286,15 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 {this.state.measurementUnit === METRIC ? '(Centimeters)' : '(Inches)'}
               </span>
             </label>
-            <InputBox
-              type="tel"
-              className="account-setup-doorway-detail-body-input"
-              placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
-              value={this.state.inputWidth}
-              onChange={e => this.setState({inputWidth: e.target.value})}
-            />
+            <div className="account-setup-doorway-detail-body-input">
+              <InputBox
+                type="tel"
+                width="100%"
+                placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
+                value={this.state.inputWidth}
+                onChange={e => this.setState({inputWidth: e.target.value})}
+              />
+            </div>
 
             <br/>
             <label className="account-setup-doorway-detail-body-input-label">
@@ -297,13 +303,15 @@ export class AccountSetupDoorwayDetail extends React.Component {
                 {this.state.measurementUnit === METRIC ? '(Centimeters)' : '(Inches)'}
               </span>
             </label>
-            <InputBox
-              type="tel"
-              className="account-setup-doorway-detail-body-input"
-              placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
-              value={this.state.inputHeight}
-              onChange={e => this.setState({inputHeight: e.target.value})}
-            />
+            <div className="account-setup-doorway-detail-body-input">
+              <InputBox
+                type="tel"
+                width="100%"
+                placeholder={this.state.measurementUnit === METRIC ? 'cm' : 'inches'}
+                value={this.state.inputHeight}
+                onChange={e => this.setState({inputHeight: e.target.value})}
+              />
+            </div>
 
             <br/>
             <label
@@ -314,16 +322,18 @@ export class AccountSetupDoorwayDetail extends React.Component {
             </p>
 
             <div className="account-setup-doorway-detail-body-clearance-radio-container">
-              <RadioButton
-                text="Yes"
-                checked={this.state.doorway.environment ? this.state.doorway.environment.clearance === true : false}
-                onChange={() => this.setState({
-                  doorway: {
-                    ...this.state.doorway,
-                    environment: {...this.state.doorway.environment, clearance: true},
-                  },
-                })}
-              />
+              <span className="account-setup-doorway-detail-body-clearance-radio-container-item">
+                <RadioButton
+                  text="Yes"
+                  checked={this.state.doorway.environment ? this.state.doorway.environment.clearance === true : false}
+                  onChange={() => this.setState({
+                    doorway: {
+                      ...this.state.doorway,
+                      environment: {...this.state.doorway.environment, clearance: true},
+                    },
+                  })}
+                />
+              </span>
               <RadioButton
                 text="No"
                 checked={this.state.doorway.environment ? this.state.doorway.environment.clearance === false : false}

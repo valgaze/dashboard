@@ -313,6 +313,7 @@ export class InsightsSpaceList extends React.Component {
           {/* Left-aligned filter box */}
           <InputBox
             type="text"
+            width={250}
             className="insights-space-list-search-box"
             placeholder="Filter Spaces ..."
             disabled={this.state.view === ERROR}

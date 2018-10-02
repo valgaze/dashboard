@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import Button from '@density/ui-button';
@@ -44,21 +44,23 @@ export class AccountForgotPassword extends React.Component {
         Password change request:
       </p>
 
-      <InputStackGroup className="account-forgot-password-form">
-        <InputStackItem
-          type="password"
-          placeholder="New Password"
-          value={this.state.password}
-          onChange={e => this.setState({password: e.target.value})}
-        />
-        <InputStackItem
-          type="password"
-          placeholder="Confirm Password"
-          invalid={this.state.passwordConfirmation.length > 0 && this.state.password !== this.state.passwordConfirmation}
-          value={this.state.passwordConfirmation}
-          onChange={e => this.setState({passwordConfirmation: e.target.value})}
-        />
-      </InputStackGroup>
+      <div className="account-forgot-password-form">
+        <InputStackGroup>
+          <InputStackItem
+            type="password"
+            placeholder="New Password"
+            value={this.state.password}
+            onChange={e => this.setState({password: e.target.value})}
+          />
+          <InputStackItem
+            type="password"
+            placeholder="Confirm Password"
+            invalid={this.state.passwordConfirmation.length > 0 && this.state.password !== this.state.passwordConfirmation}
+            value={this.state.passwordConfirmation}
+            onChange={e => this.setState({passwordConfirmation: e.target.value})}
+          />
+        </InputStackGroup>
+      </div>
 
       <Button
         onClick={this.onSubmit.bind(this)}

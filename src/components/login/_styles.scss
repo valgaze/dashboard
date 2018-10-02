@@ -52,7 +52,8 @@ $login-section-width: 420px;
   position: absolute;
   top: 61px;
   z-index: 2000;
-  width: $login-section-width;
+  width: calc(100% - 10px);
+  max-width: $login-section-width;
 }
 .login-toast-header {
   color: $brand-danger;

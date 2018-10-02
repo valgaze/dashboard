@@ -85,6 +85,7 @@ export function LiveSpaceList({
         <div className="live-space-list-header-filter">
           <InputBox
             type="text"
+            width={250}
             className="live-space-list-search-box"
             placeholder="Filter Spaces ..."
             value={spaces.filters.search}

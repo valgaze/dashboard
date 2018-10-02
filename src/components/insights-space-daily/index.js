@@ -95,6 +95,7 @@ export function InsightsSpaceDaily({
                 )})`,
               };
             })}
+            width={300}
             onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
           />
         </InsightsFilterBarItem>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import InputBox from '@density/ui-input-box';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
