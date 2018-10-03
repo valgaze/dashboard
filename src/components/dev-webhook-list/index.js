@@ -79,11 +79,11 @@ export function WebhookList({
     <div className="webhook-container">
 
       <div className="webhook-list-header">
-        <span>
+        <div className="webhook-list-header-title">
           <h1 className="webhook-list-header-text">Webhooks</h1>
           <InfoPopup
             horizontalIconOffset={8}
-            verticalIconOffset={-100}
+            verticalIconOffset={10}
           >
             <p>
               Webhooks allow us to push your data whenever your Density sensors count an event. Create a webhook, tell us what endpoint to hit, and we'll send you a HTTP request for each event.
@@ -95,7 +95,7 @@ export function WebhookList({
               rel="noopener noreferrer"
             >View our API Documentation</a>
           </InfoPopup>
-        </span>
+        </div>
 
         {/* Search box to filter webhook list */}
         <div className="webhook-list-search">
