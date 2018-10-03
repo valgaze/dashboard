@@ -21,8 +21,12 @@ export default function EnvironmentModalSensorPlacementAssignment({
         </p>
 
         <div className="environment-modal-sensor-placement-assignment-button-group">
-          <Button onClick={() => onSubmit(-1)}>Outside the space</Button>
-          <Button onClick={() => onSubmit(1)}>Inside the space</Button>
+          <div className="environment-modal-sensor-placement-assignment-button-group-item">
+            <Button onClick={() => onSubmit(-1)}>Outside the space</Button>
+          </div>
+          <div className="environment-modal-sensor-placement-assignment-button-group-item">
+            <Button onClick={() => onSubmit(1)}>Inside the space</Button>
+          </div>
         </div>
         <Button className="environment-modal-sensor-placement-assignment-button-close" onClick={onDismiss}>Cancel</Button>
       </CardBody>

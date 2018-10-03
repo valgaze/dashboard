@@ -13,7 +13,8 @@
   display: flex;
   margin-top: 40px;
 }
-.environment-modal-sensor-placement-button-group .button {
+.environment-modal-sensor-placement-button-no,
+.environment-modal-sensor-placement-button-yes {
   flex: 1;
   &:first-child { margin-right: 10px; }
   &:last-child { margin-left: 10px; }

@@ -10,6 +10,8 @@
   font-size: $font-size-base;
   display: flex;
   font-weight: normal;
+
+  height: auto;
   line-height: 42px;
 
   padding: 0px 20px;
@@ -178,22 +180,21 @@ $environment-space-item-doorways-placement-padding: 6px;
 .environment-space-item-doorways-delete {
   padding: 3px;
   color: #fff;
-  background-color: $gray;
+  background-color: $gray-cinder;
   cursor: pointer;
-  font-size: 16px;
   border-radius: 50%;
 
+  display: block;
   width: 10px;
   height: 10px;
 
   position: absolute;
   top: -8px;
+  right: -8px;
 
-  &:before {
-    content: "\00d7";
-    position: relative;
-    bottom: 2px;
-    left: 0.5px;
+  &-icon {
+    display: block;
+    transform: translate(0.75px, -4px);
   }
 
   // On small screens, the environment page is immutable.
@@ -218,7 +219,6 @@ $environment-space-item-doorways-placement-padding: 6px;
 
   // Move title text upward to center within the header row.
   padding-top: 2px;
-  height: 38px;
 }
 
 // The list icon to open up the detail for a space.

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
@@ -35,6 +35,7 @@ import hideModal from '../../actions/modal/hide';
 
 import InputBox from '@density/ui-input-box';
 import Button from '@density/ui-button';
+import { IconInfo } from '@density/ui-icons';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 
@@ -205,7 +206,7 @@ export function Environment({
                 type="primary"
                 storageKey="environment-space-space-column"
                 className="environment-space-header"
-                icon="&#xe91e;"
+                icon={<IconInfo color="#fff" />}
               >
                 Edit space details and remove doorways below.
               </DismissableToast>
@@ -296,7 +297,7 @@ export function Environment({
                 type="primary"
                 storageKey="environment-space-doorway-column"
                 className="environment-doorway-header"
-                icon="&#xe91e;"
+                icon={<IconInfo color="#fff" />}
               >
                 To link a doorway to a space, drag the doorway
                 from below to a space on the left.
