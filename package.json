@@ -14,7 +14,7 @@
     "@density/node-sass-json-importer": "^4.1.0",
     "@density/react-dates": "^12.6.0",
     "@density/ui": "5.0.1",
-    "@density/ui-button": "^1.0.0",
+    "@density/ui-button": "^1.1.0",
     "@density/ui-card": "^1.0.4",
     "@density/ui-date-picker": "^2.1.0",
     "@density/ui-date-range-picker": "^1.2.1",
