@@ -130,8 +130,13 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         timestamp: i.timestamp,
         value: i.interval.analytics.max,
       })).filter(i => {
-        // Remove all timestamps that fall off the right edge of the chart.
-        return moment.utc(i.timestamp).valueOf() < endTime.valueOf();
+        const timestampValue = moment.utc(i.timestamp).valueOf();
+        return (
+          // Remove all timestamps that fall off the left edge of the chart.
+          timestampValue >= startTime.valueOf() &&
+          // Remove all timestamps that fall off the right edge of the chart.
+          timestampValue < endTime.valueOf()
+        )
       }).sort((a, b) => {
         if (b) {
           return moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf();
@@ -212,7 +217,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         </div>
 
         <CardBody className="insights-space-detail-foot-traffic-card-body">
-          {view === VISIBLE ? <LineChartComponent
+          {view === VISIBLE && chartData.length > 0 ? <LineChartComponent
             timeZone={space.timeZone}
             svgWidth={975}
             svgHeight={350}
@@ -272,6 +277,10 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
               },
             ]}
           /> : null}
+
+          {view === VISIBLE && chartData.length === 0 ? <div className="insights-space-detail-foot-traffic-card-body-info">
+            <span>No data found for this query.</span>
+          </div> : null}
 
           {view === LOADING ? <div className="insights-space-detail-foot-traffic-card-body-info">
             <span>Generating Data&nbsp;.&nbsp;.&nbsp;.</span>
