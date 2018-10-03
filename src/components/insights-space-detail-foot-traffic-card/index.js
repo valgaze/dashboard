@@ -158,7 +158,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
         });
       }
 
-      min = Math.min.apply(Math, data.map(i => i.interval.analytics.min)));
+      min = Math.min.apply(Math, data.map(i => i.interval.analytics.min));
       max = Math.max.apply(Math, data.map(i => i.interval.analytics.max));
     }
 
