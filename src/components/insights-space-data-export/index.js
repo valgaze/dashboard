@@ -17,7 +17,7 @@ import gridVariables from '@density/ui/variables/grid.json'
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
-import commonRanges from '../../helpers/common-ranges';
+import getCommonRangesForSpace from '../../helpers/common-ranges';
 
 // The maximum number of days that can be selected by the date range picker
 const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
@@ -89,7 +89,7 @@ function InsightsSpaceDataExport({
             )}
 
             // common ranges functionality
-            commonRanges={commonRanges}
+            commonRanges={getCommonRangesForSpace(space)}
             onSelectCommonRange={({startDate, endDate}) => {
               onChangeSpaceFilter('startDate', startDate);
               onChangeSpaceFilter('endDate', endDate);

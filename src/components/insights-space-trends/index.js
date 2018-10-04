@@ -20,7 +20,7 @@ import gridVariables from '@density/ui/variables/grid.json'
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
-import commonRanges from '../../helpers/common-ranges';
+import getCommonRangesForSpace from '../../helpers/common-ranges';
 import {
   DEFAULT_TIME_SEGMENT_GROUP,
   findTimeSegmentInTimeSegmentGroupForSpace,
@@ -144,7 +144,7 @@ function InsightsSpaceTrends({
             )}
 
             // common ranges functionality
-            commonRanges={commonRanges}
+            commonRanges={getCommonRangesForSpace(space)}
             onSelectCommonRange={({startDate, endDate}) => {
               onChangeSpaceFilter('startDate', startDate.format());
               onChangeSpaceFilter('endDate', endDate.format());
