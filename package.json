@@ -19,6 +19,7 @@
     "@density/ui-date-picker": "^2.1.0",
     "@density/ui-date-range-picker": "^1.2.1",
     "@density/ui-density-mark": "^1.0.0",
+    "@density/ui-fonts": "0.0.1",
     "@density/ui-icons": "^1.0.1",
     "@density/ui-info-popup": "^1.0.0",
     "@density/ui-input-box": "^3.1.1",
