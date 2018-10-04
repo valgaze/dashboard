@@ -25,7 +25,64 @@
 @import "../node_modules/@density/ui/variables/timings.json";
 @import "../node_modules/@density/ui/variables/grid.json";
 
-@import "grid";
+/**
+ * Calculate column size percentage
+ */
+@function get-col-percent($column-num) {
+  @return $column-num / $fg-columns * 100%;
+}
+
+@mixin grid-container {
+  margin-left: -1 * $fg-gutter;
+  margin-right: -1 * $fg-gutter;
+  box-sizing: border-box;
+
+  max-width: 1000px;
+  margin: 20px auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+@mixin grid-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.row {
+  @include grid-row;
+}
+
+@mixin grid-column {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-height: 1px;
+  padding-left: $fg-gutter;
+  padding-right: $fg-gutter;
+}
+
+@mixin grid-width($xs, $sm, $md, $lg) {
+  @include grid-column;
+
+  flex-basis: get-col-percent($xs);
+  max-width: get-col-percent($xs);
+
+  @media (min-width: $screen-sm-min) {
+    flex-basis: get-col-percent($sm);
+    max-width: get-col-percent($sm);
+  }
+  @media (min-width: $screen-md-min) {
+    flex-basis: get-col-percent($md);
+    max-width: get-col-percent($md);
+  }
+  @media (min-width: $screen-lg-min) {
+    flex-basis: get-col-percent($lg);
+    max-width: get-col-percent($lg);
+  }
+}
 
 // Components:
 
