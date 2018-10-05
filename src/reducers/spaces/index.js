@@ -7,6 +7,7 @@ import { COLLECTION_SPACES_DESTROY } from '../../actions/collection/spaces/destr
 import { COLLECTION_SPACES_UPDATE } from '../../actions/collection/spaces/update';
 import { COLLECTION_SPACES_DELETE } from '../../actions/collection/spaces/delete';
 import { COLLECTION_SPACES_ERROR } from '../../actions/collection/spaces/error';
+import { COLLECTION_SPACES_SET_DEFAULT_TIME_RANGE } from '../../actions/collection/spaces/set-default-time-range'
 
 import { COLLECTION_SPACES_COUNT_CHANGE } from '../../actions/collection/spaces/count-change';
 import { COLLECTION_SPACES_SET_EVENTS } from '../../actions/collection/spaces/set-events';
@@ -21,6 +22,11 @@ import { SHOW_MODAL } from '../../actions/modal/show';
 import { HIDE_MODAL } from '../../actions/modal/hide';
 
 import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
+
+import {
+  getCurrentLocalTimeAtSpace,
+  formatInISOTime,
+} from '../../helpers/space-time-utilities/index';
 
 import moment from 'moment';
 
@@ -42,8 +48,8 @@ const initialState = {
     includeWeekends: false,
 
     // Used for date ranges
-    startDate: moment.utc().subtract(6, 'days').format(),
-    endDate: moment.utc().format(),
+    startDate: null,
+    endDate: null,
 
     // Used for a single date
     date: moment.utc().format(),
@@ -133,6 +139,27 @@ export default function spaces(state=initialState, action) {
     return {...state, error: null, selected: action.id};
   case ROUTE_TRANSITION_LIVE_SPACE_LIST:
     return {...state, error: null};
+
+  case COLLECTION_SPACES_SET_DEFAULT_TIME_RANGE:
+    return {
+      ...state,
+      filters: {
+        ...state.filters,
+
+        // For single date pages like the daily page
+        date: formatInISOTime(
+          getCurrentLocalTimeAtSpace(action.space).subtract(7, 'days').startOf('day')
+        ),
+
+        // For date range pages like the trends or raw events page
+        startDate: formatInISOTime(
+          getCurrentLocalTimeAtSpace(action.space).subtract(7, 'days').startOf('day')
+        ),
+        endDate: formatInISOTime(
+          getCurrentLocalTimeAtSpace(action.space).subtract(1, 'day').startOf('day')
+        ),
+      },
+    };
 
   // Also, when a modal is shown or hidden, clear the error from the state.
   case SHOW_MODAL:

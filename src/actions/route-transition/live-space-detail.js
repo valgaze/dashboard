@@ -3,6 +3,7 @@ import { core } from '../../client';
 import collectionSpacesPush from '../collection/spaces/push';
 import collectionSpacesError from '../collection/spaces/error';
 import collectionSpacesSetEvents from '../collection/spaces/set-events';
+import collectionSpacesSetDefaultTimeRange from '../collection/spaces/set-default-time-range';
 
 import {
   getCurrentLocalTimeAtSpace,
@@ -18,6 +19,7 @@ export default function routeTransitionLiveSpaceDetail(id) {
     try {
       const space = await core.spaces.get({id})
       dispatch(collectionSpacesPush(space));
+      dispatch(collectionSpacesSetDefaultTimeRange(space));
 
       // Fetch all initial events for the space that was loaded.
       // This is used to populate this space's events collection with all the events from the last

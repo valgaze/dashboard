@@ -53,8 +53,8 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
       const previewData = await core.spaces.csvPreview({
         base: core.config().core.replace('v2', 'v1'),
         space_id: space.id,
-        start_time: startDate.format(),
-        end_time: endDate.format(),
+        start_time: startDate,
+        end_time: endDate,
         page: 1,
         page_size: 5, /* only fetching a preview of what data could look like */
         order: 'desc',
@@ -137,13 +137,13 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
   componentWillReceiveProps({space, startDate, endDate}) {
     if (space && (
       space.id !== this.state.dataSpaceId ||
-      moment.utc(startDate).valueOf() !== this.state.startDate.valueOf() ||
-      moment.utc(endDate).valueOf() !== this.state.endDate.valueOf()
+      startDate !== this.state.startDate ||
+      endDate !== this.state.endDate
     )) {
       this.setState({
         dataSpaceId: space.id,
-        startDate: parseISOTimeToUTC(startDate),
-        endDate: parseISOTimeToUTC(endDate),
+        startDate,
+        endDate,
       }, () => this.fetchData());
     }
   }
@@ -167,7 +167,7 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
           <InfoPopup horizontalIconOffset={8}>
             <p className="insights-space-detail-raw-events-export-card-description">
               Download all events from {parseISOTimeAtSpace(startDate, space).format('MM/DD/YYYY')} -{' '}
-              {parseISOTimeAtSpace(endDate, space.timeZone).format('MM/DD/YYYY')} in CSV format.
+              {parseISOTimeAtSpace(endDate, space).format('MM/DD/YYYY')} in CSV format.
               Below is a preview of what data is included in the export.
             </p>
           </InfoPopup>
@@ -220,7 +220,7 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
           ) : (
             <span>
               Download All Events{' '}
-              ({startDate.format('MM/DD/YYYY')} - {endDate.format('MM/DD/YYYY')})
+              ({parseISOTimeAtSpace(startDate, space).format('MM/DD/YYYY')} - {parseISOTimeAtSpace(endDate, space).format('MM/DD/YYYY')})
             </span>
           )}
         </div>

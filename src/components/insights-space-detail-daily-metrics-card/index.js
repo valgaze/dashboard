@@ -155,6 +155,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
         });
       }
     } catch (error) {
+      console.log(error);
       this.setState({
         view: ERROR,
         error,
@@ -301,7 +302,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                           return 0.5 * ONE_DAY_IN_MS;
                         }
                       })(),
-                      formatter: n => getCurrentLocalTimeAtSpace(n, space).format(`MM/DD`),
+                      formatter: n => parseISOTimeAtSpace(n, space).format(`MM/DD`),
                     })}
 
                     yAxis={yAxisMinMax({})}
@@ -344,7 +345,8 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                         type: dataWaterline,
                         verticalBaselineOffset: 10,
                         data: data.sort(
-                          (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                          (a, b) =>
+                            moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
                         ),
                       },
                     ]}
@@ -357,7 +359,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                     data={data.map(i => {
                       return {
                         // Remove the offset that was added when the data was fetched.
-                        label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
+                        label: parseISOTimeAtSpace(i.timestamp, space).format('MM/DD'),
                         value: i.value,
                       };
                     })}

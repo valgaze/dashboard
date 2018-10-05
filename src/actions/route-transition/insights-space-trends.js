@@ -4,6 +4,7 @@ import collectionSpacesSet from '../collection/spaces/set';
 import collectionSpacesError from '../collection/spaces/error';
 import collectionTimeSegmentGroupsSet from '../collection/time-segment-groups/set';
 import collectionTimeSegmentGroupsError from '../collection/time-segment-groups/error';
+import collectionSpacesSetDefaultTimeRange from '../collection/spaces/set-default-time-range';
 
 export const ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS = 'ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS';
 
@@ -16,8 +17,11 @@ export default function routeTransitionInsightsSpaceTrends(id) {
     // this view unrfortunately.
     try {
       const spaces = await core.spaces.list();
+      const selectedSpace = spaces.results.find(s => s.id === id);
+      dispatch(collectionSpacesSetDefaultTimeRange(selectedSpace));
       dispatch(collectionSpacesSet(spaces.results));
     } catch (err) {
+      console.log(err)
       dispatch(collectionSpacesError(`Error loading space: ${err.message}`));
     }
 

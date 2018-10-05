@@ -152,6 +152,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       timeSegment.id !== this.state.timeSegment.id ||
       timeSegmentGroup.id !== this.state.timeSegmentGroup.id
     )) {
+      console.log('DATE', date)
       this.setState({
         view: LOADING,
         date,
@@ -183,7 +184,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           <InfoPopup horizontalIconOffset={8}>
             <p className="insights-space-detail-raw-events-card-popup-p">
               All events that the doorways within this space have seen over{' '}
-              <strong>{parseISOTimeAtSpace(date, space.timeZone).format('MM/DD/YYYY')}</strong> during{' '}
+              <strong>{parseISOTimeAtSpace(date, space).format('MM/DD/YYYY')}</strong> during{' '}
               the time segment <strong>{timeSegmentGroup.name}</strong>.
             </p>
 
@@ -209,7 +210,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           headings={["Timestamp", "Event", "Doorway"]}
           data={data}
           mapDataItemToRow={item => [
-            parseISOTimeAtSpace(item.timestamp, space.timeZone).format('MMM Do YYYY, h:mm:ss a'),
+            parseISOTimeAtSpace(item.timestamp, space).format('MMM Do YYYY, h:mm:ss a'),
             item.direction === 1 ? 'Entrance' : 'Exit',
             doorwayLookup[item.doorwayId] ? doorwayLookup[item.doorwayId].name : item.doorwayId,
           ]}
