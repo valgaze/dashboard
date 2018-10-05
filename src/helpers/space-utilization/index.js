@@ -1,11 +1,16 @@
 import moment from 'moment';
 import 'moment-timezone'; 
 
-export function groupCountsByDay(counts, timezone) {
+import {
+  parseISOTimeAtSpace,
+  formatDayAtSpace,
+} from '../space-time-utilities/index';
+
+export function groupCountsByDay(counts, space) {
   // Group counts into buckets, grouping by day.
-  // ie, dayCountGroups = {'2018-05-01': [a, b, ...], '2018-05-02': [x, y, z, ...]}
+  // ie, dayCountGroups = {'2018-05-01Z': [a, b, ...], '2018-05-02Z': [x, y, z, ...]}
   const dayCountGroups = counts.reduce((groups, i) => {
-    const day = moment.utc(i.timestamp).tz(timezone).format('YYYY-MM-DD');
+    const day = formatDayAtSpace(parseISOTimeAtSpace(i.timestamp, space), space);
     return {
       ...groups,
       [day]: [...(groups[day] || []), i],

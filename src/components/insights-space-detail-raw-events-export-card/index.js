@@ -10,6 +10,18 @@ import Card, { CardHeader, CardBody, CardLoading, CardTable } from '@density/ui-
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
+import {
+  getCurrentLocalTimeAtSpace,
+  parseISOTimeAtSpace,
+  parseFromReactDates,
+  formatInISOTime,
+  formatForReactDates,
+  formatTimeSegmentBoundaryTimeForHumans,
+  formatInISOTimeAtSpace,
+  getDurationBetweenMomentsInDays,
+  parseISOTimeToUTC,
+} from '../../helpers/space-time-utilities/index';
+
 export const LOADING_INITIAL = 'LOADING_INITIAL',
       LOADING_PREVIEW = 'LOADING_PREVIEW',
       LOADING_CSV = 'LOADING_CSV',
@@ -130,8 +142,8 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
     )) {
       this.setState({
         dataSpaceId: space.id,
-        startDate: moment.utc(startDate),
-        endDate: moment.utc(endDate),
+        startDate: parseISOTimeToUTC(startDate),
+        endDate: parseISOTimeToUTC(endDate),
       }, () => this.fetchData());
     }
   }
@@ -154,9 +166,9 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
           CSV Event Export
           <InfoPopup horizontalIconOffset={8}>
             <p className="insights-space-detail-raw-events-export-card-description">
-              Download all events from {moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')} -{' '}
-              {moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')} in CSV format. Below is a
-              preview of what data is included in the export.
+              Download all events from {parseISOTimeAtSpace(startDate, space).format('MM/DD/YYYY')} -{' '}
+              {parseISOTimeAtSpace(endDate, space.timeZone).format('MM/DD/YYYY')} in CSV format.
+              Below is a preview of what data is included in the export.
             </p>
           </InfoPopup>
           <span

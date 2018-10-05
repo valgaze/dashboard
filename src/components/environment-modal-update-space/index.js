@@ -82,7 +82,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
                 value={this.state.dailyReset}
                 disabled={this.state.timeZone.length === 0}
                 onChange={e => this.setState({dailyReset: e.id})}
-                choices={generateResetTimeChoices().map(({value, display}) => ({
+                choices={generateResetTimeChoices(this.props.initialSpace).map(({value, display}) => ({
                   id: value,
                   label: display,
                 }))}
@@ -137,8 +137,10 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
         <FormLabel
           htmlFor="update-space-daily-reset"
           label="Daily Reset"
-          input={<span>{(function(dailyReset) {
-            const resetTime = generateResetTimeChoices().find(i => i.value === dailyReset)
+          input={<span>{(dailyReset => {
+            const resetTime = generateResetTimeChoices(
+              this.props.initialSpace,
+            ).find(i => i.value === dailyReset);
             return resetTime ? resetTime.display : dailyReset;
           })(this.state.dailyReset)}</span>}
           editable={false}

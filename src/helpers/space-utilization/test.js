@@ -1,6 +1,8 @@
 import assert from 'assert';
 import spaceUtilizationPerGroup, { groupCountsByDay } from './index';
 
+const SPACE_IN_UTC = {name: 'hello world', timeZone: 'UTC'};
+
 describe('space-utilization', function() {
   const space = {
     name: 'My test space',
@@ -56,12 +58,12 @@ describe('space-utilization', function() {
    * Average Utilization should be (100% + 0%) / 2 = 50%
    */
   it('should calculate utilization for a relatively simple case', () => {
-    const groups = groupCountsByDay(events, 'UTC');
+    const groups = groupCountsByDay(events, SPACE_IN_UTC);
     const datapoints = spaceUtilizationPerGroup(space, groups);
 
     // There should only be one group, given that all datapoints were within a single day.
     assert.equal(datapoints.length, 1);
-    assert.equal(datapoints[0].date, '2017-09-19');
+    assert.equal(datapoints[0].date, '2017-09-19+00:00');
 
     // The first group should have a 0% utilization.
     assert.equal(datapoints[0].utilization[0], 0);
@@ -75,9 +77,9 @@ describe('space-utilization', function() {
 
   it('should not be able to calculate a utilization without a capacity', () => {
     assert.throws(() => {
-      const groups = groupCountsByDay(events);
+      const groups = groupCountsByDay(events, SPACE_IN_UTC);
       const datapoints = spaceUtilizationPerGroup({name: 'My capacity-less space', capacity: null}, groups);
-    }, 'Utilization cannot be calculated without a capacity.');
+    }, new Error('Utilization cannot be calculated without a capacity.'));
   });
 });
 

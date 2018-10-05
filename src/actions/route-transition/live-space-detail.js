@@ -1,9 +1,13 @@
-import moment from 'moment';
 import { core } from '../../client';
 
 import collectionSpacesPush from '../collection/spaces/push';
 import collectionSpacesError from '../collection/spaces/error';
 import collectionSpacesSetEvents from '../collection/spaces/set-events';
+
+import {
+  getCurrentLocalTimeAtSpace,
+  formatInISOTime,
+} from '../../helpers/space-time-utilities/index';
 
 export const ROUTE_TRANSITION_LIVE_SPACE_DETAIL = 'ROUTE_TRANSITION_LIVE_SPACE_DETAIL';
 
@@ -20,8 +24,8 @@ export default function routeTransitionLiveSpaceDetail(id) {
       // minute so that the real time event charts all display as "full" when the page reloads.
       const spaceEventSet = await core.spaces.events({
         id: space.id,
-        start_time: moment().subtract(1, 'minute').format(),
-        end_time: moment().utc().format(),
+        start_time: formatInISOTime(getCurrentLocalTimeAtSpace(space).subtract(1, 'minute')),
+        end_time: formatInISOTime(getCurrentLocalTimeAtSpace(space)),
       });
       dispatch(collectionSpacesSetEvents(space, spaceEventSet.results.map(i => ({
         countChange: i.direction,

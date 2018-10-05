@@ -266,8 +266,8 @@ eventSource.on('connected', async () => {
   const spaceEventSets = await Promise.all(spaces.results.map(space => {
     return core.spaces.events({
       id: space.id,
-      start_time: moment().subtract(1, 'minute').format(),
-      end_time: moment().utc().format(),
+      start_time: moment.utc().subtract(1, 'minute').format(),
+      end_time: moment.utc().format(),
     });
   }));
 

@@ -19,6 +19,17 @@ import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
 import getCommonRangesForSpace from '../../helpers/common-ranges';
 
+import {
+  getCurrentLocalTimeAtSpace,
+  parseISOTimeAtSpace,
+  parseFromReactDates,
+  formatInISOTime,
+  formatForReactDates,
+  formatTimeSegmentBoundaryTimeForHumans,
+  formatInISOTimeAtSpace,
+  getDurationBetweenMomentsInDays,
+} from '../../helpers/space-time-utilities/index';
+
 // The maximum number of days that can be selected by the date range picker
 const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
 
@@ -60,16 +71,25 @@ function InsightsSpaceDataExport({
       <InsightsFilterBar>
         <InsightsFilterBarItem label="Date Range">
           <DateRangePicker
-            startDate={moment.utc(spaces.filters.startDate).tz(space.timeZone).startOf('day')}
-            endDate={moment.utc(spaces.filters.endDate).tz(space.timeZone).startOf('day')}
+            startDate={formatForReactDates(
+              parseISOTimeAtSpace(spaces.filters.startDate, space),
+              space,
+            )}
+            endDate={formatForReactDates(
+              parseISOTimeAtSpace(spaces.filters.endDate, space),
+              space,
+            )}
             onChange={({startDate, endDate}) => {
+              startDate = parseFromReactDates(startDate, space);
+              endDate = parseFromReactDates(endDate, space);
+
               // If the user selected over 14 days, then clamp them back to 14 days.
               if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
                 endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
               }
 
-              onChangeSpaceFilter('startDate', startDate.format());
-              onChangeSpaceFilter('endDate', endDate.format());
+              onChangeSpaceFilter('startDate', formatInISOTime(startDate));
+              onChangeSpaceFilter('endDate', formatInISOTime(endDate));
             }}
             // Within the component, store if the user has selected the start of end date picker
             // input
