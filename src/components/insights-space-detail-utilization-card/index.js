@@ -46,13 +46,13 @@ const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
 const DAY_TO_INDEX_IN_UTILIZAITIONS_BY_DAY = {
-  'Monday': 0,
-  'Tuesday': 1,
-  'Wednesday': 2,
-  'Thursday': 3,
-  'Friday': 4,
-  'Saturday': 5,
-  'Sunday': 6,
+  'Sunday': 0,
+  'Monday': 1,
+  'Tuesday': 2,
+  'Wednesday': 3,
+  'Thursday': 4,
+  'Friday': 5,
+  'Saturday': 6,
 };
 
 export const LOADING = 'LOADING',
