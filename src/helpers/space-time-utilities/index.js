@@ -37,6 +37,6 @@ export function formatInISOTimeAtSpace(timestamp, space) {
 export function formatForReactDates(momentInstance, space) {
   return momentInstance.tz(space.timeZone).startOf('day');
 }
-export function formatTimeSegmentBoundaryTimeForHumans(momentInstance) {
+export function prettyPrintHoursMinutes(momentInstance) {
   return momentInstance.format('h:mma').slice(0, -1); /* am -> a */
 }

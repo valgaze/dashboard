@@ -1,6 +1,6 @@
 import {
   getCurrentLocalTimeAtSpace,
-  formatTimeSegmentBoundaryTimeForHumans,
+  prettyPrintHoursMinutes,
 } from '../space-time-utilities/index';
 
 // Generate reset time options
@@ -9,7 +9,7 @@ export default function generateResetTimeChoices(space) {
     const time = getCurrentLocalTimeAtSpace(space).startOf('day').add(hour, 'hour');
     return {
       value: time.format('HH:mm'),
-      display: formatTimeSegmentBoundaryTimeForHumans(time),
+      display: prettyPrintHoursMinutes(time),
     };
   });
 }

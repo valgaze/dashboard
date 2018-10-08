@@ -6,7 +6,7 @@ import 'moment-timezone';
 
 import {
   parseISOTimeAtSpace,
-  formatTimeSegmentBoundaryTimeForHumans,
+  prettyPrintHoursMinutes,
   getDurationBetweenMomentsInDays,
   parseDayAtSpace,
 } from '../../helpers/space-time-utilities/index';
@@ -528,7 +528,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                       bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
                         (item, {mouseX, xScale}) => {
                           const timestamp = parseISOTimeAtSpace(xScale.invert(mouseX), space);
-                          const time = formatTimeSegmentBoundaryTimeForHumans(timestamp);
+                          const time = prettyPrintHoursMinutes(timestamp);
                           return `Avg. Weekday at ${time}`;
                         }
                       ),

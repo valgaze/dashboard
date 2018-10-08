@@ -12,7 +12,7 @@ import {
   parseFromReactDates,
   formatInISOTime,
   formatForReactDates,
-  formatTimeSegmentBoundaryTimeForHumans,
+  prettyPrintHoursMinutes,
 } from '../../helpers/space-time-utilities/index';
 
 import Subnav, { SubnavItem } from '../subnav/index';
@@ -101,11 +101,11 @@ function InsightsSpaceTrends({
                 );
                 return {
                   id: ts.id,
-                  label: `${ts.name} (${formatTimeSegmentBoundaryTimeForHumans(
+                  label: `${ts.name} (${prettyPrintHoursMinutes(
                     getCurrentLocalTimeAtSpace(space)
                       .startOf('day')
                       .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.start), 'seconds')
-                  )} - ${formatTimeSegmentBoundaryTimeForHumans(
+                  )} - ${prettyPrintHoursMinutes(
                     getCurrentLocalTimeAtSpace(space)
                       .startOf('day')
                       .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.end), 'seconds')
