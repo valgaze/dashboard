@@ -15,7 +15,6 @@ export default function routeTransitionInsightsSpaceDaily(id) {
     // Ideally, we'd load a single space (since the view only pertains to one space). But, we need
     // every space to traverse through the space hierarchy and render a list of parent spaces on
     // this view unrfortunately.
-    let errorThrown = false;
     try {
       const spaces = await core.spaces.list();
       const selectedSpace = spaces.results.find(s => s.id === id);

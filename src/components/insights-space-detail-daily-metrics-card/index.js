@@ -22,12 +22,7 @@ import {
 } from '@density/chart-line-chart/dist/overlays';
 
 import {
-  getCurrentLocalTimeAtSpace,
   parseISOTimeAtSpace,
-  parseFromReactDates,
-  formatInISOTime,
-  formatForReactDates,
-  formatTimeSegmentBoundaryTimeForHumans,
   formatInISOTimeAtSpace,
   getDurationBetweenMomentsInDays,
 } from '../../helpers/space-time-utilities/index';

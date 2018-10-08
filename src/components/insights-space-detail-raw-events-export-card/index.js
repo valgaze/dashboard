@@ -1,26 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import moment from 'moment';
-import 'moment-timezone';
-
 import { core } from '../../client';
 
 import Card, { CardHeader, CardBody, CardLoading, CardTable } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
-import {
-  getCurrentLocalTimeAtSpace,
-  parseISOTimeAtSpace,
-  parseFromReactDates,
-  formatInISOTime,
-  formatForReactDates,
-  formatTimeSegmentBoundaryTimeForHumans,
-  formatInISOTimeAtSpace,
-  getDurationBetweenMomentsInDays,
-  parseISOTimeToUTC,
-} from '../../helpers/space-time-utilities/index';
+import { parseISOTimeAtSpace } from '../../helpers/space-time-utilities/index';
 
 export const LOADING_INITIAL = 'LOADING_INITIAL',
       LOADING_PREVIEW = 'LOADING_PREVIEW',

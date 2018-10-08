@@ -20,14 +20,10 @@ import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 import getCommonRangesForSpace from '../../helpers/common-ranges';
 
 import {
-  getCurrentLocalTimeAtSpace,
   parseISOTimeAtSpace,
   parseFromReactDates,
   formatInISOTime,
   formatForReactDates,
-  formatTimeSegmentBoundaryTimeForHumans,
-  formatInISOTimeAtSpace,
-  getDurationBetweenMomentsInDays,
 } from '../../helpers/space-time-utilities/index';
 
 // The maximum number of days that can be selected by the date range picker

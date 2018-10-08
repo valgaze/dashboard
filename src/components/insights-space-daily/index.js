@@ -1,9 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import moment from 'moment';
-import 'moment-timezone';
-
 import InputBox from '@density/ui-input-box';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
 

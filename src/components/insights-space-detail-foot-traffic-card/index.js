@@ -16,14 +16,8 @@ import {
 } from '../../helpers/time-segments/index';
 
 import {
-  getCurrentLocalTimeAtSpace,
   parseISOTimeAtSpace,
-  parseFromReactDates,
-  formatInISOTime,
-  formatForReactDates,
-  formatTimeSegmentBoundaryTimeForHumans,
   formatInISOTimeAtSpace,
-  getDurationBetweenMomentsInDays,
 } from '../../helpers/space-time-utilities/index';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';

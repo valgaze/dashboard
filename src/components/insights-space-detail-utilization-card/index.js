@@ -5,17 +5,10 @@ import moment from 'moment';
 import 'moment-timezone';
 
 import {
-  getCurrentLocalTimeAtSpace,
   parseISOTimeAtSpace,
-  parseFromReactDates,
-  formatInISOTime,
-  formatForReactDates,
   formatTimeSegmentBoundaryTimeForHumans,
-  formatInISOTimeAtSpace,
   getDurationBetweenMomentsInDays,
-  parseISOTimeToUTC,
   parseDayAtSpace,
-  formatDayAtSpace,
 } from '../../helpers/space-time-utilities/index';
 
 import { core } from '../../client';

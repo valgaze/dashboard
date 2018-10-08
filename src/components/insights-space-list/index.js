@@ -8,16 +8,7 @@ import gridVariables from '@density/ui/variables/grid.json';
 
 import SpaceHierarchySelectBox from '../space-hierarchy-select-box/index';
 
-import {
-  getCurrentLocalTimeAtSpace,
-  parseISOTimeAtSpace,
-  parseFromReactDates,
-  formatInISOTime,
-  formatForReactDates,
-  formatTimeSegmentBoundaryTimeForHumans,
-  formatInISOTimeAtSpace,
-  getDurationBetweenMomentsInDays,
-} from '../../helpers/space-time-utilities/index';
+import { parseISOTimeAtSpace } from '../../helpers/space-time-utilities/index';
 
 import { core } from '../../client';
 import moment from 'moment';
