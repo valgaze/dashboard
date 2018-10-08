@@ -146,17 +146,18 @@ export default function spaces(state=initialState, action) {
       filters: {
         ...state.filters,
 
-        // For single date pages like the daily page
+        // For single date pages like the daily page, default to yesterday
         date: formatInISOTime(
-          getCurrentLocalTimeAtSpace(action.space).subtract(7, 'days').startOf('day')
+          getCurrentLocalTimeAtSpace(action.space).subtract(1, 'days').startOf('day')
         ),
 
-        // For date range pages like the trends or raw events page
+        // For date range pages like the trends or raw events page, default to the last full week of
+        // data
         startDate: formatInISOTime(
-          getCurrentLocalTimeAtSpace(action.space).subtract(7, 'days').startOf('day')
+          getCurrentLocalTimeAtSpace(action.space).subtract(1, 'week').startOf('week')
         ),
         endDate: formatInISOTime(
-          getCurrentLocalTimeAtSpace(action.space).subtract(1, 'day').startOf('day')
+          getCurrentLocalTimeAtSpace(action.space).subtract(1, 'week').endOf('week')
         ),
       },
     };
