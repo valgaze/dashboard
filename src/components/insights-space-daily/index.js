@@ -61,7 +61,7 @@ export function InsightsSpaceDaily({
         <InsightsFilterBarItem label="Day">
           <DatePicker
             date={formatForReactDates(parseISOTimeAtSpace(spaces.filters.date, space), space)}
-            onChange={date => onChangeSpaceFilter('date', formatInISOTime(parseFromReactDates(date)))}
+            onChange={date => onChangeSpaceFilter('date', formatInISOTime(parseFromReactDates(date, space)))}
 
             focused={spaces.filters.datePickerFocused}
             onFocusChange={({focused}) => onChangeSpaceFilter('datePickerFocused', focused)}

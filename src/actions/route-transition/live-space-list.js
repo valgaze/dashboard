@@ -1,4 +1,5 @@
 import { core } from '../../client';
+import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 import collectionSpacesSet from '../collection/spaces/set';
 import collectionSpacesSetEvents from '../collection/spaces/set-events';
@@ -31,7 +32,8 @@ export default function routeTransitionLiveSpaceList() {
       // Then, fetch all initial events for each space.
       // This is used to populate each space's events collection with all the events from the last
       // minute so that the real time event charts all display as "full" when the page reloads.
-      return Promise.all(spaces.results.map(space => {
+      return Promise.all(spaces.results.map(s => {
+        const space = objectSnakeToCamel(s);
         return core.spaces.events({
           id: space.id,
           start_time: formatInISOTime(getCurrentLocalTimeAtSpace(space).subtract(1, 'minute')),
