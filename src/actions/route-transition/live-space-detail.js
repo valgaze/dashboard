@@ -1,4 +1,5 @@
 import { core } from '../../client';
+import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 import collectionSpacesPush from '../collection/spaces/push';
 import collectionSpacesError from '../collection/spaces/error';
@@ -17,7 +18,7 @@ export default function routeTransitionLiveSpaceDetail(id) {
     dispatch({ type: ROUTE_TRANSITION_LIVE_SPACE_DETAIL, id });
 
     try {
-      const space = await core.spaces.get({id})
+      const space = objectSnakeToCamel(await core.spaces.get({id}));
       dispatch(collectionSpacesPush(space));
       dispatch(collectionSpacesSetDefaultTimeRange(space));
 
