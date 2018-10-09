@@ -146,7 +146,6 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       timeSegment.id !== this.state.timeSegment.id ||
       timeSegmentGroup.id !== this.state.timeSegmentGroup.id
     )) {
-      console.log('DATE', date)
       this.setState({
         view: LOADING,
         date,

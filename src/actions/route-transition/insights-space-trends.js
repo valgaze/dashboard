@@ -21,7 +21,6 @@ export default function routeTransitionInsightsSpaceTrends(id) {
       dispatch(collectionSpacesSetDefaultTimeRange(selectedSpace));
       dispatch(collectionSpacesSet(spaces.results));
     } catch (err) {
-      console.log(err)
       dispatch(collectionSpacesError(`Error loading space: ${err.message}`));
     }
 

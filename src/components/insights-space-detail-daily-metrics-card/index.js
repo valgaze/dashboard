@@ -150,7 +150,6 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
         });
       }
     } catch (error) {
-      console.log(error);
       this.setState({
         view: ERROR,
         error,
