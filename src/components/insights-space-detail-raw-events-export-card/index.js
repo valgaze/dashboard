@@ -89,8 +89,8 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
       const csv = await core.spaces.csv({
         base: core.config().core.replace('v2', 'v1'),
         space_id: space.id,
-        start_time: startDate.format(),
-        end_time: endDate.format(),
+        start_time: startDate,
+        end_time: endDate,
         page: 1,
         page_size: 5, /* only fetching a preview of what data could look like */
         order: 'desc',
@@ -109,7 +109,7 @@ export default class VisualizationSpaceDetailRawEventsExportCard extends React.C
       const tempLink = document.createElement('a');
       document.body.appendChild(tempLink);
       tempLink.href = csvURL;
-      tempLink.setAttribute('download', `${space.id}: ${startDate.format()} - ${endDate.format()}.csv`);
+      tempLink.setAttribute('download', `${space.id}: ${startDate} - ${endDate}.csv`);
       tempLink.click();
       document.body.removeChild(tempLink);
     } catch (error) {
