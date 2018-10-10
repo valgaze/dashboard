@@ -74,15 +74,16 @@ export default class TokenCreate extends React.Component {
               </div>}
             />
 
-            <Button
-              className="token-create-modal-submit"
-              disabled={this.state.name.length === 0}
-              onClick={() => this.props.onSubmit({
-                name: this.state.name,
-                description: this.state.description,
-                tokenType: this.state.tokenType,
-              })}
-            >Submit</Button>
+            <div className="token-create-modal-submit">
+              <Button
+                disabled={this.state.name.length === 0}
+                onClick={() => this.props.onSubmit({
+                  name: this.state.name,
+                  description: this.state.description,
+                  tokenType: this.state.tokenType,
+                })}
+              >Submit</Button>
+            </div>
           </CardBody>
         </Card>
       </div>

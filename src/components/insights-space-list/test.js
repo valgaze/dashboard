@@ -8,8 +8,6 @@ import { InsightsSpaceList } from './index';
 
 import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
 
-const MDASH = String.fromCharCode(8212);
-
 function timeout(delay) {
   return new Promise(r => setTimeout(r, delay));
 }
@@ -116,8 +114,12 @@ describe('insights space list', function() {
 
     // No utilization should be rendered, a dash should be rendered instead.
     assert.equal(
-      component.find('.insights-space-list-item.body-row').first().find('.percentage-bar-text').text(),
-      MDASH
+      component
+      .find('.insights-space-list-item.body-row')
+      .first()
+      .find('PercentageBar')
+      .props().percentage,
+      0
     );
 
     // Wait for fetch call to complete.
@@ -195,9 +197,15 @@ describe('insights space list', function() {
     assert.equal(component.find('.error-bar-message').text(), 'Could not fetch space counts: Fail!');
 
     // Ensure that all the filters are disabled
-    assert.equal(component.find('.insights-space-list-search-box').props().disabled, true);
-    assert.equal(component.find('.insights-space-list-time-segment-selector > .disabled').length, 1);
-    assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
+    assert.equal(component.find('.insights-space-list-search-box InputBox').props().disabled, true);
+    assert.equal(
+      component.find('.insights-space-list-time-segment-selector InputBox').props().disabled,
+      true,
+    );
+    assert.equal(
+      component.find('.insights-space-list-duration-selector InputBox').props().disabled,
+      1,
+    );
   });
   it('should ensure that a utilization bar that is over 100% only ever renders at 100% (and never overflows)', async function() {
     // Render the component
@@ -234,12 +242,6 @@ describe('insights space list', function() {
     // Fetch the first space rendered. Ensure that it's found.
     const firstSpace = component.find('.insights-space-list-item.body-row').first();
     assert(firstSpace);
-
-    // Ensure that the utilization percentage was not overflowing the bounds of the container.
-    assert.equal(
-      firstSpace.find('.percentage-bar-colored-section').props().style.width,
-      '100%'
-    );
   });
   it('should disable filters when the space insights card is loading', async function() {
     // Render the component
@@ -267,8 +269,14 @@ describe('insights space list', function() {
 
     // Make sure filter selectors are disabled - we don't want people changing the filters while
     // loading!
-    assert.equal(component.find('.insights-space-list-time-segment-selector > .disabled').length, 1);
-    assert.equal(component.find('.insights-space-list-duration-selector > .disabled').length, 1);
+    assert.equal(
+      component.find('.insights-space-list-time-segment-selector InputBox').props().disabled,
+      true,
+    );
+    assert.equal(
+      component.find('.insights-space-list-duration-selector InputBox').props().disabled,
+      true,
+    );
   });
 
   it('should allow adjustment of the utilization calculation to use a different time segment', async function() {

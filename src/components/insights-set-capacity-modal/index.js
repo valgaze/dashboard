@@ -43,11 +43,12 @@ export default class InsightsSetCapacityModal extends React.Component {
               />
             </div>
 
-            <Button
-              className="insights-set-capacity-modal-submit"
-              disabled={this.state.capacity === null}
-              onClick={() => this.props.onSubmit(this.state.capacity)}
-            >Save changes</Button>
+            <div className="insights-set-capacity-modal-submit">
+              <Button
+                disabled={this.state.capacity === null}
+                onClick={() => this.props.onSubmit(this.state.capacity)}
+              >Save changes</Button>
+            </div>
           </CardBody>
         </Card>
       </Modal>

@@ -7,6 +7,8 @@ import ReactGA from 'react-ga';
 import moment from 'moment';
 import queryString from 'qs';
 
+import '@density/ui-fonts';
+
 import userSet from './actions/user/set';
 
 import objectSnakeToCamel from './helpers/object-snake-to-camel/index';

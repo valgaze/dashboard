@@ -16,6 +16,8 @@
     display: flex; /* 2 */
   }
 }
+.webhook-list-header-title { display: flex; }
+
 // The "webhook" header at the top of the page.
 .webhook-list-header-text {
   display: inline-block;

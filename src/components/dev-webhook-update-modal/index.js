@@ -58,16 +58,17 @@ export default class WebhookUpdateModal extends React.Component {
               />}
             />
 
-            <Button
-              className="webhook-update-modal-submit"
-              disabled={this.state.name.length === 0}
-              onClick={() => this.props.onSubmit({
-                id: this.props.initialWebhook.id,
-                name: this.state.name,
-                description: this.state.description,
-                key: this.state.key,
-              })}
-            >Save</Button>
+            <div className="webhook-update-modal-submit">
+              <Button
+                disabled={this.state.name.length === 0}
+                onClick={() => this.props.onSubmit({
+                  id: this.props.initialWebhook.id,
+                  name: this.state.name,
+                  description: this.state.description,
+                  key: this.state.key,
+                })}
+              >Save</Button>
+            </div>
           </CardBody>
         </Card>
       </Modal>
@@ -93,10 +94,11 @@ export default class WebhookUpdateModal extends React.Component {
               webhook with the same contents.
             </p>
 
-            <Button
-              className="webhook-update-modal-destroy-submit"
-              onClick={() => this.props.onDestroyWebhook(this.props.initialWebhook)}
-            >Destroy Webhook</Button>
+            <div className="webhook-update-modal-destroy-submit">
+              <Button
+                onClick={() => this.props.onDestroyWebhook(this.props.initialWebhook)}
+              >Destroy Webhook</Button>
+            </div>
           </CardBody>
         </Card>
       </Modal>

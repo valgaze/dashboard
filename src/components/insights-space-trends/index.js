@@ -109,6 +109,7 @@ function InsightsSpaceTrends({
                 )})`,
               };
             })}
+            width={300}
             onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
           />
         </InsightsFilterBarItem>

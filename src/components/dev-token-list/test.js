@@ -61,13 +61,13 @@ describe('Token list page', function() {
     assert.equal(component.find('.token-create').length, 1);
 
     // The button in the modal should be disabled by default.
-    assert.equal(component.find('.token-create-modal-submit').prop('disabled'), true);
+    assert.equal(component.find('.token-create-modal-submit Button').prop('disabled'), true);
 
     // Add a token name
     component.find('.token-create-name-container input').simulate('change', {target: {value: 'token name'}});
 
     // The button in the modal should now be enabled.
-    assert.equal(component.find('.token-create-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.token-create-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should create a new token on the server.
     global.fetch = sinon.stub().resolves({
@@ -81,7 +81,7 @@ describe('Token list page', function() {
         token_type: 'readonly',
       }),
     });
-    component.find('.token-create-modal-submit').simulate('click');
+    component.find('.token-create-modal-submit Button').simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(50);
@@ -108,13 +108,13 @@ describe('Token list page', function() {
     assert.equal(component.find('.token-create').length, 1);
 
     // The button in the modal should be disabled by default.
-    assert.equal(component.find('.token-create-modal-submit').prop('disabled'), true);
+    assert.equal(component.find('.token-create-modal-submit Button').prop('disabled'), true);
 
     // Add a token name
     component.find('.token-create-name-container input').simulate('change', {target: {value: 'token name'}});
 
     // The button in the modal should now be enabled.
-    assert.equal(component.find('.token-create-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.token-create-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should deestroy the token.
     global.fetch = sinon.stub().resolves({
@@ -123,7 +123,7 @@ describe('Token list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
     });
-    component.find('.token-create-modal-submit').simulate('click');
+    component.find('.token-create-modal-submit Button').simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().tokens.loading, true);
@@ -154,17 +154,17 @@ describe('Token list page', function() {
     assert.equal(component.find('.token-update-modal').length, 1);
 
     // The button in the modal should be enabled.
-    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), false);
 
     // Empty the token name box
     component.find('.update-token-name-container input').simulate('change', {target: {value: ''}});
 
     // The button in the modal should now be disabled.
-    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), true);
+    assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), true);
 
     // Enter a new name.
     component.find('.update-token-name-container input').simulate('change', {target: {value: 'token name'}});
-    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should create a new token on the server.
     global.fetch = sinon.stub().resolves({
@@ -178,7 +178,7 @@ describe('Token list page', function() {
         token_type: 'readonly',
       }),
     });
-    component.find('.token-update-modal-submit').simulate('click');
+    component.find('.token-update-modal-submit Button').simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(50);
@@ -205,17 +205,17 @@ describe('Token list page', function() {
     assert.equal(component.find('.token-update-modal').length, 1);
 
     // The button in the modal should be enabled.
-    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), false);
 
     // Empty the token name box
     component.find('.update-token-name-container input').simulate('change', {target: {value: ''}});
 
     // The button in the modal should now be disabled.
-    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), true);
+    assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), true);
 
     // Enter a new name.
     component.find('.update-token-name-container input').simulate('change', {target: {value: 'token name'}});
-    assert.equal(component.find('.token-update-modal-submit').prop('disabled'), false);
+    assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should create a new token on the server.
     global.fetch = sinon.stub().resolves({
@@ -224,7 +224,7 @@ describe('Token list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({}),
     });
-    component.find('.token-update-modal-submit').simulate('click');
+    component.find('.token-update-modal-submit Button').simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(50);
@@ -254,11 +254,11 @@ describe('Token list page', function() {
     component.find('.token-update-destroy-link').simulate('click');
 
     // The button in the modal should now be disabled.
-    assert.equal(component.find('.token-update-destroy-submit').prop('disabled'), true);
+    assert.equal(component.find('.token-update-destroy-submit Button').prop('disabled'), true);
 
     // Enter the name.
     component.find('.token-update-destroy-confirmation input').simulate('change', {target: {value: 'foo!'}});
-    assert.equal(component.find('.token-update-destroy-submit').prop('disabled'), false);
+    assert.equal(component.find('.token-update-destroy-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should deestroy the token.
     global.fetch = sinon.stub().resolves({
@@ -272,7 +272,7 @@ describe('Token list page', function() {
         token_type: 'readonly',
       }),
     });
-    component.find('.token-update-destroy-submit').simulate('click');
+    component.find('.token-update-destroy-submit Button').simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(50);
@@ -301,11 +301,11 @@ describe('Token list page', function() {
     component.find('.token-update-destroy-link').simulate('click');
 
     // The button in the modal should now be disabled.
-    assert.equal(component.find('.token-update-destroy-submit').prop('disabled'), true);
+    assert.equal(component.find('.token-update-destroy-submit Button').prop('disabled'), true);
 
     // Enter the name.
     component.find('.token-update-destroy-confirmation input').simulate('change', {target: {value: 'foo!'}});
-    assert.equal(component.find('.token-update-destroy-submit').prop('disabled'), false);
+    assert.equal(component.find('.token-update-destroy-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should deestroy the token.
     global.fetch = sinon.stub().resolves({
@@ -314,7 +314,7 @@ describe('Token list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
     });
-    component.find('.token-update-destroy-submit').simulate('click');
+    component.find('.token-update-destroy-submit Button').simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().tokens.loading, true);

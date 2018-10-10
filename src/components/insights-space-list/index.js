@@ -309,11 +309,11 @@ export class InsightsSpaceList extends React.Component {
         <div className="insights-space-list-header">
           <h2 className="insights-space-list-header-text">Insights</h2>
         </div>
-        <div className="insights-space-list-filter-spaces-row">
+        <div className="insights-space-list-filter-spaces-row insights-space-list-search-box">
           {/* Left-aligned filter box */}
           <InputBox
             type="text"
-            className="insights-space-list-search-box"
+            width={250}
             placeholder="Filter Spaces ..."
             disabled={this.state.view === ERROR}
             value={spaces.filters.search}
@@ -378,10 +378,9 @@ export class InsightsSpaceList extends React.Component {
             </span>
 
             {/* Utiliation time segment and data duration filters */}
-            <div className="insights-space-list-filter-item">
+            <div className="insights-space-list-filter-item insights-space-list-time-segment-selector">
               <InputBox
                 type="select"
-                className="insights-space-list-time-segment-selector"
                 value={this.state.timeSegmentGroupId}
                 disabled={this.state.view !== VISIBLE}
                 onChange={e => {
@@ -398,10 +397,9 @@ export class InsightsSpaceList extends React.Component {
                 ].map(({id, name}) => ({ id, label: <span>{name}</span> }))}
               />
             </div>
-            <div className="insights-space-list-filter-item">
+            <div className="insights-space-list-filter-item insights-space-list-duration-selector">
               <InputBox
                 type="select"
-                className="insights-space-list-duration-selector"
                 value={this.state.dataDuration}
                 disabled={this.state.view !== VISIBLE}
                 onChange={e => {

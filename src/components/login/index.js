@@ -1,6 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
+import { IconCheck, IconNo } from '@density/ui-icons';
 
 import { accounts } from '../../client';
 import sessionTokenSet from '../../actions/session-token/set';
@@ -39,30 +40,30 @@ export class Login extends React.Component {
     }
   }
 
-  isLoginFormValid() {
+  isLoginFormValid = () => {
     return this.state.view === LOGIN &&
       this.state.email.indexOf('@') >= 0 &&
       this.state.password.length > 0 &&
       !this.state.loading;
   }
 
-  isForgotPasswordFormValid() {
+  isForgotPasswordFormValid = () => {
     return this.state.view === FORGOT_PASSWORD &&
       this.state.email.indexOf('@') >= 0 &&
       !this.state.loading;
   }
 
-  onEnter(e) {
+  onEnter = e => {
     if (e.key === 'Enter') {
-      if (this.isLoginFormValid.apply(this)) {
+      if (this.isLoginFormValid()) {
         this.onLogin();
-      } else if (this.isForgotPasswordFormValid.apply(this)) {
+      } else if (this.isForgotPasswordFormValid()) {
         this.onForgotPassword();
       }
     }
   }
 
-  onLogin() {
+  onLogin = () => {
     this.setState({loading: true, error: null});
     return accounts.users.login({
       email: this.state.email,
@@ -75,7 +76,7 @@ export class Login extends React.Component {
     });
   }
 
-  onForgotPassword() {
+  onForgotPassword = () => {
     this.setState({loading: true, error: null});
     return accounts.users.password_forgot({
       email: this.state.email,
@@ -95,25 +96,26 @@ export class Login extends React.Component {
           placeholder="Email Address"
           invalid={this.state.email.length > 0 && this.state.email.indexOf('@') === -1}
           onChange={e => this.setState({email: e.target.value})}
-          onKeyPress={this.onEnter.bind(this)}
+          onKeyPress={this.onEnter}
           value={this.state.email}
         />
         <InputStackItem
           type="password"
           placeholder="Password"
           onChange={e => this.setState({password: e.target.value})}
-          onKeyPress={this.onEnter.bind(this)}
+          onKeyPress={this.onEnter}
           value={this.state.password}
         />
       </InputStackGroup>
 
       {/* Submit the form! */}
-      <Button 
-        className={classnames('login-submit-button', {loading: this.state.loading})}
-        size="large"
-        onClick={this.onLogin.bind(this)}
-        disabled={!this.isLoginFormValid.apply(this)}
-      >Login</Button>
+      <div className={classnames('login-submit-button', {loading: this.state.loading})}>
+        <Button 
+          size="large"
+          onClick={this.onLogin}
+          disabled={!this.isLoginFormValid()}
+        >Login</Button>
+      </div>
 
       {/* Move to forgot password view */}
       <div
@@ -125,33 +127,36 @@ export class Login extends React.Component {
 
   renderForgotPasswordForm() {
     return <div className="login-form-container">
-      {this.state.forgotPasswordConfirmation ? <Toast
-        className="login-toast"
-        type="success"
-        icon={<span className="login-toast-icon">&#xe908;</span>}
-      >
-        <p>{this.state.forgotPasswordConfirmation}</p>
-      </Toast> : null}
+      {this.state.forgotPasswordConfirmation ? <div className="login-toast">
+        <Toast
+          type="success"
+          icon={<IconCheck color="white" />}
+          onDismiss={() => this.setState({forgotPasswordConfirmation: null})}
+        >
+          {this.state.forgotPasswordConfirmation}
+        </Toast>
+      </div> : null}
 
       <h2 className="login-password-reset-title">Send password change request</h2>
-      <InputStackGroup className="login-password-reset-form">
+      <InputStackGroup>
         <InputStackItem
           type="email"
           placeholder="Email Address"
           invalid={this.state.email.length > 0 && this.state.email.indexOf('@') === -1}
           onChange={e => this.setState({email: e.target.value, error: null})}
-          onKeyPress={this.onEnter.bind(this)}
+          onKeyPress={this.onEnter}
           value={this.state.email}
         />
       </InputStackGroup>
 
       {/* Submit the form! */}
-      <Button 
-        className={classnames('login-submit-button', {loading: this.state.loading})}
-        onClick={this.onForgotPassword.bind(this)}
-        size="large"
-        disabled={!this.isForgotPasswordFormValid.apply(this)}
-      >Send Request</Button>
+      <div className={classnames('login-submit-button', {loading: this.state.loading})}>
+        <Button 
+          onClick={this.onForgotPassword}
+          size="large"
+          disabled={!this.isForgotPasswordFormValid.apply(this)}
+        >Send Request</Button>
+      </div>
 
       {/* Move to back to login page */}
       <div
@@ -168,29 +173,48 @@ export class Login extends React.Component {
 
       <div className="login-section">
         {/* Render a toast if the password reset process was successful */}
-        {this.state.referredFromForgotPassword ? <Toast
-          className="login-toast login-toast-forgot-password"
-          type="success"
-          icon={<span className="login-toast-icon">&#xe908;</span>}
-        >
-          <p>Password reset successful, log in using your new credentials.</p>
-        </Toast> : null}
+        {this.state.referredFromForgotPassword ? (
+          <div className="login-toast login-toast-forgot-password">
+            <Toast
+              type="success"
+              icon={<IconNo color="white" />}
+              onDismiss={() => this.setState({referredFromForgotPassword: false})}
+            >
+              Password reset successful, log in using your new credentials.
+            </Toast>
+          </div>
+        ) : null}
 
-        {this.props.user && this.props.user.error ? <Toast
-          className="login-toast login-toast-forgot-password"
-          type="danger"
-          icon={<span className="login-toast-icon">&#xe928;</span>}
-        >
-          {this.props.user.error}
-        </Toast> : null}
+        {this.props.user && this.props.user.error ? (
+          <div className="login-toast login-toast-forgot-password">
+            <Toast
+              className="login-toast login-toast-forgot-password"
+              type="danger"
+              title="Error fetching user"
+              icon={<IconNo color="white" />}
+            >
+              {this.props.user.error}
+            </Toast>
+          </div>
+        ) : null}
 
         {/* Render any errors with previous login attempts */}
-        {this.state.error ? <Toast className="login-toast" type="danger" icon={<span className="login-toast-icon">&#xe928;</span>}>
-          <h3 className="login-toast-header">Incorrect password</h3>
-          <p>{this.state.error}</p>
-        </Toast> : null}
+        {this.state.error ? (
+          <div className="login-toast">
+            <Toast
+              type="danger"
+              title="Incorrect password"
+              icon={<IconNo color="white" />}
+              onDismiss={() => this.setState({error: null})}
+            >
+              {this.state.error}
+            </Toast>
+          </div>
+        ) : null}
 
-        <Mark className="login-density-logo" />
+        <div className="login-density-logo">
+          <Mark size={100} />
+        </div>
 
         {/* Login inputs */}
         {this.state.view === LOGIN ?

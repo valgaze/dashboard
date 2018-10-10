@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { decode } from 'ent';
 
 import Modal from '@density/ui-modal';
@@ -43,6 +43,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               input={
                 <InputBox
                   type="text"
+                  width="100%"
                   id="update-space-name"
                   value={this.state.name}
                   onChange={e => this.setState({name: e.target.value})}
@@ -55,6 +56,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               label="Time Zone"
               input={<InputBox
                 type="select"
+                width="100%"
                 id="update-space-timezone"
                 className="update-space-time-zone-select"
                 value={this.state.timeZone}
@@ -74,6 +76,7 @@ export default class EnvironmentModalUpdateSpace extends React.Component {
               infoLabel="The time each day that the space resets its count back to zero. Typically in the middle of the night or at the star tof a work day."
               input={<InputBox
                 type="select"
+                width="100%"
                 id="update-space-daily-reset"
                 className="update-space-daily-reset-select"
                 value={this.state.dailyReset}

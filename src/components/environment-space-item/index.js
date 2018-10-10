@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { DropTarget } from 'react-dnd';
 import classnames from 'classnames';
 
+import { IconClose } from '@density/ui-icons';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 
 import { IconDragDrop, IconSwitch } from '../icons/index';
@@ -87,7 +88,11 @@ export function EnvironmentSpaceItem({
               <span
                 className="environment-space-item-doorways-delete"
                 onClick={() => onDoorwayLinkDeleted(link)}
-              />
+              >
+                <span className="environment-space-item-doorways-delete-icon">
+                  <IconClose color="#fff" width={8} height={8} />
+                </span>
+              </span>
             </li>
           })}
 

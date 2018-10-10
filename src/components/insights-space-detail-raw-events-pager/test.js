@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { mount } from 'enzyme';
 import assert from 'assert';
 import sinon from 'sinon';
@@ -144,7 +144,7 @@ describe('raw events pager', function() {
     />);
 
     // Click on one of the arrows
-    component.find('PagerButtonGroup .pager-button').last().simulate('click');
+    component.find('PagerButtonGroup').props().onClickEnd();
 
     // Assert onChange called with new value
     assert.equal(onChange.firstCall.args[0], 10);

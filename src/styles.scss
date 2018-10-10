@@ -25,16 +25,69 @@
 @import "../node_modules/@density/ui/variables/timings.json";
 @import "../node_modules/@density/ui/variables/grid.json";
 
-// Non-component bits of density-ui
-@import "../node_modules/@density/ui/styles/font";
-@import "../node_modules/@density/ui/styles/clearfix";
-@import "../node_modules/@density/ui/styles/grid";
+/**
+ * Calculate column size percentage
+ */
+@function get-col-percent($column-num) {
+  @return $column-num / $fg-columns * 100%;
+}
+
+@mixin grid-container {
+  margin-left: -1 * $fg-gutter;
+  margin-right: -1 * $fg-gutter;
+  box-sizing: border-box;
+
+  max-width: 1000px;
+  margin: 20px auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+@mixin grid-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.row {
+  @include grid-row;
+}
+
+@mixin grid-column {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-height: 1px;
+  padding-left: $fg-gutter;
+  padding-right: $fg-gutter;
+}
+
+@mixin grid-width($xs, $sm, $md, $lg) {
+  @include grid-column;
+
+  flex-basis: get-col-percent($xs);
+  max-width: get-col-percent($xs);
+
+  @media (min-width: $screen-sm-min) {
+    flex-basis: get-col-percent($sm);
+    max-width: get-col-percent($sm);
+  }
+  @media (min-width: $screen-md-min) {
+    flex-basis: get-col-percent($md);
+    max-width: get-col-percent($md);
+  }
+  @media (min-width: $screen-lg-min) {
+    flex-basis: get-col-percent($lg);
+    max-width: get-col-percent($lg);
+  }
+}
 
 // Components:
 
 // Navbar
 @import "../node_modules/@density/ui-navbar/variables.json";
-@import "../node_modules/@density/ui-navbar/dist/sass";
 
 // Card
 @import "../node_modules/@density/ui-card/variables.json";
@@ -44,69 +97,9 @@
 @import "../node_modules/@density/ui-modal/variables.json";
 @import "../node_modules/@density/ui-modal/dist/sass";
 
-// FAB
-@import "../node_modules/@density/ui-fab/variables.json";
-@import "../node_modules/@density/ui-fab/dist/sass";
-
-// Context Menu
-@import "../node_modules/@density/ui-context-menu/variables.json";
-@import "../node_modules/@density/ui-context-menu/dist/sass";
-
-// Input Box
-@import "../node_modules/@density/ui-input-box/variables.json";
-@import "../node_modules/@density/ui-input-box/dist/sass";
-
 // Popover
 @import "../node_modules/@density/ui-popover/variables.json";
 @import "../node_modules/@density/ui-popover/dist/sass";
-
-// Input Stack
-@import "../node_modules/@density/ui-input-stack/variables.json";
-@import "../node_modules/@density/ui-input-stack/dist/sass";
-
-// Toast
-@import "../node_modules/@density/ui-toast/variables.json";
-@import "../node_modules/@density/ui-toast/dist/sass";
-
-// Button
-@import "../node_modules/@density/ui-button/variables.json";
-@import "../node_modules/@density/ui-button/dist/sass";
-
-// Navbar Sidebar
-@import "../node_modules/@density/ui-navbar-sidebar/variables.json";
-@import "../node_modules/@density/ui-navbar-sidebar/dist/sass";
-
-// Date Picker
-@import "../node_modules/@density/ui-date-picker/variables.json";
-@import "../node_modules/@density/ui-date-picker/dist/sass";
-
-// Date Range Picker
-@import "../node_modules/@density/ui-date-range-picker/variables.json";
-@import "../node_modules/@density/ui-date-range-picker/dist/sass";
-
-// Pager Button group
-@import "../node_modules/@density/ui-pager-button-group/variables.json";
-@import "../node_modules/@density/ui-pager-button-group/dist/sass";
-
-// Radio Button
-@import "../node_modules/@density/ui-radio-button/variables.json";
-@import "../node_modules/@density/ui-radio-button/dist/sass";
-
-// Mark
-@import "../node_modules/@density/ui-density-mark/variables.json";
-@import "../node_modules/@density/ui-density-mark/dist/sass";
-
-// Percentage Bar
-@import "../node_modules/@density/ui-percentage-bar/variables.json";
-@import "../node_modules/@density/ui-percentage-bar/dist/sass";
-
-// Switch
-@import "../node_modules/@density/ui-switch/variables.json";
-@import "../node_modules/@density/ui-switch/dist/sass";
-
-// Info Popup
-@import "../node_modules/@density/ui-info-popup/variables.json";
-@import "../node_modules/@density/ui-info-popup/dist/sass";
 
 $font-size-x-small: 10px;
 
@@ -153,7 +146,7 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 } }
 
 // Densicons is an icon font with Density icons inside.
-// TODO: back-port this into Density UI once builds are back (GC 2017-12-14)
+$cdn-path: "https://densityco.github.io/assets";
 @font-face {
   font-family: 'Densicons';
   src: url("#{$cdn-path}/fonts/densicons.4e3b11a3.ttf") format("truetype"),
@@ -162,18 +155,6 @@ input[type=input], input[type=password] { &:-webkit-autofill {
     url("#{$cdn-path}/fonts/densicons.00b7e5bb.svg") format("svg");
   font-weight: normal;
   font-style: normal;
-}
-
-// TODO: back-port this into density UI
-.input-box::placeholder {
-  color: $gray;
-}
-
-// TODO: back-port this into density UI
-.toast {
-  width: calc(100% - 10px); /* Fit into a mobile viewport */
-  max-width: 420px;
-  margin: 0 auto;
 }
 
 //
@@ -218,7 +199,6 @@ input[type=input], input[type=password] { &:-webkit-autofill {
 @import "./components/account-forgot-password/styles";
 @import "./components/icons/styles";
 @import "./components/form-label/styles";
-@import "./components/dev-description-popover/styles";
 @import "./components/loading-spinner/styles";
 @import "./components/error-bar/styles";
 @import "./components/environment-switcher/styles";

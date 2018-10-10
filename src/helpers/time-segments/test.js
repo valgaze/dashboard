@@ -65,7 +65,7 @@ describe('time-segments', function() {
       };
       assert.throws(() => {
         findTimeSegmentInTimeSegmentGroupForSpace(TIME_SEGMENT_GROUP, SPACE);
-      }, `This space doesn't have an applicable time segment within the selected time segment group.`);
+      }, new Error(`This space doesn't have an applicable time segment within the selected time segment group.`));
     });
     it('should always be able to find the default time segment in any space', () => {
       const SPACE = {

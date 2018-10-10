@@ -96,7 +96,7 @@ describe('Space update modal', function() {
     component.setState({count: 10, textCount: false});
 
     // Click the button in the modal, which should call `onSubmit` with the count
-    component.find('.insights-edit-count-modal-submit').simulate('click');
+    component.find('.insights-edit-count-modal-submit Button').simulate('click');
 
     // Ensure that the correct count was passed through.
     assert.equal(onSubmit.firstCall.args[0], 10);

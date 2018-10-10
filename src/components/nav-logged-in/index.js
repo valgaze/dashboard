@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import Navbar, { NavbarItem, NavbarMobileItem } from '@density/ui-navbar';
 
@@ -169,7 +169,7 @@ export default function NavLoggedIn({
       pageName={['ACCOUNT']}
       href="#/account"
     >Account</NavbarItem>
-    <span aria-label="Logout" title="Logout" className="nav-logged-in-logout">
+    <span aria-label="Logout" title="Logout" className="navbar-item nav-logged-in-logout">
       <a onClick={onLogout}>&#xe923;</a>
     </span>
   </Navbar>;

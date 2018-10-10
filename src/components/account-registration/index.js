@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import Mark from '@density/ui-density-mark';
@@ -59,7 +59,9 @@ export class AccountRegistration extends React.Component {
         detail={`Lets get your Density account set up, ${this.state.email}!`}
       />
 
-      <Mark className="account-registration-density-logo" />
+      <div className="account-registration-density-logo">
+        <Mark size={100} />
+      </div>
 
       <div className="account-registration-card-container">
         <Card className="account-registration-card">

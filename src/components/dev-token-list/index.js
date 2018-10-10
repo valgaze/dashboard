@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import showModal from '../../actions/modal/show';
@@ -78,9 +78,12 @@ export function TokenList({
 
     <div className="token-list-container">
       <div className="token-list-header">
-        <span>
+        <div className="token-list-header-title">
           <h1 className="token-list-header-text">Tokens</h1>
-          <InfoPopup>
+          <InfoPopup
+            horizontalIconOffset={8}
+            verticalIconOffset={10}
+          >
             <p>
               Tokens are randomized strings that are used to access your Density data via our API. Keep these secret!
             </p>
@@ -92,7 +95,7 @@ export function TokenList({
               rel="noopener noreferrer"
             >View our documentation</a>
           </InfoPopup>
-        </span>
+        </div>
 
         {/* Search box to filter the list of tokens */}
         <div className="token-list-search">

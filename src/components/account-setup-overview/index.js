@@ -42,7 +42,9 @@ export function AccountSetupOverview({user, onGetStarted}) {
                 alt=""
               />
             </div>
-            <Button className="account-setup-overview-submit" onClick={onGetStarted}>Lets Get Started!</Button>
+            <div className="account-setup-overview-submit">
+              <Button onClick={onGetStarted}>Lets Get Started!</Button>
+            </div>
           </CardBody>
         </Card>
       </div>
