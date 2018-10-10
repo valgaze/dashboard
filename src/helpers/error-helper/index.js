@@ -1,4 +1,4 @@
-export default function errorHelper(params /* {try, catch, finally, else} */) {
+export default async function errorHelper(params /* {try, catch, finally, else} */) {
   let result = undefined,
       errorThrown = false;
 
@@ -10,12 +10,20 @@ export default function errorHelper(params /* {try, catch, finally, else} */) {
     params.finally && params.finally();
   }
 
-  if (errorThrown) {
-    params.catch && params.catch(errorThrown);
+  if (errorThrown && params.catch) {
+    let catchResponse = params.catch(errorThrown);
+    if (catchResponse instanceof Promise) { catchResponse = await catchResponse; }
+    if (typeof catchResponse !== 'undefined') {
+      result = catchResponse;
+    }
   }
 
   if (!errorThrown && params.else) {
-    params.else(result);
+    const elseResponse = params.else(result);
+    if (elseResponse instanceof Promise) { await elseResponse; }
+    if (typeof elseResponse !== 'undefined') {
+      result = elseResponse;
+    }
   }
 
   return result;
