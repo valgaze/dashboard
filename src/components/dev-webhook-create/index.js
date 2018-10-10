@@ -78,8 +78,6 @@ export default class WebhookCreateModal extends React.Component {
               }</pre>
             </div>
 
-            {this.props.error ? <span>Error: {this.props.error}</span> : null}
-
             <div className="webhook-create-modal-submit">
               <Button
                 disabled={this.state.endpoint.length === 0}

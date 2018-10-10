@@ -66,7 +66,6 @@ export default function NavLoggedIn({
       onClick={closeSidebar}
     >
       Live
-      <span className="nav-logged-in-beta">(Beta)</span>
     </NavbarMobileItem>,
 
     /* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */
@@ -151,7 +150,6 @@ export default function NavLoggedIn({
       href="#/spaces/live"
     >
       Live
-      <span className="nav-logged-in-beta">(Beta)</span>
     </NavbarItem>
 
     {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
