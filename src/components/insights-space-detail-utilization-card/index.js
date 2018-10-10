@@ -169,6 +169,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         endDate,
         timeSegment,
         timeSegmentGroup,
+
+        dataSpaceId: space.id,
+        dataSpaceCapacity: space.capacity,
       }, () => this.fetchData());
     }
   }
@@ -223,7 +226,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         }
       });
 
-      const initialTimestamp = parseISOTimeAtSpace(this.state.counts[0].timestamp, space)
+      const initialTimestampRaw = this.state.counts.length > 0 ? this.state.counts[0].timestamp : this.state.startDate;
+      const initialTimestamp = parseISOTimeAtSpace(initialTimestampRaw, space)
         .startOf('day')
         .add(parseTimeInTimeSegmentToSeconds(timeSegment.start), 'seconds');
 
