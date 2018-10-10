@@ -8,6 +8,8 @@ import gridVariables from '@density/ui/variables/grid.json';
 
 import SpaceHierarchySelectBox from '../space-hierarchy-select-box/index';
 
+import { parseISOTimeAtSpace } from '../../helpers/space-time-utilities/index';
+
 import { core } from '../../client';
 import moment from 'moment';
 
@@ -143,10 +145,10 @@ export class InsightsSpaceList extends React.Component {
         const space = spaces.data.find(i => i.id === spaceId);
 
         for (let ct = 0; ct < data[spaceId].length; ct++) {
-          data[spaceId][ct].timestampAsMoment = moment.utc(
+          data[spaceId][ct].timestampAsMoment = parseISOTimeAtSpace(
             data[spaceId][ct].timestamp,
-            'YYYY-MM-DDTHH:mm:ssZ'
-          ).tz(space.timeZone);
+            space,
+          );
         }
       }
 
@@ -159,7 +161,7 @@ export class InsightsSpaceList extends React.Component {
         const space = spaces.data.find(i => i.id === spaceId);
         const counts = data[spaceId];
 
-        const groups = groupCountsByDay(counts, space.timeZone);
+        const groups = groupCountsByDay(counts, space);
         const result = spaceUtilizationPerGroup(space, groups);
 
         return {

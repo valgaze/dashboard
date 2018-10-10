@@ -18,6 +18,11 @@ import {
   DEFAULT_TIME_SEGMENT,
 } from '../../helpers/time-segments/index';
 
+import {
+  parseISOTimeAtSpace,
+  formatInISOTimeAtSpace,
+} from '../../helpers/space-time-utilities/index';
+
 export const LOADING = 'LOADING',
       EMPTY = 'EMPTY',
       VISIBLE = 'VISIBLE',
@@ -52,13 +57,13 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
     const { date, page, pageSize, doorwayLookup, timeSegmentGroup } = this.state;
 
     // Add timezone offset to both start and end times prior to querying for the count.
-    const day = moment.utc(date).tz(space.timeZone);
+    const day = parseISOTimeAtSpace(date, space);
 
     try {
       const preData = await core.spaces.events({
         id: space.id,
-        start_time: day.startOf('day').format(),
-        end_time: day.endOf('day').format(),
+        start_time: formatInISOTimeAtSpace(day.clone().startOf('day'), space),
+        end_time: formatInISOTimeAtSpace(day.clone().endOf('day'), space),
         time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
         page: page,
         page_size: pageSize,
@@ -172,7 +177,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           <InfoPopup horizontalIconOffset={8}>
             <p className="insights-space-detail-raw-events-card-popup-p">
               All events that the doorways within this space have seen over{' '}
-              <strong>{moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}</strong> during{' '}
+              <strong>{parseISOTimeAtSpace(date, space).format('MM/DD/YYYY')}</strong> during{' '}
               the time segment <strong>{timeSegmentGroup.name}</strong>.
             </p>
 
@@ -198,7 +203,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
           headings={["Timestamp", "Event", "Doorway"]}
           data={data}
           mapDataItemToRow={item => [
-            moment.utc(item.timestamp).tz(space.timeZone).format('MMM Do YYYY, h:mm:ss a'),
+            parseISOTimeAtSpace(item.timestamp, space).format('MMM Do YYYY, h:mm:ss a'),
             item.direction === 1 ? 'Entrance' : 'Exit',
             doorwayLookup[item.doorwayId] ? doorwayLookup[item.doorwayId].name : item.doorwayId,
           ]}

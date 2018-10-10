@@ -2,21 +2,24 @@ import collectionSpacesPush from './push';
 import collectionSpacesError from './error';
 import { core } from '../../../client';
 
-import moment from 'moment';
+import {
+  getCurrentLocalTimeAtSpace,
+  formatInISOTime,
+} from '../../../helpers/space-time-utilities/index';
 
 export const COLLECTION_SPACES_RESET_COUNT = 'COLLECTION_SPACES_RESET_COUNT';
 
-export default function collectionSpacesResetCount(item, newCount) {
+export default function collectionSpacesResetCount(space, newCount) {
   return async dispatch => {
-    dispatch({ type: COLLECTION_SPACES_RESET_COUNT, item, newCount });
+    dispatch({ type: COLLECTION_SPACES_RESET_COUNT, item: space, newCount });
 
     try {
       const response = await core.spaces.reset({
-        id: item.id,
+        id: space.id,
         count: newCount,
-        timestamp: moment.utc().format(),
+        timestamp: formatInISOTime(getCurrentLocalTimeAtSpace(space)),
       });
-      dispatch(collectionSpacesPush({...item, currentCount: newCount}));
+      dispatch(collectionSpacesPush({...space, currentCount: newCount}));
       return response;
     } catch (err) {
       dispatch(collectionSpacesError(err));

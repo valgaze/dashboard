@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Modal from '@density/ui-modal';
 import Button from '@density/ui-button';
 import InputBox from '@density/ui-input-box';
@@ -64,7 +64,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 value={this.state.dailyReset}
                 disabled={this.state.timeZone.length === 0}
                 onChange={e => this.setState({dailyReset: e.id})}
-                choices={generateResetTimeChoices().map(({value, display}) => ({
+                choices={generateResetTimeChoices(this.state).map(({value, display}) => ({
                   id: value,
                   label: display,
                 }))}

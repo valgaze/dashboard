@@ -1,11 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import moment from 'moment';
-import 'moment-timezone';
-
 import InputBox from '@density/ui-input-box';
 import { isInclusivelyBeforeDay } from '@density/react-dates';
+
+import {
+  getCurrentLocalTimeAtSpace,
+  parseISOTimeAtSpace,
+  parseFromReactDates,
+  formatInISOTime,
+  formatForReactDates,
+  prettyPrintHoursMinutes,
+} from '../../helpers/space-time-utilities/index';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar/index';
@@ -54,16 +60,20 @@ export function InsightsSpaceDaily({
       <InsightsFilterBar>
         <InsightsFilterBarItem label="Day">
           <DatePicker
-            date={moment.utc(spaces.filters.date).tz(space.timeZone).startOf('day').tz('UTC')}
-            onChange={date => onChangeSpaceFilter('date', date.format())}
+            date={formatForReactDates(parseISOTimeAtSpace(spaces.filters.date, space), space)}
+            onChange={date => onChangeSpaceFilter('date', formatInISOTime(parseFromReactDates(date, space)))}
 
             focused={spaces.filters.datePickerFocused}
             onFocusChange={({focused}) => onChangeSpaceFilter('datePickerFocused', focused)}
             arrowRightDisabled={
-              moment.utc(spaces.filters.date).tz(space.timeZone).format('MM/DD/YYYY') === moment.utc().tz(space.timeZone).format('MM/DD/YYYY')
+              parseISOTimeAtSpace(spaces.filters.date, space).format('MM/DD/YYYY') ===
+              getCurrentLocalTimeAtSpace(space).format('MM/DD/YYYY')
             }
 
-            isOutsideRange={day => !isInclusivelyBeforeDay(day, moment.utc().tz(space.timeZone).startOf('day').tz('UTC'))}
+            isOutsideRange={day => !isInclusivelyBeforeDay(
+              day,
+              getCurrentLocalTimeAtSpace(space).startOf('day'),
+            )}
           />
         </InsightsFilterBarItem>
         <InsightsFilterBarItem label="Time Segment">
@@ -78,20 +88,14 @@ export function InsightsSpaceDaily({
               );
               return {
                 id: ts.id,
-                label: `${ts.name} (${(
-                  moment.utc()
-                    .tz(space.timeZone)
-                    .startOf('day')
-                    .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.start), 'seconds')
-                    .format('h:mma')
-                    .slice(0, -1) /* am -> a */
-                )} - ${(
-                  moment.utc()
-                    .tz(space.timeZone)
-                    .startOf('day')
-                    .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.end), 'seconds')
-                    .format('h:mma')
-                    .slice(0, -1) /* am -> a */
+                label: `${ts.name} (${prettyPrintHoursMinutes(
+                  getCurrentLocalTimeAtSpace(space)
+                  .startOf('day')
+                  .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.start), 'seconds')
+                )} - ${prettyPrintHoursMinutes(
+                  getCurrentLocalTimeAtSpace(space)
+                  .startOf('day')
+                  .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.end), 'seconds')
                 )})`,
               };
             })}

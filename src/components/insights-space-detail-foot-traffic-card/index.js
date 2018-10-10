@@ -15,6 +15,11 @@ import {
   parseTimeInTimeSegmentToSeconds,
 } from '../../helpers/time-segments/index';
 
+import {
+  parseISOTimeAtSpace,
+  formatInISOTimeAtSpace,
+} from '../../helpers/space-time-utilities/index';
+
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
 import {
@@ -38,7 +43,7 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
     data: null,
     dataSpaceId: null,
     datePickerOpen: false,
-    date: moment.utc().format(),
+    date: null,
 
     timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
     timeSegment: DEFAULT_TIME_SEGMENT,
@@ -47,12 +52,12 @@ export default class InsightsSpaceDetailFootTrafficCard extends React.Component 
   fetchData = () => {
     const { space } = this.props;
     const { timeSegmentGroup } = this.state;
-    const day = moment.utc(this.state.date).tz(space.timeZone);
+    const day = parseISOTimeAtSpace(this.state.date, space);
 
     return core.spaces.counts({
       id: space.id,
-      start_time: day.startOf('day').format(),
-      end_time: day.endOf('day').format(),
+      start_time: formatInISOTimeAtSpace(day.clone().startOf('day'), space),
+      end_time: formatInISOTimeAtSpace(day.clone().endOf('day'), space),
       time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
       interval: '5m',
       page: 1,

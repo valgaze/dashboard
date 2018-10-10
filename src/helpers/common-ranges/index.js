@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { getCurrentLocalTimeAtSpace } from '../space-time-utilities';
 
 // range ids
 export const WEEK_TO_DATE = 'WEEK_TO_DATE',
@@ -15,61 +15,62 @@ export const WEEK_TO_DATE = 'WEEK_TO_DATE',
 // used by the DateRangePicker
 // name, startDate, and endDate used by the DateRangePicker
 // key used to filter ranges in the dashboard
-const commonRanges = [
+export default function getCommonRangesForSpace(space) {
+  const YESTERDAY = getCurrentLocalTimeAtSpace(space).subtract(1, 'day').endOf('day');
+  return [
     {
-        id: WEEK_TO_DATE,
-        name: 'Week to date',
-        startDate: moment.utc().startOf('week'),
-        endDate: moment.utc()
+      id: WEEK_TO_DATE,
+      name: 'Week to date',
+      startDate: getCurrentLocalTimeAtSpace(space).startOf('week'),
+      endDate: YESTERDAY,
     },
     {
-        id: MONTH_TO_DATE,
-        name: 'Month to date',
-        startDate: moment.utc().startOf('month'),
-        endDate: moment.utc()
+      id: MONTH_TO_DATE,
+      name: 'Month to date',
+      startDate: getCurrentLocalTimeAtSpace(space).startOf('month'),
+      endDate: YESTERDAY,
     },
     {
-        id: QUARTER_TO_DATE,
-        name: 'Quarter to date',
-        startDate: moment.utc().startOf('quarter'),
-        endDate: moment.utc()
+      id: QUARTER_TO_DATE,
+      name: 'Quarter to date',
+      startDate: getCurrentLocalTimeAtSpace(space).startOf('quarter'),
+      endDate: YESTERDAY,
     },
     {
-        id: LAST_WEEK,
-        name: 'Last week',
-        startDate: moment.utc().startOf('week').subtract(1, 'week'),
-        endDate: moment.utc().endOf('week').subtract(1, 'week')
+      id: LAST_WEEK,
+      name: 'Last week',
+      startDate: getCurrentLocalTimeAtSpace(space).subtract(1, 'week').startOf('week'),
+      endDate: getCurrentLocalTimeAtSpace(space).subtract(1, 'week').endOf('week'),
     },
     {
-        id: LAST_MONTH,
-        name: 'Last month',
-        startDate: moment.utc().startOf('month').subtract(1, 'month'),
-        endDate: moment.utc().endOf('month').subtract(1, 'month')
+      id: LAST_MONTH,
+      name: 'Last month',
+      startDate: getCurrentLocalTimeAtSpace(space).subtract(1, 'month').startOf('month'),
+      endDate: getCurrentLocalTimeAtSpace(space).subtract(1, 'month').endOf('month'),
     },
     {
-        id: LAST_QUARTER,
-        name: 'Last Quarter',
-        startDate: moment.utc().startOf('quarter').subtract(1, 'quarter'),
-        endDate: moment.utc().endOf('quarter').subtract(1, 'quarter')
+      id: LAST_QUARTER,
+      name: 'Last Quarter',
+      startDate: getCurrentLocalTimeAtSpace(space).subtract(1, 'quarter').startOf('quarter'),
+      endDate: getCurrentLocalTimeAtSpace(space).subtract(1, 'quarter').endOf('quarter'),
     },
     {
-        id: LAST_7_DAYS,
-        name: 'Last 7 days',
-        startDate: moment.utc().subtract(1, 'week'),
-        endDate: moment.utc()
+      id: LAST_7_DAYS,
+      name: 'Last 7 days',
+      startDate: getCurrentLocalTimeAtSpace(space).subtract(7, 'days').startOf('day'),
+      endDate: YESTERDAY,
     },
     {
-        id: LAST_30_DAYS,
-        name: 'Last 30 days',
-        startDate: moment.utc().subtract(1, 'month'),
-        endDate: moment.utc()
+      id: LAST_30_DAYS,
+      name: 'Last 30 days',
+      startDate: getCurrentLocalTimeAtSpace(space).subtract(30, 'days').startOf('day'),
+      endDate: YESTERDAY,
     },
     {
-        id: LAST_90_DAYS,
-        name: 'Last 90 days',
-        startDate: moment.utc().subtract(1, 'quarter'),
-        endDate: moment.utc()
-    }
-]
-
-export default commonRanges;
+      id: LAST_90_DAYS,
+      name: 'Last 90 days',
+      startDate: getCurrentLocalTimeAtSpace(space).subtract(90, 'days').startOf('day'),
+      endDate: YESTERDAY,
+    },
+  ];
+}

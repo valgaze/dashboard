@@ -17,7 +17,14 @@ import gridVariables from '@density/ui/variables/grid.json'
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
-import commonRanges from '../../helpers/common-ranges';
+import getCommonRangesForSpace from '../../helpers/common-ranges';
+
+import {
+  parseISOTimeAtSpace,
+  parseFromReactDates,
+  formatInISOTime,
+  formatForReactDates,
+} from '../../helpers/space-time-utilities/index';
 
 // The maximum number of days that can be selected by the date range picker
 const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
@@ -57,60 +64,73 @@ function InsightsSpaceDataExport({
         <SubnavItem active href={`#/spaces/insights/${spaces.selected}/data-export`}>Data Export</SubnavItem>
       </Subnav>
 
-      <InsightsFilterBar>
-        <InsightsFilterBarItem label="Date Range">
-          <DateRangePicker
-            startDate={moment.utc(spaces.filters.startDate).tz(space.timeZone).startOf('day')}
-            endDate={moment.utc(spaces.filters.endDate).tz(space.timeZone).startOf('day')}
-            onChange={({startDate, endDate}) => {
-              // If the user selected over 14 days, then clamp them back to 14 days.
-              if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
-                endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
-              }
+      {spaces.filters.startDate && spaces.filters.endDate ? (
+        <InsightsFilterBar>
+          <InsightsFilterBarItem label="Date Range">
+            <DateRangePicker
+              startDate={formatForReactDates(
+                parseISOTimeAtSpace(spaces.filters.startDate, space),
+                space,
+              )}
+              endDate={formatForReactDates(
+                parseISOTimeAtSpace(spaces.filters.endDate, space),
+                space,
+              )}
+              onChange={({startDate, endDate}) => {
+                startDate = parseFromReactDates(startDate, space);
+                endDate = parseFromReactDates(endDate, space);
 
-              onChangeSpaceFilter('startDate', startDate.format());
-              onChangeSpaceFilter('endDate', endDate.format());
-            }}
-            // Within the component, store if the user has selected the start of end date picker
-            // input
-            focusedInput={spaces.filters.datePickerInput}
-            onFocusChange={(focused, a) => {
-              onChangeSpaceFilter('datePickerInput', focused);
-            }}
+                // If the user selected over 14 days, then clamp them back to 14 days.
+                if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
+                  endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
+                }
 
-            // On mobile, make the calendar one month wide and left aligned.
-            // On desktop, the calendar is two months wide and right aligned.
-            numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
+                onChangeSpaceFilter('startDate', formatInISOTime(startDate));
+                onChangeSpaceFilter('endDate', formatInISOTime(endDate));
+              }}
+              // Within the component, store if the user has selected the start of end date picker
+              // input
+              focusedInput={spaces.filters.datePickerInput}
+              onFocusChange={(focused, a) => {
+                onChangeSpaceFilter('datePickerInput', focused);
+              }}
 
-            isOutsideRange={day => isOutsideRange(
-              spaces.filters.startDate,
-              spaces.filters.datePickerInput,
-              day
-            )}
+              // On mobile, make the calendar one month wide and left aligned.
+              // On desktop, the calendar is two months wide and right aligned.
+              numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
 
-            // common ranges functionality
-            commonRanges={commonRanges}
-            onSelectCommonRange={({startDate, endDate}) => {
-              onChangeSpaceFilter('startDate', startDate);
-              onChangeSpaceFilter('endDate', endDate);
-            }}
-          />
-        </InsightsFilterBarItem>
-      </InsightsFilterBar>
+              isOutsideRange={day => isOutsideRange(
+                spaces.filters.startDate,
+                spaces.filters.datePickerInput,
+                day
+              )}
+
+              // common ranges functionality
+              commonRanges={getCommonRangesForSpace(space)}
+              onSelectCommonRange={({startDate, endDate}) => {
+                onChangeSpaceFilter('startDate', startDate);
+                onChangeSpaceFilter('endDate', endDate);
+              }}
+            />
+          </InsightsFilterBarItem>
+        </InsightsFilterBar>
+      ) : null}
 
       <InsightsSpaceHeader space={space} />
 
-      <div className="insights-space-data-export-container">
-        <div className="insights-space-data-export">
-          <div className="insights-space-data-export-item">
-            <RawEventsExportCard
-              space={space}
-              startDate={spaces.filters.startDate}
-              endDate={spaces.filters.endDate}
-            />
+      {spaces.filters.startDate && spaces.filters.endDate ? (
+        <div className="insights-space-data-export-container">
+          <div className="insights-space-data-export">
+            <div className="insights-space-data-export-item">
+              <RawEventsExportCard
+                space={space}
+                startDate={spaces.filters.startDate}
+                endDate={spaces.filters.endDate}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </div>;
   } else {
     return <p>Loading</p>;

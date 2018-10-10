@@ -2,10 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import moment from 'moment';
-import 'moment-timezone';
 
 import InputBox from '@density/ui-input-box';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
+
+import {
+  getCurrentLocalTimeAtSpace,
+  parseISOTimeAtSpace,
+  parseFromReactDates,
+  formatInISOTime,
+  formatForReactDates,
+  prettyPrintHoursMinutes,
+} from '../../helpers/space-time-utilities/index';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 import InsightsFilterBar, { InsightsFilterBarItem } from '../insights-filter-bar/index';
@@ -20,7 +28,7 @@ import gridVariables from '@density/ui/variables/grid.json'
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
-import commonRanges from '../../helpers/common-ranges';
+import getCommonRangesForSpace from '../../helpers/common-ranges';
 import {
   DEFAULT_TIME_SEGMENT_GROUP,
   findTimeSegmentInTimeSegmentGroupForSpace,
@@ -79,79 +87,84 @@ function InsightsSpaceTrends({
         <SubnavItem href={`#/spaces/insights/${spaces.selected}/data-export`}>Data Export</SubnavItem>
       </Subnav>
 
-      <InsightsFilterBar>
-        <InsightsFilterBarItem label="Time Segment">
-          <InputBox
-            type="select"
-            className="insights-space-trends-time-segment-box"
-            value={selectedTimeSegmentGroup.id}
-            choices={timeSegmentGroupArray.map(ts => {
-              const applicableTimeSegmentForGroup = findTimeSegmentInTimeSegmentGroupForSpace(
-                ts,
+      {spaces.filters.startDate && spaces.filters.endDate ? (
+        <InsightsFilterBar>
+          <InsightsFilterBarItem label="Time Segment">
+            <InputBox
+              type="select"
+              className="insights-space-trends-time-segment-box"
+              value={selectedTimeSegmentGroup.id}
+              choices={timeSegmentGroupArray.map(ts => {
+                const applicableTimeSegmentForGroup = findTimeSegmentInTimeSegmentGroupForSpace(
+                  ts,
+                  space,
+                );
+                return {
+                  id: ts.id,
+                  label: `${ts.name} (${prettyPrintHoursMinutes(
+                    getCurrentLocalTimeAtSpace(space)
+                      .startOf('day')
+                      .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.start), 'seconds')
+                  )} - ${prettyPrintHoursMinutes(
+                    getCurrentLocalTimeAtSpace(space)
+                      .startOf('day')
+                      .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.end), 'seconds')
+                  )})`,
+                };
+              })}
+              width={300}
+              onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
+            />
+          </InsightsFilterBarItem>
+          <InsightsFilterBarItem label="Date Range">
+            <DateRangePicker
+              startDate={formatForReactDates(
+                parseISOTimeAtSpace(spaces.filters.startDate, space),
                 space,
-              );
-              return {
-                id: ts.id,
-                label: `${ts.name} (${(
-                  moment.utc()
-                    .tz(space.timeZone)
-                    .startOf('day')
-                    .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.start), 'seconds')
-                    .format('h:mma')
-                    .slice(0, -1) /* am -> a */
-                )} - ${(
-                  moment.utc()
-                    .tz(space.timeZone)
-                    .startOf('day')
-                    .add(parseTimeInTimeSegmentToSeconds(applicableTimeSegmentForGroup.end), 'seconds')
-                    .format('h:mma')
-                    .slice(0, -1) /* am -> a */
-                )})`,
-              };
-            })}
-            width={300}
-            onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
-          />
-        </InsightsFilterBarItem>
-        <InsightsFilterBarItem label="Date Range">
-          <DateRangePicker
-            startDate={moment.utc(spaces.filters.startDate).tz(space.timeZone).startOf('day')}
-            endDate={moment.utc(spaces.filters.endDate).tz(space.timeZone).startOf('day')}
-            onChange={({startDate, endDate}) => {
-              // If the user selected over 14 days, then clamp them back to 14 days.
-              if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
-                endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
-              }
+              )}
+              endDate={formatForReactDates(
+                parseISOTimeAtSpace(spaces.filters.endDate, space),
+                space,
+              )}
+              onChange={({startDate, endDate}) => {
+                startDate = startDate ? parseFromReactDates(startDate, space) : parseISOTimeAtSpace(spaces.filters.startDate, space);
+                endDate = endDate ? parseFromReactDates(endDate, space) : parseISOTimeAtSpace(spaces.filters.endDate, space);
 
-              onChangeSpaceFilter('startDate', startDate.format());
-              onChangeSpaceFilter('endDate', endDate.format());
-            }}
-            // Within the component, store if the user has selected the start of end date picker
-            // input
-            focusedInput={spaces.filters.datePickerInput}
-            onFocusChange={(focused, a) => {
-              onChangeSpaceFilter('datePickerInput', focused);
-            }}
+                // If the user selected over 14 days, then clamp them back to 14 days.
+                if (startDate && endDate && endDate.diff(startDate, 'days') > MAXIMUM_DAY_LENGTH) {
+                  endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
+                }
 
-            // On mobile, make the calendar one month wide and left aligned.
-            // On desktop, the calendar is two months wide and right aligned.
-            numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
+                onChangeSpaceFilter('startDate', formatInISOTime(startDate));
+                onChangeSpaceFilter('endDate', formatInISOTime(endDate));
+              }}
+              // Within the component, store if the user has selected the start of end date picker
+              // input
+              focusedInput={spaces.filters.datePickerInput}
+              onFocusChange={(focused, a) => {
+                onChangeSpaceFilter('datePickerInput', focused);
+              }}
 
-            isOutsideRange={day => isOutsideRange(
-              spaces.filters.startDate,
-              spaces.filters.datePickerInput,
-              day
-            )}
+              // On mobile, make the calendar one month wide and left aligned.
+              // On desktop, the calendar is two months wide and right aligned.
+              numberOfMonths={document.body && document.body.clientWidth > gridVariables.screenSmMin ? 2 : 1}
 
-            // common ranges functionality
-            commonRanges={commonRanges}
-            onSelectCommonRange={({startDate, endDate}) => {
-              onChangeSpaceFilter('startDate', startDate.format());
-              onChangeSpaceFilter('endDate', endDate.format());
-            }}
-          />
-        </InsightsFilterBarItem>
-      </InsightsFilterBar>
+              isOutsideRange={day => isOutsideRange(
+                spaces.filters.startDate,
+                spaces.filters.datePickerInput,
+                day
+              )}
+
+              // common ranges functionality
+              commonRanges={getCommonRangesForSpace(space)}
+              onSelectCommonRange={({startDate, endDate}) => {
+                onChangeSpaceFilter('startDate', formatInISOTime(startDate));
+                onChangeSpaceFilter('endDate', formatInISOTime(endDate));
+              }}
+            />
+          </InsightsFilterBarItem>
+        </InsightsFilterBar>
+      ) : null}
 
       <ErrorBar
         message={spaces.error || timeSegmentGroups.error}
@@ -160,28 +173,30 @@ function InsightsSpaceTrends({
 
       <InsightsSpaceHeader space={space} />
 
-      <div className="insights-space-trends-container">
-        <div className="insights-space-trends">
-          <div className="insights-space-trends-item">
-            <UtilizationCard
-              space={space}
-              startDate={spaces.filters.startDate}
-              endDate={spaces.filters.endDate}
-              timeSegmentGroup={selectedTimeSegmentGroup}
-              timeSegment={applicableTimeSegment}
-            />
-          </div>
-          <div className="insights-space-trends-item">
-            <DailyMetricsCard
-              space={space}
-              startDate={spaces.filters.startDate}
-              endDate={spaces.filters.endDate}
-              timeSegmentGroup={selectedTimeSegmentGroup}
-              timeSegment={applicableTimeSegment}
-            />
+      {spaces.filters.startDate && spaces.filters.endDate ? (
+        <div className="insights-space-trends-container">
+          <div className="insights-space-trends">
+            <div className="insights-space-trends-item">
+              <UtilizationCard
+                space={space}
+                startDate={spaces.filters.startDate}
+                endDate={spaces.filters.endDate}
+                timeSegmentGroup={selectedTimeSegmentGroup}
+                timeSegment={applicableTimeSegment}
+              />
+            </div>
+            <div className="insights-space-trends-item">
+              <DailyMetricsCard
+                space={space}
+                startDate={spaces.filters.startDate}
+                endDate={spaces.filters.endDate}
+                timeSegmentGroup={selectedTimeSegmentGroup}
+                timeSegment={applicableTimeSegment}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </div>;
   } else {
     return <p>Loading</p>;

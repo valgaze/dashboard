@@ -1,10 +1,15 @@
-import moment from 'moment';
 import { core } from '../../client';
+import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 import collectionSpacesSet from '../collection/spaces/set';
 import collectionSpacesSetEvents from '../collection/spaces/set-events';
 import collectionDoorwaysSet from '../collection/doorways/set';
 import collectionLinksSet from '../collection/links/set';
+
+import {
+  getCurrentLocalTimeAtSpace,
+  formatInISOTime,
+} from '../../helpers/space-time-utilities/index';
 
 export const ROUTE_TRANSITION_LIVE_SPACE_LIST = 'ROUTE_TRANSITION_LIVE_SPACE_LIST';
 
@@ -27,11 +32,12 @@ export default function routeTransitionLiveSpaceList() {
       // Then, fetch all initial events for each space.
       // This is used to populate each space's events collection with all the events from the last
       // minute so that the real time event charts all display as "full" when the page reloads.
-      return Promise.all(spaces.results.map(space => {
+      return Promise.all(spaces.results.map(s => {
+        const space = objectSnakeToCamel(s);
         return core.spaces.events({
           id: space.id,
-          start_time: moment().subtract(1, 'minute').format(),
-          end_time: moment().utc().format(),
+          start_time: formatInISOTime(getCurrentLocalTimeAtSpace(space).subtract(1, 'minute')),
+          end_time: formatInISOTime(getCurrentLocalTimeAtSpace(space)),
         });
       })).then(spaceEventSets => {
         spaceEventSets.forEach((spaceEventSet, ct) => {

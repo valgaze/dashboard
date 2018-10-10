@@ -21,6 +21,12 @@ import {
   overlayTwoPopupsPlainTextFormatter,
 } from '@density/chart-line-chart/dist/overlays';
 
+import {
+  parseISOTimeAtSpace,
+  formatInISOTimeAtSpace,
+  getDurationBetweenMomentsInDays,
+} from '../../helpers/space-time-utilities/index';
+
 import { chartAsReactComponent } from '@density/charts';
 const DailyMetricsComponent = chartAsReactComponent(dailyMetrics);
 const LineChartComponent = chartAsReactComponent(lineChart);
@@ -89,20 +95,19 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
     const { space } = this.props;
     const { metricToDisplay, startDate, endDate, timeSegment, timeSegmentGroup } = this.state;
 
-    // Add timezone offset to both start and end times prior to querying for the count.
-    const startTime = moment.utc(startDate).tz(space.timeZone).startOf('day');
-    const endTime = moment.utc(endDate).tz(space.timeZone).startOf('day');
+    // Add timezone offset to both start and end times prior to querying for the count. Add a day
+    // to the end of the range to return a final bar of the data for the uncompleted current day.
+    const startTime = parseISOTimeAtSpace(startDate, space).startOf('day');
+    const endTime = parseISOTimeAtSpace(endDate, space).startOf('day').add(1, 'day');
 
     // Fetch data from the server for the day-long window.
     try {
       const data = await core.spaces.counts({
         id: space.id,
-        start_time: startTime.format(),
+        start_time: formatInISOTimeAtSpace(startTime, space),
         time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
 
-        // Add a day to the end of the range to return a final bar of the data for the uncompleted
-        // current day.
-        end_time: endTime.add(1, 'day').format(),
+        end_time: formatInISOTimeAtSpace(endTime, space),
         interval: '1d',
         order: 'asc',
 
@@ -202,9 +207,9 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                 <p className="insights-space-detail-daily-metrics-card-popup-p">
                   Visitation metrics for time segment <strong>{timeSegmentGroup.name}</strong>,{' '}
                   grouped by day over{' '}
-                  <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>
+                  <strong>{parseISOTimeAtSpace(startDate, space).format('MM/DD/YYYY')}</strong>
                   {' - '}
-                  <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>.
+                  <strong>{parseISOTimeAtSpace(endDate, space).format('MM/DD/YYYY')}</strong>.
                 </p>
 
                 <p className="insights-space-detail-daily-metrics-card-popup-p">
@@ -282,10 +287,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                     xAxis={xAxisDailyTick({
                       // Calculate a tick resolutino that makes sense given the selected time range.
                       tickResolutionInMs: (() => {
-                        const duration = moment.duration(
-                          moment.utc(endDate).diff(moment.utc(startDate))
-                        );
-                        const durationDays = duration.asDays();
+                        const durationDays = getDurationBetweenMomentsInDays(startDate, endDate);
                         if (durationDays > 30) {
                           return 3 * ONE_DAY_IN_MS;
                         } else if (durationDays > 14) {
@@ -294,7 +296,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                           return 0.5 * ONE_DAY_IN_MS;
                         }
                       })(),
-                      formatter: n => moment.utc(n).tz(space.timeZone).format(`MM/DD`),
+                      formatter: n => parseISOTimeAtSpace(n, space).format(`MM/DD`),
                     })}
 
                     yAxis={yAxisMinMax({})}
@@ -316,7 +318,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                         }, 'top'),
                         bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
                           (item, {mouseX, xScale}) => {
-                            const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
+                            const timestamp = parseISOTimeAtSpace(xScale.invert(mouseX), space);
                             return timestamp.format(`ddd MMM DD YYYY`);
                           }
                         ),
@@ -337,7 +339,8 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                         type: dataWaterline,
                         verticalBaselineOffset: 10,
                         data: data.sort(
-                          (a, b) => moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
+                          (a, b) =>
+                            moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
                         ),
                       },
                     ]}
@@ -350,7 +353,7 @@ export default class InsightsSpaceDetailDailyMetricsCard extends React.Component
                     data={data.map(i => {
                       return {
                         // Remove the offset that was added when the data was fetched.
-                        label: moment.utc(i.timestamp).tz(space.timeZone).format('MM/DD'),
+                        label: parseISOTimeAtSpace(i.timestamp, space).format('MM/DD'),
                         value: i.value,
                       };
                     })}

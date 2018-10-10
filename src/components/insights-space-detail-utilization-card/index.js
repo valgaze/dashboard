@@ -4,6 +4,13 @@ import classnames from 'classnames';
 import moment from 'moment';
 import 'moment-timezone';
 
+import {
+  parseISOTimeAtSpace,
+  prettyPrintHoursMinutes,
+  getDurationBetweenMomentsInDays,
+  parseDayAtSpace,
+} from '../../helpers/space-time-utilities/index';
+
 import { core } from '../../client';
 
 import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
@@ -39,13 +46,13 @@ const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
 const DAY_TO_INDEX_IN_UTILIZAITIONS_BY_DAY = {
-  'Monday': 0,
-  'Tuesday': 1,
-  'Wednesday': 2,
-  'Thursday': 3,
-  'Friday': 4,
-  'Saturday': 5,
-  'Sunday': 6,
+  'Sunday': 0,
+  'Monday': 1,
+  'Tuesday': 2,
+  'Wednesday': 3,
+  'Thursday': 4,
+  'Friday': 5,
+  'Saturday': 6,
 };
 
 export const LOADING = 'LOADING',
@@ -117,7 +124,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
     });
 
     // Group into counts into buckets, one bucket for each day.
-    const groups = groupCountsByDay(counts, space.timeZone);
+    const groups = groupCountsByDay(counts, space);
 
     // Calculate space utilization using this grouped data.
     const utilizations = spaceUtilizationPerGroup(space, groups);
@@ -162,6 +169,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         endDate,
         timeSegment,
         timeSegmentGroup,
+
+        dataSpaceId: space.id,
+        dataSpaceCapacity: space.capacity,
       }, () => this.fetchData());
     }
   }
@@ -193,7 +203,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
 
       // Calculate the average utilization for each day within the specified time segment.
       utilizationsByDay = this.state.data.reduce((acc, i) => {
-        const dayOfWeek = moment.utc(i.date, 'YYYY-MM-DD').tz(space.timeZone).day();
+        const dayOfWeek = parseDayAtSpace(i.date, space).day();
         acc[dayOfWeek].push(i);
         return acc;
       }, [[], [], [], [], [], [], []]);
@@ -216,8 +226,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         }
       });
 
-      const initialTimestamp = moment.utc(this.state.counts[0].timestamp)
-        .tz(space.timeZone)
+      const initialTimestampRaw = this.state.counts.length > 0 ? this.state.counts[0].timestamp : this.state.startDate;
+      const initialTimestamp = parseISOTimeAtSpace(initialTimestampRaw, space)
         .startOf('day')
         .add(parseTimeInTimeSegmentToSeconds(timeSegment.start), 'seconds');
 
@@ -256,8 +266,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         <InfoPopup horizontalIconOffset={8}>
           <p className="insights-space-detail-utilization-card-popup-p">
             Utilization for time segment <strong>{timeSegmentGroup.name}</strong> over the
-            time period of <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong> -{' '}
-            <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>, grouped and averaged
+            time period of <strong>{parseISOTimeAtSpace(startDate, space).format('MM/DD/YYYY')}</strong> -{' '}
+            <strong>{parseISOTimeAtSpace(endDate, space).format('MM/DD/YYYY')}</strong>, grouped and averaged
             by day of week.
           </p>
 
@@ -292,9 +302,9 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
           <p className="insights-space-detail-utilization-card-popup-p">
             An average daily breakdown of utilization for
             time segment <strong>{timeSegmentGroup.name}</strong> over the time period
-            of <strong>{moment.utc(startDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>
+            of <strong>{parseISOTimeAtSpace(startDate, space).format('MM/DD/YYYY')}</strong>
             {' - '}
-            <strong>{moment.utc(endDate).tz(space.timeZone).format('MM/DD/YYYY')}</strong>.
+            <strong>{parseISOTimeAtSpace(endDate, space).format('MM/DD/YYYY')}</strong>.
           </p>
 
           <p className="insights-space-detail-utilization-card-popup-p">
@@ -328,11 +338,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
         body = (
           <span>
             {(() => {
-              if (
-                moment.duration(
-                  moment.utc(this.state.endDate).diff(moment.utc(this.state.startDate))
-                ).weeks() > 2
-              ) {
+              if (getDurationBetweenMomentsInDays(this.state.startDate, this.state.endDate) > 14) {
                 return 'Generating Data (this may take a while ... )'
               } else {
                 return 'Generating Data . . .';
@@ -463,7 +469,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   </span> : <span>
                   Most busy around <CardWellHighlight>
                     {(timestamp => {
-                      let stamp = moment.utc(timestamp, 'YYYY-MM-DDTHH:mm:ssZ').tz(space.timeZone);
+                      let stamp = parseISOTimeAtSpace(timestamp, space);
                       let minute = '00';
                       const stampMinute = stamp.minute();
 
@@ -497,7 +503,7 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                   xAxis={xAxisDailyTick({
                     formatter: (n) => {
                       // "5a" or "8p"
-                      const timeFormat = moment.utc(n).tz(space.timeZone).format('hA');
+                      const timeFormat = parseISOTimeAtSpace(n, space).format('hA');
                       return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
                     },
                   })}
@@ -525,8 +531,8 @@ export default class InsightsSpaceDetailUtilizationCard extends React.Component 
                       topPopupFormatter: overlayTwoPopupsPlainTextFormatter(item => `Utilization: ${Math.round(item.value)}%`, 'top'),
                       bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
                         (item, {mouseX, xScale}) => {
-                          const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
-                          const time = timestamp.format(`h:mma`).slice(0, -1);
+                          const timestamp = parseISOTimeAtSpace(xScale.invert(mouseX), space);
+                          const time = prettyPrintHoursMinutes(timestamp);
                           return `Avg. Weekday at ${time}`;
                         }
                       ),
