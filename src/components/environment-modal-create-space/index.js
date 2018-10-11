@@ -43,6 +43,7 @@ export default class EnvironmentModalCreateSpace extends React.Component {
                 type="select"
                 id="create-space-time-zone"
                 className="create-space-time-zone-select"
+                width="100%"
                 value={this.state.timeZone}
                 onChange={e => this.setState({timeZone: e.id})}
                 choices={[
@@ -60,14 +61,15 @@ export default class EnvironmentModalCreateSpace extends React.Component {
               input={<InputBox
                 type="select"
                 id="create-space-reset-time"
+                width="100%"
                 className="create-space-daily-reset-select"
                 value={this.state.dailyReset}
                 disabled={this.state.timeZone.length === 0}
                 onChange={e => this.setState({dailyReset: e.id})}
-                choices={generateResetTimeChoices(this.state).map(({value, display}) => ({
+                choices={this.state.timeZone ? generateResetTimeChoices(this.state).map(({value, display}) => ({
                   id: value,
                   label: display,
-                }))}
+                })) : []}
               />}
             />
 
