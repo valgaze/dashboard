@@ -9,7 +9,7 @@ import hideModal from '../../actions/modal/hide';
 
 import InputBox from '@density/ui-input-box';
 import SpaceCard from '../live-space-card/index';
-import SpaceUpdateModal from '../insights-edit-count-modal/index';
+import SpaceUpdateModal from '../explore-edit-count-modal/index';
 
 import { CONNECTION_STATES } from '../../helpers/websocket-event-pusher/index';
 
@@ -60,7 +60,7 @@ export function LiveSpaceList({
       <div className="live-space-list-header">
         <div className="live-space-list-header-hierarchy">
           <SpaceHierarchySelectBox
-            className="insights-space-list-space-hierarchy-selector"
+            className="explore-space-list-space-hierarchy-selector"
             value={spaces.filters.parent ?  spaces.data.find(i => i.id === spaces.filters.parent) : null}
             choices={spaces.data.filter(i => i.spaceType !== 'space')}
             onChange={parent => onSpaceChangeParent(parent ? parent.id : null)}

@@ -1,5 +1,5 @@
 import { ROUTE_TRANSITION_LOGIN } from '../../actions/route-transition/login';
-import { ROUTE_TRANSITION_INSIGHTS_SPACE_LIST } from '../../actions/route-transition/insights-space-list';
+import { ROUTE_TRANSITION_EXPLORE_SPACE_LIST } from '../../actions/route-transition/explore-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_LIST } from '../../actions/route-transition/live-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_DETAIL } from '../../actions/route-transition/live-space-detail';
 import { ROUTE_TRANSITION_ENVIRONMENT_SPACE } from '../../actions/route-transition/environment-space';
@@ -8,13 +8,15 @@ import { ROUTE_TRANSITION_DEV_WEBHOOK_LIST } from '../../actions/route-transitio
 import { ROUTE_TRANSITION_DEV_TOKEN_LIST } from '../../actions/route-transition/dev-token-list';
 import { ROUTE_TRANSITION_ACCOUNT_REGISTER } from '../../actions/route-transition/account-register';
 import { ROUTE_TRANSITION_ACCOUNT_FORGOT_PASSWORD } from '../../actions/route-transition/account-forgot-password';
-import { ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS } from '../../actions/route-transition/insights-space-trends';
-import { ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY } from '../../actions/route-transition/insights-space-daily';
-import { ROUTE_TRANSITION_INSIGHTS_SPACE_DATA_EXPORT } from '../../actions/route-transition/insights-space-data-export';
+import { ROUTE_TRANSITION_EXPLORE_SPACE_TRENDS } from '../../actions/route-transition/explore-space-trends';
+import { ROUTE_TRANSITION_EXPLORE_SPACE_DAILY } from '../../actions/route-transition/explore-space-daily';
+import { ROUTE_TRANSITION_EXPLORE_SPACE_DATA_EXPORT } from '../../actions/route-transition/explore-space-data-export';
 
 import { ROUTE_TRANSITION_ACCOUNT_SETUP_OVERVIEW } from '../../actions/route-transition/account-setup-overview';
 import { ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_LIST } from '../../actions/route-transition/account-setup-doorway-list';
 import { ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL } from '../../actions/route-transition/account-setup-doorway-detail';
+
+import { ROUTE_TRANSITION_DASHBOARDS } from '../../actions/route-transition/dashboards';
 
 const initialState = null;
 
@@ -29,14 +31,14 @@ export default function activePage(state=initialState, action) {
     return "LIVE_SPACE_LIST";
   case ROUTE_TRANSITION_LIVE_SPACE_DETAIL:
     return "LIVE_SPACE_DETAIL";
-  case ROUTE_TRANSITION_INSIGHTS_SPACE_LIST:
-    return "INSIGHTS_SPACE_LIST";
-  case ROUTE_TRANSITION_INSIGHTS_SPACE_TRENDS:
-    return "INSIGHTS_SPACE_TRENDS";
-  case ROUTE_TRANSITION_INSIGHTS_SPACE_DAILY:
-    return "INSIGHTS_SPACE_DAILY";
-  case ROUTE_TRANSITION_INSIGHTS_SPACE_DATA_EXPORT:
-    return "INSIGHTS_SPACE_DATA_EXPORT";
+  case ROUTE_TRANSITION_EXPLORE_SPACE_LIST:
+    return "EXPLORE_SPACE_LIST";
+  case ROUTE_TRANSITION_EXPLORE_SPACE_TRENDS:
+    return "EXPLORE_SPACE_TRENDS";
+  case ROUTE_TRANSITION_EXPLORE_SPACE_DAILY:
+    return "EXPLORE_SPACE_DAILY";
+  case ROUTE_TRANSITION_EXPLORE_SPACE_DATA_EXPORT:
+    return "EXPLORE_SPACE_DATA_EXPORT";
 
   case ROUTE_TRANSITION_DEV_TOKEN_LIST:
     return "DEV_TOKEN_LIST";
@@ -57,6 +59,9 @@ export default function activePage(state=initialState, action) {
     return "ACCOUNT_SETUP_DOORWAY_LIST";
   case ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL:
     return "ACCOUNT_SETUP_DOORWAY_DETAIL";
+
+  case ROUTE_TRANSITION_DASHBOARDS:
+    return "DASHBOARDS";
   default:
     return state;
   }

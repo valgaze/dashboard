@@ -233,7 +233,7 @@ export default connect(state => ({
     onUserSuccessfullyLoggedIn(token) {
       dispatch(sessionTokenSet(token)).then(data => {
         const user = objectSnakeToCamel(data);
-        unsafeNavigateToLandingPage(user.organization.settings.insightsPageLocked);
+        unsafeNavigateToLandingPage(user.organization.settings);
       });
     },
   };

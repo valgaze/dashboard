@@ -47,17 +47,24 @@ export default function NavLoggedIn({
       onClick={closeSidebar}
     >Doorways</NavbarMobileItem>,
 
+    stringToBoolean(settings.dashboardEnabled) ? <NavbarMobileItem
+        activePage={activePage}
+        pageName={['DASHBOARDS']}
+        onClick={closeSidebar}
+        href="#/dashboards"
+      >Dashboards</NavbarMobileItem> : null,
+
     <NavbarMobileItem
       activePage={activePage}
-      pageName={['INSIGHTS_SPACE_LIST', 'INSIGHTS_SPACE_DAILY', 'INSIGHTS_SPACE_TRENDS', 'INSIGHTS_SPACE_DATA_EXPORT']}
+      pageName={['EXPLORE_SPACE_LIST', 'EXPLORE_SPACE_DAILY', 'EXPLORE_SPACE_TRENDS', 'EXPLORE_SPACE_DATA_EXPORT']}
 
-      // Feature flag: Do not allow the user to visit the insights page until it has been
+      // Feature flag: Do not allow the user to visit the explore page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
       // so this page does not make sense.
       locked={stringToBoolean(settings.insightsPageLocked)}
-      href="#/spaces/insights"
+      href="#/spaces/explore"
       onClick={closeSidebar}
-    >Insights</NavbarMobileItem>,
+    >Explore</NavbarMobileItem>,
 
     <NavbarMobileItem
       activePage={activePage}
@@ -131,26 +138,31 @@ export default function NavLoggedIn({
       lockedReason="Onboarding is unavailable in the demo account."
     >Onboarding</NavbarItem>
 
+    {stringToBoolean(settings.dashboardEnabled) ? <NavbarItem
+        activePage={activePage}
+        pageName={['DASHBOARDS']}
+
+        href="#/dashboards"
+      >Dashboards</NavbarItem> : null}
+
     <NavbarItem
       activePage={activePage}
-      pageName={['INSIGHTS_SPACE_LIST', 'INSIGHTS_SPACE_DAILY', 'INSIGHTS_SPACE_TRENDS', 'INSIGHTS_SPACE_DATA_EXPORT']}
+      pageName={['EXPLORE_SPACE_LIST', 'EXPLORE_SPACE_DAILY', 'EXPLORE_SPACE_TRENDS', 'EXPLORE_SPACE_DATA_EXPORT']}
 
       // Feature flag: Do not allow the user to visit the visualizations page until it has been
       // unlocked. During the onboarding process, the organization will not have spaces / doorways
       // so this page does not make sense.
       locked={stringToBoolean(settings.insightsPageLocked)}
-      lockedReason="Insights will be unlocked once your units are configured."
+      lockedReason="Explore will be unlocked once your units are configured."
 
-      href="#/spaces/insights"
+      href="#/spaces/explore"
     >Insights</NavbarItem>
 
     <NavbarItem
       activePage={activePage}
       pageName={['LIVE_SPACE_LIST']}
       href="#/spaces/live"
-    >
-      Live
-    </NavbarItem>
+    >Live</NavbarItem>
 
     {/* Feature flag: Don't show the environment page by default, but when a flag is enabled show it. */}
     {stringToBoolean(settings.environmentPageVisible) ? <NavbarItem
@@ -169,7 +181,7 @@ export default function NavLoggedIn({
       pageName={['ACCOUNT']}
       href="#/account"
     >Account</NavbarItem>
-    <span aria-label="Logout" title="Logout" className="navbar-item nav-logged-in-logout">
+    <span aria-label="Logout" title="Logout" className="navbar-item navbar-system-tray">
       <a onClick={onLogout}>&#xe923;</a>
     </span>
   </Navbar>;

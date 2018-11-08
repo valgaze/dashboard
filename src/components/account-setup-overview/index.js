@@ -34,7 +34,7 @@ export function AccountSetupOverview({user, onGetStarted}) {
               <li>Configuring the unit</li>
             </ul>
 
-            Once onboarding is complete, Insights will be made available in the Dashboard.
+            Once onboarding is complete, Explore will be made available in the Dashboard.
 
             <div className="account-setup-overview-glyph">
               <img

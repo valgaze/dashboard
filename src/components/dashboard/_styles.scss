@@ -1,0 +1,83 @@
+.dashboard-wrapper {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0px auto 40px auto;
+
+  animation: fadeInUp 0.4s ease-out;
+}
+.dashboard-wrapper-inner {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.dashboard-header {
+  color: $gray-cinder;
+  font-size: 22px;
+  border-bottom: 2px solid $gray;
+  padding-top: 64px;
+  padding-bottom: 10px;
+}
+
+.dashboard-non-ideal-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 400px;
+}
+
+.dashboard-loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 90vh;
+  color: $gray-cinder;
+
+}
+.dashboard-loading {
+  width: 100%;
+  max-width: 500px;
+
+  animation: fadeInUp 0.4s ease-out;
+}
+
+// animation used for loading states
+@keyframes fadeInUp {
+    from {
+        transform: translate3d(0, 20px, 0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1
+    }
+}
+
+.dashboard-page-header-wrapper {
+  width: 100%;
+  background-color: #fff;
+  height: 64px;
+
+  /* This all has to be here to left align the text with the navbar. Have I mentioned how much I
+   * want to write a new one? */
+  padding-left: 20px;
+  @media (min-width: 768px) { padding-left: 40px; }
+  @media (min-width: 1500px) { padding-left: 60px; }
+}
+.dashboard-page-header {
+  margin: 0px auto;
+  max-width: 1440px;
+  height: 64px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.dashboard-page-header h1 {
+  margin: 0px;
+  font-size: 24px;
+  color: $gray-cinder;
+}

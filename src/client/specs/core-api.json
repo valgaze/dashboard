@@ -102,6 +102,16 @@
           "order": "{{order}}"
         }
       },
+      "forecast": {
+        "method": "GET",
+        "url": "{{{core}}}/spaces/{{id}}/forecast/",
+        "desc": "Query the api for forecasting data used to predict future counts.",
+        "qs": {
+          "period": "{{period}}",
+          "page_size": "{{page_size}}",
+          "time_segment_groups": "{{time_segment_groups}}"
+        }
+      },
       "reset": {
         "method": "POST",
         "url": "{{{core}}}/spaces/{{id}}/resets/",
@@ -369,6 +379,18 @@
         "method": "GET",
         "url": "{{{core}}}/time_segment_groups/",
         "desc": "List all time segment groups."
+      },
+      "get": {
+        "method": "GET",
+        "url": "{{{core}}}/time_segment_groups/{{id}}",
+        "desc": "Get details for a time segment group."
+      }
+    },
+    "dashboards": {
+      "list": {
+        "method": "GET",
+        "url": "{{{core}}}/dashboards/",
+        "desc": "List all dashboards."
       }
     }
   }

@@ -11,10 +11,10 @@ import { connect } from 'react-redux';
 import NavLoggedIn from '../nav-logged-in/index';
 import NavLoggedOut from '../nav-logged-out/index';
 import TokenList from '../dev-token-list/index';
-import InsightsSpaceList from '../insights-space-list/index';
-import InsightsSpaceTrends from '../insights-space-trends/index';
-import InsightsSpaceDaily from '../insights-space-daily/index';
-import InsightsSpaceDataExport from '../insights-space-data-export/index';
+import ExploreSpaceList from '../explore-space-list/index';
+import ExploreSpaceTrends from '../explore-space-trends/index';
+import ExploreSpaceDaily from '../explore-space-daily/index';
+import ExploreSpaceDataExport from '../explore-space-data-export/index';
 import Login from '../login/index';
 import Environment from '../environment/index';
 import Account from '../account/index';
@@ -27,6 +27,8 @@ import LiveSpaceDetail from '../live-space-detail/index';
 import AccountSetupOverview from '../account-setup-overview/index';
 import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
 import AccountSetupDoorwayDetail from '../account-setup-doorway-detail/index';
+
+import Dashboard from '../dashboard/index';
 
 import UnknownPage from '../unknown-page/index';
 
@@ -90,14 +92,14 @@ function ActivePage({activePage, settings}) {
     return stringToBoolean(settings.insightsPageLocked) ? null : <LiveSpaceList />;
   case "LIVE_SPACE_DETAIL":
     return <LiveSpaceDetail />;
-  case "INSIGHTS_SPACE_LIST":
-    return <InsightsSpaceList />;
-  case "INSIGHTS_SPACE_TRENDS":
-    return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceTrends />;
-  case "INSIGHTS_SPACE_DAILY":
-    return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceDaily />;
-  case "INSIGHTS_SPACE_DATA_EXPORT":
-    return stringToBoolean(settings.insightsPageLocked) ? null : <InsightsSpaceDataExport />;
+  case "EXPLORE_SPACE_LIST":
+    return <ExploreSpaceList />;
+  case "EXPLORE_SPACE_TRENDS":
+    return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceTrends />;
+  case "EXPLORE_SPACE_DAILY":
+    return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceDaily />;
+  case "EXPLORE_SPACE_DATA_EXPORT":
+    return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceDataExport />;
   case "ENVIRONMENT_SPACE":
     return <Environment />;
   case "ACCOUNT":
@@ -116,6 +118,8 @@ function ActivePage({activePage, settings}) {
     return <AccountSetupDoorwayList />;
   case "ACCOUNT_SETUP_DOORWAY_DETAIL":
     return <AccountSetupDoorwayDetail />;
+  case "DASHBOARDS":
+    return <Dashboard />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }

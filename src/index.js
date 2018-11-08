@@ -30,10 +30,10 @@ import createRouter from '@density/conduit';
 // Import all actions required to navigate from one page to another.
 import routeTransitionEnvironmentSpace from './actions/route-transition/environment-space';
 import routeTransitionLogin from './actions/route-transition/login';
-import routeTransitionInsightsSpaceList from './actions/route-transition/insights-space-list';
-import routeTransitionInsightsSpaceTrends from './actions/route-transition/insights-space-trends';
-import routeTransitionInsightsSpaceDaily from './actions/route-transition/insights-space-daily';
-import routeTransitionInsightsSpaceDataExport from './actions/route-transition/insights-space-data-export';
+import routeTransitionExploreSpaceList from './actions/route-transition/explore-space-list';
+import routeTransitionExploreSpaceTrends from './actions/route-transition/explore-space-trends';
+import routeTransitionExploreSpaceDaily from './actions/route-transition/explore-space-daily';
+import routeTransitionExploreSpaceDataExport from './actions/route-transition/explore-space-data-export';
 import routeTransitionLiveSpaceList from './actions/route-transition/live-space-list';
 import routeTransitionLiveSpaceDetail from './actions/route-transition/live-space-detail';
 import routeTransitionDevTokenList from './actions/route-transition/dev-token-list';
@@ -44,6 +44,7 @@ import routeTransitionAccountForgotPassword from './actions/route-transition/acc
 import routeTransitionAccountSetupOverview from './actions/route-transition/account-setup-overview';
 import routeTransitionAccountSetupDoorwayList from './actions/route-transition/account-setup-doorway-list';
 import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition/account-setup-doorway-detail';
+import routeTransitionDashboards from './actions/route-transition/dashboards';
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 import collectionSpacesSetEvents from './actions/collection/spaces/set-events';
@@ -162,14 +163,20 @@ const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
 
 // v I AM DEPRECATED
-router.addRoute('insights/spaces', redirect('spaces/insights')); // DEPRECATED
-router.addRoute('spaces/insights/:id', redirect(id => `spaces/insights/${id}/trends`)); // DEPRECATED
+router.addRoute('insights/spaces', redirect('spaces/explore')); // DEPRECATED
+router.addRoute('spaces/insights/:id', redirect(id => `spaces/explore/${id}/trends`)); // DEPRECATED
+router.addRoute('spaces/insights', redirect(`spaces/explore`)); // DEPRECATED
+router.addRoute('spaces/insights/:id/trends', redirect(id => `spaces/explore/${id}/trends`)); // DEPRECATED
+router.addRoute('spaces/insights/:id/daily', redirect(id => `spaces/explore/${id}/daily`)); // DEPRECATED
+router.addRoute('spaces/insights/:id/data-export', redirect(id => `spaces/explore/${id}/data-export`)); // DEPRECATED
 // ^ I AM DEPRECATED
 
-router.addRoute('spaces/insights', () => routeTransitionInsightsSpaceList());
-router.addRoute('spaces/insights/:id/trends', id => routeTransitionInsightsSpaceTrends(id));
-router.addRoute('spaces/insights/:id/daily', id => routeTransitionInsightsSpaceDaily(id));
-router.addRoute('spaces/insights/:id/data-export', id => routeTransitionInsightsSpaceDataExport(id));
+router.addRoute('dashboards', () => routeTransitionDashboards());
+
+router.addRoute('spaces/explore', () => routeTransitionExploreSpaceList());
+router.addRoute('spaces/explore/:id/trends', id => routeTransitionExploreSpaceTrends(id));
+router.addRoute('spaces/explore/:id/daily', id => routeTransitionExploreSpaceDaily(id));
+router.addRoute('spaces/explore/:id/data-export', id => routeTransitionExploreSpaceDataExport(id));
 
 router.addRoute('spaces/live', () => routeTransitionLiveSpaceList());
 router.addRoute('spaces/live/:id', id => routeTransitionLiveSpaceDetail(id));
@@ -217,7 +224,7 @@ function preRouteAuthentication() {
         store.dispatch(userSet(user));
 
         // Then, navigate the user to the landing page.
-        unsafeNavigateToLandingPage(objectSnakeToCamel(user).organization.settings.insightsPageLocked);
+        unsafeNavigateToLandingPage(objectSnakeToCamel(user).organization.settings);
       } else {
         // User token expired (and no user object was returned) so redirect to login page.
         router.navigate('login');
