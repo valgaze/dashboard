@@ -165,7 +165,7 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
           start: boundary,
           // The end time we actually want to be right at the end of the region of interest, not at
           // the beginning of the next region of interest
-          end: boundaries[index+1].clone().subtract(1, 'second').endOf('second'),
+          end: boundaries[index+1].clone().subtract(1, 'millisecond').endOf('millisecond'),
         },
       ];
     } else {
