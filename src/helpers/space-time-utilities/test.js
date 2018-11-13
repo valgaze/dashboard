@@ -7,8 +7,8 @@ const LA_SPACE = { name: 'Los Angeles Space', timeZone: 'America/Los_Angeles' };
 const CALCUTTA_SPACE = { name: 'Kolkata Space', timeZone: 'Asia/Kolkata' };
 
 function assertSubRangesEqual(subrangesA, subrangesB) {
-  const a = subrangesA.map(i => ({start: i.start.valueOf(), end: i.end.valueOf(), gap: i.gap}));
-  const b = subrangesB.map(i => ({start: i.start.valueOf(), end: i.end.valueOf(), gap: i.gap}));
+  const a = subrangesA.map(i => ({start: i.start.toISOString(), end: i.end.toISOString(), gap: i.gap}));
+  const b = subrangesB.map(i => ({start: i.start.toISOString(), end: i.end.toISOString(), gap: i.gap}));
   assert.deepEqual(a, b);
 }
 
