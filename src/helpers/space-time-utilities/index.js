@@ -120,7 +120,7 @@ export function formatDurationAsInterval(duration) {
  *    ^= This is where the boundaries of the intervals should be in the final request.
  *
  */
-export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, start, end, interval, order) {
+export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval, order) {
   start = moment.utc(start);
   end = moment.utc(end);
   const results = [];
@@ -146,7 +146,7 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
     // Depending on the order of results, we pull from either end of the transitions array
     const transitionPoint = reverse ? transitionPoints.pop() : transitionPoints.shift();
 
-    // Skip by "interval" in the right direction until we've either passed or reached the transition
+    // Skip by "interval" in the correct order until we've either passed or reached the transition
     while (reverse ? lastInterval > transitionPoint : lastInterval < transitionPoint) {
       lastInterval = reverse ? lastInterval.subtract(interval) : lastInterval.add(interval);
     }
@@ -155,10 +155,19 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
     results.push({
       start: moment.utc(reverse ? transitionPoint : lastSegment),
       end: moment.utc(reverse ? lastSegment : transitionPoint),
-      gap: transitionPoint.valueOf() !== lastInterval.valueOf()
+      gap: false
     });
 
-    // THIS MAY LEAVE A GAP if the transition doesn't line up with our interval buckets
+    // If there is a gap before the next interval, it will need to be fetched separately
+    if (lastInterval.valueOf() !== transitionPoint.valueOf()) {
+      results.push({
+        start: moment.utc(reverse ? lastInterval : transitionPoint),
+        end: moment.utc(reverse ? transitionPoint : lastInterval),
+        gap: true
+      });
+    }
+
+    // Continue from the last even interval
     lastSegment = moment.utc(lastInterval);
   }
 
@@ -171,63 +180,8 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
     })
   }
 
-  // Return array of subranges (POSSIBLY WITH GAPS)
+  // Return array of subranges
   return results;
-}
-
-
-export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval) {
-  const startUtcMs = moment.utc(start).valueOf();
-  const endUtcMs = moment.utc(end).valueOf();
-
-  // Create a list of all boundaries that are interesting within this range of time:
-  // - The start time
-  // - All daylight savings boundaries
-  // - The end time
-  const boundaries = [
-    startUtcMs, /* initial timestamp in utc ms */
-    /* any timestamps of daylight savings time bounndaries in utc ms */
-    ...(
-      moment.tz.zone(space.timeZone).untils
-      .filter(ts => startUtcMs < ts && ts < endUtcMs)
-      .map(ts => {
-        const localTs = parseISOTimeAtSpace(ts, space);
-
-        // Find the next local even interval after the dst boundary, required so that the next time
-        // range will start on an even multiple of the interval.
-        //
-        // This is the logic that is used to handle that "second" case above that relates to data
-        // requests after the dst point being offset and not being able to be evenly placed into
-        // virtual buckets.
-        let intervalEnd = moment.utc(start);
-        while (parseISOTimeAtSpace(intervalEnd, space).isSameOrBefore(localTs)) {
-          intervalEnd = intervalEnd.add(interval);
-        }
-
-        return [ ts, intervalEnd ];
-      })
-      .reduce((a, b) => [...a, ...b], []) // flatten array, ie, making the previous step a "flatmap"
-    ),
-    endUtcMs, /* final timestamp in utc ms */
-  ].map(ts => moment.utc(ts));
-
-  // Convert the list of boundaries into pairs, where each element is paired with its neighbor.
-  // ie, [1, 2, 3, 4] => [[1, 2], [2, 3], [3, 4]]
-  return boundaries.reduce((acc, boundary, index) => {
-    if (boundaries[index+1]) {
-      return [
-        ...acc,
-        {
-          start: boundary,
-          // The end time we actually want to be right at the end of the region of interest, not at
-          // the beginning of the next region of interest
-          end: boundaries[index+1].clone().subtract(1, 'millisecond').endOf('millisecond'),
-        },
-      ];
-    } else {
-      return acc;
-    }
-  }, []);
 }
 
 export function getAllCountsForAllSubrangesWithinTimeRange(space, subranges, start, end) {

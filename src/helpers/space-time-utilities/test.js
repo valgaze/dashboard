@@ -1,6 +1,6 @@
 import moment from 'moment';
 import assert from 'assert';
-import { splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle } from './index';
+import { splitTimeRangeIntoSubrangesWithSameOffset } from './index';
 
 const NYC_SPACE = { name: 'New York Space', timeZone: 'America/New_York' };
 const LA_SPACE = { name: 'Los Angeles Space', timeZone: 'America/Los_Angeles' };
@@ -19,7 +19,7 @@ describe('time-conversions', function() {
         const start = '2018-11-12T00:00:00Z';
         const end = '2018-11-13T00:00:00Z';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
@@ -38,7 +38,7 @@ describe('time-conversions', function() {
         const start = '2018-10-01T00:00:00.000-04:00';
         const end = '2018-12-01T00:00:00.000-05:00';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
@@ -62,7 +62,7 @@ describe('time-conversions', function() {
         const start = '2018-11-04T00:00:00.000-04:00';
         const end = '2018-11-04T10:00:00.000-05:00';
         const interval = moment.duration(17, 'minute');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
@@ -73,10 +73,15 @@ describe('time-conversions', function() {
           {
             start: moment.utc("2018-11-04T00:00:00.000-04:00"),
             end: moment.utc("2018-11-04T02:00:00.000-04:00"),
+            gap: false
+          },
+          {
+            start: moment.utc("2018-11-04T02:00:00.000-04:00"),
+            end: moment.utc("2018-11-04T01:16:00.000-05:00"), // 16-MINUTE GAP
             gap: true
           },
           {
-            start: moment.utc("2018-11-04T01:16:00.000-05:00"), // 16-MINUTE GAP
+            start: moment.utc("2018-11-04T01:16:00.000-05:00"),
             end: moment.utc("2018-11-04T10:00:00.000-05:00"),
             gap: false
           },
@@ -86,7 +91,7 @@ describe('time-conversions', function() {
         const start = '2018-10-01T00:00:00.000-04:00';
         const end = '2018-12-01T00:00:00.000-05:00';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
@@ -111,7 +116,7 @@ describe('time-conversions', function() {
         const start = '2018-11-04T00:00:00.000-04:00';
         const end = '2018-11-04T10:00:00.000-05:00';
         const interval = moment.duration(17, 'minute');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
@@ -123,11 +128,16 @@ describe('time-conversions', function() {
           {
             start: moment.utc("2018-11-04T01:00:00.000-05:00"),
             end: moment.utc("2018-11-04T10:00:00.000-05:00"),
+            gap: false
+          },
+          {
+            start: moment.utc("2018-11-04T01:56:00.000-04:00"),
+            end: moment.utc("2018-11-04T01:00:00.000-05:00"), // 4-MINUTE GAP
             gap: true
           },
           {
             start: moment.utc("2018-11-04T00:00:00.000-04:00"),
-            end: moment.utc("2018-11-04T01:56:00.000-04:00"), // 4-MINUTE GAP
+            end: moment.utc("2018-11-04T01:56:00.000-04:00"),
             gap: false
           },
         ]);
@@ -138,7 +148,7 @@ describe('time-conversions', function() {
         const start = '2018-11-12T00:00:00.000Z';
         const end = '2018-11-13T00:00:00.000Z';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           LA_SPACE,
           start,
           end,
@@ -157,7 +167,7 @@ describe('time-conversions', function() {
         const start = '2018-10-01T00:00:00.000-07:00';
         const end = '2018-12-01T00:00:00.000-08:00';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           LA_SPACE,
           start,
           end,
