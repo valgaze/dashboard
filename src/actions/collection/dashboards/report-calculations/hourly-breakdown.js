@@ -26,11 +26,11 @@ export default async function totalVisitsOneSpace(report) {
     });
   });
 
-  // Filter data to remove all buckets with a timerange outside of the start and end hours speicfied
+  // Filter data to remove all buckets with a timestamp outside of the start and end hours specified
   // in the report settings
   data = data.filter(bucket => {
     const timestamp = parseISOTimeAtSpace(bucket.timestamp, space);
-    return report.settings.hourStart <= timestamp.hours() && timestamp.hours() <= report.settings.hourEnd;
+    return report.settings.hourStart <= timestamp.hours() && timestamp.hours() < report.settings.hourEnd;
   });
 
   // If the include weekends flag is enabled, then filter out all buckets that occur on weekends.
@@ -48,6 +48,7 @@ export default async function totalVisitsOneSpace(report) {
     const date = parseISOTimeAtSpace(bucket.timestamp, space).format('YYYY-MM-DD');
     const dateIndex = acc.findIndex(d => d.date === date);
     if (dateIndex >= 0) {
+      // A group was found for the day in `date`, so add the bucket to that group.
       return [
         ...acc.slice(0, dateIndex),
         {
@@ -57,6 +58,7 @@ export default async function totalVisitsOneSpace(report) {
         ...acc.slice(dateIndex+1),
       ];
     } else {
+      // No group was found for the day in `date`, so create it
       return [
         ...acc,
         {date, buckets: [bucket]},
