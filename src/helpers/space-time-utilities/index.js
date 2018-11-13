@@ -130,7 +130,7 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
   const reverse = (order || 'asc').toLowerCase() === 'desc';
 
   // Validate start and end timestamps
-  if (start >= end) { throw "Start must be before end!"; }
+  if (start >= end) { throw Error("Start must be before end!"); }
 
   // Create a list of DST transitions within this range of (local) time
   const tz = moment.tz.zone(space.timeZone);
