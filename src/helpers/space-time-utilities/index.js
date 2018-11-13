@@ -120,6 +120,58 @@ export function formatDurationAsInterval(duration) {
  *    ^= This is where the boundaries of the intervals should be in the final request.
  *
  */
+export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, start, end, interval, order) {
+  start = moment.utc(start);
+  end = moment.utc(end);
+  const results = [];
+
+  // Same defaults as API
+  interval = interval || moment.duration(3600000);
+  reverse = order.toLowerCase() === 'desc';
+
+  // Validate start and end timestamps
+  if (start >= end) { throw "Start must be before end!"; }
+
+  // Create a list of DST transitions within this range of (local) time
+  const tz = moment.tz.zone(space.timeZone);
+  const transitionPoints = tz.untils.map(ts => moment.utc(ts)).filter(ts => start < ts && ts < end);
+
+  // Save the last segment and interval boundaries that we've processed so far
+  let lastSegment = moment.utc(reverse ? end : start);
+  let lastInterval = moment.utc(lastSegment);
+
+  // Generate necessary intervals to handle each DST boundary
+  while (dsts.length > 0) {
+    const transitionPoint = reverse ? transitionPoints.pop() : transitionPoints.shift();
+    while (reverse ? lastInterval > transitionPoint : lastInterval < transitionPoint) {
+      lastInterval = reverse ? lastInterval.subtract(interval) : lastInterval.add(interval);
+    }
+
+    // Create a subrange from the last segment boundary up to this DST boundary, preserving "forwards" order
+    results.push({
+      start: moment.utc(Math.min(lastSegment, transitionPoint)),
+      end: moment.utc(Math.max(lastSegment, transitionPoint)),
+      gap: transitionPoint !== lastInterval
+    });
+
+    // This will leave a gap if the boundary doesn't line up with our interval buckets
+    lastSegment = moment.utc(lastInterval);
+  }
+
+  // Add the last interval if necessary
+  if (reverse ? end < lastSegment : end > lastSegment) {
+    results.push({
+      start: moment.utc(Math.min(lastSegment, end)),
+      end: moment.utc(Math.max(lastSegment, end)),
+      gap: false
+    })
+  }
+
+  // Return array of subranges (with gaps)
+  return results;
+}
+
+
 export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval) {
   const startUtcMs = moment.utc(start).valueOf();
   const endUtcMs = moment.utc(end).valueOf();
