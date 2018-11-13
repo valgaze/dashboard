@@ -155,7 +155,7 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
     results.push({
       start: moment.utc(Math.min(lastSegment, transitionPoint)),
       end: moment.utc(Math.max(lastSegment, transitionPoint)),
-      gap: transitionPoint !== lastInterval
+      gap: transitionPoint.valueOf() !== lastInterval.valueOf()
     });
 
     // THIS MAY LEAVE A GAP if the transition doesn't line up with our interval buckets

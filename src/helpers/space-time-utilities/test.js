@@ -7,8 +7,8 @@ const LA_SPACE = { name: 'Los Angeles Space', timeZone: 'America/Los_Angeles' };
 const CALCUTTA_SPACE = { name: 'Kolkata Space', timeZone: 'Asia/Kolkata' };
 
 function assertSubRangesEqual(subrangesA, subrangesB) {
-  const a = subrangesA.map(i => ({start: i.start.valueOf(), end: i.end.valueOf()}));
-  const b = subrangesB.map(i => ({start: i.start.valueOf(), end: i.end.valueOf()}));
+  const a = subrangesA.map(i => ({start: i.start.valueOf(), end: i.end.valueOf(), gap: i.gap}));
+  const b = subrangesB.map(i => ({start: i.start.valueOf(), end: i.end.valueOf(), gap: i.gap}));
   assert.deepEqual(a, b);
 }
 
@@ -29,7 +29,8 @@ describe('time-conversions', function() {
         assertSubRangesEqual(subranges, [
           {
             start: moment.utc("2018-11-12T00:00:00.000+00:00"),
-            end: moment.utc("2018-11-13T00:00:00.000+00:00")
+            end: moment.utc("2018-11-13T00:00:00.000+00:00"),
+            gap: false
           },
         ]);
       });
@@ -47,11 +48,37 @@ describe('time-conversions', function() {
         assertSubRangesEqual(subranges, [
           {
             start: moment.utc("2018-10-01T00:00:00.000-04:00"),
-            end: moment.utc("2018-11-04T02:00:00.000-04:00")
+            end: moment.utc("2018-11-04T02:00:00.000-04:00"),
+            gap: false
           },
           {
             start: moment.utc("2018-11-04T01:00:00.000-05:00"),
-            end: moment.utc("2018-12-01T00:00:00.000-05:00")
+            end: moment.utc("2018-12-01T00:00:00.000-05:00"),
+            gap: false
+          },
+        ]);
+      });
+      it('with daylight savings boundary between intervals', () => {
+        const start = '2018-11-04T00:00:00.000-04:00';
+        const end = '2018-11-04T10:00:00.000-05:00';
+        const interval = moment.duration(17, 'minute');
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
+          NYC_SPACE,
+          start,
+          end,
+          interval,
+        );
+
+        assertSubRangesEqual(subranges, [
+          {
+            start: moment.utc("2018-11-04T00:00:00.000-04:00"),
+            end: moment.utc("2018-11-04T02:00:00.000-04:00"),
+            gap: true
+          },
+          {
+            start: moment.utc("2018-11-04T01:16:00.000-05:00"), // 16-MINUTE GAP
+            end: moment.utc("2018-11-04T10:00:00.000-05:00"),
+            gap: false
           },
         ]);
       });
@@ -71,7 +98,8 @@ describe('time-conversions', function() {
         assertSubRangesEqual(subranges, [
           {
             start: moment.utc("2018-11-12T00:00:00.000+00:00"),
-            end: moment.utc("2018-11-13T00:00:00.000+00:00")
+            end: moment.utc("2018-11-13T00:00:00.000+00:00"),
+            gap: false
           },
         ]);
       });
@@ -89,11 +117,13 @@ describe('time-conversions', function() {
         assertSubRangesEqual(subranges, [
           {
             start: moment.utc("2018-10-01T00:00:00.000-07:00"),
-            end: moment.utc("2018-11-04T02:00:00.000-07:00")
+            end: moment.utc("2018-11-04T02:00:00.000-07:00"),
+            gap: false
           },
           {
             start: moment.utc("2018-11-04T01:00:00.000-08:00"),
-            end: moment.utc("2018-12-01T00:00:00.000-08:00")
+            end: moment.utc("2018-12-01T00:00:00.000-08:00"),
+            gap: false
           },
         ]);
       });
