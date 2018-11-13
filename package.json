@@ -33,7 +33,7 @@
     "@density/ui-popover": "^0.2.3",
     "@density/ui-radio-button": "^1.1.0",
     "@density/ui-report-comparative-performance": "^0.3.0",
-    "@density/ui-report-daily-visits-per-segment": "^0.2.2",
+    "@density/ui-report-daily-visits-per-segment": "^0.2.3",
     "@density/ui-report-hourly-breakdown": "0.0.1",
     "@density/ui-report-loading": "^0.1.3",
     "@density/ui-report-next-week-forecast": "^1.0.3",
