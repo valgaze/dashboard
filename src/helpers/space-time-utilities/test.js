@@ -4,7 +4,7 @@ import { splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle } from './inde
 
 const NYC_SPACE = { name: 'New York Space', timeZone: 'America/New_York' };
 const LA_SPACE = { name: 'Los Angeles Space', timeZone: 'America/Los_Angeles' };
-const CALCUTTA_SPACE = { name: 'Calcutta space', timeZone: 'Asia/Calcutta' };
+const CALCUTTA_SPACE = { name: 'Kolkata Space', timeZone: 'Asia/Kolkata' };
 
 function assertSubRangesEqual(subrangesA, subrangesB) {
   const a = subrangesA.map(i => ({start: i.start.valueOf(), end: i.end.valueOf()}));
