@@ -153,8 +153,8 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
 
     // Create a subrange from the last segment to this transition, preserving "time forwards" order
     results.push({
-      start: moment.utc(Math.min(lastSegment, transitionPoint)),
-      end: moment.utc(Math.max(lastSegment, transitionPoint)),
+      start: moment.utc(reverse ? transitionPoint : lastSegment),
+      end: moment.utc(reverse ? lastSegment : transitionPoint),
       gap: transitionPoint.valueOf() !== lastInterval.valueOf()
     });
 
@@ -163,10 +163,10 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
   }
 
   // Add the last interval if necessary
-  if (reverse ? end < lastSegment : end > lastSegment) {
+  if (reverse ? start < lastSegment : end > lastSegment) {
     results.push({
-      start: moment.utc(Math.min(lastSegment, end)),
-      end: moment.utc(Math.max(lastSegment, end)),
+      start: moment.utc(reverse ? start : lastSegment),
+      end: moment.utc(reverse ? lastSegment : end),
       gap: false
     })
   }
