@@ -79,7 +79,6 @@ const fields = [
     defaults: {
       'production': 'https://api.density.io/v2',
       'staging': 'https://core-staging.density.io/v2',
-      'lab': 'https://core-lab.density.io/v2',
       'local': 'http://localhost:8000/v2',
       'env (REACT_APP_CORE_API_URL)': process.env.REACT_APP_CORE_API_URL,
     },
@@ -91,7 +90,6 @@ const fields = [
     defaults: {
       'production': 'https://accounts.density.io/v1',
       'staging': 'https://accounts-staging.density.io/v1',
-      'lab': 'https://accounts-lab.density.io/v1',
       'local': 'http://localhost:8001/v1',
       'env (REACT_APP_ACCOUNTS_API_URL)': process.env.REACT_APP_ACCOUNTS_API_URL,
     },
