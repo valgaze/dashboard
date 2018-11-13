@@ -127,7 +127,7 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
 
   // Same defaults as API
   interval = interval || moment.duration(3600000);
-  reverse = order.toLowerCase() === 'desc';
+  const reverse = (order || 'asc').toLowerCase() === 'desc';
 
   // Validate start and end timestamps
   if (start >= end) { throw "Start must be before end!"; }
@@ -140,21 +140,25 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
   let lastSegment = moment.utc(reverse ? end : start);
   let lastInterval = moment.utc(lastSegment);
 
-  // Generate necessary intervals to handle each DST boundary
-  while (dsts.length > 0) {
+  // Generate necessary segments to avoid each DST boundary
+  while (transitionPoints.length > 0) {
+
+    // Depending on the order of results, we pull from either end of the transitions array
     const transitionPoint = reverse ? transitionPoints.pop() : transitionPoints.shift();
+
+    // Skip by "interval" in the right direction until we've either passed or reached the transition
     while (reverse ? lastInterval > transitionPoint : lastInterval < transitionPoint) {
       lastInterval = reverse ? lastInterval.subtract(interval) : lastInterval.add(interval);
     }
 
-    // Create a subrange from the last segment boundary up to this DST boundary, preserving "forwards" order
+    // Create a subrange from the last segment to this transition, preserving "time forwards" order
     results.push({
       start: moment.utc(Math.min(lastSegment, transitionPoint)),
       end: moment.utc(Math.max(lastSegment, transitionPoint)),
       gap: transitionPoint !== lastInterval
     });
 
-    // This will leave a gap if the boundary doesn't line up with our interval buckets
+    // THIS MAY LEAVE A GAP if the transition doesn't line up with our interval buckets
     lastSegment = moment.utc(lastInterval);
   }
 
@@ -167,7 +171,7 @@ export function splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(space, 
     })
   }
 
-  // Return array of subranges (with gaps)
+  // Return array of subranges (POSSIBLY WITH GAPS)
   return results;
 }
 

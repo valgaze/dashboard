@@ -1,14 +1,14 @@
 import moment from 'moment';
 import assert from 'assert';
-import { splitTimeRangeIntoSubrangesWithSameOffset } from './index';
+import { splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle } from './index';
 
 const NYC_SPACE = { name: 'New York Space', timeZone: 'America/New_York' };
 const LA_SPACE = { name: 'Los Angeles Space', timeZone: 'America/Los_Angeles' };
 const CALCUTTA_SPACE = { name: 'Calcutta space', timeZone: 'Asia/Calcutta' };
 
 function assertSubRangesEqual(subrangesA, subrangesB) {
-  const a = subrangesA.map(i => ({start: i.start.format(), end: i.end.format()}));
-  const b = subrangesB.map(i => ({start: i.start.format(), end: i.end.format()}));
+  const a = subrangesA.map(i => ({start: i.start.valueOf(), end: i.end.valueOf()}));
+  const b = subrangesB.map(i => ({start: i.start.valueOf(), end: i.end.valueOf()}));
   assert.deepEqual(a, b);
 }
 
@@ -17,9 +17,9 @@ describe('time-conversions', function() {
     describe('in new york', () => {
       it('no daylight savings', () => {
         const start = '2018-11-12T00:00:00Z';
-        const end = '2018-11-12T00:00:00Z';
+        const end = '2018-11-13T00:00:00Z';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
           NYC_SPACE,
           start,
           end,
@@ -29,15 +29,15 @@ describe('time-conversions', function() {
         assertSubRangesEqual(subranges, [
           {
             start: moment.utc("2018-11-12T00:00:00.000+00:00"),
-            end: moment.utc("2018-11-11T23:59:59.999+00:00")
+            end: moment.utc("2018-11-13T00:00:00.000+00:00")
           },
         ]);
       });
       it('with daylight savings boundary', () => {
-        const start = '2018-10-01T00:00:00-04:00';
-        const end = '2018-12-01T00:00:00-05:00';
+        const start = '2018-10-01T00:00:00.000-04:00';
+        const end = '2018-12-01T00:00:00.000-05:00';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
           NYC_SPACE,
           start,
           end,
@@ -46,26 +46,22 @@ describe('time-conversions', function() {
 
         assertSubRangesEqual(subranges, [
           {
-            start: moment.utc("2018-10-01T00:00:00-04:00"),
-            end: moment.utc("2018-11-04T01:59:59-04:00"),
+            start: moment.utc("2018-10-01T00:00:00.000-04:00"),
+            end: moment.utc("2018-11-04T02:00:00.000-04:00")
           },
           {
-            start: moment.utc("2018-11-04T01:00:00-05:00"),
-            end: moment.utc("2018-11-04T01:59:59-05:00"),
-          },
-          {
-            start: moment.utc("2018-11-04T02:00:00-05:00"),
-            end: moment.utc("2018-11-30T23:59:59-05:00"), // FIXME: this should be the start of the next day?
+            start: moment.utc("2018-11-04T01:00:00.000-05:00"),
+            end: moment.utc("2018-12-01T00:00:00.000-05:00")
           },
         ]);
       });
     });
     describe('in los angeles', () => {
       it('no daylight savings', () => {
-        const start = '2018-11-12T00:00:00Z';
-        const end = '2018-11-12T00:00:00Z';
+        const start = '2018-11-12T00:00:00.000Z';
+        const end = '2018-11-13T00:00:00.000Z';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
           LA_SPACE,
           start,
           end,
@@ -75,15 +71,15 @@ describe('time-conversions', function() {
         assertSubRangesEqual(subranges, [
           {
             start: moment.utc("2018-11-12T00:00:00.000+00:00"),
-            end: moment.utc("2018-11-11T23:59:59.999+00:00")
+            end: moment.utc("2018-11-13T00:00:00.000+00:00")
           },
         ]);
       });
       it('with daylight savings boundary', () => {
-        const start = '2018-10-01T00:00:00-07:00';
-        const end = '2018-12-01T00:00:00-08:00';
+        const start = '2018-10-01T00:00:00.000-07:00';
+        const end = '2018-12-01T00:00:00.000-08:00';
         const interval = moment.duration(1, 'hour');
-        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffsetImperativeStyle(
           LA_SPACE,
           start,
           end,
@@ -92,16 +88,12 @@ describe('time-conversions', function() {
 
         assertSubRangesEqual(subranges, [
           {
-            start: moment.utc("2018-10-01T00:00:00-07:00"),
-            end: moment.utc("2018-11-04T01:59:59-07:00"),
+            start: moment.utc("2018-10-01T00:00:00.000-07:00"),
+            end: moment.utc("2018-11-04T02:00:00.000-07:00")
           },
           {
-            start: moment.utc("2018-11-04T01:00:00-08:00"),
-            end: moment.utc("2018-11-04T01:59:59-08:00"),
-          },
-          {
-            start: moment.utc("2018-11-04T02:00:00-08:00"),
-            end: moment.utc("2018-11-30T23:59:59-08:00"), // FIXME: this should be the start of the next day?
+            start: moment.utc("2018-11-04T01:00:00.000-08:00"),
+            end: moment.utc("2018-12-01T00:00:00.000-08:00")
           },
         ]);
       });
