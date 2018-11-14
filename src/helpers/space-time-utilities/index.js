@@ -50,7 +50,9 @@ export function prettyPrintHoursMinutes(momentInstance) {
 // Given a moment duration, return it formatted as an interval that can be passed to the counts
 // endpoint.
 export function formatDurationAsInterval(duration) {
-  if (Math.floor(duration.asDays()) === duration.asDays()) {
+  if (Math.floor(duration.asWeeks()) === duration.asWeeks()) {
+    return `${duration.asWeeks()}w`;
+  } else if (Math.floor(duration.asDays()) === duration.asDays()) {
     return `${duration.asDays()}d`;
   } else if (Math.floor(duration.asHours()) === duration.asHours()) {
     return `${duration.asHours()}h`;
@@ -59,6 +61,14 @@ export function formatDurationAsInterval(duration) {
   } else {
     return `${duration.asSeconds()}s`;
   }
+}
+
+// Given a formatted interval string, return it as a moment duration
+export function parseIntervalAsDuration(interval) {
+  const durationUnits = { w: 'week', d: 'day', h: 'hour', m: 'minute', s: 'second' };
+  const suffix = interval.slice(-1);
+  const amount = parseInt(interval.slice(0, -1), 10);
+  return moment.duration(amount, durationUnits[suffix]);
 }
 
 /*
@@ -120,7 +130,7 @@ export function formatDurationAsInterval(duration) {
  *    ^= This is where the boundaries of the intervals should be in the final request.
  *
  */
-export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval, order) {
+export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, params={}) {
   // Convert start and end into moments
   start = moment.utc(start);
   end = moment.utc(end);
@@ -129,8 +139,10 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
   const results = [];
 
   // Same defaults as API
-  interval = interval || moment.duration(3600000);
-  const reverse = (order || 'asc').toLowerCase() === 'desc';
+  params.interval = params.interval || '1h';
+  params.order = params.order || 'asc';
+  const interval = parseIntervalAsDuration(params.interval);
+  const reverse = params.order.toLowerCase() === 'desc';
 
   // Validate start and end timestamps
   if (start >= end) { throw Error("Start must be before end!"); }
@@ -138,10 +150,7 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
   // Create a list of DST transitions within this range of (local) time
   const tz = moment.tz.zone(space.timeZone);
   const transitions = tz.untils.map((ts, index) => {
-    return {
-      index: index,
-      until: moment.utc(ts)
-    }
+    return { index: index, until: moment.utc(ts) };
   }).filter(ts => startTs < ts.until && ts.until < endTs);
   
   // Save the last segment and interval boundaries that we've processed so far
@@ -167,8 +176,8 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
       gap: false
     });
 
-    // Adjust the next interval to shift to align with the new offset, if necessary
-    if (interval > moment.duration(3600000)) {
+    // Adjust the next interval to shift to align with the new offset, if requesting weeks or days
+    if (['w', 'd'].includes(params.interval.slice(-1))) {
       const shiftMinutes = tz.offsets[transition.index - 1] - tz.offsets[transition.index];
       const shift = moment.duration(shiftMinutes, 'minutes');
       lastInterval = reverse ? lastInterval.subtract(shift) : lastInterval.add(shift);
@@ -200,8 +209,8 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
   return results;
 }
 
-export async function requestCountsForLocalRange(space, start, end, interval, params={}) {
-  const subranges = splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval, params.order);
+export async function requestCountsForLocalRange(space, start, end, params={}) {
+  const subranges = splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, params);
   
   let results = [];
   for (const subrange of subranges) {
@@ -212,7 +221,6 @@ export async function requestCountsForLocalRange(space, start, end, interval, pa
         end_time: subrange.end.toISOString(),
         page,
         page_size: 1000,
-        interval: formatDurationAsInterval(interval),
         ...params,
       })
     ));
@@ -245,7 +253,7 @@ export async function requestCountsForLocalRange(space, start, end, interval, pa
 //     space,
 //     moment().subtract(2, 'weeks'),
 //     moment(),
-//     moment.duration(1, 'day')
+//     '1d'
 //   )
 //     .then(data => console.log('SUBRANGE data', data))
 //     .catch(err => console.error('SUBRANGE error', err))

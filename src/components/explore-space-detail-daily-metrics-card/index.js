@@ -106,8 +106,8 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
         space,
         formatInISOTimeAtSpace(startTime, space),
         formatInISOTimeAtSpace(endTime, space),
-        moment.duration(1, 'day'),
         {
+          interval: '1d',
           order: 'asc',
           page_size: 1000,
           time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id

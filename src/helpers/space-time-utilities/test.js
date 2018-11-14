@@ -18,12 +18,12 @@ describe('time-conversions', function() {
       it('no daylight savings', () => {
         const start = '2018-11-12T00:00:00Z';
         const end = '2018-11-13T00:00:00Z';
-        const interval = moment.duration(1, 'hour');
+        const interval = '1h';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
-          interval,
+          { interval },
         );
 
         assertSubRangesEqual(subranges, [
@@ -37,12 +37,12 @@ describe('time-conversions', function() {
       it('with daylight savings boundary', () => {
         const start = '2018-10-01T00:00:00.000-04:00';
         const end = '2018-12-01T00:00:00.000-05:00';
-        const interval = moment.duration(1, 'hour');
+        const interval = '1h';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
-          interval,
+          { interval },
         );
 
         assertSubRangesEqual(subranges, [
@@ -61,12 +61,12 @@ describe('time-conversions', function() {
       it('with daylight savings boundary and day-long intervals', () => {
         const start = '2018-10-01T00:00:00.000-04:00';
         const end = '2018-12-01T00:00:00.000-05:00';
-        const interval = moment.duration(1, 'day');
+        const interval = '1d';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
-          interval,
+          { interval },
         );
 
         assertSubRangesEqual(subranges, [
@@ -90,12 +90,12 @@ describe('time-conversions', function() {
       it('with daylight savings boundary between intervals', () => {
         const start = '2018-11-04T00:00:00.000-04:00';
         const end = '2018-11-04T10:00:00.000-05:00';
-        const interval = moment.duration(17, 'minute');
+        const interval = '17m';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
-          interval,
+          { interval },
         );
 
         assertSubRangesEqual(subranges, [
@@ -119,13 +119,12 @@ describe('time-conversions', function() {
       it('with daylight savings boundary and descending order', () => {
         const start = '2018-10-01T00:00:00.000-04:00';
         const end = '2018-12-01T00:00:00.000-05:00';
-        const interval = moment.duration(1, 'hour');
+        const interval = '1h';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
-          interval,
-          'desc'
+          { interval, order: 'desc' },
         );
 
         assertSubRangesEqual(subranges, [
@@ -144,13 +143,12 @@ describe('time-conversions', function() {
       it('with daylight savings boundary and day-long intervals, in descending order', () => {
         const start = '2018-10-01T00:00:00.000-04:00';
         const end = '2018-12-01T00:00:00.000-05:00';
-        const interval = moment.duration(1, 'day');
+        const interval = '1d';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
-          interval,
-          'desc'
+          { interval, order: 'desc' }
         );
 
         assertSubRangesEqual(subranges, [
@@ -174,13 +172,12 @@ describe('time-conversions', function() {
       it('with daylight savings boundary between intervals, in descending order', () => {
         const start = '2018-11-04T00:00:00.000-04:00';
         const end = '2018-11-04T10:00:00.000-05:00';
-        const interval = moment.duration(17, 'minute');
+        const interval = '17m';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           NYC_SPACE,
           start,
           end,
-          interval,
-          'desc'
+          { interval, order: 'desc' }
         );
 
         assertSubRangesEqual(subranges, [
@@ -206,12 +203,12 @@ describe('time-conversions', function() {
       it('no daylight savings', () => {
         const start = '2018-11-12T00:00:00.000Z';
         const end = '2018-11-13T00:00:00.000Z';
-        const interval = moment.duration(1, 'hour');
+        const interval = '1h';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           LA_SPACE,
           start,
           end,
-          interval,
+          { interval },
         );
 
         assertSubRangesEqual(subranges, [
@@ -225,12 +222,12 @@ describe('time-conversions', function() {
       it('with daylight savings boundary', () => {
         const start = '2018-10-01T00:00:00.000-07:00';
         const end = '2018-12-01T00:00:00.000-08:00';
-        const interval = moment.duration(1, 'hour');
+        const interval = '1h';
         const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
           LA_SPACE,
           start,
           end,
-          interval,
+          { interval },
         );
 
         assertSubRangesEqual(subranges, [
