@@ -101,14 +101,15 @@ export default async function comparativePerformance(report) {
     }
 
     // Finally, average all the counts and timestamps to determine the "average peak count".
+    const dayCount = Object.keys(bucketsByDay).length;
     const totalPeakCount = peakPerDay.reduce((acc, i) => acc + i.count, 0)
-    const averagePeakCount = Math.round(totalPeakCount / Object.keys(bucketsByDay).length);
+    const averagePeakCount = Math.round(totalPeakCount / dayCount);
 
-    const totalPeakTimestamp = peakPerDay.reduce((acc, i) => acc + parseISOTimeAtSpace(i.timestamp, space).valueOf(), 0)
-    const averagePeakTime = parseISOTimeAtSpace(
-      totalPeakTimestamp / Object.keys(bucketsByDay).length,
-      space,
-    );
+    const totalPeakTime = peakPerDay.reduce((acc, i) => {
+      const peakTimeAtSpace = parseISOTimeAtSpace(i.timestamp, space);
+      return acc + peakTimeAtSpace.diff(moment(peakTimeAtSpace).startOf('day'), 'seconds');
+    }, 0);
+    const averagePeakTime = moment.duration(totalPeakTime / dayCount, 'second');
 
     // Sum up the total number of entrances in all buckets ("total visits")
     const totalEntrances = counts.reduce(
@@ -119,7 +120,7 @@ export default async function comparativePerformance(report) {
     return {
       totalVisits: totalEntrances,
       averagePeakCount,
-      averagePeakTime: moment.duration(averagePeakTime.format('hh:mm:ss')),
+      averagePeakTime,
     };
   });
 
