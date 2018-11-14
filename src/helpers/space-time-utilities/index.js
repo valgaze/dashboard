@@ -35,32 +35,16 @@ export function formatDayAtSpace(momentInstance, space) {
 }
 
 export function formatInISOTime(timestamp) {
-  return timestamp.utc().format();
+  return timestamp.utc().toISOString();
 }
 export function formatInISOTimeAtSpace(timestamp, space) {
-  return timestamp.tz(space.timeZone).format();
+  return timestamp.tz(space.timeZone).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 }
 export function formatForReactDates(momentInstance, space) {
   return momentInstance.tz(space.timeZone).startOf('day');
 }
 export function prettyPrintHoursMinutes(momentInstance) {
   return momentInstance.format('h:mma').slice(0, -1); /* am -> a */
-}
-
-// Given a moment duration, return it formatted as an interval that can be passed to the counts
-// endpoint.
-export function formatDurationAsInterval(duration) {
-  if (Math.floor(duration.asWeeks()) === duration.asWeeks()) {
-    return `${duration.asWeeks()}w`;
-  } else if (Math.floor(duration.asDays()) === duration.asDays()) {
-    return `${duration.asDays()}d`;
-  } else if (Math.floor(duration.asHours()) === duration.asHours()) {
-    return `${duration.asHours()}h`;
-  } else if (Math.floor(duration.asMinutes()) === duration.asMinutes()) {
-    return `${duration.asMinutes()}m`;
-  } else {
-    return `${duration.asSeconds()}s`;
-  }
 }
 
 // Given a formatted interval string, return it as a moment duration
@@ -217,8 +201,8 @@ export async function requestCountsForLocalRange(space, start, end, params={}) {
     const subrangeData = await fetchAllPages(page => (
       core.spaces.counts({
         id: space.id,
-        start_time: subrange.start.toISOString(),
-        end_time: subrange.end.toISOString(),
+        start_time: formatInISOTime(subrange.start),
+        end_time: formatInISOTime(subrange.end),
         page,
         page_size: 1000,
         ...params,
@@ -241,20 +225,3 @@ export async function requestCountsForLocalRange(space, start, end, params={}) {
   }
   return results;
 }
-
-// let space = {
-//   name: "Foo",
-//   timeZone: "America/New_York",
-//   id: "spc_547459039458492970",
-// };
-//
-// setTimeout(() => {
-//   requestCountsForLocalRange(
-//     space,
-//     moment().subtract(2, 'weeks'),
-//     moment(),
-//     '1d'
-//   )
-//     .then(data => console.log('SUBRANGE data', data))
-//     .catch(err => console.error('SUBRANGE error', err))
-// }, 1000);
