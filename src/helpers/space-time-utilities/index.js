@@ -201,7 +201,6 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
 
 export async function requestCountsForLocalRange(space, start, end, interval, params={}) {
   const subranges = splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval, params.order);
-  console.log(subranges)
   
   let results = [];
   for (const subrange of subranges) {
@@ -231,7 +230,6 @@ export async function requestCountsForLocalRange(space, start, end, interval, pa
       results = results.concat(subrangeData);
     }
   }
-  console.log(results);
   return results;
 }
 
