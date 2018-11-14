@@ -121,8 +121,11 @@ export function formatDurationAsInterval(duration) {
  *
  */
 export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval, order) {
+  // Convert start and end into moments
   start = moment.utc(start);
   end = moment.utc(end);
+  const startTs = start.valueOf();
+  const endTs = end.valueOf();
   const results = [];
 
   // Same defaults as API
@@ -134,17 +137,23 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
 
   // Create a list of DST transitions within this range of (local) time
   const tz = moment.tz.zone(space.timeZone);
-  const transitionPoints = tz.untils.map(ts => moment.utc(ts)).filter(ts => start < ts && ts < end);
-
+  const transitions = tz.untils.map((ts, index) => {
+    return {
+      index: index,
+      until: moment.utc(ts)
+    }
+  }).filter(ts => startTs < ts.until && ts.until < endTs);
+  
   // Save the last segment and interval boundaries that we've processed so far
   let lastSegment = moment.utc(reverse ? end : start);
   let lastInterval = moment.utc(lastSegment);
 
   // Generate necessary segments to avoid each DST boundary
-  while (transitionPoints.length > 0) {
+  while (transitions.length > 0) {
 
     // Depending on the order of results, we pull from either end of the transitions array
-    const transitionPoint = reverse ? transitionPoints.pop() : transitionPoints.shift();
+    const transition = reverse ? transitions.pop() : transitions.shift();
+    const transitionPoint = transition.until;
 
     // Skip by "interval" in the correct order until we've either passed or reached the transition
     while (reverse ? lastInterval > transitionPoint : lastInterval < transitionPoint) {
@@ -157,6 +166,12 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
       end: moment.utc(reverse ? lastSegment : transitionPoint),
       gap: false
     });
+
+    // Adjust the next interval to shift to align with the new offset, if necessary
+    if (interval > moment.duration(3600000)) {
+      const shiftMinutes = tz.offsets[transition.index - 1] - tz.offsets[transition.index];
+      lastInterval = lastInterval.add(moment.duration(shiftMinutes, 'minutes'));
+    }
 
     // If there is a gap before the next interval, it will need to be fetched separately
     if (lastInterval.valueOf() !== transitionPoint.valueOf()) {
@@ -184,75 +199,39 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
   return results;
 }
 
-export function getAllCountsForAllSubrangesWithinTimeRange(space, subranges, start, end) {
-  console.log('GETALLCOUNTSSUBRANGE', space, start.format(), end.format())
-  return subranges.map(subrange => {
-    console.log('SUBBRANGE START ====')
-    return subrange.filter(item => { // start < timestamp <= end
-      const result = (
-        parseISOTimeAtSpace(item.timestamp, space).isSameOrAfter(start) &&
-        parseISOTimeAtSpace(item.timestamp, space).isBefore(end.valueOf())
-        // parseISOTimeAtSpace(item.timestamp, space).valueOf() >= start.valueOf() &&
-        // parseISOTimeAtSpace(item.timestamp, space).valueOf() < end.valueOf()
-      );
-      console.log(
-        'SUBRANGE RANGE',
-        start.format(),
-        parseISOTimeAtSpace(item.timestamp, space).format(),
-        end.format(),
-        '=>', result,
-        'ISSAME',
-        start.valueOf(),
-        parseISOTimeAtSpace(item.timestamp, space).valueOf(),
-        end.valueOf(),
-      );
-      return result;
-    });
-  })
-  .reduce((acc, i) => [...acc, ...i], []) // Flatten arrays
-}
-
 export async function requestCountsForLocalRange(space, start, end, interval, params={}) {
-  const subranges = splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval);
-
-  console.log('SUBRANGE', space, subranges)
-  subranges.forEach(range => (
-    console.log('SUBRANGE  =>', parseISOTimeAtSpace(range.start, space).format(), parseISOTimeAtSpace(range.end, space).format())
-  ))
-
-  const subrangeCounts = await Promise.all(subranges.map(({start, end}) => (
-    fetchAllPages(page => (
+  const subranges = splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, interval, params.order);
+  console.log(subranges)
+  
+  let results = [];
+  for (const subrange of subranges) {
+    const subrangeData = await fetchAllPages(page => (
       core.spaces.counts({
         id: space.id,
-        start_time: formatInISOTimeAtSpace(start, space),
-        end_time: formatInISOTimeAtSpace(end, space),
+        start_time: subrange.start.toISOString(),
+        end_time: subrange.end.toISOString(),
         page,
         page_size: 1000,
         interval: formatDurationAsInterval(interval),
         ...params,
       })
-    ))
-  )));
-
-  console.log('SUBRANGECOUNTS', space, subrangeCounts)
-
-  const localStart = parseISOTimeAtSpace(start, space);
-  const localEnd = parseISOTimeAtSpace(end, space);
-
-  // For each day within the time range, return
-  let results = [];
-  for (
-    let subRangeStart = localStart.clone().startOf('second');
-    subRangeStart.isSameOrBefore(localEnd);
-    subRangeStart = subRangeStart.clone().add(1, 'day')
-  ) {
-    const subRangeEnd = subRangeStart.clone().add(1, 'day');
-    results = [
-      ...results,
-      getAllCountsForAllSubrangesWithinTimeRange(space, subrangeCounts, subRangeStart, subRangeEnd),
-    ];
+    ));
+    if (subrange.gap) {
+      const lastBucket = results.pop();
+      const gapBucket = subrangeData[0];
+      lastBucket.interval.analytics.entrances += gapBucket.interval.analytics.entrances;
+      lastBucket.interval.analytics.exits += gapBucket.interval.analytics.exits;
+      lastBucket.interval.analytics.events += gapBucket.interval.analytics.events;
+      lastBucket.interval.analytics.events += gapBucket.interval.analytics.events;
+      lastBucket.interval.analytics.max = Math.max(lastBucket.interval.analytics.max, gapBucket.interval.analytics.max);
+      lastBucket.interval.analytics.min = Math.min(lastBucket.interval.analytics.min, gapBucket.interval.analytics.min);
+      lastBucket.interval.end = gapBucket.interval.end;
+      results.push(lastBucket);
+    } else {
+      results = results.concat(subrangeData);
+    }
   }
-
+  console.log(results);
   return results;
 }
 

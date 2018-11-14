@@ -58,6 +58,35 @@ describe('time-conversions', function() {
           },
         ]);
       });
+      it('with daylight savings boundary and day-long intervals', () => {
+        const start = '2018-10-01T00:00:00.000-04:00';
+        const end = '2018-12-01T00:00:00.000-05:00';
+        const interval = moment.duration(1, 'day');
+        const subranges = splitTimeRangeIntoSubrangesWithSameOffset(
+          NYC_SPACE,
+          start,
+          end,
+          interval,
+        );
+
+        assertSubRangesEqual(subranges, [
+          {
+            start: moment.utc("2018-10-01T00:00:00.000-04:00"),
+            end: moment.utc("2018-11-04T02:00:00.000-04:00"),
+            gap: false
+          },
+          {
+            start: moment.utc("2018-11-04T01:00:00.000-05:00"),
+            end: moment.utc("2018-11-05T00:00:00.000-05:00"),
+            gap: true
+          },
+          {
+            start: moment.utc("2018-11-05T00:00:00.000-05:00"),
+            end: moment.utc("2018-12-01T00:00:00.000-05:00"),
+            gap: false
+          },
+        ]);
+      });
       it('with daylight savings boundary between intervals', () => {
         const start = '2018-11-04T00:00:00.000-04:00';
         const end = '2018-11-04T10:00:00.000-05:00';
