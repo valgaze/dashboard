@@ -32,7 +32,7 @@
     "@density/ui-percentage-bar": "^1.0.0",
     "@density/ui-popover": "^0.2.3",
     "@density/ui-radio-button": "^1.1.0",
-    "@density/ui-report-comparative-performance": "^0.3.0",
+    "@density/ui-report-comparative-performance": "^0.4.1",
     "@density/ui-report-daily-visits-per-segment": "^0.2.3",
     "@density/ui-report-hourly-breakdown": "0.0.1",
     "@density/ui-report-loading": "^0.1.3",
