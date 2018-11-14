@@ -170,7 +170,8 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, int
     // Adjust the next interval to shift to align with the new offset, if necessary
     if (interval > moment.duration(3600000)) {
       const shiftMinutes = tz.offsets[transition.index - 1] - tz.offsets[transition.index];
-      lastInterval = lastInterval.add(moment.duration(shiftMinutes, 'minutes'));
+      const shift = moment.duration(shiftMinutes, 'minutes');
+      lastInterval = reverse ? lastInterval.subtract(shift) : lastInterval.add(shift);
     }
 
     // If there is a gap before the next interval, it will need to be fetched separately
