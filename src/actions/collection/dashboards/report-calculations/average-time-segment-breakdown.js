@@ -41,6 +41,7 @@ function calculateAverageValues(space, minutelyBucketsByDay, minutelyCounts) {
     totalValues.push(total);
   }
 
+
   // Perform the second part of the average by dividing each total value by the total number
   // of days that were summed (ie, the number of days of data that were fetched).
   const daysInRange = Object.keys(minutelyCountsByDay).length;
@@ -150,6 +151,7 @@ export default async function averageTimeSegmentBreakdown(report) {
       time_segment_groups: report.settings.timeSegmentGroupId,
       page,
       page_size: 1000,
+      order: 'asc',
     });
   });
 
@@ -167,6 +169,7 @@ export default async function averageTimeSegmentBreakdown(report) {
 
   // Calculate the daily average number of visitors
   const dailyAverage = calculateDailyAverage(dailyCounts);
+
 
   // Calculate the "average day" values that are plotted on the chart
   const averageValues = calculateAverageValues(space, minutelyBucketsByDay, minutelyCounts);
