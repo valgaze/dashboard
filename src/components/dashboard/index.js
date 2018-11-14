@@ -12,6 +12,7 @@ import ReportDailyVisitsPerSegment from '@density/ui-report-daily-visits-per-seg
 import ReportSurpassedCapacity from '@density/ui-report-surpassed-capacity';
 import ReportComparativePerformance from '@density/ui-report-comparative-performance';
 import ReportNextWeekForecast from '@density/ui-report-next-week-forecast';
+import ReportHourlyBreakdown from '@density/ui-report-hourly-breakdown';
 
 import ReportLoading from '@density/ui-report-loading';
 
@@ -23,6 +24,7 @@ const REPORT_TYPE_TO_COMPONENT = {
   CAPACITY: ReportSurpassedCapacity,
   COMPARE_PERFORMANCE: ReportComparativePerformance,
   NEXT_WEEK: ReportNextWeekForecast,
+  HOURLY_BREAKDOWN: ReportHourlyBreakdown,
 };
 
 export function Dashboard({ dashboards, selectedDashboard }) {
