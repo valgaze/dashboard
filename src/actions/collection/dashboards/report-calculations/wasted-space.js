@@ -1,3 +1,4 @@
+import moment from 'moment';
 import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
 import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index';
 import {
@@ -21,10 +22,15 @@ export default async function wastedSpace(report) {
   const data = {};
   await Promise.all(spaces.map(async space => {
     const timeRange = convertTimeRangeToDaysAgo(space, report.settings.timeRange);
+
     data[space.id] = await fetchAllPages(page => {
       return core.spaces.counts({
         id: space.id,
-        interval: '1h',
+        // Calculate an `interval` parameter that garuntees a single count bucket be returned
+        // between the start and end times.
+        interval: `${Math.ceil(
+          moment.duration(timeRange.end.diff(timeRange.start)).asSeconds()
+        )}s`,
         start_time: formatInISOTimeAtSpace(timeRange.start, space),
         end_time: formatInISOTimeAtSpace(timeRange.end, space),
         time_segment_group_ids: report.settings.timeSegmentGroupId,
@@ -35,6 +41,7 @@ export default async function wastedSpace(report) {
   }));
 
   // Calculate average utilization value across all buckets returned by the query.
+  // XXX NOTE: this shouldn't do anything as a single bucket is returned per space.
   const spaceAverageUtilization = spaces.map(space => {
     const averageUtilization = data[space.id].reduce(
       (acc, bucket) => acc + bucket.interval.analytics.utilization,
