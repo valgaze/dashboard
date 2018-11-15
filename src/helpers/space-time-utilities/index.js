@@ -160,10 +160,12 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, par
       gap: false
     });
 
-    // Adjust the next interval (AND THE START/END TIME) to shift to align with the new offset
-    const shiftMinutes = tz.offsets[transition.index - 1] - tz.offsets[transition.index];
-    const shift = moment.duration(shiftMinutes, 'minutes');
-    reverse ? lastInterval.subtract(shift) : lastInterval.add(shift);
+    // If querying days or weeks, shift the next interval to align with the new offset
+    if (['d', 'w'].includes(params.interval.slice(-1))) {
+      const shiftMinutes = tz.offsets[transition.index - 1] - tz.offsets[transition.index];
+      const shift = moment.duration(shiftMinutes, 'minutes');
+      reverse ? lastInterval.subtract(shift) : lastInterval.add(shift);
+    }
 
     // If there is a gap before the next interval, it will need to be fetched separately
     if (lastInterval.valueOf() !== transitionPoint.valueOf()) {

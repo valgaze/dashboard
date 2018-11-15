@@ -1,4 +1,3 @@
-import moment from 'moment';
 import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index';
 import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
 import { formatInISOTimeAtSpace, requestCountsForLocalRange } from '../../../../helpers/space-time-utilities/index';

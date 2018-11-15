@@ -137,7 +137,7 @@ export default async function averageTimeSegmentBreakdown(report) {
       interval: '1d',
       order: 'desc',
       page_size: 1000,
-      //time_segment_groups: report.settings.timeSegmentGroupId,
+      time_segment_groups: report.settings.timeSegmentGroupId,
     }
   );
   const dailyCounts = dailyCountsPromise.reverse();
@@ -152,7 +152,7 @@ export default async function averageTimeSegmentBreakdown(report) {
       interval: '5m',
       order: 'desc',
       page_size: 1000,
-      //time_segment_groups: report.settings.timeSegmentGroupId,
+      time_segment_groups: report.settings.timeSegmentGroupId,
     }
   );
   const minutelyCounts = minutelyCountsPromise.reverse();
