@@ -25,7 +25,7 @@
   justify-content: center;
   align-items: center;
 
-  @media (max-height: 480px) { display: none; }
+  @media (max-height: 260px) { display: none; }
 }
 
 .live-space-detail-stats-item {
@@ -39,12 +39,14 @@
   margin: 0px;
   font-size: 24px;
   @media (min-height: 1024px) { font-size: 40px; }
+  @media (max-height: 500px) { font-size: 14px; }
 }
 
 .live-space-detail-stats-count {
   color: $brand-primary;
   font-size: 70px;
   @media (min-height: 1024px) { font-size: 100px; }
+  @media (max-height: 500px) { font-size: 24px; }
 }
 
 .live-space-detail-chart {
