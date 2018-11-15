@@ -164,7 +164,6 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, par
     const shiftMinutes = tz.offsets[transition.index - 1] - tz.offsets[transition.index];
     const shift = moment.duration(shiftMinutes, 'minutes');
     reverse ? lastInterval.subtract(shift) : lastInterval.add(shift);
-    reverse ? start.subtract(shift) : end.add(shift);
 
     // If there is a gap before the next interval, it will need to be fetched separately
     if (lastInterval.valueOf() !== transitionPoint.valueOf()) {
@@ -189,13 +188,11 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, par
   }
 
   // Return array of subranges
-  console.log(results.map(result => ({start: result.start.format(), end: result.end.format(), gap: result.gap})))
   return results;
 }
 
 export async function requestCountsForLocalRange(space, start, end, params={}) {
   const subranges = splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, params);
-  
   let results = [];
   for (const subrange of subranges) {
     const subrangeData = await fetchAllPages(page => (
@@ -208,7 +205,7 @@ export async function requestCountsForLocalRange(space, start, end, params={}) {
         ...params,
       })
     ));
-    if (subrange.gap) {
+    if (subrange.gap && subrangeData.length > 0) {
       const lastBucket = results.pop();
       const gapBucket = subrangeData[0];
       lastBucket.interval.analytics.entrances += gapBucket.interval.analytics.entrances;
