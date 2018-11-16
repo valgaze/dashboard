@@ -161,7 +161,7 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, par
     });
 
     // If querying days or weeks, shift the next interval to align with the new offset
-    if (['d', 'w'].includes(params.interval.slice(-1))) {
+    if (['d', 'w'].indexOf(params.interval.slice(-1) > -1)) {
       const shiftMinutes = tz.offsets[transition.index - 1] - tz.offsets[transition.index];
       const shift = moment.duration(shiftMinutes, 'minutes');
       reverse ? lastInterval.subtract(shift) : lastInterval.add(shift);
