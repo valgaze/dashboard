@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import moment from 'moment';
 import 'moment-timezone';
 
-import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
 import InputBox from '@density/ui-input-box';
@@ -25,6 +24,7 @@ import {
   parseISOTimeAtSpace,
   formatInISOTimeAtSpace,
   getDurationBetweenMomentsInDays,
+  requestCountsForLocalRange
 } from '../../helpers/space-time-utilities/index';
 
 import { chartAsReactComponent } from '@density/charts';
@@ -102,24 +102,24 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
 
     // Fetch data from the server for the day-long window.
     try {
-      const data = await core.spaces.counts({
-        id: space.id,
-        start_time: formatInISOTimeAtSpace(startTime, space),
-        time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
+      const data = await requestCountsForLocalRange(
+        space,
+        formatInISOTimeAtSpace(startTime, space),
+        formatInISOTimeAtSpace(endTime, space),
+        {
+          interval: '1d',
+          order: 'asc',
+          page_size: 1000,
+          time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id
+        }
+      );
 
-        end_time: formatInISOTimeAtSpace(endTime, space),
-        interval: '1d',
-        order: 'asc',
-
-        page_size: 1000,
-      });
-
-      if (data.results.length > 0) {
+      if (data.length > 0) {
         this.setState({
           view: VISIBLE,
           dataSpaceId: space.id,
           // Return the metric requested within the range of time.
-          data: data.results.filter(i => {
+          data: data.filter(i => {
             // Remove days from the dataset that are not in the time segment
             const dayOfWeek = moment.utc(i.timestamp).tz(space.timeZone).day();
             return timeSegment.days

@@ -5,6 +5,8 @@ import surpassedCapacity from './report-calculations/surpassed-capacity';
 import comparativePerformance from './report-calculations/comparative-performance';
 import nextWeekForecast from './report-calculations/next-week-forecast';
 import utilization from './report-calculations/utilization';
+import hourlyBreakdown from './report-calculations/hourly-breakdown';
+// import utilization from './report-calculations/utilization';
 
 export const COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE = 'COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE';
 export const COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_ERROR = 'COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_ERROR';
@@ -17,6 +19,7 @@ const REPORT_TYPE_TO_FUNCTION = {
   COMPARE_PERFORMANCE: comparativePerformance,
   NEXT_WEEK: nextWeekForecast,
   UTILIZATION: utilization,
+  HOURLY_BREAKDOWN: hourlyBreakdown,
 };
 
 export default function collectionDashboardsCalculateReportData(reports) {

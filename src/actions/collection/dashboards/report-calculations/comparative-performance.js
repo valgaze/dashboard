@@ -42,10 +42,10 @@ export default async function comparativePerformance(report) {
 
   // Figure out the two time ranges we need to query.
   const lastStartDate = nowAtSpace.clone().startOf(unit).subtract(1, unit);
-  const lastEndDate = lastStartDate.clone().endOf(unit);
+  const lastEndDate = lastStartDate.clone().add(1, unit);
 
   const previousStartDate = lastStartDate.clone().subtract(1, unit);
-  const previousEndDate = previousStartDate.clone().endOf(unit);
+  const previousEndDate = previousStartDate.clone().add(1, unit);
 
   // For each time range, fetch the data at a `5 minute` intervals so we can calculate the average
   // day of time over this range of time.
@@ -101,14 +101,15 @@ export default async function comparativePerformance(report) {
     }
 
     // Finally, average all the counts and timestamps to determine the "average peak count".
+    const dayCount = Object.keys(bucketsByDay).length;
     const totalPeakCount = peakPerDay.reduce((acc, i) => acc + i.count, 0)
-    const averagePeakCount = Math.round(totalPeakCount / Object.keys(bucketsByDay).length);
+    const averagePeakCount = Math.round(totalPeakCount / dayCount);
 
-    const totalPeakTimestamp = peakPerDay.reduce((acc, i) => acc + parseISOTimeAtSpace(i.timestamp, space).valueOf(), 0)
-    const averagePeakTime = parseISOTimeAtSpace(
-      totalPeakTimestamp / Object.keys(bucketsByDay).length,
-      space,
-    );
+    const totalPeakTime = peakPerDay.reduce((acc, i) => {
+      const peakTimeAtSpace = parseISOTimeAtSpace(i.timestamp, space);
+      return acc + peakTimeAtSpace.diff(moment(peakTimeAtSpace).startOf('day'), 'seconds');
+    }, 0);
+    const averagePeakTime = moment.duration(totalPeakTime / dayCount, 'second');
 
     // Sum up the total number of entrances in all buckets ("total visits")
     const totalEntrances = counts.reduce(
@@ -119,7 +120,7 @@ export default async function comparativePerformance(report) {
     return {
       totalVisits: totalEntrances,
       averagePeakCount,
-      averagePeakTime: moment.duration(averagePeakTime.format('hh:mm:ss')),
+      averagePeakTime,
     };
   });
 

@@ -57,7 +57,7 @@ export default class ExploreSpaceDetailFootTrafficCard extends React.Component {
     return core.spaces.counts({
       id: space.id,
       start_time: formatInISOTimeAtSpace(day.clone().startOf('day'), space),
-      end_time: formatInISOTimeAtSpace(day.clone().endOf('day'), space),
+      end_time: formatInISOTimeAtSpace(day.clone().startOf('day').add(1, 'day'), space),
       time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
       interval: '5m',
       page: 1,
