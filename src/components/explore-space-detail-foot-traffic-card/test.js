@@ -41,7 +41,7 @@ describe('Explore space foot traffic hour chart', function() {
               count: 0,
               interval: {
                 start: "2017-01-01T03:55:00.000Z",
-                end: "2017-01-01T03:59:59.999Z",
+                end: "2017-01-01T04:00:00.000Z",
                 analytics: {min: 0, max: 0},
               },
               timestamp: "2017-01-01T03:55:00.000Z",
@@ -84,7 +84,7 @@ describe('Explore space foot traffic hour chart', function() {
       // Make sure the request was correctly formulated for the `America/New_York` time zone.
       // On January 1st, the offset is NYC is 5 hours.
       assert.equal(requestParameters[1].qs.start_time, '2017-01-01T00:00:00.000-05:00');
-      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T23:59:59.999-05:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-02T00:00:00.000-05:00');
     });
     it('should fetch data and display it during a different part of the year', async function() {
       const space = {
@@ -106,7 +106,7 @@ describe('Explore space foot traffic hour chart', function() {
               count: 0,
               interval: {
                 start: "2017-09-14T03:55:00.000Z",
-                end: "2017-09-14T03:59:59.999Z",
+                end: "2017-09-14T04:00:00.000Z",
                 analytics: {min: 0, max: 0},
               },
               timestamp: "2017-09-14T03:55:00.000Z",
@@ -149,7 +149,7 @@ describe('Explore space foot traffic hour chart', function() {
       // Make sure the request was correctly formulated for the `America/New_York` time zone.
       // On January 1st, the offset is NYC is 4 hours.
       assert.equal(requestParameters[1].qs.start_time, '2017-09-14T00:00:00.000-04:00');
-      assert.equal(requestParameters[1].qs.end_time, '2017-09-14T23:59:59.999-04:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-09-15T00:00:00.000-04:00');
     });
     it('should fetch data and display it in a different time zone', async function() {
       const space = {
@@ -171,7 +171,7 @@ describe('Explore space foot traffic hour chart', function() {
               count: 0,
               interval: {
                 start: "2017-01-01T03:55:00.000Z",
-                end: "2017-01-01T03:59:59.999Z",
+                end: "2017-01-01T04:00:00.000Z",
                 analytics: {min: 0, max: 0},
               },
               timestamp: "2017-01-01T03:55:00.000Z",
@@ -214,7 +214,7 @@ describe('Explore space foot traffic hour chart', function() {
       // Make sure the request was correctly formulated for the `America/New_York` time zone.
       // On January 1st, the offset is NYC is 5 hours.
       assert.equal(requestParameters[1].qs.start_time, '2016-12-31T00:00:00.000-08:00');
-      assert.equal(requestParameters[1].qs.end_time, '2016-12-31T23:59:59.999-08:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T00:00:00.000-08:00');
     });
     it('should fetch data and display it, only including data in the time segment', async function() {
       const space = {
@@ -236,7 +236,7 @@ describe('Explore space foot traffic hour chart', function() {
               count: 0,
               interval: {
                 start: "2017-01-01T03:55:00.000Z",
-                end: "2017-01-01T03:59:59.999Z",
+                end: "2017-01-01T04:00:00.000Z",
                 analytics: {min: 0, max: 0},
               },
               timestamp: "2017-01-01T03:55:00.000Z",
@@ -283,7 +283,7 @@ describe('Explore space foot traffic hour chart', function() {
       // On January 1st, the offset is NYC is 5 hours. ALso, ensure that the correct time segment
       // group was passed.
       assert.equal(requestParameters[1].qs.start_time, '2017-01-01T00:00:00.000-05:00');
-      assert.equal(requestParameters[1].qs.end_time, '2017-01-01T23:59:59.999-05:00');
+      assert.equal(requestParameters[1].qs.end_time, '2017-01-02T00:00:00.000-05:00');
       assert.equal(requestParameters[1].qs.time_segment_groups, customTimeSegmentGroup.id);
     });
   });
