@@ -63,7 +63,7 @@ export default async function totalVisitsRollup(report) {
     visits.push({
       id: space.id,
       name: space.name,
-      visits: visitsBySpace[spaceId].responseData[0].interval.analytics.entrances,
+      count: visitsBySpace[spaceId].responseData[0].interval.analytics.entrances,
     });
   }
 
@@ -78,8 +78,9 @@ export default async function totalVisitsRollup(report) {
     title: report.name,
     startDate: displayedTimeRange.start,
     endDate: displayedTimeRange.end,
+    timeSegment: 'LUNCH', // TODO: load the name of this segment
 
     mode: REPORT_SETTINGS_MODE_TO_COMPONENT_MODE[report.settings.mode],
-    visits,
+    counts: visits,
   };
 }
