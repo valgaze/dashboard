@@ -22,21 +22,17 @@ export default async function utilization(report) {
 
   const spaces = allSpaces.filter(space => report.settings.spaceIds.indexOf(space.id) >= 0);
 
-  // For each space, fetch counts data for the given time range. A single bucket should be returned
-  // for each request, as the interval should be the same size as the time range requested.
-  const utilizationsBySpace = {
-    /* 'spc_xxx': [{timestamp: "...", interval: {...}, count: 100}], */
+  // For each space, fetch the count at a 5 minute interval using the given start time, end time,
+  // and time segment group ids.
+  const countsBySpace = {
+    /* 'spc_xxx': [{timestamp: "...", interval: {...}, count: 100}, ...], */
   };
   await Promise.all(spaces.map(async (space, index) => {
     const timeRange = convertTimeRangeToDaysAgo(space, report.settings.timeRange);
     const responseData = await fetchAllPages(page => {
       return core.spaces.counts({
         id: space.id,
-        // Calculate an `interval` parameter that garuntees a single count bucket be returned
-        // between the start and end times.
-        interval: `${Math.ceil(
-          moment.duration(timeRange.end.diff(timeRange.start)).asSeconds()
-        )}s`,
+        interval: '5m',
         start_time: formatInISOTimeAtSpace(timeRange.start, space),
         end_time: formatInISOTimeAtSpace(timeRange.end, space),
         time_segment_group_ids: report.settings.timeSegmentGroupId,
@@ -44,14 +40,13 @@ export default async function utilization(report) {
         page_size: 1000,
       });
     });
-    utilizationsBySpace[space.id] = {responseData, space};
+    countsBySpace[space.id] = {responseData, space};
   }));
-
   const utilizations = [];
-  for (const spaceId in utilizationsBySpace) {
-    const space = utilizationsBySpace[spaceId].space;
+  for (const spaceId in countsBySpace) {
+    const space = countsBySpace[spaceId].space;
 
-    if (utilizationsBySpace[spaceId].responseData.length === 0) {
+    if (countsBySpace[spaceId].responseData.length === 0) {
       const timeRange = convertTimeRangeToDaysAgo(space, report.settings.timeRange);
       throw new Error([
         `Space ${space.name} did not return count data when queried for the time range of `,
@@ -60,10 +55,15 @@ export default async function utilization(report) {
       ].join(''));
     }
 
+    // Calculate the approximate utilization for each space by totalling all the count values in the
+    // buckets, and dividing this value by the number of buckets.
+    const utilizationsFromCountBuckets = countsBySpace[spaceId].responseData.map(i => i.interval.analytics.utilization / 100);
+    const total = utilizationsFromCountBuckets.reduce((a, b) => a + b, 0);
+
     utilizations.push({
       id: space.id,
       name: space.name,
-      utilization: utilizationsBySpace[spaceId].responseData[0].interval.analytics.utilization / 100,
+      utilization: total / utilizationsFromCountBuckets.length,
     });
   }
 
