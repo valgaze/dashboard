@@ -8,6 +8,7 @@ import ReportWrapper, { ReportError } from '@density/ui-report-wrapper';
 
 import ReportTimeSegmentBreakdown from '@density/ui-report-time-segment-breakdown';
 import ReportTotalVisits from '@density/ui-report-total-visits';
+import ReportTotalVisitsRollup from '@density/ui-report-total-visits-rollup';
 import ReportDailyVisitsPerSegment from '@density/ui-report-daily-visits-per-segment';
 import ReportSurpassedCapacity from '@density/ui-report-surpassed-capacity';
 import ReportComparativePerformance from '@density/ui-report-comparative-performance';
@@ -18,7 +19,7 @@ import ReportLoading from '@density/ui-report-loading';
 
 const REPORT_TYPE_TO_COMPONENT = {
   TOTAL_VISITS_ONE_SPACE: ReportTotalVisits,
-  TOTAL_VISITS_MULTI_SPACE: ReportTotalVisits,
+  TOTAL_VISITS_MULTI_SPACE: ReportTotalVisitsRollup,
   DAILY_VISITS: ReportDailyVisitsPerSegment,
   TS_BREAKDOWN: ReportTimeSegmentBreakdown,
   CAPACITY: ReportSurpassedCapacity,
