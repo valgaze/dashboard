@@ -13,7 +13,7 @@ export const COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_ERROR = 'COLLECTION_DAS
 
 const REPORT_TYPE_TO_FUNCTION = {
   TOTAL_VISITS_ONE_SPACE: totalVisitsOneSpace,
-  TOTAL_VISITS_ROLLUP: totalVisitsRollup,
+  TOTAL_VISITS_MULTI_SPACE: totalVisitsRollup,
   DAILY_VISITS: dailyVisitsPerSegment,
   TS_BREAKDOWN: averageTimeSegmentBreakdown,
   CAPACITY: surpassedCapacity,

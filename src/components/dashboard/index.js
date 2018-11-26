@@ -19,7 +19,7 @@ import ReportLoading from '@density/ui-report-loading';
 
 const REPORT_TYPE_TO_COMPONENT = {
   TOTAL_VISITS_ONE_SPACE: ReportTotalVisits,
-  TOTAL_VISITS_ROLLUP: ReportTotalVisitsRollup,
+  TOTAL_VISITS_MULTI_SPACE: ReportTotalVisitsRollup,
   DAILY_VISITS: ReportDailyVisitsPerSegment,
   TS_BREAKDOWN: ReportTimeSegmentBreakdown,
   CAPACITY: ReportSurpassedCapacity,
