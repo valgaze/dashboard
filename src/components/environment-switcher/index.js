@@ -85,6 +85,7 @@ export default class EnvironmentSwitcher extends React.Component {
                   key={field.slug}
                   input={<InputBox
                     type="select"
+                    width="100%"
                     value={this.state.values[field.slug] || field.defaults[field.default]}
                     onChange={e => this.setState({values: {...this.state.values, [field.slug]: e.id}})}
                     className="environment-switcher-input"

@@ -1,9 +1,9 @@
-import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
 import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index';
 import {
   getCurrentLocalTimeAtSpace,
   formatInISOTimeAtSpace,
   parseISOTimeAtSpace,
+  requestCountsForLocalRange,
 } from '../../../../helpers/space-time-utilities/index';
 import { core } from '../../../../client';
 
@@ -40,6 +40,7 @@ function calculateAverageValues(space, minutelyBucketsByDay, minutelyCounts) {
     }
     totalValues.push(total);
   }
+
 
   // Perform the second part of the average by dividing each total value by the total number
   // of days that were summed (ie, the number of days of data that were fetched).
@@ -128,33 +129,33 @@ export default async function averageTimeSegmentBreakdown(report) {
 
   // Make a request to the spaces/:id/counts endpoint for a single space with an interval of a
   // day, passing the given time range and the single given time segment group.
-  const dailyCountsPromise = fetchAllPages(page => {
-    return core.spaces.counts({
-      id: report.settings.spaceId,
+  const dailyCountsPromise = await requestCountsForLocalRange(
+    space,
+    formatInISOTimeAtSpace(timeRange.start, space),
+    formatInISOTimeAtSpace(timeRange.end, space),
+    {
       interval: '1d',
-      start_time: formatInISOTimeAtSpace(timeRange.start, space),
-      end_time: formatInISOTimeAtSpace(timeRange.end, space),
-      time_segment_groups: report.settings.timeSegmentGroupId,
+      order: 'desc',
       page_size: 1000,
-    });
-  });
+      time_segment_groups: report.settings.timeSegmentGroupId,
+    }
+  );
+  const dailyCounts = dailyCountsPromise.reverse();
 
   // Fetch the count with the spaces/:id/counts endpoint with an interval of 5 minutes,
   // including the relevant start_time, end_time, and time segment group.
-  const minutelyCountsPromise = fetchAllPages(page => {
-    return core.spaces.counts({
-      id: report.settings.spaceId,
+  const minutelyCountsPromise = await requestCountsForLocalRange(
+    space,
+    formatInISOTimeAtSpace(timeRange.start, space),
+    formatInISOTimeAtSpace(timeRange.end, space),
+    {
       interval: '5m',
-      start_time: formatInISOTimeAtSpace(timeRange.start, space),
-      end_time: formatInISOTimeAtSpace(timeRange.end, space),
-      time_segment_groups: report.settings.timeSegmentGroupId,
-      page,
+      order: 'desc',
       page_size: 1000,
-    });
-  });
-
-  // Both requests happen in paralell, and data is returned
-  const [dailyCounts, minutelyCounts] = await Promise.all([dailyCountsPromise, minutelyCountsPromise]);
+      time_segment_groups: report.settings.timeSegmentGroupId,
+    }
+  );
+  const minutelyCounts = minutelyCountsPromise.reverse();
 
   // Group together all counts fetched into buckets for each day.
   const minutelyBucketsByDay = minutelyCounts.reduce((acc, bucket) => {
@@ -167,6 +168,7 @@ export default async function averageTimeSegmentBreakdown(report) {
 
   // Calculate the daily average number of visitors
   const dailyAverage = calculateDailyAverage(dailyCounts);
+
 
   // Calculate the "average day" values that are plotted on the chart
   const averageValues = calculateAverageValues(space, minutelyBucketsByDay, minutelyCounts);

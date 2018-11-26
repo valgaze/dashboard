@@ -1,6 +1,6 @@
-import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
 import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index';
-import { formatInISOTimeAtSpace } from '../../../../helpers/space-time-utilities/index';
+import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
+import { formatInISOTimeAtSpace, requestCountsForLocalRange } from '../../../../helpers/space-time-utilities/index';
 import { core } from '../../../../client';
 
 import { convertTimeRangeToDaysAgo } from './helpers';
@@ -19,16 +19,17 @@ export default async function dailyVisitsPerSegment(report) {
   // single space with an interval of a day, passing the given time range, and the given time
   // segment group.
   const countsPerTimeSegmentPromise = Promise.all(report.settings.timeSegmentGroupIds.map(tsgId => {
-    return fetchAllPages(page => {
-      return core.spaces.counts({
-        id: report.settings.spaceId,
+    return requestCountsForLocalRange(
+      space,
+      formatInISOTimeAtSpace(timeRange.start, space),
+      formatInISOTimeAtSpace(timeRange.end, space),
+      {
         interval: '1d',
-        start_time: formatInISOTimeAtSpace(timeRange.start, space),
-        end_time: formatInISOTimeAtSpace(timeRange.end, space),
-        time_segment_groups: tsgId,
+        order: 'desc',
         page_size: 1000,
-      });
-    });
+        time_segment_groups: tsgId,
+      }
+    )
   }));
 
   const [countsPerTimeSegment, timeSegmentGroupsUnprocessed] = await Promise.all([
@@ -44,7 +45,7 @@ export default async function dailyVisitsPerSegment(report) {
   // - Store this into data[G][D]
   const data = report.settings.timeSegmentGroupIds.map((timeSegmentGroupId, index) => {
     const timeSegmentGroupData = [];
-    for (let day = timeRange.start.clone(); day.isSameOrBefore(timeRange.end); day = day.clone().add(1, 'day')) {
+    for (let day = timeRange.start.clone(); day.isBefore(timeRange.end); day = day.clone().add(1, 'day')) {
       const countInBucket = countsPerTimeSegment[index].find(
         count => count.timestamp.startsWith(day.format('YYYY-MM-DD'))
       );
