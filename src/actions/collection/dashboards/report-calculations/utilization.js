@@ -57,12 +57,15 @@ export default async function utilization(report) {
     // Calculate the approximate utilization for each space by totalling all the count values in the
     // buckets, and dividing this value by the number of buckets.
     const utilizationsFromCountBuckets = countsBySpace[spaceId].responseData.map(i => i.interval.analytics.utilization / 100);
-    const total = utilizationsFromCountBuckets.reduce((a, b) => a + b, 0);
+    const averageUtilization = (
+      utilizationsFromCountBuckets.reduce((a, b) => a + b, 0)
+        / utilizationsFromCountBuckets.length
+    );
 
     utilizations.push({
       id: space.id,
       name: space.name,
-      utilization: total / utilizationsFromCountBuckets.length,
+      utilization: averageUtilization,
     });
   }
 
