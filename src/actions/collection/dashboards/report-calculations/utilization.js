@@ -1,4 +1,3 @@
-import moment from 'moment';
 import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
 import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index';
 import {
