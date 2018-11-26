@@ -160,11 +160,11 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, par
       gap: false
     });
 
-    // Adjust the next interval to shift to align with the new offset, if requesting weeks or days
-    if (['w', 'd'].includes(params.interval.slice(-1))) {
+    // If querying days or weeks, shift the next interval to align with the new offset
+    if (['d', 'w'].indexOf(params.interval.slice(-1)) > -1) {
       const shiftMinutes = tz.offsets[transition.index - 1] - tz.offsets[transition.index];
       const shift = moment.duration(shiftMinutes, 'minutes');
-      lastInterval = reverse ? lastInterval.subtract(shift) : lastInterval.add(shift);
+      reverse ? lastInterval.subtract(shift) : lastInterval.add(shift);
     }
 
     // If there is a gap before the next interval, it will need to be fetched separately
@@ -195,7 +195,6 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, par
 
 export async function requestCountsForLocalRange(space, start, end, params={}) {
   const subranges = splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, params);
-  
   let results = [];
   for (const subrange of subranges) {
     const subrangeData = await fetchAllPages(page => (
@@ -208,7 +207,7 @@ export async function requestCountsForLocalRange(space, start, end, params={}) {
         ...params,
       })
     ));
-    if (subrange.gap) {
+    if (subrange.gap && subrangeData.length > 0) {
       const lastBucket = results.pop();
       const gapBucket = subrangeData[0];
       lastBucket.interval.analytics.entrances += gapBucket.interval.analytics.entrances;

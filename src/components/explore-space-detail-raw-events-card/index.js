@@ -63,7 +63,7 @@ export default class VisualizationSpaceDetailRawEventsCard extends React.Compone
       const preData = await core.spaces.events({
         id: space.id,
         start_time: formatInISOTimeAtSpace(day.clone().startOf('day'), space),
-        end_time: formatInISOTimeAtSpace(day.clone().endOf('day'), space),
+        end_time: formatInISOTimeAtSpace(day.clone().startOf('day').add(1, 'day'), space),
         time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
         page: page,
         page_size: pageSize,
