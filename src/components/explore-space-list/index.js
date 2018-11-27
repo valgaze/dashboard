@@ -512,7 +512,7 @@ export class ExploreSpaceList extends React.Component {
                       {
                         space.capacity !== null ?
                           <span>{space.capacity}</span> :
-                          <a>{document.body && document.body.clientWidth > gridVariables.screenSmMin ? 'Set capacity' : 'Set'}</a>
+                          <a href=''>{document.body && document.body.clientWidth > gridVariables.screenSmMin ? 'Set capacity' : 'Set'}</a>
                       }
                     </td>
                     <td className="explore-space-list-item-utilization">

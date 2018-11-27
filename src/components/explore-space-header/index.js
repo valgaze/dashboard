@@ -42,6 +42,7 @@ export function ExploreSpaceHeader({
               {space.capacity ? <span>
                 Capacity: {space.capacity} <a
                   className="explore-space-header-capacity-update-link"
+                  href=''
                   onClick={() => {
                     return onOpenModal('set-capacity', {space});
                   }}
@@ -49,6 +50,7 @@ export function ExploreSpaceHeader({
               </span> : <span>
                 <a
                   className="explore-space-header-capacity-set-link"
+                  href=''
                   onClick={() => {
                     return onOpenModal('set-capacity', {space});
                   }}
