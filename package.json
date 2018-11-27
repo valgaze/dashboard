@@ -64,6 +64,7 @@
   "devDependencies": {
     "concurrently": "^3.4.0",
     "enzyme": "^2.9.1",
+    "jest-resolve": "^23.6.0",
     "mockdate": "^2.0.2",
     "node-sass": "^4.9.4",
     "react-scripts": "2.0.3",
