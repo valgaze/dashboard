@@ -7,6 +7,7 @@ import comparativePerformance from './report-calculations/comparative-performanc
 import nextWeekForecast from './report-calculations/next-week-forecast';
 import utilization from './report-calculations/utilization';
 import hourlyBreakdown from './report-calculations/hourly-breakdown';
+import wastedSpace from './report-calculations/wasted-space';
 // import utilization from './report-calculations/utilization';
 
 export const COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE = 'COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE';
@@ -22,6 +23,7 @@ const REPORT_TYPE_TO_FUNCTION = {
   NEXT_WEEK: nextWeekForecast,
   UTILIZATION: utilization,
   HOURLY_BREAKDOWN: hourlyBreakdown,
+  WASTED_SPACE: wastedSpace,
 };
 
 export default function collectionDashboardsCalculateReportData(reports) {

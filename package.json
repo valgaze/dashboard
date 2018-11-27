@@ -40,6 +40,7 @@
     "@density/ui-report-surpassed-capacity": "^0.3.1",
     "@density/ui-report-time-segment-breakdown": "^0.6.0",
     "@density/ui-report-total-visits": "^0.3.0",
+    "@density/ui-report-wasted-space": "^0.2.0",
     "@density/ui-report-utilization": "0.0.1",
     "@density/ui-report-total-visits-rollup": "^0.1.1",
     "@density/ui-report-wrapper": "^0.5.1",
