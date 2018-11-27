@@ -22,10 +22,6 @@ export default async function totalVisitsRollup(report) {
 
   const spaces = allSpaces.filter(space => report.settings.spaceIds.indexOf(space.id) >= 0);
 
-  const timeSegmentGroup = await core.time_segment_groups.get({
-    id: report.settings.timeSegmentGroupId
-  }).then(objectSnakeToCamel);
-
   // For each space, fetch counts data for the given time range. A single bucket should be returned
   // for each request, as the interval should be the same size as the time range requested.
   const visitsBySpace = {
@@ -82,7 +78,6 @@ export default async function totalVisitsRollup(report) {
     title: report.name,
     startDate: displayedTimeRange.start,
     endDate: displayedTimeRange.end,
-    segmentName: timeSegmentGroup.name,
 
     mode: REPORT_SETTINGS_MODE_TO_COMPONENT_MODE[report.settings.mode],
     visits: visits,
