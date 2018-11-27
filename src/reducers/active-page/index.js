@@ -2,7 +2,6 @@ import { ROUTE_TRANSITION_LOGIN } from '../../actions/route-transition/login';
 import { ROUTE_TRANSITION_EXPLORE_SPACE_LIST } from '../../actions/route-transition/explore-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_LIST } from '../../actions/route-transition/live-space-list';
 import { ROUTE_TRANSITION_LIVE_SPACE_DETAIL } from '../../actions/route-transition/live-space-detail';
-import { ROUTE_TRANSITION_ENVIRONMENT_SPACE } from '../../actions/route-transition/environment-space';
 import { ROUTE_TRANSITION_ACCOUNT } from '../../actions/route-transition/account';
 import { ROUTE_TRANSITION_DEV_WEBHOOK_LIST } from '../../actions/route-transition/dev-webhook-list';
 import { ROUTE_TRANSITION_DEV_TOKEN_LIST } from '../../actions/route-transition/dev-token-list';
@@ -24,8 +23,6 @@ export default function activePage(state=initialState, action) {
   switch (action.type) {
   case ROUTE_TRANSITION_LOGIN:
     return "LOGIN";
-  case ROUTE_TRANSITION_ENVIRONMENT_SPACE:
-    return "ENVIRONMENT_SPACE";
 
   case ROUTE_TRANSITION_LIVE_SPACE_LIST:
     return "LIVE_SPACE_LIST";

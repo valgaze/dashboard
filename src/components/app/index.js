@@ -16,7 +16,6 @@ import ExploreSpaceTrends from '../explore-space-trends/index';
 import ExploreSpaceDaily from '../explore-space-daily/index';
 import ExploreSpaceDataExport from '../explore-space-data-export/index';
 import Login from '../login/index';
-import Environment from '../environment/index';
 import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
@@ -79,8 +78,6 @@ function ActivePage({activePage, settings}) {
     return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceDaily />;
   case "EXPLORE_SPACE_DATA_EXPORT":
     return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceDataExport />;
-  case "ENVIRONMENT_SPACE":
-    return <Environment />;
   case "ACCOUNT":
     return <Account />;
   case "DEV_WEBHOOK_LIST":
