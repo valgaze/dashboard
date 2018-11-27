@@ -33,6 +33,10 @@ import moment from 'moment';
 // Store at maximum 500 events per space
 const EVENT_QUEUE_LENGTH = 500;
 
+// How long should data be fetched when running utilization calculations?
+const DATA_DURATION_WEEK = 'DATA_DURATION_WEEK',
+      DATA_DURATION_MONTH = 'DATA_DURATION_MONTH';
+
 const initialState = {
   data: [],
   loading: true,
@@ -45,7 +49,7 @@ const initialState = {
     parent: null,
 
     timeSegmentGroupId: DEFAULT_TIME_SEGMENT_GROUP.id,
-    includeWeekends: false,
+    dataDuration: DATA_DURATION_WEEK,
 
     // Used for date ranges
     startDate: null,
