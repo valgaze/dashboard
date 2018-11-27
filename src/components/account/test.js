@@ -70,7 +70,7 @@ describe('Accounts page', function() {
     />);
 
     // Click change password
-    component.find('.account-edit-button').simulate('click');
+    component.find('.account-edit-button').first().simulate('click');
 
     // Always show full-name and nickname inputs
     assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
@@ -92,7 +92,7 @@ describe('Accounts page', function() {
     />);
 
     // Click "edit" link
-    component.find('.account-edit-button').simulate('click');
+    component.find('.account-edit-button').first().simulate('click');
 
     // Ensure fullname and nickname inputs are visible
     assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
@@ -104,7 +104,7 @@ describe('Accounts page', function() {
     });
 
     // Click cancel
-    component.find('.account-edit-button').simulate('click');
+    component.find('.account-edit-button').first().simulate('click');
 
     // Ensure that the original value is in the box
     assert.equal(component.find('.account-nickname-container input').prop('value'), user.data.nickname);
@@ -129,7 +129,7 @@ describe('Accounts page', function() {
     />);
 
     // Click "edit" link
-    component.find('.account-edit-button').simulate('click');
+    component.find('.account-edit-button').first().simulate('click');
 
     // Ensure fullname and nickname inputs are visible
     assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
@@ -150,7 +150,7 @@ describe('Accounts page', function() {
     });
 
     // Click submit
-    component.find('.account-edit-button').simulate('click');
+    component.find('.account-edit-button').first().simulate('click');
 
     // Ensure that the error was reported
     assert.equal(component.find('.error-bar').length, 1);
