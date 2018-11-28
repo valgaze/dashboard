@@ -42,52 +42,6 @@ const timeSegmentGroups = {
 };
 
 describe('explore space list', function() {
-  // Stub out the data fetching api call. Use the same data for each test for now and if this needs
-  // to change later I can address then.
-  beforeEach(() => {
-    sinon.stub(global, 'fetch').resolves({
-      ok: true,
-      status: 200,
-      clone() { return this; },
-      json: () => Promise.resolve({
-        total: 3,
-        next: null,
-        results: {
-          spc_1: [
-            {
-              count: 0,
-              interval: {
-                start: "2017-01-01T03:55:00Z",
-                end: "2017-01-01T03:59:59Z",
-                analytics: {min: 0, max: 0},
-              },
-              timestamp: "2017-01-01T03:55:00Z",
-            },
-            {
-              count: 1,
-              interval: {
-                start: "2017-01-01T04:00:00Z",
-                end: "2017-01-01T04:05:00Z",
-                analytics: {min: 0, max: 1},
-              },
-              timestamp: "2017-01-01T04:00:00Z",
-            },
-            {
-              count: 2,
-              interval: {
-                start: "2017-01-01T04:05:00Z",
-                end: "2017-01-01T04:10:00Z",
-                analytics: {min: 0, max: 2},
-              },
-              timestamp: "2017-01-01T04:00:00Z",
-            },
-          ],
-        },
-      }),
-    });
-  });
-  afterEach(() => global.fetch.restore());
-
   it('should render explore list space list (smoke test)', async function() {
     // Render the component
     const component = mount(<ExploreSpaceList
@@ -107,23 +61,21 @@ describe('explore space list', function() {
       }}
       activeModal={{name: null, data: null}}
       timeSegmentGroups={timeSegmentGroups}
+      calculatedData={{
+        state: 'COMPLETE',
+        data: {
+          spaceUtilizations: {
+            'spc_1': 0.5,
+          },
+          spaceCounts: {
+            'spc_1': [],
+          },
+        },
+      }}
     />);
 
     // Ensure that a single space was rendered
     assert.equal(component.find('.explore-space-list-item.body-row').length, 1);
-
-    // No utilization should be rendered, a dash should be rendered instead.
-    assert.equal(
-      component
-      .find('.explore-space-list-item.body-row')
-      .first()
-      .find('PercentageBar')
-      .props().percentage,
-      0
-    );
-
-    // Wait for fetch call to complete.
-    await timeout(100);
 
     // Fetch the first space rendered. Ensure that it's found.
     const firstSpace = component.find('.explore-space-list-item.body-row').first();
@@ -134,10 +86,20 @@ describe('explore space list', function() {
 
     // Verify the capacity was rendered.
     assert.equal(firstSpace.find('.explore-space-list-item-capacity').text(), '5');
+
+    // Verify the utilization was rendered
+    assert.equal(
+      component
+      .find('.explore-space-list-item.body-row')
+      .first()
+      .find('PercentageBar')
+      .props().percentage,
+      0.5
+    );
   });
   it(`should render a set capacity link if the space doesn't have a capacity set`, async function() {
     // Render the component
-    const component = shallow(<ExploreSpaceList
+    const component = mount(<ExploreSpaceList
       spaces={{
         filters: {search: ''},
         data: [
@@ -146,7 +108,7 @@ describe('explore space list', function() {
             spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
-            capacity: null, /* no capacity */
+            capacity: null, /* XXX: NO CAPACITY */
             timeZone: 'America/New_York',
           },
         ],
@@ -154,22 +116,27 @@ describe('explore space list', function() {
       }}
       activeModal={{name: null, data: null}}
       timeSegmentGroups={timeSegmentGroups}
+      calculatedData={{
+        state: 'COMPLETE',
+        data: {
+          spaceUtilizations: {
+            'spc_1': 0.5,
+          },
+          spaceCounts: {
+            'spc_1': [],
+          },
+        },
+      }}
     />);
 
     // Ensure that a single space was rendered
     assert.equal(component.find('.explore-space-list-item.body-row').length, 1);
 
-    // Ensure that the single space has a set capacity link
-    assert.equal(
-      component.find('.explore-space-list-item.body-row .explore-space-list-item-capacity a').first().text(),
-      'Set'
-    );
+    // Verify set capacity link was rendered
+    const firstSpace = component.find('.explore-space-list-item.body-row').first();
+    assert.equal(firstSpace.find('.explore-space-list-item-capacity').text(), 'Set');
   });
   it(`should show an error in the error bar when something bad happens in fetchData`, async function() {
-    // Ensure that the request to the server fails.
-    global.fetch.restore();
-    sinon.stub(global, 'fetch').rejects(new Error('Fail!'));
-
     // Render the component
     const component = mount(<ExploreSpaceList
       spaces={{
@@ -180,7 +147,7 @@ describe('explore space list', function() {
             spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
-            capacity: null, /* no capacity */
+            capacity: null, /* XXX: NO CAPACITY */
             timeZone: 'America/New_York',
           },
         ],
@@ -188,60 +155,18 @@ describe('explore space list', function() {
       }}
       activeModal={{name: null, data: null}}
       timeSegmentGroups={timeSegmentGroups}
-    />);
-
-    // Wait for the promise to reject.
-    await timeout(50);
-
-    // Ensure that the error bar shows an error
-    assert.equal(component.find('.error-bar-message').text(), 'Could not fetch space counts: Fail!');
-
-    // Ensure that all the filters are disabled
-    assert.equal(component.find('.explore-space-list-search-box InputBox').props().disabled, true);
-    assert.equal(
-      component.find('.explore-space-list-time-segment-selector InputBox').props().disabled,
-      true,
-    );
-    assert.equal(
-      component.find('.explore-space-list-duration-selector InputBox').props().disabled,
-      1,
-    );
-  });
-  it('should ensure that a utilization bar that is over 100% only ever renders at 100% (and never overflows)', async function() {
-    // Render the component
-    const component = mount(<ExploreSpaceList
-      spaces={{
-        filters: {search: ''},
-        data: [
-          {
-            id: 'spc_1',
-            spaceType: 'space',
-            name: 'My Space',
-            currentCount: 2,
-            capacity: 5,
-            timeZone: 'America/New_York',
-          },
-        ],
-        events: {},
+      calculatedData={{
+        state: 'ERROR',
+        data: {
+          spaceCounts: {},
+          spaceUtilizations: {},
+        },
+        error: 'Error message here',
       }}
-      activeModal={{name: null, data: null}}
-      timeSegmentGroups={timeSegmentGroups}
     />);
-
-    // Set capacities to known values. This is important to make sure the sorting order tests work
-    // (and to make it easy to validate if they work)
-    component.setState({
-      spaceUtilizations: {
-        spc_1: 1.5, /* 150% utilized, which is > 100% */
-      },
-    });
 
     // Ensure that a single space was rendered
-    assert.equal(component.find('.explore-space-list-item.body-row').length, 1);
-
-    // Fetch the first space rendered. Ensure that it's found.
-    const firstSpace = component.find('.explore-space-list-item.body-row').first();
-    assert(firstSpace);
+    assert.equal(component.find('ErrorBar').props().message, 'Error message here');
   });
   it('should disable filters when the space explore card is loading', async function() {
     // Render the component
@@ -254,7 +179,7 @@ describe('explore space list', function() {
             spaceType: 'space',
             name: 'My Space',
             currentCount: 2,
-            capacity: 5,
+            capacity: null, /* XXX: NO CAPACITY */
             timeZone: 'America/New_York',
           },
         ],
@@ -262,10 +187,15 @@ describe('explore space list', function() {
       }}
       activeModal={{name: null, data: null}}
       timeSegmentGroups={timeSegmentGroups}
+      calculatedData={{
+        state: 'LOADING',
+        data: {
+          spaceCounts: {},
+          spaceUtilizations: {},
+        },
+        error: 'Error message here',
+      }}
     />);
-
-    // Put the component into a loading state
-    component.setState({ view: 'LOADING' });
 
     // Make sure filter selectors are disabled - we don't want people changing the filters while
     // loading!
@@ -277,49 +207,6 @@ describe('explore space list', function() {
       component.find('.explore-space-list-duration-selector InputBox').props().disabled,
       true,
     );
-  });
-
-  it('should allow adjustment of the utilization calculation to use a different time segment', async function() {
-    // Render the component
-    const component = mount(<ExploreSpaceList
-      spaces={{
-        filters: {search: ''},
-        data: [
-          {
-            id: 'spc_1',
-            spaceType: 'space',
-            name: 'My Space',
-            currentCount: 2,
-            capacity: 5,
-            timeZone: 'America/New_York',
-          },
-        ],
-        events: {},
-      }}
-      activeModal={{name: null, data: null}}
-      timeSegmentGroups={timeSegmentGroups}
-    />);
-
-    await timeout(100);
-
-    // Verify that the component is finished loading
-    assert.equal(component.state().view, 'VISIBLE');
-
-    // Then, switch the active time segment.
-    component
-      .find('.explore-space-list-time-segment-selector #input-box-select-tsg_575378014376820745')
-      .props().onClick();
-
-    // Verify that clicking the select box item put the card into a loading state
-    assert.equal(component.state().view, 'LOADING');
-
-    await timeout(100);
-
-    // Verify that the component is finished loading
-    assert.equal(component.state().view, 'VISIBLE');
-
-    // Verify that clicking the switch adjusted the `timeSegmentGroupId` property
-    assert.equal(component.state().timeSegmentGroupId, 'tsg_575378014376820745');
   });
 
   describe('sorting of spaces', function() {
@@ -358,6 +245,22 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+              'spc_2': 0.5,
+              'spc_3': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+              'spc_3': [],
+            },
+          },
+        }}
       />);
 
       // Ensure that two spaces were rendered
@@ -404,6 +307,22 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+              'spc_2': 0.5,
+              'spc_3': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+              'spc_3': [],
+            },
+          },
+        }}
       />);
 
       // Ensure that three spaces were rendered
@@ -463,6 +382,24 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+              'spc_2': 0.5,
+              'spc_3': 0.5,
+              'spc_4': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+              'spc_3': [],
+              'spc_4': [],
+            },
+          },
+        }}
       />);
 
       // Ensure that three spaces were rendered
@@ -538,17 +475,29 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              spc_2: 0.1, /* mm My Space */
+              spc_3: 0.2, /* zz My Space */
+              spc_1: 0.8, /* aa My Space */
+              spc_4: undefined, /* rr My Space */
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+              'spc_3': [],
+              'spc_4': [],
+            },
+          },
+        }}
       />);
 
       // Set capacities to known values. This is important to make sure the sorting order tests work
       // (and to make it easy to validate if they work)
       component.setState({
-        spaceUtilizations: {
-          spc_2: 0.1, /* mm My Space */
-          spc_3: 0.2, /* zz My Space */
-          spc_1: 0.8, /* aa My Space */
-          spc_4: undefined, /* rr My Space */
-        },
       });
 
       // Ensure that three spaces were rendered
@@ -607,6 +556,18 @@ describe('explore space list', function() {
         activeModal={{name: null, data: null}}
         onOpenModal={onOpenModal}
         onSetCapacity={onSetCapacity}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+            },
+          },
+        }}
       />);
 
       // Ensure that a single space was rendered
@@ -629,10 +590,6 @@ describe('explore space list', function() {
       // Submit the modal
       component.setProps({activeModal: {name: 'set-capacity', data: {space: SPACE}}});
       component.find('ExploreSetCapacityModal').props().onSubmit();
-
-      // Verify that the component goes back into a loading state, to refetch data now that the
-      // capacity has been set (changing the capacity probably means a change in utilization)
-      assert.equal(component.state().view, 'LOADING');
     });
   });
 
@@ -668,6 +625,19 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+            },
+          },
+        }}
       />);
 
       // Load in some fake count data
@@ -683,7 +653,7 @@ describe('explore space list', function() {
       // Ensure that the header uses the right language to describe the 2-space unfiltered
       // scenario.
       assert.equal(
-        component.find('.explore-space-list-summary-header').text(),
+        component.find('.explore-space-list-summary-header').first().text(),
         `Your 2 spaces have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
@@ -706,6 +676,18 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+            },
+          },
+        }}
       />);
 
       // Load in some fake count data
@@ -721,7 +703,7 @@ describe('explore space list', function() {
       // Ensure that the header uses the right language to describe the 1-space unfiltered
       // scenario.
       assert.equal(
-        component.find('.explore-space-list-summary-header').text(),
+        component.find('.explore-space-list-summary-header').first().text(),
         `Your 1 space has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
@@ -752,6 +734,20 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+              'spc_2': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+            },
+          },
+        }}
       />);
 
       // Load in some fake count data
@@ -767,7 +763,7 @@ describe('explore space list', function() {
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
-        component.find('.explore-space-list-summary-header').text(),
+        component.find('.explore-space-list-summary-header').first().text(),
         `These 2 spaces have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
@@ -790,6 +786,18 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+            },
+          },
+        }}
       />);
 
       // Load in some fake count data
@@ -805,7 +813,7 @@ describe('explore space list', function() {
       // Ensure that the header uses the right language to describe the 1-space filtered
       // scenario.
       assert.equal(
-        component.find('.explore-space-list-summary-header').text(),
+        component.find('.explore-space-list-summary-header').first().text(),
         `This 1 space has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
@@ -847,6 +855,22 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+              'spc_2': 0.5,
+              'spc_3': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+              'spc_3': [],
+            },
+          },
+        }}
       />);
 
       // Load in some fake count data
@@ -862,7 +886,7 @@ describe('explore space list', function() {
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
-        component.find('.explore-space-list-summary-header').text(),
+        component.find('.explore-space-list-summary-header').first().text(),
         `These 2 spaces on My Floor have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
@@ -904,6 +928,22 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+              'spc_2': 0.5,
+              'spc_3': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+              'spc_3': [],
+            },
+          },
+        }}
       />);
 
       // Load in some fake count data
@@ -919,7 +959,7 @@ describe('explore space list', function() {
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
-        component.find('.explore-space-list-summary-header').text(),
+        component.find('.explore-space-list-summary-header').first().text(),
         `These 2 spaces in My Building have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
@@ -961,6 +1001,22 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+              'spc_2': 0.5,
+              'spc_3': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+              'spc_3': [],
+            },
+          },
+        }}
       />);
 
       // Load in some fake count data
@@ -976,7 +1032,7 @@ describe('explore space list', function() {
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
-        component.find('.explore-space-list-summary-header').text(),
+        component.find('.explore-space-list-summary-header').first().text(),
         `This 1 space in My Campus has seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
@@ -1018,6 +1074,22 @@ describe('explore space list', function() {
         }}
         activeModal={{name: null, data: null}}
         timeSegmentGroups={timeSegmentGroups}
+
+        calculatedData={{
+          state: 'COMPLETE',
+          data: {
+            spaceUtilizations: {
+              'spc_1': 0.5,
+              'spc_2': 0.5,
+              'spc_3': 0.5,
+            },
+            spaceCounts: {
+              'spc_1': [],
+              'spc_2': [],
+              'spc_3': [],
+            },
+          },
+        }}
       />);
 
       // Load in some fake count data
@@ -1033,7 +1105,7 @@ describe('explore space list', function() {
       // Ensure that the header uses the right language to describe the 2-space filtered
       // scenario.
       assert.equal(
-        component.find('.explore-space-list-summary-header').text(),
+        component.find('.explore-space-list-summary-header').first().text(),
         `Your 2 spaces in My Building have seen 0 visitors during ${DEFAULT_TIME_SEGMENT_GROUP.name} this past week`
       );
     });
@@ -1058,59 +1130,94 @@ describe('explore space list', function() {
       }}
       activeModal={{name: null, data: null}}
       timeSegmentGroups={timeSegmentGroups}
+
+      /* Add a couple empty count buckets */
+      calculatedData={{
+        spaceCounts: {
+        },
+      }}
+      /* Add a couple empty count buckets */
+      calculatedData={{
+        state: 'COMPLETE',
+        data: {
+          spaceUtilizations: {
+            'spc_1': 0.5,
+          },
+          spaceCounts: {
+            spc_1: [
+              {
+                timestamp: '2018-05-08T19:36:48.562Z',
+                timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
+                interval: {analytics: {entrances: 0, exits: 0}},
+              },
+              {
+                timestamp: '2018-05-08T19:36:48.562Z',
+                timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
+                interval: {analytics: {entrances: 0, exits: 0}},
+              },
+              {
+                timestamp: '2018-05-09T19:36:48.562Z',
+                timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), /* optimization */
+                interval: {analytics: {entrances: 0, exits: 0}},
+              },
+            ],
+          },
+        },
+      }}
     />);
 
-    // Add a couple empty count buckets
-    component.setState({
-      spaceCounts: {
-        spc_1: [
-          {
-            timestamp: '2018-05-08T19:36:48.562Z',
-            timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
-            interval: {analytics: {entrances: 0, exits: 0}},
-          },
-          {
-            timestamp: '2018-05-08T19:36:48.562Z',
-            timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
-            interval: {analytics: {entrances: 0, exits: 0}},
-          },
-          {
-            timestamp: '2018-05-09T19:36:48.562Z',
-            timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), /* optimization */
-            interval: {analytics: {entrances: 0, exits: 0}},
-          },
-        ],
-      },
-    });
-
-    // And verify that the total number of ingresses is zero
+    // Verify that the total number of ingresses is zero
     assert.equal(component.instance().calculateTotalNumberOfIngressesForSpaces(), 0);
 
-    // Add a few ingresses into the data
-    component.setState({
-      timeSegment: 'WHOLE_DAY',
-      spaceCounts: {
-        spc_1: [
+    // Render the component, with more ingresses
+    const component2 = mount(<ExploreSpaceList
+      spaces={{
+        filters: {search: ''},
+        data: [
           {
-            timestamp: '2018-05-07T19:36:48.562Z',
-            timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
-            interval: {analytics: {entrances: 6, exits: 0}},
-          },
-          {
-            timestamp: '2018-05-08T19:36:48.562Z',
-            timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
-            interval: {analytics: {entrances: 0, exits: 0}},
-          },
-          {
-            timestamp: '2018-05-09T19:36:48.562Z',
-            timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), /* optimization */
-            interval: {analytics: {entrances: 1, exits: 0}},
+            id: 'spc_1',
+            spaceType: 'space',
+            name: 'My Space',
+            currentCount: 2,
+            capacity: 5,
+            timeZone: 'America/New_York',
           },
         ],
-      },
-    });
+        events: {},
+      }}
+      activeModal={{name: null, data: null}}
+      timeSegmentGroups={timeSegmentGroups}
 
+      /* Add a couple empty count buckets */
+      calculatedData={{
+        state: 'COMPLETE',
+        data: {
+          spaceUtilizations: {
+            'spc_1': 0.5,
+          },
+          spaceCounts: {
+            spc_1: [
+              {
+                timestamp: '2018-05-07T19:36:48.562Z',
+                timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
+                interval: {analytics: {entrances: 6, exits: 0}},
+              },
+              {
+                timestamp: '2018-05-08T19:36:48.562Z',
+                timestampAsMoment: moment.utc('2018-05-08T19:36:48.562Z'), /* optimization */
+                interval: {analytics: {entrances: 0, exits: 0}},
+              },
+              {
+                timestamp: '2018-05-09T19:36:48.562Z',
+                timestampAsMoment: moment.utc('2018-05-09T19:36:48.562Z'), /* optimization */
+                interval: {analytics: {entrances: 1, exits: 0}},
+              },
+            ],
+          },
+        },
+      }}
+    />);
     // And verify that the number of ingresses reflected the change in data
-    assert.equal(component.instance().calculateTotalNumberOfIngressesForSpaces(), 7);
+    assert.equal(component2.instance().calculateTotalNumberOfIngressesForSpaces(), 7);
   });
 });
