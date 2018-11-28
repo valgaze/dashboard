@@ -11,7 +11,15 @@ const initialModuleState = {
 };
 
 const initialState = {
-  calculations: {},
+  calculations: {
+    spaceList: {
+      ...initialModuleState,
+      data: {
+        spaceCounts: {},
+        spaceUtilizations: {},
+      },
+    },
+  },
 };
 
 export default function exploreData(state=initialState, action) {
@@ -43,7 +51,11 @@ export default function exploreData(state=initialState, action) {
       ...state,
       calculations: {
         ...state.calculations,
-        [action.calculation]: { ...state.calculations[action.calculation], state: 'COMPLETE' },
+        [action.calculation]: {
+          ...state.calculations[action.calculation],
+          data: action.data,
+          state: 'COMPLETE',
+        },
       },
     };
 

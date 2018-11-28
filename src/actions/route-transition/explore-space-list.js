@@ -48,7 +48,6 @@ export default function routeTransitionExploreSpaceList() {
       dispatch(collectionSpacesSet(spaces));
     }
 
-
     // Load a list of all time segment groups, which is required in order to render in the time
     // segment list.
     errorThrown = false;
@@ -65,16 +64,21 @@ export default function routeTransitionExploreSpaceList() {
       dispatch(collectionTimeSegmentGroupsSet(timeSegmentGroups));
     }
 
+    dispatch(calculate());
+  };
+}
 
-    dispatch(exploreDataAddCalculation('dailyMetrics'));
-    dispatch(exploreDataCalculateDataLoading('dailyMetrics'));
+export function calculate() {
+  return async (dispatch, getState) => {
+    dispatch(exploreDataAddCalculation('spaceList'));
+    dispatch(exploreDataCalculateDataLoading('spaceList'));
+
+    const spacesToFetch = getState().spaces.data;
 
     // Next, do all utilization calculations for each space
     const { dataDuration, timeSegmentGroupId } = getState().spaces.filters;
 
     try {
-      const spacesToFetch = spaces;
-
       // Store if each space has a capacity and therefore can be used to calculate utilization.
       const canSpaceBeUsedToCalculateUtilization = spacesToFetch.reduce((acc, i) => ({...acc, [i.id]: i.capacity !== null}), {})
 
@@ -119,7 +123,7 @@ export default function routeTransitionExploreSpaceList() {
       // `.calculateTotalNumberOfEventsForSpaces` method or have to be performed again below in the
       // utilization calculation.
       for (const spaceId in data) {
-        const space = spaces.find(i => i.id === spaceId);
+        const space = spacesToFetch.find(i => i.id === spaceId);
 
 
         for (let ct = 0; ct < data[spaceId].length; ct++) {
@@ -136,7 +140,7 @@ export default function routeTransitionExploreSpaceList() {
         // If a space doesn't have a capacity, don't use it for calculating utilization.
         if (!canSpaceBeUsedToCalculateUtilization[spaceId]) { return acc; }
 
-        const space = spaces.find(i => i.id === spaceId);
+        const space = spacesToFetch.find(i => i.id === spaceId);
         const counts = data[spaceId];
 
         const groups = groupCountsByDay(counts, space);
@@ -148,16 +152,14 @@ export default function routeTransitionExploreSpaceList() {
         };
       }, {});
 
-      console.log('SPACE COUNTS', data, spaceUtilizations);
-
-      dispatch(exploreDataCalculateDataComplete('dailyMetrics', {
+      dispatch(exploreDataCalculateDataComplete('spaceList', {
         spaceCounts: data,
         spaceUtilizations,
       }));
     } catch (error) {
-      console.error('ERROR', error);
+      console.error(error);
       dispatch(
-        exploreDataCalculateDataError('dailyMetrics', `Could not fetch space counts: ${error.message}`)
+        exploreDataCalculateDataError('spaceList', `Could not fetch space counts: ${error.message}`)
       );
     }
   };

@@ -76,7 +76,7 @@ $explore-space-list-item-height: 43px;
 // Adjust the spacing around the `SortableGridHeader`.
 // This inverts the styles that are defaultly placed on a card body (padding all around the card
 // body) so that the hover background on each list item can extend to the edge of the card.
-.card .explore-space-list-card-body {
+.card .card-body.explore-space-list-card-body {
   margin-top: 5px;
   margin-bottom: 10px;
   padding-left: 0px;
