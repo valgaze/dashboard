@@ -38,6 +38,11 @@ export const ROUTE_TRANSITION_EXPLORE_SPACE_TRENDS = 'ROUTE_TRANSITION_EXPLORE_S
 
 export default function routeTransitionExploreSpaceTrends(id) {
   return async dispatch => {
+    // Prior to changing the active page, change the module state to be loading.
+    dispatch(exploreDataCalculateDataLoading('dailyMetrics'));
+    dispatch(exploreDataCalculateDataLoading('utilization'));
+
+    // Change the active page
     dispatch({ type: ROUTE_TRANSITION_EXPLORE_SPACE_TRENDS, id });
 
     // Load a list of all time segment groups, which is required in order to render in the time
