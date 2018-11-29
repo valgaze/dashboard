@@ -58,7 +58,7 @@ export default async function comparativePerformance(report) {
         end_time: formatInISOTimeAtSpace(lastEndDate, space),
         time_segment_groups: report.settings.timeSegmentGroupId,
         page,
-        page_size: 1000,
+        page_size: 5000,
       });
     }),
     fetchAllPages(page => { // "Previous" range
@@ -69,7 +69,7 @@ export default async function comparativePerformance(report) {
         end_time: formatInISOTimeAtSpace(previousEndDate, space),
         time_segment_groups: report.settings.timeSegmentGroupId,
         page,
-        page_size: 1000,
+        page_size: 5000,
       });
     }),
   ]);

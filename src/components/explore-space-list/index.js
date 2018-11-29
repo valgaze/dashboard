@@ -125,7 +125,7 @@ export class ExploreSpaceList extends React.Component {
           end_time: endDate,
           interval: '10m',
           page,
-          page_size: 1000,
+          page_size: 5000,
           time_segment_groups: timeSegmentGroupId === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroupId,
 
           // Pass this abortcontroller to the fetch call so that we can cancel the call if it's in

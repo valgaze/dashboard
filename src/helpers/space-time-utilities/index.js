@@ -203,7 +203,7 @@ export async function requestCountsForLocalRange(space, start, end, params={}) {
         start_time: formatInISOTime(subrange.start),
         end_time: formatInISOTime(subrange.end),
         page,
-        page_size: 1000,
+        page_size: 5000,
         ...params,
       })
     ));

@@ -119,7 +119,7 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
         // Fetch with a large page size to try to minimize the number of requests that will be
         // required.
         page,
-        page_size: 1000,
+        page_size: 5000,
       });
     });
 
