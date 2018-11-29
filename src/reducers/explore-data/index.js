@@ -19,6 +19,7 @@ const initialState = {
         spaceUtilizations: {},
       },
     },
+    dailyMetrics: { ...initialModuleState },
   },
 };
 

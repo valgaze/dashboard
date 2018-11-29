@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
 
 import moment from 'moment';
 import 'moment-timezone';
+
+import { calculateDailyMetrics } from '../../actions/route-transition/explore-space-trends';
+import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
@@ -75,130 +79,25 @@ export function isOutsideRange(startISOTime, datePickerInput, day) {
   return false;
 }
 
-export default class ExploreSpaceDetailDailyMetricsCard extends React.Component {
-  state = {
-    view: LOADING,
-    data: null,
-    dataSpaceId: null,
-
-    datePickerInput: null,
-    hoursOffsetFromUtc: 0,
-    metricToDisplay: 'entrances',
-
-    startDate: null,
-    endDate: null,
-    timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
-    timeSegment: DEFAULT_TIME_SEGMENT,
-  }
-
-  fetchData = async () => {
-    const { space } = this.props;
-    const { metricToDisplay, startDate, endDate, timeSegment, timeSegmentGroup } = this.state;
-
-    // Add timezone offset to both start and end times prior to querying for the count. Add a day
-    // to the end of the range to return a final bar of the data for the uncompleted current day.
-    const startTime = parseISOTimeAtSpace(startDate, space).startOf('day');
-    const endTime = parseISOTimeAtSpace(endDate, space).startOf('day').add(1, 'day');
-
-    // Fetch data from the server for the day-long window.
-    try {
-      const data = await requestCountsForLocalRange(
-        space,
-        formatInISOTimeAtSpace(startTime, space),
-        formatInISOTimeAtSpace(endTime, space),
-        {
-          interval: '1d',
-          order: 'asc',
-          page_size: 1000,
-          time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id
-        }
-      );
-
-      if (data.length > 0) {
-        this.setState({
-          view: VISIBLE,
-          dataSpaceId: space.id,
-          // Return the metric requested within the range of time.
-          data: data.filter(i => {
-            // Remove days from the dataset that are not in the time segment
-            const dayOfWeek = moment.utc(i.timestamp).tz(space.timeZone).day();
-            return timeSegment.days
-              .map(i => DAY_TO_INDEX[i])
-              .indexOf(dayOfWeek) !== -1;
-          }).map(i => ({
-            timestamp: i.timestamp,
-            value: (function(i, metric) {
-              switch (metric) {
-              case 'entrances':
-                return i.interval.analytics.entrances;
-              case 'exits':
-                return i.interval.analytics.exits;
-              case 'total-events':
-                return i.interval.analytics.events;
-              case 'peak-occupancy':
-                return i.interval.analytics.max;
-              default:
-                return false
-              }
-            })(i, metricToDisplay) || 0,
-          })),
-        });
-      } else {
-        this.setState({
-          view: EMPTY,
-          dataSpaceId: space.id,
-        });
-      }
-    } catch (error) {
-      this.setState({
-        view: ERROR,
-        error,
-        dataSpaceId: space.id,
-      });
-    }
-  }
-
-  // When a new start date and end data is received, attempt to refetch data.
-  componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.startDate && nextProps.endDate && (
-        nextProps.startDate !== this.state.startDate ||
-        nextProps.endDate !== this.state.endDate ||
-        nextProps.timeSegment !== this.state.timeSegment ||
-        nextProps.timeSegmentGroup !== this.state.timeSegmentGroup
-      )
-    ) {
-      this.setState({
-        view: LOADING,
-        data: null,
-        startDate: nextProps.startDate,
-        endDate: nextProps.endDate,
-        timeSegment: nextProps.timeSegment,
-        timeSegmentGroup: nextProps.timeSegmentGroup,
-      }, () => this.fetchData());
-    }
-  }
-
-  componentDidMount() {
-    this.componentWillReceiveProps(this.props);
-  }
-
+export class ExploreSpaceDetailDailyMetricsCard extends Component {
   render() {
-    const { space } = this.props;
     const {
-      view,
-      error,
-      metricToDisplay,
-      data,
+      spaces,
+      calculatedData,
+
+      space,
       startDate,
       endDate,
       timeSegmentGroup,
-    } = this.state;
+
+      onRefresh,
+      onChangeMetricToDisplay,
+    } = this.props;
 
     if (space) {
       return (
         <Card>
-          {view === LOADING ? <CardLoading indeterminate /> : null }
+          {calculatedData.state === 'LOADING' ? <CardLoading indeterminate /> : null }
 
           <CardHeader className="explore-space-detail-daily-metrics-card-header">
             <div className="explore-space-detail-daily-metrics-card-title">
@@ -231,28 +130,19 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
               </InfoPopup>
               <span
                 className={classnames('explore-space-detail-daily-metrics-card-refresh mid', {
-                  disabled: view !== VISIBLE,
+                  disabled: calculatedData.state !== 'COMPLETE',
                 })}
-                onClick={() => this.setState({
-                  view: LOADING,
-                  data: null,
-                }, () => this.fetchData())}
+                onClick={() => onRefresh(space)}
               >
-                <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+                <IconRefresh color={calculatedData.state === 'LOADING' ? 'gray' : 'primary'} />
               </span>
             </div>
             <div className="explore-space-detail-daily-metrics-card-metric-picker">
               <InputBox
                 type="select"
-                value={metricToDisplay}
-                disabled={view !== VISIBLE}
-                onChange={e => {
-                  this.setState({
-                    view: LOADING,
-                    data: null,
-                    metricToDisplay: e.id,
-                  }, () => this.fetchData());
-                }}
+                value={spaces.filters.metricToDisplay}
+                disabled={calculatedData.state !== 'COMPLETE'}
+                onChange={e => onChangeMetricToDisplay(space, e.id)}
                 choices={[
                   {id: "entrances", label: "Entrances"},
                   {id: "exits", label: "Exits"},
@@ -263,20 +153,17 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
             </div>
             <span
               className={classnames('explore-space-detail-daily-metrics-card-refresh end', {
-                disabled: view !== VISIBLE,
+                disabled: calculatedData.state !== 'COMPLETE',
               })}
-              onClick={() => this.setState({
-                view: LOADING,
-                data: null,
-              }, () => this.fetchData())}
+              onClick={() => onRefresh(space)}
             >
-              <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+              <IconRefresh color={calculatedData.state === 'LOADING' ? 'gray' : 'primary'} />
             </span>
           </CardHeader>
 
           <CardBody className="explore-space-detail-daily-metrics-card-body">
-            {view === VISIBLE ? (() => {
-              if (data.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
+            {calculatedData.state === 'COMPLETE' ? (() => {
+              if (calculatedData.data.metrics.length > GRAPH_TYPE_TRANSITION_POINT_IN_DAYS) {
                 // For more than two weeks of data, show the graph chart.
                 return <div className="large-timespan-chart">
                   <LineChartComponent
@@ -313,7 +200,7 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
                               case 'peak-occupancy': return 'Peak Occupancy';
                               default: return 'People';
                             }
-                          })(metricToDisplay);
+                          })(spaces.filters.metricToDisplay);
                           return `${Math.round(item.value)} ${unit}`;
                         }, 'top'),
                         bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
@@ -326,7 +213,7 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
                         bottomOverlayTopMargin: 40,
                         topOverlayBottomMargin: 20,
 
-                        topOverlayWidth: metricToDisplay === 'peak-occupancy' ? 180 : 150,
+                        topOverlayWidth: spaces.filters.metricToDisplay === 'peak-occupancy' ? 180 : 150,
                         topOverlayHeight: 42,
                         bottomOverlayWidth: 150,
                         bottomOverlayHeight: 42,
@@ -338,7 +225,7 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
                         name: 'default',
                         type: dataWaterline,
                         verticalBaselineOffset: 10,
-                        data: data.sort(
+                        data: calculatedData.data.metrics.sort(
                           (a, b) =>
                             moment.utc(a.timestamp).valueOf() - moment.utc(b.timestamp).valueOf()
                         ),
@@ -350,7 +237,7 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
                 // Less than two weeks should stil use the daily metrics chart.
                 return <div className="short-timespan-chart">
                   <DailyMetricsComponent
-                    data={data.map(i => {
+                    data={calculatedData.data.metrics.map(i => {
                       return {
                         // Remove the offset that was added when the data was fetched.
                         label: parseISOTimeAtSpace(i.timestamp, space).format('MM/DD'),
@@ -364,18 +251,18 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
               }
             })() : null}
 
-            {view === ERROR ? <div className="explore-space-detail-daily-metrics-card-body-error">
+            {calculatedData.state === 'ERROR' ? <div className="explore-space-detail-daily-metrics-card-body-error">
               <span>
                 <span className="explore-space-detail-daily-metrics-card-body-error-icon">&#xe91a;</span>
-                {error.toString()}
+                {calculatedData.error.toString()}
               </span>
             </div> : null }
 
-            {view === EMPTY ? <div className="explore-space-detail-daily-metrics-card-body-info">
+            {calculatedData.state === 'COMPLETE' && calculatedData.data.metrics === null ? <div className="explore-space-detail-daily-metrics-card-body-info">
               No data available for this time range.
             </div> : null }
 
-            {view === LOADING ? <div className="explore-space-detail-daily-metrics-card-body-info">
+            {calculatedData.state === LOADING ? <div className="explore-space-detail-daily-metrics-card-body-info">
               Generating Data&nbsp;.&nbsp;.&nbsp;.
             </div> : null }
           </CardBody>
@@ -386,3 +273,16 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
     }
   }
 }
+
+export default connect(state => ({
+  spaces: state.spaces,
+  calculatedData: state.exploreData.calculations.dailyMetrics,
+}), dispatch => ({
+  onRefresh(space) {
+    dispatch(calculateDailyMetrics(space));
+  },
+  onChangeMetricToDisplay(space, metric) {
+    dispatch(collectionSpacesFilter('metricToDisplay', metric));
+    dispatch(calculateDailyMetrics(space));
+  }
+}))(ExploreSpaceDetailDailyMetricsCard);

@@ -51,6 +51,8 @@ const initialState = {
     timeSegmentGroupId: DEFAULT_TIME_SEGMENT_GROUP.id,
     dataDuration: DATA_DURATION_WEEK,
 
+    metricToDisplay: 'entrances',
+
     // Used for date ranges
     startDate: null,
     endDate: null,
