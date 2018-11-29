@@ -50,18 +50,18 @@ export function Dashboard({ dashboards, selectedDashboard }) {
     );
   }
 
-  const totalReports = selectedDashboard.reportSet.length;
-  const totalNotLoadingReports = selectedDashboard.reportSet.filter(
+  const nonHeaderReports = selectedDashboard.reportSet.filter(r => r.type !== 'HEADER');
+  const loadedReports = nonHeaderReports.filter(
     report => dashboards.calculatedReportData[report.id].state !== 'LOADING'
-  ).length;
-  const isDashboardLoading = totalNotLoadingReports < totalReports;
+  );
+  const isDashboardLoading = loadedReports.length < nonHeaderReports.length;
   if (isDashboardLoading) {
     return (
       <div className="dashboard-loading-wrapper">
         <div className="dashboard-loading">
           <ReportLoading
-            part={totalNotLoadingReports}
-            whole={totalReports}
+            part={loadedReports.length}
+            whole={nonHeaderReports.length}
           />
         </div>
       </div>
