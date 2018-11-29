@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import SetCapacityModal from '../explore-set-capacity-modal/index';
 
 import collectionSpacesUpdate from '../../actions/collection/spaces/update';
+import { calculate as calculateTrendsModules } from '../../actions/route-transition/explore-space-trends';
 
 import { getParentsOfSpace } from '../../helpers/filter-hierarchy/index';
 
@@ -40,13 +41,13 @@ export function ExploreSpaceHeader({
           <div className="explore-space-header-row">
             <div className="explore-space-header-capacity">
               {space.capacity ? <span>
-                Capacity: {space.capacity} <a
+                Capacity: {space.capacity} <span
                   className="explore-space-header-capacity-update-link"
-                  href=''
                   onClick={() => {
                     return onOpenModal('set-capacity', {space});
                   }}
-                >Edit</a>
+                  role="button"
+                >Edit</span>
               </span> : <span>
                 <a
                   className="explore-space-header-capacity-set-link"
@@ -110,10 +111,12 @@ export default connect(state => {
     onCloseModal() {
       dispatch(hideModal());
     },
-    onSetCapacity(space, capacity) {
-      dispatch(collectionSpacesUpdate({...space, capacity})).then(ok => {
-        ok && dispatch(hideModal());
-      });
+    async onSetCapacity(space, capacity) {
+      const ok = await dispatch(collectionSpacesUpdate({...space, capacity}));
+      if (ok) {
+        dispatch(hideModal());
+        dispatch(calculateTrendsModules(space));
+      }
     },
   };
 })(ExploreSpaceHeader);
