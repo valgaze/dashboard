@@ -52,9 +52,10 @@ describe('Token list page', function() {
     const store = storeFactory();
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
     store.dispatch(collectionTokensSet([]));
+    component.update();
 
     // Click on the new button
-    component.find('.token-list-create-token-link').simulate('click');
+    component.find('.token-list-create-token-link').first().simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'token-create');
@@ -64,7 +65,7 @@ describe('Token list page', function() {
     assert.equal(component.find('.token-create-modal-submit Button').prop('disabled'), true);
 
     // Add a token name
-    component.find('.token-create-name-container input').simulate('change', {target: {value: 'token name'}});
+    component.find('.token-create-name-container input').first().simulate('change', {target: {value: 'token name'}});
 
     // The button in the modal should now be enabled.
     assert.equal(component.find('.token-create-modal-submit Button').prop('disabled'), false);
@@ -81,7 +82,7 @@ describe('Token list page', function() {
         token_type: 'readonly',
       }),
     });
-    component.find('.token-create-modal-submit Button').simulate('click');
+    component.find('.token-create-modal-submit Button').first().simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(50);
@@ -92,16 +93,16 @@ describe('Token list page', function() {
 
     // The modal should no longer be visible.
     assert.equal(store.getState().activeModal.name, null);
-    assert.equal(component.find('.token-create').length, 0);
   });
   it('should display an error when creating a token fails', async function() {
     // Mount the connected version of the component.
     const store = storeFactory();
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
     store.dispatch(collectionTokensSet([]));
+    component.update();
 
     // Click on the new button
-    component.find('.token-list-create-token-link').simulate('click');
+    component.find('.token-list-create-token-link').first().simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'token-create');
@@ -111,7 +112,7 @@ describe('Token list page', function() {
     assert.equal(component.find('.token-create-modal-submit Button').prop('disabled'), true);
 
     // Add a token name
-    component.find('.token-create-name-container input').simulate('change', {target: {value: 'token name'}});
+    component.find('.token-create-name-container input').first().simulate('change', {target: {value: 'token name'}});
 
     // The button in the modal should now be enabled.
     assert.equal(component.find('.token-create-modal-submit Button').prop('disabled'), false);
@@ -123,7 +124,7 @@ describe('Token list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
     });
-    component.find('.token-create-modal-submit Button').simulate('click');
+    component.find('.token-create-modal-submit Button').first().simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().tokens.loading, true);
@@ -138,16 +139,16 @@ describe('Token list page', function() {
 
     // The modal should still be visible.
     assert.equal(store.getState().activeModal.name, 'token-create');
-    assert.equal(component.find('.token-create').length, 1);
   });
   it('should update an existing token', async function() {
     // Mount the connected version of the component, with a token.
     const store = storeFactory();
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
     store.dispatch(collectionTokensSet([TOKEN]));
+    component.update();
 
     // Click on the edit button for the token.
-    component.find('.token-card-edit').simulate('click');
+    component.find('.token-card-edit').first().simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'token-update');
@@ -157,13 +158,13 @@ describe('Token list page', function() {
     assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), false);
 
     // Empty the token name box
-    component.find('.update-token-name-container input').simulate('change', {target: {value: ''}});
+    component.find('.update-token-name-container input').first().simulate('change', {target: {value: ''}});
 
     // The button in the modal should now be disabled.
     assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), true);
 
     // Enter a new name.
-    component.find('.update-token-name-container input').simulate('change', {target: {value: 'token name'}});
+    component.find('.update-token-name-container input').first().simulate('change', {target: {value: 'token name'}});
     assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should create a new token on the server.
@@ -178,7 +179,7 @@ describe('Token list page', function() {
         token_type: 'readonly',
       }),
     });
-    component.find('.token-update-modal-submit Button').simulate('click');
+    component.find('.token-update-modal-submit Button').first().simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(50);
@@ -189,16 +190,16 @@ describe('Token list page', function() {
 
     // The modal should not longer be visible.
     assert.equal(store.getState().activeModal.name, null);
-    assert.equal(component.find('.token-update-modal').length, 0);
   });
   it('should display an error when updating an existing token fails', async function() {
     // Mount the connected version of the component, with a token.
     const store = storeFactory();
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
     store.dispatch(collectionTokensSet([TOKEN]));
+    component.update();
 
     // Click on the edit button for the token.
-    component.find('.token-card-edit').simulate('click');
+    component.find('.token-card-edit').first().simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'token-update');
@@ -208,13 +209,13 @@ describe('Token list page', function() {
     assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), false);
 
     // Empty the token name box
-    component.find('.update-token-name-container input').simulate('change', {target: {value: ''}});
+    component.find('.update-token-name-container input').first().simulate('change', {target: {value: ''}});
 
     // The button in the modal should now be disabled.
     assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), true);
 
     // Enter a new name.
-    component.find('.update-token-name-container input').simulate('change', {target: {value: 'token name'}});
+    component.find('.update-token-name-container input').first().simulate('change', {target: {value: 'token name'}});
     assert.equal(component.find('.token-update-modal-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should create a new token on the server.
@@ -224,7 +225,7 @@ describe('Token list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({}),
     });
-    component.find('.token-update-modal-submit Button').simulate('click');
+    component.find('.token-update-modal-submit Button').first().simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(50);
@@ -235,29 +236,29 @@ describe('Token list page', function() {
 
     // The modal should still be visible.
     assert.equal(store.getState().activeModal.name, 'token-update');
-    assert.equal(component.find('.token-update-modal').length, 1);
   });
   it('should destroy an existing token', async function() {
     // Mount the connected version of the component, with a token.
     const store = storeFactory();
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
     store.dispatch(collectionTokensSet([TOKEN]));
+    component.update();
 
     // Click on the edit button for the token.
-    component.find('.token-card-edit').simulate('click');
+    component.find('.token-card-edit').first().simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'token-update');
     assert.equal(component.find('.token-update-modal').length, 1);
 
     // Click the destroy button
-    component.find('.token-update-destroy-link').simulate('click');
+    component.find('.token-update-destroy-link').first().simulate('click');
 
     // The button in the modal should now be disabled.
     assert.equal(component.find('.token-update-destroy-submit Button').prop('disabled'), true);
 
     // Enter the name.
-    component.find('.token-update-destroy-confirmation input').simulate('change', {target: {value: 'foo!'}});
+    component.find('.token-update-destroy-confirmation input').first().simulate('change', {target: {value: 'foo!'}});
     assert.equal(component.find('.token-update-destroy-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should deestroy the token.
@@ -272,7 +273,7 @@ describe('Token list page', function() {
         token_type: 'readonly',
       }),
     });
-    component.find('.token-update-destroy-submit Button').simulate('click');
+    component.find('.token-update-destroy-submit Button').first().simulate('click');
 
     // Wait a bit for the promises to settle. FIXME: Not ideal.
     await timeout(50);
@@ -282,29 +283,29 @@ describe('Token list page', function() {
 
     // The modal should not be visible.
     assert.equal(store.getState().activeModal.name, null);
-    assert.equal(component.find('.token-update-modal').length, 0);
   });
   it('should display an error when destroying an existing token fails', async function() {
     // Mount the connected version of the component, with a token.
     const store = storeFactory();
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
     store.dispatch(collectionTokensSet([TOKEN]));
+    component.update();
 
     // Click on the edit button for the token.
-    component.find('.token-card-edit').simulate('click');
+    component.find('.token-card-edit').first().simulate('click');
 
     // The modal should be visible.
     assert.equal(store.getState().activeModal.name, 'token-update');
     assert.equal(component.find('.token-update-modal').length, 1);
 
     // Click the destroy button
-    component.find('.token-update-destroy-link').simulate('click');
+    component.find('.token-update-destroy-link').first().simulate('click');
 
     // The button in the modal should now be disabled.
     assert.equal(component.find('.token-update-destroy-submit Button').prop('disabled'), true);
 
     // Enter the name.
-    component.find('.token-update-destroy-confirmation input').simulate('change', {target: {value: 'foo!'}});
+    component.find('.token-update-destroy-confirmation input').first().simulate('change', {target: {value: 'foo!'}});
     assert.equal(component.find('.token-update-destroy-submit Button').prop('disabled'), false);
 
     // Click the button in the modal, which should deestroy the token.
@@ -314,7 +315,7 @@ describe('Token list page', function() {
       clone() { return this; },
       json: () => Promise.resolve({detail: 'Error!'}),
     });
-    component.find('.token-update-destroy-submit Button').simulate('click');
+    component.find('.token-update-destroy-submit Button').first().simulate('click');
 
     // Ensure that loading spinner is visible.
     assert.equal(store.getState().tokens.loading, true);
@@ -329,7 +330,6 @@ describe('Token list page', function() {
 
     // The modal should still be visible.
     assert.equal(store.getState().activeModal.name, 'token-update');
-    assert.equal(component.find('.token-update-modal').length, 1);
   });
   it('should filter the token list page', async function() {
     // Mount the connected version of the component, with a token.
@@ -355,12 +355,13 @@ describe('Token list page', function() {
       },
     ]));
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
+    component.update();
 
     // All three are visible.
     assert.equal(component.find('.token-list-item').length, 3);
 
     // Enter a search query to filter the tokens
-    component.find('.token-list-search input').simulate('change', {target: {value: 'apple'}});
+    component.find('.token-list-search input').first().simulate('change', {target: {value: 'apple'}});
 
     // Only `apple` and `pineapple` show up
     assert.equal(component.find('.token-list-item').length, 2);
@@ -369,6 +370,7 @@ describe('Token list page', function() {
     // Mount the connected version of the component, with a token.
     const store = storeFactory();
     const component = mount(<Provider store={store}><ConnectedTokenList /></Provider>);
+    component.update();
 
     // Loading spinner is visible.
     assert.equal(component.find('.loading-spinner').length, 1);

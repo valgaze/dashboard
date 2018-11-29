@@ -1,26 +1,31 @@
 import assert from 'assert';
-import user from './index';
+import exploreData from './index';
 
-import userSet from '../../actions/user/set';
-import userPush from '../../actions/user/push';
-import userError from '../../actions/user/error';
+import exploreDataCalculateDataLoading from '../../actions/explore-data/calculate-data-loading';
+import exploreDataCalculateDataComplete from '../../actions/explore-data/calculate-data-complete';
+import exploreDataCalculateDataError from '../../actions/explore-data/calculate-data-error';
 
-describe('user', function() {
-  it('should fully update the user inside', function() {
-    const output = user(null, userSet({email: 'test@density.io'}));
-    assert.deepEqual(output.data, {email: 'test@density.io'});
-  });
-  it('should apply a single field update to a user', function() {
-    const output = user({data: {foo: 'bar'}}, userPush({email: 'test@density.io'}));
-    assert.deepEqual(output.data, {foo: 'bar', email: 'test@density.io'});
-  });
+const INITIAL_STATE = exploreData(undefined, {});
 
-  it('should fully update the user inside and reset loading state', function() {
-    const output = user({loading: true}, userSet({email: 'test@density.io'}));
-    assert.deepEqual(output.loading, false);
+describe('explore data reducer', function() {
+  it('should set report to be in a loading state', function() {
+    const output = exploreData(INITIAL_STATE, exploreDataCalculateDataLoading('spaceList'));
+    assert.deepEqual(output.calculations.spaceList.state, 'LOADING');
   });
-  it('should set the error attribute on a user', function() {
-    const output = user({error: null}, userError('Boom!'));
-    assert.deepEqual(output.error, 'Boom!');
+  it(`should complete report and store the report's calculations`, function() {
+    const output = exploreData(
+      INITIAL_STATE,
+      exploreDataCalculateDataComplete('spaceList', {foo: 'bar'}),
+    );
+    assert.deepEqual(output.calculations.spaceList.state, 'COMPLETE');
+    assert.deepEqual(output.calculations.spaceList.data, {foo: 'bar'});
+  });
+  it(`should error if the report calculations error and store the error`, function() {
+    const output = exploreData(
+      INITIAL_STATE,
+      exploreDataCalculateDataError('spaceList', 'My error here'),
+    );
+    assert.deepEqual(output.calculations.spaceList.state, 'ERROR');
+    assert.deepEqual(output.calculations.spaceList.error, 'My error here');
   });
 });

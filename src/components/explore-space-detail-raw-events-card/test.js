@@ -9,7 +9,7 @@ import { ExploreSpaceDetailRawEventsCard as RawEventsCard } from './index';
 
 const space = {id: 'spc_1', name: 'My Space', timeZone: 'America/New_York'};
 
-describe('raw events pager', function() {
+describe('daily raw events card', function() {
   it('should render the card (smoke test)', async function() {
     mount(<RawEventsCard
       space={space}

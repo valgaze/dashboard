@@ -31,20 +31,18 @@ export const LOADING = 'LOADING',
       VISIBLE = 'VISIBLE',
       ERROR = 'ERROR';
 
-export class ExploreSpaceDetailRawEventsCard extends Component {
-  render() {
-    const {
-      space,
-      spaces,
-      date,
-      timeSegmentGroup,
-      calculatedData,
+export function ExploreSpaceDetailRawEventsCard({
+  space,
+  spaces,
+  date,
+  timeSegmentGroup,
+  calculatedData,
 
-      onRefresh,
-      onChangePage,
-    } = this.props;
-
-    return <div>
+  onRefresh,
+  onChangePage,
+}) {
+  return (
+    <div>
       <Card className="explore-space-detail-raw-events-card">
         {calculatedData.state === 'LOADING' ? <CardLoading indeterminate /> : null}
         <CardHeader>
@@ -102,8 +100,8 @@ export class ExploreSpaceDetailRawEventsCard extends Component {
         totalEvents={calculatedData.state === 'COMPLETE' ? calculatedData.data.total : 0}
         onChange={page => onChangePage(space, page)}
       />
-    </div>;
-  }
+    </div>
+  );
 }
 
 export default connect(state => ({
