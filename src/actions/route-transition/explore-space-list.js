@@ -16,7 +16,6 @@ import collectionSpacesError from '../collection/spaces/error';
 import collectionTimeSegmentGroupsSet from '../collection/time-segment-groups/set';
 import collectionTimeSegmentGroupsError from '../collection/time-segment-groups/error';
 
-import exploreDataAddCalculation from '../../actions/explore-data/add-calculation';
 import exploreDataCalculateDataLoading from '../../actions/explore-data/calculate-data-loading';
 import exploreDataCalculateDataComplete from '../../actions/explore-data/calculate-data-complete';
 import exploreDataCalculateDataError from '../../actions/explore-data/calculate-data-error';
@@ -70,7 +69,6 @@ export default function routeTransitionExploreSpaceList() {
 
 export function calculate() {
   return async (dispatch, getState) => {
-    dispatch(exploreDataAddCalculation('spaceList'));
     dispatch(exploreDataCalculateDataLoading('spaceList'));
 
     const spacesToFetch = getState().spaces.data;
