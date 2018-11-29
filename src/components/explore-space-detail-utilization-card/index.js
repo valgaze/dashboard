@@ -76,7 +76,6 @@ export class ExploreSpaceDetailUtilizationCard extends React.Component {
 
   render() {
     const {
-      spaces,
       calculatedData,
 
       space,
@@ -124,7 +123,7 @@ export class ExploreSpaceDetailUtilizationCard extends React.Component {
         }
       });
 
-      const initialTimestampRaw = calculatedData.data.counts.length > 0 ? calculatedData.data.counts[0].timestamp : spaces.filters.startDate;
+      const initialTimestampRaw = calculatedData.data.counts.length > 0 ? calculatedData.data.counts[0].timestamp : startDate;
       const initialTimestamp = parseISOTimeAtSpace(initialTimestampRaw, space)
         .startOf('day')
         .add(parseTimeInTimeSegmentToSeconds(timeSegment.start), 'seconds');
@@ -462,7 +461,6 @@ export class ExploreSpaceDetailUtilizationCard extends React.Component {
 }
 
 export default connect(state => ({
-  spaces: state.spaces,
   calculatedData: state.exploreData.calculations.utilization,
 }), dispatch => ({
   onRefresh(space) {
