@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
 
 import moment from 'moment';
 import 'moment-timezone';
@@ -10,6 +11,8 @@ import {
   getDurationBetweenMomentsInDays,
   parseDayAtSpace,
 } from '../../helpers/space-time-utilities/index';
+
+import { calculateUtilization } from '../../actions/route-transition/explore-space-trends';
 
 import { core } from '../../client';
 
@@ -43,8 +46,6 @@ const LineChartComponent = chartAsReactComponent(lineChart);
 
 const AVERAGE_WEEKLY_BREAKDOWN_PERCENTAGE_BAR_BREAK_WIDTH_IN_PX = 320;
 
-const ONE_HOUR_IN_SECONDS = 60 * 60;
-
 const DAY_TO_INDEX_IN_UTILIZAITIONS_BY_DAY = {
   'Sunday': 0,
   'Monday': 1,
@@ -61,89 +62,8 @@ export const LOADING = 'LOADING',
              REQUIRES_CAPACITY = 'REQUIRES_CAPACITY',
              ERROR = 'ERROR';
 
-export default class ExploreSpaceDetailUtilizationCard extends React.Component {
-  state = {
-    view: LOADING,
-
-    groups: null,
-    data: null,
-    dataSpaceId: null,
-
-    // Set by props and used to determine when the data should be refetched.
-    startDate: null,
-    endDate: null,
-    includeWeekends: false,
-
-    timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
-    timeSegment: DEFAULT_TIME_SEGMENT,
-  }
-
-  fetchData = async () => {
-    const { space } = this.props;
-    const { timeSegmentGroup, timeSegment } = this.state;
-
-    if (!space.capacity) {
-      this.setState({
-        view: REQUIRES_CAPACITY,
-
-        // Along with the utilization data, store the space id that the data has been calculated for.
-        // In this way, if the space id changes, then we know to refetch utilization data.
-        dataSpaceId: space.id,
-      });
-      return;
-    }
-
-    const timeSegmentDurationInSeconds = parseTimeInTimeSegmentToSeconds(timeSegment.end) - parseTimeInTimeSegmentToSeconds(timeSegment.start);
-
-    // Step 1: Fetch all counts--which means all pages--of data from the start date to the end data
-    // selected on the DateRangePicker. Uses the `fetchAllPages` helper, which encapsulates the
-    // logic required to fetch all pages of data from the server.
-    const counts = await fetchAllPages(page => {
-      return core.spaces.counts({
-        id: space.id,
-
-        start_time: this.state.startDate,
-        end_time: this.state.endDate,
-        time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
-
-        interval: function(timeSegmentDurationInSeconds) {
-          if (timeSegmentDurationInSeconds > 4 * ONE_HOUR_IN_SECONDS) {
-            // For large graphs, fetch data at a coarser resolution.
-            return '10m';
-          } else {
-            // For small graphs, fetch data at a finer resolution.
-            return '2m';
-          }
-        }(timeSegmentDurationInSeconds),
-
-        // Fetch with a large page size to try to minimize the number of requests that will be
-        // required.
-        page,
-        page_size: 1000,
-      });
-    });
-
-    // Group into counts into buckets, one bucket for each day.
-    const groups = groupCountsByDay(counts, space);
-
-    // Calculate space utilization using this grouped data.
-    const utilizations = spaceUtilizationPerGroup(space, groups);
-
-    this.setState({
-      view: VISIBLE,
-
-      counts,
-      groups,
-      data: utilizations,
-
-      // Along with the utilization data, store the space id that the data has been calculated for.
-      // In this way, if the space id changes, then we know to refetch utilization data.
-      dataSpaceId: space.id,
-      dataSpaceCapacity: space.capacity,
-    });
-  }
-
-  calculateAverageUtilization(data=this.state.data) {
+export class ExploreSpaceDetailUtilizationCard extends React.Component {
+  calculateAverageUtilization(data=this.props.calculatedData.data.utilizations) {
     // No data exists, so render a '-' instead of actual data.
     if (data.length === 0) {
       return null;
@@ -154,41 +74,19 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
     return Math.round(result * 100) / 100; /* round to the nearest percentage */
   }
 
-  componentWillReceiveProps({space, startDate, endDate, timeSegment, timeSegmentGroup}) {
-    if (space && (
-      space.id !== this.state.dataSpaceId ||
-      space.capacity !== this.state.dataSpaceCapacity ||
-      startDate !== this.state.startDate ||
-      endDate !== this.state.endDate ||
-      timeSegment.id !== this.state.timeSegment.id ||
-      timeSegmentGroup.id !== this.state.timeSegmentGroup.id
-    )) {
-      this.setState({
-        view: LOADING,
-        startDate,
-        endDate,
-        timeSegment,
-        timeSegmentGroup,
-
-        dataSpaceId: space.id,
-        dataSpaceCapacity: space.capacity,
-      }, () => this.fetchData());
-    }
-  }
-
-  componentDidMount() {
-    this.componentWillReceiveProps(this.props);
-  }
-
   render() {
-    const { space } = this.props;
     const {
-      view,
+      spaces,
+      calculatedData,
+
+      space,
       startDate,
       endDate,
       timeSegment,
       timeSegmentGroup,
-    } = this.state;
+
+      onRefresh,
+    } = this.props;
 
     let utilizationsByDay,
       averageUtilizationDatapoints,
@@ -198,11 +96,11 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
 
     const timeSegmentDurationInSeconds = parseTimeInTimeSegmentToSeconds(timeSegment.end) - parseTimeInTimeSegmentToSeconds(timeSegment.start);
 
-    if (view === VISIBLE) {
+    if (calculatedData.state === 'COMPLETE') {
       //
 
       // Calculate the average utilization for each day within the specified time segment.
-      utilizationsByDay = this.state.data.reduce((acc, i) => {
+      utilizationsByDay = calculatedData.data.utilizations.reduce((acc, i) => {
         const dayOfWeek = parseDayAtSpace(i.date, space).day();
         acc[dayOfWeek].push(i);
         return acc;
@@ -210,14 +108,14 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
 
 
       // Calculate an average day's utilization graph.
-      averageUtilizationDatapoints = (this.state.data[0] ? this.state.data[0].utilization : []).map(_ => 0);
+      averageUtilizationDatapoints = (calculatedData.data.utilizations[0] ? calculatedData.data.utilizations[0].utilization : []).map(_ => 0);
 
       // The average calculation is split into two parts: the sum and the division.
       // - The sum part of the average (step 1) occurs below.
       // - `dataPointCount` contains the number of samples that have been summed together and is the
       // number that will be divided by later to complete the average.
       let dataPointCount = 0;
-      this.state.data.forEach(group => {
+      calculatedData.data.utilizations.forEach(group => {
         if (Array.isArray(group.utilization)) {
           averageUtilizationDatapoints = averageUtilizationDatapoints.map(
             (i, ct) => i + (group.utilization[ct] || 0) /* ensure that a utilization bucket has data */
@@ -226,7 +124,7 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
         }
       });
 
-      const initialTimestampRaw = this.state.counts.length > 0 ? this.state.counts[0].timestamp : this.state.startDate;
+      const initialTimestampRaw = calculatedData.data.counts.length > 0 ? calculatedData.data.counts[0].timestamp : spaces.filters.startDate;
       const initialTimestamp = parseISOTimeAtSpace(initialTimestampRaw, space)
         .startOf('day')
         .add(parseTimeInTimeSegmentToSeconds(timeSegment.start), 'seconds');
@@ -283,14 +181,11 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
         </InfoPopup>
         <span
           className={classnames('explore-space-detail-utilization-card-header-refresh', {
-            disabled: view !== VISIBLE,
+            disabled: calculatedData.state !== 'COMPLETE',
           })}
-          onClick={() => this.setState({
-            view: LOADING,
-            data: null,
-          }, () => this.fetchData())}
+          onClick={() => onRefresh(space)}
         >
-          <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+          <IconRefresh color={calculatedData.state === 'LOADING' ? 'gray' : 'primary'} />
         </span>
       </CardHeader>
     );
@@ -320,25 +215,22 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
         </InfoPopup>
         <span
           className={classnames('explore-space-detail-utilization-card-header-refresh', {
-            disabled: view !== VISIBLE,
+            disabled: calculatedData.state !== 'COMPLETE',
           })}
-          onClick={() => this.setState({
-            view: LOADING,
-            data: null,
-          }, () => this.fetchData())}
+          onClick={() => onRefresh(space)}
         >
-          <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
+          <IconRefresh color={calculatedData.state === 'LOADING' ? 'gray' : 'primary'} />
         </span>
       </CardHeader>
     );
 
     let body;
-    switch (this.state.view) {
-      case LOADING:
+    switch (true) {
+      case calculatedData.state === 'LOADING':
         body = (
           <span>
             {(() => {
-              if (getDurationBetweenMomentsInDays(this.state.startDate, this.state.endDate) > 14) {
+              if (getDurationBetweenMomentsInDays(startDate, endDate) > 14) {
                 return 'Generating Data (this may take a while ... )'
               } else {
                 return 'Generating Data . . .';
@@ -366,7 +258,28 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
           </div>
         );
 
-      case REQUIRES_CAPACITY:
+      case calculatedData.state === 'ERROR':
+        body = (
+          <div className="explore-space-detail-utilization-card-body-info">
+            <span>
+              <span className="explore-space-detail-utilization-card-body-error-icon">&#xe91a;</span>
+              {calculatedData.error}
+            </span>
+          </div>
+        );
+
+        return <div>
+          <Card className="explore-space-detail-utilization-card-average-week">
+            {averageWeekHeader}
+            {body}
+          </Card>
+          <Card className="explore-space-detail-utilization-card-average-day">
+            {averageDayHeader}
+            {body}
+          </Card>
+        </div>;
+
+      case calculatedData.data.requiresCapacity:
         body = (
           <div className="explore-space-detail-utilization-card-body-info">
             <span>No capacity is set for this space. Capacity is required to calculate utilization.</span>
@@ -386,7 +299,7 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
           </div>
         );
 
-      case EMPTY:
+      case calculatedData.data.utilizations.length === 0:
         body = (
           <div className="explore-space-detail-utilization-card-body-info">
             <span>No data found in date range.</span>
@@ -404,28 +317,7 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
           </Card>
         </div>;
 
-      case ERROR:
-        body = (
-          <div className="explore-space-detail-utilization-card-body-info">
-            <span>
-              <span className="explore-space-detail-utilization-card-body-error-icon">&#xe91a;</span>
-              {this.state.error}
-            </span>
-          </div>
-        );
-
-        return <div>
-          <Card className="explore-space-detail-utilization-card-average-week">
-            {averageWeekHeader}
-            {body}
-          </Card>
-          <Card className="explore-space-detail-utilization-card-average-day">
-            {averageDayHeader}
-            {body}
-          </Card>
-        </div>;
-
-      case VISIBLE:
+      case calculatedData.state === 'COMPLETE':
         return (
           <div>
             <Card className="explore-space-detail-utilization-card-average-week">
@@ -568,3 +460,12 @@ export default class ExploreSpaceDetailUtilizationCard extends React.Component {
     }
   }
 }
+
+export default connect(state => ({
+  spaces: state.spaces,
+  calculatedData: state.exploreData.calculations.utilization,
+}), dispatch => ({
+  onRefresh(space) {
+    dispatch(calculateUtilization(space));
+  },
+}))(ExploreSpaceDetailUtilizationCard);

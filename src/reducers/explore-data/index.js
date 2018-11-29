@@ -20,6 +20,15 @@ const initialState = {
       },
     },
     dailyMetrics: { ...initialModuleState },
+    utilization: {
+      ...initialModuleState,
+      data: {
+        requiresCapacity: false,
+        counts: [],
+        groups: [],
+        utilizations: [],
+      },
+    },
   },
 };
 

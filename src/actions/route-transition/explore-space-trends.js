@@ -29,6 +29,11 @@ import {
   parseTimeInTimeSegmentToSeconds,
 } from '../../helpers/time-segments/index';
 
+import spaceUtilizationPerGroup, {
+  groupCountsByDay,
+} from '../../helpers/space-utilization/index';
+
+
 export const ROUTE_TRANSITION_EXPLORE_SPACE_TRENDS = 'ROUTE_TRANSITION_EXPLORE_SPACE_TRENDS';
 
 export default function routeTransitionExploreSpaceTrends(id) {
@@ -77,6 +82,7 @@ export default function routeTransitionExploreSpaceTrends(id) {
 export function calculate(space) {
   return dispatch => {
     dispatch(calculateDailyMetrics(space));
+    dispatch(calculateUtilization(space));
   };
 }
 
@@ -89,7 +95,6 @@ const DAY_TO_INDEX = {
   'Saturday': 6,
   'Sunday': 0,
 };
-
 export function calculateDailyMetrics(space) {
   return async (dispatch, getState) => {
     dispatch(exploreDataCalculateDataLoading('dailyMetrics'));
@@ -172,5 +177,81 @@ export function calculateDailyMetrics(space) {
         metrics: null,
       }));
     }
+  };
+}
+
+
+const ONE_HOUR_IN_SECONDS = 60 * 60;
+
+export function calculateUtilization(space) {
+  return async (dispatch, getState) => {
+    dispatch(exploreDataCalculateDataLoading('utilization'));
+
+    const {
+      startDate,
+      endDate,
+      timeSegmentGroupId,
+    } = getState().spaces.filters;
+
+    const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
+
+    // Which time segment group was selected?
+    const selectedTimeSegmentGroup = timeSegmentGroupArray.find(i => i.id === getState().spaces.filters.timeSegmentGroupId);
+
+    // And, with the knowlege of the selected space, which time segment within that time segment
+    // group is applicable to this space?
+    const applicableTimeSegment = findTimeSegmentInTimeSegmentGroupForSpace(
+      selectedTimeSegmentGroup,
+      space,
+    );
+
+    if (!space.capacity) {
+      dispatch(exploreDataCalculateDataComplete('utilization', { requiresCapacity: true }));
+      return;
+    }
+
+    const timeSegmentDurationInSeconds = parseTimeInTimeSegmentToSeconds(applicableTimeSegment.end) - parseTimeInTimeSegmentToSeconds(applicableTimeSegment.start);
+
+    // Step 1: Fetch all counts--which means all pages--of data from the start date to the end data
+    // selected on the DateRangePicker. Uses the `fetchAllPages` helper, which encapsulates the
+    // logic required to fetch all pages of data from the server.
+    const counts = await fetchAllPages(page => {
+      return core.spaces.counts({
+        id: space.id,
+
+        start_time: startDate,
+        end_time: endDate,
+        time_segment_groups: selectedTimeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : selectedTimeSegmentGroup.id,
+
+        interval: function(timeSegmentDurationInSeconds) {
+          if (timeSegmentDurationInSeconds > 4 * ONE_HOUR_IN_SECONDS) {
+            // For large graphs, fetch data at a coarser resolution.
+            return '10m';
+          } else {
+            // For small graphs, fetch data at a finer resolution.
+            return '2m';
+          }
+        }(timeSegmentDurationInSeconds),
+
+        // Fetch with a large page size to try to minimize the number of requests that will be
+        // required.
+        page,
+        page_size: 1000,
+      });
+    });
+
+    // Group into counts into buckets, one bucket for each day.
+    const groups = groupCountsByDay(counts, space);
+
+    // Calculate space utilization using this grouped data.
+    const utilizations = spaceUtilizationPerGroup(space, groups);
+
+    dispatch(exploreDataCalculateDataComplete('utilization', {
+      requiresCapacity: false,
+
+      counts,
+      groups,
+      utilizations,
+    }));
   };
 }
