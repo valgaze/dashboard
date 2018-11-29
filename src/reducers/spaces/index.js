@@ -52,6 +52,7 @@ const initialState = {
     dataDuration: DATA_DURATION_WEEK,
 
     metricToDisplay: 'entrances',
+    dailyRawEventsPage: 1,
 
     // Used for date ranges
     startDate: null,

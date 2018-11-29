@@ -67,6 +67,8 @@ function ExploreSpaceTrends({
   activeModal,
   timeSegmentGroups,
   onChangeSpaceFilter,
+  onChangeTimeSegmentGroup,
+  onChangeDateRange,
 }) {
   if (space) {
     const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
@@ -114,7 +116,7 @@ function ExploreSpaceTrends({
                 };
               })}
               width={300}
-              onChange={value => onChangeSpaceFilter(space, 'timeSegmentGroupId', value.id)}
+              onChange={value => onChangeTimeSegmentGroup(space, value.id)}
             />
           </ExploreFilterBarItem>
           <ExploreFilterBarItem label="Date Range">
@@ -142,8 +144,7 @@ function ExploreSpaceTrends({
                   formatInISOTime(startDate) !== spaces.filters.startDate || 
                   formatInISOTime(endDate) !== spaces.filters.endDate
                 ) {
-                  onChangeSpaceFilter(space, 'startDate', formatInISOTime(startDate));
-                  onChangeSpaceFilter(space, 'endDate', formatInISOTime(endDate));
+                  onChangeDateRange(space, formatInISOTime(startDate), formatInISOTime(endDate));
                 }
               }}
               // Within the component, store if the user has selected the start of end date picker
@@ -166,8 +167,7 @@ function ExploreSpaceTrends({
               // common ranges functionality
               commonRanges={getCommonRangesForSpace(space)}
               onSelectCommonRange={({startDate, endDate}) => {
-                onChangeSpaceFilter(space, 'startDate', formatInISOTime(startDate));
-                onChangeSpaceFilter(space, 'endDate', formatInISOTime(endDate));
+                onChangeDateRange(space, formatInISOTime(startDate), formatInISOTime(endDate));
               }}
             />
           </ExploreFilterBarItem>
@@ -221,6 +221,14 @@ export default connect(state => {
   return {
     onChangeSpaceFilter(space, key, value) {
       dispatch(collectionSpacesFilter(key, value));
+    },
+    onChangeTimeSegmentGroup(space, value) {
+      dispatch(collectionSpacesFilter('timeSegmentGroupId', value));
+      dispatch(calculateTrendsModules(space));
+    },
+    onChangeDateRange(space, startDate, endDate) {
+      dispatch(collectionSpacesFilter('startDate', startDate));
+      dispatch(collectionSpacesFilter('endDate', endDate));
       dispatch(calculateTrendsModules(space));
     },
   };

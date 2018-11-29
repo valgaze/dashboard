@@ -1,4 +1,5 @@
 import { core } from '../../client';
+import moment from 'moment';
 
 import collectionSpacesSet from '../collection/spaces/set';
 import collectionSpacesError from '../collection/spaces/error';
@@ -79,6 +80,7 @@ export default function routeTransitionExploreSpaceDaily(id) {
 export function calculate(space) {
   return dispatch => {
     dispatch(calculateFootTraffic(space));
+    dispatch(calculateDailyRawEvents(space));
   };
 }
 
@@ -112,7 +114,7 @@ export function calculateFootTraffic(space) {
         })
       ));
     } catch (err) {
-      dispatch(exploreDataCalculateDataError('footTraffic', err));
+      dispatch(exploreDataCalculateDataError('footTraffic', `Error fetching count data: ${err}`));
     }
 
     if (data.length > 0) {
@@ -121,4 +123,88 @@ export function calculateFootTraffic(space) {
       dispatch(exploreDataCalculateDataComplete('footTraffic', null));
     }
   }
+}
+
+export const DAILY_RAW_EVENTS_PAGE_SIZE = 20;
+
+export function calculateDailyRawEvents(space) {
+  return async (dispatch, getState) => {
+    // Mark the foot traffic card as in a loading state
+    dispatch(exploreDataCalculateDataLoading('dailyRawEvents'));
+
+    const {
+      date,
+      dailyRawEventsPage,
+      timeSegmentGroupId,
+    } = getState().spaces.filters;
+
+    // Add timezone offset to both start and end times prior to querying for the count.
+    const day = parseISOTimeAtSpace(date, space);
+
+    let preData;
+    try {
+      preData = await core.spaces.events({
+        id: space.id,
+        start_time: formatInISOTimeAtSpace(day.clone().startOf('day'), space),
+        end_time: formatInISOTimeAtSpace(day.clone().startOf('day').add(1, 'day'), space),
+        time_segment_groups: timeSegmentGroupId === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroupId,
+        page: dailyRawEventsPage,
+        page_size: DAILY_RAW_EVENTS_PAGE_SIZE,
+        order: 'desc',
+      });
+    } catch (error) {
+      dispatch(exploreDataCalculateDataError('dailyRawEvents', `Error fetching event data: ${error}`));
+      return;
+    }
+
+    // No results returned? Show a special state.
+    if (preData.results.length === 0) {
+      dispatch(exploreDataCalculateDataComplete('dailyRawEvents', { data: null }));
+      return;
+    }
+
+    // Convert all keys in the response to camelcase. Also, reverse data so it is ordered from
+    const data = preData.results
+      .map(i => objectSnakeToCamel(i))
+      .sort((a, b) => moment.utc(b.timestamp).valueOf() - moment.utc(a.timestamp).valueOf());
+
+    // Calculate a unique array of all doorways that are referenced by each event that was
+    // returned.
+    const uniqueArrayOfDoorways = data.reduce((acc, item) => {
+      if (acc.indexOf(item.doorwayId) === -1) {
+        return [...acc, item.doorwayId];
+      } else {
+        return acc;
+      }
+    }, []);
+
+    // Fetch information about each doorway in each event, if the doorway information isn't
+    // already known.
+    const doorwayRequests = uniqueArrayOfDoorways.map(async doorwayId => {
+      try {
+        return core.doorways.get({id: doorwayId});
+      } catch (error) {
+        dispatch(exploreDataCalculateDataError('dailyRawEvents', error));
+        return;
+      }
+    });
+
+    const doorwayResponses = await Promise.all(doorwayRequests);
+
+    // Add all the new doorways to the state.
+    const doorwayLookup = {};
+    uniqueArrayOfDoorways.forEach((id, index) => {
+      doorwayLookup[id] = doorwayResponses[index];
+    });
+
+    // Update the state to reflect that the data fetching is complete.
+    dispatch(exploreDataCalculateDataComplete('dailyRawEvents', {
+      data,
+      doorwayLookup,
+
+      total: preData.total,
+      nextPageAvailable: Boolean(preData.next),
+      previousPageAvailable: Boolean(preData.previous),
+    }));
+  };
 }

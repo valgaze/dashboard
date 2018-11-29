@@ -29,6 +29,10 @@ const initialState = {
         utilizations: [],
       },
     },
+    dailyRawEvents: {
+      ...initialModuleState,
+      data: {},
+    },
   },
 };
 
