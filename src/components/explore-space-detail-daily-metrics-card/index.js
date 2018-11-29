@@ -109,7 +109,7 @@ export default class ExploreSpaceDetailDailyMetricsCard extends React.Component 
         {
           interval: '1d',
           order: 'asc',
-          page_size: 1000,
+          page_size: 5000,
           time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id
         }
       );

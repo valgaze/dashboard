@@ -11,7 +11,7 @@ export default async function dailyVisitsPerSegment(report) {
 
   // Get all time segment names
   const timeSegmentGroupsPromise = fetchAllPages(
-    page => core.time_segment_groups.list({page, page_size: 1000})
+    page => core.time_segment_groups.list({page, page_size: 5000})
   );
 
 
@@ -26,7 +26,7 @@ export default async function dailyVisitsPerSegment(report) {
       {
         interval: '1d',
         order: 'desc',
-        page_size: 1000,
+        page_size: 5000,
         time_segment_groups: tsgId,
       }
     )

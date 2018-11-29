@@ -16,7 +16,7 @@ const REPORT_SETTINGS_MODE_TO_COMPONENT_MODE = {
 
 export default async function utilization(report) {
   const allSpaces = (await fetchAllPages(page => (
-    core.spaces.list({page, page_size: 1000})
+    core.spaces.list({page, page_size: 5000})
   ))).map(objectSnakeToCamel);
 
   const spaces = allSpaces.filter(space => report.settings.spaceIds.indexOf(space.id) >= 0);
@@ -36,7 +36,7 @@ export default async function utilization(report) {
         end_time: formatInISOTimeAtSpace(timeRange.end, space),
         time_segment_group_ids: report.settings.timeSegmentGroupId,
         page,
-        page_size: 1000,
+        page_size: 5000,
       });
     });
     countsBySpace[space.id] = {responseData, space};

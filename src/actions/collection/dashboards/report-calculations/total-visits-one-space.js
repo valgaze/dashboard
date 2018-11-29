@@ -11,7 +11,7 @@ export default async function totalVisitsOneSpace(report) {
 
   // Get all time segment groups that are in this report
   const timeSegmentGroupsPromise = fetchAllPages(
-    page => core.time_segment_groups.list({page, page_size: 1000})
+    page => core.time_segment_groups.list({page, page_size: 5000})
   );
 
   // For each time segment group, make a request to the spaces/:id/counts endpoint for a single
@@ -25,7 +25,7 @@ export default async function totalVisitsOneSpace(report) {
         start_time: formatInISOTimeAtSpace(timeRange.start, space),
         end_time: formatInISOTimeAtSpace(timeRange.end, space),
         time_segment_groups: tsg.id,
-        page_size: 1000,
+        page_size: 5000,
       });
     });
   }));

@@ -61,7 +61,7 @@ export default class ExploreSpaceDetailFootTrafficCard extends React.Component {
       time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
       interval: '5m',
       page: 1,
-      page_size: 1000,
+      page_size: 5000,
       order: 'desc',
     }).then(data => {
       if (data.results.length > 0) {

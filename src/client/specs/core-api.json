@@ -161,7 +161,7 @@
         "qs": {
           "detail": "{{detail}}",
           "environment": "{{#environment}}True{{/environment}}",
-          "page_size": "1000"
+          "page_size": "5000"
         }
       },
       "get": {
@@ -254,7 +254,7 @@
           "end_time": "{{end_time}}",
           "space_id": "{{id}}",
           "shadow": "{{shadow}}",
-          "page_size": "1000"
+          "page_size": "5000"
         },
         "desc": "List all sensors."
       },
@@ -277,7 +277,7 @@
         "qs": {
           "space_id": "{{space_id}}",
           "doorway_id": "{{doorway_id}}",
-          "page_size": "1000"
+          "page_size": "5000"
         }
       },
       "get": {
@@ -322,7 +322,7 @@
         "method": "GET",
         "url": "{{{core}}}/webhooks/",
         "desc": "List all webhooks.",
-        "page_size": "1000"
+        "page_size": "5000"
       },
       "get": {
         "method": "GET",

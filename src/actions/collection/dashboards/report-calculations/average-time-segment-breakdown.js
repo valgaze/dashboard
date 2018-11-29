@@ -136,7 +136,7 @@ export default async function averageTimeSegmentBreakdown(report) {
     {
       interval: '1d',
       order: 'desc',
-      page_size: 1000,
+      page_size: 5000,
       time_segment_groups: report.settings.timeSegmentGroupId,
     }
   );
@@ -151,7 +151,7 @@ export default async function averageTimeSegmentBreakdown(report) {
     {
       interval: '5m',
       order: 'desc',
-      page_size: 1000,
+      page_size: 5000,
       time_segment_groups: report.settings.timeSegmentGroupId,
     }
   );

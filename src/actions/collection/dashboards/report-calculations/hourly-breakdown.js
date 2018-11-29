@@ -22,7 +22,7 @@ export default async function totalVisitsOneSpace(report) {
       start_time: formatInISOTimeAtSpace(timeRange.start, space),
       end_time: formatInISOTimeAtSpace(timeRange.end, space),
       page,
-      page_size: 1000,
+      page_size: 5000,
     });
   });
 
