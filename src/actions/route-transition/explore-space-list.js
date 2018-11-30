@@ -23,8 +23,8 @@ import exploreDataCalculateDataError from '../../actions/explore-data/calculate-
 export const ROUTE_TRANSITION_EXPLORE_SPACE_LIST = 'ROUTE_TRANSITION_EXPLORE_SPACE_LIST';
 
 // How long should data be fetched when running utilization calculations?
-const DATA_DURATION_WEEK = 'DATA_DURATION_WEEK',
-      DATA_DURATION_MONTH = 'DATA_DURATION_MONTH';
+const DATA_DURATION_WEEK = 'DATA_DURATION_WEEK';
+      // DATA_DURATION_MONTH = 'DATA_DURATION_MONTH';
 
 export default function routeTransitionExploreSpaceList() {
   return async (dispatch, getState) => {

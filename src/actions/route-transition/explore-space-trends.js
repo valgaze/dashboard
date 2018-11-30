@@ -10,7 +10,6 @@ import collectionSpacesFilter from '../collection/spaces/filter';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 
-import exploreDataAddCalculation from '../../actions/explore-data/add-calculation';
 import exploreDataCalculateDataLoading from '../../actions/explore-data/calculate-data-loading';
 import exploreDataCalculateDataComplete from '../../actions/explore-data/calculate-data-complete';
 import exploreDataCalculateDataError from '../../actions/explore-data/calculate-data-error';
@@ -19,13 +18,11 @@ import {
   getCurrentLocalTimeAtSpace,
   parseISOTimeAtSpace,
   formatInISOTimeAtSpace,
-  getDurationBetweenMomentsInDays,
   requestCountsForLocalRange
 } from '../../helpers/space-time-utilities/index';
 
 import {
   DEFAULT_TIME_SEGMENT_GROUP,
-  DEFAULT_TIME_SEGMENT,
   findTimeSegmentInTimeSegmentGroupForSpace,
   parseTimeInTimeSegmentToSeconds,
 } from '../../helpers/time-segments/index';
@@ -109,7 +106,6 @@ export function calculateDailyMetrics(space) {
       metricToDisplay,
       startDate,
       endDate,
-      timeSegmentGroupId,
     } = getState().spaces.filters;
 
     const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
@@ -193,11 +189,7 @@ export function calculateUtilization(space) {
   return async (dispatch, getState) => {
     dispatch(exploreDataCalculateDataLoading('utilization'));
 
-    const {
-      startDate,
-      endDate,
-      timeSegmentGroupId,
-    } = getState().spaces.filters;
+    const { startDate, endDate } = getState().spaces.filters;
 
     const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
 

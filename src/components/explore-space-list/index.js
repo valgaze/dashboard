@@ -8,9 +8,6 @@ import gridVariables from '@density/ui/variables/grid.json';
 
 import SpaceHierarchySelectBox from '../space-hierarchy-select-box/index';
 
-import { core } from '../../client';
-import moment from 'moment';
-
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 import collectionSpacesUpdate from '../../actions/collection/spaces/update';
 import { calculate as exploreSpaceListCalculate } from '../../actions/route-transition/explore-space-list';
@@ -22,11 +19,7 @@ import SetCapacityModal from '../explore-set-capacity-modal/index';
 import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 
-import spaceUtilizationPerGroup, {
-  groupCountsByDay,
-} from '../../helpers/space-utilization/index';
 import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
-import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import commaFormatNumber from '../../helpers/comma-format-number/index';
 import formatPercentage from '../../helpers/format-percentage/index';
 
@@ -46,10 +39,6 @@ const DEFAULT_SORT_DIRECTION = SORT_DESC;
 // How long should data be fetched when running utilization calculations?
 const DATA_DURATION_WEEK = 'DATA_DURATION_WEEK',
       DATA_DURATION_MONTH = 'DATA_DURATION_MONTH';
-
-const LOADING = 'LOADING',
-      VISIBLE = 'VISIBLE',
-      ERROR = 'ERROR';
 
 export class ExploreSpaceList extends Component {
   constructor(props) {
@@ -335,7 +324,7 @@ export class ExploreSpaceList extends Component {
                         {
                           space.capacity !== null ?
                             <span>{space.capacity}</span> :
-                            <a href=''>{document.body && document.body.clientWidth > gridVariables.screenSmMin ? 'Set capacity' : 'Set'}</a>
+                            <span className="explore-space-list-item-capacity-set-link">{document.body && document.body.clientWidth > gridVariables.screenSmMin ? 'Set capacity' : 'Set'}</span>
                         }
                       </td>
                       <td className="explore-space-list-item-utilization">

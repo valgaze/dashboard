@@ -19,16 +19,9 @@ import {
   getCurrentLocalTimeAtSpace,
   parseISOTimeAtSpace,
   formatInISOTimeAtSpace,
-  getDurationBetweenMomentsInDays,
-  requestCountsForLocalRange
 } from '../../helpers/space-time-utilities/index';
 
-import {
-  DEFAULT_TIME_SEGMENT_GROUP,
-  DEFAULT_TIME_SEGMENT,
-  findTimeSegmentInTimeSegmentGroupForSpace,
-  parseTimeInTimeSegmentToSeconds,
-} from '../../helpers/time-segments/index';
+import { DEFAULT_TIME_SEGMENT_GROUP } from '../../helpers/time-segments/index';
 
 export const ROUTE_TRANSITION_EXPLORE_SPACE_DAILY = 'ROUTE_TRANSITION_EXPLORE_SPACE_DAILY';
 

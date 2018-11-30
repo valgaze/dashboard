@@ -5,21 +5,13 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import 'moment-timezone';
 
-import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
 import {
-  DEFAULT_TIME_SEGMENT,
-  DEFAULT_TIME_SEGMENT_GROUP,
   parseTimeInTimeSegmentToSeconds,
 } from '../../helpers/time-segments/index';
-
-import {
-  parseISOTimeAtSpace,
-  formatInISOTimeAtSpace,
-} from '../../helpers/space-time-utilities/index';
 
 import { calculateFootTraffic } from '../../actions/route-transition/explore-space-daily';
 
@@ -34,11 +26,6 @@ import { chartAsReactComponent } from '@density/charts';
 const LineChartComponent = chartAsReactComponent(lineChart);
 
 const ONE_MINUTE_IN_MS = 60 * 1000, ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60;
-
-const LOADING = 'LOADING',
-      EMPTY = 'EMPTY',
-      VISIBLE = 'VISIBLE',
-      ERROR = 'ERROR';
 
 export class ExploreSpaceDetailFootTrafficCard extends React.Component {
   // state = {
@@ -124,7 +111,7 @@ export class ExploreSpaceDetailFootTrafficCard extends React.Component {
 
       return (
         <Card className="explore-space-detail-card">
-          { calculatedData.state === LOADING ? <CardLoading indeterminate /> : null }
+          { calculatedData.state === 'LOADING' ? <CardLoading indeterminate /> : null }
           <CardHeader className="explore-space-detail-foot-traffic-card-header">
             Foot Traffic
             <InfoPopup horizontalIconOffset={8}>
@@ -145,7 +132,7 @@ export class ExploreSpaceDetailFootTrafficCard extends React.Component {
               })}
               onClick={() => onRefresh(space)}
             >
-              <IconRefresh color={calculatedData.state === LOADING ? 'gray' : 'primary'} />
+              <IconRefresh color={calculatedData.state === 'LOADING' ? 'gray' : 'primary'} />
             </span>
           </CardHeader>
 

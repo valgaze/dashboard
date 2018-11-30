@@ -14,8 +14,6 @@ import InputBox from '@density/ui-input-box';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
-import { DEFAULT_TIME_SEGMENT_GROUP, DEFAULT_TIME_SEGMENT } from '../../helpers/time-segments/index';
-
 import dailyMetrics from '@density/chart-daily-metrics';
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
@@ -26,9 +24,7 @@ import {
 
 import {
   parseISOTimeAtSpace,
-  formatInISOTimeAtSpace,
   getDurationBetweenMomentsInDays,
-  requestCountsForLocalRange
 } from '../../helpers/space-time-utilities/index';
 
 import { chartAsReactComponent } from '@density/charts';
@@ -38,21 +34,6 @@ const LineChartComponent = chartAsReactComponent(lineChart);
 const ONE_MINUTE_IN_MS = 60 * 1000,
       ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60,
       ONE_DAY_IN_MS = ONE_HOUR_IN_MS * 60;
-
-const DAY_TO_INDEX = {
-  'Monday': 1,
-  'Tuesday': 2,
-  'Wednesday': 3,
-  'Thursday': 4,
-  'Friday': 5,
-  'Saturday': 6,
-  'Sunday': 0,
-};
-
-const LOADING = 'LOADING',
-      EMPTY = 'EMPTY',
-      VISIBLE = 'VISIBLE',
-      ERROR = 'ERROR';
 
 // The maximum number of days that can be selected by the date range picker
 const MAXIMUM_DAY_LENGTH = 3 * 31; // Three months of data
@@ -262,7 +243,7 @@ export class ExploreSpaceDetailDailyMetricsCard extends Component {
               No data available for this time range.
             </div> : null }
 
-            {calculatedData.state === LOADING ? <div className="explore-space-detail-daily-metrics-card-body-info">
+            {calculatedData.state === 'LOADING' ? <div className="explore-space-detail-daily-metrics-card-body-info">
               Generating Data&nbsp;.&nbsp;.&nbsp;.
             </div> : null }
           </CardBody>

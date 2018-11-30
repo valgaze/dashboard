@@ -576,7 +576,7 @@ describe('explore space list', function() {
       // Click on the 'set capacity' link
       const stopPropagation = sinon.spy();
       component
-        .find('.explore-space-list-item-capacity a')
+        .find('.explore-space-list-item-capacity-set-link')
         .first()
         .simulate('click', {stopPropagation});
 

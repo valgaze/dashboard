@@ -34,8 +34,8 @@ import moment from 'moment';
 const EVENT_QUEUE_LENGTH = 500;
 
 // How long should data be fetched when running utilization calculations?
-const DATA_DURATION_WEEK = 'DATA_DURATION_WEEK',
-      DATA_DURATION_MONTH = 'DATA_DURATION_MONTH';
+const DATA_DURATION_WEEK = 'DATA_DURATION_WEEK';
+      // DATA_DURATION_MONTH = 'DATA_DURATION_MONTH';
 
 const initialState = {
   data: [],

@@ -14,25 +14,15 @@ import {
 
 import { calculateUtilization } from '../../actions/route-transition/explore-space-trends';
 
-import { core } from '../../client';
-
 import Card, { CardHeader, CardBody, CardLoading, CardWell, CardWellHighlight } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
 import PercentageBar from '@density/ui-percentage-bar';
 
-import fetchAllPages from '../../helpers/fetch-all-pages/index';
 import formatPercentage from '../../helpers/format-percentage/index';
 
-import spaceUtilizationPerGroup, {
-  groupCountsByDay,
-} from '../../helpers/space-utilization/index';
-import {
-  DEFAULT_TIME_SEGMENT_GROUP,
-  DEFAULT_TIME_SEGMENT,
-  parseTimeInTimeSegmentToSeconds,
-} from '../../helpers/time-segments/index';
+import { parseTimeInTimeSegmentToSeconds } from '../../helpers/time-segments/index';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';

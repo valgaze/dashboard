@@ -1,12 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-
-import moment from 'moment';
-import 'moment-timezone';
-
-import { core } from '../../client';
-import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 import Card, { CardHeader, CardLoading, CardTable } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
@@ -16,15 +10,7 @@ import RawEventsPager from '../explore-space-detail-raw-events-pager/index';
 import { calculateDailyRawEvents, DAILY_RAW_EVENTS_PAGE_SIZE } from '../../actions/route-transition/explore-space-daily';
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 
-import {
-  DEFAULT_TIME_SEGMENT_GROUP,
-  DEFAULT_TIME_SEGMENT,
-} from '../../helpers/time-segments/index';
-
-import {
-  parseISOTimeAtSpace,
-  formatInISOTimeAtSpace,
-} from '../../helpers/space-time-utilities/index';
+import { parseISOTimeAtSpace } from '../../helpers/space-time-utilities/index';
 
 export const LOADING = 'LOADING',
       EMPTY = 'EMPTY',

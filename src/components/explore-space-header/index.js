@@ -49,13 +49,13 @@ export function ExploreSpaceHeader({
                   role="button"
                 >Edit</span>
               </span> : <span>
-                <a
+                <span
                   className="explore-space-header-capacity-set-link"
                   href=''
                   onClick={() => {
                     return onOpenModal('set-capacity', {space});
                   }}
-                >Set Capacity</a>
+                >Set Capacity</span>
               </span>}
             </div>
             <div className="explore-space-header-time-zone">

@@ -2,7 +2,6 @@ import { EXPLORE_DATA_ADD_CALCULATION } from '../../actions/explore-data/add-cal
 import { EXPLORE_DATA_CALCULATE_DATA_LOADING } from '../../actions/explore-data/calculate-data-loading';
 import { EXPLORE_DATA_CALCULATE_DATA_COMPLETE } from '../../actions/explore-data/calculate-data-complete';
 import { EXPLORE_DATA_CALCULATE_DATA_ERROR } from '../../actions/explore-data/calculate-data-error';
-import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 
 const initialModuleState = {
   state: 'EMPTY',
