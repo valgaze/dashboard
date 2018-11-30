@@ -58,7 +58,7 @@ export default function routeTransitionExploreSpaceTrends(id) {
     let spaces, selectedSpace;
     try {
       spaces = (await fetchAllPages(
-        page => core.spaces.list({page, page_size: 1000})
+        page => core.spaces.list({page, page_size: 5000})
       )).map(objectSnakeToCamel);
       selectedSpace = spaces.find(s => s.id === id);
     } catch (err) {
@@ -135,7 +135,7 @@ export function calculateDailyMetrics(space) {
         {
           interval: '1d',
           order: 'asc',
-          page_size: 1000,
+          page_size: 5000,
           time_segment_groups: selectedTimeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : selectedTimeSegmentGroup.id
         },
       );
@@ -234,7 +234,7 @@ export function calculateUtilization(space) {
         // Fetch with a large page size to try to minimize the number of requests that will be
         // required.
         page,
-        page_size: 1000,
+        page_size: 5000,
       });
     });
 

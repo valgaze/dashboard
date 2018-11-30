@@ -37,7 +37,7 @@ export default function routeTransitionExploreSpaceList() {
     let spaces;
     try {
       spaces = (await fetchAllPages(
-        page => core.spaces.list({page, page_size: 1000})
+        page => core.spaces.list({page, page_size: 5000})
       )).map(objectSnakeToCamel);
     } catch (err) {
       errorThrown = true;
@@ -53,7 +53,7 @@ export default function routeTransitionExploreSpaceList() {
     let timeSegmentGroups;
     try {
       timeSegmentGroups = await fetchAllPages(
-        page => core.time_segment_groups.list({page, page_size: 1000})
+        page => core.time_segment_groups.list({page, page_size: 5000})
       );
     } catch (err) {
       errorThrown = true;
@@ -111,7 +111,7 @@ export function calculate() {
           end_time: endDate,
           interval: '10m',
           page,
-          page_size: 1000,
+          page_size: 5000,
           time_segment_groups: timeSegmentGroupId === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroupId,
         });
       });

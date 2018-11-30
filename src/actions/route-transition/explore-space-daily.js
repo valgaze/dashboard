@@ -50,7 +50,7 @@ export default function routeTransitionExploreSpaceDaily(id) {
     let spaces, selectedSpace;
     try {
       spaces = (await fetchAllPages(
-        page => core.spaces.list({page, page_size: 1000})
+        page => core.spaces.list({page, page_size: 5000})
       )).map(objectSnakeToCamel);
       selectedSpace = spaces.find(s => s.id === id);
     } catch (err) {
@@ -103,7 +103,7 @@ export function calculateFootTraffic(space) {
           end_time: formatInISOTimeAtSpace(day.clone().startOf('day').add(1, 'day'), space),
 
           page,
-          page_size: 1000,
+          page_size: 5000,
         })
       ));
     } catch (err) {
