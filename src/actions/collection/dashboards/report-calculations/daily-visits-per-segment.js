@@ -1,6 +1,6 @@
 import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index';
 import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
-import { formatInISOTimeAtSpace, requestCountsForLocalRange } from '../../../../helpers/space-time-utilities/index';
+import { formatInISOTimeAtSpace, parseISOTimeAtSpace, requestCountsForLocalRange } from '../../../../helpers/space-time-utilities/index';
 import { core } from '../../../../client';
 
 import { convertTimeRangeToDaysAgo } from './helpers';
@@ -46,10 +46,11 @@ export default async function dailyVisitsPerSegment(report) {
   const data = report.settings.timeSegmentGroupIds.map((timeSegmentGroupId, index) => {
     const timeSegmentGroupData = [];
     for (let day = timeRange.start.clone(); day.isBefore(timeRange.end); day = day.clone().add(1, 'day')) {
-      const countInBucket = countsPerTimeSegment[index].find(
-        count => count.timestamp.startsWith(day.format('YYYY-MM-DD'))
-      );
-      timeSegmentGroupData.push(countInBucket ? countInBucket.interval.analytics.entrances : null);
+      const todaysBucket = countsPerTimeSegment[index].find(bucket => {
+        const localBucketTimestamp = parseISOTimeAtSpace(bucket.timestamp, space);
+        return localBucketTimestamp.format('YYYY-MM-DD') === day.format('YYYY-MM-DD');
+      });
+      timeSegmentGroupData.push(todaysBucket ? todaysBucket.interval.analytics.entrances : null);
     }
     return timeSegmentGroupData;
   });
