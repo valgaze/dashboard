@@ -163,7 +163,7 @@ describe('Login page', function() {
   it('shows a toast when referred to from the forgot password page', function() {
     // Set a global flag in localstorage. This would be set in the previous page by the
     // `ForgotPassword` component prior to redirecting to the login page.
-    window.localStorage = {referredFromForgotPassword: 'true'};
+    window.localStorage.referredFromForgotPassword = 'true';
 
     const component = mount(<Login />);
 

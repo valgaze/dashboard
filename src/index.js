@@ -1,3 +1,4 @@
+import 'react-app-polyfill/ie11'; // For IE 11 support
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { unregister as unregisterServiceWorker } from './registerServiceWorker';
@@ -28,7 +29,6 @@ import { Provider } from 'react-redux';
 import createRouter from '@density/conduit';
 
 // Import all actions required to navigate from one page to another.
-import routeTransitionEnvironmentSpace from './actions/route-transition/environment-space';
 import routeTransitionLogin from './actions/route-transition/login';
 import routeTransitionExploreSpaceList from './actions/route-transition/explore-space-list';
 import routeTransitionExploreSpaceTrends from './actions/route-transition/explore-space-trends';
@@ -178,8 +178,6 @@ router.addRoute('spaces/explore/:id/data-export', id => routeTransitionExploreSp
 
 router.addRoute('spaces/live', () => routeTransitionLiveSpaceList());
 router.addRoute('spaces/live/:id', id => routeTransitionLiveSpaceDetail(id));
-
-router.addRoute('environment/spaces', () => routeTransitionEnvironmentSpace());
 
 router.addRoute('dev/tokens', () => routeTransitionDevTokenList());
 router.addRoute('dev/webhooks', () => routeTransitionDevWebhookList());

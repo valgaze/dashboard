@@ -12,6 +12,7 @@ import {
   formatForReactDates,
   prettyPrintHoursMinutes,
 } from '../../helpers/space-time-utilities/index';
+import { calculate as calculateDailyModules } from '../../actions/route-transition/explore-space-daily';
 
 import Subnav, { SubnavItem } from '../subnav/index';
 import ExploreFilterBar, { ExploreFilterBarItem } from '../explore-filter-bar/index';
@@ -36,6 +37,8 @@ export function ExploreSpaceDaily({
   timeSegmentGroups,
   activeModal,
   onChangeSpaceFilter,
+  onChangeDate,
+  onChangeTimeSegmentGroup,
 }) {
   if (space) {
     const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
@@ -61,7 +64,7 @@ export function ExploreSpaceDaily({
         <ExploreFilterBarItem label="Day">
           <DatePicker
             date={formatForReactDates(parseISOTimeAtSpace(spaces.filters.date, space), space)}
-            onChange={date => onChangeSpaceFilter('date', formatInISOTime(parseFromReactDates(date, space)))}
+            onChange={date => onChangeDate(space, formatInISOTime(parseFromReactDates(date, space)))}
 
             focused={spaces.filters.datePickerFocused}
             onFocusChange={({focused}) => onChangeSpaceFilter('datePickerFocused', focused)}
@@ -100,7 +103,7 @@ export function ExploreSpaceDaily({
               };
             })}
             width={300}
-            onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
+            onChange={value => onChangeTimeSegmentGroup(space, value.id)}
           />
         </ExploreFilterBarItem>
       </ExploreFilterBar>
@@ -149,6 +152,14 @@ export default connect(state => {
   return {
     onChangeSpaceFilter(key, value) {
       dispatch(collectionSpacesFilter(key, value));
+    },
+    onChangeTimeSegmentGroup(space, value) {
+      dispatch(collectionSpacesFilter('timeSegmentGroupId', value));
+      dispatch(calculateDailyModules(space));
+    },
+    onChangeDate(space, value) {
+      dispatch(collectionSpacesFilter('date', value));
+      dispatch(calculateDailyModules(space));
     },
   };
 })(ExploreSpaceDaily);
