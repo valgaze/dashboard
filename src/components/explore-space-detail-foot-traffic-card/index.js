@@ -28,16 +28,6 @@ const LineChartComponent = chartAsReactComponent(lineChart);
 const ONE_MINUTE_IN_MS = 60 * 1000, ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60;
 
 export class ExploreSpaceDetailFootTrafficCard extends React.Component {
-  // state = {
-  //   calculatedData.state: LOADING,
-  //   data: null,
-  //   dataSpaceId: null,
-  //   date: null,
-  //
-  //   timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
-  //   timeSegment: DEFAULT_TIME_SEGMENT,
-  // }
-
   render() {
     const {
       space,

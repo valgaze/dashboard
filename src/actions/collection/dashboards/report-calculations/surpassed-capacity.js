@@ -39,7 +39,7 @@ export default async function surpassedCapacity(report) {
       end_time: formatInISOTimeAtSpace(timeRange.end, space),
       time_segment_groups: report.settings.timeSegmentGroupId,
       page,
-      page_size: 1000,
+      page_size: 5000,
     });
   });
 

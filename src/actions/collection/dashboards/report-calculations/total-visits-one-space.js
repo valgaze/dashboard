@@ -1,6 +1,6 @@
 import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
 import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index';
-import { formatInISOTimeAtSpace } from '../../../../helpers/space-time-utilities/index';
+import { formatInISOTimeAtSpace, parseISOTimeAtSpace } from '../../../../helpers/space-time-utilities/index';
 import { core } from '../../../../client';
 
 import { convertTimeRangeToDaysAgo, convertColorToHex } from './helpers';
@@ -11,7 +11,7 @@ export default async function totalVisitsOneSpace(report) {
 
   // Get all time segment groups that are in this report
   const timeSegmentGroupsPromise = fetchAllPages(
-    page => core.time_segment_groups.list({page, page_size: 1000})
+    page => core.time_segment_groups.list({page, page_size: 5000})
   );
 
   // For each time segment group, make a request to the spaces/:id/counts endpoint for a single
@@ -25,7 +25,7 @@ export default async function totalVisitsOneSpace(report) {
         start_time: formatInISOTimeAtSpace(timeRange.start, space),
         end_time: formatInISOTimeAtSpace(timeRange.end, space),
         time_segment_groups: tsg.id,
-        page_size: 1000,
+        page_size: 5000,
       });
     });
   }));
@@ -47,7 +47,10 @@ export default async function totalVisitsOneSpace(report) {
       // Get the bucket that represents the day for the given time segment group. If no bucket
       // can be found (ie, the time segment group doesn't include that day) then don't render
       // a bar (return null).
-      const todaysBucket = tsg.find(bucket => bucket.timestamp.startsWith(day.format('YYYY-MM-DD')));
+      const todaysBucket = tsg.find(bucket => {
+        const localBucketTimestamp = parseISOTimeAtSpace(bucket.timestamp, space);
+        return localBucketTimestamp.format('YYYY-MM-DD') === day.format('YYYY-MM-DD');
+      });
       return todaysBucket ? todaysBucket.interval.analytics.entrances : null;
     });
     segments.push(segmentsPerDay);

@@ -8,23 +8,28 @@ import ReportWrapper, { ReportError } from '@density/ui-report-wrapper';
 
 import ReportTimeSegmentBreakdown from '@density/ui-report-time-segment-breakdown';
 import ReportTotalVisits from '@density/ui-report-total-visits';
+import ReportTotalVisitsRollup from '@density/ui-report-total-visits-rollup';
 import ReportDailyVisitsPerSegment from '@density/ui-report-daily-visits-per-segment';
 import ReportSurpassedCapacity from '@density/ui-report-surpassed-capacity';
 import ReportComparativePerformance from '@density/ui-report-comparative-performance';
 import ReportNextWeekForecast from '@density/ui-report-next-week-forecast';
+import ReportUtilization from '@density/ui-report-utilization';
 import ReportHourlyBreakdown from '@density/ui-report-hourly-breakdown';
+import ReportWastedSpace from '@density/ui-report-wasted-space';
 
 import ReportLoading from '@density/ui-report-loading';
 
 const REPORT_TYPE_TO_COMPONENT = {
   TOTAL_VISITS_ONE_SPACE: ReportTotalVisits,
-  TOTAL_VISITS_MULTI_SPACE: ReportTotalVisits,
+  TOTAL_VISITS_MULTI_SPACE: ReportTotalVisitsRollup,
   DAILY_VISITS: ReportDailyVisitsPerSegment,
   TS_BREAKDOWN: ReportTimeSegmentBreakdown,
   CAPACITY: ReportSurpassedCapacity,
   COMPARE_PERFORMANCE: ReportComparativePerformance,
   NEXT_WEEK: ReportNextWeekForecast,
+  UTILIZATION: ReportUtilization,
   HOURLY_BREAKDOWN: ReportHourlyBreakdown,
+  WASTED_SPACE: ReportWastedSpace,
 };
 
 export function Dashboard({ dashboards, selectedDashboard }) {
@@ -45,18 +50,18 @@ export function Dashboard({ dashboards, selectedDashboard }) {
     );
   }
 
-  const totalReports = selectedDashboard.reportSet.length;
-  const totalNotLoadingReports = selectedDashboard.reportSet.filter(
+  const nonHeaderReports = selectedDashboard.reportSet.filter(r => r.type !== 'HEADER');
+  const loadedReports = nonHeaderReports.filter(
     report => dashboards.calculatedReportData[report.id].state !== 'LOADING'
-  ).length;
-  const isDashboardLoading = totalNotLoadingReports < totalReports;
+  );
+  const isDashboardLoading = loadedReports.length < nonHeaderReports.length;
   if (isDashboardLoading) {
     return (
       <div className="dashboard-loading-wrapper">
         <div className="dashboard-loading">
           <ReportLoading
-            part={totalNotLoadingReports}
-            whole={totalReports}
+            part={loadedReports.length}
+            whole={nonHeaderReports.length}
           />
         </div>
       </div>
