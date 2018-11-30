@@ -375,35 +375,4 @@ describe('Space hierarchy select box', function() {
   //   component.find('.test-input').simulate('keydown', { key: 'Tab', keyCode: 9, which: 9 });
   //   assert.equal(component.find('.space-hierarchy-select-box-menu.opened').length, 1);
   // });
-
-  it('should open a select box if another is already open, with only one click', function() {
-    const component = mount(<div>
-      <SpaceHierarchySelectBox
-        choices={[
-          {id: 0, parentId: null, spaceType: 'floor', name: 'foo'},
-          {id: 1, parentId: null, spaceType: 'floor', name: 'bar'},
-          {id: 2, parentId: null, spaceType: 'floor', name: 'baz'},
-        ]}
-      />
-      <SpaceHierarchySelectBox
-        choices={[
-          {id: 0, parentId: null, spaceType: 'floor', name: 'quux'},
-          {id: 1, parentId: null, spaceType: 'floor', name: 'bix'}
-        ]}
-      />
-    </div>);
-    const firstSelectBox = component.find('.space-hierarchy-select-box').first();
-    const lastSelectBox = component.find('.space-hierarchy-select-box').last();
-
-    // Focusing the first select box opens it
-    firstSelectBox.find('.space-hierarchy-select-box-value').simulate('focus');
-    assert.equal(firstSelectBox.find('.space-hierarchy-select-box-menu.opened').length, 1);
-    assert.equal(lastSelectBox.find('.space-hierarchy-select-box-menu.opened').length, 0);
-
-    // Blurring the first and focusing the second switches to that one
-    firstSelectBox.find('.space-hierarchy-select-box-value').simulate('blur');
-    lastSelectBox.find('.space-hierarchy-select-box-value').simulate('focus');
-    assert.equal(firstSelectBox.find('.space-hierarchy-select-box-menu.opened').length, 0);
-    assert.equal(lastSelectBox.find('.space-hierarchy-select-box-menu.opened').length, 1);
-  });
 });
