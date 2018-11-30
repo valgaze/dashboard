@@ -1,3 +1,4 @@
+import './polyfill.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { unregister as unregisterServiceWorker } from './registerServiceWorker';
