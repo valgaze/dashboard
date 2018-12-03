@@ -65,7 +65,7 @@ export function ExploreSpaceDetailRawEventsCard({
           ]}
         /> : null}
 
-        {calculatedData.state === 'COMPLETE' && calculatedData.data.data.length === 0 ? <div className="explore-space-detail-raw-events-card-body-info">
+        {calculatedData.state === 'COMPLETE' && (calculatedData.data.data || []).length === 0 ? <div className="explore-space-detail-raw-events-card-body-info">
           No data available for this time period.
         </div> : null}
         {calculatedData.state === 'LOADING' ? <div className="explore-space-detail-raw-events-card-body-info">
