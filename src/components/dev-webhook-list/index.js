@@ -62,11 +62,13 @@ export function WebhookList({
   </Subnav>;
 
   if (webhooks.loading) {
-    return <div className="webhook">
-      {modals}
-      {subnav}
-      <div className="webhook-list-loading"><LoadingSpinner /></div>
-    </div>;
+    return (
+      <div className="webhook">
+        {modals}
+        {subnav}
+        <div className="webhook-list-loading"><LoadingSpinner /></div>
+      </div>
+    );
   }
 
   return <div className="webhook">
@@ -77,7 +79,6 @@ export function WebhookList({
     <ErrorBar message={webhooks.error} showRefresh modalOpen={Boolean(activeModal.name)} />
 
     <div className="webhook-container">
-
       <div className="webhook-list-header">
         <div className="webhook-list-header-title">
           <h1 className="webhook-list-header-text">Webhooks</h1>

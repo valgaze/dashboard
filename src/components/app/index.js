@@ -16,7 +16,6 @@ import ExploreSpaceTrends from '../explore-space-trends/index';
 import ExploreSpaceDaily from '../explore-space-daily/index';
 import ExploreSpaceDataExport from '../explore-space-data-export/index';
 import Login from '../login/index';
-import Environment from '../environment/index';
 import Account from '../account/index';
 import WebhookList from '../dev-webhook-list/index';
 import AccountRegistration from '../account-registration/index';
@@ -32,12 +31,7 @@ import Dashboard from '../dashboard/index';
 
 import UnknownPage from '../unknown-page/index';
 
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import TouchBackend from 'react-dnd-touch-backend';
-import MultiBackend, { TouchTransition, Preview } from 'react-dnd-multi-backend';
-
-function AppComponent({activePage, settings, user, onLogout}) {
+function App({activePage, settings, user, onLogout}) {
   return <div className="app">
     {/* Render the navbar */}
     {(function(activePage) {
@@ -63,26 +57,10 @@ function AppComponent({activePage, settings, user, onLogout}) {
       }
     })(activePage)}
 
-    {/* Render dragging preview when an item is being dragged */}
-    <Preview generator={(type, item, style) => <div style={style} />} />
-
     {/* Insert the currently displayed page into the view */}
     <ActivePage activePage={activePage} settings={settings} />
   </div>;
 }
-const HTML5toTouch = {
-  backends: [
-    {
-      backend: HTML5Backend,
-    },
-    {
-      backend: TouchBackend({enableMouseEvents: true}),
-      preview: true,
-      transition: TouchTransition,
-    },
-  ],
-};
-const App = DragDropContext(MultiBackend(HTML5toTouch))(AppComponent);
 
 function ActivePage({activePage, settings}) {
   switch (activePage) {
@@ -100,8 +78,6 @@ function ActivePage({activePage, settings}) {
     return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceDaily />;
   case "EXPLORE_SPACE_DATA_EXPORT":
     return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceDataExport />;
-  case "ENVIRONMENT_SPACE":
-    return <Environment />;
   case "ACCOUNT":
     return <Account />;
   case "DEV_WEBHOOK_LIST":

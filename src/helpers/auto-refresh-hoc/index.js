@@ -49,7 +49,7 @@ export default function autoRefresh({interval, shouldComponentUpdate}) {
             window.clearInterval(this.wakeUpRafAfterPageInactivity);
           }
           this.wakeUpRafAfterPageInactivity = window.setTimeout(() => {
-            debug('Restarting raf loop. componentid=%o timeoutid=%o', this._reactInternalInstance._debugID, this.wakeUpRafAfterPageInactivity);
+            debug('Restarting raf loop. timeoutid=%o', this.wakeUpRafAfterPageInactivity);
             // Restart raf loop
             this.setState({ lastFrame: window.performance.now() });
             this.raf = window.requestAnimationFrame(this.tick);

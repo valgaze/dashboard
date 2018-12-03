@@ -3,6 +3,7 @@ import React from 'react';
 import Navbar, { NavbarItem, NavbarMobileItem } from '@density/ui-navbar';
 
 import stringToBoolean from '../../helpers/string-to-boolean/index';
+import { IconLogout } from '@density/ui-icons';
 
 
 export default function NavLoggedIn({
@@ -182,7 +183,9 @@ export default function NavLoggedIn({
       href="#/account"
     >Account</NavbarItem>
     <span aria-label="Logout" title="Logout" className="navbar-item navbar-system-tray">
-      <a onClick={onLogout}>&#xe923;</a>
+      <span onClick={onLogout}>
+        <IconLogout width={12} height={12} />
+      </span>
     </span>
   </Navbar>;
 }

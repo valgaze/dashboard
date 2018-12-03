@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import InputBox from '@density/ui-input-box';
 import { isInclusivelyBeforeDay, isInclusivelyAfterDay } from '@density/react-dates';
+import { calculate as calculateTrendsModules } from '../../actions/route-transition/explore-space-trends';
 
 import {
   getCurrentLocalTimeAtSpace,
@@ -66,6 +67,8 @@ function ExploreSpaceTrends({
   activeModal,
   timeSegmentGroups,
   onChangeSpaceFilter,
+  onChangeTimeSegmentGroup,
+  onChangeDateRange,
 }) {
   if (space) {
     const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
@@ -113,7 +116,7 @@ function ExploreSpaceTrends({
                 };
               })}
               width={300}
-              onChange={value => onChangeSpaceFilter('timeSegmentGroupId', value.id)}
+              onChange={value => onChangeTimeSegmentGroup(space, value.id)}
             />
           </ExploreFilterBarItem>
           <ExploreFilterBarItem label="Date Range">
@@ -135,14 +138,20 @@ function ExploreSpaceTrends({
                   endDate = startDate.clone().add(INITIAL_RANGE_SELECTION-1, 'days');
                 }
 
-                onChangeSpaceFilter('startDate', formatInISOTime(startDate));
-                onChangeSpaceFilter('endDate', formatInISOTime(endDate));
+                // Only update the start and end data if one of them has changed from its previous
+                // value
+                if (
+                  formatInISOTime(startDate) !== spaces.filters.startDate || 
+                  formatInISOTime(endDate) !== spaces.filters.endDate
+                ) {
+                  onChangeDateRange(space, formatInISOTime(startDate), formatInISOTime(endDate));
+                }
               }}
               // Within the component, store if the user has selected the start of end date picker
               // input
               focusedInput={spaces.filters.datePickerInput}
               onFocusChange={(focused, a) => {
-                onChangeSpaceFilter('datePickerInput', focused);
+                onChangeSpaceFilter(space, 'datePickerInput', focused);
               }}
 
               // On mobile, make the calendar one month wide and left aligned.
@@ -158,8 +167,7 @@ function ExploreSpaceTrends({
               // common ranges functionality
               commonRanges={getCommonRangesForSpace(space)}
               onSelectCommonRange={({startDate, endDate}) => {
-                onChangeSpaceFilter('startDate', formatInISOTime(startDate));
-                onChangeSpaceFilter('endDate', formatInISOTime(endDate));
+                onChangeDateRange(space, formatInISOTime(startDate), formatInISOTime(endDate));
               }}
             />
           </ExploreFilterBarItem>
@@ -191,7 +199,6 @@ function ExploreSpaceTrends({
                 startDate={spaces.filters.startDate}
                 endDate={spaces.filters.endDate}
                 timeSegmentGroup={selectedTimeSegmentGroup}
-                timeSegment={applicableTimeSegment}
               />
             </div>
           </div>
@@ -212,8 +219,17 @@ export default connect(state => {
   };
 }, dispatch => {
   return {
-    onChangeSpaceFilter(key, value) {
+    onChangeSpaceFilter(space, key, value) {
       dispatch(collectionSpacesFilter(key, value));
+    },
+    onChangeTimeSegmentGroup(space, value) {
+      dispatch(collectionSpacesFilter('timeSegmentGroupId', value));
+      dispatch(calculateTrendsModules(space));
+    },
+    onChangeDateRange(space, startDate, endDate) {
+      dispatch(collectionSpacesFilter('startDate', startDate));
+      dispatch(collectionSpacesFilter('endDate', endDate));
+      dispatch(calculateTrendsModules(space));
     },
   };
 })(ExploreSpaceTrends);

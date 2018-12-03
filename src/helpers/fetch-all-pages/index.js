@@ -9,7 +9,7 @@
 // Example call: fetchSinglePage(1)
 // Example response: {next: 'https://api.density.io/v2/spaces?page=2', total: 18, results: [1, 2, 3, 4, 5]}
 export default function fetchAllPages(fetchSinglePage) {
-  return (async function getPage(page) {
+  const getPage = async function(page) {
     const data = await fetchSinglePage(page);
 
     if (!data) {
@@ -39,5 +39,6 @@ export default function fetchAllPages(fetchSinglePage) {
     } else {
       return data.results;
     }
-  })(1);
+  };
+  return getPage(1);
 }

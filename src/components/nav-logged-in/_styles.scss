@@ -8,13 +8,10 @@
   margin-right: 10px;
 
   // The link within the item.
-  & > a {
-    font-family: "Densicons";
-    cursor: pointer;
-    font-size: $font-size-base;
-    &:hover { opacity: 0.8; }
-    &:active { opacity: 1; }
-  }
+  cursor: pointer;
+  font-size: $font-size-base;
+  &:hover { opacity: 0.8; }
+  &:active { opacity: 1; }
 }
 
 .navbar-item-active {

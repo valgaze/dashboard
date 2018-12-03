@@ -1,24 +1,19 @@
 import React from 'react';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
 
 import moment from 'moment';
 import 'moment-timezone';
 
-import { core } from '../../client';
 import Card, { CardHeader, CardBody, CardLoading } from '@density/ui-card';
 import { IconRefresh } from '@density/ui-icons';
 import InfoPopup from '@density/ui-info-popup';
 
 import {
-  DEFAULT_TIME_SEGMENT,
-  DEFAULT_TIME_SEGMENT_GROUP,
   parseTimeInTimeSegmentToSeconds,
 } from '../../helpers/time-segments/index';
 
-import {
-  parseISOTimeAtSpace,
-  formatInISOTimeAtSpace,
-} from '../../helpers/space-time-utilities/index';
+import { calculateFootTraffic } from '../../actions/route-transition/explore-space-daily';
 
 import lineChart, { dataWaterline } from '@density/chart-line-chart';
 import { xAxisDailyTick, yAxisMinMax } from '@density/chart-line-chart/dist/axes';
@@ -32,91 +27,18 @@ const LineChartComponent = chartAsReactComponent(lineChart);
 
 const ONE_MINUTE_IN_MS = 60 * 1000, ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60;
 
-const LOADING = 'LOADING',
-      EMPTY = 'EMPTY',
-      VISIBLE = 'VISIBLE',
-      ERROR = 'ERROR';
-
-export default class ExploreSpaceDetailFootTrafficCard extends React.Component {
-  state = {
-    view: LOADING,
-    data: null,
-    dataSpaceId: null,
-    datePickerOpen: false,
-    date: null,
-
-    timeSegmentGroup: DEFAULT_TIME_SEGMENT_GROUP,
-    timeSegment: DEFAULT_TIME_SEGMENT,
-  }
-
-  fetchData = () => {
-    const { space } = this.props;
-    const { timeSegmentGroup } = this.state;
-    const day = parseISOTimeAtSpace(this.state.date, space);
-
-    return core.spaces.counts({
-      id: space.id,
-      start_time: formatInISOTimeAtSpace(day.clone().startOf('day'), space),
-      end_time: formatInISOTimeAtSpace(day.clone().startOf('day').add(1, 'day'), space),
-      time_segment_groups: timeSegmentGroup.id === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroup.id,
-      interval: '5m',
-      page: 1,
-      page_size: 5000,
-      order: 'desc',
-    }).then(data => {
-      if (data.results.length > 0) {
-        this.setState({
-          view: VISIBLE,
-          dataSpaceId: space.id,
-          data: data.results,
-        });
-      } else {
-        this.setState({
-          view: EMPTY,
-          dataSpaceId: space.id,
-        });
-      }
-    }).catch(error => {
-      this.setState({
-        view: ERROR,
-        error,
-        dataSpaceId: space.id,
-      });
-    });
-  }
-
-  componentWillReceiveProps({space, date, timeSegment, timeSegmentGroup}) {
-    if (space && (
-      space.id !== this.state.dataSpaceId ||
-      date !== this.state.date ||
-      timeSegment.id !== this.state.timeSegment.id ||
-      timeSegmentGroup.Id !== this.state.timeSegmentGroup.Id
-    )) {
-      this.setState({
-        view: LOADING,
-        date,
-        timeSegment,
-        timeSegmentGroup,
-        dataSpaceId: space.id,
-      }, () => this.fetchData());
-    }
-  }
-
-  componentDidMount() {
-    this.componentWillReceiveProps(this.props);
-  }
-
+export class ExploreSpaceDetailFootTrafficCard extends React.Component {
   render() {
-    const { space } = this.props;
     const {
-      view,
-      data,
-      error,
+      space,
 
       date,
       timeSegment,
       timeSegmentGroup,
-    } = this.state;
+      calculatedData,
+
+      onRefresh,
+    } = this.props;
 
     const startOfDayTime = moment.utc(date).tz(space.timeZone).startOf('day');
     const startTime = startOfDayTime
@@ -130,8 +52,8 @@ export default class ExploreSpaceDetailFootTrafficCard extends React.Component {
         min = '-',
         max = '-';
 
-    if (data) {
-      chartData = data.map(i => ({
+    if (calculatedData.data) {
+      chartData = calculatedData.data.map(i => ({
         timestamp: i.timestamp,
         value: i.interval.analytics.max,
       })).filter(i => {
@@ -151,7 +73,7 @@ export default class ExploreSpaceDetailFootTrafficCard extends React.Component {
       });
 
       const isToday = (
-        moment.utc(this.state.date).tz(space.timeZone).format('YYYY-MM-DD') ===
+        moment.utc(date).tz(space.timeZone).format('YYYY-MM-DD') ===
         moment.utc().tz(space.timeZone).format('YYYY-MM-DD')
       );
 
@@ -168,141 +90,148 @@ export default class ExploreSpaceDetailFootTrafficCard extends React.Component {
         });
       }
 
-      min = Math.min.apply(Math, data.map(i => i.interval.analytics.min));
-      max = Math.max.apply(Math, data.map(i => i.interval.analytics.max));
+      min = Math.min.apply(Math, calculatedData.data.map(i => i.interval.analytics.min));
+      max = Math.max.apply(Math, calculatedData.data.map(i => i.interval.analytics.max));
     }
 
     if (space) {
-      const largestCount = view === 'VISIBLE' ? (
-        data.reduce((acc, i) => i.count > acc.count ? i : acc, {count: -1})
+      const largestCount = calculatedData.state === 'COMPLETE' ? (
+        calculatedData.data.reduce((acc, i) => i.count > acc.count ? i : acc, {count: -1})
       ) : null;
 
-      return <Card className="explore-space-detail-card">
-        { view === LOADING ? <CardLoading indeterminate /> : null }
-        <CardHeader className="explore-space-detail-foot-traffic-card-header">
-          Foot Traffic
-          <InfoPopup horizontalIconOffset={8}>
-            <p className="explore-space-detail-foot-traffic-card-popup-p">
-              Count over time for <strong>{timeSegmentGroup.name}</strong> over
-              the time period of{' '}
-              <strong>{moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}</strong>, queried
-              in 5 minute intervals.
-            </p>
+      return (
+        <Card className="explore-space-detail-card">
+          { calculatedData.state === 'LOADING' ? <CardLoading indeterminate /> : null }
+          <CardHeader className="explore-space-detail-foot-traffic-card-header">
+            Foot Traffic
+            <InfoPopup horizontalIconOffset={8}>
+              <p className="explore-space-detail-foot-traffic-card-popup-p">
+                Count over time for <strong>{timeSegmentGroup.name}</strong> over
+                the time period of{' '}
+                <strong>{moment.utc(date).tz(space.timeZone).format('MM/DD/YYYY')}</strong>, queried
+                in 5 minute intervals.
+              </p>
 
-            <p className="explore-space-detail-foot-traffic-card-popup-p">
-              Use this chart to understand visitation over the course of a day.
-            </p>
-          </InfoPopup>
-          <span
-            className={classnames('explore-space-detail-foot-traffic-card-header-refresh', {
-              disabled: view !== VISIBLE,
-            })}
-            onClick={() => this.setState({
-              view: LOADING,
-              data: null,
-            }, () => this.fetchData())}
-          >
-            <IconRefresh color={view === LOADING ? 'gray' : 'primary'} />
-          </span>
-        </CardHeader>
+              <p className="explore-space-detail-foot-traffic-card-popup-p">
+                Use this chart to understand visitation over the course of a day.
+              </p>
+            </InfoPopup>
+            <span
+              className={classnames('explore-space-detail-foot-traffic-card-header-refresh', {
+                disabled: calculatedData.state !== 'COMPLETE',
+              })}
+              onClick={() => onRefresh(space)}
+            >
+              <IconRefresh color={calculatedData.state === 'LOADING' ? 'gray' : 'primary'} />
+            </span>
+          </CardHeader>
 
-        <div className="explore-space-detail-foot-traffic-card-well">
-          <div className="explore-space-detail-foot-traffic-card-well-section capacity">
-            <span className="explore-space-detail-foot-traffic-card-well-section-quantity">{space.capacity || '-'}</span>
-            <span className="explore-space-detail-foot-traffic-card-well-section-label">Capacity</span>
+          <div className="explore-space-detail-foot-traffic-card-well">
+            <div className="explore-space-detail-foot-traffic-card-well-section capacity">
+              <span className="explore-space-detail-foot-traffic-card-well-section-quantity">{space.capacity || '-'}</span>
+              <span className="explore-space-detail-foot-traffic-card-well-section-label">Capacity</span>
+            </div>
+            <div className="explore-space-detail-foot-traffic-card-well-section minimum">
+              <span className="explore-space-detail-foot-traffic-card-well-section-quantity">{min}</span>
+              <span className="explore-space-detail-foot-traffic-card-well-section-label">Minimum</span>
+            </div>
+            <div className="explore-space-detail-foot-traffic-card-well-section maximum">
+              <span className="explore-space-detail-foot-traffic-card-well-section-quantity">{max}</span>
+              <span className="explore-space-detail-foot-traffic-card-well-section-label">Maximum</span>
+            </div>
           </div>
-          <div className="explore-space-detail-foot-traffic-card-well-section minimum">
-            <span className="explore-space-detail-foot-traffic-card-well-section-quantity">{min}</span>
-            <span className="explore-space-detail-foot-traffic-card-well-section-label">Minimum</span>
-          </div>
-          <div className="explore-space-detail-foot-traffic-card-well-section maximum">
-            <span className="explore-space-detail-foot-traffic-card-well-section-quantity">{max}</span>
-            <span className="explore-space-detail-foot-traffic-card-well-section-label">Maximum</span>
-          </div>
-        </div>
 
-        <CardBody className="explore-space-detail-foot-traffic-card-body">
-          {view === VISIBLE && chartData.length > 0 ? <LineChartComponent
-            timeZone={space.timeZone}
-            svgWidth={975}
-            svgHeight={350}
+          <CardBody className="explore-space-detail-foot-traffic-card-body">
+            {calculatedData.state === 'COMPLETE' && chartData.length > 0 ? <LineChartComponent
+              timeZone={space.timeZone}
+              svgWidth={975}
+              svgHeight={350}
 
-            xAxisStart={startTime}
-            xAxisEnd={endTime}
-            xAxis={xAxisDailyTick({
-              timeBetweenTicksInMs: 1 * ONE_HOUR_IN_MS,
-              bottomOffset: 20,
-              formatter: (n) => {
-                // "5a" or "8p"
-                const timeFormat = moment.utc(n).tz(space.timeZone).format('hA');
-                return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
-              },
-            })}
+              xAxisStart={startTime}
+              xAxisEnd={endTime}
+              xAxis={xAxisDailyTick({
+                timeBetweenTicksInMs: 1 * ONE_HOUR_IN_MS,
+                bottomOffset: 20,
+                formatter: (n) => {
+                  // "5a" or "8p"
+                  const timeFormat = moment.utc(n).tz(space.timeZone).format('hA');
+                  return timeFormat.slice(0, timeFormat.startsWith('12') ? -1 : -2).toLowerCase();
+                },
+              })}
 
-            yAxisStart={0}
-            yAxisEnd={space.capacity !== null ?  Math.max(space.capacity, largestCount.count) : undefined}
-            yAxis={yAxisMinMax({
-              leftOffset: 20,
-              points: [
-                ...(space.capacity !== null ? [{value: space.capacity, hasShadow: true}] : []),
-                {value: largestCount.count, hasRule: false, hasShadow: false},
-              ],
-              showMaximumPoint: false,
-            })}
+              yAxisStart={0}
+              yAxisEnd={space.capacity !== null ?  Math.max(space.capacity, largestCount.count) : undefined}
+              yAxis={yAxisMinMax({
+                leftOffset: 20,
+                points: [
+                  ...(space.capacity !== null ? [{value: space.capacity, hasShadow: true}] : []),
+                  {value: largestCount.count, hasRule: false, hasShadow: false},
+                ],
+                showMaximumPoint: false,
+              })}
 
-            overlays={[
-              overlayTwoPopups({
-                topPopupFormatter: overlayTwoPopupsPersonIconTextFormatter(item => `${item.value}`),
-                bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
-                  (item, {mouseX, xScale}) => {
-                    const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
-                    const time = timestamp.format(`h:mma`).slice(0, -1);
-                    const date = timestamp.format(`ddd MMM Do`);
-                    return `${time} ${date}`;
-                  }
-                ),
+              overlays={[
+                overlayTwoPopups({
+                  topPopupFormatter: overlayTwoPopupsPersonIconTextFormatter(item => `${item.value}`),
+                  bottomPopupFormatter: overlayTwoPopupsPlainTextFormatter(
+                    (item, {mouseX, xScale}) => {
+                      const timestamp = moment.utc(xScale.invert(mouseX)).tz(space.timeZone);
+                      const time = timestamp.format(`h:mma`).slice(0, -1);
+                      const date = timestamp.format(`ddd MMM Do`);
+                      return `${time} ${date}`;
+                    }
+                  ),
 
-                bottomOverlayTopMargin: 40,
-                topOverlayBottomMargin: 20,
+                  bottomOverlayTopMargin: 40,
+                  topOverlayBottomMargin: 20,
 
-                topOverlayWidth: 80,
-                topOverlayHeight: 42,
-                bottomOverlayWidth: 200,
-                bottomOverlayHeight: 42,
-              }),
-            ]}
+                  topOverlayWidth: 80,
+                  topOverlayHeight: 42,
+                  bottomOverlayWidth: 200,
+                  bottomOverlayHeight: 42,
+                }),
+              ]}
 
-            data={[
-              {
-                name: 'default',
-                type: dataWaterline,
-                verticalBaselineOffset: 10,
-                // BUG: chart can't render a single datapoint.
-                data: chartData.length === 1 ? [...chartData, ...chartData] : chartData,
-              },
-            ]}
-          /> : null}
+              data={[
+                {
+                  name: 'default',
+                  type: dataWaterline,
+                  verticalBaselineOffset: 10,
+                  // BUG: chart can't render a single datapoint.
+                  data: chartData.length === 1 ? [...chartData, ...chartData] : chartData,
+                },
+              ]}
+            /> : null}
 
-          {view === VISIBLE && chartData.length === 0 ? <div className="explore-space-detail-foot-traffic-card-body-info">
+          {calculatedData.state === 'COMPLETE' && chartData.length === 0 ? <div className="explore-space-detail-foot-traffic-card-body-info">
             <span>No data found for this query.</span>
           </div> : null}
-
-          {view === LOADING ? <div className="explore-space-detail-foot-traffic-card-body-info">
-            <span>Generating Data&nbsp;.&nbsp;.&nbsp;.</span>
-          </div> : null}
-          {view === EMPTY ? <div className="explore-space-detail-foot-traffic-card-body-info">
+          {calculatedData.state === 'COMPLETE' && !chartData ? <div className="explore-space-detail-foot-traffic-card-body-info">
             <span>No data found in date range.</span>
           </div> : null}
-          {view === ERROR ? <div className="explore-space-detail-foot-traffic-card-body-info">
+
+          {calculatedData.state === 'LOADING' ? <div className="explore-space-detail-foot-traffic-card-body-info">
+            <span>Generating Data&nbsp;.&nbsp;.&nbsp;.</span>
+          </div> : null}
+          {calculatedData.state === 'ERROR' ? <div className="explore-space-detail-foot-traffic-card-body-info">
             <span>
               <span className="explore-space-detail-foot-traffic-card-body-error-icon">&#xe91a;</span>
-              {error.toString()}
+              {calculatedData.error.toString()}
             </span>
           </div> : null}
-          </CardBody>
-      </Card>;
+        </CardBody>
+      </Card>
+    );
     } else {
       return <span>This space doesn't exist.</span>;
     }
   }
 }
+
+export default connect(state => ({
+  calculatedData: state.exploreData.calculations.footTraffic,
+}), dispatch => ({
+  onRefresh(space) {
+    dispatch(calculateFootTraffic(space));
+  },
+}))(ExploreSpaceDetailFootTrafficCard);
