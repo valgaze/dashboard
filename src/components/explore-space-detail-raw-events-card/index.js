@@ -57,7 +57,7 @@ export function ExploreSpaceDetailRawEventsCard({
 
         {calculatedData.state === 'COMPLETE' ? <CardTable
           headings={["Timestamp", "Event", "Doorway"]}
-          data={calculatedData.data.data}
+          data={calculatedData.data.data || []}
           mapDataItemToRow={item => [
             parseISOTimeAtSpace(item.timestamp, space).format('MMM Do YYYY, h:mm:ss a'),
             item.direction === 1 ? 'Entrance' : 'Exit',
