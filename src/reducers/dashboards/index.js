@@ -2,7 +2,7 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import { COLLECTION_DASHBOARDS_SET } from '../../actions/collection/dashboards/set';
 import { COLLECTION_DASHBOARDS_ERROR } from '../../actions/collection/dashboards/error';
 import { COLLECTION_DASHBOARDS_SELECT } from '../../actions/collection/dashboards/select';
-import { ROUTE_TRANSITION_DASHBOARDS } from '../../actions/route-transition/dashboards';
+import { ROUTE_TRANSITION_DASHBOARD_DETAIL } from '../../actions/route-transition/dashboard-detail';
 
 import {
   COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE,
@@ -27,7 +27,7 @@ const initialState = {
 export default function dashboards(state=initialState, action) {
   switch (action.type) {
 
-  case ROUTE_TRANSITION_DASHBOARDS:
+  case ROUTE_TRANSITION_DASHBOARD_DETAIL:
     return initialState;
 
   // Update the whole dashboard collection.

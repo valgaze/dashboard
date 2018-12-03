@@ -15,7 +15,8 @@ import { ROUTE_TRANSITION_ACCOUNT_SETUP_OVERVIEW } from '../../actions/route-tra
 import { ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_LIST } from '../../actions/route-transition/account-setup-doorway-list';
 import { ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL } from '../../actions/route-transition/account-setup-doorway-detail';
 
-import { ROUTE_TRANSITION_DASHBOARDS } from '../../actions/route-transition/dashboards';
+import { ROUTE_TRANSITION_DASHBOARD_LIST } from '../../actions/route-transition/dashboard-list';
+import { ROUTE_TRANSITION_DASHBOARD_DETAIL } from '../../actions/route-transition/dashboard-detail';
 
 const initialState = null;
 
@@ -57,8 +58,10 @@ export default function activePage(state=initialState, action) {
   case ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL:
     return "ACCOUNT_SETUP_DOORWAY_DETAIL";
 
-  case ROUTE_TRANSITION_DASHBOARDS:
-    return "DASHBOARDS";
+  case ROUTE_TRANSITION_DASHBOARD_LIST:
+    return "DASHBOARD_LIST";
+  case ROUTE_TRANSITION_DASHBOARD_DETAIL:
+    return "DASHBOARD_DETAIL";
   default:
     return state;
   }

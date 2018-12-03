@@ -94,7 +94,7 @@ function ActivePage({activePage, settings}) {
     return <AccountSetupDoorwayList />;
   case "ACCOUNT_SETUP_DOORWAY_DETAIL":
     return <AccountSetupDoorwayDetail />;
-  case "DASHBOARDS":
+  case "DASHBOARD_DETAIL":
     return <Dashboard />;
   default:
     return <UnknownPage invalidUrl={activePage} />;

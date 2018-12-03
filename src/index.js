@@ -44,7 +44,8 @@ import routeTransitionAccountForgotPassword from './actions/route-transition/acc
 import routeTransitionAccountSetupOverview from './actions/route-transition/account-setup-overview';
 import routeTransitionAccountSetupDoorwayList from './actions/route-transition/account-setup-doorway-list';
 import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition/account-setup-doorway-detail';
-import routeTransitionDashboards from './actions/route-transition/dashboards';
+import routeTransitionDashboardList from './actions/route-transition/dashboard-list';
+import routeTransitionDashboardDetail from './actions/route-transition/dashboard-detail';
 
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 import collectionSpacesSetEvents from './actions/collection/spaces/set-events';
@@ -169,7 +170,8 @@ router.addRoute('spaces/insights/:id/daily', redirect(id => `spaces/explore/${id
 router.addRoute('spaces/insights/:id/data-export', redirect(id => `spaces/explore/${id}/data-export`)); // DEPRECATED
 // ^ I AM DEPRECATED
 
-router.addRoute('dashboards', () => routeTransitionDashboards());
+router.addRoute('dashboards', () => routeTransitionDashboardList());
+router.addRoute('dashboards/:id', id => routeTransitionDashboardDetail(id));
 
 router.addRoute('spaces/explore', () => routeTransitionExploreSpaceList());
 router.addRoute('spaces/explore/:id/trends', id => routeTransitionExploreSpaceTrends(id));
