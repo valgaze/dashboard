@@ -380,6 +380,11 @@ pre {
   line-height: $line-height-base;
 }
 
+// globally override chrome's terrible autofill background color
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 100px white inset !important;
+}
+
 // Change autofill color in chrome to be white.
 // TODO: still necessary after adding the box-shadow rule above?
 input[type=input], input[type=password] { &:-webkit-autofill {
@@ -461,3 +466,5 @@ $cdn-path: "https://densityco.github.io/assets";
 @import "./components/explore-space-data-export/styles";
 @import "./components/explore-space-detail-raw-events-export-card/styles";
 @import "./components/dashboard/styles";
+@import "./components/app-frame-column/styles";
+@import "./components/app-bar/styles";

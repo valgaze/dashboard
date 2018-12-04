@@ -8,7 +8,6 @@ import collectionLinksSet from '../../actions/collection/links/set';
 
 import { connect } from 'react-redux';
 
-import NavLoggedIn from '../nav-logged-in/index';
 import NavLoggedOut from '../nav-logged-out/index';
 import TokenList from '../dev-token-list/index';
 import ExploreSpaceList from '../explore-space-list/index';
@@ -28,38 +27,43 @@ import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
 import AccountSetupDoorwayDetail from '../account-setup-doorway-detail/index';
 
 import Dashboard from '../dashboard/index';
+import AppBar from '../app-bar/index';
 
 import UnknownPage from '../unknown-page/index';
 
 function App({activePage, settings, user, onLogout}) {
-  return <div className="app">
-    {/* Render the navbar */}
-    {(function(activePage) {
-      switch (activePage) {
+  return (
+    <div className="app">
+      {/* Render the navbar */}
+      {(function(activePage) {
+        switch (activePage) {
         // On these special pages, render the logged-out navbar.
         case 'LOGIN':
         case 'ACCOUNT_REGISTRATION':
         case 'ACCOUNT_FORGOT_PASSWORD':
           return <NavLoggedOut />;
 
-        // Don't render a nav bar on this special page.
+          // Don't render a nav bar on this special page.
         case 'LIVE_SPACE_DETAIL':
           return null;
 
-        // Render the logged-in navbar by default
+          // Render the logged-in navbar by default
         default:
-          return <NavLoggedIn
-            activePage={activePage}
-            settings={settings}
+          return <AppBar
+            page={activePage}
             onLogout={onLogout}
             user={user}
           />;
-      }
-    })(activePage)}
+        }
+      })(activePage)}
 
-    {/* Insert the currently displayed page into the view */}
-    <ActivePage activePage={activePage} settings={settings} />
-  </div>;
+      {/* Insert the currently displayed page into the view */}
+      <ActivePage
+        activePage={activePage}
+        settings={settings}
+      />
+    </div>
+  );
 }
 
 function ActivePage({activePage, settings}) {

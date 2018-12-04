@@ -1,6 +1,16 @@
+.dashboard-app-frame {
+  display: flex;
+  flex-direction: row;
+}
+.dashboard-app-column {
+  width: 300px;
+}
+.dashboard-app-frame-content {
+  flex: 1;
+}
+
 .dashboard-wrapper {
   width: 100%;
-  max-width: 1440px;
   margin: 0px auto 40px auto;
 
   animation: fadeInUp 0.4s ease-out;

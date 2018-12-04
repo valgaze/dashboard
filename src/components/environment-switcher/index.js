@@ -50,7 +50,7 @@ export default class EnvironmentSwitcher extends React.Component {
     this.props.onChange(getActiveEnvironments(this.props.fields));
   }
   render() {
-    const {fields} = this.props;
+    const { fields } = this.props;
     return <div>
 
       {/* if the url of what the user is looking at is staging, show a banner saying that */}
