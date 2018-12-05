@@ -1,0 +1,45 @@
+
+.chartContainer {
+  width: 100%;
+}
+
+.reportTimeSegmentBreakdownList {
+  padding-left: 0px;
+  list-style: none;
+
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.reportTimeSegmentBreakdownItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 12px;
+
+  margin-top: 0px;
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.reportTimeSegmentBreakdownItemBubble {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+
+  background-color: #CBCFD6;
+  border: 4px solid #8E9299;
+
+  margin-right: 10px;
+}
+.reportTimeSegmentBreakdownItemLabel {
+  flex: 1;
+  font-size: 12px;
+  // this is because sailec's baseline is messed
+  transform: translate(0px, 2px);
+}
+
+
+
+.reportTimeSegmentBreakdownItemHighlight { font-weight: bold; }

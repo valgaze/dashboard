@@ -1,7 +1,7 @@
 import totalVisitsOneSpace from './report-calculations/total-visits-one-space';
 import totalVisitsRollup from './report-calculations/total-visits-rollup';
 import dailyVisitsPerSegment from './report-calculations/daily-visits-per-segment';
-import averageTimeSegmentBreakdown from './report-calculations/average-time-segment-breakdown';
+import timeSegmentBreakout from './report-calculations/time-segment-breakout';
 import surpassedCapacity from './report-calculations/surpassed-capacity';
 import comparativePerformance from './report-calculations/comparative-performance';
 import nextWeekForecast from './report-calculations/next-week-forecast';
@@ -17,7 +17,7 @@ const REPORT_TYPE_TO_FUNCTION = {
   TOTAL_VISITS_ONE_SPACE: totalVisitsOneSpace,
   TOTAL_VISITS_MULTI_SPACE: totalVisitsRollup,
   DAILY_VISITS: dailyVisitsPerSegment,
-  TS_BREAKDOWN: averageTimeSegmentBreakdown,
+  TS_BREAKDOWN: timeSegmentBreakout,
   CAPACITY: surpassedCapacity,
   COMPARE_PERFORMANCE: comparativePerformance,
   NEXT_WEEK: nextWeekForecast,
