@@ -34,6 +34,55 @@
 .dashboard-sidebar-hide-show-icon:hover { opacity: 0.8; }
 .dashboard-sidebar-hide-show-icon:active { opacity: 1; }
 
+.dashboard-sidebar-link {
+  text-decoration: none;
+  color: $gray-darker;
+}
+
+
+.dashboard-sidebar-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  transition: all 250ms ease-in-out;
+
+  height: 45px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  margin-left: 32px;
+  margin-right: 32px;
+  border-bottom: 1px solid $gray;
+}
+.dashboard-sidebar-item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.dashboard-sidebar-item-name {
+  color: $gray-darkest;
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: auto;
+}
+.dashboard-sidebar-item:hover .dashboard-sidebar-item-name { color: $gray-cinder; }
+.dashboard-sidebar-item.selected .dashboard-sidebar-item-name { color: $brand-primary; }
+
+.dashboard-sidebar-item-num-reports {
+  color: $gray-darkest;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 4px;
+}
+.dashboard-sidebar-item:hover .dashboard-sidebar-item-num-reports { color: $gray-cinder; }
+.dashboard-sidebar-item.selected .dashboard-sidebar-item-num-reports { color: $brand-primary; }
+
+.dashboard-sidebar-item-headers {
+  color: $gray-darkest;
+  font-size: 14px;
+}
+
 
 
 

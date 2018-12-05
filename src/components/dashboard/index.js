@@ -21,7 +21,7 @@ import ReportWastedSpace from '@density/ui-report-wasted-space';
 import ReportLoading from '@density/ui-report-loading';
 
 import AppFrameHeader, { AppFrameHeaderText, AppFrameHeaderItem } from '../app-frame-header/index';
-import { IconMenu } from '@density/ui-icons';
+import { IconMenu, IconChevronRight } from '@density/ui-icons';
 
 import showDashboardSidebar from '../../actions/miscellaneous/show-dashboards-sidebar';
 import hideDashboardSidebar from '../../actions/miscellaneous/hide-dashboards-sidebar';
@@ -39,6 +39,29 @@ const REPORT_TYPE_TO_COMPONENT = {
   HOURLY_BREAKDOWN: ReportHourlyBreakdown,
   WASTED_SPACE: ReportWastedSpace,
 };
+
+function DashboardSidebarItem({selected, id, name, reportSet}) {
+  const nonHeaderReports = reportSet.filter(i => i.type !== 'HEADER');
+  const headerNames = reportSet.filter(i => i.type === 'HEADER').map(i => i.name);
+  return (
+    <a className="dashboard-sidebar-link" href={`#/dashboards/${id}`}>
+      <div className={classnames('dashboard-sidebar-item', {selected})}>
+        <div className="dashboard-sidebar-item-row">
+          <span className="dashboard-sidebar-item-name">{name}</span>
+          <span className="dashboard-sidebar-item-num-reports">
+            {nonHeaderReports.length} Reports
+          </span>
+          <IconChevronRight width={8} height={8} />
+        </div>
+        <div className="dashboard-sidebar-item-row">
+          <span className="dashboard-sidebar-item-headers">
+            {headerNames.length > 0 ? headerNames.join(', ') : "No headers"}
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+}
 
 function DashboardSidebarHideShowIcon({sidebarVisible, onChangeSidebarVisibility}) {
   return (
@@ -75,15 +98,17 @@ export function Dashboard({
               return null;
             } else {
               return (
-                <ul>
+                <Fragment>
                   {dashboards.data.map(dashboard => (
-                    <li key={dashboard.id}>
-                      <a href={`#/dashboards/${dashboard.id}`}>
-                        {dashboard.name}
-                      </a>
-                    </li>
+                    <DashboardSidebarItem
+                      key={dashboard.id}
+                      id={dashboard.id}
+                      name={dashboard.name}
+                      reportSet={dashboard.reportSet}
+                      selected={selectedDashboard ? selectedDashboard.id === dashboard.id : false}
+                    />
                   ))}
-                </ul>
+                </Fragment>
               )
             }
           })()}
