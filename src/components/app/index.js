@@ -37,13 +37,10 @@ function App({activePage, settings, user, onLogout}) {
       {/* Render the navbar */}
       {(function(activePage) {
         switch (activePage) {
-        // On these special pages, render the logged-out navbar.
+        // On these special pages, don't render a navbar
         case 'LOGIN':
         case 'ACCOUNT_REGISTRATION':
         case 'ACCOUNT_FORGOT_PASSWORD':
-          return <NavLoggedOut />;
-
-          // Don't render a nav bar on this special page.
         case 'LIVE_SPACE_DETAIL':
           return null;
 
@@ -53,6 +50,7 @@ function App({activePage, settings, user, onLogout}) {
             page={activePage}
             onLogout={onLogout}
             user={user}
+            settings={settings}
           />;
         }
       })(activePage)}
