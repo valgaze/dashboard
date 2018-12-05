@@ -49,7 +49,7 @@ function DashboardSidebarItem({selected, id, name, reportSet}) {
         <div className="dashboard-sidebar-item-row">
           <span className="dashboard-sidebar-item-name">{name}</span>
           <span className="dashboard-sidebar-item-num-reports">
-            {nonHeaderReports.length} Reports
+            {nonHeaderReports.length} {nonHeaderReports.length === 1 ? 'Report' : 'Reports'}
           </span>
           <IconChevronRight width={8} height={8} />
         </div>
