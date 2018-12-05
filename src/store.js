@@ -18,6 +18,7 @@ import eventPusherStatus from './reducers/event-pusher-status/index';
 import timeSegmentGroups from './reducers/time-segment-groups/index';
 import dashboards from './reducers/dashboards/index';
 import exploreData from './reducers/explore-data/index';
+import miscellaneous from './reducers/miscellaneous/index';
 const reducer = combineReducers({
   accountForgotPassword,
   accountRegistration,
@@ -34,6 +35,7 @@ const reducer = combineReducers({
   timeSegmentGroups,
   dashboards,
   exploreData,
+  miscellaneous,
 });
 
 // Create our redux store for storing the application state.

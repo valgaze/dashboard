@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import classnames from 'classnames';
 
 import { connect } from 'react-redux';
 
@@ -19,7 +20,12 @@ import ReportWastedSpace from '@density/ui-report-wasted-space';
 
 import ReportLoading from '@density/ui-report-loading';
 
-import AppFrameColumn from '../app-frame-column/index';
+import AppFrameHeader, { AppFrameHeaderText, AppFrameHeaderItem } from '../app-frame-header/index';
+import { IconMenu } from '@density/ui-icons';
+
+import showDashboardSidebar from '../../actions/miscellaneous/show-dashboards-sidebar';
+import hideDashboardSidebar from '../../actions/miscellaneous/hide-dashboards-sidebar';
+import resetDashboardReportGridIdentityValue from '../../actions/miscellaneous/reset-dashboard-report-grid-identity-value';
 
 const REPORT_TYPE_TO_COMPONENT = {
   TOTAL_VISITS_ONE_SPACE: ReportTotalVisits,
@@ -34,11 +40,36 @@ const REPORT_TYPE_TO_COMPONENT = {
   WASTED_SPACE: ReportWastedSpace,
 };
 
-export function Dashboard({ dashboards, selectedDashboard }) {
+function DashboardSidebarHideShowIcon({sidebarVisible, onChangeSidebarVisibility}) {
+  return (
+    <span
+      className="dashboard-sidebar-hide-show-icon"
+      onClick={() => onChangeSidebarVisibility(!sidebarVisible)}
+    >
+      <IconMenu />
+    </span>
+  );
+}
+
+export function Dashboard({
+  dashboards,
+  selectedDashboard,
+
+  dashboardReportGridIdentityValue,
+  onChangeDashboardReportGridIdentityValue,
+
+  sidebarVisible,
+  onChangeSidebarVisibility,
+}) {
   return (
     <div className="dashboard-app-frame">
-      <div className="dashboard-app-column">
-        <AppFrameColumn title="Dashboards">
+      <div className={classnames('dashboard-app-frame-sidebar-wrapper', {visible: sidebarVisible})}>
+        <div className="dashboard-app-frame-sidebar">
+          <AppFrameHeader>
+            <AppFrameHeaderItem>
+              <AppFrameHeaderText>Dashboards</AppFrameHeaderText>
+            </AppFrameHeaderItem>
+          </AppFrameHeader>
           {(function() {
             if (dashboards.loading) {
               return null;
@@ -56,24 +87,54 @@ export function Dashboard({ dashboards, selectedDashboard }) {
               )
             }
           })()}
-        </AppFrameColumn>
+        </div>
       </div>
       <div className="dashboard-app-frame-content">
         {(function() {
-          if (dashboards.loading) {
+          if (dashboards.loading && !dashboards.selected) {
             return (
-              <AppFrameColumn title="Loading" />
+              <AppFrameHeader></AppFrameHeader>
             );
           } else if (!dashboards.selected) {
             return (
-              <AppFrameColumn title="">
+              <Fragment>
+                <AppFrameHeader>
+                  <AppFrameHeaderItem>
+                    <DashboardSidebarHideShowIcon
+                      sidebarVisible={sidebarVisible}
+                      onChangeSidebarVisibility={onChangeSidebarVisibility}
+                    />
+                  </AppFrameHeaderItem>
+                </AppFrameHeader>
                 <div className="dashboard-wrapper">
                   <div className="dashboard-non-ideal-state">
                     <h1>No dashboard selected</h1>
                     <span>To create a dashboard, please talk to your Density account manager.</span>
                   </div>
                 </div>
-              </AppFrameColumn>
+              </Fragment>
+            );
+          } else if (selectedDashboard && selectedDashboard.reportSet.length === 0) {
+            return (
+              <Fragment>
+                <AppFrameHeader>
+                  <AppFrameHeaderItem>
+                    <DashboardSidebarHideShowIcon
+                      sidebarVisible={sidebarVisible}
+                      onChangeSidebarVisibility={onChangeSidebarVisibility}
+                    />
+                  </AppFrameHeaderItem>
+                  <AppFrameHeaderItem>
+                    <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
+                  </AppFrameHeaderItem>
+                </AppFrameHeader>
+                <div className="dashboard-wrapper">
+                  <div className="dashboard-non-ideal-state">
+                    <h1>No reports in dashboard</h1>
+                    <span>Please talk to your Density account manager to add reports to this dashboard.</span>
+                  </div>
+                </div>
+              </Fragment>
             );
           } else {
             const nonHeaderReports = selectedDashboard.reportSet.filter(r => r.type !== 'HEADER');
@@ -83,7 +144,18 @@ export function Dashboard({ dashboards, selectedDashboard }) {
             const isDashboardLoading = loadedReports.length < nonHeaderReports.length;
             if (isDashboardLoading) {
               return (
-                <AppFrameColumn title={selectedDashboard.name}>
+                <Fragment>
+                  <AppFrameHeader>
+                    <AppFrameHeaderItem>
+                      <DashboardSidebarHideShowIcon
+                        sidebarVisible={sidebarVisible}
+                        onChangeSidebarVisibility={onChangeSidebarVisibility}
+                      />
+                    </AppFrameHeaderItem>
+                    <AppFrameHeaderItem>
+                      <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
+                    </AppFrameHeaderItem>
+                  </AppFrameHeader>
                   <div className="dashboard-loading-wrapper">
                     <div className="dashboard-loading">
                       <ReportLoading
@@ -92,7 +164,7 @@ export function Dashboard({ dashboards, selectedDashboard }) {
                       />
                     </div>
                   </div>
-                </AppFrameColumn>
+                </Fragment>
               );
             }
 
@@ -113,7 +185,18 @@ export function Dashboard({ dashboards, selectedDashboard }) {
             }, [ {id: 'rpt_initial', name: null, contents: []} ]);
 
             return (
-              <AppFrameColumn title={selectedDashboard.name}>
+              <Fragment>
+                <AppFrameHeader>
+                  <AppFrameHeaderItem>
+                    <DashboardSidebarHideShowIcon
+                      sidebarVisible={sidebarVisible}
+                      onChangeSidebarVisibility={onChangeSidebarVisibility}
+                    />
+                  </AppFrameHeaderItem>
+                  <AppFrameHeaderItem>
+                    <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
+                  </AppFrameHeaderItem>
+                </AppFrameHeader>
                 {reportSections.map(({id, name, contents}) => (
                   <div key={id} className="dashboard-wrapper">
                     {contents.length > 0 ? <div className="dashboard-wrapper-inner">
@@ -137,14 +220,14 @@ export function Dashboard({ dashboards, selectedDashboard }) {
                               switch (reportData.state) {
                               case 'LOADING':
                                 return {
-                                  id: report.id,
+                                  id: `${report.id}-${dashboardReportGridIdentityValue}`,
                                   report: (
                                     <span>Loading report</span>
                                   ),
                                 };
                               case 'ERROR':
                                 return {
-                                  id: report.id,
+                                  id: `${report.id}-${dashboardReportGridIdentityValue}`,
                                   report: (
                                     <ReportWrapper
                                       title={report.name}
@@ -159,7 +242,7 @@ export function Dashboard({ dashboards, selectedDashboard }) {
                                 };
                               case 'COMPLETE':
                                 return {
-                                  id: report.id,
+                                  id: `${report.id}-${dashboardReportGridIdentityValue}`,
                                   report: (
                                     <ReportComponent
                                       key={report.id}
@@ -185,7 +268,7 @@ export function Dashboard({ dashboards, selectedDashboard }) {
                     </div> : null}
                   </div>
                 ))}
-              </AppFrameColumn>
+              </Fragment>
             );
           }
         })()}
@@ -199,7 +282,22 @@ export default connect(state => {
   return {
     dashboards: state.dashboards,
     selectedDashboard,
+    sidebarVisible: state.miscellaneous.dashboardSidebarVisible,
+    dashboardReportGridIdentityValue: state.miscellaneous.dashboardReportGridIdentityValue,
   };
 }, dispatch => {
-  return {};
+  return {
+    onChangeSidebarVisibility(visibleState) {
+      if (visibleState) {
+        dispatch(showDashboardSidebar());
+      } else {
+        dispatch(hideDashboardSidebar());
+      }
+
+      // Once the animation has completed, force a relayout
+      setTimeout(() => {
+        dispatch(resetDashboardReportGridIdentityValue());
+      }, 300);
+    },
+  };
 })(Dashboard);

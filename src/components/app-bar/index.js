@@ -52,6 +52,12 @@ export default function Appbar({page, onLogout, loggedIn}) {
             icon={IconCopy}
             name="Developer"
           />
+          <AppBarItem
+            isSelected={() => ['ACCOUNT_SETUP_OVERVIEW', 'ACCOUNT_SETUP_DOORWAY_LIST', 'ACCOUNT_SETUP_DOORWAY_DETAIL'].includes(page)}
+            path="#/onboarding"
+            icon={IconCopy}
+            name="Onboarding"
+          />
         </ul>
       </div>
     </div>

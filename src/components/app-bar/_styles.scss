@@ -6,6 +6,8 @@ $appbar-padding: 20px;
   display: flex;
   flex-direction: row;
   background-color: #fff;
+
+  border-bottom: 1px solid $gray-light;
 }
 
 .app-bar {

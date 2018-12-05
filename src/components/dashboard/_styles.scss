@@ -1,13 +1,41 @@
 .dashboard-app-frame {
   display: flex;
   flex-direction: row;
+
+  background-color: #fff;
 }
-.dashboard-app-column {
-  width: 300px;
+
+.dashboard-app-frame-sidebar-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  width: 0px;
+  transition: all 200ms ease-in-out;
+  border-right: 1px solid $gray-light;
 }
-.dashboard-app-frame-content {
+@media (min-width: $screen-sm-max) {
+  .dashboard-app-frame-sidebar-wrapper.visible {
+    width: 415px;
+  }
+}
+.dashboard-app-frame-sidebar {
+  display: flex;
+  flex-direction: column;
+
   flex: 1;
+
+  width: 415px;
 }
+
+.dashboard-app-frame-content { flex: 1; }
+
+.dashboard-sidebar-hide-show-icon { cursor: pointer; }
+.dashboard-sidebar-hide-show-icon:hover { opacity: 0.8; }
+.dashboard-sidebar-hide-show-icon:active { opacity: 1; }
+
+
+
 
 .dashboard-wrapper {
   width: 100%;
@@ -16,11 +44,11 @@
   animation: fadeInUp 0.4s ease-out;
 }
 .dashboard-wrapper-inner {
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 36px;
+  padding-right: 36px;
 }
 .dashboard-header {
-  color: $gray-cinder;
+  color: $gray-darkest;
   font-size: 22px;
   border-bottom: 2px solid $gray;
   padding-top: 64px;
@@ -33,7 +61,11 @@
   align-items: center;
   justify-content: center;
 
+  padding-top: 48px;
+  padding-left: 32px;
+
   height: 400px;
+  color: $gray-cinder;
 }
 
 .dashboard-loading-wrapper {
