@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 export default function AppFrameHeader({children, color}) {
   return (
@@ -8,9 +9,12 @@ export default function AppFrameHeader({children, color}) {
   );
 }
 
-export function AppFrameHeaderItem({children}) {
+export function AppFrameHeaderItem({children, noLeftSpace, noRightSpace}) {
   return (
-    <div className="app-frame-header-item">
+    <div className={classnames('app-frame-header-item', {
+      'left-space': !noLeftSpace,
+      'right-space': !noRightSpace,
+    })}>
       {children}
     </div>
   );

@@ -124,12 +124,14 @@ export function Dashboard({
             return (
               <Fragment>
                 <AppFrameHeader>
-                  <AppFrameHeaderItem>
-                    <DashboardSidebarHideShowIcon
-                      sidebarVisible={sidebarVisible}
-                      onChangeSidebarVisibility={onChangeSidebarVisibility}
-                    />
-                  </AppFrameHeaderItem>
+                  <div className="dashboard-sidebar-hide-show-icon-wrapper">
+                    <AppFrameHeaderItem noRightSpace>
+                      <DashboardSidebarHideShowIcon
+                        sidebarVisible={sidebarVisible}
+                        onChangeSidebarVisibility={onChangeSidebarVisibility}
+                      />
+                    </AppFrameHeaderItem>
+                  </div>
                 </AppFrameHeader>
                 <div className="dashboard-wrapper">
                   <div className="dashboard-non-ideal-state">
@@ -143,12 +145,14 @@ export function Dashboard({
             return (
               <Fragment>
                 <AppFrameHeader>
-                  <AppFrameHeaderItem>
-                    <DashboardSidebarHideShowIcon
-                      sidebarVisible={sidebarVisible}
-                      onChangeSidebarVisibility={onChangeSidebarVisibility}
-                    />
-                  </AppFrameHeaderItem>
+                  <div className="dashboard-sidebar-hide-show-icon-wrapper">
+                    <AppFrameHeaderItem noRightSpace>
+                      <DashboardSidebarHideShowIcon
+                        sidebarVisible={sidebarVisible}
+                        onChangeSidebarVisibility={onChangeSidebarVisibility}
+                      />
+                    </AppFrameHeaderItem>
+                  </div>
                   <AppFrameHeaderItem>
                     <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
                   </AppFrameHeaderItem>
@@ -171,12 +175,14 @@ export function Dashboard({
               return (
                 <Fragment>
                   <AppFrameHeader>
-                    <AppFrameHeaderItem>
-                      <DashboardSidebarHideShowIcon
-                        sidebarVisible={sidebarVisible}
-                        onChangeSidebarVisibility={onChangeSidebarVisibility}
-                      />
-                    </AppFrameHeaderItem>
+                    <div className="dashboard-sidebar-hide-show-icon-wrapper">
+                      <AppFrameHeaderItem noRightSpace>
+                        <DashboardSidebarHideShowIcon
+                          sidebarVisible={sidebarVisible}
+                          onChangeSidebarVisibility={onChangeSidebarVisibility}
+                        />
+                      </AppFrameHeaderItem>
+                    </div>
                     <AppFrameHeaderItem>
                       <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
                     </AppFrameHeaderItem>
@@ -212,12 +218,14 @@ export function Dashboard({
             return (
               <Fragment>
                 <AppFrameHeader>
-                  <AppFrameHeaderItem>
-                    <DashboardSidebarHideShowIcon
-                      sidebarVisible={sidebarVisible}
-                      onChangeSidebarVisibility={onChangeSidebarVisibility}
-                    />
-                  </AppFrameHeaderItem>
+                  <div className="dashboard-sidebar-hide-show-icon-wrapper">
+                    <AppFrameHeaderItem noRightSpace>
+                      <DashboardSidebarHideShowIcon
+                        sidebarVisible={sidebarVisible}
+                        onChangeSidebarVisibility={onChangeSidebarVisibility}
+                      />
+                    </AppFrameHeaderItem>
+                  </div>
                   <AppFrameHeaderItem>
                     <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
                   </AppFrameHeaderItem>

@@ -30,9 +30,17 @@
 
 .dashboard-app-frame-content { flex: 1; }
 
-.dashboard-sidebar-hide-show-icon { cursor: pointer; }
+.dashboard-sidebar-hide-show-icon {
+  cursor: pointer;
+  display: block;
+}
 .dashboard-sidebar-hide-show-icon:hover { opacity: 0.8; }
 .dashboard-sidebar-hide-show-icon:active { opacity: 1; }
+
+.dashboard-sidebar-hide-show-icon-wrapper { display: none; }
+@media (min-width: $screen-sm-max) {
+  .dashboard-sidebar-hide-show-icon-wrapper { display: block; }
+}
 
 .dashboard-sidebar-link {
   text-decoration: none;
