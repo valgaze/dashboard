@@ -8,7 +8,6 @@ import collectionLinksSet from '../../actions/collection/links/set';
 
 import { connect } from 'react-redux';
 
-import NavLoggedOut from '../nav-logged-out/index';
 import TokenList from '../dev-token-list/index';
 import ExploreSpaceList from '../explore-space-list/index';
 import ExploreSpaceTrends from '../explore-space-trends/index';
