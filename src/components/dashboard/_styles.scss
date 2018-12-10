@@ -28,7 +28,10 @@
   width: 415px;
 }
 
-.dashboard-app-frame-content { flex: 1; }
+.dashboard-app-frame-content {
+  flex: 1;
+  margin-bottom: 100px;
+}
 
 .dashboard-sidebar-hide-show-icon {
   cursor: pointer;
