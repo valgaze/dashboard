@@ -3,10 +3,11 @@ $appbar-height: 40px;
 $appbar-padding: 20px;
 
 .app-bar-container {
-  display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: #fff;
+
+  height: $appbar-height;
 
   border-bottom: 1px solid $gray-light;
 }
@@ -16,7 +17,6 @@ $appbar-padding: 20px;
   display: flex;
   justify-content: space-between;
 
-  max-width: 1440px;
   height: $appbar-height;
 
   padding-left: 8px;
