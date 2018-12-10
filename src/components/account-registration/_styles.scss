@@ -50,3 +50,20 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+.account-registration-consent-container {
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  margin: 12px 0;
+}
+
+.account-registration-consent {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.account-registration-checkbox {
+  margin-right: 8px;
+}
