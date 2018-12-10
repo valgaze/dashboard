@@ -5,10 +5,11 @@ $appbar-padding: 20px;
 .app-bar-container {
   flex-direction: row;
   justify-content: flex-start;
+  flex-grow: 0;
+  flex-shrink: 0;
+
   background-color: #fff;
-
   height: $appbar-height;
-
   border-bottom: 1px solid $gray-light;
 }
 

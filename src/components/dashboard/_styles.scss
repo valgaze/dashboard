@@ -1,7 +1,9 @@
 .dashboard-app-frame {
-  flex-grow: 1;
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 100%;
 
   overflow: hidden;
 
@@ -9,11 +11,11 @@
 }
 
 .dashboard-app-frame-sidebar-wrapper {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-
+  flex-grow: 0;
+  flex-shrink: 0;
   width: 0px;
+
+  overflow: hidden;
   transition: all 200ms ease-in-out;
   border-right: 1px solid $gray-light;
 }
@@ -25,15 +27,25 @@
 .dashboard-app-frame-sidebar {
   display: flex;
   flex-direction: column;
-
-  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
 
   width: 415px;
+  height: 100%;
 }
 
 .dashboard-app-frame-content {
-  flex: 1;
-  margin-bottom: 100px;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.dashboard-app-frame-scroll-body {
+  overflow-y: auto;
+  height: 100%;
+  padding-bottom: 100px;
+}
+.dashboard-app-frame-scroll-body-spacer {
+  height: 150px;
 }
 
 .dashboard-sidebar-hide-show-icon {
@@ -48,7 +60,14 @@
   .dashboard-sidebar-hide-show-icon-wrapper { display: block; }
 }
 
-.dashboard-sidebar-link {
+.dashboard-app-frame-sidebar-list {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow-y: auto;
+}
+
+.dashboard-app-frame-sidebar-list-item {
+  display: block;
   text-decoration: none;
   color: $gray-darker;
 }

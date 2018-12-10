@@ -3,6 +3,9 @@
   flex-direction: row;
   align-items: center;
 
+  flex-grow: 0;
+  flex-shrink: 0;
+
   height: 64px;
   background-color: #fff;
   border-bottom: 1px solid $gray-light;

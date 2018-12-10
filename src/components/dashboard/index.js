@@ -44,7 +44,7 @@ function DashboardSidebarItem({selected, id, name, reportSet}) {
   const nonHeaderReports = reportSet.filter(i => i.type !== 'HEADER');
   const headerNames = reportSet.filter(i => i.type === 'HEADER').map(i => i.name);
   return (
-    <a className="dashboard-sidebar-link" href={`#/dashboards/${id}`}>
+    <a className="dashboard-app-frame-sidebar-list-item" href={`#/dashboards/${id}`}>
       <div className={classnames('dashboard-sidebar-item', {selected})}>
         <div className="dashboard-sidebar-item-row">
           <span className="dashboard-sidebar-item-name">{name}</span>
@@ -93,25 +93,28 @@ export function Dashboard({
               <AppFrameHeaderText>Dashboards</AppFrameHeaderText>
             </AppFrameHeaderItem>
           </AppFrameHeader>
-          {(function() {
-            if (dashboards.loading) {
-              return null;
-            } else {
-              return (
-                <Fragment>
-                  {dashboards.data.map(dashboard => (
-                    <DashboardSidebarItem
-                      key={dashboard.id}
-                      id={dashboard.id}
-                      name={dashboard.name}
-                      reportSet={dashboard.reportSet}
-                      selected={selectedDashboard ? selectedDashboard.id === dashboard.id : false}
-                    />
-                  ))}
-                </Fragment>
-              )
-            }
-          })()}
+          <nav className="dashboard-app-frame-sidebar-list">
+            {(function() {
+              if (dashboards.loading) {
+                return null;
+              } else {
+                return (
+                  <Fragment>
+                    {dashboards.data.map(dashboard => (
+                      <DashboardSidebarItem
+                        key={dashboard.id}
+                        id={dashboard.id}
+                        name={dashboard.name}
+                        reportSet={dashboard.reportSet}
+                        selected={selectedDashboard ? selectedDashboard.id === dashboard.id : false}
+                      />
+                    ))}
+                  </Fragment>
+                )
+              }
+            })()}
+          </nav>
+          
         </div>
       </div>
       <div className="dashboard-app-frame-content">
@@ -230,77 +233,81 @@ export function Dashboard({
                     <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
                   </AppFrameHeaderItem>
                 </AppFrameHeader>
-                {reportSections.map(({id, name, contents}) => (
-                  <div key={id} className="dashboard-wrapper">
-                    {contents.length > 0 ? <div className="dashboard-wrapper-inner">
-                      {name !== null ? <h1 className="dashboard-header">{name}</h1> : null}
-                      <div>
-                        <DashboardReportGrid
-                          reports={[
-                            ...contents.map((report, index) => {
-                              const ReportComponent = REPORT_TYPE_TO_COMPONENT[report.type];
-                              const reportData = dashboards.calculatedReportData[report.id];
+                <div className="dashboard-app-frame-scroll-body">
+                  {reportSections.map(({id, name, contents}) => (
+                    <div key={id} className="dashboard-wrapper">
+                      {contents.length > 0 ? <div className="dashboard-wrapper-inner">
+                        {name !== null ? <h1 className="dashboard-header">{name}</h1> : null}
+                        <div>
+                          <DashboardReportGrid
+                            reports={[
+                              ...contents.map((report, index) => {
+                                const ReportComponent = REPORT_TYPE_TO_COMPONENT[report.type];
+                                const reportData = dashboards.calculatedReportData[report.id];
 
-                              if (!ReportComponent) {
+                                if (!ReportComponent) {
+                                  return {
+                                    id: report.id,
+                                    report: (
+                                      <span>Unknown report type {report.type}</span>
+                                    )
+                                  };
+                                }
+
+                                switch (reportData.state) {
+                                case 'LOADING':
+                                  return {
+                                    id: `${report.id}-${dashboardReportGridIdentityValue}`,
+                                    report: (
+                                      <span>Loading report</span>
+                                    ),
+                                  };
+                                case 'ERROR':
+                                  return {
+                                    id: `${report.id}-${dashboardReportGridIdentityValue}`,
+                                    report: (
+                                      <ReportWrapper
+                                        title={report.name}
+                                        startDate={null}
+                                        endDate={null}
+                                        hideDetailsLink={true}
+                                          spaces={[]}
+                                      >
+                                        <ReportError />
+                                      </ReportWrapper>
+                                    ),
+                                  };
+                                case 'COMPLETE':
+                                  return {
+                                    id: `${report.id}-${dashboardReportGridIdentityValue}`,
+                                    report: (
+                                      <ReportComponent
+                                        key={report.id}
+                                        title={report.name}
+                                        {...reportData.data}
+                                      />
+                                    ),
+                                  };
+                                default:
+                                  break;
+                                }
+
                                 return {
                                   id: report.id,
                                   report: (
-                                    <span>Unknown report type {report.type}</span>
-                                  )
+                                    <span>Unknown report state {reportData.state}</span>
+                                  ),
                                 };
-                              }
+                              }),
+                            ]}
+                          />
+                        </div>
+                      </div> : null}
 
-                              switch (reportData.state) {
-                              case 'LOADING':
-                                return {
-                                  id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                                  report: (
-                                    <span>Loading report</span>
-                                  ),
-                                };
-                              case 'ERROR':
-                                return {
-                                  id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                                  report: (
-                                    <ReportWrapper
-                                      title={report.name}
-                                      startDate={null}
-                                      endDate={null}
-                                      hideDetailsLink={true}
-                                        spaces={[]}
-                                    >
-                                      <ReportError />
-                                    </ReportWrapper>
-                                  ),
-                                };
-                              case 'COMPLETE':
-                                return {
-                                  id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                                  report: (
-                                    <ReportComponent
-                                      key={report.id}
-                                      title={report.name}
-                                      {...reportData.data}
-                                    />
-                                  ),
-                                };
-                              default:
-                                break;
-                              }
-
-                              return {
-                                id: report.id,
-                                report: (
-                                  <span>Unknown report state {reportData.state}</span>
-                                ),
-                              };
-                            }),
-                          ]}
-                        />
-                      </div>
-                    </div> : null}
-                  </div>
-                ))}
+                    </div>
+                  ))}
+                  <div className="dashboard-app-frame-scroll-body-spacer" />
+                </div>
               </Fragment>
             );
           }
