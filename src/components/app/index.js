@@ -95,6 +95,8 @@ function ActivePage({activePage, settings}) {
     return <AccountSetupDoorwayList />;
   case "ACCOUNT_SETUP_DOORWAY_DETAIL":
     return <AccountSetupDoorwayDetail />;
+  case "DASHBOARD_LIST":
+    return null;
   case "DASHBOARD_DETAIL":
     return <Dashboard />;
   default:
