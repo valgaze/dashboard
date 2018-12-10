@@ -140,7 +140,7 @@ export class AccountRegistration extends React.Component {
                   className="account-registration-checkbox"
                   onChange={e => this.setState({marketingConsent: e.target.checked})}
                 />
-                <label htmlFor='account-registration-marketing-consent'>I would like to sign up to receive marketing emails from Density. You can unsubscribe at any time.</label>
+                <label htmlFor="account-registration-marketing-consent">I would like to sign up to receive marketing emails from Density (unsubscribe is available at any time).</label>
               </div>
             </div>
 
