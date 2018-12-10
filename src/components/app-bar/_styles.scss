@@ -5,12 +5,14 @@ $appbar-padding: 20px;
 .app-bar-container {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   background-color: #fff;
 
   border-bottom: 1px solid $gray-light;
 }
 
 .app-bar {
+  flex: 1;
   display: flex;
   justify-content: space-between;
 
@@ -22,11 +24,22 @@ $appbar-padding: 20px;
 }
 
 .app-bar-left {
+  flex: 1;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 
   padding-left: 0px;
+
+  list-style-type: none;
+}
+
+.app-bar-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  padding-right: 0px;
 
   list-style-type: none;
 }

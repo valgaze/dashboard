@@ -6,6 +6,7 @@ import {
   IconGlobe,
   IconStopWatch,
   IconCopy,
+  IconLogout
 } from '@density/ui-icons';
 
 function AppBarItem({isSelected, path, icon, name}) {
@@ -14,9 +15,9 @@ function AppBarItem({isSelected, path, icon, name}) {
   return (
     <li className={classnames('app-bar-item', { selected })}>
       <a href={path}>
-        <span className="app-bar-icon">
+        {icon ? <span className="app-bar-icon">
           {selected ? <Icon color={colorVariables.brandPrimary} /> : <Icon />}
-        </span>
+        </span> : null}
         {name}
       </a>
     </li>
@@ -57,6 +58,13 @@ export default function Appbar({page, onLogout, loggedIn}) {
             path="#/onboarding"
             icon={IconCopy}
             name="Onboarding"
+          />
+        </ul>
+        <ul className="app-bar-right">
+          <AppBarItem
+            isSelected={() => false}
+            path="#/logout"
+            name="Logout"
           />
         </ul>
       </div>

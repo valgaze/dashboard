@@ -30,6 +30,7 @@ import createRouter from '@density/conduit';
 
 // Import all actions required to navigate from one page to another.
 import routeTransitionLogin from './actions/route-transition/login';
+import routeTransitionLogout from './actions/route-transition/logout';
 import routeTransitionExploreSpaceList from './actions/route-transition/explore-space-list';
 import routeTransitionExploreSpaceTrends from './actions/route-transition/explore-space-trends';
 import routeTransitionExploreSpaceDaily from './actions/route-transition/explore-space-daily';
@@ -160,6 +161,7 @@ function redirect(url) {
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
+router.addRoute('logout', () => routeTransitionLogout());
 
 // v I AM DEPRECATED
 router.addRoute('insights/spaces', redirect('spaces/explore')); // DEPRECATED
