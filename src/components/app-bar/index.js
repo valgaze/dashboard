@@ -3,10 +3,10 @@ import classnames from 'classnames';
 import colorVariables from '@density/ui/variables/colors';
 
 import {
+  IconDashboards,
   IconGlobe,
   IconStopWatch,
-  IconCopy,
-  IconLogout
+  IconCopy
 } from '@density/ui-icons';
 
 function AppBarItem({isSelected, path, icon, name}) {
@@ -32,7 +32,7 @@ export default function Appbar({page, onLogout, loggedIn}) {
           <AppBarItem
             isSelected={() => ['DASHBOARD_LIST', 'DASHBOARD_DETAIL'].includes(page)}
             path="#/dashboards"
-            icon={IconCopy}
+            icon={IconDashboards}
             name="Dashboards"
           />
           <AppBarItem

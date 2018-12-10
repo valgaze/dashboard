@@ -2,6 +2,7 @@ $explore-space-list-item-height: 43px;
 
 .explore-space-list-container {
   @include grid-container;
+  overflow: scroll;
   margin-top: 2px;
 }
 
