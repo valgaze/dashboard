@@ -68,6 +68,23 @@ core.doorways.update = function(data) {
   });
 };
 
+accounts.users.register = (data) => {
+  return fetch(`${accounts.config().host}/users/register/`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }).then(async response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      return Promise.reject(await errorHandler(response));
+    }
+  });
+};
+
 export {
   core,
   accounts,
