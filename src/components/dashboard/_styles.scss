@@ -1,40 +1,17 @@
-.dashboard-app-frame {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 100%;
-
-  overflow: hidden;
-
-  background-color: #fff;
-}
-
-.dashboard-app-frame-content {
-  flex-grow: 1;
-  flex-shrink: 1;
-}
-
-.dashboard-app-frame-scroll-body {
-  overflow-y: auto;
-  height: 100%;
-  padding-bottom: 100px;
-}
 .dashboard-app-frame-scroll-body-spacer {
   height: 150px;
 }
 
 .dashboard-sidebar-hide-show-icon {
   cursor: pointer;
-  display: block;
+  display: none;
+  margin-right: 10px;
+}
+@media (min-width: $screen-sm-max) {
+  .dashboard-sidebar-hide-show-icon { display: block; }
 }
 .dashboard-sidebar-hide-show-icon:hover { opacity: 0.8; }
 .dashboard-sidebar-hide-show-icon:active { opacity: 1; }
-
-.dashboard-sidebar-hide-show-icon-wrapper { display: none; }
-@media (min-width: $screen-sm-max) {
-  .dashboard-sidebar-hide-show-icon-wrapper { display: block; }
-}
 
 .dashboard-app-frame-sidebar-list {
   flex-grow: 1;

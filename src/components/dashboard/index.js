@@ -78,7 +78,7 @@ function DashboardSidebarHideShowIcon({sidebarVisible, onChangeSidebarVisibility
   );
 }
 
-function MainScrollViewContent({
+function DashboardMainScrollViewContent({
   dashboards,
   selectedDashboard,
   dashboardReportGridIdentityValue
@@ -220,32 +220,30 @@ export function Dashboard({
         <AppBar title="Dashboards" />
         <AppScrollView>
           <nav className="dashboard-app-frame-sidebar-list">
-            {(function() {
-              if (dashboards.loading) {
-                return null;
-              } else {
-                return (
-                  <Fragment>
-                    {dashboards.data.map(dashboard => (
-                      <DashboardSidebarItem
-                        key={dashboard.id}
-                        id={dashboard.id}
-                        name={dashboard.name}
-                        reportSet={dashboard.reportSet}
-                        selected={selectedDashboard ? selectedDashboard.id === dashboard.id : false}
-                      />
-                    ))}
-                  </Fragment>
-                )
-              }
-            })()}
+            {dashboards.loading ? null :
+              <Fragment>
+                {dashboards.data.map(dashboard => (
+                  <DashboardSidebarItem
+                    key={dashboard.id}
+                    id={dashboard.id}
+                    name={dashboard.name}
+                    reportSet={dashboard.reportSet}
+                    selected={selectedDashboard ? selectedDashboard.id === dashboard.id : false}
+                  />
+                ))}
+              </Fragment>}
           </nav>
         </AppScrollView>
       </AppSidebar>
       <AppPane>
-        <AppBar title={dashboards.selected ? selectedDashboard.name : ""} />
+        <AppBar
+          leftSpan={<DashboardSidebarHideShowIcon
+            sidebarVisible={sidebarVisible}
+            onChangeSidebarVisibility={onChangeSidebarVisibility}
+          />}
+          title={dashboards.selected ? selectedDashboard.name : ""} />
         <AppScrollView>
-          <MainScrollViewContent
+          <DashboardMainScrollViewContent
             dashboards={dashboards}
             selectedDashboard={selectedDashboard}
             dashboardReportGridIdentityValue={dashboardReportGridIdentityValue} />
