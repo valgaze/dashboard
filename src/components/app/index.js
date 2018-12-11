@@ -26,7 +26,7 @@ import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
 import AccountSetupDoorwayDetail from '../account-setup-doorway-detail/index';
 
 import Dashboard from '../dashboard/index';
-import AppBar from '../app-bar/index';
+import AppNavbar from '../app-navbar/index';
 
 import UnknownPage from '../unknown-page/index';
 
@@ -45,7 +45,7 @@ function App({activePage, settings, user, onLogout}) {
 
           // Render the logged-in navbar by default
         default:
-          return <AppBar
+          return <AppNavbar
             page={activePage}
             onLogout={onLogout}
             user={user}

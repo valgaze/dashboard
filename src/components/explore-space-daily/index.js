@@ -53,7 +53,7 @@ export function ExploreSpaceDaily({
       space,
     );
 
-    return <div>
+    return <div className="explore-space-daily-page">
       <Subnav visible>
         <SubnavItem href={`#/spaces/explore/${spaces.selected}/trends`}>Trends</SubnavItem>
         <SubnavItem active href={`#/spaces/explore/${spaces.selected}/daily`}>Daily</SubnavItem>

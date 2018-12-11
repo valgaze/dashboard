@@ -99,6 +99,7 @@ $explore-space-list-item-height: 43px;
   table-layout: fixed;
   border-collapse: collapse;
   width: 100%;
+  overflow-y: scroll;
 }
 
 // Style each row to include the space name and utilization percentage.

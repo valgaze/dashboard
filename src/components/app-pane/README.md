@@ -1,4 +1,4 @@
-# %COMPONENTUPPERCAMEL%
+# AppPane
 
 What does this component do?
 Is the component stateful?

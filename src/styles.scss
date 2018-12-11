@@ -415,6 +415,12 @@ $cdn-path: "https://densityco.github.io/assets";
 // 
 
 @import "./components/app/styles";
+@import "./components/app-bar/styles";
+@import "./components/app-frame/styles";
+@import "./components/app-navbar/styles";
+@import "./components/app-pane/styles";
+@import "./components/app-scroll-view/styles";
+@import "./components/app-sidebar/styles";
 @import "./components/space-count/styles";
 @import "./components/dev-token-list/styles";
 @import "./components/unknown-page/styles";
@@ -466,5 +472,3 @@ $cdn-path: "https://densityco.github.io/assets";
 @import "./components/explore-space-data-export/styles";
 @import "./components/explore-space-detail-raw-events-export-card/styles";
 @import "./components/dashboard/styles";
-@import "./components/app-frame-header/styles";
-@import "./components/app-bar/styles";

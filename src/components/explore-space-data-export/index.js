@@ -57,7 +57,7 @@ function ExploreSpaceDataExport({
   onChangeSpaceFilter,
 }) {
   if (space) {
-    return <div>
+    return <div className="explore-space-data-export-page">
       <Subnav visible>
         <SubnavItem href={`#/spaces/explore/${spaces.selected}/trends`}>Trends</SubnavItem>
         <SubnavItem href={`#/spaces/explore/${spaces.selected}/daily`}>Daily</SubnavItem>

@@ -1,64 +1,17 @@
-.dashboard-app-frame {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 100%;
-
-  overflow: hidden;
-
-  background-color: #fff;
-}
-
-.dashboard-app-frame-sidebar-wrapper {
-  flex-grow: 0;
-  flex-shrink: 0;
-  width: 0px;
-
-  overflow: hidden;
-  transition: all 200ms ease-in-out;
-  border-right: 1px solid $gray-light;
-}
-@media (min-width: $screen-sm-max) {
-  .dashboard-app-frame-sidebar-wrapper.visible {
-    width: 415px;
-  }
-}
-.dashboard-app-frame-sidebar {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  flex-shrink: 1;
-
-  width: 415px;
-  height: 100%;
-}
-
-.dashboard-app-frame-content {
-  flex-grow: 1;
-  flex-shrink: 1;
-}
-
-.dashboard-app-frame-scroll-body {
-  overflow-y: auto;
-  height: 100%;
-  padding-bottom: 100px;
-}
 .dashboard-app-frame-scroll-body-spacer {
   height: 150px;
 }
 
 .dashboard-sidebar-hide-show-icon {
   cursor: pointer;
-  display: block;
+  display: none;
+  margin-right: 10px;
+}
+@media (min-width: $screen-sm-max) {
+  .dashboard-sidebar-hide-show-icon { display: block; }
 }
 .dashboard-sidebar-hide-show-icon:hover { opacity: 0.8; }
 .dashboard-sidebar-hide-show-icon:active { opacity: 1; }
-
-.dashboard-sidebar-hide-show-icon-wrapper { display: none; }
-@media (min-width: $screen-sm-max) {
-  .dashboard-sidebar-hide-show-icon-wrapper { display: block; }
-}
 
 .dashboard-app-frame-sidebar-list {
   flex-grow: 1;

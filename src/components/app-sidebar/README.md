@@ -1,4 +1,4 @@
-# AppBar
+# AppSidebar
 
 What does this component do?
 Is the component stateful?

@@ -83,7 +83,7 @@ function ExploreSpaceTrends({
       space,
     );
 
-    return <div>
+    return <div className="explore-space-trends-page">
       <Subnav visible>
         <SubnavItem active href={`#/spaces/explore/${spaces.selected}/trends`}>Trends</SubnavItem>
         <SubnavItem href={`#/spaces/explore/${spaces.selected}/daily`}>Daily</SubnavItem>
