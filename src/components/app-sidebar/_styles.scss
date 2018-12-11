@@ -22,7 +22,7 @@
   transition: all 200ms ease-in-out;
 }
 
-@media (min-width: $screen-xs-max) {
+@media (min-width: $screen-sm-max) {
   .app-sidebar-collapser.visible {
     width: 415px;
   }
