@@ -20,7 +20,11 @@ import ReportWastedSpace from '@density/ui-report-wasted-space';
 
 import ReportLoading from '@density/ui-report-loading';
 
-import AppFrameHeader, { AppFrameHeaderText, AppFrameHeaderItem } from '../app-frame-header/index';
+import AppBar from '../app-bar/index';
+import AppFrame from '../app-frame/index';
+import AppPane from '../app-pane/index';
+import AppScrollView from '../app-scroll-view/index';
+import AppSidebar from '../app-sidebar/index';
 import { IconMenu, IconChevronRight } from '@density/ui-icons';
 
 import showDashboardSidebar from '../../actions/miscellaneous/show-dashboards-sidebar';
@@ -74,25 +78,147 @@ function DashboardSidebarHideShowIcon({sidebarVisible, onChangeSidebarVisibility
   );
 }
 
+function MainScrollViewContent({
+  dashboards,
+  selectedDashboard,
+  dashboardReportGridIdentityValue
+}) {
+  if (!dashboards.selected && !dashboards.loading) {
+    return <div className="dashboard-non-ideal-state">
+      <h1>No dashboard selected</h1>
+      <span>To create a dashboard, please talk to your Density account manager.</span>
+    </div>;
+  } else if (selectedDashboard && selectedDashboard.reportSet.length === 0) {
+    return <div className="dashboard-non-ideal-state">
+      <h1>No reports in dashboard</h1>
+      <span>To add reports to this dashboard, please talk to your Density account manager.</span>
+    </div>;
+  } else if (selectedDashboard && selectedDashboard.reportSet.length > 0) {
+    const nonHeaderReports = selectedDashboard.reportSet.filter(r => r.type !== 'HEADER');
+    const loadedReports = nonHeaderReports.filter(
+      report => dashboards.calculatedReportData[report.id].state !== 'LOADING'
+    );
+    const isDashboardLoading = loadedReports.length < nonHeaderReports.length;
+    if (isDashboardLoading) {
+      return <div className="dashboard-loading-wrapper">
+        <div className="dashboard-loading">
+          <ReportLoading
+            part={loadedReports.length}
+            whole={nonHeaderReports.length}
+          />
+        </div>
+      </div>;
+    } else {
+      const reportSections = selectedDashboard.reportSet.reduce((sections, report) => {
+        if (report.type === 'HEADER') {
+          // Create a new section
+          return [ ...sections, {id: report.id, name: report.name, contents: []} ];
+        } else {
+          // Add report to last existing section
+          return [
+            ...sections.slice(0, -1),
+            {
+              ...sections[sections.length-1],
+              contents: [...sections[sections.length-1].contents, report],
+            },
+          ];
+        }
+      }, [ {id: 'rpt_initial', name: null, contents: []} ]);
+  
+      return <div>
+        {reportSections.map(({id, name, contents}) => (
+          <div key={id} className="dashboard-wrapper">
+            {contents.length > 0 ? <div className="dashboard-wrapper-inner">
+              {name !== null ? <h1 className="dashboard-header">{name}</h1> : null}
+              <div>
+                <DashboardReportGrid
+                  reports={[
+                    ...contents.map((report, index) => {
+                      const ReportComponent = REPORT_TYPE_TO_COMPONENT[report.type];
+                      const reportData = dashboards.calculatedReportData[report.id];
+
+                      if (!ReportComponent) {
+                        return {
+                          id: report.id,
+                          report: (
+                            <span>Unknown report type {report.type}</span>
+                          )
+                        };
+                      }
+
+                      switch (reportData.state) {
+                      case 'LOADING':
+                        return {
+                          id: `${report.id}-${dashboardReportGridIdentityValue}`,
+                          report: (
+                            <span>Loading report</span>
+                          ),
+                        };
+                      case 'ERROR':
+                        return {
+                          id: `${report.id}-${dashboardReportGridIdentityValue}`,
+                          report: (
+                            <ReportWrapper
+                              title={report.name}
+                              startDate={null}
+                              endDate={null}
+                              hideDetailsLink={true}
+                                spaces={[]}
+                            >
+                              <ReportError />
+                            </ReportWrapper>
+                          ),
+                        };
+                      case 'COMPLETE':
+                        return {
+                          id: `${report.id}-${dashboardReportGridIdentityValue}`,
+                          report: (
+                            <ReportComponent
+                              key={report.id}
+                              title={report.name}
+                              {...reportData.data}
+                            />
+                          ),
+                        };
+                      default:
+                        break;
+                      }
+
+                      return {
+                        id: report.id,
+                        report: (
+                          <span>Unknown report state {reportData.state}</span>
+                        ),
+                      };
+                    }),
+                  ]}
+                />
+              </div>
+            </div> : null}
+
+          </div>
+        ))}
+        <div className="dashboard-app-frame-scroll-body-spacer" />
+      </div>;
+    }
+  } else {
+    return null;
+  }
+}
+
 export function Dashboard({
   dashboards,
   selectedDashboard,
-
   dashboardReportGridIdentityValue,
-  onChangeDashboardReportGridIdentityValue,
 
   sidebarVisible,
   onChangeSidebarVisibility,
 }) {
   return (
-    <div className="dashboard-app-frame">
-      <div className={classnames('dashboard-app-frame-sidebar-wrapper', {visible: sidebarVisible})}>
-        <div className="dashboard-app-frame-sidebar">
-          <AppFrameHeader>
-            <AppFrameHeaderItem>
-              <AppFrameHeaderText>Dashboards</AppFrameHeaderText>
-            </AppFrameHeaderItem>
-          </AppFrameHeader>
+    <AppFrame>
+      <AppSidebar visible={sidebarVisible}>
+        <AppBar title="Dashboards" />
+        <AppScrollView>
           <nav className="dashboard-app-frame-sidebar-list">
             {(function() {
               if (dashboards.loading) {
@@ -114,206 +240,18 @@ export function Dashboard({
               }
             })()}
           </nav>
-          
-        </div>
-      </div>
-      <div className="dashboard-app-frame-content">
-        {(function() {
-          if (dashboards.loading && !dashboards.selected) {
-            return (
-              <AppFrameHeader></AppFrameHeader>
-            );
-          } else if (!dashboards.selected) {
-            return (
-              <Fragment>
-                <AppFrameHeader>
-                  <div className="dashboard-sidebar-hide-show-icon-wrapper">
-                    <AppFrameHeaderItem noRightSpace>
-                      <DashboardSidebarHideShowIcon
-                        sidebarVisible={sidebarVisible}
-                        onChangeSidebarVisibility={onChangeSidebarVisibility}
-                      />
-                    </AppFrameHeaderItem>
-                  </div>
-                </AppFrameHeader>
-                <div className="dashboard-wrapper">
-                  <div className="dashboard-non-ideal-state">
-                    <h1>No dashboard selected</h1>
-                    <span>To create a dashboard, please talk to your Density account manager.</span>
-                  </div>
-                </div>
-              </Fragment>
-            );
-          } else if (selectedDashboard && selectedDashboard.reportSet.length === 0) {
-            return (
-              <Fragment>
-                <AppFrameHeader>
-                  <div className="dashboard-sidebar-hide-show-icon-wrapper">
-                    <AppFrameHeaderItem noRightSpace>
-                      <DashboardSidebarHideShowIcon
-                        sidebarVisible={sidebarVisible}
-                        onChangeSidebarVisibility={onChangeSidebarVisibility}
-                      />
-                    </AppFrameHeaderItem>
-                  </div>
-                  <AppFrameHeaderItem>
-                    <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
-                  </AppFrameHeaderItem>
-                </AppFrameHeader>
-                <div className="dashboard-wrapper">
-                  <div className="dashboard-non-ideal-state">
-                    <h1>No reports in dashboard</h1>
-                    <span>Please talk to your Density account manager to add reports to this dashboard.</span>
-                  </div>
-                </div>
-              </Fragment>
-            );
-          } else {
-            const nonHeaderReports = selectedDashboard.reportSet.filter(r => r.type !== 'HEADER');
-            const loadedReports = nonHeaderReports.filter(
-              report => dashboards.calculatedReportData[report.id].state !== 'LOADING'
-            );
-            const isDashboardLoading = loadedReports.length < nonHeaderReports.length;
-            if (isDashboardLoading) {
-              return (
-                <Fragment>
-                  <AppFrameHeader>
-                    <div className="dashboard-sidebar-hide-show-icon-wrapper">
-                      <AppFrameHeaderItem noRightSpace>
-                        <DashboardSidebarHideShowIcon
-                          sidebarVisible={sidebarVisible}
-                          onChangeSidebarVisibility={onChangeSidebarVisibility}
-                        />
-                      </AppFrameHeaderItem>
-                    </div>
-                    <AppFrameHeaderItem>
-                      <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
-                    </AppFrameHeaderItem>
-                  </AppFrameHeader>
-                  <div className="dashboard-loading-wrapper">
-                    <div className="dashboard-loading">
-                      <ReportLoading
-                        part={loadedReports.length}
-                        whole={nonHeaderReports.length}
-                      />
-                    </div>
-                  </div>
-                </Fragment>
-              );
-            }
-
-            const reportSections = selectedDashboard.reportSet.reduce((sections, report) => {
-              if (report.type === 'HEADER') {
-                // Create a new section
-                return [ ...sections, {id: report.id, name: report.name, contents: []} ];
-              } else {
-                // Add report to last existing section
-                return [
-                  ...sections.slice(0, -1),
-                  {
-                    ...sections[sections.length-1],
-                    contents: [...sections[sections.length-1].contents, report],
-                  },
-                ];
-              }
-            }, [ {id: 'rpt_initial', name: null, contents: []} ]);
-
-            return (
-              <Fragment>
-                <AppFrameHeader>
-                  <div className="dashboard-sidebar-hide-show-icon-wrapper">
-                    <AppFrameHeaderItem noRightSpace>
-                      <DashboardSidebarHideShowIcon
-                        sidebarVisible={sidebarVisible}
-                        onChangeSidebarVisibility={onChangeSidebarVisibility}
-                      />
-                    </AppFrameHeaderItem>
-                  </div>
-                  <AppFrameHeaderItem>
-                    <AppFrameHeaderText>{selectedDashboard.name}</AppFrameHeaderText>
-                  </AppFrameHeaderItem>
-                </AppFrameHeader>
-                <div className="dashboard-app-frame-scroll-body">
-                  {reportSections.map(({id, name, contents}) => (
-                    <div key={id} className="dashboard-wrapper">
-                      {contents.length > 0 ? <div className="dashboard-wrapper-inner">
-                        {name !== null ? <h1 className="dashboard-header">{name}</h1> : null}
-                        <div>
-                          <DashboardReportGrid
-                            reports={[
-                              ...contents.map((report, index) => {
-                                const ReportComponent = REPORT_TYPE_TO_COMPONENT[report.type];
-                                const reportData = dashboards.calculatedReportData[report.id];
-
-                                if (!ReportComponent) {
-                                  return {
-                                    id: report.id,
-                                    report: (
-                                      <span>Unknown report type {report.type}</span>
-                                    )
-                                  };
-                                }
-
-                                switch (reportData.state) {
-                                case 'LOADING':
-                                  return {
-                                    id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                                    report: (
-                                      <span>Loading report</span>
-                                    ),
-                                  };
-                                case 'ERROR':
-                                  return {
-                                    id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                                    report: (
-                                      <ReportWrapper
-                                        title={report.name}
-                                        startDate={null}
-                                        endDate={null}
-                                        hideDetailsLink={true}
-                                          spaces={[]}
-                                      >
-                                        <ReportError />
-                                      </ReportWrapper>
-                                    ),
-                                  };
-                                case 'COMPLETE':
-                                  return {
-                                    id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                                    report: (
-                                      <ReportComponent
-                                        key={report.id}
-                                        title={report.name}
-                                        {...reportData.data}
-                                      />
-                                    ),
-                                  };
-                                default:
-                                  break;
-                                }
-
-                                return {
-                                  id: report.id,
-                                  report: (
-                                    <span>Unknown report state {reportData.state}</span>
-                                  ),
-                                };
-                              }),
-                            ]}
-                          />
-                        </div>
-                      </div> : null}
-
-                    </div>
-                  ))}
-                  <div className="dashboard-app-frame-scroll-body-spacer" />
-                </div>
-              </Fragment>
-            );
-          }
-        })()}
-      </div>
-    </div>
+        </AppScrollView>
+      </AppSidebar>
+      <AppPane>
+        <AppBar title={dashboards.selected ? selectedDashboard.name : ""} />
+        <AppScrollView>
+          <MainScrollViewContent
+            dashboards={dashboards}
+            selectedDashboard={selectedDashboard}
+            dashboardReportGridIdentityValue={dashboardReportGridIdentityValue} />
+        </AppScrollView>
+      </AppPane>
+    </AppFrame>
   );
 }
 

@@ -10,30 +10,6 @@
   background-color: #fff;
 }
 
-.dashboard-app-frame-sidebar-wrapper {
-  flex-grow: 0;
-  flex-shrink: 0;
-  width: 0px;
-
-  overflow: hidden;
-  transition: all 200ms ease-in-out;
-  border-right: 1px solid $gray-light;
-}
-@media (min-width: $screen-sm-max) {
-  .dashboard-app-frame-sidebar-wrapper.visible {
-    width: 415px;
-  }
-}
-.dashboard-app-frame-sidebar {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  flex-shrink: 1;
-
-  width: 415px;
-  height: 100%;
-}
-
 .dashboard-app-frame-content {
   flex-grow: 1;
   flex-shrink: 1;
