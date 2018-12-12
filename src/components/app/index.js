@@ -1,10 +1,7 @@
 import React from 'react';
 
 import stringToBoolean from '../../helpers/string-to-boolean/index';
-import sessionTokenUnset from '../../actions/session-token/unset';
-import collectionSpacesSet from '../../actions/collection/spaces/set';
-import collectionDoorwaysSet from '../../actions/collection/doorways/set';
-import collectionLinksSet from '../../actions/collection/links/set';
+import routeTransitionLogout from '../../actions/route-transition/logout';
 
 import { connect } from 'react-redux';
 
@@ -119,11 +116,7 @@ export default connect(state => {
 }, dispatch => {
   return {
     onLogout() {
-      dispatch(sessionTokenUnset());
-      dispatch(collectionSpacesSet([]));
-      dispatch(collectionDoorwaysSet([]));
-      dispatch(collectionLinksSet([]));
-      window.location.hash = '#/login';
+      dispatch(routeTransitionLogout());
     },
   }
 })(App);

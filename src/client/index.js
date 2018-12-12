@@ -1,6 +1,7 @@
 import clientele from '@density/clientele';
 
-import sessionTokenUnSet from '../actions/session-token/unset';
+import redirectAfterLogin from '../actions/miscellaneous/redirect-after-login';
+import sessionTokenUnset from '../actions/session-token/unset';
 import userError from '../actions/user/error';
 
 let store;
@@ -15,8 +16,9 @@ async function errorHandler(response) {
     // bad session token from the reducer.
     if (response.status === 403 && data.detail === 'Incorrect authentication credentials.') {
       store.dispatch(userError(`Login session has expired or is invalid. Please login again.`));
-      store.dispatch(sessionTokenUnSet());
-      window.location.href = '#/login';
+      store.dispatch(sessionTokenUnset());
+      store.dispatch(redirectAfterLogin(window.location.hash));
+      window.location.hash = '#/login';
     }
 
     // If the response wasn't a 403, then return the best representation of the error.

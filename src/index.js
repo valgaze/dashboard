@@ -48,6 +48,7 @@ import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition
 import routeTransitionDashboardList from './actions/route-transition/dashboard-list';
 import routeTransitionDashboardDetail from './actions/route-transition/dashboard-detail';
 
+import redirectAfterLogin from './actions/miscellaneous/redirect-after-login';
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 import collectionSpacesSetEvents from './actions/collection/spaces/set-events';
 import collectionSpacesSet from './actions/collection/spaces/set';
@@ -213,6 +214,7 @@ function preRouteAuthentication() {
 
   // If the user isn't logged in, send them to the login page.
   } else if (!loggedIn) {
+    store.dispatch(redirectAfterLogin(window.location.hash));
     router.navigate('login');
 
   // Otherwise, fetch the logged in user's info since there's a session token available.
@@ -227,6 +229,7 @@ function preRouteAuthentication() {
         unsafeNavigateToLandingPage(objectSnakeToCamel(user).organization.settings);
       } else {
         // User token expired (and no user object was returned) so redirect to login page.
+        store.dispatch(redirectAfterLogin(window.location.hash));
         router.navigate('login');
       }
     });

@@ -10,6 +10,7 @@ import Card, { CardBody } from '@density/ui-card';
 import ErrorBar from '../error-bar/index';
 import AccountSetupHeader from '../account-setup-header/index';
 
+import redirectAfterLogin from '../../actions/miscellaneous/redirect-after-login';
 import sessionTokenSet from '../../actions/session-token/set';
 import { accounts } from '../../client';
 
@@ -39,7 +40,7 @@ export class AccountRegistration extends React.Component {
       full_name: this.state.fullName,
       nickname: this.state.nickname || this.generateNickname.apply(this),
     }).then(response => {
-      return this.props.onUserLoggedIn(response.session_token);
+      return this.props.onUserLoggedIn(response.session_token, this.props.redirectAfterLogin);
     }).catch(err => {
       this.setState({error: err.toString()});
     });
@@ -138,14 +139,17 @@ export class AccountRegistration extends React.Component {
 }
 
 export default connect(state => {
-  return {invitationData: state.accountRegistration};
+  return {
+    invitationData: state.accountRegistration,
+    redirectAfterLogin: state.miscellaneous.redirectAfterLogin,
+  };
 }, dispatch => {
   return {
-    onUserLoggedIn(token) {
+    onUserLoggedIn(token, redirect) {
       dispatch(sessionTokenSet(token)).then(data => {
         const user = objectSnakeToCamel(data);
-        window.location.hash = '';
-        unsafeNavigateToLandingPage(user.organization.settings);
+        unsafeNavigateToLandingPage(user.organization.settings, redirect);
+        dispatch(redirectAfterLogin(null));
       });
     },
   };
