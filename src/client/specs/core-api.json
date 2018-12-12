@@ -391,6 +391,11 @@
         "method": "GET",
         "url": "{{{core}}}/dashboards/",
         "desc": "List all dashboards."
+      },
+      "detail": {
+        "method": "GET",
+        "url": "{{{core}}}/dashboards/{{id}}",
+        "desc": "Fetch a dashboard."
       }
     }
   }
