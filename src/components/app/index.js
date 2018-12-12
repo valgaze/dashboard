@@ -47,7 +47,6 @@ function App({activePage, settings, user, onLogout}) {
             settings={settings}
             onLogout={onLogout}
             user={user}
-            settings={settings}
           />;
         }
       })(activePage)}
