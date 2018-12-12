@@ -34,6 +34,7 @@ export class Account extends React.Component {
       fullName: this.props.user.data ? this.props.user.data.fullName : '',
       nickname: this.props.user.data ? this.props.user.data.nickname : '',
       email: this.props.user.data ? this.props.user.data.email : '',
+      marketingConsent: this.props.user.data ? this.props.user.data.marketingConsent : false,
     };
   }
 
@@ -42,6 +43,7 @@ export class Account extends React.Component {
       fullName: nextProps.user.data.fullName || '',
       nickname: nextProps.user.data.nickname || '',
       email: nextProps.user.data.email || '',
+      marketingConsent: nextProps.user.data.marketingConsent,
     });
   }
 
@@ -227,7 +229,7 @@ export class Account extends React.Component {
           <div className="account-submit-user-details">
             {this.state.mode === EDIT ? <Button
               onClick={() => {
-                onSubmitUserUpdate(this.state.fullName, this.state.nickname, this.state.email)
+                onSubmitUserUpdate(this.state.fullName, this.state.nickname, this.state.marketingConsent)
                 .then(() => {
                   this.setState({mode: NORMAL});
                 }).catch(error => {
@@ -255,8 +257,8 @@ export default connect(state => {
         dispatch(showModal('account-password-reset'));
       });
     },
-    onSubmitUserUpdate(fullName, nickname, email) {
-      return dispatch(userUpdate(fullName, nickname, email));
+    onSubmitUserUpdate(fullName, nickname, marketingConsent) {
+      return dispatch(userUpdate(fullName, nickname, marketingConsent));
     },
     onHideSuccessToast() {
       dispatch(hideModal());

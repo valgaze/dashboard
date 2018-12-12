@@ -65,7 +65,7 @@
           "Accept": "application/json"
         },
         "body": {
-          "email": "{{email}}",
+          "marketing_consent": "{{marketing_consent}}",
           "full_name": "{{full_name}}",
           "nickname": "{{nickname}}"
         }
