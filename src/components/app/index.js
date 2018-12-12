@@ -44,6 +44,7 @@ function App({activePage, settings, user, onLogout}) {
         default:
           return <AppNavbar
             page={activePage}
+            settings={settings}
             onLogout={onLogout}
             user={user}
             settings={settings}

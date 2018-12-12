@@ -46,6 +46,7 @@ $app-navbar-padding: 20px;
 }
 
 .app-navbar-item {
+  display: none;
   height: $app-navbar-height;
 
   opacity: 0.5;
@@ -69,6 +70,14 @@ $app-navbar-padding: 20px;
   font-weight: bold;
   text-align: center;
   text-align: center;
+}
+.app-navbar-item.showOnMobile {
+  display: flex;
+}
+@media (min-width: $screen-sm-max) {
+  .app-navbar-item {
+    display: flex;
+  }
 }
 
 .app-navbar-icon { padding-right: 8px; }
