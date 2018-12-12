@@ -93,3 +93,24 @@
     left: calc(50% - 210px);
   }
 }
+
+.account-consent-container {
+  margin-bottom: 40px;
+}
+
+.account-consent {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.account-checkbox {
+  margin-right: 8px;
+}
+
+.account-deactivate-container {
+  display: flex;
+  justify-content: center;
+  font-size: smaller;
+}
+
