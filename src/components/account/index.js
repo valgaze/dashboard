@@ -156,6 +156,20 @@ export class Account extends React.Component {
             />}
           />
 
+          <div className="account-consent-container">
+            <div className="account-consent">
+              <input
+                type="checkbox"
+                id="account-marketing-consent"
+                className="account-checkbox"
+                onChange={e => this.setState({marketingConsent: e.target.checked})}
+                defaultChecked={user.data && user.data.marketingConsent}
+                disabled={this.state.mode !== EDIT}
+              />
+              <label htmlFor="account-marketing-consent">I want to receive marketing emails from Density.</label>
+            </div>
+            </div>
+
           {/* Trigger changing the password */}
           {this.state.mode === NORMAL && user.data && !user.data.isDemo ? <FormLabel
             className="account-change-password-link-container"
@@ -204,6 +218,10 @@ export class Account extends React.Component {
               }}
               disabled={this.state.password.length < 8}
             >Change Password</Button>
+          </div> : null}
+
+          {this.state.mode === NORMAL ? <div className="account-deactivate-container">
+              <span>If you&apos;d like to deactivate your account, please <a href="mailto:support@density.io?subject=I want to deactivate my Density account"> contact support</a>.</span>
           </div> : null}
 
           <div className="account-submit-user-details">
