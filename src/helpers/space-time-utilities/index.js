@@ -196,31 +196,33 @@ export function splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, par
 export async function requestCountsForLocalRange(space, start, end, params={}) {
   const subranges = splitTimeRangeIntoSubrangesWithSameOffset(space, start, end, params);
   let results = [];
-  for (const subrange of subranges) {
-    const subrangeData = await fetchAllPages(page => (
-      core.spaces.counts({
-        id: space.id,
-        start_time: formatInISOTime(subrange.start),
-        end_time: formatInISOTime(subrange.end),
-        page,
-        page_size: 5000,
-        ...params,
-      })
-    ));
-    if (subrange.gap && subrangeData.length > 0) {
-      const lastBucket = results.pop();
-      const gapBucket = subrangeData[0];
-      lastBucket.interval.analytics.entrances += gapBucket.interval.analytics.entrances;
-      lastBucket.interval.analytics.exits += gapBucket.interval.analytics.exits;
-      lastBucket.interval.analytics.events += gapBucket.interval.analytics.events;
-      lastBucket.interval.analytics.events += gapBucket.interval.analytics.events;
-      lastBucket.interval.analytics.max = Math.max(lastBucket.interval.analytics.max, gapBucket.interval.analytics.max);
-      lastBucket.interval.analytics.min = Math.min(lastBucket.interval.analytics.min, gapBucket.interval.analytics.min);
-      lastBucket.interval.end = gapBucket.interval.end;
-      results.push(lastBucket);
-    } else {
-      results = results.concat(subrangeData);
-    }
-  }
+  await Promise.all(
+    subranges.map(async subrange => {
+      const subrangeData = await fetchAllPages(page => (
+        core.spaces.counts({
+          id: space.id,
+          start_time: formatInISOTime(subrange.start),
+          end_time: formatInISOTime(subrange.end),
+          page,
+          page_size: 5000,
+          ...params,
+        })
+      ));
+      if (subrange.gap && subrangeData.length > 0) {
+        const lastBucket = results.pop();
+        const gapBucket = subrangeData[0];
+        lastBucket.interval.analytics.entrances += gapBucket.interval.analytics.entrances;
+        lastBucket.interval.analytics.exits += gapBucket.interval.analytics.exits;
+        lastBucket.interval.analytics.events += gapBucket.interval.analytics.events;
+        lastBucket.interval.analytics.events += gapBucket.interval.analytics.events;
+        lastBucket.interval.analytics.max = Math.max(lastBucket.interval.analytics.max, gapBucket.interval.analytics.max);
+        lastBucket.interval.analytics.min = Math.min(lastBucket.interval.analytics.min, gapBucket.interval.analytics.min);
+        lastBucket.interval.end = gapBucket.interval.end;
+        results.push(lastBucket);
+      } else {
+        results = results.concat(subrangeData);
+      }
+    })
+  );
   return results;
 }

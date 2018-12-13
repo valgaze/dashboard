@@ -57,7 +57,7 @@ export function ExploreSpaceDetailRawEventsCard({
 
         {calculatedData.state === 'COMPLETE' ? <CardTable
           headings={["Timestamp", "Event", "Doorway"]}
-          data={calculatedData.data.data}
+          data={calculatedData.data.data || []}
           mapDataItemToRow={item => [
             parseISOTimeAtSpace(item.timestamp, space).format('MMM Do YYYY, h:mm:ss a'),
             item.direction === 1 ? 'Entrance' : 'Exit',
@@ -65,7 +65,7 @@ export function ExploreSpaceDetailRawEventsCard({
           ]}
         /> : null}
 
-        {calculatedData.state === 'COMPLETE' && calculatedData.data.data.length === 0 ? <div className="explore-space-detail-raw-events-card-body-info">
+        {calculatedData.state === 'COMPLETE' && (calculatedData.data.data || []).length === 0 ? <div className="explore-space-detail-raw-events-card-body-info">
           No data available for this time period.
         </div> : null}
         {calculatedData.state === 'LOADING' ? <div className="explore-space-detail-raw-events-card-body-info">

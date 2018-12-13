@@ -30,6 +30,8 @@ export class AccountRegistration extends React.Component {
       nickname: '',
       password: '',
       passwordConfirmation: '',
+      coreConsent: false,
+      marketingConsent: false,
     };
   }
   onSubmit() {
@@ -37,8 +39,11 @@ export class AccountRegistration extends React.Component {
       email: this.state.email,
       invitation_token: this.state.invitationToken,
       password: this.state.password,
+      confirm_password: this.state.password,
       full_name: this.state.fullName,
       nickname: this.state.nickname || this.generateNickname.apply(this),
+      core_consent: this.state.coreConsent,
+      marketing_consent: this.state.marketingConsent,
     }).then(response => {
       return this.props.onUserLoggedIn(response.session_token, this.props.redirectAfterLogin);
     }).catch(err => {
@@ -118,7 +123,28 @@ export class AccountRegistration extends React.Component {
               value={this.state.passwordConfirmation}
             />
 
-            <br />
+            <div className="account-registration-consent-container">
+              <div className="account-registration-consent">
+                <input
+                  type="checkbox"
+                  id="account-registration-core-consent"
+                  className="account-registration-checkbox"
+                  onChange={e => this.setState({coreConsent: e.target.checked})}
+                />
+                <label htmlFor="account-registration-core-consent">I confirm, by completing this registration, that I have read, understand, and agree to the Density <a href="https://www.density.io/Density-Terms-and-Conditions-1.0.0.pdf" target="_blank" rel="noopener noreferrer">Terms of Service</a>.</label>
+              </div>
+
+              <div className="account-registration-consent">
+                <input
+                  type="checkbox"
+                  id="account-registration-marketing-consent"
+                  className="account-registration-checkbox"
+                  onChange={e => this.setState({marketingConsent: e.target.checked})}
+                />
+                <label htmlFor="account-registration-marketing-consent">I would like to sign up to receive marketing emails from Density (unsubscribe is available at any time).</label>
+              </div>
+            </div>
+
             <Button
               className="account-registration-submit-button"
               size="large"
@@ -128,7 +154,8 @@ export class AccountRegistration extends React.Component {
                 this.state.password === this.state.passwordConfirmation &&
                 this.state.fullName.length > 0 && 
                 (this.state.fullName.indexOf(' ') >= 0 || this.state.nickname.length > 0) &&
-                this.state.email.indexOf('@') >= 0
+                this.state.email.indexOf('@') >= 0 &&
+                this.state.coreConsent
               )}
             >Create Account</Button>
           </CardBody>

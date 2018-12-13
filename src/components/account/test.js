@@ -16,6 +16,7 @@ const user = {
     organization: {
       name: 'baz',
     },
+    marketingConsent: true,
   },
 };
 
@@ -26,19 +27,21 @@ describe('Accounts page', function() {
       activeModal={{name: null}}
     />);
 
-    // Always show name and email inputs
-    assert.notEqual(component.find('.account-full-name-container').length, 0);
-    assert.notEqual(component.find('.account-nickname-container').length, 0);
-    assert.notEqual(component.find('.account-email-container').length, 0);
+    // Always show name, email, and consent inputs
+    assert.notStrictEqual(component.find('.account-full-name-container').length, 0);
+    assert.notStrictEqual(component.find('.account-nickname-container').length, 0);
+    assert.notStrictEqual(component.find('.account-email-container').length, 0);
+    assert.notStrictEqual(component.find('.account-deactivate-container').length, 0);
+    assert.notStrictEqual(component.find('.account-consent-container').length, 0);
 
     // Show change password link
-    assert.notEqual(component.find('.account-change-password-value').length, 0);
+    assert.notStrictEqual(component.find('.account-change-password-value').length, 0);
 
     // Don't show change password form
-    assert.equal(component.find('.account-change-password-form-container').length, 0);
+    assert.strictEqual(component.find('.account-change-password-form-container').length, 0);
 
     // Don't show submit user details button
-    assert.equal(component.find('.account-submit-user-details button').length, 0);
+    assert.strictEqual(component.find('.account-submit-user-details button').length, 0);
   });
   it('shows the password reset form after clicking the password reset link', function() {
     const component = mount(<Account
@@ -50,20 +53,21 @@ describe('Accounts page', function() {
     component.find('.account-change-password-value span').simulate('click');
 
     // Always show name and email inputs
-    assert.notEqual(component.find('.account-full-name-container').length, 0);
-    assert.notEqual(component.find('.account-nickname-container').length, 0);
-    assert.notEqual(component.find('.account-email-container').length, 0);
+    assert.notStrictEqual(component.find('.account-full-name-container').length, 0);
+    assert.notStrictEqual(component.find('.account-nickname-container').length, 0);
+    assert.notStrictEqual(component.find('.account-email-container').length, 0);
+    assert.notStrictEqual(component.find('.account-consent-container').length, 0);
 
     // Don't show change password link
-    assert.equal(component.find('.account-change-password-value span').length, 0);
+    assert.strictEqual(component.find('.account-change-password-value span').length, 0);
 
     // Show change password form
-    assert.notEqual(component.find('.account-change-password-form-container').length, 0);
+    assert.notStrictEqual(component.find('.account-change-password-form-container').length, 0);
 
     // Don't show submit user details button
-    assert.equal(component.find('.account-submit-user-details button').length, 0);
+    assert.strictEqual(component.find('.account-submit-user-details button').length, 0);
   });
-  it('makes the name / email editable when the user clicks the edit button', function() {
+  it('makes the name, email, and marketing consent editable when the user clicks the edit button', function() {
     const component = mount(<Account
       user={user}
       activeModal={{name: null}}
@@ -73,17 +77,22 @@ describe('Accounts page', function() {
     component.find('.account-edit-button').first().simulate('click');
 
     // Always show full-name and nickname inputs
-    assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
-    assert.equal(component.find('.account-nickname-container input').prop('disabled'), false);
+    assert.strictEqual(component.find('.account-full-name-container input').prop('disabled'), false);
+    assert.strictEqual(component.find('.account-nickname-container input').prop('disabled'), false);
+    assert.strictEqual(component.find('.account-full-name-container input').prop('disabled'), false);
+    assert.strictEqual(component.find('#account-marketing-consent').prop('disabled'), false);
 
     // Don't show change password link
-    assert.equal(component.find('.account-change-password-value span').length, 0);
+    assert.strictEqual(component.find('.account-change-password-value span').length, 0);
 
     // Don't show change password form
-    assert.equal(component.find('.account-change-password-form-container').length, 0);
+    assert.strictEqual(component.find('.account-change-password-form-container').length, 0);
+
+    // Don't show deactivate account blurb
+    assert.strictEqual(component.find('.account-deactivate-container').length, 0);
 
     // Show submit user details button
-    assert.notEqual(component.find('.account-submit-user-details button').length, 0);
+    assert.notStrictEqual(component.find('.account-submit-user-details button').length, 0);
   });
   it('resets the state of name back to original state when cancel is clicked', function() {
     const component = mount(<Account
@@ -95,8 +104,8 @@ describe('Accounts page', function() {
     component.find('.account-edit-button').first().simulate('click');
 
     // Ensure fullname and nickname inputs are visible
-    assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
-    assert.equal(component.find('.account-nickname-container input').prop('disabled'), false);
+    assert.strictEqual(component.find('.account-full-name-container input').prop('disabled'), false);
+    assert.strictEqual(component.find('.account-nickname-container input').prop('disabled'), false);
 
     // Change contents of nickname
     component.find('.account-nickname-container input').simulate('change', {
@@ -107,7 +116,7 @@ describe('Accounts page', function() {
     component.find('.account-edit-button').first().simulate('click');
 
     // Ensure that the original value is in the box
-    assert.equal(component.find('.account-nickname-container input').prop('value'), user.data.nickname);
+    assert.strictEqual(component.find('.account-nickname-container input').prop('value'), user.data.nickname);
   });
   it('sets the nickname to the best guess from the full name', function() {
     const component = mount(<Account
@@ -116,11 +125,11 @@ describe('Accounts page', function() {
     />);
 
     // Name defaults to 'Nickname'
-    assert.equal(component.find('.account-nickname-container input').prop('placeholder'), 'Nickname');
+    assert.strictEqual(component.find('.account-nickname-container input').prop('placeholder'), 'Nickname');
 
     // Nickname changes depending on full name
     component.setState({fullName: 'Foo Bar'});
-    assert.equal(component.find('.account-nickname-container input').prop('placeholder'), 'Foo');
+    assert.strictEqual(component.find('.account-nickname-container input').prop('placeholder'), 'Foo');
   });
   it('handles errors when changing password request fails', function() {
     const component = mount(<Account
@@ -132,8 +141,8 @@ describe('Accounts page', function() {
     component.find('.account-edit-button').first().simulate('click');
 
     // Ensure fullname and nickname inputs are visible
-    assert.equal(component.find('.account-full-name-container input').prop('disabled'), false);
-    assert.equal(component.find('.account-nickname-container input').prop('disabled'), false);
+    assert.strictEqual(component.find('.account-full-name-container input').prop('disabled'), false);
+    assert.strictEqual(component.find('.account-nickname-container input').prop('disabled'), false);
 
     // Change contents of nickname
     component.find('.account-nickname-container input').simulate('change', {
@@ -153,7 +162,7 @@ describe('Accounts page', function() {
     component.find('.account-edit-button').first().simulate('click');
 
     // Ensure that the error was reported
-    assert.equal(component.find('.error-bar').length, 1);
+    assert.strictEqual(component.find('.error-bar').length, 1);
   });
 
 
@@ -163,7 +172,7 @@ describe('Accounts page', function() {
     const component = mount(<Provider store={store}><ConnectedAccount /></Provider>);
 
     // Make sure a loading indicator is visible.
-    assert.equal(component.find('.card-loading').length, 1);
+    assert.strictEqual(component.find('.card-loading').length, 1);
   });
   it('shows a error bar when there is an error', function() {
     const component = mount(<Account
@@ -175,6 +184,6 @@ describe('Accounts page', function() {
     component.setState({error: 'boom!'});
 
     // Make sure an error bar is visible.
-    assert.equal(component.find('.error-bar').length, 1);
+    assert.strictEqual(component.find('.error-bar').length, 1);
   });
 });

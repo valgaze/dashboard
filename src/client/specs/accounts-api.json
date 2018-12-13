@@ -65,23 +65,7 @@
           "Accept": "application/json"
         },
         "body": {
-          "email": "{{email}}",
-          "full_name": "{{full_name}}",
-          "nickname": "{{nickname}}"
-        }
-      },
-      "register": {
-        "method": "PUT",
-        "url": "{{{host}}}/users/register/",
-        "headers": {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        "body": {
-          "email": "{{email}}",
-          "invitation_token": "{{invitation_token}}",
-          "password": "{{password}}",
-          "confirm_password": "{{password}}",
+          "marketing_consent": "{{marketing_consent}}",
           "full_name": "{{full_name}}",
           "nickname": "{{nickname}}"
         }
