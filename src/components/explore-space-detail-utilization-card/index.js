@@ -85,7 +85,7 @@ export class ExploreSpaceDetailUtilizationCard extends React.Component {
 
     const timeSegmentDurationInSeconds = parseTimeInTimeSegmentToSeconds(timeSegment.end) - parseTimeInTimeSegmentToSeconds(timeSegment.start);
 
-    if (calculatedData.state === 'COMPLETE') {
+    if (calculatedData.state === 'COMPLETE' && !calculatedData.data.requiresCapacity) {
       //
 
       // Calculate the average utilization for each day within the specified time segment.

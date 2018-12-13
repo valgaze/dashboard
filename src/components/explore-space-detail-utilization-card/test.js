@@ -29,10 +29,33 @@ describe('space utilization card', function() {
       calculatedData={{
         state: 'COMPLETE',
         data: {
-          requiresCapacity: true,
+          requiresCapacity: false,
           counts: [],
           groups: [],
           utilizations: [],
+        },
+        error: null,
+      }}
+    />);
+  });
+  it('should render explore space utilization card with a space that does not have a capacity', async function() {
+    // Render the component
+    shallow(<ExploreSpaceDetailUtilizationCard
+      space={{
+        id: 'spc_1',
+        name: 'My Space',
+        currentCount: 2,
+          capacity: null, /* no capacity */
+        timeZone: 'America/New_York',
+      }}
+      startDate="2016-12-25T00:00:00-05:00"
+      endDate="2017-01-01T00:00:00-05:00"
+      timeSegmentGroup={DEFAULT_TIME_SEGMENT_GROUP}
+      timeSegment={DEFAULT_TIME_SEGMENT}
+      calculatedData={{
+        state: 'COMPLETE',
+        data: {
+          requiresCapacity: true,
         },
         error: null,
       }}
