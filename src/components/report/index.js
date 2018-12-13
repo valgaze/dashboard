@@ -71,6 +71,7 @@ function Report({
     TOTAL_VISITS_MULTI_SPACE: {
       isExpandable: true,
       displayContextWhenExpanded: report => ({
+        showExpandControl: false,
         maximumNumberOfRows: null, /* an unlimited amount of rows */
       }),
       displayContextWhenNotExpanded: report => ({
@@ -83,12 +84,13 @@ function Report({
     UTILIZATION: {
       isExpandable: true,
       displayContextWhenExpanded: report => ({
+        showExpandControl: false,
         maximumNumberOfRows: null, /* an unlimited amount of rows */
       }),
       displayContextWhenNotExpanded: report => ({
-        maximumNumberOfRows: 7,
         showExpandControl: true,
         onReportExpand: () => onOpenReportExpandedModal(report),
+        maximumNumberOfRows: 7,
       }),
     },
 
@@ -97,14 +99,22 @@ function Report({
 
       // When expanded, override the hours in the day shown.
       displayContextWhenExpanded: (report, reportData) => ({
+        showExpandControl: false,
         dataStartTime: getCurrentLocalTimeAtSpace(reportData.data.space).startOf('day'),
         dataEndTime: getCurrentLocalTimeAtSpace(reportData.data.space).endOf('day'),
       }),
 
       // When not expanded, show the expand control.
-      displayContextWhenNotExpanded: report => ({
+      displayContextWhenNotExpanded: (report, reportData) => ({
         showExpandControl: true,
         onReportExpand: () => onOpenReportExpandedModal(report),
+
+        dataStartTime: getCurrentLocalTimeAtSpace(reportData.data.space)
+          .startOf('day')
+          .add(report.settings.hourStart, 'hours'),
+        dataEndTime: getCurrentLocalTimeAtSpace(reportData.data.space)
+          .startOf('day')
+          .add(report.settings.hourEnd, 'hours'),
       }),
     },
   };

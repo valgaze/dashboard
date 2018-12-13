@@ -4,7 +4,6 @@ import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index'
 import {
   formatInISOTimeAtSpace,
   parseISOTimeAtSpace,
-  getCurrentLocalTimeAtSpace,
 } from '../../../../helpers/space-time-utilities/index';
 import { core } from '../../../../client';
 
@@ -76,11 +75,5 @@ export default async function totalVisitsOneSpace(report) {
     space,
 
     data: dataByDay,
-    dataStartTime: getCurrentLocalTimeAtSpace(space)
-      .startOf('day')
-      .add(report.settings.hourStart, 'hours'),
-    dataEndTime: getCurrentLocalTimeAtSpace(space)
-      .startOf('day')
-      .add(report.settings.hourEnd, 'hours'),
   };
 }
