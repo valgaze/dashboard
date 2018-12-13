@@ -3,6 +3,7 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import collectionDashboardsSet from '../collection/dashboards/set';
 import collectionDashboardsError from '../collection/dashboards/error';
 import collectionDashboardsSelect from '../collection/dashboards/select';
+import dashboardsError from '../collection/dashboards/error';
 
 import fetchAllPages from '../../helpers/fetch-all-pages/index';
 
@@ -21,22 +22,36 @@ export default function routeTransitionDashboardDetail(id) {
       // this will show a loading state / remove all dashboards that are already in the collection
       // and that's not desired.
       dashboardSelectionPromise = dispatch(collectionDashboardsSelect(selectedDashboard));
-    } else {
-      // Though this route is only to load a single dashboard, we need to load all dashboards in order
-      // to render the list on the left side of the screen.
-      //
-      // So, next, load all dashboards. Even if all dashboards are set, loading them again isn't a bad
-      // idea and ensures we have up to date data.
-      let dashboards;
-      try {
-        dashboards = await fetchAllPages(page => core.dashboards.list({page, page_size: 5000}));
-      } catch (err) {
-        dispatch(collectionDashboardsError(err));
-        return;
-      }
+    }
 
-      if (dashboards.length === 0) {
-        console.warn('Display an error relating to when there are no dashboards and something about contacting your density account manager');
+    // Though this route is only to load a single dashboard, we need to load all dashboards in order
+    // to render the list on the left side of the screen.
+    //
+    // So, next, load all dashboards. Even if all dashboards are set, loading them again isn't a bad
+    // idea and ensures we have up to date data.
+
+    let dashboards;
+    try {
+      dashboards = await fetchAllPages(page => core.dashboards.list({page, page_size: 5000}));
+    } catch (err) {
+      dispatch(collectionDashboardsError(err));
+      return;
+    }
+
+    const results = dashboards.map(objectSnakeToCamel);
+    dispatch(collectionDashboardsSet(results));
+
+    if (results.length === 0) {
+      dispatch(dashboardsError('No dashboards were found, please talk to your Density account representative to create one.'))
+      return;
+    }
+
+    // Now, if the dashboard to be selected hasn't already been selected (optimistically, at the top
+    // of the function), then select it now that it has been loaded.
+    if (!selectedDashboard) {
+      selectedDashboard = results.find(dashboard => dashboard.id === id);
+      if (!selectedDashboard) {
+        dispatch(dashboardsError('No dashboard with this id was found.'))
         return;
       } else {
         dashboards = dashboards.map(objectSnakeToCamel);

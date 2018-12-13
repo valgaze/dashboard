@@ -1,48 +1,27 @@
 import React, { Fragment } from 'react';
+import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 
 import { connect } from 'react-redux';
 
 import DashboardReportGrid from '@density/ui-dashboard-report-grid';
 
-import ReportWrapper, { ReportError } from '@density/ui-report-wrapper';
-
-import ReportTimeSegmentBreakdown from '@density/ui-report-time-segment-breakdown';
-import ReportTotalVisits from '@density/ui-report-total-visits';
-import ReportTotalVisitsRollup from '@density/ui-report-total-visits-rollup';
-import ReportDailyVisitsPerSegment from '@density/ui-report-daily-visits-per-segment';
-import ReportSurpassedCapacity from '@density/ui-report-surpassed-capacity';
-import ReportComparativePerformance from '@density/ui-report-comparative-performance';
-import ReportNextWeekForecast from '@density/ui-report-next-week-forecast';
-import ReportUtilization from '@density/ui-report-utilization';
-import ReportHourlyBreakdown from '@density/ui-report-hourly-breakdown';
-import ReportWastedSpace from '@density/ui-report-wasted-space';
-
 import ReportLoading from '@density/ui-report-loading';
 
 import AppBar from '../app-bar/index';
+import AppBarTransparent from '../app-bar-transparent/index';
 import AppFrame from '../app-frame/index';
 import AppPane from '../app-pane/index';
 import AppScrollView from '../app-scroll-view/index';
 import AppSidebar from '../app-sidebar/index';
+import Report from '../report';
 import { IconMenu, IconChevronRight } from '@density/ui-icons';
 
 import showDashboardSidebar from '../../actions/miscellaneous/show-dashboards-sidebar';
 import hideDashboardSidebar from '../../actions/miscellaneous/hide-dashboards-sidebar';
 import resetDashboardReportGridIdentityValue from '../../actions/miscellaneous/reset-dashboard-report-grid-identity-value';
 
-const REPORT_TYPE_TO_COMPONENT = {
-  TOTAL_VISITS_ONE_SPACE: ReportTotalVisits,
-  TOTAL_VISITS_MULTI_SPACE: ReportTotalVisitsRollup,
-  DAILY_VISITS: ReportDailyVisitsPerSegment,
-  TS_BREAKDOWN: ReportTimeSegmentBreakdown,
-  CAPACITY: ReportSurpassedCapacity,
-  COMPARE_PERFORMANCE: ReportComparativePerformance,
-  NEXT_WEEK: ReportNextWeekForecast,
-  UTILIZATION: ReportUtilization,
-  HOURLY_BREAKDOWN: ReportHourlyBreakdown,
-  WASTED_SPACE: ReportWastedSpace,
-};
+import hideModal from '../../actions/modal/hide';
 
 function DashboardSidebarItem({selected, id, name, reportSet}) {
   const nonHeaderReports = reportSet.filter(i => i.type !== 'HEADER');
@@ -78,21 +57,65 @@ function DashboardSidebarHideShowIcon({sidebarVisible, onChangeSidebarVisibility
   );
 }
 
+function DashboardExpandedReportModal({visible, report, reportData, onCloseModal}) {
+  return ReactDOM.createPortal(
+    (
+      <div className={classnames('dashboard-expanded-report-modal', {visible})}>
+        <div className="dashboard-expanded-report-modal-inner">
+          <AppBarTransparent
+            rightSpan={(
+              <button onClick={onCloseModal} className="dashboard-expanded-report-modal-button">
+                Close
+              </button>
+            )}
+          />
+          {report ? (
+            <Report
+              report={report}
+              reportData={reportData}
+              expanded={true}
+            />
+          ) : null}
+        </div>
+      </div>
+    ),
+    document.body, /* appends to the end of document.body */
+  );
+}
+
+
+
 function DashboardMainScrollViewContent({
   dashboards,
   selectedDashboard,
-  dashboardReportGridIdentityValue
+  dashboardReportGridIdentityValue,
+
+  onCloseModal,
 }) {
-  if (!dashboards.selected && !dashboards.loading) {
-    return <div className="dashboard-non-ideal-state">
-      <h1>No dashboard selected</h1>
-      <span>To create a dashboard, please talk to your Density account manager.</span>
-    </div>;
+  if (dashboards.error) {
+    return (
+      <div className="dashboard-non-ideal-state">
+        <h1>Error loading dashboards</h1>
+        <span>{dashboards.error}</span>
+      </div>
+    );
+
+  } else if (!dashboards.selected && !dashboards.loading) {
+    return (
+      <div className="dashboard-non-ideal-state">
+        <h1>No dashboard selected</h1>
+        <span>To create a dashboard, please talk to your Density account manager.</span>
+      </div>
+    );
+
   } else if (selectedDashboard && selectedDashboard.reportSet.length === 0) {
-    return <div className="dashboard-non-ideal-state">
-      <h1>No reports in dashboard</h1>
-      <span>To add reports to this dashboard, please talk to your Density account manager.</span>
-    </div>;
+    return (
+      <div className="dashboard-non-ideal-state">
+        <h1>No reports in dashboard</h1>
+        <span>To add reports to this dashboard, please talk to your Density account manager.</span>
+      </div>
+    );
+
   } else if (selectedDashboard && selectedDashboard.reportSet.length > 0) {
     const nonHeaderReports = selectedDashboard.reportSet.filter(r => r.type !== 'HEADER');
     const loadedReports = nonHeaderReports.filter(
@@ -100,14 +123,17 @@ function DashboardMainScrollViewContent({
     );
     const isDashboardLoading = loadedReports.length < nonHeaderReports.length;
     if (isDashboardLoading) {
-      return <div className="dashboard-loading-wrapper">
-        <div className="dashboard-loading">
-          <ReportLoading
-            part={loadedReports.length}
-            whole={nonHeaderReports.length}
-          />
+      return (
+        <div className="dashboard-loading-wrapper">
+          <div className="dashboard-loading">
+            <ReportLoading
+              part={loadedReports.length}
+              whole={nonHeaderReports.length}
+            />
+          </div>
         </div>
-      </div>;
+      );
+
     } else {
       const reportSections = selectedDashboard.reportSet.reduce((sections, report) => {
         if (report.type === 'HEADER') {
@@ -124,82 +150,38 @@ function DashboardMainScrollViewContent({
           ];
         }
       }, [ {id: 'rpt_initial', name: null, contents: []} ]);
-  
-      return <div>
-        {reportSections.map(({id, name, contents}) => (
-          <div key={id} className="dashboard-wrapper">
-            {contents.length > 0 ? <div className="dashboard-wrapper-inner">
-              {name !== null ? <h1 className="dashboard-header">{name}</h1> : null}
-              <div>
-                <DashboardReportGrid
-                  reports={[
-                    ...contents.map((report, index) => {
-                      const ReportComponent = REPORT_TYPE_TO_COMPONENT[report.type];
-                      const reportData = dashboards.calculatedReportData[report.id];
 
-                      if (!ReportComponent) {
-                        return {
-                          id: report.id,
-                          report: (
-                            <span>Unknown report type {report.type}</span>
-                          )
-                        };
-                      }
-
-                      switch (reportData.state) {
-                      case 'LOADING':
-                        return {
-                          id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                          report: (
-                            <span>Loading report</span>
-                          ),
-                        };
-                      case 'ERROR':
+      return (
+        <div>
+          {reportSections.map(({id, name, contents}) => (
+            <div key={id} className="dashboard-wrapper">
+              {contents.length > 0 ? <div className="dashboard-wrapper-inner">
+                {name !== null ? <h1 className="dashboard-header">{name}</h1> : null}
+                <div>
+                  <DashboardReportGrid
+                    reports={[
+                      ...contents.map((report, index) => {
                         return {
                           id: `${report.id}-${dashboardReportGridIdentityValue}`,
                           report: (
-                            <ReportWrapper
-                              title={report.name}
-                              startDate={null}
-                              endDate={null}
-                              hideDetailsLink={true}
-                                spaces={[]}
-                            >
-                              <ReportError />
-                            </ReportWrapper>
-                          ),
-                        };
-                      case 'COMPLETE':
-                        return {
-                          id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                          report: (
-                            <ReportComponent
-                              key={report.id}
-                              title={report.name}
-                              {...reportData.data}
+                            <Report
+                              report={report}
+                              reportData={dashboards.calculatedReportData[report.id]}
+                              expanded={false}
                             />
                           ),
                         };
-                      default:
-                        break;
-                      }
+                      }),
+                    ]}
+                  />
+                </div>
+              </div> : null}
 
-                      return {
-                        id: report.id,
-                        report: (
-                          <span>Unknown report state {reportData.state}</span>
-                        ),
-                      };
-                    }),
-                  ]}
-                />
-              </div>
-            </div> : null}
-
-          </div>
-        ))}
-        <div className="dashboard-app-frame-scroll-body-spacer" />
-      </div>;
+            </div>
+          ))}
+          <div className="dashboard-app-frame-scroll-body-spacer" />
+        </div>
+      );
     }
   } else {
     return null;
@@ -210,46 +192,62 @@ export function Dashboard({
   dashboards,
   selectedDashboard,
   dashboardReportGridIdentityValue,
+  activeModal,
 
   sidebarVisible,
   onChangeSidebarVisibility,
+  onCloseModal,
 }) {
+  const reportExpandedModalVisible = (activeModal.name === 'MODAL_REPORT_EXPANDED');
   return (
-    <AppFrame>
-      <AppSidebar visible={sidebarVisible}>
-        <AppBar title="Dashboards" />
-        <AppScrollView>
-          <nav className="dashboard-app-frame-sidebar-list">
-            {dashboards.loading ? null :
-              <Fragment>
-                {dashboards.data.map(dashboard => (
-                  <DashboardSidebarItem
-                    key={dashboard.id}
-                    id={dashboard.id}
-                    name={dashboard.name}
-                    reportSet={dashboard.reportSet}
-                    selected={selectedDashboard ? selectedDashboard.id === dashboard.id : false}
-                  />
-                ))}
-              </Fragment>}
-          </nav>
-        </AppScrollView>
-      </AppSidebar>
-      <AppPane>
-        <AppBar
-          leftSpan={<DashboardSidebarHideShowIcon
-            sidebarVisible={sidebarVisible}
-            onChangeSidebarVisibility={onChangeSidebarVisibility}
-          />}
-          title={dashboards.selected ? selectedDashboard.name : ""} />
-        <AppScrollView>
-          <DashboardMainScrollViewContent
-            dashboards={dashboards}
-            selectedDashboard={selectedDashboard}
-            dashboardReportGridIdentityValue={dashboardReportGridIdentityValue} />
-        </AppScrollView>
-      </AppPane>
-    </AppFrame>
+    <Fragment>
+      {/* If an expanded report modal is visible, then render it above the view */}
+      <DashboardExpandedReportModal
+        visible={reportExpandedModalVisible}
+        report={activeModal.data.report}
+        reportData={reportExpandedModalVisible ?
+          dashboards.calculatedReportData[activeModal.data.report.id] : null}
+        onCloseModal={onCloseModal}
+      />
+
+      {/* Main application */}
+      <AppFrame>
+        <AppSidebar visible={sidebarVisible}>
+          <AppBar title="Dashboards" />
+          <AppScrollView>
+            <nav className="dashboard-app-frame-sidebar-list">
+              {dashboards.loading ? null :
+                <Fragment>
+                  {dashboards.data.map(dashboard => (
+                    <DashboardSidebarItem
+                      key={dashboard.id}
+                      id={dashboard.id}
+                      name={dashboard.name}
+                      reportSet={dashboard.reportSet}
+                      selected={selectedDashboard ? selectedDashboard.id === dashboard.id : false}
+                    />
+                  ))}
+                </Fragment>}
+            </nav>
+          </AppScrollView>
+        </AppSidebar>
+        <AppPane>
+          <AppBar
+            leftSpan={<DashboardSidebarHideShowIcon
+              sidebarVisible={sidebarVisible}
+              onChangeSidebarVisibility={onChangeSidebarVisibility}
+            />}
+            title={selectedDashboard ? selectedDashboard.name : ""} />
+          <AppScrollView>
+            <DashboardMainScrollViewContent
+              dashboards={dashboards}
+              selectedDashboard={selectedDashboard}
+              dashboardReportGridIdentityValue={dashboardReportGridIdentityValue}
+            />
+          </AppScrollView>
+        </AppPane>
+      </AppFrame>
+    </Fragment>
   );
 }
 
@@ -258,6 +256,8 @@ export default connect(state => {
   return {
     dashboards: state.dashboards,
     selectedDashboard,
+    activeModal: state.activeModal,
+
     sidebarVisible: state.miscellaneous.dashboardSidebarVisible,
     dashboardReportGridIdentityValue: state.miscellaneous.dashboardReportGridIdentityValue,
   };
@@ -274,6 +274,10 @@ export default connect(state => {
       setTimeout(() => {
         dispatch(resetDashboardReportGridIdentityValue());
       }, 300);
+    },
+
+    onCloseModal() {
+      dispatch(hideModal());
     },
   };
 })(Dashboard);

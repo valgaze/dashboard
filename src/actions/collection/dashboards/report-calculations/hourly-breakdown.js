@@ -26,13 +26,6 @@ export default async function totalVisitsOneSpace(report) {
     });
   });
 
-  // Filter data to remove all buckets with a timestamp outside of the start and end hours specified
-  // in the report settings
-  data = data.filter(bucket => {
-    const timestamp = parseISOTimeAtSpace(bucket.timestamp, space);
-    return report.settings.hourStart <= timestamp.hours() && timestamp.hours() < report.settings.hourEnd;
-  });
-
   // If the include weekends flag is enabled, then filter out all buckets that occur on weekends.
   if (!report.settings.includeWeekends) {
     data = data.filter(bucket => {
@@ -86,5 +79,8 @@ export default async function totalVisitsOneSpace(report) {
     dataStartTime: getCurrentLocalTimeAtSpace(space)
       .startOf('day')
       .add(report.settings.hourStart, 'hours'),
+    dataEndTime: getCurrentLocalTimeAtSpace(space)
+      .startOf('day')
+      .add(report.settings.hourEnd, 'hours'),
   };
 }

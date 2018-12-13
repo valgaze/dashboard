@@ -17,6 +17,7 @@ import AccountRegistration from '../account-registration/index';
 import AccountForgotPassword from '../account-forgot-password/index';
 import LiveSpaceList from '../live-space-list/index';
 import LiveSpaceDetail from '../live-space-detail/index';
+import DashboardsList from '../dashboards-list/index';
 
 import AccountSetupOverview from '../account-setup-overview/index';
 import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
@@ -93,7 +94,7 @@ function ActivePage({activePage, settings}) {
   case "ACCOUNT_SETUP_DOORWAY_DETAIL":
     return <AccountSetupDoorwayDetail />;
   case "DASHBOARD_LIST":
-    return null;
+    return <DashboardsList />;
   case "DASHBOARD_DETAIL":
     return <Dashboard />;
   default:
