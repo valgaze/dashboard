@@ -10,6 +10,8 @@ import {
   IconLightning
 } from '@density/ui-icons';
 
+import stringToBoolean from '../../helpers/string-to-boolean';
+
 function AppNavbarItem({isSelected, showOnMobile, path, icon, name}) {
   const selected = isSelected();
   const Icon = icon;
@@ -30,14 +32,14 @@ export default function AppNavbar({page, settings}) {
     <div className="app-navbar-container">
       <div className="app-navbar">
         <ul className="app-navbar-left">
-          {settings.dashboardEnabled ? <AppNavbarItem
+          {stringToBoolean(settings.dashboardEnabled) ? <AppNavbarItem
             isSelected={() => ['DASHBOARD_LIST', 'DASHBOARD_DETAIL'].includes(page)}
             showOnMobile={false}
             path="#/dashboards"
             icon={IconDashboards}
             name="Dashboards"
           /> : null}
-          {!settings.insightsPageLocked ? <AppNavbarItem
+          {!stringToBoolean(settings.insightsPageLocked) ? <AppNavbarItem
             isSelected={() => ['EXPLORE_SPACE_LIST', 'EXPLORE_SPACE_DETAIL'].includes(page)}
             showOnMobile={false}
             path="#/spaces/explore"
@@ -58,7 +60,7 @@ export default function AppNavbar({page, settings}) {
             icon={IconLightning}
             name="Developer"
           />
-          {settings.insightsPageLocked ? <AppNavbarItem
+          {stringToBoolean(settings.insightsPageLocked) ? <AppNavbarItem
             isSelected={() => ['ACCOUNT_SETUP_OVERVIEW', 'ACCOUNT_SETUP_DOORWAY_LIST', 'ACCOUNT_SETUP_DOORWAY_DETAIL'].includes(page)}
             showOnMobile={true}
             path="#/onboarding"
