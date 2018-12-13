@@ -8,7 +8,7 @@ export default function unsafeNavigateToLandingPage(settings, redirect) {
   } else if (redirect) {
     window.location.hash = redirect;
   // If the dashboards page is enabled, redirect to the dashboards page on first navigation
-  } else if (stringToBoolean(settings.dashboardsEnabled)) {
+  } else if (stringToBoolean(settings.dashboardEnabled)) {
     window.location.hash = '#/dashboards';
   // If the explore page is locked, redirect to the onboarding flow.
   } else if (stringToBoolean(settings.insightsPageLocked || settings.explorePageLocked)) {
