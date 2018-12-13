@@ -34,6 +34,7 @@ export class Account extends React.Component {
       fullName: this.props.user.data ? this.props.user.data.fullName : '',
       nickname: this.props.user.data ? this.props.user.data.nickname : '',
       email: this.props.user.data ? this.props.user.data.email : '',
+      marketingConsent: this.props.user.data ? this.props.user.data.marketingConsent : false,
     };
   }
 
@@ -42,6 +43,7 @@ export class Account extends React.Component {
       fullName: nextProps.user.data.fullName || '',
       nickname: nextProps.user.data.nickname || '',
       email: nextProps.user.data.email || '',
+      marketingConsent: nextProps.user.data.marketingConsent,
     });
   }
 
@@ -156,6 +158,20 @@ export class Account extends React.Component {
             />}
           />
 
+          <div className="account-consent-container">
+            <div className="account-consent">
+              <input
+                type="checkbox"
+                id="account-marketing-consent"
+                className="account-checkbox"
+                onChange={e => this.setState({marketingConsent: e.target.checked})}
+                defaultChecked={user.data && user.data.marketingConsent}
+                disabled={this.state.mode !== EDIT}
+              />
+              <label htmlFor="account-marketing-consent">I want to receive marketing emails from Density.</label>
+            </div>
+            </div>
+
           {/* Trigger changing the password */}
           {this.state.mode === NORMAL && user.data && !user.data.isDemo ? <FormLabel
             className="account-change-password-link-container"
@@ -206,10 +222,14 @@ export class Account extends React.Component {
             >Change Password</Button>
           </div> : null}
 
+          {this.state.mode === NORMAL ? <div className="account-deactivate-container">
+              <span>If you&apos;d like to deactivate your account, please <a href="mailto:support@density.io?subject=I want to deactivate my Density account"> contact support</a>.</span>
+          </div> : null}
+
           <div className="account-submit-user-details">
             {this.state.mode === EDIT ? <Button
               onClick={() => {
-                onSubmitUserUpdate(this.state.fullName, this.state.nickname, this.state.email)
+                onSubmitUserUpdate(this.state.fullName, this.state.nickname, this.state.marketingConsent)
                 .then(() => {
                   this.setState({mode: NORMAL});
                 }).catch(error => {
@@ -237,8 +257,8 @@ export default connect(state => {
         dispatch(showModal('account-password-reset'));
       });
     },
-    onSubmitUserUpdate(fullName, nickname, email) {
-      return dispatch(userUpdate(fullName, nickname, email));
+    onSubmitUserUpdate(fullName, nickname, marketingConsent) {
+      return dispatch(userUpdate(fullName, nickname, marketingConsent));
     },
     onHideSuccessToast() {
       dispatch(hideModal());
