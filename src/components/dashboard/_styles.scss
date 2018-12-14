@@ -5,7 +5,7 @@
 .dashboard-sidebar-hide-show-icon {
   cursor: pointer;
   display: none;
-  margin-right: 10px;
+  margin-right: 24px;
 }
 @media (min-width: $screen-sm-max) {
   .dashboard-sidebar-hide-show-icon { display: block; }
@@ -38,7 +38,7 @@
   padding-bottom: 17px;
   margin-left: 32px;
   margin-right: 32px;
-  border-bottom: 1px solid $gray;
+  border-bottom: 1px solid $gray-light;
 }
 .dashboard-sidebar-item-row {
   display: flex;
@@ -87,8 +87,8 @@
 }
 @media (min-width: 375px) {
   .dashboard-wrapper-inner {
-    padding-left: 36px;
-    padding-right: 36px;
+    padding-left: 32px;
+    padding-right: 32px;
   }
 }
 .dashboard-header {
@@ -224,13 +224,13 @@
   .dashboard-expanded-report-modal-inner {
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 10px;
   }
 }
 .dashboard-expanded-report-modal-button {
   background-color: #fff;
 
   height: 40px;
-  line-height: 41px;
   padding-left: 24px;
   padding-right: 24px;
   border-radius: 4px;

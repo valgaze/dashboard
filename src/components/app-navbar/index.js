@@ -19,7 +19,7 @@ function AppNavbarItem({isSelected, showOnMobile, path, icon, name}) {
     <li className={classnames('app-navbar-item', { selected, showOnMobile })}>
       <a href={path}>
         {icon ? <span className="app-navbar-icon">
-          {selected ? <Icon color={colorVariables.brandPrimary} /> : <Icon />}
+          {selected ? <Icon color={colorVariables.brandPrimaryNew} /> : <Icon />}
         </span> : null}
         {name}
       </a>

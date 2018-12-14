@@ -71,6 +71,10 @@ $app-navbar-padding: 20px;
   text-align: center;
   text-align: center;
 }
+
+.app-navbar-item.selected > a,
+.app-navbar-item.selected > span { color: $brand-primary-new; }
+
 .app-navbar-item.showOnMobile {
   display: flex;
 }
