@@ -63,7 +63,7 @@ export default function AppNavbar({page, settings}) {
             name="Developer"
           />
           <AppNavbarItem
-            isSelected={() => ['DEV_TOKEN_LIST', 'DEV_WEBHOOK_LIST'].includes(page)}
+            isSelected={() => ['ACCOUNT'].includes(page)}
             showOnMobile={false}
             path="#/account"
             icon={IconPerson}
