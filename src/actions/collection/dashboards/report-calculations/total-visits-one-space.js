@@ -25,7 +25,7 @@ export default async function totalVisitsOneSpace(report) {
         start_time: formatInISOTimeAtSpace(timeRange.start, space),
         end_time: formatInISOTimeAtSpace(timeRange.end, space),
         time_segment_groups: tsg.id,
-        page_size: 5000,
+        page_size: 4999,
       });
     });
   }));

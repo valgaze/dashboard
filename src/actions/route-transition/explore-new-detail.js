@@ -1,0 +1,112 @@
+import uuid from 'uuid';
+import { core } from '../../client';
+import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
+import spacesPush from '../collection/spaces/push';
+import collectionDashboardsCalculateReportData from '../collection/dashboards/calculate-report-data';
+
+import exploreDataCalculateDataLoading from '../explore-data/calculate-data-loading';
+import exploreDataCalculateDataComplete from '../explore-data/calculate-data-complete';
+
+export const ROUTE_TRANSITION_EXPLORE_NEW_DETAIL = 'ROUTE_TRANSITION_EXPLORE_NEW';
+
+export default function routeTransitionExploreNewDetail(ids) {
+  return async (dispatch, getState) => {
+    dispatch({ type: ROUTE_TRANSITION_EXPLORE_NEW_DETAIL, ids });
+
+    dispatch(exploreDataCalculateDataLoading('reports'));
+
+    // Fetch the data for all spaces that have been specified.
+    const spaces = await Promise.all(
+      ids.map(async id => {
+        const space = getState().spaces.data.find(i => i.id === id);
+        if (space) {
+          return space;
+        } else {
+          // Space was not found, fetch its data and add it to the collection.
+          const newSpace = objectSnakeToCamel(await core.spaces.get({id}));
+          dispatch(spacesPush(newSpace));
+          return newSpace;
+        }
+      })
+    );
+
+    const reports = contextuallyPickReports(spaces);
+    await dispatch(collectionDashboardsCalculateReportData(reports));
+    dispatch(exploreDataCalculateDataComplete('reports', reports));
+  };
+}
+
+
+function contextuallyPickReports(selectedSpaces) {
+  if (selectedSpaces.length === 0) {
+    // No spaces, prompt the user to select at least one
+    return [];
+  } else if (selectedSpaces.length === 1) {
+    // Single space, show reports that are relevant to one space
+    const space = selectedSpaces[0];
+    return [
+      {
+        id: uuid.v4(), // FIXME: bad idea!
+        name: 'Total visits',
+        type: 'TOTAL_VISITS_ONE_SPACE',
+        settings: {
+          spaceId: space.id,
+          timeRange: 'LAST_WEEK',
+          timeSegmentGroups: [
+            {
+              id: 'tsg_575401441519206683',
+              color: 'BLUE',
+            },
+          ],
+        },
+      },
+      {
+        id: uuid.v4(), // FIXME: bad idea!
+        name: 'Next week forecast',
+        type: 'NEXT_WEEK',
+        settings: {
+          spaceId: space.id,
+          period: 'NEXT_WEEK',
+          timeSegmentGroupId: 'tsg_575401441519206683',
+        },
+      },
+      {
+        id: uuid.v4(), // FIXME: bad idea!
+        name: 'Average time segment breakdown',
+        type: 'TS_BREAKDOWN',
+        settings: {
+          spaceId: space.id,
+          timeRange: 'LAST_WEEK',
+          color: 'BLUE',
+          timeSegmentGroupId: 'tsg_575401441519206683',
+        },
+      },
+    ];
+  } else {
+    // Multiple spaces, show reports relevant to multiple spaces
+    return [
+      {
+        id: uuid.v4(), // FIXME: bad idea!
+        name: 'Total visits',
+        type: 'TOTAL_VISITS_MULTI_SPACE',
+        settings: {
+          spaceIds: selectedSpaces.map(s => s.id),
+          timeRange: 'LAST_WEEK',
+          mode: 'MOST_VISITED',
+          timeSegmentGroupId: 'tsg_575401441519206683'
+        },
+      },
+      {
+        id: uuid.v4(), // FIXME: bad idea!
+        name: 'Utilization',
+        type: 'UTILIZATION',
+        settings: {
+          spaceIds: selectedSpaces.map(s => s.id),
+          timeRange: 'LAST_WEEK',
+          mode: 'MOST_UTILIZED',
+          timeSegmentGroupId: 'tsg_575401441519206683'
+        },
+      },
+    ];
+  }
+}

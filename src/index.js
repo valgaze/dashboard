@@ -49,6 +49,7 @@ import routeTransitionAccountSetupDoorwayList from './actions/route-transition/a
 import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition/account-setup-doorway-detail';
 import routeTransitionDashboardList from './actions/route-transition/dashboard-list';
 import routeTransitionDashboardDetail from './actions/route-transition/dashboard-detail';
+import routeTransitionExploreNewDetail from './actions/route-transition/explore-new-detail';
 
 import redirectAfterLogin from './actions/miscellaneous/redirect-after-login';
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
@@ -177,6 +178,9 @@ router.addRoute('spaces/insights/:id/data-export', redirect(id => `spaces/explor
 
 router.addRoute('dashboards', () => routeTransitionDashboardList());
 router.addRoute('dashboards/:id', id => routeTransitionDashboardDetail(id));
+
+router.addRoute('explore-new', () => routeTransitionExploreNewDetail([]));
+router.addRoute('explore-new/:ids', (ids) => routeTransitionExploreNewDetail(ids.split(',')));
 
 router.addRoute('spaces/explore', () => routeTransitionExploreSpaceList());
 router.addRoute('spaces/explore/:id/trends', id => routeTransitionExploreSpaceTrends(id));

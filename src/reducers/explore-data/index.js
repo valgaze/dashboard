@@ -32,6 +32,12 @@ const initialState = {
       ...initialModuleState,
       data: {},
     },
+
+
+    reports: {
+      ...initialModuleState,
+      data: [],
+    },
   },
 };
 
