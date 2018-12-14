@@ -218,7 +218,12 @@ export function Dashboard({
             <nav className="dashboard-app-frame-sidebar-list">
               {dashboards.loading ? null :
                 <Fragment>
-                  {dashboards.data.map(dashboard => (
+                  {dashboards.data.sort((a, b) => {
+                    // Sort alphabetically by name
+                    if (a.name < b.name) { return -1; }
+                    if (b.name < a.name) { return 1; }
+                    return 0;
+                  }).map(dashboard => (
                     <DashboardSidebarItem
                       key={dashboard.id}
                       id={dashboard.id}
