@@ -220,9 +220,7 @@ export function Dashboard({
                 <Fragment>
                   {dashboards.data.sort((a, b) => {
                     // Sort alphabetically by name
-                    if (a.name < b.name) { return -1; }
-                    if (b.name < a.name) { return 1; }
-                    return 0;
+                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
                   }).map(dashboard => (
                     <DashboardSidebarItem
                       key={dashboard.id}
