@@ -31,6 +31,7 @@
     "@density/ui-percentage-bar": "^1.0.0",
     "@density/ui-popover": "^0.2.3",
     "@density/ui-radio-button": "^1.1.0",
+    "@density/ui-report-average-meeting-size": "^0.1.0",
     "@density/ui-report-comparative-performance": "^0.5.0",
     "@density/ui-report-daily-visits-per-segment": "^0.2.4",
     "@density/ui-report-hourly-breakdown": "^1.0.0",
