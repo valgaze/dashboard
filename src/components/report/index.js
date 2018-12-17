@@ -54,7 +54,6 @@ function Report({
   reportData,
   expanded,
 
-  dashboardReportGridIdentityValue,
   onOpenReportExpandedModal,
 }) {
   const REPORT_TYPE_TO_SETTINGS = {
