@@ -1,3 +1,7 @@
+.live-space-list {
+  overflow-y: auto;
+}
+
 // Header for the space list view. Contians a label and a search box.
 .live-space-list-header {
   color: $gray-darkest;

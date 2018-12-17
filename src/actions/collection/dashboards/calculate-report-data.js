@@ -1,3 +1,4 @@
+import averageMeetingSize from './report-calculations/average-meeting-size';
 import totalVisitsOneSpace from './report-calculations/total-visits-one-space';
 import totalVisitsRollup from './report-calculations/total-visits-rollup';
 import dailyVisitsPerSegment from './report-calculations/daily-visits-per-segment';
@@ -8,12 +9,12 @@ import nextWeekForecast from './report-calculations/next-week-forecast';
 import utilization from './report-calculations/utilization';
 import hourlyBreakdown from './report-calculations/hourly-breakdown';
 import wastedSpace from './report-calculations/wasted-space';
-// import utilization from './report-calculations/utilization';
 
 export const COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE = 'COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE';
 export const COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_ERROR = 'COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_ERROR';
 
 const REPORT_TYPE_TO_FUNCTION = {
+  AVG_MEETING: averageMeetingSize,
   TOTAL_VISITS_ONE_SPACE: totalVisitsOneSpace,
   TOTAL_VISITS_MULTI_SPACE: totalVisitsRollup,
   DAILY_VISITS: dailyVisitsPerSegment,

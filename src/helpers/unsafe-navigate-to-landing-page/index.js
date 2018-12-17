@@ -1,11 +1,14 @@
 import stringToBoolean from '../string-to-boolean/index';
 
-export default function unsafeNavigateToLandingPage(settings) {
+export default function unsafeNavigateToLandingPage(settings, redirect) {
   // If there is a URL hash present, don't redirect to any default page
   if (['', '#', '#/', '#/login'].indexOf(window.location.hash) < 0) {
     return;
-  // If the dashbards page is enabled, redirect to the dashboards page on first navigation
-  } else if (stringToBoolean(settings.dashboardsEnabled)) {
+  // If there is an explicit redirect queued, use that {
+  } else if (redirect) {
+    window.location.hash = redirect;
+  // If the dashboards page is enabled, redirect to the dashboards page on first navigation
+  } else if (stringToBoolean(settings.dashboardEnabled)) {
     window.location.hash = '#/dashboards';
   // If the explore page is locked, redirect to the onboarding flow.
   } else if (stringToBoolean(settings.insightsPageLocked || settings.explorePageLocked)) {

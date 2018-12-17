@@ -1,3 +1,7 @@
+.token-list {
+  overflow-y: auto;
+}
+
 .token-list-container {
   @include grid-container;
   margin: 30px auto;

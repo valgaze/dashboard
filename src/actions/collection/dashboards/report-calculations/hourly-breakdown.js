@@ -4,7 +4,6 @@ import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index'
 import {
   formatInISOTimeAtSpace,
   parseISOTimeAtSpace,
-  getCurrentLocalTimeAtSpace,
 } from '../../../../helpers/space-time-utilities/index';
 import { core } from '../../../../client';
 
@@ -24,13 +23,6 @@ export default async function totalVisitsOneSpace(report) {
       page,
       page_size: 5000,
     });
-  });
-
-  // Filter data to remove all buckets with a timestamp outside of the start and end hours specified
-  // in the report settings
-  data = data.filter(bucket => {
-    const timestamp = parseISOTimeAtSpace(bucket.timestamp, space);
-    return report.settings.hourStart <= timestamp.hours() && timestamp.hours() < report.settings.hourEnd;
   });
 
   // If the include weekends flag is enabled, then filter out all buckets that occur on weekends.
@@ -83,8 +75,5 @@ export default async function totalVisitsOneSpace(report) {
     space,
 
     data: dataByDay,
-    dataStartTime: getCurrentLocalTimeAtSpace(space)
-      .startOf('day')
-      .add(report.settings.hourStart, 'hours'),
   };
 }

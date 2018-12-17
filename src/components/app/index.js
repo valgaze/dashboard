@@ -1,15 +1,10 @@
 import React from 'react';
 
 import stringToBoolean from '../../helpers/string-to-boolean/index';
-import sessionTokenUnset from '../../actions/session-token/unset';
-import collectionSpacesSet from '../../actions/collection/spaces/set';
-import collectionDoorwaysSet from '../../actions/collection/doorways/set';
-import collectionLinksSet from '../../actions/collection/links/set';
+import routeTransitionLogout from '../../actions/route-transition/logout';
 
 import { connect } from 'react-redux';
 
-import NavLoggedIn from '../nav-logged-in/index';
-import NavLoggedOut from '../nav-logged-out/index';
 import TokenList from '../dev-token-list/index';
 import ExploreSpaceList from '../explore-space-list/index';
 import ExploreSpaceTrends from '../explore-space-trends/index';
@@ -22,44 +17,48 @@ import AccountRegistration from '../account-registration/index';
 import AccountForgotPassword from '../account-forgot-password/index';
 import LiveSpaceList from '../live-space-list/index';
 import LiveSpaceDetail from '../live-space-detail/index';
+import DashboardsList from '../dashboards-list/index';
 
 import AccountSetupOverview from '../account-setup-overview/index';
 import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
 import AccountSetupDoorwayDetail from '../account-setup-doorway-detail/index';
 
 import Dashboard from '../dashboard/index';
+import AppNavbar from '../app-navbar/index';
 
 import UnknownPage from '../unknown-page/index';
 
 function App({activePage, settings, user, onLogout}) {
-  return <div className="app">
-    {/* Render the navbar */}
-    {(function(activePage) {
-      switch (activePage) {
-        // On these special pages, render the logged-out navbar.
+  return (
+    <div className="app">
+      {/* Render the navbar */}
+      {(function(activePage) {
+        switch (activePage) {
+        // On these special pages, don't render a navbar
         case 'LOGIN':
         case 'ACCOUNT_REGISTRATION':
         case 'ACCOUNT_FORGOT_PASSWORD':
-          return <NavLoggedOut />;
-
-        // Don't render a nav bar on this special page.
         case 'LIVE_SPACE_DETAIL':
           return null;
 
-        // Render the logged-in navbar by default
+          // Render the logged-in navbar by default
         default:
-          return <NavLoggedIn
-            activePage={activePage}
+          return <AppNavbar
+            page={activePage}
             settings={settings}
             onLogout={onLogout}
             user={user}
           />;
-      }
-    })(activePage)}
+        }
+      })(activePage)}
 
-    {/* Insert the currently displayed page into the view */}
-    <ActivePage activePage={activePage} settings={settings} />
-  </div>;
+      {/* Insert the currently displayed page into the view */}
+      <ActivePage
+        activePage={activePage}
+        settings={settings}
+      />
+    </div>
+  );
 }
 
 function ActivePage({activePage, settings}) {
@@ -94,7 +93,9 @@ function ActivePage({activePage, settings}) {
     return <AccountSetupDoorwayList />;
   case "ACCOUNT_SETUP_DOORWAY_DETAIL":
     return <AccountSetupDoorwayDetail />;
-  case "DASHBOARDS":
+  case "DASHBOARD_LIST":
+    return <DashboardsList />;
+  case "DASHBOARD_DETAIL":
     return <Dashboard />;
   default:
     return <UnknownPage invalidUrl={activePage} />;
@@ -116,11 +117,7 @@ export default connect(state => {
 }, dispatch => {
   return {
     onLogout() {
-      dispatch(sessionTokenUnset());
-      dispatch(collectionSpacesSet([]));
-      dispatch(collectionDoorwaysSet([]));
-      dispatch(collectionLinksSet([]));
-      window.location.hash = '#/login';
+      dispatch(routeTransitionLogout());
     },
   }
 })(App);

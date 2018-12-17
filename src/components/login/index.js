@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { IconCheck, IconNo } from '@density/ui-icons';
 
 import { accounts } from '../../client';
+import redirectAfterLogin from '../../actions/miscellaneous/redirect-after-login';
 import sessionTokenSet from '../../actions/session-token/set';
 import unsafeNavigateToLandingPage from '../../helpers/unsafe-navigate-to-landing-page/index';
 
@@ -70,7 +71,7 @@ export class Login extends React.Component {
       password: this.state.password,
     }).then(token => {
       this.setState({loading: false, error: null});
-      this.props.onUserSuccessfullyLoggedIn(token);
+      this.props.onUserSuccessfullyLoggedIn(token, this.props.redirectAfterLogin);
     }).catch(error => {
       this.setState({loading: false, error: error.toString()});
     });
@@ -228,12 +229,14 @@ export class Login extends React.Component {
 
 export default connect(state => ({
   user: state.user,
+  redirectAfterLogin: state.miscellaneous.redirectAfterLogin,
 }), dispatch => {
   return {
-    onUserSuccessfullyLoggedIn(token) {
+    onUserSuccessfullyLoggedIn(token, redirect) {
       dispatch(sessionTokenSet(token)).then(data => {
         const user = objectSnakeToCamel(data);
-        unsafeNavigateToLandingPage(user.organization.settings);
+        unsafeNavigateToLandingPage(user.organization.settings, redirect);
+        dispatch(redirectAfterLogin(null));
       });
     },
   };

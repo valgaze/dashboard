@@ -1,3 +1,7 @@
+.webhook {
+  overflow-y: auto;
+}
+
 .webhook-container {
   @include grid-container;
   margin: 30px auto;

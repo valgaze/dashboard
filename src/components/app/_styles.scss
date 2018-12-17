@@ -1,7 +1,10 @@
 .app {
-  color: $text-color;
-  background-color: #F0F0F2;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  position: fixed;
 }
 
 // Navbar styles.
@@ -16,32 +19,6 @@
 // - Top nav items are shown.
 // - Navbar is statically positioned.
 // - Sidebar menu in the navbar is hidden.
-.app .navbar {
-  padding-left: 0px;
-  padding-right: 0px;
-  .navbar-sidebar { margin-bottom: 0px; }
-  .navbar-sidebar-button { display: none; }
-  .navbar-container {
-    padding-left: 40px;
-    padding-right: 20px;
-  }
-
-  // Hide the top nav on mobile.
-  @media (max-width: $screen-xs-max) {
-    position: fixed;
-    top: 0px;
-
-    .navbar-container {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    .navbar-items > li {
-      display: none;
-    }
-    .navbar-sidebar-button { display: inline-block; }
-  }
-}
 .app .subnav {
   // Hide the subnav on mobile...
   @media (max-width: $screen-xs-max) {
@@ -50,24 +27,4 @@
 
   // ...Unless it's always visible
   &.subnav-visible { display: block; }
-}
-
-.app {
-  @media (max-width: $screen-xs-max) {
-    margin-top: $navbar-height;
-  }
-}
-
-.navbar-mobile-sidebar {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-
-
-
-
-// globally override chrome's terrible autofill background color
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 100px white inset !important;
 }

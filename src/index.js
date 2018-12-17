@@ -32,6 +32,7 @@ import createRouter from '@density/conduit';
 
 // Import all actions required to navigate from one page to another.
 import routeTransitionLogin from './actions/route-transition/login';
+import routeTransitionLogout from './actions/route-transition/logout';
 import routeTransitionExploreSpaceList from './actions/route-transition/explore-space-list';
 import routeTransitionExploreSpaceTrends from './actions/route-transition/explore-space-trends';
 import routeTransitionExploreSpaceDaily from './actions/route-transition/explore-space-daily';
@@ -46,8 +47,10 @@ import routeTransitionAccountForgotPassword from './actions/route-transition/acc
 import routeTransitionAccountSetupOverview from './actions/route-transition/account-setup-overview';
 import routeTransitionAccountSetupDoorwayList from './actions/route-transition/account-setup-doorway-list';
 import routeTransitionAccountSetupDoorwayDetail from './actions/route-transition/account-setup-doorway-detail';
-import routeTransitionDashboards from './actions/route-transition/dashboards';
+import routeTransitionDashboardList from './actions/route-transition/dashboard-list';
+import routeTransitionDashboardDetail from './actions/route-transition/dashboard-detail';
 
+import redirectAfterLogin from './actions/miscellaneous/redirect-after-login';
 import collectionSpacesCountChange from './actions/collection/spaces/count-change';
 import collectionSpacesSetEvents from './actions/collection/spaces/set-events';
 import collectionSpacesSet from './actions/collection/spaces/set';
@@ -161,6 +164,7 @@ function redirect(url) {
 // Uses conduit, an open source router we made at Density: https://github.com/DensityCo/conduit
 const router = createRouter(store);
 router.addRoute('login', () => routeTransitionLogin());
+router.addRoute('logout', () => routeTransitionLogout());
 
 // v I AM DEPRECATED
 router.addRoute('insights/spaces', redirect('spaces/explore')); // DEPRECATED
@@ -171,7 +175,8 @@ router.addRoute('spaces/insights/:id/daily', redirect(id => `spaces/explore/${id
 router.addRoute('spaces/insights/:id/data-export', redirect(id => `spaces/explore/${id}/data-export`)); // DEPRECATED
 // ^ I AM DEPRECATED
 
-router.addRoute('dashboards', () => routeTransitionDashboards());
+router.addRoute('dashboards', () => routeTransitionDashboardList());
+router.addRoute('dashboards/:id', id => routeTransitionDashboardDetail(id));
 
 router.addRoute('spaces/explore', () => routeTransitionExploreSpaceList());
 router.addRoute('spaces/explore/:id/trends', id => routeTransitionExploreSpaceTrends(id));
@@ -211,6 +216,7 @@ function preRouteAuthentication() {
 
   // If the user isn't logged in, send them to the login page.
   } else if (!loggedIn) {
+    store.dispatch(redirectAfterLogin(window.location.hash));
     router.navigate('login');
 
   // Otherwise, fetch the logged in user's info since there's a session token available.
@@ -225,6 +231,7 @@ function preRouteAuthentication() {
         unsafeNavigateToLandingPage(objectSnakeToCamel(user).organization.settings);
       } else {
         // User token expired (and no user object was returned) so redirect to login page.
+        store.dispatch(redirectAfterLogin(window.location.hash));
         router.navigate('login');
       }
     });

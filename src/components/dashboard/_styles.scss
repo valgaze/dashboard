@@ -1,19 +1,101 @@
+.dashboard-app-frame-scroll-body-spacer {
+  height: 150px;
+}
+
+.dashboard-sidebar-hide-show-icon {
+  cursor: pointer;
+  display: none;
+  margin-right: 24px;
+}
+@media (min-width: $screen-sm-max) {
+  .dashboard-sidebar-hide-show-icon { display: block; }
+}
+.dashboard-sidebar-hide-show-icon:hover { opacity: 0.8; }
+.dashboard-sidebar-hide-show-icon:active { opacity: 1; }
+
+.dashboard-app-frame-sidebar-list {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow-y: auto;
+}
+
+.dashboard-app-frame-sidebar-list-item {
+  display: block;
+  text-decoration: none;
+  color: $gray-darker;
+}
+
+
+.dashboard-sidebar-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  transition: all 250ms ease-in-out;
+
+  height: 45px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  margin-left: 32px;
+  margin-right: 32px;
+  border-bottom: 1px solid $gray-light;
+}
+.dashboard-sidebar-item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.dashboard-sidebar-item-name {
+  color: $gray-darkest;
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: auto;
+}
+.dashboard-sidebar-item:hover .dashboard-sidebar-item-name { color: $gray-cinder; }
+.dashboard-sidebar-item.selected .dashboard-sidebar-item-name { color: $brand-primary-new; }
+
+.dashboard-sidebar-item-num-reports {
+  color: $gray-darkest;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 4px;
+}
+.dashboard-sidebar-item:hover .dashboard-sidebar-item-num-reports { color: $gray-cinder; }
+.dashboard-sidebar-item.selected .dashboard-sidebar-item-num-reports { color: $brand-primary-new; }
+
+.dashboard-sidebar-item-headers {
+  color: $gray-darkest;
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+
+
 .dashboard-wrapper {
   width: 100%;
   max-width: 1440px;
-  margin: 0px auto 40px auto;
 
   animation: fadeInUp 0.4s ease-out;
 }
 .dashboard-wrapper-inner {
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+@media (min-width: 375px) {
+  .dashboard-wrapper-inner {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
 }
 .dashboard-header {
-  color: $gray-cinder;
+  color: $gray-darkest;
   font-size: 22px;
   border-bottom: 2px solid $gray;
-  padding-top: 64px;
+  margin-top: 40px;
   padding-bottom: 10px;
 }
 
@@ -23,7 +105,11 @@
   align-items: center;
   justify-content: center;
 
+  padding-top: 48px;
+  padding-left: 32px;
+
   height: 400px;
+  color: $gray-cinder;
 }
 
 .dashboard-loading-wrapper {
@@ -34,8 +120,8 @@
 
   height: 90vh;
   color: $gray-cinder;
-
 }
+
 .dashboard-loading {
   width: 100%;
   max-width: 500px;
@@ -79,4 +165,85 @@
   margin: 0px;
   font-size: 24px;
   color: $gray-cinder;
+}
+
+
+@keyframes modalAnimateIn {
+  from {
+    transform: translate3d(0, 20px, -200px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1
+  }
+}
+
+@keyframes modalAnimateOut {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 1
+  }
+  to {
+    transform: translate3d(0, 20px, 200px);
+    opacity: 0;
+  }
+}
+
+.dashboard-expanded-report-modal {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+
+  display: flex;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  animation: modalAnimateOut 0.4s ease-out;
+  background-color: rgba(255, 255, 255, 0.95);
+  overflow-y: auto;
+}
+.dashboard-expanded-report-modal.visible {
+  pointer-events: auto;
+  opacity: 1;
+  animation: modalAnimateIn 0.25s ease-in;
+}
+.dashboard-expanded-report-modal-inner {
+  width: 100%;
+  height: 100%;
+  max-width: 1000px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+@media (min-width: 375px) {
+  .dashboard-expanded-report-modal-inner {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+  }
+}
+.dashboard-expanded-report-modal-button {
+  background-color: #fff;
+
+  height: 40px;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-radius: 4px;
+
+  border: 1px solid $gray-dark;
+  outline: none;
+  cursor: pointer;
+
+  font-family: 'Sailec', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+
+  transition: all 200ms ease-in-out;
+  &:hover { opacity: 0.8; }
+  &:active { opacity: 1; }
 }

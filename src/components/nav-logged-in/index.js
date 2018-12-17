@@ -141,7 +141,7 @@ export default function NavLoggedIn({
 
     {stringToBoolean(settings.dashboardEnabled) ? <NavbarItem
         activePage={activePage}
-        pageName={['DASHBOARDS']}
+        pageName={['DASHBOARD_LIST', 'DASHBOARD_DETAIL']}
 
         href="#/dashboards"
       >Dashboards</NavbarItem> : null}

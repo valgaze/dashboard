@@ -2,7 +2,7 @@ import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
 import { COLLECTION_DASHBOARDS_SET } from '../../actions/collection/dashboards/set';
 import { COLLECTION_DASHBOARDS_ERROR } from '../../actions/collection/dashboards/error';
 import { COLLECTION_DASHBOARDS_SELECT } from '../../actions/collection/dashboards/select';
-import { ROUTE_TRANSITION_DASHBOARDS } from '../../actions/route-transition/dashboards';
+import { ROUTE_TRANSITION_DASHBOARD_DETAIL } from '../../actions/route-transition/dashboard-detail';
 
 import {
   COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE,
@@ -27,11 +27,27 @@ const initialState = {
 export default function dashboards(state=initialState, action) {
   switch (action.type) {
 
-  case ROUTE_TRANSITION_DASHBOARDS:
-    return initialState;
+  // When the active page changes, reset the state of all reports to be at the loading state,
+  // removing all of their previously stored data.
+  case ROUTE_TRANSITION_DASHBOARD_DETAIL: {
+    const allReports = state.data.reduce((acc, dashboard) => [...acc, ...dashboard.reportSet], []);
+    return {
+      ...state,
+      calculatedReportData: {
+        // All reports will be put into a loading state.
+        ...(allReports.reduce((acc, report) => ({
+          ...acc,
+          [report.id]: {
+            state: 'LOADING',
+            data: null,
+          },
+        }), {})),
+      },
+    };
+  }
 
   // Update the whole dashboard collection.
-  case COLLECTION_DASHBOARDS_SET:
+  case COLLECTION_DASHBOARDS_SET: {
     const allReports = action.data.reduce((acc, dashboard) => [...acc, ...dashboard.reportSet], []);
     return {
       ...state,
@@ -53,10 +69,14 @@ export default function dashboards(state=initialState, action) {
         ...state.calculatedReportData,
       },
     };
+  }
 
   // Select a new dashboard
   case COLLECTION_DASHBOARDS_SELECT:
-    return { ...state, selected: action.dashboard.id };
+    return {
+      ...state,
+      selected: action.dashboard.id,
+    };
 
   // If report data calculation is successful, add the calculated data into the context for each
   // report.
