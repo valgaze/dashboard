@@ -13,7 +13,7 @@ import ExploreSpaceHeader from '../explore-space-header/index';
 import RawEventsExportCard from '../explore-space-detail-raw-events-export-card/index';
 
 import DateRangePicker from '@density/ui-date-range-picker';
-import gridVariables from '@density/ui/variables/grid.json'
+import gridVariables from '@density/ui/variables/grid.json';
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 

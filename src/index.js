@@ -17,6 +17,8 @@ import userSet from './actions/user/set';
 import objectSnakeToCamel from './helpers/object-snake-to-camel/index';
 import WebsocketEventPusher from './helpers/websocket-event-pusher/index';
 import mixpanelTrack from './helpers/mixpanel-track/index';
+import unsafeHandleWindowResize from './helpers/unsafe-handle-window-resize';
+import unsafeNavigateToLandingPage from './helpers/unsafe-navigate-to-landing-page/index';
 import unsafeSetSettingsFlagConstructor from './helpers/unsafe-set-settings-flag/index';
 
 // The main app component that renders everything.
@@ -59,7 +61,6 @@ import eventPusherStatusChange from './actions/event-pusher/status-change';
 
 // All the reducer and store code is in a seperate file.
 import storeFactory from './store';
-import unsafeNavigateToLandingPage from './helpers/unsafe-navigate-to-landing-page/index';
 const store = storeFactory();
 
 // ----------------------------------------------------------------------------
@@ -242,6 +243,9 @@ preRouteAuthentication();
 
 // Add a helper into the global namespace to allow changing of settings flags on the fly.
 window.setSettingsFlag = unsafeSetSettingsFlagConstructor(store);
+
+// Add a handler to debounce & handle window resize events
+window.resizeHandler = unsafeHandleWindowResize(store);
 
 // Handle the route that the user is currently at.
 router.handle();

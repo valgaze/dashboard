@@ -16,7 +16,7 @@
     "@density/ui": "^5.6.0",
     "@density/ui-button": "^1.1.0",
     "@density/ui-card": "^1.1.0",
-    "@density/ui-dashboard-report-grid": "^1.0.1",
+    "@density/ui-dashboard-report-grid": "^1.1.0",
     "@density/ui-date-picker": "^2.1.0",
     "@density/ui-date-range-picker": "^1.2.2",
     "@density/ui-density-mark": "^1.0.0",
