@@ -2,6 +2,7 @@ import * as React from 'react';
 import FormLabel from '../form-label/index';
 
 import InputBox from '@density/ui-input-box';
+import Switch from '@density/ui-switch';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import Button from '@density/ui-button';
 import Modal from '@density/ui-modal';
@@ -97,6 +98,19 @@ export default class EnvironmentSwitcher extends React.Component {
                   />}
                 />
               })}
+              <FormLabel
+                className="environment-switcher-item"
+                label="Use experimental fast queries"
+                htmlFor="environment-switcher-go-fast"
+                key="goFast"
+                input={<Switch
+                    name="goFast"
+                    type="checkbox"
+                    checked={this.state.goFast}
+                    onChange={e => this.setState({value: {goFast: e.target.value}})}
+                  />
+                }
+              />
             </ul>
 
             <div className="environment-switcher-footer">
