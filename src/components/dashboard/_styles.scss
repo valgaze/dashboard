@@ -48,9 +48,15 @@
 
 .dashboard-sidebar-item-name {
   color: $gray-darkest;
+
   font-size: 16px;
   font-weight: 600;
   margin-right: auto;
+  padding-right: 10px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .dashboard-sidebar-item:hover .dashboard-sidebar-item-name { color: $gray-cinder; }
 .dashboard-sidebar-item.selected .dashboard-sidebar-item-name { color: $brand-primary-new; }
@@ -60,6 +66,10 @@
   font-size: 12px;
   font-weight: bold;
   margin-right: 4px;
+  white-space: nowrap;
+
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 .dashboard-sidebar-item:hover .dashboard-sidebar-item-num-reports { color: $gray-cinder; }
 .dashboard-sidebar-item.selected .dashboard-sidebar-item-num-reports { color: $brand-primary-new; }
