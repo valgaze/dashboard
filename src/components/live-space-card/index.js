@@ -20,7 +20,6 @@ const RealTimeCountChart = autoRefreshHoc({
   }
 })(chartAsReactComponent(RealTimeCountFn));
 
-
 const EVENTS = [
   { countChange: 1, timestamp: moment.utc().add(10, 'seconds').format() },
   { countChange: -1, timestamp: moment.utc().add(1, 'seconds').format() },
@@ -69,8 +68,17 @@ export default function SpaceCard({
           className="space-card-chart-full-screen"
           onClick={onClickRealtimeChartFullScreen}
         >&#xe919;</div>
-        <RealTimeCountChart events={events || []} />
-        <SpaceCardChart events={EVENTS} />
+        {/* <RealTimeCountChart events={events || []} /> */}
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
+        <SpaceCardChart events={events || []} />
       </div>
     </Card>;
   } else {
@@ -79,160 +87,219 @@ export default function SpaceCard({
 }
 
 
-const CONVEYER_LENGTH_MS = 60 * 1000;
-// const CONVEYER_LENGTH_MS = 10 * 1000;
 const SPACE_CARD_CHART_HEIGHT = 160;
-
-const INITIAL_STATE = {
-  view: 'ACTIVE',
-  conveyers: ['one'],
-  conveyerCycleCount: 0,
-
-  conveyerOneEvents: [],
-  conveyerTwoEvents: [],
-};
-
 class SpaceCardChart extends Component {
-  state = INITIAL_STATE
-
-  constructor(props) {
-    super(props);
-
-    this.componentInstantiationTimestamp = moment.utc();
-
-    window.addEventListener('visibilitychange', this.onVisibilityChange);
-    window.addEventListener('msvisibilitychange', this.onVisibilityChange);
-    window.addEventListener('webkitvisibilitychange', this.onVisibilityChange);
+  state = {
+    msSinceInitialRender: 0,
   }
-
-  onVisibilityChange = () => {
-		let hidden;
-		if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
-			hidden = "hidden";
-		} else if (typeof document.msHidden !== "undefined") {
-			hidden = "msHidden";
-		} else if (typeof document.webkitHidden !== "undefined") {
-			hidden = "webkitHidden";
-		}
-
-		const isHidden = document[hidden];
-
-    if (isHidden) {
-      this.setState({
-        view: 'INACTIVE',
-        conveyers: [],
-        conveyerCycleCount: -1,
-      });
-    } else {
-      this.componentInstantiationTimestamp = moment.utc();
-      this.setState(INITIAL_STATE);
-    }
-  }
+  timeAtRender = 0
 
   componentDidMount() {
-    this.swapConveyersInterval = setInterval(() => {
-      this.swapConveyers();
-    }, CONVEYER_LENGTH_MS);
+    this.timeAtRender = moment.utc();
+    this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
   }
   componentWillUnmount() {
-    window.clearInverval(this.swapConveyersInterval);
+    window.cancelAnimationFrame(this.nextAnimationFrameId);
   }
 
-  swapConveyers = () => {
-    this.setState(state => {
-      if (state.conveyers.length === 0) {
-        // Move "conveyer two" to the end
-        return {
-          conveyers: ['one', 'two'],
-          conveyerCycleCount: state.conveyerCycleCount + 1,
-          // conveyerTwoEvents: [],
-        };
-      } else {
-        // Move "conveyer one" to the end
-        return {
-          conveyers: ['two', 'one'],
-          conveyerCycleCount: state.conveyerCycleCount + 1,
-          // conveyerOneEvents: [],
-        };
-      }
+  onFrame = () => {
+    const now = moment.utc();
+    this.setState({
+      msSinceInitialRender: now.valueOf() - this.timeAtRender.valueOf(),
     }, () => {
-      // After swapping conveyers, rebalance conveyers to ensure that the right events are on the
-      // right conveyers
-      console.log('REBUCKETIZE');
-      this.rebucketizeEvents(this.props.events);
+      this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
     });
-  }
-
-  componentWillReceiveProps({events}) {
-    this.rebucketizeEvents(events);
-  }
-
-  rebucketizeEvents = (events) => {
-    const { conveyers, conveyerCycleCount } = this.state;
-
-    // Get the timestamps at the start of the new conveyer and the old conveyer
-    const timestampAtStartOfNewerConveyer = (
-      this.componentInstantiationTimestamp.clone()
-        .add(conveyerCycleCount * CONVEYER_LENGTH_MS, 'milliseconds')
-    );
-
-    const oldContainerRenderableEvents = events.filter(event => {
-      return moment.utc(event.timestamp).isBefore(timestampAtStartOfNewerConveyer);
-    });
-
-    const newContainerRenderableEvents = events.filter(event => {
-      return moment.utc(event.timestamp).isSameOrAfter(timestampAtStartOfNewerConveyer);
-    });
-
-    console.log(oldContainerRenderableEvents, timestampAtStartOfNewerConveyer.format(), newContainerRenderableEvents)
-    if (conveyers[0] === 'one') {
-      // one is the "newest" conveyer
-      this.setState({
-        conveyerOneEvents: newContainerRenderableEvents,
-        conveyerTwoEvents: oldContainerRenderableEvents,
-      });
-    } else {
-      this.setState({
-        conveyerTwoEvents: newContainerRenderableEvents,
-        conveyerOneEvents: oldContainerRenderableEvents,
-      });
-    }
   }
 
   render() {
-    const { conveyerCycleCount, conveyers } = this.state;
-
+    const { msSinceInitialRender } = this.state;
+    const percentageOffset = (msSinceInitialRender / 60000) * 100;
     return (
-      <svg width="100%" height={SPACE_CARD_CHART_HEIGHT}>
-        <g>
-          {conveyers.map(conveyer => {
-            return (
-              <g className="space-card-chart-conveyer-belt" key={conveyer}>
-                <rect
-                  x1="0"
-                  y1="0"
-                  width="100%"
-                  height={SPACE_CARD_CHART_HEIGHT}
-                  fill={conveyer === 'one' ? 'red' : 'blue'}
-                />
-                <text fill="white" transform="translate(20, 20)">{conveyer}</text>
-              </g>
-            );
-          })}
-        </g>
-        {conveyerCycleCount === 0 ? (
-          <g className="space-card-chart-conveyer-belt-header" key="header">
-            <rect
-              x1="0"
-              y1="0"
-              width="100%"
-              height={SPACE_CARD_CHART_HEIGHT}
-              fill="yellow"
-            />
-            <text fill="black" transform="translate(20, 20)">header</text>
-          </g>
-        ) : null}
+      <svg width="100%" height={160}>
+        {/* two svgs? idea from https://stackoverflow.com/questions/17098397/how-to-translate-an-svg-group-by-a-percentage-of-the-viewport */}
+        <svg x={`${100 - percentageOffset}%`} y={0}>
+          <rect
+            x={0}
+            y={0}
+            width="100%"
+            height="100%"
+            fill="red"
+          />
+
+        {this.props.events.map(event => (
+          <circle
+            key={event.timestamp}
+            cx={`${((moment.utc(event.timestamp).valueOf() - this.timeAtRender.valueOf()) / 60000) * 100}%`}
+            cy={10}
+            r={5}
+            fill="green"
+          />
+        ))}
+        </svg>
       </svg>
     );
   }
 }
+
+
+
+
+
+
+// const CONVEYER_LENGTH_MS = 60 * 1000;
+// // const CONVEYER_LENGTH_MS = 10 * 1000;
+// const SPACE_CARD_CHART_HEIGHT = 160;
+//
+// const INITIAL_STATE = {
+//   view: 'ACTIVE',
+//   conveyers: ['one'],
+//   conveyerCycleCount: 0,
+//
+//   conveyerOneEvents: [],
+//   conveyerTwoEvents: [],
+// };
+//
+// class SpaceCardChart extends Component {
+//   state = INITIAL_STATE
+//
+//   constructor(props) {
+//     super(props);
+//
+//     this.componentInstantiationTimestamp = moment.utc();
+//
+//     window.addEventListener('visibilitychange', this.onVisibilityChange);
+//     window.addEventListener('msvisibilitychange', this.onVisibilityChange);
+//     window.addEventListener('webkitvisibilitychange', this.onVisibilityChange);
+//   }
+//
+//   onVisibilityChange = () => {
+// 		let hidden;
+// 		if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
+// 			hidden = "hidden";
+// 		} else if (typeof document.msHidden !== "undefined") {
+// 			hidden = "msHidden";
+// 		} else if (typeof document.webkitHidden !== "undefined") {
+// 			hidden = "webkitHidden";
+// 		}
+//
+// 		const isHidden = document[hidden];
+//
+//     if (isHidden) {
+//       this.setState({
+//         view: 'INACTIVE',
+//         conveyers: [],
+//         conveyerCycleCount: -1,
+//       });
+//     } else {
+//       this.componentInstantiationTimestamp = moment.utc();
+//       this.setState(INITIAL_STATE);
+//     }
+//   }
+//
+//   componentDidMount() {
+//     this.swapConveyersInterval = setInterval(() => {
+//       this.swapConveyers();
+//     }, CONVEYER_LENGTH_MS);
+//   }
+//   componentWillUnmount() {
+//     window.clearInverval(this.swapConveyersInterval);
+//   }
+//
+//   swapConveyers = () => {
+//     this.setState(state => {
+//       if (state.conveyers.length === 0) {
+//         // Move "conveyer two" to the end
+//         return {
+//           conveyers: ['one', 'two'],
+//           conveyerCycleCount: state.conveyerCycleCount + 1,
+//           // conveyerTwoEvents: [],
+//         };
+//       } else {
+//         // Move "conveyer one" to the end
+//         return {
+//           conveyers: ['two', 'one'],
+//           conveyerCycleCount: state.conveyerCycleCount + 1,
+//           // conveyerOneEvents: [],
+//         };
+//       }
+//     }, () => {
+//       // After swapping conveyers, rebalance conveyers to ensure that the right events are on the
+//       // right conveyers
+//       console.log('REBUCKETIZE');
+//       this.rebucketizeEvents(this.props.events);
+//     });
+//   }
+//
+//   componentWillReceiveProps({events}) {
+//     this.rebucketizeEvents(events);
+//   }
+//
+//   rebucketizeEvents = (events) => {
+//     const { conveyers, conveyerCycleCount } = this.state;
+//
+//     // Get the timestamps at the start of the new conveyer and the old conveyer
+//     const timestampAtStartOfNewerConveyer = (
+//       this.componentInstantiationTimestamp.clone()
+//         .add(conveyerCycleCount * CONVEYER_LENGTH_MS, 'milliseconds')
+//     );
+//
+//     const oldContainerRenderableEvents = events.filter(event => {
+//       return moment.utc(event.timestamp).isBefore(timestampAtStartOfNewerConveyer);
+//     });
+//
+//     const newContainerRenderableEvents = events.filter(event => {
+//       return moment.utc(event.timestamp).isSameOrAfter(timestampAtStartOfNewerConveyer);
+//     });
+//
+//     console.log(oldContainerRenderableEvents, timestampAtStartOfNewerConveyer.format(), newContainerRenderableEvents)
+//     if (conveyers[0] === 'one') {
+//       // one is the "newest" conveyer
+//       this.setState({
+//         conveyerOneEvents: newContainerRenderableEvents,
+//         conveyerTwoEvents: oldContainerRenderableEvents,
+//       });
+//     } else {
+//       this.setState({
+//         conveyerTwoEvents: newContainerRenderableEvents,
+//         conveyerOneEvents: oldContainerRenderableEvents,
+//       });
+//     }
+//   }
+//
+//   render() {
+//     const { conveyerCycleCount, conveyers } = this.state;
+//
+//     return (
+//       <svg width="100%" height={SPACE_CARD_CHART_HEIGHT}>
+//         <g>
+//           {conveyers.map(conveyer => {
+//             return (
+//               <g className="space-card-chart-conveyer-belt" key={conveyer}>
+//                 <rect
+//                   x1="0"
+//                   y1="0"
+//                   width="100%"
+//                   height={SPACE_CARD_CHART_HEIGHT}
+//                   fill={conveyer === 'one' ? 'red' : 'blue'}
+//                 />
+//                 <text fill="white" transform="translate(20, 20)">{conveyer}</text>
+//               </g>
+//             );
+//           })}
+//         </g>
+//         {conveyerCycleCount === 0 ? (
+//           <g className="space-card-chart-conveyer-belt-header" key="header">
+//             <rect
+//               x1="0"
+//               y1="0"
+//               width="100%"
+//               height={SPACE_CARD_CHART_HEIGHT}
+//               fill="yellow"
+//             />
+//             <text fill="black" transform="translate(20, 20)">header</text>
+//           </g>
+//         ) : null}
+//       </svg>
+//     );
+//   }
+// }
