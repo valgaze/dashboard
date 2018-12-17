@@ -89,3 +89,42 @@
   font-size: $font-size-base;
   margin-right: 5px;
 }
+
+
+
+@keyframes spaceCardChartConveyerBelt {
+  // Start all the way to the right, off the screen
+  0% {
+    transform: translate(100%, 0px);
+  }
+
+  // And animate all the way to the left, off the screen
+  100% {
+    transform: translate(-100%, 0px);
+  }
+}
+
+.space-card-chart-conveyer-belt {
+  animation-name: spaceCardChartConveyerBelt;
+  animation-duration: 120s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes spaceCardChartConveyerBeltHeader {
+  0% {
+    transform: translate(0px, 0px);
+  }
+
+  // And animate all the way to the left, off the screen
+  100% {
+    transform: translate(-100%, 0px);
+  }
+}
+
+.space-card-chart-conveyer-belt-header {
+  animation-name: spaceCardChartConveyerBeltHeader;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
