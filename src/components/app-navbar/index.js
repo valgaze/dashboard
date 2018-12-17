@@ -7,7 +7,9 @@ import {
   IconGlobe,
   IconStopWatch,
   IconCopy,
-  IconLightning
+  IconLightning,
+  IconPerson,
+  IconLogout
 } from '@density/ui-icons';
 
 import stringToBoolean from '../../helpers/string-to-boolean';
@@ -60,6 +62,13 @@ export default function AppNavbar({page, settings}) {
             icon={IconLightning}
             name="Developer"
           />
+          <AppNavbarItem
+            isSelected={() => ['ACCOUNT'].includes(page)}
+            showOnMobile={false}
+            path="#/account"
+            icon={IconPerson}
+            name="Account"
+          />
           {stringToBoolean(settings.insightsPageLocked) ? <AppNavbarItem
             isSelected={() => ['ACCOUNT_SETUP_OVERVIEW', 'ACCOUNT_SETUP_DOORWAY_LIST', 'ACCOUNT_SETUP_DOORWAY_DETAIL'].includes(page)}
             showOnMobile={true}
@@ -73,7 +82,7 @@ export default function AppNavbar({page, settings}) {
             isSelected={() => false}
             showOnMobile={true}
             path="#/logout"
-            name="Logout"
+            name={<IconLogout/>}
           />
         </ul>
       </div>

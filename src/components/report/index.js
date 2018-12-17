@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import ReportWrapper, { ReportError } from '@density/ui-report-wrapper';
 
+import ReportAverageMeetingSize from '@density/ui-report-average-meeting-size';
 import ReportTimeSegmentBreakdown from '@density/ui-report-time-segment-breakdown';
 import ReportTotalVisits from '@density/ui-report-total-visits';
 import ReportTotalVisitsRollup from '@density/ui-report-total-visits-rollup';
@@ -33,6 +34,7 @@ import { getCurrentLocalTimeAtSpace } from '../../helpers/space-time-utilities/i
 // NOTE: if the report is expandable, add the correct properties to the REPORT_TYPE_TO_SETTINGS
 // structure below to!
 const REPORT_TYPE_TO_COMPONENT = {
+  AVG_MEETING: ReportAverageMeetingSize,
   TOTAL_VISITS_ONE_SPACE: ReportTotalVisits,
   TOTAL_VISITS_MULTI_SPACE: ReportTotalVisitsRollup,
   DAILY_VISITS: ReportDailyVisitsPerSegment,
@@ -52,7 +54,6 @@ function Report({
   reportData,
   expanded,
 
-  dashboardReportGridIdentityValue,
   onOpenReportExpandedModal,
 }) {
   const REPORT_TYPE_TO_SETTINGS = {
@@ -132,12 +133,7 @@ function Report({
   );
 
   if (!ReportComponent) {
-    return {
-      id: report.id,
-      report: (
-        <span>Unknown report type {report.type}</span>
-      )
-    };
+    return <span>Unknown report type {report.type}</span>;
   }
 
   switch (reportData.state) {
