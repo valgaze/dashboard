@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as d3Scale from 'd3-scale';
 
 import timings from '@density/ui/variables/timings';
 
@@ -13,21 +14,47 @@ import { chartAsReactComponent } from '@density/charts';
 import RealTimeCountFn from '@density/chart-real-time-count';
 import LinearProgressFn from '@density/chart-linear-progress';
 const LinearProgress = chartAsReactComponent(LinearProgressFn);
-const RealTimeCountChart = autoRefreshHoc({
-  interval: 50,
-  shouldComponentUpdate: function (nextProps) {
-    return this.props.events.length || nextProps.events.length;
-  }
-})(chartAsReactComponent(RealTimeCountFn));
+const RealTimeCountChart = chartAsReactComponent(RealTimeCountFn);
 
 const EVENTS = [
   { countChange: 1, timestamp: moment.utc().add(10, 'seconds').format() },
   { countChange: -1, timestamp: moment.utc().add(1, 'seconds').format() },
 ];
 
+function getNow() {
+  return window.performance ? window.performance.now() : Date.now();
+}
+
+class Refresher extends Component {
+  state = { time: 0 }
+
+  componentDidMount() {
+    this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
+  }
+  componentWillUnmount() {
+    window.cancelAnimationFrame(this.nextAnimationFrameId);
+  }
+
+  onFrame = () => {
+    this.setState({
+      time: getNow(),
+    });
+    this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
+  }
+
+  render() {
+    const nowMs = moment.utc().valueOf();
+    return (
+      this.props.content(nowMs)
+    );
+  }
+}
+
+
 export default function SpaceCard({
   space,
   events,
+  nowMs,
 
   onClickRealtimeChartFullScreen,
   onClickEditCount,
@@ -68,17 +95,70 @@ export default function SpaceCard({
           className="space-card-chart-full-screen"
           onClick={onClickRealtimeChartFullScreen}
         >&#xe919;</div>
-        {/* <RealTimeCountChart events={events || []} /> */}
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
-        <SpaceCardChart events={events || []} />
+        {/* <RealTimeCountChart */}
+        {/*   events={events || []} */}
+        {/*   key={performance.now()} */}
+        {/* /> */}
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
+        <Refresher content={nowMs => (
+          <SpaceCardChart nowMs={nowMs} events={events || []} />
+        )} />
       </div>
     </Card>;
   } else {
@@ -87,59 +167,167 @@ export default function SpaceCard({
 }
 
 
-const SPACE_CARD_CHART_HEIGHT = 160;
 class SpaceCardChart extends Component {
-  state = {
-    msSinceInitialRender: 0,
+  constructor(props) {
+    super(props);
+    this.startTimeMs = moment.utc().valueOf();
   }
-  timeAtRender = 0
-
-  componentDidMount() {
-    this.timeAtRender = moment.utc();
-    this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
-  }
-  componentWillUnmount() {
-    window.cancelAnimationFrame(this.nextAnimationFrameId);
-  }
-
-  onFrame = () => {
-    const now = moment.utc();
-    this.setState({
-      msSinceInitialRender: now.valueOf() - this.timeAtRender.valueOf(),
-    }, () => {
-      this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
-    });
-  }
-
   render() {
-    const { msSinceInitialRender } = this.state;
-    const percentageOffset = (msSinceInitialRender / 60000) * 100;
-    return (
-      <svg width="100%" height={160}>
-        {/* two svgs? idea from https://stackoverflow.com/questions/17098397/how-to-translate-an-svg-group-by-a-percentage-of-the-viewport */}
-        <svg x={`${100 - percentageOffset}%`} y={0}>
-          <rect
-            x={0}
-            y={0}
-            width="100%"
-            height="100%"
-            fill="red"
-          />
+    if (!this.container) {
+      return (
+        <div
+          ref={r => { this.container = r; }}
+          style={{width: '100%', height: '100%'}}
+        />
+      );
+    }
 
-        {this.props.events.map(event => (
-          <circle
-            key={event.timestamp}
-            cx={`${((moment.utc(event.timestamp).valueOf() - this.timeAtRender.valueOf()) / 60000) * 100}%`}
-            cy={10}
-            r={5}
-            fill="green"
-          />
-        ))}
+    const width = 400;
+    const height = 160;
+    const { nowMs } = this.props;
+
+    const slidingScale = d3Scale.scaleLinear()
+      .domain([60 * 1000, 0])
+      .range([0, width]);
+    const chartScale = d3Scale.scaleLinear()
+      .domain([0, 60 * 1000])
+      .range([0, width]);
+
+    const offsettedEvents = this.props.events.map(event => ({
+      // offset: moment.utc(event.timestamp).valueOf() - this.startTimeMs,
+      offset: moment.utc(event.timestamp).valueOf() - this.startTimeMs,
+      countChange: event.countChange,
+    }));
+
+    return (
+      <div
+        ref={r => { this.container = r; }}
+        style={{width: '100%', height: '100%'}}
+      >
+        <svg
+          width={width}
+          height={height}
+          viewBox={`0 0 ${width} ${height}`}
+        >
+          <g transform={`translate(${slidingScale(nowMs - this.startTimeMs)}, 0)`}>
+            {offsettedEvents.map(event => (
+              <circle
+                key={event.offset}
+                cx={chartScale(event.offset)}
+                cy={10}
+                r="5"
+                fill="red"
+              />
+            ))}
+          </g>
         </svg>
-      </svg>
+      </div>
     );
   }
 }
+
+
+
+// ----------------------------------------------------------------------------
+// CANVAS TEST
+// ----------------------------------------------------------------------------
+
+// class SpaceCardChart extends Component {
+//   componentDidMount() {
+//     this.epochAtRender = performance.now();
+//
+//     const context = this.canvas.getContext('2d');
+//     context.fillStyle = 'red';
+//     context.fillRect(468-100, 0, 100, 100);
+//
+//     this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
+//   }
+//   componentWillUnmount() {
+//     window.cancelAnimationFrame(this.nextAnimationFrameId);
+//   }
+//
+//   onFrame = timestamp => {
+//     const msSinceInitialRender = this.epochAtRender - performance.now();
+//     const pixelOffset = (msSinceInitialRender / 600000) * this.canvas.width;
+//
+//     const context = this.canvas.getContext('2d');
+//     const imageData = context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+//     context.putImageData(imageData, pixelOffset, 0);
+//
+//     this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
+//   }
+//
+//   render() {
+//     return (
+//       <canvas
+//         width={468}
+//         height={160}
+//         ref={r => { this.canvas = r; }}
+//       />
+//     );
+//   }
+// }
+
+
+
+
+// ----------------------------------------------------------------------------
+// SVG MOVING INNER SVG VERSION
+// ----------------------------------------------------------------------------
+
+// const SPACE_CARD_CHART_HEIGHT = 160;
+// export class SpaceCardChart extends Component {
+//   // state = {
+//   //   msSinceInitialRender: 0,
+//   // }
+//   // timeAtRender = 0
+//
+//   // componentDidMount() {
+//   //   this.timeAtRender = moment.utc();
+//   //   this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
+//   // }
+//   // componentWillUnmount() {
+//   //   window.cancelAnimationFrame(this.nextAnimationFrameId);
+//   // }
+//
+//   // onFrame = () => {
+//   //   const now = moment.utc();
+//   //   this.setState({
+//   //     msSinceInitialRender: now.valueOf() - this.timeAtRender.valueOf(),
+//   //   }, () => {
+//   //     this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
+//   //   });
+//   // }
+//
+//   render() {
+//     const { msSinceInitialRender } = this.state;
+//     const percentageOffset = 0;//(msSinceInitialRender / 60000) * 100;
+//     return (
+//       <svg width="100%" height={160}>
+//         {#<{(| two svgs? idea from https://stackoverflow.com/questions/17098397/how-to-translate-an-svg-group-by-a-percentage-of-the-viewport |)}>#}
+//         <svg x={`${100 - percentageOffset}%`} y={0}>
+//           <rect
+//             x={0}
+//             y={0}
+//             width="100%"
+//             height="100%"
+//             fill="red"
+//           />
+//
+//         {this.props.events.map(event => (
+//           <circle
+//             key={event.timestamp}
+//             cx={`${((moment.utc(event.timestamp).valueOf() - this.timeAtRender.valueOf()) / 60000) * 100}%`}
+//             cy={10}
+//             r={5}
+//             fill="green"
+//           />
+//         ))}
+//         </svg>
+//       </svg>
+//     );
+//   }
+// }
 
 
 

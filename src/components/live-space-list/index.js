@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { Component, Fragment }from 'react';
 import { connect } from 'react-redux';
 import ErrorBar from '../error-bar/index';
+import moment from 'moment';
+
+import autoRefreshHoc from '../../helpers/auto-refresh-hoc/index';
 
 import collectionSpacesFilter from '../../actions/collection/spaces/filter';
 import spaceResetCount from '../../actions/collection/spaces/reset-count';
@@ -8,7 +11,7 @@ import showModal from '../../actions/modal/show';
 import hideModal from '../../actions/modal/hide';
 
 import InputBox from '@density/ui-input-box';
-import SpaceCard from '../live-space-card/index';
+import SpaceCard, { SpaceCardChart } from '../live-space-card/index';
 import SpaceUpdateModal from '../explore-edit-count-modal/index';
 
 import { CONNECTION_STATES } from '../../helpers/websocket-event-pusher/index';
@@ -18,6 +21,13 @@ import SpaceHierarchySelectBox from '../space-hierarchy-select-box/index';
 import filterHierarchy from '../../helpers/filter-hierarchy/index';
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
+
+const AutoRefresh = autoRefreshHoc({
+  interval: 50,
+  shouldComponentUpdate: function (nextProps) {
+    return this.props.events.length || nextProps.events.length;
+  }
+})('div');
 
 export function LiveSpaceList({
   spaces,
@@ -43,7 +53,6 @@ export function LiveSpaceList({
 
   // Remove campuses, buildings, and floors before rendering.
   filteredSpaces = filteredSpaces.filter(i => i.spaceType === 'space');
-
 
   return <div className="live-space-list">
     {/* Show errors in the spaces collection. */}
@@ -94,24 +103,56 @@ export function LiveSpaceList({
         </div>
       </div>
 
-      <div className="live-space-list-row">
-        {filteredSpaces.map(space => {
-          return <div className="live-space-list-item" key={space.id}>
-            <SpaceCard
-              space={space}
-              events={spaces.events[space.id]}
-              onClickEditCount={() => onOpenModal('update-space-count', {space})}
-              onClickRealtimeChartFullScreen={() => window.location.href = `#/spaces/live/${space.id}` }
-            />
-          </div>;
-        })}
-        
-        {!spaces.loading && filteredSpaces.length === 0 ? <div className="live-space-list-empty">
-          <span>No spaces found.</span>
-        </div> : null}
-      </div>
+      {/* <Refresher content={nowMs => ( */}
+        <div className="live-space-list-row">
+          {filteredSpaces.map(space => {
+            return <div className="live-space-list-item" key={space.id}>
+              <SpaceCard
+                // nowMs={nowMs}
+                space={space}
+                events={spaces.events[space.id]}
+                onClickEditCount={() => onOpenModal('update-space-count', {space})}
+                onClickRealtimeChartFullScreen={() => window.location.href = `#/spaces/live/${space.id}` }
+              />
+            </div>;
+          })}
+          
+          {!spaces.loading && filteredSpaces.length === 0 ? <div className="live-space-list-empty">
+            <span>No spaces found.</span>
+          </div> : null}
+        </div>
+      {/* )} /> */}
     </div>
   </div>;
+}
+
+function getNow() {
+  return window.performance ? window.performance.now() : Date.now();
+}
+
+class Refresher extends Component {
+  state = { time: 0 }
+
+  componentDidMount() {
+    this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
+  }
+  componentWillUnmount() {
+    window.cancelAnimationFrame(this.nextAnimationFrameId);
+  }
+
+  onFrame = () => {
+    this.setState({
+      time: getNow(),
+    });
+    this.nextAnimationFrameId = window.requestAnimationFrame(this.onFrame);
+  }
+
+  render() {
+    const nowMs = moment.utc().valueOf();
+    return (
+      this.props.content(nowMs)
+    );
+  }
 }
 
 export default connect(state => {
