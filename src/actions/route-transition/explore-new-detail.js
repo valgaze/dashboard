@@ -11,6 +11,9 @@ import exploreDataCalculateDataComplete from '../explore-data/calculate-data-com
 
 export const ROUTE_TRANSITION_EXPLORE_NEW_DETAIL = 'ROUTE_TRANSITION_EXPLORE_NEW';
 
+// const TIME_SEGMENT_GROUP_ID = 'tsg_581948608237010959';
+const TIME_SEGMENT_GROUP_ID = 'tsg_575401441519206683'; // demo
+
 const QUESTIONS = [
   {
     id: 'qst_1',
@@ -36,7 +39,7 @@ const QUESTIONS = [
           spaceIds: spaces.map(s => s.id),
           timeRange: 'LAST_WEEK',
           mode: 'MOST_VISITED',
-          timeSegmentGroupId: 'tsg_575401441519206683'
+          timeSegmentGroupId: TIME_SEGMENT_GROUP_ID,
         },
       },
       {
@@ -47,7 +50,7 @@ const QUESTIONS = [
           spaceIds: spaces.map(s => s.id),
           timeRange: 'LAST_WEEK',
           mode: 'MOST_UTILIZED',
-          timeSegmentGroupId: 'tsg_575401441519206683'
+          timeSegmentGroupId: TIME_SEGMENT_GROUP_ID,
         },
       },
     ],
@@ -103,7 +106,7 @@ function contextuallyPickReports(selectedSpaces, question) {
           timeRange: 'LAST_WEEK',
           timeSegmentGroups: [
             {
-              id: 'tsg_575401441519206683',
+              id: TIME_SEGMENT_GROUP_ID,
               color: 'BLUE',
             },
           ],
@@ -116,7 +119,7 @@ function contextuallyPickReports(selectedSpaces, question) {
         settings: {
           spaceId: space.id,
           period: 'NEXT_WEEK',
-          timeSegmentGroupId: 'tsg_575401441519206683',
+          timeSegmentGroupId: TIME_SEGMENT_GROUP_ID,
         },
       },
       {
@@ -127,7 +130,7 @@ function contextuallyPickReports(selectedSpaces, question) {
           spaceId: space.id,
           timeRange: 'LAST_WEEK',
           color: 'BLUE',
-          timeSegmentGroupId: 'tsg_575401441519206683',
+          timeSegmentGroupId: TIME_SEGMENT_GROUP_ID,
         },
       },
     ];
@@ -142,7 +145,7 @@ function contextuallyPickReports(selectedSpaces, question) {
           spaceIds: selectedSpaces.map(s => s.id),
           timeRange: 'LAST_WEEK',
           mode: 'MOST_VISITED',
-          timeSegmentGroupId: 'tsg_575401441519206683'
+          timeSegmentGroupId: TIME_SEGMENT_GROUP_ID,
         },
       },
       {
@@ -153,7 +156,7 @@ function contextuallyPickReports(selectedSpaces, question) {
           spaceIds: selectedSpaces.map(s => s.id),
           timeRange: 'LAST_WEEK',
           mode: 'MOST_UTILIZED',
-          timeSegmentGroupId: 'tsg_575401441519206683'
+          timeSegmentGroupId: TIME_SEGMENT_GROUP_ID,
         },
       },
     ];
