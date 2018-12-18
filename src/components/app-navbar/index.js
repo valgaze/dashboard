@@ -49,6 +49,13 @@ export default function AppNavbar({page, settings}) {
             name="Explore"
           /> : null}
           <AppNavbarItem
+            isSelected={() => ['EXPLORE_NEW_DETAIL'].includes(page)}
+            showOnMobile={false}
+            path="#/explore-new"
+            icon={IconGlobe}
+            name="Explore 2"
+          />
+          <AppNavbarItem
             isSelected={() => ['LIVE_SPACE_LIST', 'LIVE_SPACE_DETAIL'].includes(page)}
             showOnMobile={true}
             path="#/spaces/live"
