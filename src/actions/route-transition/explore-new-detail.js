@@ -1,3 +1,5 @@
+import React from 'react';
+
 import uuid from 'uuid';
 import { core } from '../../client';
 import objectSnakeToCamel from '../../helpers/object-snake-to-camel/index';
@@ -9,9 +11,53 @@ import exploreDataCalculateDataComplete from '../explore-data/calculate-data-com
 
 export const ROUTE_TRANSITION_EXPLORE_NEW_DETAIL = 'ROUTE_TRANSITION_EXPLORE_NEW';
 
-export default function routeTransitionExploreNewDetail(ids) {
+const QUESTIONS = [
+  {
+    id: 'qst_1',
+    name: 'How many people came to lunch?',
+    filters: {
+      spaces: space => space.description.indexOf('cafeteria') !== -1, /* TODO: some sort of space usage type? */
+    },
+    controls: {
+      timeSegmentGroup: {
+        id: 'qct_2',
+        label: 'Time Segment Group',
+        render: (data, onChange) => (
+          <span onClick={() => onChange('new data')}>selectbox here, data is {data}</span>
+        ),
+      },
+    },
+    reports: spaces => [
+      {
+        id: uuid.v4(), // FIXME: bad idea!
+        name: 'Cafeteria entrances',
+        type: 'TOTAL_VISITS_MULTI_SPACE',
+        settings: {
+          spaceIds: spaces.map(s => s.id),
+          timeRange: 'LAST_WEEK',
+          mode: 'MOST_VISITED',
+          timeSegmentGroupId: 'tsg_575401441519206683'
+        },
+      },
+      {
+        id: uuid.v4(), // FIXME: bad idea!
+        name: 'Utilization',
+        type: 'UTILIZATION',
+        settings: {
+          spaceIds: spaces.map(s => s.id),
+          timeRange: 'LAST_WEEK',
+          mode: 'MOST_UTILIZED',
+          timeSegmentGroupId: 'tsg_575401441519206683'
+        },
+      },
+    ],
+  },
+];
+
+export default function routeTransitionExploreNewDetail(ids, questionId) {
   return async (dispatch, getState) => {
-    dispatch({ type: ROUTE_TRANSITION_EXPLORE_NEW_DETAIL, ids });
+    const question = QUESTIONS.find(question => question.id === questionId) || null;
+    dispatch({ type: ROUTE_TRANSITION_EXPLORE_NEW_DETAIL, ids, question });
 
     dispatch(exploreDataCalculateDataLoading('reports'));
 
@@ -30,17 +76,20 @@ export default function routeTransitionExploreNewDetail(ids) {
       })
     );
 
-    const reports = contextuallyPickReports(spaces);
+    const reports = contextuallyPickReports(spaces, QUESTIONS.find(q => q.id === questionId));
     await dispatch(collectionDashboardsCalculateReportData(reports));
     dispatch(exploreDataCalculateDataComplete('reports', reports));
   };
 }
 
 
-function contextuallyPickReports(selectedSpaces) {
+function contextuallyPickReports(selectedSpaces, question) {
   if (selectedSpaces.length === 0) {
     // No spaces, prompt the user to select at least one
     return [];
+  } else if (question) {
+    // A question is selected, return the data for that question
+    return question.reports(selectedSpaces);
   } else if (selectedSpaces.length === 1) {
     // Single space, show reports that are relevant to one space
     const space = selectedSpaces[0];

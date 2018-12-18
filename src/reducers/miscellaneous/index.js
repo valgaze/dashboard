@@ -12,6 +12,7 @@ const initialState = {
   dashboardSidebarVisible: true,
   dashboardReportGridIdentityValue: uuid.v4(),
   exploreSpaceIds: [],
+  exploreSpaceQuestion: null,
 };
 
 export default function miscellaneous(state=initialState, action) {
@@ -25,7 +26,7 @@ export default function miscellaneous(state=initialState, action) {
     case RESET_DASHBOARD_REPORT_GRID_IDENTITY_VALUE:
       return { ...state, dashboardReportGridIdentityValue: uuid.v4() };
     case ROUTE_TRANSITION_EXPLORE_NEW_DETAIL:
-      return { ...state, exploreSpaceIds: action.ids };
+      return { ...state, exploreSpaceIds: action.ids, exploreSpaceQuestion: action.question };
     default:
       return state;
   }

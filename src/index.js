@@ -180,8 +180,9 @@ router.addRoute('spaces/insights/:id/data-export', redirect(id => `spaces/explor
 router.addRoute('dashboards', () => routeTransitionDashboardList());
 router.addRoute('dashboards/:id', id => routeTransitionDashboardDetail(id));
 
-router.addRoute('explore-new', () => routeTransitionExploreNewDetail([]));
-router.addRoute('explore-new/:ids', (ids) => routeTransitionExploreNewDetail(ids.split(',')));
+router.addRoute('explore-new', () => routeTransitionExploreNewDetail([], null));
+router.addRoute('explore-new/:ids', (ids) => routeTransitionExploreNewDetail(ids.split(','), null));
+router.addRoute('explore-new/:ids/:question', (ids, question) => routeTransitionExploreNewDetail(ids.split(','), question));
 
 router.addRoute('spaces/explore', () => routeTransitionExploreSpaceList());
 router.addRoute('spaces/explore/:id/trends', id => routeTransitionExploreSpaceTrends(id));

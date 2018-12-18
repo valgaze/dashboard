@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import Report from '../report/index';
@@ -16,14 +16,31 @@ import filterHierarchy from '../../helpers/filter-hierarchy/index';
 import filterCollection from '../../helpers/filter-collection/index';
 const spaceFilter = filterCollection({fields: ['name']});
 
+function EmptyState({spaceIds}) {
+  return (
+    <Fragment>
+      <h2>Questions:</h2>
+      <ul>
+        <li>
+          <a href={`#/explore-new/${spaceIds.join(',')}/qst_1`}>
+            How many people came to lunch?
+          </a>
+        </li>
+      </ul>
+    </Fragment>
+  );
+}
+
 export function NewExploreDetail({
   spaceIds,
+  question,
   spaces,
   reports,
   calculatedReportData,
 
   onSpaceChangeParent,
   onSpaceSearch,
+  onReportControlDataChange,
 }) {
   // Filter space list
   // 1. Using the space hierarchy `parent value`
@@ -41,7 +58,7 @@ export function NewExploreDetail({
   return (
     <AppFrame>
       <AppPane>
-        <AppBar title="Spaces" />
+        <AppBar title="Space List" />
         <AppScrollView>
           <div className="explore-new-space-filters">
             <InputBox
@@ -59,19 +76,25 @@ export function NewExploreDetail({
             />
           </div>
 
+          {spaceIds.length === 0 ? (
+            <a href={`#/explore-new/${spaces.data.map(s => s.id).join(',')}/${question ? question.id : ''}`}>Select All</a>
+          ) : (
+            <a href={`#/explore-new`}>Deselect All</a>
+          )}
+
           <ul>
             {filteredSpaces.sort((a, b) => a.name.localeCompare(b.name)).map(space => {
               if (spaceIds.indexOf(space.id) >= 0) {
                 return (
                   <li key={space.id}>
                     [{space.spaceType}] {space.name}{' '}
-                    <a href={`#/explore-new/${spaceIds.filter(i => i !== space.id).join(',')}`}>(remove)</a>
+                    <a href={`#/explore-new/${spaceIds.filter(i => i !== space.id).join(',')}/${question ? question.id : ''}`}>(remove)</a>
                   </li>
                 );
               } else {
                 return (
                   <li key={space.id}>
-                    <a href={`#/explore-new/${[...spaceIds, space.id].join(',')}`}>
+                    <a href={`#/explore-new/${[...spaceIds, space.id].join(',')}/${question ? question.id : ''}`}>
                       [{space.spaceType}] {space.name}
                     </a>
                   </li>
@@ -84,9 +107,21 @@ export function NewExploreDetail({
       <AppPane>
         <AppBar title="Space Data" />
         <div className="explore-new-detail">
+          {question ? <Fragment>
+            <h1>{question.name}</h1>
+            <div>
+              <h3>Controls</h3>
+              {Object.entries(question.controls).map(([key, control]) => (
+                <div key={key}>
+                  <label>Label: {control.label}</label>
+                  <div>{control.render('foo', value => onReportControlDataChange(key, value))}</div>
+                </div>
+              ))}
+            </div>
+          </Fragment> : null}
           {reports.state === 'COMPLETE' && reports.data.length === 0 ? (
             <div>
-              <h2>Please select some spaces!</h2>
+              <EmptyState spaceIds={spaces.data.map(space => space.id)} />
             </div>
           ) : null}
           {reports.state === 'COMPLETE' && reports.data.length > 0 ? reports.data.map(report => (
@@ -106,6 +141,7 @@ export function NewExploreDetail({
 export default connect(state => {
   return {
     spaceIds: state.miscellaneous.exploreSpaceIds,
+    question: state.miscellaneous.exploreSpaceQuestion,
     spaces: state.spaces,
     reports: state.exploreData.calculations.reports,
     calculatedReportData: state.dashboards.calculatedReportData,
@@ -117,6 +153,9 @@ export default connect(state => {
     },
     onSpaceChangeParent(parentId) {
       dispatch(collectionSpacesFilter('parent', parentId));
+    },
+    onReportControlDataChange(key, value) {
+      console.log('CHANGING FILTER DATA', key, value);
     },
   };
 })(NewExploreDetail);
