@@ -18,7 +18,7 @@ import AccountForgotPassword from '../account-forgot-password/index';
 import LiveSpaceList from '../live-space-list/index';
 import LiveSpaceDetail from '../live-space-detail/index';
 import DashboardsList from '../dashboards-list/index';
-import NewExploreDetail from '../new-explore-detail/index';
+import NewExploreDetail from '../explore-new-detail/index';
 
 import AccountSetupOverview from '../account-setup-overview/index';
 import AccountSetupDoorwayList from '../account-setup-doorway-list/index';

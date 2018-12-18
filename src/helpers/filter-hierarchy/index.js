@@ -30,11 +30,16 @@ export function getParentsOfSpace(spaces, initialSpace) {
   }
 }
 
-export default function filterHierarchy(spaces, parentId) {
+export default function filterHierarchy(spaces, parentId, opts={mustBeSpace: true}) {
   return spaces.filter(space => {
-    return (
-      space.spaceType === 'space' && /* must be of type space */
-      getParentsOfSpace(spaces, space).indexOf(parentId) > 0 /* index 0 = current space */
-    );
+    if (opts.mustBeSpace) {
+      return (
+        space.spaceType === 'space' && /* must be of type space, if opts.mustBeSpace === true */
+        getParentsOfSpace(spaces, space).indexOf(parentId) > 0 /* index 0 = current space */
+      );
+    } else {
+      // Doesn't have to be a space
+      return getParentsOfSpace(spaces, space).indexOf(parentId) > 0;
+    }
   });
 }
