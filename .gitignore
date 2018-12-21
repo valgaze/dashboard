@@ -7,3 +7,4 @@ npm-debug.log
 .*.sw*
 yarn-error.log
 coverage/
+src/density-ui-integration/

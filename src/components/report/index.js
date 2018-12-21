@@ -120,6 +120,26 @@ function Report({
           .add(report.settings.hourEnd, 'hours'),
       }),
     },
+
+    HORIZON_CHART: {
+      isExpandable: true,
+
+      // When expanded, define the height of each horizon chart to be large.
+      displayContextWhenExpanded: (report, reportData) => ({
+        showExpandControl: false,
+        trackHeight: 54,
+        trackVerticalSpacing: 12,
+      }),
+
+      // When not expanded, show the expand control and make the height of each
+      // horizon chart small.
+      displayContextWhenNotExpanded: (report, reportData) => ({
+        showExpandControl: true,
+        onReportExpand: () => onOpenReportExpandedModal(report),
+        trackHeight: 24,
+        trackVerticalSpacing: 8,
+      }),
+    },
   };
 
   // If a report is not in the above mapping, then default to these report settings.

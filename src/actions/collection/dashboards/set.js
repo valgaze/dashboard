@@ -12,7 +12,7 @@ export default function collectionDashboardsSet(segments) {
         'spc_578610642626281829', // phone booth
         'spc_578609560999166590', // pantry
         'spc_578610433024328307', // lounge
-        'spc_578610369350599062', // Office
+        // 'spc_578610369350599062', // Office
         'spc_578609895201309436', // Office desk area
       ],
     },
