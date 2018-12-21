@@ -1,6 +1,14 @@
 export const COLLECTION_DASHBOARDS_SET = 'COLLECTION_DASHBOARDS_SET';
 
-export default function collectionDashboardsSet(segments) {
+export default function collectionDashboardsSet(dashboards) {
+  // XXX: Any reports of type `ANNUAL_SAVINGS` should actually be type `HORIZON_CHART`
+  dashboards.forEach(dashboard => {
+    dashboard.reportSet.forEach(report => {
+      if (report.type === 'ANNUAL_SAVINGS') {
+        report.type = 'HORIZON_CHART';
+      }
+    });
+  });
   // segments[0].reportSet.push({
   //   id: 'rpt_xxx',
   //   name: 'Horizon Chart',
@@ -16,5 +24,5 @@ export default function collectionDashboardsSet(segments) {
   //     ],
   //   },
   // });
-  return { type: COLLECTION_DASHBOARDS_SET, data: segments };
+  return { type: COLLECTION_DASHBOARDS_SET, data: dashboards };
 }
