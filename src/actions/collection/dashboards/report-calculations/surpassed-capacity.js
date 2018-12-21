@@ -10,6 +10,7 @@ import { convertTimeRangeToDaysAgo } from './helpers';
 
 export default async function surpassedCapacity(report) {
   const space = objectSnakeToCamel(await core.spaces.get({ id: report.settings.spaceId }));
+  const timeSegmentGroup = objectSnakeToCamel(await core.time_segment_groups.get({ id: report.settings.timeSegmentGroupId }));
   const timeRange = convertTimeRangeToDaysAgo(space, report.settings.timeRange);
 
   if (!space.capacity) {
@@ -17,17 +18,14 @@ export default async function surpassedCapacity(report) {
   }
 
   // Find the time segment group and applicable time segment for this space.
-  const timeSegmentGroup = space.timeSegmentGroups.find(i => i.id === report.settings.timeSegmentGroupId);
-  if (!timeSegmentGroup) {
-    throw new Error('Cannot find time segment group');
-  }
   const timeSegmentGroupIds = timeSegmentGroup.timeSegments.map(j => j.timeSegmentId);
-  const timeSegment = space.timeSegments.find(i => (
-    i.spaces.find(s => s.spaceId === space.id) && timeSegmentGroupIds.indexOf(i.id) >= 0
-  ));
+  const timeSegment = space.timeSegments.find(i => timeSegmentGroupIds.indexOf(i.id) >= 0);
   if (!timeSegment) {
     throw new Error('Cannot find applicable time segment for time segment group');
   }
+
+  // TODO: This prop shouldn't be nested in timeSegment
+  timeSegment.spaces = [space];
 
   // Fetch the count with the spaces/:id/counts endpoint with an interval of 5 minutes,
   // including the relevant start_time, end_time, and time segment group.

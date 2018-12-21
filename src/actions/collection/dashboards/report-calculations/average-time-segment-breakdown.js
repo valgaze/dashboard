@@ -112,20 +112,23 @@ function calculatePeakRateOfEntry(space, minutelyBucketsByDay) {
 
 export default async function averageTimeSegmentBreakdown(report) {
   const space = objectSnakeToCamel(await core.spaces.get({ id: report.settings.spaceId }));
+  const timeSegmentGroup = objectSnakeToCamel(await core.time_segment_groups.get({
+    id: report.settings.timeSegmentGroupId
+  }));
   const timeRange = convertTimeRangeToDaysAgo(space, report.settings.timeRange);
 
   // Find the time segment group and applicable time segment for this space.
-  const timeSegmentGroup = space.timeSegmentGroups.find(i => i.id === report.settings.timeSegmentGroupId);
   if (!timeSegmentGroup) {
     throw new Error('Cannot find time segment group');
   }
-  const timeSegmentGroupIds = timeSegmentGroup.timeSegments.map(j => j.timeSegmentId);
-  const timeSegment = space.timeSegments.find(i => (
-    i.spaces.find(s => s.spaceId === space.id) && timeSegmentGroupIds.indexOf(i.id) >= 0
-  ));
+  const timeSegmentIds = timeSegmentGroup.timeSegments.map(j => j.timeSegmentId);
+  const timeSegment = space.timeSegments.find(i => timeSegmentIds.indexOf(i.id) >= 0);
   if (!timeSegment) {
     throw new Error('Cannot find applicable time segment for time segment group');
   }
+
+  // TODO: the report has a dependency on this deeply-nested stuff
+  timeSegment.spaces = [space];
 
   // Make a request to the spaces/:id/counts endpoint for a single space with an interval of a
   // day, passing the given time range and the single given time segment group.

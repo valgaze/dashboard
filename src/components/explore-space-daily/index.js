@@ -41,7 +41,7 @@ export function ExploreSpaceDaily({
   onChangeTimeSegmentGroup,
 }) {
   if (space) {
-    const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
+    const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...timeSegmentGroups.data];
 
     // Which time segment group was selected?
     const selectedTimeSegmentGroup = timeSegmentGroupArray.find(i => i.id === spaces.filters.timeSegmentGroupId);

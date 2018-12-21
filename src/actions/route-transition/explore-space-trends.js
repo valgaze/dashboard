@@ -103,15 +103,21 @@ export function calculateDailyMetrics(space) {
     dispatch(exploreDataCalculateDataLoading('dailyMetrics'));
 
     const {
+      timeSegmentGroupId,
       metricToDisplay,
       startDate,
       endDate,
     } = getState().spaces.filters;
 
-    const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
+    const allTimeSegmentGroups = getState().timeSegmentGroups.data;
+
+    const spaceTimeSegmentGroups = [
+      DEFAULT_TIME_SEGMENT_GROUP,
+      ...allTimeSegmentGroups.filter(x => space.timeSegmentGroups.find(y => x.id === y.id))
+    ];
 
     // Which time segment group was selected?
-    const selectedTimeSegmentGroup = timeSegmentGroupArray.find(i => i.id === getState().spaces.filters.timeSegmentGroupId);
+    const selectedTimeSegmentGroup = spaceTimeSegmentGroups.find(i => i.id === timeSegmentGroupId);
 
     // And, with the knowlege of the selected space, which time segment within that time segment
     // group is applicable to this space?
@@ -189,12 +195,16 @@ export function calculateUtilization(space) {
   return async (dispatch, getState) => {
     dispatch(exploreDataCalculateDataLoading('utilization'));
 
-    const { startDate, endDate } = getState().spaces.filters;
+    const { startDate, endDate, timeSegmentGroupId } = getState().spaces.filters;
+    const allTimeSegmentGroups = getState().timeSegmentGroups.data;
 
-    const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...space.timeSegmentGroups];
+    const spaceTimeSegmentGroups = [
+      DEFAULT_TIME_SEGMENT_GROUP,
+      ...allTimeSegmentGroups.filter(x => space.timeSegmentGroups.find(y => x.id === y.id))
+    ];
 
     // Which time segment group was selected?
-    const selectedTimeSegmentGroup = timeSegmentGroupArray.find(i => i.id === getState().spaces.filters.timeSegmentGroupId);
+    const selectedTimeSegmentGroup = spaceTimeSegmentGroups.find(i => i.id === timeSegmentGroupId);
 
     // And, with the knowlege of the selected space, which time segment within that time segment
     // group is applicable to this space?
