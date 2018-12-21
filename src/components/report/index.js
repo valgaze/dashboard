@@ -14,7 +14,8 @@ import ReportNextWeekForecast from '@density/ui-report-next-week-forecast';
 import ReportUtilization from '@density/ui-report-utilization';
 import ReportHourlyBreakdown from '@density/ui-report-hourly-breakdown';
 import ReportWastedSpace from '@density/ui-report-wasted-space';
-import ReportHorizonChart from '../../density-ui-integration/ui-report-horizon-chart';
+// import ReportHorizonChart from '../../density-ui-integration/ui-report-horizon-chart';
+import ReportHorizonChart from '@density/ui-report-horizon-chart';
 
 import showModal from '../../actions/modal/show';
 

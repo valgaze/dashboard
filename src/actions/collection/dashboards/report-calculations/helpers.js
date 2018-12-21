@@ -4,11 +4,6 @@ import colorVariables from '@density/ui/variables/colors.json';
 export function convertTimeRangeToDaysAgo(space, timeRange) {
   const TODAY = getCurrentLocalTimeAtSpace(space).startOf('day');
   switch (timeRange) {
-  case 'YESTERDAY':
-    return {
-      start: TODAY.clone().subtract(1, 'day').startOf('day'),
-      end: TODAY.clone().subtract(1, 'day').endOf('day'),
-    };
   case 'LAST_WEEK':
     return {
       start: getCurrentLocalTimeAtSpace(space).subtract(7, 'days').startOf('week'),
