@@ -41,10 +41,17 @@ export function ExploreSpaceDaily({
   onChangeTimeSegmentGroup,
 }) {
   if (space) {
-    const timeSegmentGroupArray = [DEFAULT_TIME_SEGMENT_GROUP, ...timeSegmentGroups.data];
+    const spaceTimeSegmentGroupArray = [
+      DEFAULT_TIME_SEGMENT_GROUP,
+      ...timeSegmentGroups.data.filter(tsg => {
+        return space.timeSegmentGroups.find(i => i.id === tsg.id);
+      })
+    ];
 
     // Which time segment group was selected?
-    const selectedTimeSegmentGroup = timeSegmentGroupArray.find(i => i.id === spaces.filters.timeSegmentGroupId);
+    const selectedTimeSegmentGroup = spaceTimeSegmentGroupArray.find(i => {
+      return i.id === spaces.filters.timeSegmentGroupId;
+    });
 
     // And, with the knowlege of the selected space, which time segment within that time segment
     // group is applicable to this space?
@@ -84,7 +91,7 @@ export function ExploreSpaceDaily({
             type="select"
             className="explore-space-daily-time-segment-box"
             value={selectedTimeSegmentGroup.id}
-            choices={timeSegmentGroupArray.map(ts => {
+            choices={spaceTimeSegmentGroupArray.map(ts => {
               const applicableTimeSegmentForGroup = findTimeSegmentInTimeSegmentGroupForSpace(
                 ts,
                 space,
