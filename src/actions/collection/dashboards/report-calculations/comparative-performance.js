@@ -42,10 +42,10 @@ export default async function comparativePerformance(report) {
 
   // Figure out the two time ranges we need to query.
   const lastStartDate = nowAtSpace.clone().startOf(unit).subtract(1, unit);
-  const lastEndDate = lastStartDate.clone().add(1, unit);
+  const lastEndDate = lastStartDate.clone().endOf(unit);
 
   const previousStartDate = lastStartDate.clone().subtract(1, unit);
-  const previousEndDate = previousStartDate.clone().add(1, unit);
+  const previousEndDate = previousStartDate.clone().endOf(unit);
 
   // For each time range, fetch the data at a `5 minute` intervals so we can calculate the average
   // day of time over this range of time.
@@ -131,5 +131,9 @@ export default async function comparativePerformance(report) {
     mode: TYPE_TO_MODE[report.settings.type],
     lastData,
     previousData,
+    lastStartDate,
+    lastEndDate,
+    previousStartDate,
+    previousEndDate,
   };
 }
