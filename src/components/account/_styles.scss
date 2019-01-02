@@ -1,9 +1,15 @@
-.account {
-  @include grid-container;
+.account-container {
   padding-left: 20px;
   padding-right: 20px;
+  overflow-y: auto;
+  height: 100%;
+}
+.account {
   max-width: 620px;
   margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
 }
 // Position the account card below the navbar. I would have used margin here, but the error bar
 // somehow is spaced with margin there too?

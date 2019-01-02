@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
 import colorVariables from '@density/ui/variables/colors';
+import DensityMark from '@density/ui-density-mark';
 
 import {
   IconDashboards,
@@ -27,6 +28,78 @@ function AppNavbarItem({isSelected, showOnMobile, path, icon, name}) {
       </a>
     </li>
   );
+}
+
+class AppNavbarMenu extends Component {
+  state = {visible: false}
+
+  // Called when the user focuses either the value or an item in the menu part of the box.
+  onMenuFocus = () => {
+    this.setState({visible: true});
+  };
+
+  // Called when the user blurs either the value or an item in the menu part of the box.
+  onMenuBlur = () => {
+    this.setState({visible: false});
+  };
+
+  render() {
+    const { visible } = this.state;
+    const { isSelected } = this.props;
+    const selected = isSelected();
+
+    return (
+      <div className="app-navbar-menu">
+        <div
+          ref={r => { this.selectBoxValueRef = r; }}
+          className={classnames('app-navbar-menu-value', {selected})}
+          tabIndex={0}
+          onFocus={this.onMenuFocus}
+          onBlur={this.onMenuBlur}
+          onMouseDown={e => {
+            if (this.state.visible) {
+              /* Prevent the default "focus" handler from re-opening the dropdown */
+              e.preventDefault();
+              /* Blur the select value box, which closes the dropdown */
+              this.selectBoxValueRef.blur();
+              this.onMenuBlur();
+            }
+          }}
+        >
+          <DensityMark size={32} color="white" />
+        </div>
+        <nav className={classnames('app-navbar-menu-items', {visible})}>
+          <a
+            className={classnames('app-navbar-menu-item', {selected: isSelected()})}
+            style={{paddingLeft: 2}}
+            href="#/account"
+            tabIndex={0}
+            onFocus={this.onMenuFocus}
+            onBlur={this.onMenuBlur}
+            onClick={this.onMenuBlur}
+          >
+            <span className="app-navbar-menu-item-icon">
+              {selected ? <IconPerson color={colorVariables.brandPrimaryNew} /> : <IconPerson />}
+            </span>
+            Your Account
+          </a>
+          <a
+            className="app-navbar-menu-item"
+            href="#/logout"
+            tabIndex={0}
+            onFocus={this.onMenuFocus}
+            onBlur={this.onMenuBlur}
+            onClick={this.onMenuBlur}
+          >
+            <span className="app-navbar-menu-item-icon">
+              <IconLogout />
+            </span>
+            Logout
+          </a>
+        </nav>
+      </div>
+    );
+  }
 }
 
 export default function AppNavbar({page, settings}) {
@@ -62,13 +135,6 @@ export default function AppNavbar({page, settings}) {
             icon={IconLightning}
             name="Developer"
           />
-          <AppNavbarItem
-            isSelected={() => ['ACCOUNT'].includes(page)}
-            showOnMobile={false}
-            path="#/account"
-            icon={IconPerson}
-            name="Account"
-          />
           {stringToBoolean(settings.insightsPageLocked) ? <AppNavbarItem
             isSelected={() => ['ACCOUNT_SETUP_OVERVIEW', 'ACCOUNT_SETUP_DOORWAY_LIST', 'ACCOUNT_SETUP_DOORWAY_DETAIL'].includes(page)}
             showOnMobile={true}
@@ -78,12 +144,7 @@ export default function AppNavbar({page, settings}) {
           /> : null}
         </ul>
         <ul className="app-navbar-right">
-          <AppNavbarItem
-            isSelected={() => false}
-            showOnMobile={true}
-            path="#/logout"
-            name={<IconLogout/>}
-          />
+          <AppNavbarMenu isSelected={() => ['ACCOUNT'].includes(page)}/>
         </ul>
       </div>
     </div>

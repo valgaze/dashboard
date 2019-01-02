@@ -97,6 +97,12 @@ function ActivePage({activePage, settings}) {
     return <DashboardsList />;
   case "DASHBOARD_DETAIL":
     return <Dashboard />;
+
+  // When logging out, navigate to this page (it's empty) to ensure that removing things like the
+  // token doesn't cause weird stuff in components that expect it to exist.
+  case "LOGOUT":
+    return null;
+
   default:
     return <UnknownPage invalidUrl={activePage} />;
   }
@@ -112,7 +118,7 @@ export default connect(state => {
       state.user.data.organization &&
       state.user.data.organization.settings
     ) || {},
-    user: state.user
+    user: state.user,
   };
 }, dispatch => {
   return {

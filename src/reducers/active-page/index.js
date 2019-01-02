@@ -18,6 +18,8 @@ import { ROUTE_TRANSITION_ACCOUNT_SETUP_DOORWAY_DETAIL } from '../../actions/rou
 import { ROUTE_TRANSITION_DASHBOARD_LIST } from '../../actions/route-transition/dashboard-list';
 import { ROUTE_TRANSITION_DASHBOARD_DETAIL } from '../../actions/route-transition/dashboard-detail';
 
+import { ROUTE_TRANSITION_LOGOUT } from '../../actions/route-transition/logout';
+
 const initialState = null;
 
 export default function activePage(state=initialState, action) {
@@ -62,6 +64,12 @@ export default function activePage(state=initialState, action) {
     return "DASHBOARD_LIST";
   case ROUTE_TRANSITION_DASHBOARD_DETAIL:
     return "DASHBOARD_DETAIL";
+
+  // When logging out, navigate to this page (it's empty) to ensure that removing things like the
+  // token doesn't cause weird stuff in components that expect it to exist.
+  case ROUTE_TRANSITION_LOGOUT:
+    return "LOGOUT";
+
   default:
     return state;
   }
