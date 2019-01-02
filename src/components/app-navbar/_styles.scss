@@ -138,7 +138,7 @@ $app-navbar-padding: 20px;
   pointer-events: none;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
-.app-navbar-menu-items.visible {
+.app-navbar-menu-items.opened {
   opacity: 1;
   pointer-events: auto;
 }
