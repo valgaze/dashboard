@@ -1,31 +1,7 @@
-import averageMeetingSize from './report-calculations/average-meeting-size';
-import totalVisitsOneSpace from './report-calculations/total-visits-one-space';
-import totalVisitsRollup from './report-calculations/total-visits-rollup';
-import dailyVisitsPerSegment from './report-calculations/daily-visits-per-segment';
-import averageTimeSegmentBreakdown from './report-calculations/average-time-segment-breakdown';
-import surpassedCapacity from './report-calculations/surpassed-capacity';
-import comparativePerformance from './report-calculations/comparative-performance';
-import nextWeekForecast from './report-calculations/next-week-forecast';
-import utilization from './report-calculations/utilization';
-import hourlyBreakdown from './report-calculations/hourly-breakdown';
-import wastedSpace from './report-calculations/wasted-space';
+import REPORTS from '../../../reports';
 
 export const COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE = 'COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_COMPLETE';
 export const COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_ERROR = 'COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_ERROR';
-
-const REPORT_TYPE_TO_FUNCTION = {
-  AVG_MEETING: averageMeetingSize,
-  TOTAL_VISITS_ONE_SPACE: totalVisitsOneSpace,
-  TOTAL_VISITS_MULTI_SPACE: totalVisitsRollup,
-  DAILY_VISITS: dailyVisitsPerSegment,
-  TS_BREAKDOWN: averageTimeSegmentBreakdown,
-  CAPACITY: surpassedCapacity,
-  COMPARE_PERFORMANCE: comparativePerformance,
-  NEXT_WEEK: nextWeekForecast,
-  UTILIZATION: utilization,
-  HOURLY_BREAKDOWN: hourlyBreakdown,
-  WASTED_SPACE: wastedSpace,
-};
 
 export default function collectionDashboardsCalculateReportData(reports) {
   return async (dispatch) => {
@@ -65,7 +41,7 @@ export default function collectionDashboardsCalculateReportData(reports) {
       default:
         let data, errorThrown: any = false;
 
-        const reportDataCalculationFunction = REPORT_TYPE_TO_FUNCTION[report.type];
+        const reportDataCalculationFunction = REPORTS[report.type].calculations;
         if (!reportDataCalculationFunction) {
           dispatch({
             type: COLLECTION_DASHBOARDS_CALCULATE_REPORT_DATA_ERROR,
