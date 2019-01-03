@@ -26,7 +26,7 @@ import App from './components/app/index';
 
 // The Environment switcher, used to switch between sets of servers that should be communicated
 // with.
-import EnvironmentSwitcher, { getActiveEnvironments } from './components/environment-switcher/index';
+import EnvironmentSwitcher, { getActiveEnvironments, getGoFast } from './components/environment-switcher/index';
 
 // Redux is used to manage state.
 import { Provider } from 'react-redux';
@@ -102,11 +102,11 @@ const fields = [
     default: process.env.REACT_APP_ENVIRONMENT || 'production',
   },
 ];
-function setServiceLocations(data) {
-  core.config({core: data.core});
-  accounts.config({host: data.accounts});
+function setServiceLocations(environments, goFast) {
+  core.config({core: environments.core, goFast});
+  accounts.config({host: environments.accounts});
 }
-setServiceLocations(getActiveEnvironments(fields)); /* step 1 above */
+setServiceLocations(getActiveEnvironments(fields), getGoFast()); /* step 1 above */
 
 
 // Send metrics to google analytics and mixpanel when the page url changes.

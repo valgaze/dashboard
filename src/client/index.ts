@@ -3,6 +3,7 @@ import clientele from '@density/clientele';
 import redirectAfterLogin from '../actions/miscellaneous/redirect-after-login';
 import sessionTokenUnset from '../actions/session-token/unset';
 import userError from '../actions/user/error';
+import { getGoFast } from '../components/environment-switcher/index';
 
 let store;
 function setStore(s) { store = s; }
@@ -33,6 +34,18 @@ async function errorHandler(response) {
 const core = clientele({...require('./specs/core-api'), errorFormatter: errorHandler});
 const accounts = clientele({...require('./specs/accounts-api'), errorFormatter: errorHandler});
 const metrics = clientele({...require('./specs/metrics-api'), errorFormatter: errorHandler});
+
+const defaultCounts = core.spaces.counts;
+core.spaces.counts = function(data) {
+  data.fast = getGoFast();
+  return defaultCounts(data);
+};
+
+const defaultAllCounts = core.spaces.allCounts;
+core.spaces.allCounts = function(data) {
+  data.fast = getGoFast();
+  return defaultAllCounts(data);
+};
 
 core.doorways.create = function(data) {
   return fetch(`${core.config().core}/doorways?environment=True`, {
