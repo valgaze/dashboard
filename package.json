@@ -44,7 +44,6 @@
     "@density/ui-report-utilization": "^1.0.0",
     "@density/ui-report-wasted-space": "^0.2.0",
     "@density/ui-report-wrapper": "^1.0.0",
-    "@density/ui-switch": "^1.0.0",
     "@density/ui-toast": "^2.2.1",
     "classnames": "^2.2.5",
     "debug": "^3.1.0",
