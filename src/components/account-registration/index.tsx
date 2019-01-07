@@ -10,7 +10,6 @@ import Card, { CardBody } from '@density/ui-card';
 import ErrorBar from '../error-bar/index';
 import AccountSetupHeader from '../account-setup-header/index';
 
-import redirectAfterLogin from '../../actions/miscellaneous/redirect-after-login';
 import sessionTokenSet from '../../actions/session-token/set';
 import { accounts } from '../../client';
 
@@ -45,7 +44,7 @@ export class AccountRegistration extends React.Component<any, any> {
       core_consent: this.state.coreConsent,
       marketing_consent: this.state.marketingConsent,
     }).then(response => {
-      return this.props.onUserLoggedIn(response.session_token, this.props.redirectAfterLogin);
+      return this.props.onUserLoggedIn(response.session_token);
     }).catch(err => {
       this.setState({error: err.toString()});
     });
@@ -168,15 +167,13 @@ export class AccountRegistration extends React.Component<any, any> {
 export default connect((state: any) => {
   return {
     invitationData: state.accountRegistration,
-    redirectAfterLogin: state.miscellaneous.redirectAfterLogin,
   };
 }, dispatch => {
   return {
-    onUserLoggedIn(token, redirect) {
+    onUserLoggedIn(token) {
       dispatch<any>(sessionTokenSet(token)).then(data => {
         const user: any = objectSnakeToCamel(data);
-        unsafeNavigateToLandingPage(user.organization.settings, redirect);
-        dispatch(redirectAfterLogin(null));
+        unsafeNavigateToLandingPage(user.organization.settings, null, true);
       });
     },
   };

@@ -1,8 +1,8 @@
 import stringToBoolean from '../string-to-boolean/index';
 
-export default function unsafeNavigateToLandingPage(settings, redirect) {
+export default function unsafeNavigateToLandingPage(settings, redirect, force = false) {
   // If there is a URL hash present, don't redirect to any default page
-  if (['', '#', '#/', '#/login'].indexOf(window.location.hash) < 0) {
+  if (!force && ['', '#', '#/', '#/login'].indexOf(window.location.hash) < 0) {
     return;
   // If there is an explicit redirect queued, use that {
   } else if (redirect) {
