@@ -11,7 +11,7 @@ export function convertTimeRangeToDaysAgo(space, timeRange) {
     };
   case 'LAST_7_DAYS':
     return {
-      start: getCurrentLocalTimeAtSpace(space).subtract(7, 'days'),
+      start: getCurrentLocalTimeAtSpace(space).subtract(7, 'days').startOf('day'),
       end: TODAY,
     };
   case 'WEEK_TO_DATE':
