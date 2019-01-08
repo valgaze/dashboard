@@ -10,6 +10,18 @@
   overflow-y: auto;
 }
 
+
+.sensors-list-header-text {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  color: $gray-darkest;
+  font-size: $font-size-2;
+  font-weight: $font-weight-2;
+}
+
 // Header for the sensor list view.
 .sensors-list-header {
   color: $gray-darkest;
@@ -35,6 +47,18 @@
   margin-top: 2px;
 }
 .sensors-list-container {
+  table {
+    background: white;
+    border-radius: $border-radius-base;
+    padding: 20px;
+  }
+  
+  tr:nth-child(odd) {
+    background: #f7f7f7;
+  }
+  thead tr {
+    background: white !important;
+  }
 	thead td {
 		font-weight: bold;
 	}
@@ -42,6 +66,7 @@
 		padding: 10px;
 		font-size: 12px;
 	}
+
 	.spaceItem {
 		display: block;
 	}

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import bankersRound from '../../../../helpers/bankers-round/index';
 import fetchAllPages from '../../../../helpers/fetch-all-pages/index';
 import objectSnakeToCamel from '../../../../helpers/object-snake-to-camel/index';
 import {
@@ -8,8 +9,9 @@ import {
 import { core } from '../../../../client';
 
 import { convertTimeRangeToDaysAgo } from './helpers';
+import { ReportHourlyBreakdownProps } from '@density/ui-report-hourly-breakdown';
 
-export default async function totalVisitsOneSpace(report) {
+export default async function hourlyBreakdown(report): Promise<ReportHourlyBreakdownProps> {
   const space: any = objectSnakeToCamel(await core.spaces.get({ id: report.settings.spaceId }));
   const timeRange = convertTimeRangeToDaysAgo(space, report.settings.timeRange);
 
@@ -35,36 +37,76 @@ export default async function totalVisitsOneSpace(report) {
     });
   }
 
-  // Finally, group together all count buckets fetched into groups, one per day.
-  const bucketsByDay = data.reduce((acc, bucket) => {
-    const date = parseISOTimeAtSpace(bucket.timestamp, space).format('YYYY-MM-DD');
-    const dateIndex = acc.findIndex(d => d.date === date);
-    if (dateIndex >= 0) {
-      // A group was found for the day in `date`, so add the bucket to that group.
-      return [
-        ...acc.slice(0, dateIndex),
-        {
-          ...acc[dateIndex],
-          buckets: [...acc[dateIndex].buckets, bucket],
-        },
-        ...acc.slice(dateIndex+1),
-      ];
-    } else {
-      // No group was found for the day in `date`, so create it
-      return [
-        ...acc,
-        {date, buckets: [bucket]},
-      ];
-    }
-  }, []);
+  // Group together all count buckets, one group per (columnKey + hours)
+  // Aggregate all buckets in each (columnKey + hours) into a "bucketArray"
+  const bucketsByColumn: any[] = [];
+  data.sort((a, b) => a.timestamp > b.timestamp).forEach(bucket => {
 
-  // Prior to passing this data to the component, sort all count buckets in order (they should
-  // already be as the data is returned in order already, but it never hurts to be sure) and extract
-  // out the entrances from each bucket.
-  const dataByDay = bucketsByDay.map(({date, buckets}) => {
+    // Determine values for the unique columnKey and its index in the grouped array, if it exists yet
+    const bucketTimestamp = parseISOTimeAtSpace(bucket.timestamp, space);
+    const bucketDate = bucketTimestamp.format('YYYY-MM-DD');
+    const columnKey = (report.settings.aggregation || 'NONE') === 'NONE' ?
+      bucketDate : bucketTimestamp.format('dddd');
+    const columnIndex = bucketsByColumn.findIndex(d => d.columnKey === columnKey);
+
+    // If column is found, append each bucket to the correct "bucketArray" for its time slot
+    if (columnIndex >= 0) {
+
+      // Determine value of the row index for this bucket
+      const columnBucketArrays = bucketsByColumn[columnIndex].bucketArrays;
+      const columnTimestamp = parseISOTimeAtSpace(columnBucketArrays[0][0].timestamp, space);
+      const columnStartTime = moment.utc(columnTimestamp.format('HH:mm'), 'HH:mm');
+      const rowStartTime = moment.utc(bucketTimestamp.format('HH:mm'), 'HH:mm');
+      const rowIndex = rowStartTime.diff(columnStartTime, 'hours');
+
+      // If bucketArray at this row index exists, append the value, otherwise create a new bucketArray
+      if (bucketsByColumn[columnIndex].bucketArrays[rowIndex]) {
+        bucketsByColumn[columnIndex].bucketArrays[rowIndex].push(bucket);
+      } else {
+        bucketsByColumn[columnIndex].bucketArrays[rowIndex] = [bucket];
+      }
+
+      // Overwrite the date since it's OK if the columns end up with the "latest" date for each weekday
+      bucketsByColumn[columnIndex].date = bucketDate;
+
+    // If the column is not found, create it and include the first bucket
+    } else {
+      bucketsByColumn.push({
+        columnKey,
+        bucketDate,
+        bucketArrays: [[bucket]]
+      });
+    }
+  });
+
+  // Determine the "extractor" function to get the correct metric out of each bucket
+  let valueExtractor: (any) => any;
+  if (report.settings.metric === 'PEAKS') {
+    valueExtractor = i => i.interval.analytics.max
+  } else {
+    valueExtractor = i => i.interval.analytics.entrances
+  }
+
+  // Aggregate the buckets for each day/time if necessary, and map to an array of values
+  const dataByColumn = bucketsByColumn.map(({date, bucketArrays}) => {
     return {
       date: moment.tz(date, "YYYY-MM-DD", space.timeZone),
-      values: buckets.sort((a, b) => a.timestamp > b.timestamp).map(i => i.interval.analytics.entrances),
+      values: bucketArrays.map(bucketArray => {
+        let value;
+        // Sum the values in each bucketArray
+        if (report.settings.aggregation === 'SUM') {
+          value = bucketArray.reduce((acc, i) => acc + valueExtractor(i), 0);
+        // Average the values in each bucketArray
+        } else if (report.settings.aggregation === 'AVERAGE') {
+          value = bucketArray.reduce((acc, i) => acc + valueExtractor(i), 0);
+          value = value / bucketArray.length;
+          value = value >= 100 ? bankersRound(value, 0) : bankersRound(value, 1);
+        // Don't aggregate by default, there should be only one bucket in each bucketArray
+        } else {
+          value = valueExtractor(bucketArray[0]);
+        }
+        return value;
+      })
     };
   });
 
@@ -74,6 +116,8 @@ export default async function totalVisitsOneSpace(report) {
     endDate: timeRange.end,
     space,
 
-    data: dataByDay,
+    data: dataByColumn,
+    metric: report.settings.metric,
+    aggregation: report.settings.aggregation
   };
 }

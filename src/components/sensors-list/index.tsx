@@ -19,16 +19,16 @@ export function SensorsList({
 
     <div className="sensors-list-container">
       <div className="sensors-list-header">
-        <h2>Sensor Status</h2>
+        <h2 className="sensors-list-header-text">Sensor Status</h2>
       </div>
       <table>
         <thead>
           <tr>
             <td>Serial Number</td>
             <td>Status</td>
+            <td>Last Heartbeat</td>
             <td>Doorway</td>
             <td>Space(s)</td>
-            <td>Last Heartbeat</td>
           </tr>
         </thead>
         <tbody>
@@ -43,12 +43,12 @@ export function SensorsList({
           return <tr key={sensor.serial_number}>
             <td>{sensor.serialNumber}</td>
             <td className={`sensor-status-${sensor.status}`}>{sensor.status}</td>
+            <td>{moment(sensor.lastHeartbeat).format("MMM D, h:mma")}</td>
             <td>{sensor.doorwayName}</td>
             <td>{ filteredSpaces.map(space => {
               return <span className="spaceItem">{space.name}</span>
             }) }
             </td>
-            <td>{moment(sensor.lastHeartbeat).format("MMM D, h:mma")}</td>
           </tr>;
         })}
         </tbody>
