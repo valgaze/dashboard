@@ -18,6 +18,7 @@ import AccountForgotPassword from '../account-forgot-password/index';
 import LiveSpaceList from '../live-space-list/index';
 import LiveSpaceDetail from '../live-space-detail/index';
 import DashboardsList from '../dashboards-list/index';
+import SensorsList from '../sensors-list/index';
 
 import AccountSetupOverview from '../account-setup-overview/index';
 import AccountSetupDoorwayList from '../account-setup-doorway-list/index';
@@ -75,6 +76,8 @@ function ActivePage({activePage, settings}) {
     return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceDaily />;
   case "EXPLORE_SPACE_DATA_EXPORT":
     return stringToBoolean(settings.insightsPageLocked) ? null : <ExploreSpaceDataExport />;
+  case "SENSORS_LIST":
+    return <SensorsList />;
   case "ACCOUNT":
     return <Account />;
   case "DEV_WEBHOOK_LIST":
