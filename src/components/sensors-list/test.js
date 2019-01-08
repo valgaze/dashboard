@@ -32,54 +32,7 @@ describe('live space list', function() {
     // Ensure that no spaces were rendered
     assert.equal(component.find('.live-space-list-item').length, 1);
   });
-  it('should render list space list when offline', async function() {
-    // Render the component
-    const component = mount(<LiveSpaceList 
-      spaces={{
-        filters: {search: ''},
-        data: [],
-        events: {}
-      }}
-      eventPusherStatus={{status: 'CLOSED'}}
-      activeModal={{name: null, data: null}}
-    />);
 
-    // Ensure that no spaces were rendered
-    assert.equal(component.find('.live-space-list-item').length, 0);
-
-    // Also ensure that that the "tag" next to the page title reads "OFFLINE"
-    assert.notEqual(
-      component.find('.live-space-list-live-indicator-tag').debug().indexOf('OFFLINE'),
-      -1
-    );
-
-    // And that the colored bubble within the tag is gray.
-    assert.equal(component.find('.live-space-list-live-indicator-tag').childAt(0).prop('className'), 'status-closed');
-  });
-  it('should render list space list when connecting', async function() {
-    // Render the component
-    const component = mount(<LiveSpaceList 
-      spaces={{
-        filters: {search: ''},
-        data: [],
-        events: {}
-      }}
-      eventPusherStatus={{status: 'CONNECTING'}}
-      activeModal={{name: null, data: null}}
-    />);
-
-    // Ensure that no spaces were rendered
-    assert.equal(component.find('.live-space-list-item').length, 0);
-
-    // Also ensure that that the "tag" next to the page title reads "OFFLINE"
-    assert.notEqual(
-      component.find('.live-space-list-live-indicator-tag').debug().indexOf('CONNECTING'),
-      -1
-    );
-
-    // And that the colored bubble within the tag is gray.
-    assert.equal(component.find('.live-space-list-live-indicator-tag').childAt(0).prop('className'), 'status-connecting');
-  });
   it('should render list space list when online', async function() {
     // Render the component
     const component = mount(<LiveSpaceList 

@@ -23,7 +23,7 @@ export function SensorsList({
       </div>
       <table>
         <thead>
-          <tr>
+          <tr key="1">
             <td>Serial Number</td>
             <td>Status</td>
             <td>Last Heartbeat</td>
@@ -40,7 +40,7 @@ export function SensorsList({
             }).includes(sensor.doorwayId)
           })
 
-          return <tr key={sensor.serial_number}>
+          return <tr key={sensor.serialNumber}>
             <td>{sensor.serialNumber}</td>
             <td className={`sensor-status-${sensor.status}`}>{sensor.status}</td>
             <td>{moment(sensor.lastHeartbeat).format("MMM D, h:mma")}</td>
