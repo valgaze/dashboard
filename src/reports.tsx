@@ -9,7 +9,7 @@ import ReportSurpassedCapacity from '@density/ui-report-surpassed-capacity';
 import ReportComparativePerformance from '@density/ui-report-comparative-performance';
 import ReportNextWeekForecast from '@density/ui-report-next-week-forecast';
 import ReportUtilization from '@density/ui-report-utilization';
-import ReportHourlyBreakdown from '@density/ui-report-hourly-breakdown';
+import ReportHourlyBreakdown, { ReportHourlyBreakdownProps } from '@density/ui-report-hourly-breakdown';
 import ReportWastedSpace from '@density/ui-report-wasted-space';
 
 import averageMeetingSize from './actions/collection/dashboards/report-calculations/average-meeting-size';
@@ -119,7 +119,7 @@ const REPORTS: {[key: string]: ReportDefinition} = {
     }),
   },
   HOURLY_BREAKDOWN: {
-    component: ReportHourlyBreakdown,
+    component: ReportHourlyBreakdown as React.ComponentClass<ReportHourlyBreakdownProps, any>,
     calculations: hourlyBreakdown,
     settings: ({report, reportData, onOpenReportExpandedModal}) => ({
       isExpandable: true,
