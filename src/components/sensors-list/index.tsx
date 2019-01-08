@@ -46,7 +46,7 @@ export function SensorsList({
             <td>{moment(sensor.lastHeartbeat).format("MMM D, h:mma")}</td>
             <td>{sensor.doorwayName}</td>
             <td>{ filteredSpaces.map(space => {
-              return <span className="spaceItem">{space.name}</span>
+              return <span className="spaceItem" key={space.id}>{space.name}</span>
             }) }
             </td>
           </tr>;
