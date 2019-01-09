@@ -10,7 +10,8 @@ import {
   IconCopy,
   IconLightning,
   IconPerson,
-  IconLogout
+  IconLogout,
+  IconError
 } from '@density/ui-icons';
 
 import stringToBoolean from '../../helpers/string-to-boolean';
@@ -84,6 +85,20 @@ class AppNavbarMenu extends Component<any, any> {
               {selected ? <IconPerson color={colorVariables.brandPrimaryNew} /> : <IconPerson />}
             </span>
             Your Account
+          </a>
+          <a
+            className={classnames('app-navbar-menu-item', {selected: isSelected()})}
+            style={{paddingLeft: 2}}
+            href="#/sensors"
+            tabIndex={0}
+            onFocus={this.onMenuFocus}
+            onBlur={this.onMenuBlur}
+            onClick={this.onMenuBlur}
+          >
+            <span className="app-navbar-menu-item-icon">
+              {selected ? <IconError color={colorVariables.brandPrimaryNew} /> : <IconError />}
+            </span>
+            DPU Status
           </a>
           <a
             className="app-navbar-menu-item"

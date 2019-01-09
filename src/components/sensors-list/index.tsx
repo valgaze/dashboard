@@ -19,7 +19,7 @@ export function SensorsList({
 
     <div className="sensors-list-container">
       <div className="sensors-list-header">
-        <h2 className="sensors-list-header-text">Sensor Status</h2>
+        <h2 className="sensors-list-header-text">DPU Status</h2>
       </div>
       <table className="sensors-list-table">
         <thead>

@@ -28,6 +28,7 @@ describe('sensors list', function() {
           currentCount: 2,
           capacity: 5,
           timeZone: 'America/New_York',
+          doorways: []
         }],
       }}
     />);
