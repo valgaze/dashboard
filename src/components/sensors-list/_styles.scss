@@ -46,6 +46,7 @@
   background: white;
   border-radius: $border-radius-base;
   padding: 20px;
+  overflow: scroll;
 }
 
 .sensors-list-container {
@@ -68,7 +69,7 @@
 		font-weight: bold;
 	}
 	td {
-		font-size: 14px;
+		font-size: 12px;
     padding: 16px 10px;
 	}
 
