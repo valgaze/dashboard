@@ -21,7 +21,7 @@ export function SensorsList({
       <div className="sensors-list-header">
         <h2 className="sensors-list-header-text">Sensor Status</h2>
       </div>
-      <table>
+      <table className="sensors-list-table">
         <thead>
           <tr key="1">
             <td>Serial Number</td>
