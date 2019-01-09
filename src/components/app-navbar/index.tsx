@@ -88,7 +88,6 @@ class AppNavbarMenu extends Component<any, any> {
           </a>
           <a
             className={classnames('app-navbar-menu-item', {selected: isSelected()})}
-            style={{paddingLeft: 2}}
             href="#/sensors"
             tabIndex={0}
             onFocus={this.onMenuFocus}

@@ -34,6 +34,6 @@ describe('sensors list', function() {
     />);
 
     // Ensure that a single sensor is rendered
-    assert.equal(component.find('.sensors-list-table').length, 2);
+    assert.equal(component.find('.sensors-list-table').length, 1);
   });
 });
