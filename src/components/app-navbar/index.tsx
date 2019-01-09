@@ -52,12 +52,17 @@ class AppNavbarMenu extends Component<any, any> {
 
     const accountSelected = ['ACCOUNT'].includes(selectedPage)
     const sensorsSelected = ['SENSORS_LIST'].includes(selectedPage)
+    
+    var navBarMenuDropdownSelected = false
+    if(accountSelected || sensorsSelected) {
+        navBarMenuDropdownSelected = true
+    }
 
     return (
       <div className="app-navbar-menu">
         <div
           ref={r => { this.selectBoxValueRef = r; }}
-          className={classnames('app-navbar-menu-value', {selectedPage})}
+          className={classnames('app-navbar-menu-value', {selected: navBarMenuDropdownSelected})}
           tabIndex={0}
           onFocus={this.onMenuFocus}
           onBlur={this.onMenuBlur}
