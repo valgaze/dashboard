@@ -48,14 +48,17 @@ class AppNavbarMenu extends Component<any, any> {
 
   render() {
     const { opened } = this.state;
-    const { isSelected } = this.props;
-    const selected = isSelected();
+    const { selectedPage } = this.props;
+
+    const accountSelected = ['ACCOUNT'].includes(selectedPage)
+    const sensorsSelected = ['SENSORS_LIST'].includes(selectedPage)
+    console.log(selectedPage)
 
     return (
       <div className="app-navbar-menu">
         <div
           ref={r => { this.selectBoxValueRef = r; }}
-          className={classnames('app-navbar-menu-value', {selected})}
+          className={classnames('app-navbar-menu-value', {selectedPage})}
           tabIndex={0}
           onFocus={this.onMenuFocus}
           onBlur={this.onMenuBlur}
@@ -73,7 +76,7 @@ class AppNavbarMenu extends Component<any, any> {
         </div>
         <nav className={classnames('app-navbar-menu-items', {opened})}>
           <a
-            className={classnames('app-navbar-menu-item', {selected: isSelected()})}
+            className={classnames('app-navbar-menu-item', {selected: accountSelected})}
             style={{paddingLeft: 2}}
             href="#/account"
             tabIndex={0}
@@ -82,12 +85,12 @@ class AppNavbarMenu extends Component<any, any> {
             onClick={this.onMenuBlur}
           >
             <span className="app-navbar-menu-item-icon">
-              {selected ? <IconPerson color={colorVariables.brandPrimaryNew} /> : <IconPerson />}
+              {accountSelected ? <IconPerson color={colorVariables.brandPrimaryNew} /> : <IconPerson />}
             </span>
             Your Account
           </a>
           <a
-            className={classnames('app-navbar-menu-item', {selected: isSelected()})}
+            className={classnames('app-navbar-menu-item', {selected: sensorsSelected})}
             href="#/sensors"
             tabIndex={0}
             onFocus={this.onMenuFocus}
@@ -95,7 +98,7 @@ class AppNavbarMenu extends Component<any, any> {
             onClick={this.onMenuBlur}
           >
             <span className="app-navbar-menu-item-icon">
-              {selected ? <IconError color={colorVariables.brandPrimaryNew} /> : <IconError />}
+              {sensorsSelected ? <IconError color={colorVariables.brandPrimaryNew} /> : <IconError />}
             </span>
             DPU Status
           </a>
@@ -160,7 +163,7 @@ export default function AppNavbar({page, settings}) {
           /> : null}
         </ul>
         <ul className="app-navbar-right">
-          <AppNavbarMenu isSelected={() => ['ACCOUNT'].includes(page)}/>
+          <AppNavbarMenu selectedPage={page}/>
         </ul>
       </div>
     </div>

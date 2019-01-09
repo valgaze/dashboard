@@ -42,16 +42,20 @@
   }
 }
 
+.sensors-list-body {
+  background: white;
+  border-radius: $border-radius-base;
+  padding: 20px;
+}
+
 .sensors-list-container {
   @include grid-container;
   margin-top: 2px;
 }
 .sensors-list-container {
   table {
-    background: white;
-    border-radius: $border-radius-base;
-    padding: 20px;
     border-collapse: collapse;
+    width: 100%;
   }
   
   tr:nth-child(odd) {
@@ -64,7 +68,7 @@
 		font-weight: bold;
 	}
 	td {
-		font-size: 12px;
+		font-size: 14px;
     padding: 16px 10px;
 	}
 
