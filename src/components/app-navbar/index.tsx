@@ -52,12 +52,8 @@ class AppNavbarMenu extends Component<any, any> {
 
     const accountSelected = ['ACCOUNT'].includes(selectedPage)
     const sensorsSelected = ['SENSORS_LIST'].includes(selectedPage)
+    const navBarMenuDropdownSelected = accountSelected || sensorsSelected;
     
-    var navBarMenuDropdownSelected = false
-    if(accountSelected || sensorsSelected) {
-        navBarMenuDropdownSelected = true
-    }
-
     return (
       <div className="app-navbar-menu">
         <div
