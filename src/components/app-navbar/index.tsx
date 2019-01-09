@@ -52,7 +52,6 @@ class AppNavbarMenu extends Component<any, any> {
 
     const accountSelected = ['ACCOUNT'].includes(selectedPage)
     const sensorsSelected = ['SENSORS_LIST'].includes(selectedPage)
-    console.log(selectedPage)
 
     return (
       <div className="app-navbar-menu">
