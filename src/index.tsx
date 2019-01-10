@@ -35,6 +35,7 @@ import createRouter from '@density/conduit';
 // Import all actions required to navigate from one page to another.
 import routeTransitionLogin from './actions/route-transition/login';
 import routeTransitionLogout from './actions/route-transition/logout';
+import routeTransitionSensorsList from './actions/route-transition/sensors-list';
 import routeTransitionExploreSpaceList from './actions/route-transition/explore-space-list';
 import routeTransitionExploreSpaceTrends from './actions/route-transition/explore-space-trends';
 import routeTransitionExploreSpaceDaily from './actions/route-transition/explore-space-daily';
@@ -191,6 +192,8 @@ router.addRoute('dev/tokens', () => routeTransitionDevTokenList());
 router.addRoute('dev/webhooks', () => routeTransitionDevWebhookList());
 
 router.addRoute('account', () => routeTransitionAccount());
+
+router.addRoute('sensors', () => routeTransitionSensorsList());
 
 // User registration and password resetting
 router.addRoute('account/register/:slug', slug => routeTransitionAccountRegister(slug));
