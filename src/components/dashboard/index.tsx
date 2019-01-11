@@ -8,12 +8,12 @@ import DashboardReportGrid from '@density/ui-dashboard-report-grid';
 
 import ReportLoading from '@density/ui-report-loading';
 
-import AppBar from '../app-bar/index';
+import AppBar from '@density/ui-app-bar';
+import AppFrame from '@density/ui-app-frame';
+import AppPane from '@density/ui-app-pane';
+import AppSidebar from '@density/ui-app-sidebar';
+import AppScrollView from '@density/ui-app-scroll-view';
 import AppBarTransparent from '../app-bar-transparent/index';
-import AppFrame from '../app-frame/index';
-import AppPane from '../app-pane/index';
-import AppScrollView from '../app-scroll-view/index';
-import AppSidebar from '../app-sidebar/index';
 import Report from '../report';
 import { IconMenu, IconChevronRight } from '@density/ui-icons';
 
@@ -239,7 +239,7 @@ export function Dashboard({
               onChangeSidebarVisibility={onChangeSidebarVisibility}
             />}
             title={selectedDashboard ? selectedDashboard.name : ""} />
-          <AppScrollView>
+          <AppScrollView backgroundColor="#F5F5F5">
             <DashboardMainScrollViewContent
               dashboards={dashboards}
               selectedDashboard={selectedDashboard}
