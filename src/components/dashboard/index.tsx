@@ -23,6 +23,8 @@ import resetDashboardReportGridIdentityValue from '../../actions/miscellaneous/r
 
 import hideModal from '../../actions/modal/hide';
 
+const DASHBOARD_BACKGROUND = '#F5F5F5';
+
 function DashboardSidebarItem({selected, id, name, reportSet}) {
   const nonHeaderReports = reportSet.filter(i => i.type !== 'HEADER');
   const headerNames = reportSet.filter(i => i.type === 'HEADER').map(i => i.name);
@@ -239,7 +241,7 @@ export function Dashboard({
               onChangeSidebarVisibility={onChangeSidebarVisibility}
             />}
             title={selectedDashboard ? selectedDashboard.name : ""} />
-          <AppScrollView backgroundColor="#F5F5F5">
+          <AppScrollView backgroundColor={DASHBOARD_BACKGROUND}>
             <DashboardMainScrollViewContent
               dashboards={dashboards}
               selectedDashboard={selectedDashboard}
