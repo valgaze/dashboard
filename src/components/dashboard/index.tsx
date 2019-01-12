@@ -23,7 +23,7 @@ import resetDashboardReportGridIdentityValue from '../../actions/miscellaneous/r
 
 import hideModal from '../../actions/modal/hide';
 
-const DASHBOARD_BACKGROUND = '#F5F5F5';
+const DASHBOARD_BACKGROUND = '#F5F5F7';
 
 function DashboardSidebarItem({selected, id, name, reportSet}) {
   const nonHeaderReports = reportSet.filter(i => i.type !== 'HEADER');
