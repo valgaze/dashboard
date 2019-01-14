@@ -91,13 +91,13 @@ export function calculateFootTraffic(space) {
 
     let data;
     try {
-      data = await fetchAllPages(page => (
+      data = (await fetchAllPages(page => (
         core.spaces.counts({
           id: space.id,
 
           interval: '5m',
           time_segment_groups: timeSegmentGroupId === DEFAULT_TIME_SEGMENT_GROUP.id ? '' : timeSegmentGroupId,
-          order: 'desc',
+          order: 'asc',
 
           start_time: formatInISOTimeAtSpace(day.clone().startOf('day'), space),
           end_time: formatInISOTimeAtSpace(day.clone().startOf('day').add(1, 'day'), space),
@@ -105,7 +105,7 @@ export function calculateFootTraffic(space) {
           page,
           page_size: 5000,
         })
-      ));
+      ))).reverse();
     } catch (err) {
       dispatch(exploreDataCalculateDataError('footTraffic', `Error fetching count data: ${err}`));
     }
