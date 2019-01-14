@@ -70,7 +70,8 @@
           "page_size": "{{page_size}}",
           "time_segment_groups": "{{time_segment_groups}}",
           "page": "{{page}}",
-          "order": "{{order}}"
+          "order": "{{order}}",
+          "fast": "{{fast}}"
         }
       },
       "allCounts": {
@@ -84,7 +85,8 @@
           "page_size": "{{page_size}}",
           "time_segment_groups": "{{time_segment_groups}}",
           "page": "{{page}}",
-          "order": "{{order}}"
+          "order": "{{order}}",
+          "fast": "{{fast}}"
         }
       },
       "events": {

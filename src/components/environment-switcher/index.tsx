@@ -2,6 +2,7 @@ import * as React from 'react';
 import FormLabel from '../form-label/index';
 
 import InputBox from '@density/ui-input-box';
+import Switch from '@density/ui-switch';
 import Card, { CardHeader, CardBody } from '@density/ui-card';
 import Button from '@density/ui-button';
 import Modal from '@density/ui-modal';
@@ -20,11 +21,17 @@ export function getActiveEnvironments(fields) {
   return data;
 }
 
+// Is the dashboard configured to "go fast" (special query parameter for event queries)?
+export function getGoFast() {
+  return window.localStorage.environmentGoFast ? JSON.parse(window.localStorage.environmentGoFast) : false;
+}
+
 export default class EnvironmentSwitcher extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      values: window.localStorage.environmentSwitcher ? JSON.parse(window.localStorage.environmentSwitcher) : [],
+      values: getActiveEnvironments(props.fields),
+      goFast: getGoFast(),
       open: false,
     };
 
@@ -97,13 +104,24 @@ export default class EnvironmentSwitcher extends React.Component<any, any> {
                   />}
                 />
               })}
+              <FormLabel
+                className="environment-switcher-item"
+                label="Use experimental fast queries"
+                htmlFor="environment-switcher-go-fast"
+                key="goFast"
+                input={<Switch
+                    value={this.state.goFast}
+                    onChange={e => this.setState({goFast: !this.state.goFast})}
+                  />}
+              />
             </ul>
 
             <div className="environment-switcher-footer">
               <Button className="environment-switcher-button" onClick={() => {
                 this.setState({open: false});
                 window.localStorage.environmentSwitcher = JSON.stringify(this.state.values);
-                this.props.onChange(this.state.values)
+                window.localStorage.environmentGoFast = JSON.stringify(this.state.goFast);
+                this.props.onChange(this.state.values, this.state.goFast)
               }}>OK</Button>
             </div>
           </CardBody>
