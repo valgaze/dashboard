@@ -28,10 +28,6 @@ const TYPE_TO_MODE = {
 };
 
 export default async function comparativePerformance(report) {
-  const space = objectSnakeToCamel(await core.spaces.get({ id: report.settings.spaceId }));
-
-  const nowAtSpace = getCurrentLocalTimeAtSpace(space);
-
   // Figure out the unit that we are comparing with - week, month, or quarter?
   const unit = TYPE_TO_TIME_UNIT[report.settings.type];
   if (!unit) {
@@ -40,87 +36,89 @@ export default async function comparativePerformance(report) {
     );
   }
 
-  // Figure out the two time ranges we need to query.
-  const lastStartDate = nowAtSpace.clone().startOf(unit).subtract(1, unit);
-  const lastEndDate = lastStartDate.clone().endOf(unit);
+  const space = objectSnakeToCamel(await core.spaces.get({ id: report.settings.spaceId }));
+  const lastStartDate = getCurrentLocalTimeAtSpace(space).startOf(unit).subtract(1, unit);
 
-  const previousStartDate = lastStartDate.clone().subtract(1, unit);
-  const previousEndDate = previousStartDate.clone().endOf(unit);
+  // Build array of periods
+  const mode = TYPE_TO_MODE[report.settings.type];
+  const size = report.settings.size || (mode === COMPARATIVE_WEEK ? 4 : 3);
+  const periods: any[] = [];
+  for (let i = 0; i < size; i++) {
+    const startDate = lastStartDate.clone().subtract(i, unit);
+    const endDate = startDate.clone().endOf(unit);
+    periods.unshift({ startDate, endDate });
+  }
 
-  // For each time range, fetch the data at a `5 minute` intervals so we can calculate the average
-  // day of time over this range of time.
-  const [ lastCounts, previousCounts ] = await Promise.all([
-    fetchAllPages(page => { // "Last" range
+  // For each time range, fetch the data at 1 hour intervals
+  const periodCounts = await Promise.all(
+    periods.map(period => fetchAllPages(page => {
       return core.spaces.counts({
         id: report.settings.spaceId,
-        interval: '5m',
-        start_time: formatInISOTimeAtSpace(lastStartDate, space),
-        end_time: formatInISOTimeAtSpace(lastEndDate, space),
+        interval: '1h',
+        start_time: formatInISOTimeAtSpace(period.startDate, space),
+        end_time: formatInISOTimeAtSpace(period.endDate, space),
         time_segment_groups: report.settings.timeSegmentGroupId,
         page,
         page_size: 5000,
       });
-    }),
-    fetchAllPages(page => { // "Previous" range
-      return core.spaces.counts({
-        id: report.settings.spaceId,
-        interval: '5m',
-        start_time: formatInISOTimeAtSpace(previousStartDate, space),
-        end_time: formatInISOTimeAtSpace(previousEndDate, space),
-        time_segment_groups: report.settings.timeSegmentGroupId,
-        page,
-        page_size: 5000,
-      });
-    }),
-  ]);
+    }))
+  );
 
-  const [ lastData, previousData ] = [lastCounts, previousCounts].map(counts => {
-    // Group together all counts fetched into buckets for each day.
-    const bucketsByDay = counts.reduce((acc, bucket) => {
-      const day = parseISOTimeAtSpace(bucket.timestamp, space).format('YYYY-MM-DD');
-      return {
-        ...acc,
-        [day]: [...(acc[day] || []), bucket],
+  const data = periods.map((period, index) => {
+
+    // Calculate peak (hourly) bucket in the period
+    const totalsByHour = periodCounts[index].reduce((totals, bucket) => {
+      const timestamp = parseISOTimeAtSpace(bucket.timestamp, space);
+      const day = timestamp.format('dddd');
+      const hour = timestamp.format('ha');
+      const hourIndex = totals.findIndex(d => d.day === day && d.hour === hour);
+      if (hourIndex >= 0) {
+        totals[hourIndex].entrances += bucket.interval.analytics.entrances;
+      } else {
+        totals.push({ day, hour, entrances: bucket.interval.analytics.entrances });
       }
-    }, {});
+      return totals;
+    }, []);
 
-    // For each bucket, calculate a peak count and timestamp.
-    const peakPerDay: any[] = [];
-    for (const day in bucketsByDay) {
-      const peak = bucketsByDay[day].reduce(
-        ({count, timestamp}, bucket) => {
-          if (count === null || bucket.interval.analytics.max > count) {
-            return { count: bucket.interval.analytics.max, timestamp: bucket.timestamp };
-          } else {
-            return {count, timestamp};
-          }
-        },
-        {count: null, timestamp: null},
-      );
-      peakPerDay.push(peak);
-    }
+    // Peak hour(s) in the period
+    const busiestHours = totalsByHour.reduce((acc, hour) => {
+      if (hour.entrances > 0 && (acc.length == 0 || acc[0].entrances === hour.entrances)) {
+        acc.push(hour);
+      } else if (hour.entrances > 0 && hour.entrances > acc[0].entrances) {
+        acc = [hour];
+      }
+      return acc;
+    }, []);
 
-    // Finally, average all the counts and timestamps to determine the "average peak count".
-    const dayCount = Object.keys(bucketsByDay).length;
-    const totalPeakCount = peakPerDay.reduce((acc, i) => acc + i.count, 0)
-    const averagePeakCount = Math.round(totalPeakCount / dayCount);
+    // Reduce again to totals by day
+    const totalsByDay = totalsByHour.reduce((totals, hour) => {
+      const dayIndex = totals.findIndex(d => d.day === hour.day);
+      if (dayIndex >= 0) {
+        totals[dayIndex].entrances += hour.entrances;
+      } else {
+        totals.push({ day: hour.day, entrances: hour.entrances });
+      }
+      return totals;
+    }, []);
 
-    const totalPeakTime = peakPerDay.reduce((acc, i) => {
-      const peakTimeAtSpace = parseISOTimeAtSpace(i.timestamp, space);
-      return acc + peakTimeAtSpace.diff(moment(peakTimeAtSpace).startOf('day'), 'seconds');
-    }, 0);
-    const averagePeakTime = moment.duration(totalPeakTime / dayCount, 'second');
+    // Peak day(s) in the period
+    const busiestDays = totalsByDay.reduce((acc, day) => {
+      if (day.entrances > 0 && (acc.length == 0 || acc[0].entrances === day.entrances)) {
+        acc.push(day);
+      } else if (day.entrances > 0 && day.entrances > acc[0].entrances) {
+        acc = [day];
+      }
+      return acc;
+    }, []);
 
     // Sum up the total number of entrances in all buckets ("total visits")
-    const totalEntrances = counts.reduce(
-      (sum, bucket) => sum + bucket.interval.analytics.entrances,
-      0,
-    );
+    const totalEntrances = totalsByDay.reduce((sum, day) => sum + day.entrances, 0);
 
     return {
       totalVisits: totalEntrances,
-      averagePeakCount,
-      averagePeakTime,
+      busiestDays,
+      busiestHours,
+      ...period
     };
   });
 
@@ -128,12 +126,7 @@ export default async function comparativePerformance(report) {
     title: report.name,
     space,
 
-    mode: TYPE_TO_MODE[report.settings.type],
-    lastData,
-    previousData,
-    lastStartDate,
-    lastEndDate,
-    previousStartDate,
-    previousEndDate,
+    mode,
+    data
   };
 }
