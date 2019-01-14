@@ -37,13 +37,13 @@ const metrics = clientele({...require('./specs/metrics-api'), errorFormatter: er
 
 const defaultCounts = core.spaces.counts;
 core.spaces.counts = function(data) {
-  data.fast = getGoFast();
+  data.fast = getGoFast() ? 'true' : undefined;
   return defaultCounts(data);
 };
 
 const defaultAllCounts = core.spaces.allCounts;
 core.spaces.allCounts = function(data) {
-  data.fast = getGoFast();
+  data.fast = getGoFast() ? 'true' : undefined;
   return defaultAllCounts(data);
 };
 
