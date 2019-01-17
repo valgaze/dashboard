@@ -214,7 +214,7 @@ function ExploreSpaceTrends({
       ) : null}
     </div>;
   } else {
-    return <p>Loading</p>;
+    return <br />;
   }
 }
 

@@ -144,7 +144,7 @@ export function ExploreSpaceDaily({
       </div>
     </div>;
   } else {
-    return <p>Loading</p>;
+    return <br />;
   }
 }
 
