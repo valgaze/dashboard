@@ -39,8 +39,8 @@ type ReportDefinition = {
 // Default report settings if no settings are defined in a report
 export const DEFAULT_REPORT_SETTINGS: ReportSettings = {
   isExpandable: false,
-  displayContextWhenExpanded: () => ({}),
-  displayContextWhenNotExpanded: () => ({}),
+  displayContextWhenExpanded: {},
+  displayContextWhenNotExpanded: {},
 };
 
 

@@ -159,20 +159,18 @@ function DashboardMainScrollViewContent({
                 {name !== null ? <h1 className="dashboard-header">{name}</h1> : null}
                 <div>
                   <DashboardReportGrid
-                    reports={[
-                      ...contents.map((report, index) => {
-                        return {
-                          id: `${report.id}-${dashboardReportGridIdentityValue}`,
-                          report: (
-                            <Report
-                              report={report}
-                              reportData={dashboards.calculatedReportData[report.id]}
-                              expanded={false}
-                            />
-                          ),
-                        };
-                      }),
-                    ]}
+                    reports={contents.map((report, index) => {
+                      return {
+                        id: `${report.id}-${dashboardReportGridIdentityValue}`,
+                        report: (
+                          <Report
+                            report={report}
+                            reportData={dashboards.calculatedReportData[report.id]}
+                            expanded={false}
+                          />
+                        ),
+                      };
+                    })}
                   />
                 </div>
               </div> : null}

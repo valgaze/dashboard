@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import REPORTS, { DEFAULT_REPORT_SETTINGS } from '../../reports';
@@ -21,85 +21,124 @@ import showModal from '../../actions/modal/show';
 
 import { getCurrentLocalTimeAtSpace } from '../../helpers/space-time-utilities/index';
 
-function Report({
-  report,
-  reportData,
-  expanded,
+type ReportProps = {
+  report: any;
+  reportData: any;
+  expanded: boolean;
 
-  onOpenReportExpandedModal,
-}) {
-  const ReportComponent = REPORTS[report.type].component;
-  const reportSettingsGenerator = REPORTS[report.type].settings;
-  const reportSettings = reportSettingsGenerator ? reportSettingsGenerator({
-    report,
-    reportData,
-    expanded,
-    onOpenReportExpandedModal,
-  }) : DEFAULT_REPORT_SETTINGS;
+  onOpenReportExpandedModal: (any) => any;
+};
 
-  if (!ReportComponent) {
-    return (
-      <span>Unknown report type {report.type}</span>
-    );
+type ReportState = {
+	error: Error | null;
+	info: any;
+}
+
+class Report extends Component<ReportProps, ReportState> {
+  state = { error: null, info: null }
+
+
+  // Note: https://github.com/facebook/create-react-app/issues/3627
+  // In development, an error popup will still be shown. This really confused
+  // me for a while. but if you close it, you'll see the error boundary state below it.
+  componentDidCatch(error, info) {
+    this.setState({error, info})
   }
 
-  switch (reportData.state) {
-  case 'LOADING':
-    return (
-      <span>Loading report</span>
-    );
-  case 'ERROR':
-    return (
-      <ReportWrapper
-        title={report.name}
-        startDate={null}
-        endDate={null}
-        hideDetailsLink={true}
+  render() {
+    const {
+      report,
+      reportData,
+      expanded,
+
+      onOpenReportExpandedModal,
+    }: ReportProps = this.props;
+
+    // If an error was thrown while rendering the component (because this component acts as an
+    // error boundary), swap in the report error state instead.
+    const { error } = this.state;
+    if (error) {
+      return (
+        <ReportWrapper
+          title={report.name}
+          startDate={null}
+          endDate={null}
+          hideDetailsLink={true}
           spaces={[]}
-      >
-        <ReportError />
-      </ReportWrapper>
-    );
-  case 'COMPLETE':
-    const reportProps = {
-      /* inject return data that calculated by data calculations as props */
-      ...reportData.data,
+        >
+          <ReportError />
+        </ReportWrapper>
+      );
+    }
 
-      /* inject custom props when a report is expandable */
-      ...(() => {
-        // If the report cannot be expanded, always use the non expanded version of the props
-        if (!reportSettings.isExpandable) {
-          return {
-            displayContext: reportSettings.displayContextWhenNotExpanded(report, reportData)
-          };
-        }
+    const ReportComponent = REPORTS[report.type].component;
+    const reportSettingsGenerator = REPORTS[report.type].settings;
+    const reportSettings = reportSettingsGenerator ? reportSettingsGenerator({
+      report,
+      reportData,
+      expanded,
+      onOpenReportExpandedModal,
+    }) : DEFAULT_REPORT_SETTINGS;
 
-        // Render the correct set of props depending on whether the report is expanded or not
-        if (expanded) {
-          return {
-            displayContext: reportSettings.displayContextWhenExpanded,
-          };
-        } else {
-          return {
-            displayContext: reportSettings.displayContextWhenNotExpanded,
-          };
-        }
-      })(),
-    };
+    if (!ReportComponent) {
+      return (
+        <span>Unknown report type {report.type}</span>
+      );
+    }
+
+    switch (reportData.state) {
+    case 'LOADING':
+      return (
+        <span>Loading report</span>
+      );
+
+    case 'ERROR':
+      return (
+        <ReportWrapper
+          title={report.name}
+          startDate={null}
+          endDate={null}
+          hideDetailsLink={true}
+            spaces={[]}
+        >
+          <ReportError />
+        </ReportWrapper>
+      );
+
+    case 'COMPLETE':
+      let displayContext = {};
+
+      // If the report cannot be expanded, always use the non expanded version of the props
+      if (!reportSettings.isExpandable) {
+        displayContext = reportSettings.displayContextWhenNotExpanded;
+
+      // Render the correct set of props depending on whether the report is expanded or not
+      } else if (expanded) {
+        displayContext = reportSettings.displayContextWhenExpanded;
+      } else {
+        displayContext = reportSettings.displayContextWhenNotExpanded;
+      }
+
+      return (
+        <ReportComponent
+          key={report.id}
+          title={report.name}
+
+          // A custom prop that has data used to determine exactly how the report should be rendered.
+          displayContext={displayContext}
+
+          // The rest of the props returned from the report calculation
+          {...reportData.data}
+        />
+      );
+    default:
+      break;
+    }
+
     return (
-      <ReportComponent
-        key={report.id}
-        title={report.name}
-        {...reportProps}
-      />
+      <span>Unknown report state {reportData.state}</span>
     );
-  default:
-    break;
   }
-
-  return (
-    <span>Unknown report state {reportData.state}</span>
-  );
 }
 
 export default connect(state => ({}), dispatch => {
